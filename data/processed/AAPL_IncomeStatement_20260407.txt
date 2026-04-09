@@ -1,0 +1,71 @@
+=== AAPL Annual Income Statement ===
+
+--- Fiscal Year: 2025 ---
+ Tax Effect Of Unusual Items: $0.00
+ Tax Rate For Calcs: $0.16
+ Normalized EBITDA: $144.75B
+ Net Income From Continuing Operation Net Minority Interest: $112.01B
+ Reconciled Depreciation: $11.70B
+ Reconciled Cost Of Revenue: $220.96B
+ EBITDA: $144.75B
+ EBIT: $133.05B
+ Normalized Income: $112.01B
+ Net Income From Continuing And Discontinued Operation: $112.01B
+ Total Expenses: $283.11B
+ Total Operating Income As Reported: $133.05B
+ Diluted Average Shares: $15.00B
+ Basic Average Shares: $14.95B
+ Diluted EPS: $7.46
+ Basic EPS: $7.49
+ Diluted NI Availto Com Stockholders: $112.01B
+ Net Income Common Stockholders: $112.01B
+ Net Income: $112.01B
+ Net Income Including Noncontrolling Interests: $112.01B
+ Net Income Continuous Operations: $112.01B
+ Tax Provision: $20.72B
+ Pretax Income: $132.73B
+ Other Income Expense: $-321.00M
+ Other Non Operating Income Expenses: $-321.00M
+ Operating Income: $133.05B
+ Operating Expense: $62.15B
+ Research And Development: $34.55B
+ Selling General And Administration: $27.60B
+ Gross Profit: $195.20B
+ Cost Of Revenue: $220.96B
+ Total Revenue: $416.16B
+ Operating Revenue: $416.16B
+
+--- Fiscal Year: 2024 ---
+ Tax Effect Of Unusual Items: $0.00
+ Tax Rate For Calcs: $0.24
+ Normalized EBITDA: $134.66B
+ Net Income From Continuing Operation Net Minority Interest: $93.74B
+ Reconciled Depreciation: $11.45B
+ Reconciled Cost Of Revenue: $210.35B
+ EBITDA: $134.66B
+ EBIT: $123.22B
+ Normalized Income: $93.74B
+ Net Income From Continuing And Discontinued Operation: $93.74B
+ Total Expenses: $267.82B
+ Total Operating Income As Reported: $123.22B
+ Diluted Average Shares: $15.41B
+ Basic Average Shares: $15.34B
+ Diluted EPS: $6.08
+ Basic EPS: $6.11
+ Diluted NI Availto Com Stockholders: $93.74B
+ Net Income Common Stockholders: $93.74B
+ Net Income: $93.74B
+ Net Income Including Noncontrolling Interests: $93.74B
+ Net Income Continuous Operations: $93.74B
+ Tax Provision: $29.75B
+ Pretax Income: $123.48B
+ Other Income Expense: $269.00M
+ Other Non Operating Income Expenses: $269.00M
+ Operating Income: $123.22B
+ Operating Expense: $57.47B
+ Research And Development: $31.37B
+ Selling General And Administration: $26.10B
+ Gross Profit: $180.68B
+ Cost Of Revenue: $210.35B
+ Total Revenue: $391.04B
+ Operating Revenue: $391.04B

@@ -1,0 +1,47 @@
+=== NVDA Company Fundamentals ===
+Generated: 2026-04-07
+
+--- Company Overview ---
+Name : NVIDIA Corporation
+Sector : Technology
+Industry : Semiconductors
+Employees: 42,000
+
+--- Valuation Metrics ---
+Market Cap : $4317.54B
+Enterprise Value : $4259.43B
+P/E Ratio Trailing: 36.25306
+P/E Ratio Forward : 15.980065
+Price/Sales (TTM) : 19.99435
+Price/Book : 27.447466
+EV/EBITDA : 31.971
+
+--- Profitability ---
+Revenue (TTM) : $215.94B
+Gross Profit : $153.46B
+EBITDA : $133.23B
+Net Income : $120.07B
+Profit Margin : 0.55603004
+Operating Margin: 0.65024
+Gross Margin : 0.71068
+
+--- Growth ---
+Revenue Growth (YoY): 0.732
+Earnings Growth : 0.956
+EPS Trailing : 4.9
+EPS Forward : 11.11635
+
+--- Balance Sheet ---
+Total Cash : $62.56B
+Total Debt : $11.41B
+Debt/Equity: 7.255
+Current Ratio: 3.905
+
+--- Dividends & Returns ---
+Dividend Yield : 0.02
+Return on Equity: 1.01485
+Return on Assets: 0.51188
+Free Cash Flow : $58.13B
+
+--- Business Summary ---
+NVIDIA Corporation operates as a data center scale AI infrastructure company. The company operates through two segments, Compute & Networking, and Graphics segments. The Compute & Networking segment provides data center accelerated computing and networking platforms and artificial intelligence solutions and software, and automotive platforms and autonomous and electric vehicle solutions, including software. The Graphics segment offers GeForce GPUs for gaming and PCs; Quadro/NVIDIA RTX GPUs for enterprise workstation graphics. The company's products are used in gaming, professional visualization, data center, and automotive markets. The company sells its products to original equipment manufacturers, original device manufacturers, system integrators and distributors, independent software vendors, cloud service providers, add-in board manufacturers, distributors, automotive manufacturers and tier-1 automotive suppliers, and other ecosystem participants worldwide. It has a collaboration with Tech Mahindra Limited to develop artificial intelligence powered telco network operations reasoning agent. The company has a strategic partnership with Lumentum Holdings Inc. to develop optics technologies for AI and data centers. It also has a strategic partnership with Nebius Group N.V. to develop and deploy hyperscale cloud for the artificial intelligence market. NVIDIA Corporation was incorporated in 1993 and is headquartered in Santa Clara, California.

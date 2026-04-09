@@ -1,0 +1,47 @@
+# === Environment & Secrets ===
+.env
+*.env.local
+
+# === Virtual Environment ===
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# === Vector Database (ChromaDB) ===
+chroma_db/
+*.db
+*.sqlite
+
+# === Hash State (Incremental Update) ===
+hashes.json
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Jupyter ===
+.ipynb_checkpoints/
+*.ipynb
+
+# === Logs ===
+*.log
+logs/
+
+# === Phase 1 Not required ===
+data copy/
+fetch_data.py
+skill_builder.py
+project.md
+skill.md
+HW3.md

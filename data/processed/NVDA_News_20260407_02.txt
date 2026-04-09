@@ -1,0 +1,95 @@
+Title : Consumer hardware trade in danger as Iran war triggers memory chip pricing explosion
+Source : Yahoo Finance [full]
+URL : https://finance.yahoo.com/news/consumer-hardware-trade-in-danger-as-iran-war-triggers-memory-chip-pricing-explosion-144857982.html
+Published: 2026-04-06T14:48:57Z
+
+Consumer hardware trade in danger as Iran war triggers memory chip pricing explosion
+Francisco Velasquez
+Mon, April 6, 2026 at 10:48 PM GMT+8
+3 min read
+StockStory Top Pick
+NVDA
++0.14%
+^GSPC
++0.44%
+HPQ
+-2.92%
+LOGI
++0.54%
+Hardware makers may soon show the impact of the Iran war despite their recent stock outperformance.
+The S&P 500 Technology Hardware Index (
+^SP500-4520
+) has outperformed the S&P 500 (
+^GSPC
+) by 13% since February. Yet Morgan Stanley analyst Erik Woodring warns that the industry will face multiple headwinds in the near future.
+Woodring noted that the firm is "Doubling down on our 'Cautionary' stance as memory tightness persists and signs of demand weakness begin to emerge."
+Morgan Stanley's position largely applies to consumer hardware companies like Logitech (
+LOGI
+), a Swiss-American manufacturer that specializes in keyboards, webcams, and gaming accessories. In the past month, Logitech stock has risen over 2% and is up more than 30% over the past year. In comparison, Nvidia (
+NVDA
+) shares have slipped slightly over the past 30 days but remain up over 80% for the past year.
+In the months ahead, the supply shock from the Iran war could result in a double whammy of higher costs and lower demand for consumer hardware companies.
+Read more:
+How oil price shocks ripple through your wallet, from gas to groceries
+While a conflict in the Middle East might seem far away from the computer factories of Asia, the two are linked by energy and shipping.
+Memory chips require a massive, steady flow of natural gas to power production. Soaring energy prices have elevated the manufacturing costs. At the same time, the war has turned the Strait of Hormuz — a critical global shipping highway — into a bottleneck. Ships carrying the raw chemicals and gases needed to build electronics have been forced to take long, expensive detours.
+Woodring said the shock is pushing memory contract prices up to 70% higher. This triggers a spike in costs for companies like HP (
+HPQ
+), Logitech, Cricut (
+CRCT
+), and GoPro (
+GPRO
+), which rely on high volumes of DRAM and NAND flash for their products. Since these companies may struggle to pass the costs along to consumers, Woodring expects a 5% to 10% drop in earnings.
+NYSE
+•
+USD
+(HPQ)
+Follow
+View Quote Details
+18.94
+-0.57
+(-2.92%)
+At close: April 6 at 4:00:02 PM EDT
+HPQ
+GPRO
+LOGI
+Advanced Chart
+NetApp (
+NTAP
+) — a data storage and cloud management firm — is also at risk. While it avoids direct consumer exposure, it lacks the buying power of tech giants such as Microsoft (
+MSFT
+), Google (
+GOOGL
+,
+GOOG
+), and Meta (
+META
+). These top AI players are aggressively acquiring Nvidia GPUs and hoarding the memory components that smaller hardware companies now struggle to afford.
+That leaves companies like NetApp more exposed to shifting prices for the memory chips that power their storage systems.
+On the consumer front, the predicted recovery in PC demand is not materializing, according to Jim Kelleher, director of research at Argus Research. Kelleher reported that memory now consumes over 50% of a computer's total build price, up from just 18% before the conflict.
+Story Continues
+He argued that this creates a "squeezing-out effect." When component costs skyrocket, companies are forced to raise prices, cut margins, or reduce other spending — which may push price-sensitive buyers out of the market.
+Kelleher argued that PC prices have already risen and will likely continue to do so as companies seek to cover these costs. While data on consumer tech spending has yet to materialize, he noted that demand for upgrades may decline as users prioritize essential spending on groceries and
+$4 per gallon
+gas.
+"You can't skimp on gas," he told Yahoo Finance. "You've got to get to work."
+Kelleher suggested investors pivot to networking "highways" like Arista (
+ANET
+) and Ciena (
+CIEN
+), which are better insulated from the current supply chain spike. In the past year, shares of Arista have risen by about 60%, while Ciena's stock has jumped over 588%.
+Francisco Velasquez
+is a Reporter at Yahoo Finance. Follow him on
+LinkedIn
+,
+X
+, and
+Instagram
+. Story tips? Email him at francisco.velasquez@yahooinc.com.
+Click here for the latest technology news that will impact the stock market
+Read the latest financial and business news from Yahoo Finance
+Terms
+and
+Privacy Policy
+Privacy Dashboard
+More Info

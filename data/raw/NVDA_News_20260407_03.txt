@@ -1,0 +1,32 @@
+Title    : AI networking firm Aria Networks raises $125 million in funding
+Source   : Reuters [full]
+URL      : https://finance.yahoo.com/sectors/technology/articles/ai-networking-firm-aria-networks-113112910.html
+Published: 2026-04-07T11:31:12Z
+
+AI networking firm Aria Networks raises $125 million in funding
+Reuters
+Tue, April 7, 2026 at 7:31 PM GMT+8
+1 min read
+StockStory Top Pick
+NVDA
++0.14%
+GOOG
++1.09%
+April 7 (Reuters) - Aria Networks said on Tuesday it has raised $125 million in its first series funding ‌round, as the startup seeks to develop its AI ‌networking infrastructure to meet the soaring demand for capacity amid the rapid ​adoption of
+artificial intelligence
+.
+Aria's network is designed to work with any AI chip on the market, including those from
+Nvidia
+and Google, giving companies the flexibility to upgrade or switch hardware ‌over time without ⁠overhauling their entire network infrastructure.
+Founded in 2025, Aria Networks is backed by Sutter Hill Ventures, Atreides ⁠Management, Valor Equity Partners, and Eclipse Ventures.
+Gavin Baker, managing partner at Atreides, has joined Aria’s board, along with Stefan Dyckerhoff of Sutter ​Hill ​and Aria's founders.
+The company also ​announced the availability of what ‌it calls the world's first AI-native network, built to help AI data centers run more efficiently and at lower cost. Its core focus is "token efficiency", a measure of a data center's AI output relative to its running costs.
+Proceeds from ‌the Series A funding round will ​be used to build this so-called 'Networks ​that Think', the company ​said.
+Tokens are a measure of how much ‌text an AI model can process ​or remember ​during a single interaction. A token roughly corresponds to a short piece of text, such as part of a ​word.
+Palo Alto-based Aria ‌said it already has customer orders in hand ​and is actively deploying.
+(Reporting by Juby Babu in Mexico ​City; Editing by Leroy Leo)
+Terms
+and
+Privacy Policy
+Privacy Dashboard
+More Info
