@@ -38,11 +38,8 @@ Thumbs.db
 *.log
 logs/
 
-# === Phase 1 Not required ===
+# === Local Notes / Course Handout ===
 data copy/
-fetch_data.py
-skill_builder.py
 project.md
-skill.md
+fetch_data.py
 HW3.md
-README.md
