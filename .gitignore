@@ -19,6 +19,7 @@ chroma_db/
 
 # === Hash State (Incremental Update) ===
 hashes.json
+data/.seen_news_keys.json
 
 # === IDE ===
 .vscode/

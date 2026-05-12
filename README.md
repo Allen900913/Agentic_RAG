@@ -167,10 +167,10 @@ copy .env.example .env
 python data_update.py --rebuild
 
 # ⑦ 測試 RAG 問答
-python rag_query.py --query "NVIDIA 最新財報的毛利率是多少？" --model gpt-oss:20b
-python rag_query.py --query "Microsoft 最新財報的毛利率是多少？" --model gpt-oss:20b
-python rag_query.py --query "Microsoft 目前有什麼有利或是不利的新聞？" --model gpt-oss:20b
-python rag_query.py --query "Apple 最近的 iPhone 銷售狀況如何？" --model gpt-oss:20b
+python rag_query.py --query "NVIDIA 最新財報的毛利率是多少？" --model gemini-3-flash-preview
+python rag_query.py --query "Microsoft 最新財報的毛利率是多少？" --model gemini-3-flash-preview
+python rag_query.py --query "Apple 目前有什麼有利或是不利的新聞？" --model gemini-3-flash-preview
+python rag_query.py --query "Apple 最近的 iPhone 銷售狀況如何？" --model gemini-3-flash-preview
 
 # ⑧ 生成 Skill 文件
 python skill_builder.py --output skill.md

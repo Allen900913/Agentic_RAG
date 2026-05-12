@@ -1,0 +1,22 @@
+Title    : IREN Shares Jump as Nvidia Deal Sharpens Bitcoin Miner’s AI Pivot
+Source   : CryptoProwl [full]
+URL      : https://www.cryptoprowl.com/releases/iren-shares-jump-as-nvidia-deal-sharpens-bitcoin-miners-ai-pivot-4421
+Published: 2026-05-08T02:20:00Z
+
+IREN Shares Jump as Nvidia Deal Sharpens Bitcoin Miner’s AI Pivot
+$IREN
+$NVDA
+2 hours ago
+By: CryptoProwl
+IREN Limited (NASDAQ:
+$IREN
+) shares jumped in after-hours trading on Thursday after the company announced a new Nvidia (NASDAQ:
+$NVDA
+) partnership that gives its AI infrastructure pivot a much larger public-market signal.
+The stock rose 27% to $72.28 after closing at $56.85, before pulling back to $69.45 at press time, still up more than 21%. The rally followed IREN’s disclosure of a five-gigawatt strategic partnership with Nvidia tied to the deployment of AI infrastructure across its global data center pipeline.
+Under the agreement, IREN issued Nvidia a five-year right to purchase up to 30 million ordinary shares at $70 per share. If fully exercised, the right would represent up to $2.1 billion of potential investment, subject to conditions including regulatory limits.
+The partnership is expected to focus on Nvidia-aligned DSX AI factory infrastructure, with future deployments centred around IREN’s two-gigawatt Sweetwater campus in Texas. IREN also announced a separate five-year, $3.4 billion AI Cloud contract with Nvidia for air-cooled Blackwell GPUs, with deployment expected within 60 megawatts of existing data centers at Childress and a targeted ramp beginning in early 2027.
+The update pushes IREN further away from the pure bitcoin-mining identity it carried when it operated as Iris Energy. Bitcoin still anchors the company’s current revenue base, but the market reaction shows how quickly investors are starting to value miners with power access, land, data center expertise and a credible path into AI compute.
+Co-founder and co-CEO Daniel Roberts said the world is “structurally short compute,” adding that the bottleneck is delivered data center and GPU capacity. That framing fits with IREN’s current pitch: use its power portfolio and development pipeline to capture demand from AI customers while mining economics remain under pressure.
+The quarter itself was mixed. IREN reported total revenue of $144.8 million, down from $184.7 million in the prior quarter, while AI Cloud Services revenue rose to $33.6 million.
+IREN Limited (NASDAQ: IREN) stock closed at $56.65 U.S. per share before the after-hours rally.

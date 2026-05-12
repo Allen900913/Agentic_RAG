@@ -135,23 +135,7 @@ def clean_text(text: str) -> str:
 # Chunking
 # ══════════════════════════════════════════════════════════════════════════════
 
-def chunk_text(
-    text: str,
-    size: int = CHUNK_SIZE,
-    overlap: int = CHUNK_OVERLAP,
-) -> list[str]:
-    """
-    固定長度 + Overlap 切塊策略。
-    每塊 `size` 字元，相鄰塊重疊 `overlap` 字元，避免語意斷裂。
-    """
-    chunks: list[str] = []
-    start = 0
-    while start < len(text):
-        chunk = text[start : start + size]
-        if len(chunk.strip()) > 20:     # 過濾過短的片段
-            chunks.append(chunk)
-        start += size - overlap
-    return chunks
+
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -193,14 +177,7 @@ Examples:
         "--processed-dir", default=str(PROCESSED_DIR),
         help=f"Processed text output directory (default: {PROCESSED_DIR})",
     )
-    parser.add_argument(
-        "--chunk-size", type=int, default=CHUNK_SIZE,
-        help=f"Characters per chunk (default: {CHUNK_SIZE})",
-    )
-    parser.add_argument(
-        "--overlap", type=int, default=CHUNK_OVERLAP,
-        help=f"Overlap characters between chunks (default: {CHUNK_OVERLAP})",
-    )
+
     args = parser.parse_args()
 
     raw_dir       = Path(args.raw_dir)
@@ -210,12 +187,22 @@ Examples:
 
     # ── Imports that require installed packages ──────────────────────────────
     import chromadb
-    from sentence_transformers import SentenceTransformer
+    from langchain_huggingface import HuggingFaceEmbeddings
+    from langchain_experimental.text_splitter import SemanticChunker
 
-    # ── Load model ────────────────────────────────────────────────────────────
+    # ── Load model & Chunker ──────────────────────────────────────────────────
     print(f"[INFO] Embedding model : {EMBEDDING_MODEL}")
     print(f"[INFO] ChromaDB path   : {CHROMA_PERSIST}")
-    embed_model = SentenceTransformer(EMBEDDING_MODEL)
+    
+    # 1. 使用 LangChain 封裝你的本地模型
+    embed_model = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
+    
+    # 2. 初始化 Semantic Chunker
+    semantic_chunker = SemanticChunker(
+        embed_model,
+        breakpoint_threshold_type="percentile",
+        breakpoint_threshold_amount=90 # 相似度跌破前 10% 時切割 (數值越高切得越細，可依需求微調)
+    )
 
     # ── ChromaDB client ───────────────────────────────────────────────────────
     client = chromadb.PersistentClient(path=CHROMA_PERSIST)
@@ -284,10 +271,14 @@ Examples:
         proc_path = processed_dir / (filepath.stem + ".txt")
         proc_path.write_text(clean, encoding="utf-8")
 
-        # ── Chunk ─────────────────────────────────────────────────────────
-        chunks = chunk_text(clean, args.chunk_size, args.overlap)
+        # ── Semantic Chunking ─────────────────────────────────────────────
+        # 使用 Semantic Chunker 切割文件
+        docs = semantic_chunker.create_documents([clean])
+        # 取出文字，並過濾掉過短的無意義片段
+        chunks = [doc.page_content for doc in docs if len(doc.page_content.strip()) > 20]
+        
         total_chunks += len(chunks)
-        print(f"  → {len(chunks)} chunks  |  processed: {proc_path.name}")
+        print(f"  → {len(chunks)} semantic chunks  |  processed: {proc_path.name}")
 
         if not chunks:
             continue
@@ -301,9 +292,8 @@ Examples:
             pass
 
         # ── Embed ─────────────────────────────────────────────────────────
-        embeddings = embed_model.encode(
-            chunks, batch_size=32, show_progress_bar=False
-        ).tolist()
+        # 使用 LangChain 的 embed_documents 方法來產生 ChromaDB 需要的向量格式
+        embeddings = embed_model.embed_documents(chunks)
 
         # ── Store ─────────────────────────────────────────────────────────
         ids       = [f"{filepath.stem}_c{i}" for i in range(len(chunks))]
