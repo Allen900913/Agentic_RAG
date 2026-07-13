@@ -1,0 +1,564 @@
+{
+  "summary": {
+    "no-rewrite": {
+      "pool_file_R": 0.581,
+      "pool_ckpt_R": 0.34,
+      "avg_pool_size": 20,
+      "file_P": 0.4733,
+      "file_R": 0.4435,
+      "chunk_P": 0.44,
+      "ckpt_R": 0.5386,
+      "crit_miss": 0.5,
+      "n_queries": 10,
+      "n_with_ckpt": 10
+    },
+    "rewrite+cap=3": {
+      "pool_file_R": 0.706,
+      "pool_ckpt_R": 0.53,
+      "avg_pool_size": 22.9,
+      "file_P": 0.4767,
+      "file_R": 0.4685,
+      "chunk_P": 0.5,
+      "ckpt_R": 0.56,
+      "crit_miss": 0.4,
+      "n_queries": 10,
+      "n_with_ckpt": 10
+    },
+    "rewrite+no-cap": {
+      "pool_file_R": 0.8202,
+      "pool_ckpt_R": 0.0714,
+      "avg_pool_size": 39.5,
+      "file_P": 0.4283,
+      "file_R": 0.4768,
+      "chunk_P": 0.48,
+      "ckpt_R": 0.4514,
+      "crit_miss": 0.4,
+      "n_queries": 10,
+      "n_with_ckpt": 10
+    },
+    "rewrite+RRF-fusion": {
+      "pool_file_R": 0.8435,
+      "pool_ckpt_R": 0.13,
+      "avg_pool_size": 39.1,
+      "file_P": 0.525,
+      "file_R": 0.5435,
+      "chunk_P": 0.46,
+      "ckpt_R": 0.36,
+      "crit_miss": 0.7,
+      "n_queries": 10,
+      "n_with_ckpt": 10
+    }
+  },
+  "traces": [
+    {
+      "id": "col-01",
+      "category": "colloquial",
+      "query": "為什麼大家做 AI 都要買輝達的卡，別家一直追不上它？",
+      "conditions": {
+        "no-rewrite": {
+          "pool_size": 20,
+          "pool_file_R": 0.1429,
+          "pool_ckpt_R": 0.3,
+          "file_P": 0.5,
+          "file_R": 0.1429,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.5,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+cap=3": {
+          "pool_size": 21,
+          "pool_file_R": 0.1429,
+          "pool_ckpt_R": 0.3,
+          "file_P": 0.5,
+          "file_R": 0.1429,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.7,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+no-cap": {
+          "pool_size": 43,
+          "pool_file_R": 0.2857,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.5,
+          "file_R": 0.1429,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.7,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+RRF-fusion": {
+          "pool_size": 20,
+          "pool_file_R": 0.1429,
+          "pool_ckpt_R": 0.3,
+          "file_P": 0.5,
+          "file_R": 0.1429,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.5,
+          "crit_miss": true,
+          "fallback_note": ""
+        }
+      }
+    },
+    {
+      "id": "col-02",
+      "category": "colloquial",
+      "query": "蘋果除了賣手機，還靠什麼一直在收錢？這塊以後會不會更會賺？",
+      "conditions": {
+        "no-rewrite": {
+          "pool_size": 20,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.7,
+          "file_P": 0.25,
+          "file_R": 0.5,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.5,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+cap=3": {
+          "pool_size": 21,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.5,
+          "file_P": 0.25,
+          "file_R": 0.5,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.5,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+no-cap": {
+          "pool_size": 36,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.25,
+          "file_R": 0.5,
+          "chunk_P": 1.0,
+          "ckpt_R": 0.5,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+RRF-fusion": {
+          "pool_size": 36,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.25,
+          "file_R": 0.5,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.5,
+          "crit_miss": true,
+          "fallback_note": ""
+        }
+      }
+    },
+    {
+      "id": "col-03",
+      "category": "colloquial",
+      "query": "微軟賣東西，扣掉成本之後大概還能留下幾成？",
+      "conditions": {
+        "no-rewrite": {
+          "pool_size": 20,
+          "pool_file_R": 0.25,
+          "pool_ckpt_R": 0.2857,
+          "file_P": 0.25,
+          "file_R": 0.125,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.2857,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+cap=3": {
+          "pool_size": 25,
+          "pool_file_R": 0.5,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.25,
+          "file_R": 0.125,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.7143,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+no-cap": {
+          "pool_size": 20,
+          "pool_file_R": 0.25,
+          "pool_ckpt_R": 0.7143,
+          "file_P": 0.25,
+          "file_R": 0.125,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.7143,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+RRF-fusion": {
+          "pool_size": 43,
+          "pool_file_R": 0.625,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.3333,
+          "file_R": 0.125,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.0,
+          "crit_miss": true,
+          "fallback_note": ""
+        }
+      }
+    },
+    {
+      "id": "col-04",
+      "category": "colloquial",
+      "query": "微軟租伺服器、做網路那塊生意，跟亞馬遜、谷歌比打得贏嗎？",
+      "conditions": {
+        "no-rewrite": {
+          "pool_size": 20,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.2,
+          "file_P": 0.6667,
+          "file_R": 1.0,
+          "chunk_P": 0.2,
+          "ckpt_R": 0.7,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+cap=3": {
+          "pool_size": 25,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 1.0,
+          "file_P": 0.5,
+          "file_R": 0.5,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.8,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+no-cap": {
+          "pool_size": 41,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.5,
+          "file_R": 1.0,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.5,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+RRF-fusion": {
+          "pool_size": 43,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.5,
+          "file_R": 1.0,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.7,
+          "crit_miss": false,
+          "fallback_note": ""
+        }
+      }
+    },
+    {
+      "id": "col-05",
+      "category": "colloquial",
+      "query": "亞馬遜租伺服器那塊生意，以後想往哪個方向走？",
+      "conditions": {
+        "no-rewrite": {
+          "pool_size": 20,
+          "pool_file_R": 0.6667,
+          "pool_ckpt_R": 0.5,
+          "file_P": 0.4,
+          "file_R": 0.6667,
+          "chunk_P": 0.2,
+          "ckpt_R": 0.7,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+cap=3": {
+          "pool_size": 21,
+          "pool_file_R": 0.6667,
+          "pool_ckpt_R": 0.7,
+          "file_P": 0.4,
+          "file_R": 0.6667,
+          "chunk_P": 0.2,
+          "ckpt_R": 0.8,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+no-cap": {
+          "pool_size": 50,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.6667,
+          "file_R": 0.6667,
+          "chunk_P": 0.2,
+          "ckpt_R": 0.2,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+RRF-fusion": {
+          "pool_size": 50,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.5,
+          "file_R": 0.6667,
+          "chunk_P": 0.2,
+          "ckpt_R": 0.0,
+          "crit_miss": true,
+          "fallback_note": ""
+        }
+      }
+    },
+    {
+      "id": "col-06",
+      "category": "colloquial",
+      "query": "蘋果一年下來，平均一股大概幫股東賺多少錢？",
+      "conditions": {
+        "no-rewrite": {
+          "pool_size": 20,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.7143,
+          "file_P": 0.75,
+          "file_R": 0.5,
+          "chunk_P": 0.4,
+          "ckpt_R": 1.0,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+cap=3": {
+          "pool_size": 21,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 1.0,
+          "file_P": 0.75,
+          "file_R": 0.5,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.2857,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+no-cap": {
+          "pool_size": 34,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.2,
+          "file_R": 0.1667,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.0,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+RRF-fusion": {
+          "pool_size": 20,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 1.0,
+          "file_P": 0.75,
+          "file_R": 0.5,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.0,
+          "crit_miss": true,
+          "fallback_note": ""
+        }
+      }
+    },
+    {
+      "id": "col-07",
+      "category": "colloquial",
+      "query": "臉書一直砸大錢做頭戴裝置跟虛擬世界，到底在賺還在賠？以後想怎麼搞？",
+      "conditions": {
+        "no-rewrite": {
+          "pool_size": 20,
+          "pool_file_R": 0.6667,
+          "pool_ckpt_R": 0.2,
+          "file_P": 0.6667,
+          "file_R": 0.6667,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.8,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+cap=3": {
+          "pool_size": 24,
+          "pool_file_R": 0.6667,
+          "pool_ckpt_R": 0.5,
+          "file_P": 0.6667,
+          "file_R": 0.6667,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.5,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+no-cap": {
+          "pool_size": 42,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.6667,
+          "file_R": 0.6667,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.7,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+RRF-fusion": {
+          "pool_size": 47,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.6667,
+          "file_R": 0.6667,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.7,
+          "crit_miss": false,
+          "fallback_note": ""
+        }
+      }
+    },
+    {
+      "id": "col-08",
+      "category": "colloquial",
+      "query": "特斯拉現在最讓人擔心、最頭痛的麻煩有哪些？",
+      "conditions": {
+        "no-rewrite": {
+          "pool_size": 20,
+          "pool_file_R": 0.3333,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.25,
+          "file_R": 0.3333,
+          "chunk_P": 0.2,
+          "ckpt_R": 0.0,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+cap=3": {
+          "pool_size": 23,
+          "pool_file_R": 0.3333,
+          "pool_ckpt_R": 0.5,
+          "file_P": 0.25,
+          "file_R": 0.3333,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.3,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+no-cap": {
+          "pool_size": 39,
+          "pool_file_R": 0.6667,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.0,
+          "file_R": 0.0,
+          "chunk_P": 0.2,
+          "ckpt_R": 0.0,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+RRF-fusion": {
+          "pool_size": 50,
+          "pool_file_R": 0.6667,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.5,
+          "file_R": 0.3333,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.2,
+          "crit_miss": true,
+          "fallback_note": ""
+        }
+      }
+    },
+    {
+      "id": "col-09",
+      "category": "colloquial",
+      "query": "蘋果自己跳下去做晶片，對它有什麼好處？",
+      "conditions": {
+        "no-rewrite": {
+          "pool_size": 20,
+          "pool_file_R": 0.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.0,
+          "file_R": 0.0,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.2,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+cap=3": {
+          "pool_size": 24,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.2,
+          "file_R": 1.0,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.5,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+no-cap": {
+          "pool_size": 49,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.25,
+          "file_R": 1.0,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.5,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+RRF-fusion": {
+          "pool_size": 42,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 0.25,
+          "file_R": 1.0,
+          "chunk_P": 0.4,
+          "ckpt_R": 0.0,
+          "crit_miss": true,
+          "fallback_note": ""
+        }
+      }
+    },
+    {
+      "id": "col-10",
+      "category": "colloquial",
+      "query": "谷歌會不會怕 AI 搶走它網路搜尋的生意？它打算怎麼接招？",
+      "conditions": {
+        "no-rewrite": {
+          "pool_size": 20,
+          "pool_file_R": 0.75,
+          "pool_ckpt_R": 0.5,
+          "file_P": 1.0,
+          "file_R": 0.5,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.7,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+cap=3": {
+          "pool_size": 24,
+          "pool_file_R": 0.75,
+          "pool_ckpt_R": 0.8,
+          "file_P": 1.0,
+          "file_R": 0.25,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.5,
+          "crit_miss": true,
+          "fallback_note": ""
+        },
+        "rewrite+no-cap": {
+          "pool_size": 41,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 1.0,
+          "file_R": 0.5,
+          "chunk_P": 0.6,
+          "ckpt_R": 0.7,
+          "crit_miss": false,
+          "fallback_note": ""
+        },
+        "rewrite+RRF-fusion": {
+          "pool_size": 40,
+          "pool_file_R": 1.0,
+          "pool_ckpt_R": 0.0,
+          "file_P": 1.0,
+          "file_R": 0.5,
+          "chunk_P": 0.6,
+          "ckpt_R": 1.0,
+          "crit_miss": false,
+          "fallback_note": ""
+        }
+      }
+    }
+  ]
+}

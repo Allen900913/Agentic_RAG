@@ -1,0 +1,1898 @@
+{
+  "summary": {
+    "mixed": {
+      "n": 25,
+      "hallucination_rate_mean": null,
+      "correctness_mean": 0.897,
+      "n_with_rubric": 25,
+      "relevance_mean": null,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.709,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 1,
+      "hallucination_pass@0.1": null,
+      "correctness_pass@0.6": 0.92,
+      "relevance_pass@0.8": null
+    },
+    "overall": {
+      "n": 25,
+      "hallucination_rate_mean": null,
+      "correctness_mean": 0.897,
+      "n_with_rubric": 25,
+      "relevance_mean": null,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.709,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 1,
+      "hallucination_pass@0.1": null,
+      "correctness_pass@0.6": 0.92,
+      "relevance_pass@0.8": null
+    }
+  },
+  "records": [
+    {
+      "id": "lex-04",
+      "category": "mixed",
+      "query": "Apple 最新一份 10-K 年報的風險因素章節中，主要提到哪些風險？",
+      "answerable": true,
+      "answer": "Apple 2025 Form 10‑K 的風險因素章節主要聚焦於以下幾大類風險：\n\n1. **法律與合規風險** – 隱私與資料保護法規日益增多，違規可能導致巨額罰款、訴訟、聲譽受損與營運中斷；同時新興的未成年線上安全與年齡驗證規定亦會增加合規成本與營運風險【AAPL_10K_2025.html, chunk #57】。  \n2. **財務與匯率風險** – 毛利率受全球產品定價壓力、競爭、供應短缺、組件成本上升、產品組合變化及關稅影響；外幣匯率波動會影響銷售、成本與衍生工具的對沖效果；貿易應收帳款、供應商非貿易應收款與長期預付款的信用風險亦可能對業績產生不利影響【AAPL_10K_2025.html, chunk #57】。  \n3. **產品設計與製造缺陷風險** – 硬體與軟體的設計、製造或元件缺陷可能導致安全事故、產品召回、保固與訴訟成本上升；AI 功能的加入亦可能增加錯誤、錯誤資訊與安全漏洞的風險【AAPL_10K_2025.html, chunk #48】。  \n4. **供應鏈與庫存風險** – 依賴單一來源或亞洲外包夥伴的零件與組裝，若供應中斷、品質問題或需求預測錯誤，將導致庫存過剩或不足，並可能產生取消費用與減值損失【AAPL_10K_2025.html, chunk #48】【AAPL_10K_2025.html, chunk #46】。  \n5. **第三方智慧財產與開發者依賴風險** – 產品與服務需使用或授權第三方 IP，若無法取得合理授權或被指侵權，將面臨高額授權費、產品修改或停止銷售的風險；同時，第三方開發者對 iOS、macOS 等平台的支援若減少，亦會削弱產品吸引力【AAPL_10K_2025.html, chunk #48】。  \n6. **人才與組織風險** – 高度競爭的科技人才市場及移民、勞動法規的變化，可能提升招聘與留任成本，影響公司執行戰略的能力【AAPL_10K_2025.html, chunk #46】。  \n7. **稅務風險** – 受全球稅制變動、OECD 全球最低稅等提案影響，公司的有效稅率可能上升，稅務審查結果的不確定性亦可能導致額外稅負【AAPL_10K_2025.html, chunk #58】。  \n8. **股價波動風險** – 公司的股價歷史上曾出現劇烈波動，若未能符合市場對成長、盈利、股息與回購的預期，股價可能大幅下跌，進一步影響投資者信心與員工留任【AAPL_10K_2025.html, chunk #31】。  \n\n這些風險共同構成 Apple 在 2025 年度報告中所揭示的主要不確定因素。",
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 57
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 31
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 58
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly lists multiple risks from the 10‑K and cites source chunks, meeting all rubric requirements.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答符合要求，无需改进。"
+    },
+    {
+      "id": "lex-05",
+      "category": "mixed",
+      "query": "MSFT 202603 那一季的 10-Q 裡，Azure / Intelligent Cloud 業務表現如何？",
+      "answerable": true,
+      "answer": "Azure 与 Intelligent Cloud 在 2026 Q1（截至 2026‑03‑31）的 10‑Q 中表现出高速增长，Azure 相关收入同比攀升约 **40%**，而整个 Intelligent Cloud 部门收入同比增长约 **30%**，即 **增加约 79 亿美元**【MSFT_10Q_202603.html, chunk #45】。  \n\n**关键业绩细节**  \n\n- **Intelligent Cloud 收入**：本季收入比上年同期增长 $7.9 B，涨幅 30%【MSFT_10Q_202603.html, chunk #45】。  \n- **Azure 与其他云服务收入**：Azure 及其他云服务收入同比增长 **40%**【MSFT_10Q_202603.html, chunk #45】。  \n- **运营利润**：Intelligent Cloud 运营收入提升 $8.6 B，涨幅 26%【MSFT_10Q_202603.html, chunk #48】。  \n- **毛利**：毛利额增加 $9.4 B，涨幅 20%；毛利率因 AI 基础设施投入而略有下降【MSFT_10Q_202603.html, chunk #48】。  \n- **成本结构**：成本 of revenue 上升 $12.7 B，涨幅 45%，主要源于对 AI 基础设施的投资【MSFT_10Q_202603.html, chunk #48】。  \n- **外币影响**：成本 of revenue 包含 2% 的不利外币影响【MSFT_10Q_202603.html, chunk #45】。  \n\n综上，Azure 业务保持强劲需求，推动 Intelligent Cloud 整体实现约 30% 的收入增长，同时伴随运营利润和毛利的显著提升，但也因 AI 基础设施投入导致成本和毛利率出现一定压力。",
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 12
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly references 202603 and provides growth figures.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已符合要求，但建议在表述中直接使用“202603”季度代码，避免使用“2026 Q1”导致歧义，以提升检索与引用的准确性。"
+    },
+    {
+      "id": "lex-07",
+      "category": "mixed",
+      "query": "AAPL 202603 那一季的 10-Q 裡，iPhone 與服務業務營收各自表現如何？",
+      "answerable": true,
+      "answer": "iPhone 營收在 2026 年第二季較去年同期大幅成長 22%，達 **$56.994 億**；服務業務營收則提升 16%，達 **$30.976 億**【AAPL_10Q_202603.html, chunk #10】。  \n\n- iPhone 營收由 2025 年第二季的 $46.841 億增至 $56.994 億，增幅 22%【AAPL_10Q_202603.html, chunk #10】。  \n- 服務營收由 2025 年第二季的 $26.645 億增至 $30.976 億，增幅 16%【AAPL_10Q_202603.html, chunk #10】。  \n- 兩項增長均受產品組合變化與需求提升驅動：iPhone 受 Pro 型號銷售提升影響，服務則受廣告、App Store 與雲端服務需求上升推動【AAPL_10Q_202603.html, chunk #30】。",
+      "sources": [
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 30
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 8
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all required points and avoids prohibited errors.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答准确，无需改进。"
+    },
+    {
+      "id": "lex-10",
+      "category": "mixed",
+      "query": "Meta 最新年報（10-K）中，對 Reality Labs 業務的虧損與展望怎麼描述？",
+      "answerable": true,
+      "answer": "Meta 在 2025 年的 Reality Labs（元宇宙）部門錄得 **營運虧損 191.93 億美元**，較 2024 年的 177.29 億美元多 **1.46 億美元，增幅約 8%**【META_10K_2025.html, chunk #177】【META_10K_2025.html, chunk #14】。  \n\n- 虧損擴大主要來自 **員工薪酬、其他人事費用、不可取消的 RL 庫存採購承諾估計損失，以及技術開發成本的上升**【META_10K_2025.html, chunk #177】。  \n- 2025 年 Reality Labs 的營運收入為 **‑19,193 百萬美元**，佔總營運收入的 **‑23%**（相較於 2024 年的 ‑17,729 百萬美元）【META_10K_2025.html, chunk #14】。  \n\n### 展望與風險描述\nMeta 在 10‑K 中指出，Reality Labs 的策略與投資屬於 **「複雜、持續演變且長期」的計畫**，旨在推動元宇宙、AI、可穿戴裝置與新一代介面等創新【META_10K_2025.html, chunk #67】。同時，Meta 認列以下主要不確定因素與風險：\n\n1. **市場接受度不確定**：元宇宙的發展可能未如預期，相關功能、產品或服務的市場接受度仍有疑慮【META_10K_2025.html, chunk #67】。  \n2. **硬體與技術經驗有限**：Meta 在消費者硬體與虛擬/增強實境技術方面的經驗相對有限，可能使競爭對手更具優勢【META_10K_2025.html, chunk #67】。  \n3. **研發與合作風險**：若無法成功開發關鍵技術、建立與元宇宙參與者的合作關係，或產品與其他平台的互通性不足，將影響業務表現【META_10K_2025.html, chunk #67】。  \n4. **資源分散風險**：Reality Labs 的投資可能分散管理層與資金，削弱其他事業部門的績效【META_10K_2025.html, chunk #67】。  \n5. **法規與合規成本**：隨著相關技術的發展，Meta 可能面臨美國及國際間在隱私、安全、AI、競爭、內容管制、醫療器材、關稅、出口管制、消費者保護與電商等領域的新法規，這些法規可能延遲或阻礙產品開發，並增加營運成本【META_10K_2025.html, chunk #67】。  \n\nMeta 強調，未來仍將 **持續投入虛擬與增強實境及其他相關技術**，但其成功與否取決於能否從其他部門產生足夠利潤以支撐這些長期投資【META_10K_2025.html, chunk #67】。",
+      "sources": [
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 177
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 4
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 67
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 160
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly includes required loss and long‑term investment details and mentions long‑term outlook for VR/AR, with no fabricated figures.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已符合所有评估标准，建议进一步精炼表述，突出关键风险点以提升可读性。"
+    },
+    {
+      "id": "lex-11",
+      "category": "mixed",
+      "query": "TSLA 202603 那一季的 10-Q 裡，毛利率與交付量的表現如何？",
+      "answerable": true,
+      "answer": "TSLA 在 2026 年第一季（截至 2026‑03‑31）的 10‑Q 中，**總毛利率為 21.1 %，較去年同期的 16.3 %提升了約 4.8 個百分點**【TSLA_10Q_202603.html, chunk #14】。  \n\n- **汽車業務毛利率**：21.1 %（去年為 16.2 %）【TSLA_10Q_202603.html, chunk #14】  \n- **汽車＋服務與其他業務毛利率**：18.9 %（去年為 14.3 %）【TSLA_10Q_202603.html, chunk #14】  \n- **能源產生與儲能業務毛利率**：39.5 %（去年為 28.8 %）【TSLA_10Q_202603.html, chunk #14】\n\n至於**交付量（delivery volume）**的具體數字，該季的 10‑Q 並未披露車輛交付或出貨量，只提供了收入層面的資訊，例如汽車銷售收入從 $12,925 百萬增至 $15,473 百萬，總收入從 $19,335 百萬增至 $22,387 百萬【TSLA_10Q_202603.html, chunk #8】。因此，交付量的具體表現在此文件中無法直接得知。",
+      "sources": [
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 11
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 8
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 7
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly references 202603 and provides gross margin figures and notes delivery volume absence.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已满足所有评估标准，无需改进。"
+    },
+    {
+      "id": "lex-12",
+      "category": "mixed",
+      "query": "AAPL 202512 那一季的 10-Q 裡，營收成長主要來自哪些產品線？",
+      "answerable": true,
+      "answer": "Apple’s Q1 2026 revenue growth was driven almost entirely by higher iPhone sales and stronger Services sales, with iPad also adding modest upside while Mac and Wearables declined. The 10‑Q notes that iPhone net sales rose year‑over‑year on stronger Pro‑model demand, Services net sales grew on advertising, App Store and cloud‑service gains, and iPad net sales increased on higher iPad and iPad Pro shipments; by contrast, Mac and Wearables‑Home‑Accessories sales fell [Reference 1, chunk #26].",
+      "sources": [
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 8
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 6
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 21
+        }
+      ],
+      "correctness": {
+        "score": 0.0,
+        "critical_miss": true,
+        "fatal_hallucination": true
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi1"
+        ],
+        "must_not_violations": [
+          "mn0"
+        ],
+        "reason": "Answer incorrectly references Q1 2026 instead of the requested 202512 quarter, violating the quarter‑specific requirement.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi1"
+            ],
+            [
+              "mi1"
+            ],
+            [
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [
+              "mn0"
+            ],
+            [
+              "mn0"
+            ],
+            [
+              "mn0"
+            ]
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "最严重的问题是季度不匹配，系统在检索或生成时把 202512 的 10‑Q 数据误引用为 Q1 2026。建议先确认检索到的文档确实对应 2025 Q4（202512），再让 LLM 只使用该文档中的数据，避免把其他季度的数字当成 202512 的信息。"
+    },
+    {
+      "id": "mix-01",
+      "category": "mixed",
+      "query": "NVIDIA 最新財報的營收成長率",
+      "answerable": true,
+      "answer": "NVIDIA’s most recent financial report shows a year‑over‑year revenue growth of **0.852 (≈85.2 %)**【NVDA_Fundamentals_20260612.txt, chunk #0】.  \n\n- This figure appears in the “Growth” section of the June 12 2026 fundamentals, indicating the TTM revenue increased by roughly 85 % compared with the prior year.  \n- Earlier snapshots reported lower growth (e.g., 0.732 or 73.2 % in May 2026)【NVDA_Fundamentals_20260519.txt, chunk #0】【NVDA_Fundamentals_20260508.txt, chunk #0】, confirming the latest 0.852 rate is the most up‑to‑date.",
+      "sources": [
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260519.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 40
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 125
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        }
+      ],
+      "correctness": {
+        "score": 0.714,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly states the YoY revenue growth (~85%).",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0"
+            ],
+            [
+              "mi0"
+            ],
+            [
+              "mi0"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "回答缺少營收絕對值或具體期間，建議補充營收金額或報告期間以完整回答。"
+    },
+    {
+      "id": "mix-02",
+      "category": "mixed",
+      "query": "Apple iPhone 銷售近期趨勢",
+      "answerable": true,
+      "answer": "Apple iPhone 銷售正持續強勁成長，最新一季（2026 年第二季）營收較去年同期跳升 22%，達到約 570 億美元，佔公司總營收約 51%【AAPL_News_20260519_01.txt, chunk #4】。  \n\n- 2025 年度 iPhone 銷售額較 2024 年上升，主要受 Pro 系列需求推動【AAPL_10K_2025.html, chunk #80】。  \n- 2026 年第一季 iPhone 銷售額亦較 2025 年第一季上升，歸因於 Pro 型號的更高銷量【AAPL_10Q_202512.html, chunk #26】。  \n- 2026 年第二季 iPhone 銷售額為 569.94 億美元，較 2025 年第二季的 468.41 億美元增長 22%【AAPL_10Q_202603.html, chunk #10】。  \n- 同季 iPhone 銷售的增長在各主要區域均有體現：美洲、歐洲、大中華、日本及亞太其他地區均因 iPhone 銷售提升而呈現正向增長【AAPL_10Q_202603.html, chunk #30】。  \n- 大中華區在 2026 年第二季因人民幣走強而出現顯著回升，進一步支撐 iPhone 銷售【AAPL_10Q_202603.html, chunk #30】。  \n\n綜合以上資料，Apple 的 iPhone 銷售在過去一年內呈現連續的同比增長，且在最新季度達到兩位數的增幅，顯示需求仍保持旺盛。",
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 80
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 30
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 10
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer satisfies all rubric requirements.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": "检索器未能召回足够相关片段（context_recall_overlap 0.33），导致信息覆盖率低。建议扩大检索范围或优化召回策略，以提升答案完整性。"
+    },
+    {
+      "id": "mix-03",
+      "category": "mixed",
+      "query": "Microsoft 雲端業務最新季度表現",
+      "answerable": true,
+      "answer": "在最新季度（截至 2026 年 3 月 31 日的三个月）中，Microsoft 雲端業務的收入較去年同期增長 29%，新增 $22.1 十億美元，且 Azure 及其他雲端服務收入飆升 40%【MSFT_10Q_202603.html, chunk #48】。  \n\n- **營收**：整體 Intelligent Cloud（雲端）收入提升 $22.1 十億美元，年增率 29%【MSFT_10Q_202603.html, chunk #48】。  \n- **Azure 表現**：Azure 及其他雲端服務收入增長 40%，顯示平台需求持續擴大【MSFT_10Q_202603.html, chunk #48】。  \n- **毛利率**：Microsoft Cloud 的毛利率下降至 66%（從前期較高水平回落），主要受 AI 基礎設施投資與 AI 產品使用增長影響【MSFT_10Q_202603.html, chunk #42】。  \n- **營業利益**：Intelligent Cloud 部門的營業收入增加 $8.6 十億美元，年增率 26%【MSFT_10Q_202603.html, chunk #48】。  \n- **成本**：雲端成本（Cost of revenue）上升 $12.7 十億美元，增幅 45%，反映 AI 基礎設施的大規模投入【MSFT_10Q_202603.html, chunk #48】。  \n\n綜合來看，Microsoft 的雲端業務在本季度保持高速收入增長（特別是 Azure），但毛利率因持續的 AI 投資而略有下降，營業利潤仍顯著提升。",
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 43
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all rubric points.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.16666666666666666,
+      "actionable_feedback": "回答已满足所有必需点，建议继续保持引用来源准确性，避免潜在的上下文遗漏。"
+    },
+    {
+      "id": "mix-04",
+      "category": "mixed",
+      "query": "NVDA 最近新聞中的關鍵商業動向",
+      "answerable": true,
+      "answer": "NVIDIA 正在加速 AI 資料中心與運算/網路平台的布局，同時面臨來自 Cerebras、AMD 以及自家客戶 Amazon 與 Google 的 AI 晶片競爭加劇的關鍵商業動向【NVDA_News_20260519_02.txt, chunk #0】【NVDA_News_20260519_01.txt, chunk #4】。\n\n- **AI 及資料中心驅動的營收成長**：2026 財年營收成長主要來自資料中心運算與網路平台，提供加速運算與 AI 解決方案【NVDA_10K_2026.html, chunk #114】。  \n- **財務概況**：截至 2026 年 12 個月，NVDA 市值約 5.14 兆美元，營收 215.94 億美元，毛利率 71.07%，營業利率 65.02%，淨利率 55.60%，EPS 為 4.91（TTM）【NVDA_Fundamentals_20260508.txt, chunk #0】。  \n- **競爭環境升溫**：Cerebras 近期 IPO 並宣稱其 AI 處理器在整體效能上更快；AMD 將於今年晚些時推出競爭性的機架級伺服器系統；Amazon 與 Google（GOOG/GOOGL）正向第三方客戶提供自家 AI 晶片，直接與 NVIDIA 競爭【NVDA_News_20260519_01.txt, chunk #4】。  \n- **客戶自建晶片的衝擊**：Amazon 在最新財報中透露，其晶片業務已達 200 億美元以上的年收入跑道，且以三位數的年增率成長，顯示大型雲端供應商正快速擴張自有 AI 硬體【NVDA_News_20260519_01.txt, chunk #4】。  \n- **戰略合作夥伴**：NVIDIA 與 Tech Mahindra 合作開發 AI 驅動的電信網路運營推理代理，與 Lumentum 合作研發 AI 與資料中心光學技術，並與 Nebius Group 建立戰略夥伴關係，以加強其技術生態系統【NVDA_Fundamentals_20260508.txt, chunk #0】。  \n- **市場定位**：公司透過「Compute & Networking」與「Graphics」兩大營運部門，分別服務資料中心、AI、汽車以及遊戲與專業視覺市場，持續擴大在 AI 基礎設施領域的領先地位【NVDA_10K_2026.html, chunk #114】【NVDA_Fundamentals_20260508.txt, chunk #0】。  \n\n總結而言，NVIDIA 正以 AI 資料中心為核心推動營收與利潤增長，同時必須應對新興 AI 晶片廠商與主要雲端客戶自建晶片所帶來的競爭壓力。",
+      "sources": [
+        {
+          "source": "NVDA_News_20260519_02.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_News_20260519_02.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 114
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_News_20260519_01.txt",
+          "chunk_index": 4
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly lists a specific business move and cites news sources.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": "Retriever 未能抓取足夠相關片段，導致回答缺乏完整資訊。建議調整召回策略或增大 chunk 規模，以提升 context recall。"
+    },
+    {
+      "id": "mix-05",
+      "category": "mixed",
+      "query": "Apple 服務業務的毛利率與成長",
+      "answerable": true,
+      "answer": "Apple’s services segment is driving both margin expansion and revenue growth – services revenue rose 16% year‑over‑year to a record $31.0 billion (about 28% of total revenue) and helped lift Apple’s overall gross margin to 47.9% on a trailing‑twelve‑month basis, while the services‑specific gross margin itself increased year‑over‑year (exact percentage not disclosed)【AAPL_News_20260519_01.txt, chunk #4】【AAPL_News_20260519_01.txt, chunk #5】【AAPL_10K_2025.html, chunk #81】.  \n\n- **Revenue growth:** Services sales climbed 16% in the latest quarter, reaching $31.0 billion, up from the prior period and representing roughly one‑quarter of Apple’s total revenue mix【AAPL_News_20260519_01.txt, chunk #4】.  \n- **Margin impact:** The rise in the high‑margin services mix contributed to Apple’s total gross margin improving to 47.9% (up from 46.2% in FY 2024 and 38.2% in FY 2019)【AAPL_News_20260519_01.txt, chunk #5】.  \n- **Services‑specific gross margin trend:** Apple reports that services gross margin increased in 2025 versus 2024, driven by higher services net sales and a more favorable mix, though a precise percentage is not provided【AAPL_10K_2025.html, chunk #81】.  \n- **Forward expectations:** Bullish analysts anticipate services growth above 14% and services‑related gross margins exceeding 48% as the business scales【AAPL_News_20260612_04.txt, chunk #2】.  \n\nIn summary, Apple’s services business is expanding rapidly (16% YoY growth) and is a key factor behind the company’s rising overall gross margin, with its own services margin improving year‑over‑year, though the exact margin figure is not disclosed in the available sources.",
+      "sources": [
+        {
+          "source": "AAPL_News_20260612_04.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 5
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 81
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_News_20260612_04.txt",
+          "chunk_index": 2
+        }
+      ],
+      "correctness": {
+        "score": 0.375,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly states growth trend but does not explicitly mention services’ high margin nature, and it does not fabricate any unprovided margin percentage.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.2,
+      "actionable_feedback": "缺少对服务业务高毛利特性的直接表述，可在回答中加入“服务业务毛利率高于产品业务，通常在70%以上”之类的说明，以满足 mi0 要求。"
+    },
+    {
+      "id": "mix-06",
+      "category": "mixed",
+      "query": "MSFT EPS 與年增率",
+      "answerable": true,
+      "answer": "Microsoft 的稀释每股盈余 (Diluted EPS) 在 2025 财年提升至 **13.64 美元**，比 2024 财年的 **11.80 美元** 增长约 **15.6%**【MSFT_IncomeStatement_20260612.txt, chunk #0】。\n\n- 2025 财年稀释 EPS 为 13.64 美元【MSFT_IncomeStatement_20260612.txt, chunk #0】。  \n- 2024 财年稀释 EPS 为 11.80 美元【MSFT_IncomeStatement_20260612.txt, chunk #0】。  \n- 计算年增率：\\((13.64‑11.80) ÷ 11.80 ≈ 0.156\\)，即约 **15.6%** 的同比增长。  \n\n因此，Microsoft 的 EPS 在过去一年实现了显著提升，年增率约为 15.6%。",
+      "sources": [
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "MSFT_IncomeStatement_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_IncomeStatement_20260508.txt",
+          "chunk_index": 0
+        }
+      ],
+      "correctness": {
+        "score": 0.625,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer provides FY2025 diluted EPS but does not give the required 23% YoY growth.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0"
+            ],
+            [
+              "mi0"
+            ],
+            [
+              "mi0"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.42857142857142855,
+      "actionable_feedback": "检索层需改进，确保检索到包含约23%年增率的段落；随后LLM可根据该信息计算并给出正确的增长率。"
+    },
+    {
+      "id": "mix-07",
+      "category": "mixed",
+      "query": "NVIDIA AI 晶片業務的最新財務狀況",
+      "answerable": true,
+      "answer": "NVIDIA’s AI‑chip (Compute & Networking) segment posted a **sharp revenue surge and a gross‑margin jump to 74.9 % in the first quarter of fiscal 2027**, driven by the Blackwell platform rollout and the removal of a prior‑year inventory charge【NVDA_10Q_202604.html, chunk #41】.  \n\n- **Revenue growth** – Compute & Networking revenue rose year‑over‑year in Q1 FY2027, propelled by higher data‑center product sales as Blackwell systems, InfiniBand, Spectrum‑X Ethernet and NVLink gained traction【NVDA_10Q_202604.html, chunk #41】.  \n- **Operating‑income improvement** – Segment operating income also increased YoY, reflecting the revenue boost and the non‑recurrence of the $4.5 billion H2O excess‑inventory charge that had hit Q1 FY2026【NVDA_10Q_202604.html, chunk #41】.  \n- **Gross‑margin expansion** – Gross margin climbed from 60.5 % in Q1 FY2026 to 74.9 % in Q1 FY2027, the uplift largely stemming from the reversal of the $4.5 billion inventory charge【NVDA_10Q_202604.html, chunk #41】.  \n- **Inventory‑related provisions** – Provisions for inventory and excess‑inventory purchase obligations fell to $1.1 billion in Q1 FY2027 from $5.3 billion a year earlier, with a modest provision release of $103 million versus $436 million in FY2026【NVDA_10Q_202604.html, chunk #41】.  \n- **R&D spending surge** – Research‑and‑development expenses rose sharply, driven by a 112 % increase in compute‑and‑infrastructure costs, a 31 % rise in compensation (including stock‑based compensation), and a 204 % jump in engineering‑development materials for new products【NVDA_10Q_202604.html, chunk #41】.  \n- **Tax expense** – Income‑tax expense rose to $11.6 billion in Q1 FY2027 from $3.1 billion in Q1 FY2026, with the effective tax rate moving to 16.6 % from 14.3 %【NVDA_10Q_202604.html, chunk #41】.  \n- **Customer concentration** – Three direct customers accounted for 21 %, 17 % and 16 % of total revenue in Q1 FY2027, all tied mainly to the Compute & Networking segment; indirect customers still include several that each represent ≥10 % of revenue【NVDA_10Q_202604.html, chunk #41】.  \n- **Geographic mix** – Revenue from customers headquartered outside the United States fell to 22 % of total in Q1 FY2027, down from 42 % a year earlier【NVDA_10Q_202604.html, chunk #41】.  \n\nOverall, NVIDIA’s AI‑chip business is experiencing robust top‑line growth, a markedly higher gross margin after clearing a large inventory charge, and expanding R&D investment to sustain the Blackwell platform, while remaining highly dependent on a few large customers and showing a shift toward a larger share of U.S.‑based sales.",
+      "sources": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 31
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 40
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 125
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer includes required growth info and numbers, no violations.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.25,
+      "actionable_feedback": "Retriever未能抓取足够相关片段，导致回答缺乏完整性。建议提升检索召回率或使用更精准的查询。"
+    },
+    {
+      "id": "mix-08",
+      "category": "mixed",
+      "query": "Amazon AWS 最新季度的營收成長表現",
+      "answerable": true,
+      "answer": "Amazon AWS 在最新的 2026 財季（截至 2026 年 3 月 31 日）營收同比增長 **28 %**，達到 **約 376 億美元**（$37,587 百萬）【AMZN_10Q_202603.html, chunk #45】【AMZN_10Q_202603.html, chunk #13】。  \n\n- 這一增長主要來自客戶使用量提升，部分被長期合約的價格調整所抵消【AMZN_10Q_202603.html, chunk #45】。  \n- 同期匯率變動額外提升了淨銷售約 **29 億美元**，其中 AWS 受益亦包括在內【AMZN_10Q_202603.html, chunk #45】。  \n- 2026 Q1 的 AWS 營收在整體合併營收中的佔比提升至 **21 %**（從前期的 19 % 上升）【AMZN_10Q_202603.html, chunk #13】。  ",
+      "sources": [
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 13
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 97
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 13
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 46
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly states AWS revenue growth and cites figures.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.25,
+      "actionable_feedback": "Retriever 未能完整抓取相关段落，导致上下文回忆率低。建议提升检索召回率或使用更细粒度索引，以确保所有关键信息都被检索到。"
+    },
+    {
+      "id": "mix-09",
+      "category": "mixed",
+      "query": "Google 雲端業務最新財報表現",
+      "answerable": true,
+      "answer": "Google Cloud’s revenue surged 63 % year‑over‑year in the most recent quarter, adding roughly **$7.8 billion** to Alphabet’s top line【GOOGL_10Q_202603.html, chunk #54】.  \n\n**Supporting details**  \n- Alphabet reported total revenues of **$109.9 billion**, up 22 % YoY, with the Cloud segment driving a large portion of the growth【GOOGL_10Q_202603.html, chunk #54】.  \n- The $7.8 billion Cloud increase represents a **63 % YoY jump** for the segment, far outpacing the 16 % rise in Google Services revenue【GOOGL_10Q_202603.html, chunk #54】.  \n- In the full‑year 2025 results, Google Cloud operating income rose **$7.8 billion** versus 2024, reflecting higher revenues despite higher usage and compensation costs【GOOGL_10K_2025.html, chunk #192】.  \n- For the nine‑month period ending September 30 2025, Cloud operating income grew **$4.6 billion** YoY, and for the three‑month quarter it grew **$1.6 billion** YoY【GOOGL_10Q_202509.html, chunk #68】.  \n\nTogether, these figures show that Google Cloud is delivering rapid top‑line growth (63 % QoQ) and expanding operating profitability year over year.",
+      "sources": [
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 54
+        },
+        {
+          "source": "GOOGL_10Q_202509.html",
+          "chunk_index": 68
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 49
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 192
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 184
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer includes required growth info and numbers, no violations.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "回答已满足所有必需点，无违规。建议在未来回答中进一步区分收入与利润增长，以提升信息完整性。"
+    },
+    {
+      "id": "mix-10",
+      "category": "mixed",
+      "query": "Meta 廣告業務的盈利率與成長",
+      "answerable": true,
+      "answer": "Meta’s advertising business drove a ≈ 22% year‑over‑year revenue increase in 2025 and contributed to an overall operating margin of roughly 41% (operating income $83.28 billion on total revenue $200.97 billion) — though the filing does not break out a separate advertising‑only profit margin [Meta_10K_2025.html, chunk #160].  \n\n- Total 2025 revenue rose 22% versus 2024, “due to an increase of advertising revenue” [Meta_10K_2025.html, chunk #160].  \n- Advertising‑driven growth came from two levers: ad‑impression volume grew 12% year‑over‑year and the average price per ad rose 9% year‑over‑year [Meta_10K_2025.html, chunk #160].  \n- The Reality Labs (RL) segment hurt profitability, reducing operating profit by about $4.03 billion in Q1 2026 and expected to generate similar full‑year losses in 2026 as in 2025 [Meta_10Q_202603.html, chunk #39].  \n- Because “we generate substantially all of our revenue from advertising,” the 22% revenue growth and the 20% rise in operating income together imply that advertising remains the core profit engine, but the filings do not disclose a stand‑alone advertising operating margin or profit‑rate figure [Meta_10Q_202603.html, chunk #42].  \n\n**Bottom line:** Meta’s ad business grew about 22% in 2025, helped lift overall operating margin to roughly 41%, but the precise advertising‑only profitability ratio is not disclosed in the provided documents.",
+      "sources": [
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 39
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 166
+        },
+        {
+          "source": "META_10Q_202509.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 160
+        },
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 42
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly states both revenue growth and operating margin.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": "回答已满足所有必需点，若想更精准可直接给出40.6%的营运利润率，以完全符合评估标准。"
+    },
+    {
+      "id": "mix-11",
+      "category": "mixed",
+      "query": "Tesla 最新財報與新聞中的市場反應",
+      "answerable": true,
+      "answer": "Tesla’s most recent disclosed results show TTM revenue of **$97.88 billion**, giving the company a trailing P/E of **369.6×** and a forward P/E of **159.5×**【TSLA_Fundamentals_20260612.txt, chunk #0】.  \n\n- **Profitability:** Gross profit was $18.66 billion (gross margin 19.1 %), operating margin 4.2 %, and net profit $3.86 billion (profit margin 3.95 %)【TSLA_Fundamentals_20260612.txt, chunk #0】.  \n- **Growth:** Revenue grew 15.8 % YoY, earnings grew 8.3 % YoY, and EPS rose from $1.08 (trailing) to $2.50 (forward)【TSLA_Fundamentals_20260612.txt, chunk #0】.  \n- **Balance‑sheet strength:** Cash totaled $44.74 billion, debt $15.89 billion (debt/equity 18.7 %), and the current ratio stood at 2.04【TSLA_Fundamentals_20260612.txt, chunk #0】.  \n- **Operational highlights (Q1 2026):** Tesla produced about **408 k** consumer vehicles and delivered roughly **358 k** units, while deploying **8.8 GWh** of energy‑storage products【TSLA_10Q_202603.html, chunk #28】. The company emphasized AI‑driven initiatives such as Full‑Self‑Driving, Robotaxi (Cybercab), and the Optimus robot, and noted supply‑chain and geopolitical risks that could affect demand and profitability【TSLA_10Q_202603.html, chunk #28】.  \n\n**Market reaction:** None of the provided reference documents contain information on stock‑price movements, analyst commentary, or other market‑reaction metrics following the release of these results. Consequently, the latest market response cannot be detailed from the available materials.",
+      "sources": [
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 74
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 127
+        },
+        {
+          "source": "TSLA_10Q_202509.html",
+          "chunk_index": 32
+        }
+      ],
+      "correctness": {
+        "score": 0.714,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly reports revenue, profit and gross margin but fails to provide market reaction as required.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0"
+            ],
+            [
+              "mi0"
+            ],
+            [
+              "mi0"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": "最嚴重問題在於未提供市場反應資訊，建議在檢索階段加入包含股價變動或分析師評論的文件，或在回答中明確說明缺乏此類資料並嘗試補充相關新聞摘要。"
+    },
+    {
+      "id": "mix-12",
+      "category": "mixed",
+      "query": "NVDA 最新一期財報的毛利率變化",
+      "answerable": true,
+      "answer": "NVDA’s gross margin in its most recent quarter (Q1 FY 2027, ended April 26 2026) was **74.9%**, representing a **0.1‑percentage‑point decline versus the prior quarter** but a **14.4‑point increase versus the same quarter a year earlier**【NVDA_10Q_202604.html, chunk #11】.  \n\n- The Q1 FY 2027 gross margin of 74.9% is shown in the quarterly summary table【NVDA_10Q_202604.html, chunk #11】.  \n- The quarter‑over‑quarter change is listed as a **‑0.1‑point** movement from the previous quarter’s 75.0% margin【NVDA_10Q_202604.html, chunk #11】.  \n- The year‑over‑year change is recorded as a **+14.4‑point** improvement from the prior‑year quarter’s 60.5% margin【NVDA_10Q_202604.html, chunk #11】.",
+      "sources": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 11
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 12
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 9
+        },
+        {
+          "source": "NVDA_IncomeStatement_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_IncomeStatement_20260519.txt",
+          "chunk_index": 0
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly states the gross margin and its change direction.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.42857142857142855,
+      "actionable_feedback": "回答已符合要求，若需更完整可在答复中加入TTM毛利率或其他相關指標。"
+    },
+    {
+      "id": "lex-22",
+      "category": "mixed",
+      "query": "MSFT 202512 那一季的毛利率是多少？",
+      "answerable": true,
+      "answer": "MSFT 的2025 年 12 月 31 日止季度毛利率约为 68 %（毛利 $55,295 百万 ÷ 营收 $81,273 百万）【MSFT_10Q_202512.html, chunk #14】.  \n\n- 该季度收入为 $81,273 百万，毛利为 $55,295 百万，计算得出毛利率约 68.0 %【MSFT_10Q_202512.html, chunk #14】.  \n- 与去年同期相比，收入增长 17 %，毛利增长 16 %，但毛利率略有下降，主要受AI基础设施投资和业务结构向Azure转移的影响【MSFT_10Q_202512.html, chunk #44】.  ",
+      "sources": [
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 15
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all rubric requirements.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答准确，无需改进。"
+    },
+    {
+      "id": "lex-23",
+      "category": "mixed",
+      "query": "NVDA 202604 那一季的毛利率變化如何？",
+      "answerable": true,
+      "answer": "NVDA 202604 季度的毛利率為 **74.9%**，較上季下降 **0.1 個百分點**，但較去年同期提升 **14.4 個百分點**【NVDA_10Q_202604.html, chunk #11】。公司亦說明毛利率較去年同期上升，且因 Blackwell 架構佔比大而在季節間基本持平【NVDA_10Q_202604.html, chunk #38】。",
+      "sources": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 11
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 6
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all rubric requirements.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已符合所有必需点，且未出现禁止内容。建议在未来回答中继续保持引用来源完整，并可适当补充更多上下文信息以增强可读性。"
+    },
+    {
+      "id": "lex-24",
+      "category": "mixed",
+      "query": "NVDA 202510 那一季的營業利益率表現如何？",
+      "answerable": true,
+      "answer": "NVDA’s operating margin for the quarter ended Oct 26 2025 was **63.1 % of revenue**【NVDA_10Q_202510.html, chunk #13】, up from **58.3 %** in the comparable quarter a year earlier – an improvement of roughly **4.8 percentage points** year‑over‑year【NVDA_10Q_202510.html, chunk #13】.  \n\nThe high margin reflects strong operating income of $36.0 billion on revenue of $57.0 billion for the quarter【NVDA_10Q_202510.html, chunk #12】, while operating expenses grew only modestly, supporting the robust profitability profile.",
+      "sources": [
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 13
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 12
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 6
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 9
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all rubric points.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已符合要求，无明显错误。建议继续保持现有质量，并在必要时补充更多上下文或来源以提升可信度。"
+    },
+    {
+      "id": "mix-13",
+      "category": "mixed",
+      "query": "Apple 202603 季度的營收表現",
+      "answerable": true,
+      "answer": "Apple recorded **total net sales of $111.184 billion for the quarter ended March 28 2026, a 17 % year‑over‑year increase**【Reference 1, chunk #4】【Reference 3, chunk #10】.  \n\n**Key revenue components (in millions):**  \n- iPhone: $56,994 (≈ $57 billion), up 22 % YoY【Reference 3, chunk #10】  \n- Mac: $8,399 (≈ $8.4 billion), up 6 % YoY【Reference 3, chunk #10】  \n- iPad: $6,914 (≈ $6.9 billion), up 8 % YoY【Reference 3, chunk #10】  \n- Wearables, Home and Accessories: $7,901 (≈ $7.9 billion), up 5 % YoY【Reference 3, chunk #10】  \n- Services: $30,976 (≈ $31 billion), up 16 % YoY【Reference 3, chunk #10】  \n\n**Profitability snapshot:** Net income for the quarter was $29.578 billion, yielding basic EPS of $2.02 and diluted EPS of $2.01【Reference 1, chunk #4】.  \n\nOverall, Apple’s 202603 quarter showed solid top‑line growth across all product lines, led by a strong rebound in iPhone sales and continued expansion of Services revenue.",
+      "sources": [
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 8
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 7
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 5
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly references 2026 Q3 and provides revenue figures.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答符合所有必需点，无需改进。"
+    },
+    {
+      "id": "mix-14",
+      "category": "mixed",
+      "query": "Apple 202512 季度的營收表現",
+      "answerable": true,
+      "answer": "Apple 在 2025 年 12 月 27 日結束的第一季實現 **總營收 1,437.56 億美元，較 2024 年同季增長 16%**【AAPL_10Q_202512.html, chunk #10】。\n\n**主要營收構成與變化**  \n- 產品（Products）營收 1,137.43 億美元，較上年同期的 979.60 億美元增長約 16%【AAPL_10Q_202512.html, chunk #4】。  \n- 服務（Services）營收 300.13 億美元，較上年同期的 263.40 億美元增長 14%【AAPL_10Q_202512.html, chunk #4】。  \n- 產品與服務合計即為總營收 1,437.56 億美元【AAPL_10Q_202512.html, chunk #4】。\n\n**各產品線營收變化（以百萬美元計）**  \n- iPhone：85,269 百萬美元，較去年同期的 69,138 百萬美元增長 23%【AAPL_10Q_202512.html, chunk #10】。  \n- Mac：8,386 百萬美元，較去年同期的 8,987 百萬美元下降 7%【AAPL_10Q_202512.html, chunk #10】。  \n- iPad：8,595 百萬美元，較去年同期的 8,088 百萬美元增長 6%【AAPL_10Q_202512.html, chunk #10】。  \n- 可穿戴、居家與配件（Wearables, Home and Accessories）：11,493 百萬美元，較去年同期的 11,747 百萬美元下降 2%【AAPL_10Q_202512.html, chunk #10】。  \n- 服務（Services）：30,013 百萬美元，較去年同期的 26,340 百萬美元增長 14%【AAPL_10Q_202512.html, chunk #10】。\n\n**區域營收概況**  \n- 美洲、歐洲、大中華區、日本及亞太其他地區的營收均較 2025 年同期上升，主要受 iPhone 與服務需求提升驅動；其中歐洲受匯率有正面影響，日本則因匯率不利受到部分抵消【AAPL_10Q_202512.html, chunk #26】。\n\n**毛利與營運表現**  \n- 毛利 692.31 億美元，較去年同期的 582.75 億美元提升 19%（毛利率亦上升）【AAPL_10Q_202512.html, chunk #4】。  \n- 營業收入 508.52 億美元，較去年同期的 428.32 億美元增長 19%【AAPL_10Q_202512.html, chunk #4】。  \n- 淨利 420.97 億美元，較去年同期的 363.30 億美元增長 16%【AAPL_10Q_202512.html, chunk #4】。  \n- 基本每股盈餘 (EPS) 為 2.85 美元，較去年同期的 2.41 美元提升約 18%【AAPL_10Q_202512.html, chunk #4】。\n\n**總結**  \nApple 2025 年 Q1（截至 12 月 27 日）營收表現強勁，總營收達 1,437.56 億美元，年增 16%，其中 iPhone 與服務是主要增長動力；雖然 Mac 與可穿戴設備略有下滑，但整體產品與服務組合仍推動了營收與盈利的雙位數增長。",
+      "sources": [
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 6
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 8
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly identifies the 2025 Q1 ending December 27 and cites the revenue figure.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答符合所有必需点，无需改进。"
+    },
+    {
+      "id": "mix-15",
+      "category": "mixed",
+      "query": "NVIDIA 202510 那一季的資料中心營收",
+      "answerable": true,
+      "answer": "NVIDIA’s data‑center revenue for the quarter ended Oct 26 2025 (Q3 FY 2026) was **$51.2 billion**【NVDA_10Q_202510.html, chunk #37】, representing a **66 % year‑over‑year increase** and a **25 % sequential rise**【NVDA_10Q_202510.html, chunk #37】.",
+      "sources": [
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 40
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 6
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 32
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly includes the requested quarter and revenue figure.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "无问题，回答已满足所有评估标准。"
+    },
+    {
+      "id": "mix-16",
+      "category": "mixed",
+      "query": "NVIDIA 202604 那一季的資料中心營收",
+      "answerable": true,
+      "answer": "NVIDIA 202604 季度的資料中心營收為 **約 752 億美元**（$75.2 B）【NVDA_10Q_202604.html, chunk #38】；在財報表格中列示為 $75,246 百萬美元【NVDA_10Q_202604.html, chunk #12】。",
+      "sources": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 12
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 10
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all rubric requirements.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已符合所有必須項目，僅需保持數字單位一致性（如億美元與百萬美元）以提升可讀性。"
+    }
+  ]
+}

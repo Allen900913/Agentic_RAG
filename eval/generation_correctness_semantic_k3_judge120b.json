@@ -1,0 +1,1758 @@
+{
+  "overall": {
+    "judge_model": "openai/gpt-oss-120b",
+    "judge_repeats": 3,
+    "mean_within_answer_judge_std": 0.05,
+    "note": "avg_within_answer_judge_std = 同一個既有答案重評 N 次的 std（純 judge 變異）；cross_run_std = 3 個不同 run 生成答案的 judge_score_mean 之間的 std（生成變異，含原 k3 的 run-to-run 抽樣噪音）。"
+  },
+  "per_question_summary": {
+    "sem-01": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.0,
+      "run_means": [
+        0.5,
+        0.8,
+        0.8
+      ],
+      "cross_run_std": 0.1414,
+      "original_scores": [
+        0.0,
+        0.8,
+        0.8
+      ]
+    },
+    "sem-02": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.0471,
+      "run_means": [
+        0.2,
+        0.3,
+        0.2
+      ],
+      "cross_run_std": 0.0471,
+      "original_scores": [
+        0.5,
+        0.5,
+        0.2
+      ]
+    },
+    "sem-03": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.1257,
+      "run_means": [
+        0.5333,
+        0.8,
+        0.8
+      ],
+      "cross_run_std": 0.1257,
+      "original_scores": [
+        0.8,
+        0.8,
+        0.0
+      ]
+    },
+    "sem-04": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.0471,
+      "run_means": [
+        1.0,
+        0.9,
+        1.0
+      ],
+      "cross_run_std": 0.0471,
+      "original_scores": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "sem-05": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.0,
+      "run_means": [
+        1.0,
+        0.8,
+        1.0
+      ],
+      "cross_run_std": 0.0943,
+      "original_scores": [
+        1.0,
+        1.0,
+        0.5
+      ]
+    },
+    "sem-06": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.0471,
+      "run_means": [
+        1.0,
+        0.8,
+        0.6
+      ],
+      "cross_run_std": 0.1633,
+      "original_scores": [
+        0.5,
+        0.8,
+        0.5
+      ]
+    },
+    "sem-07": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.0,
+      "run_means": [
+        0.8,
+        1.0,
+        1.0
+      ],
+      "cross_run_std": 0.0943,
+      "original_scores": [
+        0.0,
+        0.0,
+        0.5
+      ]
+    },
+    "sem-08": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.0314,
+      "run_means": [
+        0.1333,
+        0.3,
+        0.5
+      ],
+      "cross_run_std": 0.1499,
+      "original_scores": [
+        0.8,
+        0.3,
+        0.0
+      ]
+    },
+    "sem-09": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.1257,
+      "run_means": [
+        0.7,
+        0.5333,
+        0.7
+      ],
+      "cross_run_std": 0.0786,
+      "original_scores": [
+        0.5,
+        0.8,
+        0.7
+      ]
+    },
+    "sem-10": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.1257,
+      "run_means": [
+        0.7,
+        0.0,
+        0.2667
+      ],
+      "cross_run_std": 0.2885,
+      "original_scores": [
+        0.7,
+        1.0,
+        0.8
+      ]
+    },
+    "sem-11": {
+      "n_runs": 3,
+      "avg_within_answer_judge_std": 0.0,
+      "run_means": [
+        0.2,
+        0.2,
+        0.7
+      ],
+      "cross_run_std": 0.2357,
+      "original_scores": [
+        0.0,
+        0.0,
+        0.2
+      ]
+    }
+  },
+  "raw_per_question_runs": {
+    "sem-01": [
+      {
+        "run_idx": 1,
+        "answer": "NVIDIA 的核心技術護城河是其 GPU 架構和相關技術，包括 CUDA、Tensor Core 和深度學習算法 [NVDA_10K_2026.html, chunk #38]。該公司的 GPU 架構是其技術的基礎，並且已經被應用於多個領域，包括人工智慧、科學計算、自動駕駛和機器人 [NVDA_10K_2026.html, chunk #37]。此外，NVIDIA 的技術栈還包括數百個領域特定的軟件庫、框架、算法和應用程序接口 [NVDA_10K_2026.html, chunk #37]，這些技術使得 NVIDIA 能夠在多個領域中提供優異的性能和功能。\n\nNVIDIA 的技術護城河還包括其在 GPU 架構和相關技術上的持續投資和研發 [NVDA_10K_2026.html, chunk #38]。該公司已經在研究和開發上投資了超過 76.7 億美元 [NVDA_10K_2026.html, chunk #38]，並且已經開發出多個領先的技術，包括 CUDA、Tensor Core 和深度學習算法 [NVDA_10K_2026.html, chunk #38]。\n\n此外，NVIDIA 的生態系統和合作夥伴關係也是其技術護城河的一部分 [NVDA_10K_2026.html, chunk #38]。該公司已經與多個領先的企業和組織建立了合作夥伴關係，包括 Tech Mahindra Limited 和 Lumentum Holdings Inc. [NVDA_Fundamentals_20260508.txt, chunk #0]，這些合作夥伴關係使得 NVIDIA 能夠在多個領域中提供優異的解決方案和服務。",
+        "judge_scores": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "judge_score_mean": 0.5,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0"
+            ],
+            "must_not_violations": [],
+            "reason": "mi0 satisfied, other includes missing",
+            "actionable_feedback": "檢索器未能抓取涵蓋資料中心 GPU 效能與 NVLink 整合的相關段落，導致 context_recall 低，建議提升 Retriever 的召回率，例如擴大 top‑k、優化向量索引或加入關鍵詞擴展。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers CUDA ecosystem but misses data‑center GPU performance and NVLink integration, and overall context recall is low.",
+            "actionable_feedback": "檢索器未能抓取包含資料中心 GPU 效能與 NVLink 等資訊的段落，導致上下文召回率僅 0.14。建議提升檢索策略，例如擴大 top‑k、使用更精細的向量相似度或加入關鍵詞過濾，以確保相關 chunk 被檢索到。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer includes CUDA ecosystem but misses data center GPU performance and network integration points.",
+            "actionable_feedback": "檢索器未能有效抓取相關文檔，導致關鍵資訊缺失，如資料中心 GPU 表現與網路整合等。建議優化檢索策略或擴大索引範圍，以提升 context recall。",
+            "error": null
+          }
+        ],
+        "original_score": 0.0
+      },
+      {
+        "run_idx": 2,
+        "answer": "NVIDIA 的核心技術護城河是其 GPU 架構和相關技術，包括 CUDA、Tensor Core 和深度學習算法 [NVDA_10K_2026.html, chunk #38]。這些技術使 NVIDIA 能夠提供高性能的計算能力和人工智慧解決方案，從而在數據中心、人工智慧和自動駕駛等領域建立了強大的競爭優勢 [NVDA_10K_2026.html, chunk #37]。此外，NVIDIA 的軟件堆棧和開發平台，例如 NVIDIA CUDA 和 NVIDIA RTX，也是其核心技術護城河的一部分 [NVDA_10K_2026.html, chunk #43]。這些技術和平台使 NVIDIA 能夠提供完整的解決方案，從硬件到軟件，從而增加了其競爭優勢和客戶黏性 [NVDA_Fundamentals_20260508.txt, chunk #0]。總的來說，NVIDIA 的核心技術護城河是其在 GPU 架構、人工智慧和相關技術領域的領先地位和強大的軟件堆棧和開發平台 [NVDA_10Q_202604.html, chunk #31]。",
+        "judge_scores": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "judge_score_mean": 0.8,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers required points mi0 and mi1, missing mi2, no forbidden content.",
+            "actionable_feedback": "檢索階段的召回率極低（≈0.14），導致關鍵的 NVLink/InfiniBand 等系統整合資訊未被抓取。建議優化 Retriever 的索引與查詢擴展策略，提升相關 Chunk 的召回，以完整呈現所有必須包含的要點。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers mi0 and mi1, misses mi2, and includes no prohibited content.",
+            "actionable_feedback": "检索器未能抓取包含 NVLink/InfiniBand 等网络整合信息的文档，导致 mi2 漏失。建议扩大检索范围或提升 top‑k，以提高 context_recall，确保相关章节被检出。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer satisfies mi0 and mi1, misses mi2, and includes no prohibited claims.",
+            "actionable_feedback": "檢索層的召回率過低（<0.5），未能抓取包含 NVLink、InfiniBand 等系統整合資訊的 Chunk，導致部分關鍵要點缺失。建議提升 Retriever 的召回範圍或調整 top‑k、向量相似度門檻，以確保相關文檔被完整檢索。",
+            "error": null
+          }
+        ],
+        "original_score": 0.8
+      },
+      {
+        "run_idx": 3,
+        "answer": "NVIDIA 的核心技術護城河是其 GPU 架構和相關技術，包括 CUDA、Tensor Core 和深度學習算法 [NVDA_10K_2026.html, chunk #38]。這些技術使 NVIDIA 能夠提供高性能的計算能力和人工智慧解決方案，從而在數據中心、人工智慧和自動駕駛等領域取得領先地位 [NVDA_10K_2026.html, chunk #37]。此外，NVIDIA 的平台策略，將硬件、系統、軟件、算法和服務整合在一起，為客戶提供了一個完整的解決方案 [NVDA_10K_2026.html, chunk #38]。這些技術和策略使 NVIDIA 能夠保持其在行業中的競爭優勢和技術領先地位 [NVDA_Fundamentals_20260508.txt, chunk #0]。 \n\nNVIDIA 的技術領先地位也體現在其研發投入上，公司自成立以來已經投入超過 76.7 億美元的研發資金 [NVDA_10K_2026.html, chunk #38]。這些投入使 NVIDIA 能夠不斷推出新的技術和產品，從而保持其在行業中的領先地位 [NVDA_10Q_202604.html, chunk #31]。 \n\n因此，NVIDIA 的核心技術護城河是其 GPU 架構、相關技術和平台策略的綜合體 [NVDA_10K_2026.html, chunk #38]。這些技術和策略使 NVIDIA 能夠提供高性能的計算能力和人工智慧解決方案，從而在數據中心、人工智慧和自動駕駛等領域取得領先地位 [NVDA_10K_2026.html, chunk #37]。",
+        "judge_scores": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "judge_score_mean": 0.8,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers CUDA ecosystem and data‑center GPU performance but omits network‑integration details required by mi2.",
+            "actionable_feedback": "主要問題在 Retriever，召回率僅 0.14，導致缺少 NVLink/InfiniBand 等網路整合資訊。建議調整檢索器的 top‑k、相似度門檻或使用更豐富的向量索引，以確保相關段落被抓取，從而完整覆蓋所有 must_include 要點。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers required points mi0 and mi1 but misses mi2.",
+            "actionable_feedback": "檢索器未能抓取包含 NVLink/InfiniBand 等網路整合資訊的段落，導致 context_recall 低。建議優化檢索索引或使用更廣的 query 擴展，以提升相關 chunk 的召回率。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers required points mi0 and mi1, missing mi2, no prohibited fabrications.",
+            "actionable_feedback": "檢索器未能有效抓取包含 NVLink、InfiniBand 等網路整合資訊的段落，導致 context_recall 低。建議優化檢索策略或擴大索引範圍，確保相關技術細節被檢索到。",
+            "error": null
+          }
+        ],
+        "original_score": 0.8
+      }
+    ],
+    "sem-02": [
+      {
+        "run_idx": 1,
+        "answer": "Microsoft 在 AI 領域的長期戰略方向是致力於負責任地推動 AI 的發展，並使其益處廣泛可及 [MSFT_10Q_202603.html, chunk #38]。Microsoft 與 OpenAI 合作，共同推動 AI 的發展，並在 2019 年建立了長期戰略合作伙伴關係 [MSFT_10Q_202512.html, chunk #38]。Microsoft 是 OpenAI 的主要投資者，並持有 OpenAI 的知識產權，包括模型和基礎設施，以便整合到其產品中 [MSFT_10K_2025.html, chunk #112]。\n\nMicrosoft 的 AI 戰略方向包括將 AI 技術應用於各個領域，例如生產力、協作、個人計算和遊戲 [MSFT_10K_2025.html, chunk #40]。公司致力於設計和部署 AI，以確保安全和可靠，並提供相關的培訓和資源 [MSFT_10K_2025.html, chunk #42]。\n\n此外，Microsoft 還致力於投資 AI 基礎設施和設備，以滿足客戶的需求，並推動公司的雲計算業務 [MSFT_10Q_202603.html, chunk #38]。公司的長期目標是領導 AI 平台浪潮，並提供完整的智能解決方案，以幫助客戶提高生產力和合作 [MSFT_10K_2025.html, chunk #42]。",
+        "judge_scores": [
+          0.2,
+          0.2,
+          0.2
+        ],
+        "judge_score_mean": 0.2,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer only includes OpenAI cooperation, missing Copilot and Azure AI points.",
+            "actionable_feedback": "检索器未能抓取包含 Copilot 与 Azure AI 内容的文档，导致关键信息缺失。建议扩大检索范围或提升检索关键词覆盖度，确保相关章节被检出。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer omitted required points mi0 and mi1.",
+            "actionable_feedback": "检索器未能抓取包含 Copilot 与 Azure AI 内容的文档，导致答案缺失关键信息。建议优化检索查询或扩大索引范围，确保相关章节被检出。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Only mi2 satisfied; mi0 and mi1 missing.",
+            "actionable_feedback": "檢索層未能抓到包含 Copilot 與 Azure AI 的相關段落，導致關鍵資訊缺失，建議擴大檢索範圍或調整 top‑k、向量相似度門檻，以提升 context recall。",
+            "error": null
+          }
+        ],
+        "original_score": 0.5
+      },
+      {
+        "run_idx": 2,
+        "answer": "Microsoft 在 AI 領域的長期戰略方向是致力於推動 AI 的發展和應用，旨在使 AI 的益處廣泛可及 [MSFT_10Q_202603.html, chunk #38]。Microsoft 已經與 OpenAI 建立了長期戰略合作關係，該合作關係始於 2019 年 [MSFT_10Q_202603.html, chunk #38]，並在 2025 年和 2026 年進行了延續 [MSFT_10Q_202512.html, chunk #38] [MSFT_10Q_202603.html, chunk #38]。Microsoft 是 OpenAI 的主要投資者，並將繼續從中獲得收入分成 [MSFT_10Q_202603.html, chunk #38]。Microsoft 還持有 OpenAI 的知識產權，包括模型和基礎設施，以便將其整合到 Microsoft 的產品中 [MSFT_10Q_202603.html, chunk #38]。\n\nMicrosoft 的 AI 戰略還包括投資於雲計算和 AI 基礎設施的發展 [MSFT_10K_2025.html, chunk #112]，以滿足客戶對 AI 服務日益增長的需求 [MSFT_10Q_202603.html, chunk #38]。Microsoft 還致力於設計和部署 AI 的安全性和可靠性 [MSFT_10K_2025.html, chunk #40]，並致力於提供 AI 相關的培訓和學習資源 [MSFT_10K_2025.html, chunk #42]。\n\nMicrosoft 的長期目標是領導 AI 平台的發展 [MSFT_10K_2025.html, chunk #42]，並致力於將 AI 技術應用於各個領域，包括生產力、合作、學習和娛樂 [MSFT_10K_2025.html, chunk #42]。Microsoft 還致力於推動 Windows 的發展，以推動雲計算業務的增長 [MSFT_10K_2025.html, chunk #42]。",
+        "judge_scores": [
+          0.5,
+          0.2,
+          0.2
+        ],
+        "judge_score_mean": 0.3,
+        "judge_score_std": 0.1414,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "The answer covers OpenAI partnership and cloud AI infrastructure but omits Copilot integration.",
+            "actionable_feedback": "Retriever 未能檢索到包含 Copilot 整合的相關段落，導致答案缺失關鍵資訊。建議提升檢索策略或擴大索引範圍，確保包含 Microsoft 365 Copilot 相關內容。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer only includes OpenAI cooperation, missing required Copilot and Azure AI details.",
+            "actionable_feedback": "檢索層的召回率偏低，未抓到包含 Copilot 與 Azure AI 的相關段落，建議優化檢索查詢或擴充索引，使相關策略資訊能被檢索到。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer misses required Copilot and Azure AI mentions and has low context recall.",
+            "actionable_feedback": "檢索器未能抓取涵蓋 Copilot 與 Azure AI 的相關段落，導致上下文召回率僅 0.33，需提升檢索策略或擴大檢索範圍；同時在生成階段補足 Copilot 跨產品線的整合與 Azure AI 基礎設施的描述，以完整滿足 rubric 要求。",
+            "error": null
+          }
+        ],
+        "original_score": 0.5
+      },
+      {
+        "run_idx": 3,
+        "answer": "Microsoft 在 AI 領域的長期戰略方向是致力於推動 AI 的發展和應用，旨在使 AI 的益處廣泛可及 [MSFT_10Q_202603.html, chunk #38]。Microsoft 已經與 OpenAI 建立了長期戰略合作伙伴關係，該合作關係始於 2019 年 [MSFT_10Q_202603.html, chunk #38]。Microsoft 是 OpenAI 的主要投資者，並將繼續從 OpenAI 獲得收入分成支付 [MSFT_10Q_202603.html, chunk #38]。Microsoft 擁有 OpenAI 的知識產權，包括模型和基礎設施，用于集成到其產品中 [MSFT_10Q_202603.html, chunk #38]。\n\nMicrosoft 的 AI 戰略還包括發展和應用 AI 技術，以推動生產力和創新 [MSFT_10K_2025.html, chunk #40]。Microsoft 致力於負責任地設計和部署 AI，注重安全性和可靠性 [MSFT_10K_2025.html, chunk #40]。Microsoft 的 AI 領域投資包括發展 AI 平台、應用和服務，以滿足客戶的需求 [MSFT_10K_2025.html, chunk #42]。\n\n此外，Microsoft 還致力於發展和應用 AI 技術，以推動其各個業務領域的發展，包括雲計算、生產力和協作、個人計算等 [MSFT_10K_2025.html, chunk #42]。Microsoft 的目標是領導 AI 平台的發展，推動客戶的數字化轉型和創新 [MSFT_10K_2025.html, chunk #42]。Microsoft 的 AI 戰略還包括提供 AI 相關的培訓和教育資源，以幫助客戶和開發者掌握 AI 技術 [MSFT_10K_2025.html, chunk #42]。",
+        "judge_scores": [
+          0.2,
+          0.2,
+          0.2
+        ],
+        "judge_score_mean": 0.2,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer omitted required points mi0 and mi1.",
+            "actionable_feedback": "检索器未能抓取包含 Copilot 与 Azure AI 内容的文档块，导致关键信息缺失。建议扩大检索范围或提升检索关键词覆盖度，以确保相关章节被检索到。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer omitted required points mi0 and mi1, only covered OpenAI partnership.",
+            "actionable_feedback": "检索器未能抓取包含 Copilot 与 Azure AI 内容的文档块，导致关键信息缺失。建议扩大检索范围或优化检索参数，确保相关章节被检索到。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "The answer only covers the OpenAI partnership (mi2) and omits the required Copilot and Azure AI points.",
+            "actionable_feedback": "檢索器未能抓取包含 Copilot 與 Azure AI 相關資訊的段落，導致關鍵要點缺失。建議擴大檢索範圍或調整 top‑k，以確保相關 chunk 被檢索到；同時可在系統提示中明確要求涵蓋 Copilot 與 Azure AI 的內容。",
+            "error": null
+          }
+        ],
+        "original_score": 0.2
+      }
+    ],
+    "sem-03": [
+      {
+        "run_idx": 1,
+        "answer": "Apple 的服務業務未來成長潛力看好，服務業務的收入已經達到 28% 的總收入 [AAPL_News_20260519_01.txt, chunk #4]。服務業務的收入增長率為 16% [AAPL_News_20260519_01.txt, chunk #4]，並且服務業務的毛利率也在增加 [AAPL_News_20260519_01.txt, chunk #4]。此外，Apple 的服務業務也面臨著全球監管機構試圖拆除其主要的收入來源——App Store 的挑戰 [Reference 3: AAPL_News_20260612_04.txt, chunk #1]。但是，Apple 的服務業務仍然具有很大的成長潛力，尤其是在廣告、App Store 和雲端服務等領域 [Reference 4: AAPL_10K_2025.html, chunk #80]。因此，Apple 的服務業務未來成長潛力看好，但也需要關注全球監管機構的政策變化 [Reference 3: AAPL_News_20260612_04.txt, chunk #1]。",
+        "judge_scores": [
+          0.8,
+          0.0,
+          0.8
+        ],
+        "judge_score_mean": 0.5333,
+        "judge_score_std": 0.3771,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer meets most required points but omits device install base.",
+            "actionable_feedback": "LLM未提及裝置安裝基數，導致關鍵得分點缺失。建議在系統提示中明確要求加入裝置基數相關資訊，或確保檢索階段抓取包含此內容的段落。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [
+              "mn0"
+            ],
+            "reason": "Answer includes fabricated growth rate not present in sources.",
+            "actionable_feedback": "LLM 在回答时捏造了服務業務的具體成長率（16%），屬於 mn0 錯誤。需在 System Prompt 中明確要求只能使用檔案中已有的數據，或在檢索階段確保返回包含明確成長率的段落，以避免此類幻覺。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers revenue growth and subscription ecosystem but omits the large device install base point.",
+            "actionable_feedback": "問題出在 LLM 未完整覆蓋 rubric 中的 mi2 項，需在系統提示或提示工程中明確要求提及 Apple 的龐大裝置安裝基數對服務變現的推動作用，以提升答案完整性。",
+            "error": null
+          }
+        ],
+        "original_score": 0.8
+      },
+      {
+        "run_idx": 2,
+        "answer": "Apple 的服務業務未來成長潛力看好，服務業務的收入已經達到 28% 的總收入 [AAPL_News_20260519_01.txt, chunk #4]，並且服務業務的收入在最近一季度中增加了 16% [AAPL_News_20260519_01.txt, chunk #4]。此外，Apple 的服務業務的增長主要是由於廣告、App Store 和雲端服務的收入增加 [AAPL_News_20260519_01.txt, chunk #4] 和 [Reference 4: AAPL_10K_2025.html, chunk #80]。同時，Apple 也在增加服務業務的定價權，成功提高服務價格 [AAPL_News_20260612_04.txt, chunk #1]。因此，Apple 的服務業務未來成長潛力看好。然而，需要注意的是，全球監管機構正在試圖拆除 Apple 的主要收入來源——App Store [Reference 3: AAPL_News_20260612_04.txt, chunk #1]，這可能會對 Apple 的服務業務成長產生影響。",
+        "judge_scores": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "judge_score_mean": 0.8,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer meets most required points but omits device install base.",
+            "actionable_feedback": "LLM 未涵蓋裝置安裝基數帶動服務變現的要點，屬於內容完整性不足。建議在 System Prompt 中明確列出所有 must_include 項目，或在檢索階段加入包含裝置基數的相關 chunk，以提升回答完整度。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers most required points but misses the device install base aspect.",
+            "actionable_feedback": "LLM 未提及裝置安裝基數，屬於內容遺漏問題。請在 System Prompt 中明確要求列出裝置基數對服務變現的影響，或在 Retriever 提供相關 chunk。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer meets required points mi0 and mi1 but omits mi2.",
+            "actionable_feedback": "缺少提及龐大裝置安裝基數的影響，屬於Retriever/LLM層面的內容未被抽取或生成，建議在檢索階段加入包含裝置基數的相關段落，或在提示中強調需說明裝置安裝基數對服務變現的作用。",
+            "error": null
+          }
+        ],
+        "original_score": 0.8
+      },
+      {
+        "run_idx": 3,
+        "answer": "Apple 的服務業務未來成長潛力看好，服務業務已經成為公司的重要增長引擎 [AAPL_News_20260519_01.txt, chunk #4]。服務業務的收入已經達到 31.0 億美元，同比增長 16% [AAPL_News_20260519_01.txt, chunk #4]。公司的服務業務包括 App Store、廣告、iCloud、Apple Music、Apple TV+ 和支付服務等 [AAPL_News_20260519_01.txt, chunk #4]。此外，公司的服務業務毛利率也在增加 [AAPL_News_20260519_01.txt, chunk #4]。但是，也有一些挑戰，例如全球監管機構正在試圖拆除公司的主要收入來源——App Store [Reference 3: AAPL_News_20260612_04.txt, chunk #1]。因此，公司的服務業務未來成長潛力取決於公司能否克服這些挑戰並繼續創新和發展其服務業務。 \n\n此外，公司的服務業務也面臨著一些風險，例如國際貿易糾紛可能對公司的服務業務產生不利影響 [Reference 2: AAPL_10Q_202603.html, chunk #30]。但是，公司的服務業務也有一些優勢，例如公司的服務業務具有高毛利率和高增長潛力 [Reference 3: AAPL_News_20260612_04.txt, chunk #1]。因此，公司的服務業務未來成長潛力取決於公司能否有效地管理風險和機會。 \n\n總的來說，Apple 的服務業務未來成長潛力看好，但是也面臨著一些挑戰和風險 [Reference 3: AAPL_News_20260612_04.txt, chunk #1]。公司需要繼續創新和發展其服務業務，以克服挑戰和風險，實現長期增長和發展 [AAPL_News_20260519_01.txt, chunk #4]。",
+        "judge_scores": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "judge_score_mean": 0.8,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers revenue growth and service ecosystem but omits device install base.",
+            "actionable_feedback": "缺少提及裝置安裝基數，屬於檢索層問題，需擴大檢索範圍或加入相關關鍵詞以抓取包含此資訊的文檔。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers revenue growth and service ecosystem but omits device base.",
+            "actionable_feedback": "LLM層面未充分利用檢索到的資訊，缺少提及裝置安裝基數，建議在系統提示中強調要說明設備規模對服務變現的貢獻，或在檢索階段加入相關段落。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers revenue growth and service ecosystem but omits device install base.",
+            "actionable_feedback": "檢查檢索器，確保能抓取包含裝置安裝基數的相關段落；可擴大檢索範圍或調整 top‑k，以提供關於裝置基數帶動服務變現的資訊。",
+            "error": null
+          }
+        ],
+        "original_score": 0.0
+      }
+    ],
+    "sem-04": [
+      {
+        "run_idx": 1,
+        "answer": "這些公司面臨的主要風險與挑戰包括來自激烈的市場競爭、組織變革、國際運營風險以及投資風險等。例如，NVIDIA 面臨著來自灰市和未經授權的銷售渠道的競爭，這使得需求預測變得困難 [NVDA_10Q_202510.html, chunk #57]。同時，NVIDIA 的收購和投資也涉及著顯著的風險和挑戰，可能會影響其業務的發展和財務結果 [NVDA_10Q_202510.html, chunk #57]。\n\nMeta 則面臨著組織變革的風險，例如員工裁員和辦公室規模的調整，這可能會導致預期之外的成本增加、員工留存率下降以及業務管理的複雜性增加 [META_10Q_202509.html, chunk #123] [META_10Q_202603.html, chunk #130] [META_10K_2025.html, chunk #76]。此外，Meta 的國際運營也使其面臨著更多的業務、經濟和法律風險 [META_10Q_202509.html, chunk #123] [META_10Q_202603.html, chunk #130] [META_10K_2025.html, chunk #76]。\n\nMicrosoft 也面臨著激烈的市場競爭，尤其是在技術領域，競爭對手範圍從大型全球公司到小型專業公司 [MSFT_10K_2025.html, chunk #77]。Microsoft 必須不斷創新並提供吸引人的產品和服務，以保持其競爭力 [MSFT_10K_2025.html, chunk #77]。\n\n綜上所述，這些公司面臨著多方面的風險和挑戰，包括市場競爭、組織變革、國際運營風險、投資風險等，需要不斷地適應和應對這些挑戰，以保持其業務的發展和競爭力。",
+        "judge_scores": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "judge_score_mean": 1.0,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are covered and no prohibited content.",
+            "actionable_feedback": "檢索器召回率僅 0.29，說明未能抓取足夠相關文件，需優化檢索策略或擴大索引範圍，以提升上下文召回率。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer meets all required rubric points and has no violations.",
+            "actionable_feedback": "檢索器未能充分抓取相關文檔，導致上下文召回率僅 0.29，建議提升檢索召回率或擴大檢索範圍，以取得更多關鍵風險資訊。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are covered and no prohibited errors.",
+            "actionable_feedback": "檢索器未能充分抓取相關片段，導致 context recall 低（≈0.29），建議提升檢索召回率或擴大 top‑k，以取得更多關鍵風險資訊。",
+            "error": null
+          }
+        ],
+        "original_score": 1.0
+      },
+      {
+        "run_idx": 2,
+        "answer": "這些公司面臨的主要風險與挑戰包括來自激烈競爭、組織變革、國際業務風險、收購和投資風險等。NVIDIA 面臨的風險包括來自灰色市場和未經授權的銷售渠道的競爭，可能會影響其需求預測和收入 [NVDA_10Q_202510.html, chunk #57]。META 面臨的風險包括組織變革、員工留任、國際業務風險等，可能會對其業務、聲譽或財務結果產生負面影響 [META_10Q_202509.html, chunk #123]、[META_10Q_202603.html, chunk #130]、[META_10K_2025.html, chunk #76]。Microsoft 面臨的風險包括來自激烈競爭、技術變革等，可能會對其業務、財務狀況、經營結果、流動性和普通股交易價格產生不利影響 [MSFT_10K_2025.html, chunk #77]。此外，NVIDIA 的收購和投資也存在風險，可能會對其財務結果產生不利影響 [NVDA_10Q_202510.html, chunk #57]。",
+        "judge_scores": [
+          0.7,
+          1.0,
+          1.0
+        ],
+        "judge_score_mean": 0.9,
+        "judge_score_std": 0.1414,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer provides specific risks for multiple companies but does not cover several required risk categories.",
+            "actionable_feedback": "檢索器未能抓取足夠相關的文件，導致上下文召回率僅 0.29，建議擴大檢索範圍或調整 top‑k、相似度門檻，以取得包含監管、供應鏈、總體經濟等風險的段落。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required rubric points are satisfied and no prohibited errors are present.",
+            "actionable_feedback": "檢索器未能有效抓取足夠相關段落，導致上下文召回率僅 0.29，屬於 Retriever 層面的問題。建議優化檢索策略或擴大索引範圍，以提升關鍵風險資訊的覆蓋率。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are covered and no prohibited errors.",
+            "actionable_feedback": "檢索器未能充分抓取相關段落，導致上下文召回率僅 0.29，需提升檢索召回或擴大檢索範圍。其他部分表現良好，風險描述正確。",
+            "error": null
+          }
+        ],
+        "original_score": 1.0
+      },
+      {
+        "run_idx": 3,
+        "answer": "這些公司面臨的主要風險與挑戰包括來自競爭、組織變革、國際運營和投資的風險。例如，NVIDIA 面臨來自灰色市場和未經授權的銷售的風險，這使得需求預測變得困難 [NVDA_10Q_202510.html, chunk #57]。同時，META 公司面臨組織變革的風險，例如員工裁員和辦公室設施的縮減，這可能會導致員工留存率下降和業務複雜性增加 [META_10Q_202509.html, chunk #123]。此外，META 公司還面臨國際運營的風險，包括業務、經濟和法律風險，這可能會影響其財務結果 [META_10Q_202509.html, chunk #123]。Microsoft 也面臨著競爭風險，包括來自其他技術公司的競爭，這可能會影響其業務和財務結果 [MSFT_10K_2025.html, chunk #77]。\n\n這些公司還面臨著投資風險，例如 NVIDIA 的投資可能會產生波動和損失 [NVDA_10Q_202510.html, chunk #57]。此外，META 公司的國際運營也面臨著法律和經濟風險，這可能會影響其財務結果 [META_10K_2025.html, chunk #76]。\n\n總的來說，這些公司面臨著多種風險和挑戰，包括競爭、組織變革、國際運營和投資風險。這些風險可能會影響其業務、財務結果和市場競爭力。 [NVDA_10Q_202510.html, chunk #57], [META_10Q_202509.html, chunk #123], [META_10K_2025.html, chunk #76], [MSFT_10K_2025.html, chunk #77]。",
+        "judge_scores": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "judge_score_mean": 1.0,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required rubric points are met and no prohibited errors are present.",
+            "actionable_feedback": "檢索階段的召回率偏低（≈0.29），導致關鍵文檔未被抓取。建議優化 Retriever 設定，如提升 top‑k、擴充索引或使用更精細的向量相似度門檻，以確保相關 chunk 能被成功檢索。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required rubric points are satisfied and no prohibited errors are present.",
+            "actionable_feedback": "檢索器未能充分抓取相關段落，導致上下文召回率僅 0.29，需提升檢索策略或擴大 top‑k。其餘回答內容符合要求。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are covered and no prohibited errors.",
+            "actionable_feedback": "檢索器召回率僅 0.29，說明未能抓取足夠相關段落，屬於 Retriever 層面的問題。建議優化檢索策略、擴大索引或調整 top‑k，以提升關鍵風險資訊的覆蓋率。",
+            "error": null
+          }
+        ],
+        "original_score": 1.0
+      }
+    ],
+    "sem-05": [
+      {
+        "run_idx": 1,
+        "answer": "NVIDIA's competitive advantages in the data center market include its unified underlying programmable architecture, large body of software, and full-stack computing platform, which deliver superior total cost of ownership and performance for compute-intensive workloads, such as AI, data processing, graphics, robotics, and scientific computing [NVDA_10K_2026.html, chunk #41]. The company's Data Center platform is focused on accelerating these workloads, and its infrastructure systems include supercomputing platforms and servers, bringing together high-performance GPUs, CPUs, interconnects, and fully optimized AI and HPC software stacks [NVDA_10K_2026.html, chunk #41]. Additionally, NVIDIA's acquisition of Mellanox in 2020 expanded its offerings to include networking, enabling the company to architect data center-scale computing platforms that can interconnect up to hundreds of thousands of compute nodes with high-performance networking [NVDA_10K_2026.html, chunk #38]. The company's large and growing number of developers and installed base across its platforms also strengthens its ecosystem and increases the value of its platform for customers [NVDA_10K_2026.html, chunk #38]. Furthermore, NVIDIA's innovation and investment in research and development, with over $76.7 billion invested since its inception, have yielded inventions that are essential to modern computing, including the GPU, CUDA, and Tensor Core GPU [NVDA_10K_2026.html, chunk #38]. The company's recent launches, such as the NVIDIA Blackwell architecture and the NVIDIA Rubin platform, also demonstrate its commitment to delivering cutting-edge technologies and solutions for the data center market [NVDA_10K_2026.html, chunk #42] and [NVDA_10K_2026.html, chunk #42]. Overall, NVIDIA's competitive advantages in the data center market are rooted in its technology, software, and ecosystem, which enable it to deliver unique value to its customers and maintain its position as a leader in the industry [NVDA_Fundamentals_20260519.txt, chunk #1].",
+        "judge_scores": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "judge_score_mean": 1.0,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are covered and no prohibited content is present.",
+            "actionable_feedback": "檢索層的召回率偏低（<0.5），說明未能從知識庫撈到足夠相關的片段。建議提升 Retriever 的檢索範圍或增大 top‑k，並優化索引與向量表示，以確保關鍵資訊被完整抓取。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are covered and no prohibited content is present.",
+            "actionable_feedback": "检索层的召回率偏低（<0.5），导致系统未能充分获取相关文档。建议提升检索器的 top‑k 或改进向量索引，以获取更多包含竞争优势信息的 chunk。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required rubric points are covered and no prohibited content is present.",
+            "actionable_feedback": "检索阶段召回率仅为0.14，说明Retriever未能抓取足够相关的文档块，导致信息覆盖不足。建议提升检索策略，如扩大top‑k、优化向量索引或加入混合检索，以提高context_recall。",
+            "error": null
+          }
+        ],
+        "original_score": 1.0
+      },
+      {
+        "run_idx": 2,
+        "answer": "NVIDIA's competitive advantages in the data center market include its unified underlying programmable architecture, large body of software, and full-stack computing platform, which deliver superior total cost of ownership and performance for compute-intensive workloads, such as AI, data processing, graphics, robotics, and scientific computing [NVDA_10K_2026.html, chunk #41]. The company's Data Center platform is focused on accelerating these workloads, delivering superior total cost of ownership relative to conventional CPU-only approaches [NVDA_10K_2026.html, chunk #41]. NVIDIA's invention of the GPU in 1999 and introduction of CUDA in 2006 have enabled the emergence of modern AI, and its continued innovation, including the introduction of Tensor Core GPU in 2017 and data center CPU, Grace, in 2023, have strengthened its position in the market [NVDA_10K_2026.html, chunk #38]. The company's large and growing number of developers and installed base across its platforms also strengthens its ecosystem and increases the value of its platform for customers [NVDA_10K_2026.html, chunk #38]. Additionally, NVIDIA's partnerships with industry leaders, such as Tech Mahindra Limited, Lumentum Holdings Inc., and Nebius Group N.V., accelerate the adoption of AI and expand its offerings [NVDA_Fundamentals_20260519.txt, chunk #1]. The company's full-stack computing platform, including its GPUs, CPUs, DPUs, interconnects, switch chips, and systems, along with its software stacks and algorithms, deliver data center-scale computing solutions [NVDA_10K_2026.html, chunk #42]. NVIDIA's Blackwell architecture, launched in fiscal year 2025, and its upcoming Rubin platform, expected to commence production shipments in the second half of fiscal year 2027, are also expected to drive growth and competitiveness in the data center market [NVDA_10K_2026.html, chunk #42].",
+        "judge_scores": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "judge_score_mean": 0.8,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers full-stack platform and performance but lacks explicit networking mention, no fabricated figures.",
+            "actionable_feedback": "检索器未能检索到包含网络技术（NVLink、InfiniBand 等）信息的文档，导致答案缺少关键的网络层要点。建议优化检索策略或扩大检索范围，以提升 context_recall，确保相关章节被抓取。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers required points mi0 and mi1 but misses networking detail mi2.",
+            "actionable_feedback": "检索器未能有效抓取包含网络相关信息的文档，导致上下文召回率仅0.14，建议提升检索查询或扩大检索范围，确保包含NVLink、InfiniBand等网络章节。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers required points mi0 and mi1, missing mi2.",
+            "actionable_feedback": "检索器未能抓取包含网络相关信息的文档，导致上下文召回率低（0.14），请提升检索策略或扩大检索范围，以确保包含 NVLink、InfiniBand 等网络章节。",
+            "error": null
+          }
+        ],
+        "original_score": 1.0
+      },
+      {
+        "run_idx": 3,
+        "answer": "NVIDIA's competitive advantages in the data center market include its unified underlying programmable architecture, large and growing number of developers and installed base, and significant investments in research and development, totaling over $76.7 billion since its inception [Reference 2: NVDA_10K_2026.html, chunk #38]. The company's data center platform is focused on accelerating compute-intensive workloads, such as AI, data processing, graphics, robotics, and scientific computing, delivering superior total cost of ownership relative to conventional CPU-only approaches [Reference 1: NVDA_10K_2026.html, chunk #41]. NVIDIA's data center infrastructure systems include supercomputing platforms and servers, bringing together higher performance, energy-efficient GPUs, CPUs, interconnects, and fully optimized AI and HPC software stacks [Reference 1: NVDA_10K_2026.html, chunk #41]. The company's networking offerings include NVLink interconnects and switches, end-to-end platforms for InfiniBand and Ethernet, consisting of network adapters, cables, DPUs, switch chips, and systems, as well as software [Reference 1: NVDA_10K_2026.html, chunk #41]. Additionally, NVIDIA has a platform strategy, bringing together hardware, systems, software, algorithms, libraries, AI models, and training data sets, and services to create unique value for the markets it serves [Reference 2: NVDA_10K_2026.html, chunk #38]. The company's customers include all major public and private cloud providers, AI model makers, enterprises, and startups, and public sector entities [Reference 1: NVDA_10K_2026.html, chunk #41]. NVIDIA's introduction of new technologies, such as the NVIDIA Blackwell architecture and the NVIDIA Rubin platform, also provides a competitive advantage, with the latter expected to deliver up to a 10x reduction in cost per token compared to Blackwell [Reference 5: NVDA_10K_2026.html, chunk #42].",
+        "judge_scores": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "judge_score_mean": 1.0,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are covered and no prohibited content.",
+            "actionable_feedback": "检索器未能有效抓取相关文档，导致上下文召回率仅0.14，需优化检索策略或扩大检索范围以提升召回。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are present and no prohibited content.",
+            "actionable_feedback": "检索器未能有效抓取相关文档，导致上下文召回率仅0.14，需提升检索策略，如扩大检索范围、增加 top‑k 或改进向量索引，以确保关键章节被检出。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are covered and no prohibited content.",
+            "actionable_feedback": "检索器未能有效抓取相关文档，导致上下文召回率仅0.14，需提升检索策略，如扩大 top‑k、优化向量索引或使用更精准的查询扩展，以确保关键信息被检出。",
+            "error": null
+          }
+        ],
+        "original_score": 0.5
+      }
+    ],
+    "sem-06": [
+      {
+        "run_idx": 1,
+        "answer": "Apple Silicon 對 Apple 整體策略具有重要意義，因為它可以讓 Apple 更好地控制自己的產品和技術，並提高產品的性能和安全性 [AAPL_10K_2025.html, chunk #48]。此外，Apple Silicon 也可以幫助 Apple 減少對第三方供應商的依賴，從而降低成本和風險 [AAPL_10K_2025.html, chunk #35]。\n\n根據 Apple 的 10-K 報告，公司的未來表現將取決於其在半導體和其他技術領域的研發投入 [AAPL_10K_2025.html, chunk #46]。Apple Silicon 是 Apple 在這個領域的重要投入之一，它可以幫助公司提高產品的競爭力和創新能力 [AAPL_News_20260519_01.txt, chunk #4]。\n\n然而，Apple Silicon 也面臨著一些挑戰和風險，例如供應鏈的不確定性和半導體產業的激烈競爭 [AAPL_10K_2025.html, chunk #35]。因此，Apple 需要繼續投資於研發和供應鏈管理，以確保 Apple Silicon 的成功 [AAPL_10K_2025.html, chunk #46]。\n\n總的來說，Apple Silicon 是 Apple 整體策略的重要組成部分，它可以幫助公司提高產品的競爭力和創新能力，同時也面臨著一些挑戰和風險 [AAPL_News_20260519_01.txt, chunk #4]。Apple 需要繼續投資於研發和供應鏈管理，以確保 Apple Silicon 的成功 [AAPL_10K_2025.html, chunk #46]。",
+        "judge_scores": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "judge_score_mean": 1.0,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are present and no prohibited content.",
+            "actionable_feedback": "目前回答已完整涵蓋垂直整合、效能優勢與降低第三方依賴，未見捏造數據，無需調整檢索或模型。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer satisfies all required points and contains no fabricated numbers.",
+            "actionable_feedback": "答案已完整覆盖垂直整合、效能優勢及降低第三方依賴等關鍵要點，檢索與生成均表現良好。建議持續確保引用來源的精確性即可。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are present and no prohibited content.",
+            "actionable_feedback": "答案已完整涵蓋垂直整合、效能優勢與降低第三方依賴，未出現捏造數據，檢索與生成均表現良好，無需調整。",
+            "error": null
+          }
+        ],
+        "original_score": 0.5
+      },
+      {
+        "run_idx": 2,
+        "answer": "Apple Silicon 對 Apple 整體策略具有重要意義，因為它使 Apple 能夠設計和開發自己的芯片，從而提高產品的性能和安全性 [AAPL_10K_2025.html, chunk #48]。這一策略也使 Apple 能夠更好地控制自己的供應鏈和成本 [AAPL_10K_2025.html, chunk #35]。此外，Apple Silicon 也是 Apple 推動人工智慧（AI）和機器學習（ML）技術的一部分 [AAPL_News_20260519_01.txt, chunk #4]。\n\nApple 的 AI 基礎設施投資增加了 34%，達到 114 億美元 [AAPL_News_20260519_01.txt, chunk #4]。這表明 Apple 正在加大對 AI 和 ML 技術的投入，以提高其產品和服務的性能和安全性。同時，Apple 也在擴大其服務業務，包括 App Store、Apple Music 和 Apple TV+ [AAPL_News_20260519_01.txt, chunk #4]。\n\n然而，Apple 的整體策略也面臨著一些風險和挑戰，例如全球供應鏈的不確定性和競爭對手的激烈競爭 [AAPL_10K_2025.html, chunk #48]。同時，Apple 也需要管理好其在亞洲的製造和物流業務 [AAPL_10K_2025.html, chunk #46]。\n\n綜上所述，Apple Silicon 對 Apple 整體策略具有重要意義，它使 Apple 能夠提高產品的性能和安全性，控制自己的供應鏈和成本，並推動 AI 和 ML 技術的發展 [AAPL_News_20260519_01.txt, chunk #4] [AAPL_10K_2025.html, chunk #48] [AAPL_10K_2025.html, chunk #35]。",
+        "judge_scores": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "judge_score_mean": 0.8,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers most required points but omits reducing third‑party dependence.",
+            "actionable_feedback": "檢查檢索器是否能抓取提及降低對 Intel 依賴的段落，必要時擴大檢索範圍或調整 top‑k，以確保關鍵資訊被納入。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers vertical integration and performance benefits but omits the point about reducing reliance on third‑party chips.",
+            "actionable_feedback": "缺少提及降低對 Intel 等第三方的依賴，屬於檢索層面的不足。需擴大 Retriever 的檢索範圍或調整檢索關鍵詞，確保包含說明自研晶片減少外部依賴的相關段落。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer meets most required points but omits reducing third‑party dependence.",
+            "actionable_feedback": "問題出在 LLM 未提及降低對第三方（如 Intel）的依賴，建議在系統提示或提示詞中加入此要點，確保生成時覆蓋所有關鍵層面。",
+            "error": null
+          }
+        ],
+        "original_score": 0.8
+      },
+      {
+        "run_idx": 3,
+        "answer": "Apple Silicon 對 Apple 整體策略具有重要意義，因為它代表了公司向自主研發芯片的轉變 [AAPL_News_20260519_01.txt, chunk #4]。這一轉變使得 Apple 能夠更好地控制其產品的核心技術和性能，並且可以更靈活地應對市場的變化 [AAPL_10K_2025.html, chunk #48]。\n\nApple Silicon 的引入也使得公司的產品線更加多樣化和完整，從 iPhone 到 Mac，從 iPad 到 Apple Watch [AAPL_News_20260519_01.txt, chunk #4]。這一系列的產品都采用了 Apple Silicon 芯片，代表了公司對於自主研發芯片的重視和投入 [AAPL_10K_2025.html, chunk #35]。\n\n此外，Apple Silicon 的引入也使得公司的成本結構發生了變化，公司可以通過自主研發芯片來降低成本和提高利潤率 [AAPL_News_20260519_01.txt, chunk #5]。這一點對於公司的財務表現具有重要意義，公司的淨利潤率和現金流都有所提高 [AAPL_News_20260519_01.txt, chunk #5]。\n\n然而，Apple Silicon 的引入也帶來了一些挑戰和風險，例如供應鏈的變化和芯片的可靠性等問題 [AAPL_10K_2025.html, chunk #46]。公司需要繼續投入研發和生產，以確保 Apple Silicon 的質量和可靠性 [AAPL_10K_2025.html, chunk #48]。\n\n總之，Apple Silicon 對 Apple 整體策略具有重要意義，它代表了公司向自主研發芯片的轉變和對於產品線的多樣化和完整化 [AAPL_News_20260519_01.txt, chunk #4]。公司需要繼續投入研發和生產，以確保 Apple Silicon 的質量和可靠性，並且需要管理好供應鏈和風險等問題 [AAPL_10K_2025.html, chunk #46]。",
+        "judge_scores": [
+          0.8,
+          0.5,
+          0.5
+        ],
+        "judge_score_mean": 0.6,
+        "judge_score_std": 0.1414,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers vertical integration and performance but omits reduced third‑party dependence.",
+            "actionable_feedback": "問題在 LLM 層，未提及降低對 Intel 等第三方的依賴。可在 System Prompt 中加入要求說明自研晶片減少對外部供應商的依賴，以提升完整性。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer includes vertical integration but omits performance/energy advantage and reduced third‑party dependence.",
+            "actionable_feedback": "問題出在 LLM 生成層面，未完整覆蓋 rubric 中的關鍵要點。建議在 System Prompt 中明確要求說明效能/能效優勢以及降低對 Intel 等第三方的依賴，或在檢索結果後加入結構化提示以引導模型完整回答。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0"
+            ],
+            "must_not_violations": [],
+            "reason": "Partial rubric coverage, missing key points",
+            "actionable_feedback": "LLM 未完整回答，缺少效能/能效優勢以及降低對第三方依賴的說明。建議在 System Prompt 中明確要求涵蓋垂直整合、效能/能效優勢及減少對 Intel 等第三方的依賴，以提升答案完整性。",
+            "error": null
+          }
+        ],
+        "original_score": 0.5
+      }
+    ],
+    "sem-07": [
+      {
+        "run_idx": 1,
+        "answer": "Microsoft Azure 在雲端市場的競爭定位是提供一套綜合的雲端服務，包括基礎設施即服務（IaaS）和平台即服務（PaaS）消費型服務 [MSFT_10K_2025.html, chunk #48]。Azure 的競爭優勢在於其全球規模、廣泛的身份和安全解決方案，以及能夠解決複雜的網路安全挑戰 [MSFT_10K_2025.html, chunk #50]。Azure 還提供超級計算能力和 AI 雲端服務，包括 Azure AI Foundry，一個統一的平台，讓開發人員可以設計、自訂和管理 AI 應用程式和代理人 [MSFT_10K_2025.html, chunk #48]。\n\nMicrosoft Azure 面臨來自其他雲端服務提供商和開源供應商的競爭 [MSFT_10K_2025.html, chunk #49]。然而，Microsoft 的長期戰略合作夥伴關係，例如與 OpenAI 的合作關係，讓 Azure 能夠提供獨特的 AI 解決方案和服務 [MSFT_10Q_202512.html, chunk #38]。此外，Azure 的全球資料中心網路和可擴展的基礎設施，也讓它能夠滿足客戶日益增長的需求 [MSFT_10K_2025.html, chunk #48]。\n\n綜上所述，Microsoft Azure 在雲端市場的競爭定位是提供一套全面、可擴展和安全的雲端服務，結合其全球規模、AI 能力和戰略合作夥伴關係，讓客戶能夠解決複雜的網路安全挑戰和滿足日益增長的需求 [MSFT_10K_2025.html, chunk #50]。",
+        "judge_scores": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "judge_score_mean": 0.8,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer meets required points mi0 and mi1 but omits mi2.",
+            "actionable_feedback": "回答缺少企業/混合雲優勢的說明，可能是檢索未抓到相關內容，建議提升 Retriever 的召回率或擴大檢索範圍。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer meets required points mi0 and mi1, but omits mi2.",
+            "actionable_feedback": "LLM层未覆盖企业/混合云优势的关键点，需在检索到的文档中加入相关信息并在生成时确保包含此要点。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers most required points but omits enterprise/hybrid cloud advantage.",
+            "actionable_feedback": "回答缺少企業/混合雲及既有客戶優勢的說明，屬於 LLM 輸出不完整問題。建議在系統提示中明確要求列出 Azure 的企業客戶和混合雲優勢，或在檢索階段加入相關 chunk，以提升完整性。",
+            "error": null
+          }
+        ],
+        "original_score": 0.0
+      },
+      {
+        "run_idx": 2,
+        "answer": "Microsoft Azure 在雲端市場的競爭定位是提供了一個全面的雲端服務平台，為開發人員、IT 專業人員和企業提供了自由建構、部署和管理應用程式的能力 [MSFT_10K_2025.html, chunk #48]。Azure 的競爭優勢包括其全球規模、廣泛的身份和安全解決方案，以及其能夠有效地解決複雜的網路安全挑戰 [MSFT_10K_2025.html, chunk #50]。此外，Azure 的 AI 服務提供了優勢，包括超級計算能力和快速擴張的 AI 雲端服務組合 [MSFT_10K_2025.html, chunk #48]。\n\nAzure 面臨來自雲端服務提供商和開源供應商的競爭 [MSFT_10K_2025.html, chunk #49]。然而，Microsoft 與 OpenAI 的長期戰略合作關係為 Azure 提供了獨特的優勢，包括對 OpenAI 的知識產權和基礎設施的使用權 [MSFT_10Q_202512.html, chunk #38]。\n\nMicrosoft 的雲端戰略包括不斷投資於雲端和 AI 基礎設施，以滿足客戶的需求 [MSFT_10K_2025.html, chunk #112]。公司還致力於擴大其資料中心位置和增加伺服器容量，以滿足不斷增長的 AI 服務需求 [MSFT_10K_2025.html, chunk #50]。\n\n總之，Microsoft Azure 在雲端市場的競爭定位是提供了一個全面的雲端服務平台，具有全球規模、廣泛的身份和安全解決方案，以及優勢的 AI 服務。公司的長期戰略合作關係和不斷投資於雲端和 AI 基礎設施將有助於 Azure 在雲端市場中保持競爭優勢 [MSFT_10K_2025.html, chunk #48] [MSFT_10K_2025.html, chunk #50] [MSFT_10Q_202512.html, chunk #38]。",
+        "judge_scores": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "judge_score_mean": 1.0,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are present and no fabricated data.",
+            "actionable_feedback": "檢索層的召回率僅為0.5，略低於理想值，建議提升檢索策略或擴大 top‑k，以取得更多相關片段。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are present and no prohibited content.",
+            "actionable_feedback": "检索层未能充分覆盖混合云/企业优势的相关文档，导致上下文召回仅为0.5，建议提升检索策略或扩大检索范围，以获取更多涉及混合云和企业客户的章节。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are present and no fabricated data.",
+            "actionable_feedback": "回答已覆盖所有必需要点，未出现捏造信息，但检索召回率仅为0.5，建议优化检索器以获取更多相关章节，提高信息完整性。",
+            "error": null
+          }
+        ],
+        "original_score": 0.0
+      },
+      {
+        "run_idx": 3,
+        "answer": "Microsoft Azure 在雲端市場的競爭定位是提供一套全面的雲端服務，讓開發者、IT專業人員和企業能夠自由地建置、部署和管理應用程式於任何平台或設備 [MSFT_10K_2025.html, chunk #48]。Azure 的競爭優勢包括能夠讓客戶將現有的資料中心與公有雲整合成一個單一的基礎設施，並能夠根據客戶的需求提供適合的規模 [MSFT_10K_2025.html, chunk #50]。此外，Azure 的 AI 服務提供了優勢，讓公司能夠優化和擴大其業務 [MSFT_10K_2025.html, chunk #48]。\n\nAzure 面臨來自其他雲端服務提供商和開源方案的競爭 [MSFT_10K_2025.html, chunk #49]。然而，Microsoft 的長期戰略合作夥伴關係，例如與 OpenAI 的合作，讓 Azure 能夠提供獨特的 AI 服務和解決方案 [MSFT_10Q_202512.html, chunk #38]。此外，Azure 的全球資料中心網路和強大的合作夥伴關係，也讓 Azure 能夠提供高品質的服務和支持 [MSFT_10K_2025.html, chunk #48]。\n\n綜上所述，Microsoft Azure 在雲端市場的競爭定位是提供一套全面的雲端服務，結合 AI 服務和強大的合作夥伴關係，讓客戶能夠自由地建置、部署和管理應用程式於任何平台或設備 [MSFT_10K_2025.html, chunk #48]。",
+        "judge_scores": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "judge_score_mean": 1.0,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are present and no prohibited content.",
+            "actionable_feedback": "目前回答已涵蓋所有必須的要點，未出現捏造資訊。但檢索召回率僅為0.5，屬於邊緣水平，建議優化 Retriever，使其能抓取更多相關段落，以提升資訊完整度。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are covered and no prohibited content.",
+            "actionable_feedback": "回答已完整涵蓋 rubric 要求，未出現捏造資訊。可考慮提升 Retriever 的召回率，以取得更多相關片段，進一步增強答案深度。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "All required points are present and no prohibited content.",
+            "actionable_feedback": "目前回答已涵蓋所有關鍵要點，檢索層面的召回率僅為0.5，可考慮提升Retriever的召回以取得更多相關段落，進一步增強答案完整性。",
+            "error": null
+          }
+        ],
+        "original_score": 0.5
+      }
+    ],
+    "sem-08": [
+      {
+        "run_idx": 1,
+        "answer": "Amazon AWS 的長期策略方向是繼續發展和擴展其雲端服務，包括計算、儲存、資料庫、分析和機器學習等服務 [AMZN_10K_2025.html, chunk #86]。Amazon 透過 AWS 提供一系列按需技術服務，包括計算、儲存、資料庫、分析和機器學習等，為開發人員和企業提供了強大的工具和平台 [AMZN_10K_2025.html, chunk #58]。此外，Amazon 也在投資於人工智慧和機器學習的研發，以進一步提升其雲端服務的能力 [AMZN_10Q_202603.html, chunk #45]。\n\nAmazon 的長期策略是通過不斷的創新和投資來保持其在雲端服務市場的領導地位 [AMZN_10K_2025.html, chunk #56]。公司的四個核心原則，包括以顧客為中心、熱愛發明、追求卓越和長期思考，指導著其在雲端服務領域的戰略決策 [AMZN_10K_2025.html, chunk #56]。\n\n因此，Amazon AWS 的長期策略方向是繼續發展和擴展其雲端服務，投資於人工智慧和機器學習的研發，同時保持其在雲端服務市場的領導地位 [AMZN_10Q_202603.html, chunk #45] [AMZN_10K_2025.html, chunk #86]。",
+        "judge_scores": [
+          0.2,
+          0.2,
+          0.0
+        ],
+        "judge_score_mean": 0.1333,
+        "judge_score_std": 0.0943,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Partial coverage of rubric, missing critical points.",
+            "actionable_feedback": "LLM未完整呈現關鍵資訊，需在系統提示中強化要求列出AWS作為Amazon獲利引擎及具體AI/ML服務（如Bedrock、晶片），以提升答案完整性。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Missing critical points from rubric",
+            "actionable_feedback": "LLM 未能完整提取檢索到的關鍵資訊，導致未說明 AWS 為雲端市佔龍頭及其獲利引擎，也未具體提及 Bedrock 或自研晶片等 AI/ML 服務。建議加強系統提示，要求模型必須覆蓋所有 must_include 項，並在檢索階段確保相關段落被抓取。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [],
+            "must_not_violations": [],
+            "reason": "Missing required rubric points",
+            "actionable_feedback": "LLM 未在回答中指出 AWS 為雲端市佔龍頭及 Amazon 的獲利引擎，也未具體提及 Bedrock 或自研晶片等 AI/ML 服務，基礎設施擴張與資本支出亦未說明。建議在系統提示中強化必答要點，並在檢索階段確保相關段落被抓取，以便 LLM 能完整呈現這些關鍵資訊。",
+            "error": null
+          }
+        ],
+        "original_score": 0.8
+      },
+      {
+        "run_idx": 2,
+        "answer": "Amazon AWS 的長期策略方向是繼續投資於雲端事業，提供廣泛的技術服務，包括計算、儲存、資料庫、分析和機器學習等 [AMZN_10K_2025.html, chunk #86]。AWS 的目標是為所有大小的開發人員和企業提供按需技術服務 [AMZN_10K_2025.html, chunk #58]。Amazon 也在投資於人工智慧和機器學習的研發，以提高 AWS 的服務質量和效率 [AMZN_10Q_202603.html, chunk #45]。此外，Amazon 會繼續擴大 AWS 的服務，包括開發新的產品和服務，以滿足客戶的需求 [AMZN_10K_2025.html, chunk #86]。Amazon 的長期策略是通過持續的投資和創新，來維持 AWS 的領導地位和競爭優勢 [AMZN_10K_2025.html, chunk #56]。",
+        "judge_scores": [
+          0.3,
+          0.3,
+          0.3
+        ],
+        "judge_score_mean": 0.3,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Partial coverage of rubric; missed key points.",
+            "actionable_feedback": "主要問題在 Retriever，未能檢索到說明 AWS 為雲端市佔龍頭及基礎設施擴張的段落。建議擴大檢索範圍或調整 top‑k，以確保相關策略資訊被抓取。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Partial coverage of rubric; missing key points.",
+            "actionable_feedback": "檢索層未能抓取包含 AWS 為盈利引擎及基礎設施資本支出資訊的文件，建議提升 Retriever 的召回率或調整檢索參數；同時讓 LLM 更加聚焦於完整呈現檢索到的關鍵要點。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Partial coverage of rubric; missed key points.",
+            "actionable_feedback": "主要問題在 Retriever，未能檢索到說明 AWS 為雲端市佔龍頭及基礎設施擴張的段落。建議擴大檢索範圍或調整 top‑k，以確保相關策略資訊被抓取。",
+            "error": null
+          }
+        ],
+        "original_score": 0.3
+      },
+      {
+        "run_idx": 3,
+        "answer": "Amazon AWS 的長期策略方向是繼續投資於雲端技術和基礎設施，包括計算、儲存、資料庫、分析和機器學習等服務 [AMZN_10K_2025.html, chunk #86]。該公司相信，技術的進步，特別是處理速度、資料儲存和分析的成本降低，以及人工智慧和機器學習的實用應用，將繼續改善用戶的網際網路體驗和增加其在人們生活中的普遍性 [AMZN_10K_2025.html, chunk #86]。因此，Amazon 將繼續投資於 AWS，以提供更廣泛的雲端服務和技術，包括計算、儲存、資料庫、分析和機器學習等 [AMZN_10K_2025.html, chunk #58]。此外，AWS 的銷售額在 2025 年第三季度和 2026 年第一季度分別增加了 20% 和 28% [AMZN_10Q_202509.html, chunk #46] [AMZN_10Q_202603.html, chunk #45]，表明 AWS 的業務正在快速增長。 \n\n總的來說，Amazon AWS 的長期策略方向是繼續投資於雲端技術和基礎設施，提供更廣泛的雲端服務和技術，以滿足用戶的需求和推動業務的增長 [AMZN_10K_2025.html, chunk #86] [AMZN_10K_2025.html, chunk #58] [AMZN_10Q_202509.html, chunk #46] [AMZN_10Q_202603.html, chunk #45]。",
+        "judge_scores": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "judge_score_mean": 0.5,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "The answer covers AI/ML investment and infrastructure expansion but does not position AWS as the market leader or profit engine.",
+            "actionable_feedback": "問題出在 LLM 層面，未能完整呈現關鍵的 AWS 市佔龍頭與 Amazon 獲利引擎定位。建議在 System Prompt 中加入明確指示，要求回答必須說明 AWS 為雲端市場領導者及公司主要獲利來源。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer misses critical point about AWS being market leader and profit engine.",
+            "actionable_feedback": "檢索階段未抓到包含 AWS 市佔龍頭與獲利引擎的內容，導致關鍵資訊缺失。建議提升 Retriever 的召回率或擴大檢索範圍，以確保相關段落被納入。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Missing critical point about AWS being market leader and profit engine.",
+            "actionable_feedback": "缺少關鍵的 AWS 市佔龍頭與 Amazon 獲利引擎定位，可能是檢索階段未抓到相關段落。建議擴大 Retriever 的檢索範圍或調整關鍵詞，以確保包含說明 AWS 市場領導地位的文件。",
+            "error": null
+          }
+        ],
+        "original_score": 0.0
+      }
+    ],
+    "sem-09": [
+      {
+        "run_idx": 1,
+        "answer": "Google 在 AI 與搜尋領域的競爭策略包括持續投資於技術基礎設施、研究和開發，以打造最先進的 AI 技術和產品 [GOOGL_10K_2025.html, chunk #157]。Google 致力於打造 AI 優化的基礎設施，以支持其產品和服務的發展 [GOOGL_10K_2025.html, chunk #139]。此外，Google 亦致力於發展新的 AI 模型和技術，例如 Gemini 3，这是一種先進的 AI 模型，能夠提供多模態理解和交互式用戶體驗 [GOOGL_10K_2025.html, chunk #139]。\n\n在搜尋領域，Google 面臨著激烈的競爭，包括來自其他搜索引擎和信息服務提供商的競爭 [GOOGL_10K_2025.html, chunk #148]。為了維持其競爭優勢，Google 必須不斷創新和提供有用的產品和服務，以吸引和留住用戶、廣告商和內容提供商 [GOOGL_10K_2025.html, chunk #148]。\n\nGoogle 的競爭策略還包括擴大其業務範圍，包括雲計算、消費者訂閱和硬件等領域 [GOOGL_10K_2025.html, chunk #179]。這些業務的發展需要大量的投資和創新，同時也面臨著激烈的競爭 [GOOGL_10K_2025.html, chunk #179]。\n\n總的來說，Google 在 AI 與搜尋領域的競爭策略是通過持續投資於技術基礎設施、研究和開發，打造最先進的 AI 技術和產品，同時擴大其業務範圍和提供有用的產品和服務，以吸引和留住用戶、廣告商和內容提供商 [GOOGL_10K_2025.html, chunk #157] [GOOGL_10K_2025.html, chunk #139] [GOOGL_10K_2025.html, chunk #148] [GOOGL_10K_2025.html, chunk #179]。",
+        "judge_scores": [
+          0.7,
+          0.7,
+          0.7
+        ],
+        "judge_score_mean": 0.7,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers required points mi0 and mi2 but misses mi1.",
+            "actionable_feedback": "檢索層面召回率僅0.25，未能抓取包含搜尋廣告防禦與變現的相關段落，需提升Retriever的召回或擴大檢索範圍。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "The answer mentions Gemini and cloud services but omits ad monetization details and includes no fabricated data.",
+            "actionable_feedback": "檢索器未能抓取包含搜尋廣告防禦或變現資訊的文檔，導致關鍵點缺失。建議優化 Retriever 的召回策略或擴大檢索範圍，以提升 context_recall。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "The answer mentions Gemini and cloud services but omits the ad‑business detail required by the rubric.",
+            "actionable_feedback": "檢索階段的召回率僅 0.25，說明 Retriever 未能抓取包含搜尋廣告防禦/變現資訊的相關 Chunk，需提升檢索策略或擴大 top‑k。另一方面，回答缺少搜尋廣告核心業務的描述，請在檢索結果中加入相關段落並在 LLM 生成時確保涵蓋此要點。",
+            "error": null
+          }
+        ],
+        "original_score": 0.5
+      },
+      {
+        "run_idx": 2,
+        "answer": "Google 在 AI 與搜尋領域的競爭策略是通過不斷發展和部署創新的 AI 技術和產品來競爭 [GOOGL_10K_2025.html, chunk #157]。Google 致力於打造最先進、安全和負責任的 AI 平台，通過全棧式方法，包括 AI 優化基礎設施、世界級研究和產品開發 [GOOGL_10K_2025.html, chunk #139]。Google 的 AI 技術和服務是高度競爭和快速演變的，需要大量投資，包括技術基礎設施、開發和運營成本 [GOOGL_10K_2025.html, chunk #157]。\n\nGoogle 的搜尋領域競爭策略包括通過吸引和保留用戶、廣告商和內容提供商來競爭 [GOOGL_10K_2025.html, chunk #148]。Google 的廣告平台和網絡面臨著激烈的競爭，包括來自其他線上廣告平台和傳統廣告媒體的競爭 [GOOGL_10K_2025.html, chunk #148]。\n\n此外，Google 仍在投資於技術基礎設施，包括數據中心和 AI 加速器，以支持其 AI 產品和服務的發展 [GOOGL_10K_2025.html, chunk #179]。Google 的 Gemini 3 AI 模型是其最先進的 AI 技術，具有先進的多模態理解和推理能力 [GOOGL_10K_2025.html, chunk #139]。\n\n總之，Google 在 AI 與搜尋領域的競爭策略是通過不斷發展和部署創新的 AI 技術和產品，吸引和保留用戶、廣告商和內容提供商，投資於技術基礎設施和 AI 研究和開發。 [GOOGL_10K_2025.html, chunk #157], [GOOGL_10K_2025.html, chunk #139], [GOOGL_10K_2025.html, chunk #148], [GOOGL_10K_2025.html, chunk #179]。",
+        "judge_scores": [
+          0.8,
+          0.8,
+          0.0
+        ],
+        "judge_score_mean": 0.5333,
+        "judge_score_std": 0.3771,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers most required points but misses Google Cloud/TPU.",
+            "actionable_feedback": "檢查檢索器（Retriever），目前召回的相關片段不足，未包含 Google Cloud 或自研 TPU 的資訊，導致 mi2 缺失；需提升檢索召回率或擴大檢索範圍，以取得完整相關內容。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers most required points but misses Google Cloud/TPU.",
+            "actionable_feedback": "檢索層未能抓取包含 Google Cloud 或 TPU 的相關段落，導致關鍵資訊缺失，建議擴大檢索範圍或調整 top‑k 設定以提升 context recall。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [],
+            "must_not_violations": [],
+            "reason": "Missing required rubric points",
+            "actionable_feedback": "檢索器未能抓取包含 Gemini、廣告防禦與 Google Cloud/TPU 等關鍵資訊的段落，需提升檢索召回率或擴大檢索範圍。",
+            "error": null
+          }
+        ],
+        "original_score": 0.8
+      },
+      {
+        "run_idx": 3,
+        "answer": "Google 在 AI 與搜尋領域的競爭策略是透過不斷發展和整合 AI 技術來提供更好的使用者體驗和廣告商效果 [GOOGL_10K_2025.html, chunk #157]。Google 致力於打造最先進、安全和負責任的 AI 技術，透過全棧式方法，包括 AI 優化的基礎設施、世界級的研究和開發，以及將 AI 技術整合到產品和平台中 [GOOGL_10K_2025.html, chunk #139]。\n\nGoogle 的競爭策略還包括繼續投資於技術基礎設施，包括自定義的 Tensor Processing Units (TPUs) 和 Graphics Processing Units (GPUs) [GOOGL_10K_2025.html, chunk #139]。此外，Google 也致力於發展新的 AI 模型和技術，例如 Gemini 3，旨在提供更先進的多模態理解和交互式使用者體驗 [GOOGL_10K_2025.html, chunk #139]。\n\n在搜尋領域，Google 致力於提供更好的搜尋結果和使用者體驗，透過整合 AI 技術和其他先進技術 [GOOGL_10K_2025.html, chunk #157]。Google 也面臨著來自其他搜尋引擎和技術公司的激烈競爭，包括垂直搜尋引擎和電子商務平台 [GOOGL_10K_2025.html, chunk #148]。\n\n總之，Google 在 AI 與搜尋領域的競爭策略是透過不斷發展和整合 AI 技術，提供更好的使用者體驗和廣告商效果，同時繼續投資於技術基礎設施和發展新的 AI 模型和技術 [GOOGL_10K_2025.html, chunk #157] [GOOGL_10K_2025.html, chunk #139] [GOOGL_10K_2025.html, chunk #148]。",
+        "judge_scores": [
+          0.7,
+          0.7,
+          0.7
+        ],
+        "judge_score_mean": 0.7,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Partial coverage of rubric, missing some required points.",
+            "actionable_feedback": "回答缺少搜尋廣告防禦或變現的說明，屬於內容不完整問題，需在檢索階段加入相關廣告業務的文件或在提示中明確要求 LLM 輸出此資訊。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer includes Gemini model and TPUs but omits search advertising discussion.",
+            "actionable_feedback": "最嚴重問題在於內容缺失，未提及搜尋廣告的防禦或變現策略，屬於檢索層未抓到相關段落導致的正確性不足。建議在 Retriever 階段擴大檢索範圍或在系統提示中加入搜尋廣告相關關鍵詞，以確保相關資訊被納入回答。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer omitted some required points.",
+            "actionable_feedback": "問題出在 LLM 未完整覆蓋檢索到的資訊，缺少搜尋廣告核心業務的描述。建議在系統提示或檢索結果的摘要中強調需提及廣告變現策略，或在提示中加入要求列出所有 must_include 項目。",
+            "error": null
+          }
+        ],
+        "original_score": 0.7
+      }
+    ],
+    "sem-10": [
+      {
+        "run_idx": 1,
+        "answer": "Meta 在 AI 與 Reality Labs 上的長期投資方向是發展下一代計算平台，包括虛擬和增強實境技術 [META_10K_2025.html, chunk #67]。Meta 預計在 2026 年將約 70% 的 Reality Labs 運營費用投入可穿戴設備的研發 [META_10K_2025.html, chunk #45]。同時，Meta 也在 AI 領域進行著大量投資，包括開發 AI 模型和應用 [META_10K_2025.html, chunk #47]。\n\nMeta 的 Reality Labs 努力旨在打造下一代計算平台，包括虛擬和增強實境技術 [META_10K_2025.html, chunk #67]。這些努力包括開發新技術、基礎設施和安全性措施 [META_10K_2025.html, chunk #67]。Meta 也在開發 AI 技術，包括開發 AI 模型和應用 [META_10K_2025.html, chunk #47]。\n\nMeta 的長期投資方向還包括發展可穿戴設備和虛擬實境技術 [META_10K_2025.html, chunk #44]。Meta 已經推出了多款可穿戴設備，包括 Ray-Ban Meta 和 Oakley Meta 鏡片 [META_10K_2025.html, chunk #44]。同時，Meta 也在開發虛擬實境技術，包括 Meta Quest 設備和 Meta Horizon Store [META_10K_2025.html, chunk #44]。\n\n綜上所述，Meta 在 AI 與 Reality Labs 上的長期投資方向是發展下一代計算平台，包括虛擬和增強實境技術、可穿戴設備和 AI 技術 [META_10K_2025.html, chunk #67] [META_10K_2025.html, chunk #45] [META_10K_2025.html, chunk #47] [META_10K_2025.html, chunk #44]。",
+        "judge_scores": [
+          0.7,
+          0.7,
+          0.7
+        ],
+        "judge_score_mean": 0.7,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Partial coverage of rubric, missing loss details.",
+            "actionable_feedback": "在 LLM 層面未提及 Reality Labs 的虧損資訊，導致關鍵要點缺失，建議在系統提示中加入必須說明虧損的要求，或在檢索階段確保包含相關財務數據的段落。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer omitted required loss information.",
+            "actionable_feedback": "檢查檢索器，確保能抓到包含 Reality Labs 虧損資訊的段落；可提升 top‑k 或調整相似度門檻，以提升 context recall，避免關鍵資訊遺漏。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer includes AI investment and wearable devices but omits Reality Labs loss details.",
+            "actionable_feedback": "回答未提及 Reality Labs 的虧損情況，屬於關鍵資訊遺漏。問題在 LLM 未充分抽取或生成所需內容，建議加強 System Prompt 或檢查 Retriever 提供的相關段落，確保包含虧損數據。",
+            "error": null
+          }
+        ],
+        "original_score": 0.7
+      },
+      {
+        "run_idx": 2,
+        "answer": "Meta 的長期投資方向在 AI 和 Reality Labs 方面，預計將繼續投資虛擬和增強實境技術，以及其他新興技術，來支持其 Reality Labs 努力 [META_10K_2025.html, chunk #67]。在 2026 年，Meta 預計將花費約 70% 的 Reality Labs 運營費用在可穿戴設備的研發上，剩餘的 30% 則用於虛擬實境和 Horizon 項目 [META_10K_2025.html, chunk #45]。此外，Meta 也將繼續投資 AI 項目，包括開發新一代的 AI 模型和技術 [META_10K_2025.html, chunk #47]。\n\nMeta 的 Reality Labs 努力包括開發新產品和服務，例如虛擬實境設備、軟件和內容 [META_10K_2025.html, chunk #44]。該公司也在開發可穿戴設備，例如 AI 眼鏡和增強實境眼鏡 [META_10K_2025.html, chunk #44]。Meta 預計其 Reality Labs Segment 將在可預見的未來繼續虧損，但該公司相信這項投資將在長期內帶來回報 [META_10K_2025.html, chunk #47]。\n\nMeta 的長期投資方向也包括開發新一代的計算平台，該公司相信這將是下一個互聯網的發展方向 [META_10K_2025.html, chunk #67]。該公司預計將繼續投資新技術和新產品的研發，以支持其 Reality Labs 努力 [META_10K_2025.html, chunk #47]。",
+        "judge_scores": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "judge_score_mean": 0.0,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [
+              "mn0"
+            ],
+            "reason": "Answer includes required points but fabricates numeric expense allocation not present in sources.",
+            "actionable_feedback": "問題出在 LLM 層面，生成了未在來源中出現的具體數字。需加強模型的 grounding 機制，對數值類資訊進行嚴格核對或限制直接引用未驗證的比例數據。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [
+              "mn0"
+            ],
+            "reason": "Answer includes fabricated percentage figures not present in sources.",
+            "actionable_feedback": "問題出在 LLM 生成時未嚴格根據檢索到的內容，出現捏造的數據。建議加強來源對齊機制，限制模型直接生成未在 chunk 中出現的具體數字，或在系統提示中要求僅使用已檢索到的資訊。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            "must_not_violations": [
+              "mn0"
+            ],
+            "reason": "The answer covers all required points but fabricates financial percentages not present in the source.",
+            "actionable_feedback": "問題出在 LLM 捏造了未在來源中的財務比例數據。建議在系統提示中加入嚴格的事實檢查機制，或限制模型直接生成具體數字，僅在來源明確時引用。",
+            "error": null
+          }
+        ],
+        "original_score": 1.0
+      },
+      {
+        "run_idx": 3,
+        "answer": "Meta 在 AI 與 Reality Labs 上的長期投資方向是發展下一代計算平台，包括虛擬和增強實境技術、AI 和可穿戴設備 [META_10K_2025.html, chunk #67]。在 2026 年，Meta 預計將在 Reality Labs 上花費約 70% 的經費在可穿戴設備的研發上，另外 30% 則用於虛擬實境和 Horizon 項目 [META_10K_2025.html, chunk #45]。Meta 的 Reality Labs 努力包括短期和長期的研究與開發項目，目的是打造下一代的計算平台和社交技術 [META_10K_2025.html, chunk #44]。\n\nMeta 的 AI 投資方向包括開發前沿 AI 模型、基於 AI 的發現引擎和其他新技術 [META_10K_2025.html, chunk #47]。公司預計其 Reality Labs 部門將在可預見的未來繼續虧損，但相信這項投資將為未來的商業和創作者帶來新的機會 [META_10K_2025.html, chunk #47]。\n\n此外，Meta 的投資方向也包括保護用戶的隱私、安全和社交平台的完整性 [META_10K_2025.html, chunk #47]。公司相信開源創新和分享 AI 研究成果將有助於加速 AI 研究和改善其產品 [META_10K_2025.html, chunk #47]。整體而言，Meta 的長期投資方向是圍繞著發展下一代計算平台和社交技術，同時注重用戶體驗、安全和創新。 [META_10K_2025.html, chunk #67] [META_10K_2025.html, chunk #45] [META_10K_2025.html, chunk #44] [META_10K_2025.html, chunk #47]",
+        "judge_scores": [
+          0.8,
+          0.0,
+          0.0
+        ],
+        "judge_score_mean": 0.2667,
+        "judge_score_std": 0.3771,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers AI investment and Reality Labs but omits AI glasses.",
+            "actionable_feedback": "缺少 AI 眼鏡（Ray‑Ban Meta）相關資訊，屬於檢索層未抓到關鍵 chunk，請提升 Retriever 的召回範圍或加入相關關鍵詞，以便 LLM 能在回答中加入此要點。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [
+              "mn0"
+            ],
+            "reason": "Answer misses AI glasses and fabricates spending percentages.",
+            "actionable_feedback": "LLM 捏造了 Reality Labs 的具体经费比例（70%/30%），且未提及 AI 眼镜 Ray‑Ban Meta，说明模型在引用时自行推断并遗漏关键信息。建议在系统提示中强调必须严格依据检索到的文档，不得自行编造数值，并加入对 AI 眼镜等关键关键词的检索要求，以提升答案的忠实度和完整性。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi1"
+            ],
+            "must_not_violations": [
+              "mn0"
+            ],
+            "reason": "The answer covers AI investment and Reality Labs losses but omits AI glasses and fabricates spending percentages.",
+            "actionable_feedback": "問題出在 LLM 捏造了未在來源中的數字，需加強對檢索結果的引用與驗證，避免產生虛假資訊；同時檢查檢索是否包含 AI 眼鏡相關內容，以補全關鍵資訊。",
+            "error": null
+          }
+        ],
+        "original_score": 0.8
+      }
+    ],
+    "sem-11": [
+      {
+        "run_idx": 1,
+        "answer": "Tesla 面臨多種競爭與監管風險。首先，公司運營於一個週期性行業，容易受到消費趨勢、政治和監管不確定性的影響 [TSLA_10Q_202509.html, chunk #37]。此外，隨著更多競爭對手進入市場，Tesla 需要不斷調整和執行戰略以維持其勢頭 [TSLA_10Q_202509.html, chunk #37]。\n\n在監管方面，政府和經濟政策的變化可能會影響 Tesla 的生產、成本結構和競爭格局 [TSLA_10Q_202509.html, chunk #37]。例如，最近公佈的貿易政策變化可能會對消費者支出和耐用消費品需求產生不利影響 [TSLA_10Q_202509.html, chunk #37]。此外，某些法規的變化，例如電動汽車稅收抵免的取消，可能會影響電動汽車的需求 [TSLA_10Q_202509.html, chunk #37]。\n\n在能源領域，當前的關稅體制對 Tesla 的能源生產和儲存業務的影響相對較大 [TSLA_10Q_202509.html, chunk #33]。公司需要不斷關注監管環境的變化，並根據需要進行調整以維持其競爭優勢 [TSLA_10Q_202509.html, chunk #37]。",
+        "judge_scores": [
+          0.2,
+          0.2,
+          0.2
+        ],
+        "judge_score_mean": 0.2,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Partial rubric coverage; missing key competition and autonomous driving points.",
+            "actionable_feedback": "檢索層面需提升，確保抓取包含 EV 市場競爭、價格戰及自動駕駛監管風險的相關段落；可擴大 top‑k 或調整檢索關鍵詞。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer omitted critical points mi0 and mi1.",
+            "actionable_feedback": "檢索器未能抓取包含 EV 市場競爭加劇、價格戰以及自動駕駛監管風險的相關段落，導致關鍵資訊缺失。建議提升 Retriever 的召回率，例如增大 top‑k、優化向量索引或加入關鍵詞擴展，以確保相關 chunk 被檢索到。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Partial coverage, missing critical competition and autonomous driving risks.",
+            "actionable_feedback": "检索器未能抓取包含 EV 市场竞争加剧、价格战及自动驾驶监管风险的章节，导致关键信息缺失。建议提升检索召回率，扩大 top‑k 或优化向量检索，以确保相关风险章节被检出。",
+            "error": null
+          }
+        ],
+        "original_score": 0.0
+      },
+      {
+        "run_idx": 2,
+        "answer": "Tesla 面臨多種競爭和監管風險。首先，公司運營於一個週期性產業，容易受到消費趨勢、政治和監管不確定性的影響，包括貿易和環境方面的變化 [TSLA_10Q_202509.html, chunk #37]。此外，隨著更多競爭對手進入市場，Tesla 需要不斷調整和執行策略以維持其動力 [TSLA_10Q_202509.html, chunk #37]。\n\n在監管方面，政府和經濟政策的變化，包括稅收抵免和關稅，可能會影響 Tesla 的生產、成本結構和競爭格局 [TSLA_10Q_202509.html, chunk #37]。例如，最近宣布的貿易政策變化可能會對消費者支出和耐用消費品的需求產生不利影響 [TSLA_10Q_202509.html, chunk #37]。\n\n此外，Tesla 的能源生產和儲存業務可能會受到當前關稅體制的影響 [TSLA_10Q_202509.html, chunk #33]。公司需要不斷關注監管環境的變化，並根據需要進行調整，以維持其競爭優勢 [TSLA_10Q_202509.html, chunk #37]。\n\n總之，Tesla 面臨的主要競爭和監管風險包括：消費趨勢和政治不確定性的影響 [TSLA_10Q_202509.html, chunk #37]、競爭對手的進入 [TSLA_10Q_202509.html, chunk #37]、政府和經濟政策的變化 [TSLA_10Q_202509.html, chunk #37]，以及關稅和貿易政策的影響 [TSLA_10Q_202509.html, chunk #37]。",
+        "judge_scores": [
+          0.2,
+          0.2,
+          0.2
+        ],
+        "judge_score_mean": 0.2,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Only the overall economic/subsidy risk was covered; EV competition and autonomous driving risks missing.",
+            "actionable_feedback": "檢索器未能抓取包含 EV 市場競爭加劇與自動駕駛監管風險的相關段落，導致關鍵要點缺失。建議提升檢索召回率，擴大 top‑k 或使用更精細的查詢擴展，以確保相關風險資訊被檢索到。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "The answer only covered macro‑economic/subsidy risks, missing EV competition and autonomous‑driving regulatory risks.",
+            "actionable_feedback": "檢索器未能抓取包含 EV 市場競爭加劇、價格戰以及自動駕駛監管風險的相關段落，導致關鍵要點缺失。建議擴大檢索範圍或調整 top‑k，確保這些風險內容被檢索到。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Partial rubric coverage; missing key competition and autonomous driving risks.",
+            "actionable_feedback": "檢索層面未能抓取包含 EV 市場競爭加劇、價格戰及自動駕駛監管風險的相關段落，建議提升 Retriever 的召回率或擴大檢索範圍，以確保關鍵風險資訊被納入。",
+            "error": null
+          }
+        ],
+        "original_score": 0.0
+      },
+      {
+        "run_idx": 3,
+        "answer": "Tesla 面臨著多種競爭和監管風險。首先，該公司在電動汽車市場面臨著來自其他汽車製造商的激烈競爭，尤其是當其他公司也開始生產電動汽車時 [Reference 3: TSLA_10Q_202509.html, chunk #37]。此外，Tesla 還面臨著監管風險，例如政府政策和法規的變化可能會影響電動汽車的需求和銷售 [Reference 3: TSLA_10Q_202509.html, chunk #37]。此外，該公司還需要應對全球經濟的變化，例如通貨膨脹、利率波動和能源價格的變化 [Reference 3: TSLA_10Q_202509.html, chunk #37]。\n\n在監管方面，Tesla 需要遵守各種法規和標準，例如與電動汽車相關的法規和標準 [Reference 4: TSLA_Fundamentals_20260612.txt, chunk #1]。此外，該公司還需要應對與能源儲存和生產相關的法規和標準 [Reference 4: TSLA_Fundamentals_20260612.txt, chunk #1]。\n\n總之，Tesla 面臨著多種競爭和監管風險，包括市場競爭、監管風險、全球經濟變化和法規遵守等 [Reference 3: TSLA_10Q_202509.html, chunk #37] [Reference 4: TSLA_Fundamentals_20260612.txt, chunk #1]。",
+        "judge_scores": [
+          0.7,
+          0.7,
+          0.7
+        ],
+        "judge_score_mean": 0.7,
+        "judge_score_std": 0.0,
+        "verdicts": [
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covered EV competition and macro‑economic risks but omitted autonomous‑driving regulatory risk.",
+            "actionable_feedback": "Retriever 未能檢索到包含自動駕駛監管風險的相關段落，導致答案缺失關鍵資訊。建議調整檢索參數或擴大檢索範圍，以提升 context recall。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer covers EV competition and economic risks but omits autonomous driving regulatory risk.",
+            "actionable_feedback": "檢索層面召回率偏低（0.33），未能抓取包含自動駕駛監管風險的相關段落，導致關鍵資訊缺失。建議提升 Retriever 的召回策略或擴大檢索範圍，以確保相關風險內容被檢索到。",
+            "error": null
+          },
+          {
+            "is_refusal": false,
+            "must_include_hits": [
+              "mi0",
+              "mi2"
+            ],
+            "must_not_violations": [],
+            "reason": "Answer missed autonomous driving risk and had low context recall.",
+            "actionable_feedback": "檢查檢索器（Retriever），提升召回率以取得更多相關段落；同時在生成時確保涵蓋自動駕駛（FSD/Autopilot）監管風險等關鍵點。",
+            "error": null
+          }
+        ],
+        "original_score": 0.2
+      }
+    ]
+  }
+}

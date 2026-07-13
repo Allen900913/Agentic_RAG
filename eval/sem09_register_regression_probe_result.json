@@ -1,0 +1,71 @@
+{
+  "query": "Google 在 AI 與搜尋領域的競爭策略？",
+  "target": "GOOGL_News_20260612_01.txt#1",
+  "E0_pool_attribution": {
+    "rewrite_off": {
+      "pool_size": 20,
+      "topk_size": 5,
+      "target_in_pool": true,
+      "target_pool_rank": 6,
+      "target_in_topk": false,
+      "target_topk_rank": null,
+      "topk_source_type_breakdown": {
+        "10-K": 4,
+        "10-Q": 1
+      }
+    },
+    "rewrite_on": {
+      "pool_size": 27,
+      "topk_size": 5,
+      "target_in_pool": true,
+      "target_pool_rank": 6,
+      "target_in_topk": false,
+      "target_topk_rank": null,
+      "topk_source_type_breakdown": {
+        "10-K": 5
+      }
+    }
+  },
+  "E1_rerank_register": {
+    "raw_zh": {
+      "query_text": "Google 在 AI 與搜尋領域的競爭策略？",
+      "target_rerank_rank": 23,
+      "target_rerank_score": 0.013006538152694702,
+      "in_top5": false,
+      "top5_source_types": [
+        "10-K",
+        "10-K",
+        "10-K",
+        "10-K",
+        "10-K"
+      ]
+    },
+    "plain_en": {
+      "query_text": "What is Google's competitive strategy in AI and search?",
+      "target_rerank_rank": 26,
+      "target_rerank_score": 0.023162459954619408,
+      "in_top5": false,
+      "top5_source_types": [
+        "10-K",
+        "10-K",
+        "10-K",
+        "10-K",
+        "10-K"
+      ]
+    },
+    "formal_en_translate": {
+      "query_text": "Google's competitive strategy in AI and search domains",
+      "target_rerank_rank": 25,
+      "target_rerank_score": 0.02342655509710312,
+      "in_top5": false,
+      "top5_source_types": [
+        "10-K",
+        "10-K",
+        "10-K",
+        "10-Q",
+        "10-K"
+      ]
+    }
+  },
+  "pool_size_for_E1": 27
+}

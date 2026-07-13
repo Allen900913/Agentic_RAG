@@ -1,0 +1,70 @@
+{
+  "sem-08": {
+    "query": "Amazon AWS 雲端事業的長期策略方向是什麼？",
+    "pool_size": 30,
+    "topk_size": 5,
+    "rows": [
+      {
+        "checkpoint": "提到 AWS 的獲利貢獻或營業利益表現（如營業利益增長、為 Amazon 重要獲利來源）——不要求出現「市佔龍頭 / market leader」等來源文件本身未使用的具名定位措辭",
+        "critical": true,
+        "weight": 50,
+        "in_pool": true,
+        "in_topk": false,
+        "in_rest": true,
+        "verdict": "RANK  (pool有→top-k被擠出)"
+      },
+      {
+        "checkpoint": "提到 AI / ML 服務投資（如 Bedrock、自研晶片）",
+        "critical": false,
+        "weight": 30,
+        "in_pool": true,
+        "in_topk": true,
+        "in_rest": false,
+        "verdict": "OK (in top-k)"
+      },
+      {
+        "checkpoint": "提到基礎設施擴張 / 資本支出",
+        "critical": false,
+        "weight": 20,
+        "in_pool": true,
+        "in_topk": false,
+        "in_rest": true,
+        "verdict": "RANK  (pool有→top-k被擠出)"
+      }
+    ]
+  },
+  "sem-11": {
+    "query": "Tesla 面臨哪些主要競爭與監管風險？",
+    "pool_size": 24,
+    "topk_size": 5,
+    "rows": [
+      {
+        "checkpoint": "提到 EV 市場競爭加劇 / 價格戰",
+        "critical": true,
+        "weight": 50,
+        "in_pool": true,
+        "in_topk": true,
+        "in_rest": false,
+        "verdict": "OK (in top-k)"
+      },
+      {
+        "checkpoint": "提到自動駕駛（FSD / Autopilot）的監管風險",
+        "critical": false,
+        "weight": 30,
+        "in_pool": false,
+        "in_topk": false,
+        "in_rest": false,
+        "verdict": "RECALL(pool就沒有)"
+      },
+      {
+        "checkpoint": "提到總體經濟 / 利率 / 補貼政策風險",
+        "critical": false,
+        "weight": 20,
+        "in_pool": true,
+        "in_topk": true,
+        "in_rest": false,
+        "verdict": "OK (in top-k)"
+      }
+    ]
+  }
+}

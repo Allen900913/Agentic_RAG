@@ -1,0 +1,777 @@
+{
+  "summary": {
+    "colloquial": {
+      "n": 10,
+      "hallucination_rate_mean": null,
+      "correctness_mean": 0.73,
+      "n_with_rubric": 10,
+      "relevance_mean": null,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.443,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 0,
+      "hallucination_pass@0.1": null,
+      "correctness_pass@0.6": 0.8,
+      "relevance_pass@0.8": null
+    },
+    "overall": {
+      "n": 10,
+      "hallucination_rate_mean": null,
+      "correctness_mean": 0.73,
+      "n_with_rubric": 10,
+      "relevance_mean": null,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.443,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 0,
+      "hallucination_pass@0.1": null,
+      "correctness_pass@0.6": 0.8,
+      "relevance_pass@0.8": null
+    }
+  },
+  "records": [
+    {
+      "id": "col-01",
+      "category": "colloquial",
+      "query": "為什麼大家做 AI 都要買輝達的卡，別家一直追不上它？",
+      "answerable": true,
+      "answer": "NVIDIA 的 GPU 之所以成為 AI 開發者的首選，是因為它結合了領先的硬體效能、完整的軟體生態以及市場上壓倒性的佔有率，使得其他廠商難以匹敵【NVDA_10K_2026.html, chunk #38】。\n\n- **硬體效能領先**：NVIDIA GPU 具備「數萬個運算核心」的平行處理能力，專為深度學習演算法設計，能在生成式 AI、代理式 AI 等高需求工作負載上提供「顯著提升的 token 吞吐量」與「降低每個 token 成本」的效益，尤其是最新的 Blackwell 與 Blackwell Ultra 平台【NVDA_10K_2026.html, chunk #38】。  \n- **完整平台策略**：公司不只提供 GPU，還整合了 CPU（Grace）、DPU、網路、系統、軟體庫、開發工具（CUDA）以及 AI 模型與資料集，形成「硬體‑系統‑軟體‑演算法」的全堆疊解決方案，讓開發者能在同一生態系統內快速部署 AI 應用【NVDA_10K_2026.html, chunk #38】。  \n- **軟體生態與開發者基礎**：超過半數工程師專注於軟體，NVIDIA CUDA 已成為所有 NVIDIA GPU 的通用開發平台，配套數千個應用程式、領域專屬庫與 API，形成「龐大的開發者與安裝基礎」，進一步提升平台價值【NVDA_10K_2026.html, chunk #38】。  \n- **市場佔有率與客戶基礎**：NVIDIA 的 GPU 與網路產品支援全球 TOP500 超過 78% 的超級電腦，且 9 台位列 Green500 前十的系統皆採用 NVIDIA 技術，顯示其在高效能運算領域的絕對領導地位【NVDA_10K_2026.html, chunk #39】。同時，所有主要雲端服務供應商、AI 模型製造商與企業客戶皆依賴 NVIDIA 的資料中心規模基礎設施來加速其服務與產品，形成「廣泛的產業採用」【NVDA_10K_2026.html, chunk #39】。  \n- **研發投入與創新歷史**：自 1999 年發明 GPU 以來，NVIDIA 持續投入研發，累計超過 767 億美元，推出 CUDA、Tensor Core、Grace CPU、Blackwell 架構等多項里程碑技術，持續領先產業創新曲線【NVDA_10K_2026.html, chunk #38】。  \n- **競爭環境**：雖然文件列出 AMD、Intel、華為、亞馬遜、微軟等競爭者，但它們在行銷、財務、製造規模或技術適應性上仍可能不及 NVIDIA，未能在同等規模的 AI 基礎設施上與 NVIDIA 匹敵【NVDA_10K_2026.html, chunk #51】。\n\n綜合以上硬體性能、全堆疊平台、龐大開發者生態、絕對的市場佔有率與持續的研發投入，說明了為何 AI 開發者普遍選擇 NVIDIA 的卡，而其他廠商難以追趕。",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 51
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "AAPL_News_20260612_02.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 39
+        }
+      ],
+      "correctness": {
+        "score": 0.8,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer covers CUDA ecosystem and data center GPU performance, but misses network integration requirement.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.14285714285714285,
+      "actionable_feedback": "回答已涵蓋 CUDA 生態與資料中心 GPU 性能，但未提及網路整合（NVLink/InfiniBand/Mellanox），這是最嚴重缺失。Retriever 可能未抓取包含網路整合資訊的段落，建議增強檢索範圍或使用更精確關鍵字，以確保網路整合細節被納入。"
+    },
+    {
+      "id": "col-02",
+      "category": "colloquial",
+      "query": "蘋果除了賣手機，還靠什麼一直在收錢？這塊以後會不會更會賺？",
+      "answerable": true,
+      "answer": "Apple 除了 iPhone，最主要的持續收錢來源是 **Services（包括 App Store、廣告、iCloud、Apple Music、Apple TV+ 以及支付服務）**——2023 財年服務營收約 310 億美元，較前一年成長 16%【AAPL_News_20260519_01.txt, chunk #4】。  \n\n- 服務佔 Apple 總營收的 28%，與 800 億美元的產品銷售形成高毛利的混合，提升了整體毛利率至 47.9%（較 FY 2024 的 46.2%）【AAPL_News_20260519_01.txt, chunk #5】。  \n- 服務毛利率持續上升，因為服務的產品組合比重提升，且成本結構較低【AAPL_10Q_202512.html, chunk #15】。  \n- 2023 Q4（即 2025 Q4）服務收入創下 310 億美元新高，且廣告與雲端服務的貢獻顯著【AAPL_News_20260519_01.txt, chunk #4】。  \n- 分析師指出，隨著 Apple Intelligence AI 功能在所有裝置上擴散，未來會出現「多年度升級、提升變現」以及「擴大經常性收入」的機會，預期服務收入將持續雙位數增長【AAPL_News_20260612_05.txt, chunk #1】。  \n- 服務的高現金流表現也支撐了公司大規模的股息與回購計畫：TTM 自由現金流 1292 億美元足以覆蓋 77 億美元的股息與 370 億美元的回購【AAPL_News_20260519_01.txt, chunk #5】。  \n\n**未來展望**：根據上述資料，服務部門不僅已成為 Apple 收入結構中的核心高毛利來源，且因 AI 基礎設施投入、廣告與雲端需求持續增長，預計其營收規模與毛利率將進一步提升，成為公司未來最具增長潛力的收入來源。",
+      "sources": [
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 5
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 30
+        },
+        {
+          "source": "AAPL_News_20260612_05.txt",
+          "chunk_index": 1
+        }
+      ],
+      "correctness": {
+        "score": 0.8,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer satisfies growth/margin and subscription ecosystem but omits device base driving service monetization.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "回答缺少提及龐大裝置安裝基數帶動服務變現的說明，建議補充說明 Apple 產品龐大裝置基數如何推動服務收入成長，以完整符合評分標準。"
+    },
+    {
+      "id": "col-03",
+      "category": "colloquial",
+      "query": "微軟賣東西，扣掉成本之後大概還能留下幾成？",
+      "answerable": true,
+      "answer": "微軟的毛利率大約在 **68% 左右**（即每賣出 1 元商品，扣除成本後可保留約 0.68 元）【MSFT_10Q_202603, chunk #14】。  \n\n- 2026 年第一季（截至 3 月 31 日）營收為 828.86 億美元，毛利為 560.58 億美元，毛利率約 67.6%【MSFT_10Q_202603, chunk #14】。  \n- 同季的九個月累計營收為 2,418.32 億美元，毛利為 1,649.83 億美元，毛利率約 68.2%【MSFT_10Q_202603, chunk #14】。  \n- 2025 年底的 10‑Q 報告亦指出，微軟雲端（Microsoft Cloud）毛利率下降至 **67%**，顯示整體毛利率在 66‑68% 的區間【MSFT_10Q_202512, chunk #42】。  \n\n因此，從可得的財務資料看，微軟在扣除成本後能保留大約 **兩成三分之二**（約 68%）的營收。",
+      "sources": [
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 32
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 37
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all required points.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.125,
+      "actionable_feedback": "无明显问题，保持现有做法即可。"
+    },
+    {
+      "id": "col-04",
+      "category": "colloquial",
+      "query": "微軟租伺服器、做網路那塊生意，跟亞馬遜、谷歌比打得贏嗎？",
+      "answerable": true,
+      "answer": "Microsoft 的雲端與伺服器租賃業務正快速成長，但參考資料中沒有亞馬遜或谷歌的相關數據，無法直接判斷 Microsoft 是否在與兩者的競爭中「打贏」[MSFT_10K_2025.html, chunk #50]。\n\n**成長與競爭優勢**  \n- Azure 以混合雲模式（可將既有資料中心與公有雲整合）為主要差異化優勢，並藉由全球規模與身分安全解決方案來應對企業的網路安全需求[MSFT_10K_2025.html, chunk #50]。  \n- 2025 財年 Microsoft Cloud 營收增長 23%，達到 1689 億美元，主要驅動力來自 Azure 及其他雲端服務[MSFT_10K_2025.html, chunk #111]。  \n- 伺服器產品與雲端服務營收增長 23%，其中 Azure 及其他雲端服務的營收增長 34%[MSFT_10K_2025.html, chunk #111]。  \n- 在 2025 年上半年，伺服器產品與雲端服務營收增長 30%，Azure 及其他雲端服務營收更是成長 40%[MSFT_10K_2025.html, chunk #111]。  \n- Microsoft 明確指出其雲端服務面臨來自其他大型雲端供應商（包括亞馬遜與谷歌）的競爭[MSFT_10K_2025.html, chunk #50]。\n\n**缺乏比較基礎**  \n- 參考文件僅提供 Microsoft 的營收與成長率，未列出亞馬遜 (Amazon) 或谷歌 (Google) 在相同領域的營收、成長或市場佔有率數據。  \n- 因此，無法根據現有資料判斷 Microsoft 在伺服器租賃與網路服務市場上是否「贏過」亞馬遜與谷歌。\n\n**結論**  \nMicrosoft 的雲端與伺服器業務正以兩位數的高速成長，具備混合雲與安全解決方案的競爭優勢；然而，缺乏亞馬遜與谷歌的對照數據，無法在此基礎上斷言 Microsoft 已在市場上擊敗兩大競爭對手。",
+      "sources": [
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 50
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 111
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 54
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 45
+        }
+      ],
+      "correctness": {
+        "score": 0.7,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer satisfies competition and hybrid cloud points but omits AI/Copilot mention.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi2"
+            ],
+            [
+              "mi0",
+              "mi2"
+            ],
+            [
+              "mi0",
+              "mi2"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "在回答中加入 AI / Copilot 对 Azure 成长的推动作用，以完整覆盖所有必需点。"
+    },
+    {
+      "id": "col-05",
+      "category": "colloquial",
+      "query": "亞馬遜租伺服器那塊生意，以後想往哪個方向走？",
+      "answerable": true,
+      "answer": "Amazon plans to keep expanding its cloud‑infrastructure business by **increasing technology and infrastructure spending and broadening capabilities in artificial‑intelligence, machine‑learning, satellite‑based broadband and autonomous‑vehicle services**【AMZN_10K_2025.html, chunk #99】.  \n\n- The company says it will “continue to add infrastructure and employees, including to support our artificial intelligence and machine learning initiatives,” and expects technology‑and‑infrastructure costs to rise over time【AMZN_10K_2025.html, chunk #99】.  \n- Investment is also directed toward “the development of a satellite network for global broadband service and autonomous vehicles for ride‑hailing services,” with most current costs expensed now and later capitalized once the services become commercially viable【AMZN_10K_2025.html, chunk #99】.  \n- The Q1 2026 filing reiterates that “spending in technology and infrastructure … will increase … to support our artificial intelligence and machine learning initiatives” and notes a significant rise in infrastructure spending, driven by data‑center depreciation and amortization【AMZN_10Q_202603.html, chunk #47】.  \n- AWS‑related revenue streams are supported by a broad set of on‑demand services (compute, storage, database, analytics, AI/ML, etc.), indicating the company’s intent to deepen its cloud service portfolio【AMZN_10K_2025.html, chunk #58】.  \n\nTogether, these disclosures show Amazon’s strategic focus on scaling its server‑rental (AWS) platform through higher capex, AI/ML enhancements, and new satellite‑broadband and autonomous‑vehicle initiatives.",
+      "sources": [
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 72
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 73
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 99
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 47
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 58
+        }
+      ],
+      "correctness": {
+        "score": 0.5,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer covers AI/ML investment and infrastructure expansion but misses AWS profitability contribution.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi1",
+              "mi2"
+            ],
+            [
+              "mi1",
+              "mi2"
+            ],
+            [
+              "mi1",
+              "mi2"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": "最严重问题是未提及 AWS 的盈利贡献或营业利润表现。建议在回答中加入具体的 AWS 营业利润或收入占比数据，并保持与整体收入的区分，避免混淆两者。"
+    },
+    {
+      "id": "col-06",
+      "category": "colloquial",
+      "query": "蘋果一年下來，平均一股大概幫股東賺多少錢？",
+      "answerable": true,
+      "answer": "Apple earned roughly **$7.46 in diluted earnings per share (EPS) for the fiscal year ended September 27 2025**【AAPL_10K_2025.html, chunk #14】.  \n\n- The 2025 Form 10‑K shows net income of $112,010 million, which translates to a basic EPS of $7.49 and a diluted EPS of $7.46【AAPL_10K_2025.html, chunk #14】.  \n- For comparison, the prior year (2024) diluted EPS was $6.08 and 2023 diluted EPS was $6.13, indicating a year‑over‑year increase in per‑share earnings【AAPL_10K_2025.html, chunk #14】.  \n\nThus, on average, each Apple share generated about $7.46 of profit for shareholders in the most recent year.",
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 92
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 70
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 73
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly provides EPS value and period.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.0,
+      "actionable_feedback": "回答已满足所有评估标准，无需改进。"
+    },
+    {
+      "id": "col-07",
+      "category": "colloquial",
+      "query": "臉書一直砸大錢做頭戴裝置跟虛擬世界，到底在賺還在賠？以後想怎麼搞？",
+      "answerable": true,
+      "answer": "Meta的Reality Labs（虛擬與增強實境）仍在虧損——2025財年該部門的營運虧損為 $19.2 億美元，較2024年的 $17.7 億美元更大【META_10K_2025.html, chunk #2】。2026年第一季（截至3月31日）Reality Labs的營運虧損為 $4.0 億美元，較2025年同季的 $4.2 億美元略有收窄【META_10Q_202603.html, chunk #3】；2025年第三季的虧損則為 $4.4 億美元，與2024年同季基本持平【META_10Q_202509.html, chunk #4】。因此，從全年度與季度數據看，Reality Labs仍未實現盈餘。\n\n**未來策略與風險**  \n- Meta已將重心放在「元宇宙」的長期願景上，持續投入AI、可穿戴設備與新型介面等研發，以打造下一代沉浸式體驗【META_10K_2025.html, chunk #1】。  \n- 公司承認Reality Labs是「複雜、持續演變且長期」的計畫，需大量基礎設施、隱私安全與跨公司合作的投入【META_10K_2025.html, chunk #1】。  \n- 由於Meta在消費者硬體與AR/VR領域的經驗相對有限，競爭對手可能在技術、資源或市場接受度上取得優勢，進一步威脅Reality Labs的成功【META_10K_2025.html, chunk #1】。  \n- 公司的未來資金支撐依賴於其他業務（如Family of Apps）的盈利能力，若其他部門無法產生足夠利潤，Reality Labs的持續投資可能受限【META_10K_2025.html, chunk #1】。  \n- 法規、隱私、安全、AI與硬體相關的國際與美國法律風險亦可能提升營運成本或延遲產品上市，進一步影響財務表現【META_10K_2025.html, chunk #1】。  \n\n**總結**：Meta的Reality Labs目前仍在大幅虧損，且短期內未見扭虧為盈的明確跡象；公司計畫繼續加大在VR/AR、AI與可穿戴設備的研發投入，並依賴其他盈利部門的現金流來支撐這一長期、資本密集的戰略，同時面臨技術、競爭與監管等多重風險。",
+      "sources": [
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 67
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 4
+        },
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 11
+        },
+        {
+          "source": "META_10Q_202509.html",
+          "chunk_index": 11
+        },
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 118
+        }
+      ],
+      "correctness": {
+        "score": 0.8,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer satisfies the required points and contains no violations.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": "缺少對 AI 眼鏡（Ray‑Ban Meta）等穿戴裝置的提及，建議在未來回答中加入此資訊以完整覆蓋 mi2。"
+    },
+    {
+      "id": "col-08",
+      "category": "colloquial",
+      "query": "特斯拉現在最讓人擔心、最頭痛的麻煩有哪些？",
+      "answerable": true,
+      "answer": "Tesla’s most pressing headache right now is the risk that insufficient battery‑cell supply and volatile raw‑material prices could limit vehicle and energy‑product production or force Tesla to incur higher costs [TSLA_10K_2025.html, chunk #66].\n\nAdditional major troubles include:\n\n* **Scaling manufacturing and delivery** – Tesla must rapidly expand production capacity and its global delivery network; any delays in scaling factories, meeting demand forecasts, or executing home‑touchless deliveries could harm sales and operating results [TSLA_10K_2025.html, chunk #65].\n\n* **Product‑quality and warranty exposure** – Design or software defects, delayed feature roll‑outs, and potential recalls generate significant warranty reserves (total accrued warranty of $8,607 million as of 31 Dec 2025) and expose Tesla to product‑liability claims [TSLA_10K_2025.html, chunk #70]; [TSLA_10K_2025.html, chunk #128].\n\n* **Brand perception and external criticism** – Negative commentary, protests, and exaggerated criticism can damage Tesla’s brand, make fundraising harder, and affect sales [TSLA_10K_2025.html, chunk #74].\n\n* **Limited operating history and competitive pressure** – Compared with established rivals, Tesla’s relatively short track record, customer unfamiliarity, and uncertainty around EV market growth increase the difficulty of maintaining investor confidence and competing with other EV and alternative‑fuel manufacturers [TSLA_10K_2025.html, chunk #74].\n\n* **Supply‑chain concentration** – Tesla relies on a few battery‑cell suppliers (e.g., Panasonic, CATL); any disruption could curtail production, and the need to develop its own cells requires large, uncertain investments [TSLA_10K_2025.html, chunk #66].\n\nThese inter‑related risks—especially the battery‑cell supply constraint—are the key sources of current concern for Tesla.",
+      "sources": [
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 128
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 74
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 66
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 70
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 65
+        }
+      ],
+      "correctness": {
+        "score": 0.0,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [],
+        "must_not_violations": [],
+        "reason": "Answer does not cover any of the required points.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [],
+            [],
+            []
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": "回答缺少對 EV 市場競爭加劇、價格戰、以及自動駕駛監管風險和宏觀經濟風險的提及，請在回覆中加入這些關鍵點，並確保引用來源以避免捏造具體數字。"
+    },
+    {
+      "id": "col-09",
+      "category": "colloquial",
+      "query": "蘋果自己跳下去做晶片，對它有什麼好處？",
+      "answerable": true,
+      "answer": "Apple’s move to design its own silicon gives it higher‑margin, tightly integrated hardware‑software products while cutting reliance on third‑party component suppliers and costly licensing agreements — the single biggest upside for the company【AAPL_10K_2025.html, chunk #48】.  \n\n- **Margin lift and cost control** – By owning the chip architecture Apple can avoid “significant licensing costs” and the risk of “exposure to product liability claims, recalls, … write‑offs of inventory” that arise when components are sourced from external vendors【AAPL_10K_2025.html, chunk #48】. This directly supports the “high‑margin services” model that now contributes $31.0 billion (≈ 7% of total revenue) and helps sustain gross‑margin expansion【AAPL_News_20260519_01.txt, chunk #4】.  \n\n- **Supply‑chain resilience** – In‑house silicon reduces exposure to “single‑source partners” and “outsourcing partners located primarily in China … India … Taiwan” whose disruptions can force “excess or insufficient amounts of components” and inventory write‑downs【AAPL_10K_2025.html, chunk #46】.  \n\n- **Accelerated AI and product innovation** – Apple’s “all‑in on AI infrastructure” and a 34% YoY jump in R&D spending ($11.4 bn) are aimed at embedding AI features (e.g., the new Siri app) that require custom‑engineered chips for performance and security【AAPL_News_20260519_01.txt, chunk #4】. Owning the silicon stack lets Apple tightly couple AI workloads with its hardware, a key driver of the recent 16% iPhone growth【AAPL_News_20260612_03.txt, chunk #0】.  \n\n- **Intellectual‑property protection** – Designing chips in‑house lessens the chance of “infringing existing intellectual property rights of others” and the associated litigation or licensing fees that can “materially adversely affect … results of operations”【AAPL_10K_2025.html, chunk #48】.  \n\n- **Strategic flexibility** – Control over chip design enables Apple to more quickly introduce new product categories (e.g., Vision Pro, M‑series Macs) and adjust pricing without being constrained by external component pricing or availability【AAPL_10K_2025.html, chunk #46】.  \n\nIn sum, Apple’s internal chip program boosts profitability, safeguards its supply chain, fuels AI‑driven product upgrades, and reduces legal and licensing exposure.",
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_News_20260612_03.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "AAPL_News_20260612_01.txt",
+          "chunk_index": 2
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer covers all required points and contains no violations.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            [
+              "mi0",
+              "mi1",
+              "mi2"
+            ],
+            [
+              "mi0",
+              "mi1",
+              "mi2"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已满足所有必需点，未出现错误。建议进一步补充具体性能指标或能效数据，以增强说服力。"
+    },
+    {
+      "id": "col-10",
+      "category": "colloquial",
+      "query": "谷歌會不會怕 AI 搶走它網路搜尋的生意？它打算怎麼接招？",
+      "answerable": true,
+      "answer": "Google 正在以「AI 深度嵌入」的方式回應可能被 AI 取代搜尋業務的風險，而不是單純擔心被取代；公司已把 AI 功能（如 AI Overviews、AI Mode）直接加入搜尋，並透過自家 AI 基礎設施與新產品（Gemini 系列、AI 加速器）打造可持續的營收與利潤來源【GOOGL_10K_2025.html, chunk #179】。\n\n- **產品層面**：Alphabet 把 AI 置於「全堆疊」策略核心，從 AI‑優化的資料中心、TPU/GPU 加速器到最新的 Gemini 3 多模態模型，都直接供應給搜尋、YouTube、Workspace 等消費者與企業產品，使搜尋體驗升級且保持差異化【GOOGL_10K_2025.html, chunk #139】。  \n- **營收與貨幣化**：公司仍以「先提升使用者體驗、後考慮變現」的方式推出 AI 功能，同時預期雲端、訂閱、平台與裝置等非廣告收入的成長速度將超過傳統廣告，逐步提升這些較低毛利但增長快速的業務在整體營收中的比重【GOOGL_10K_2025.html, chunk #179】。  \n- **基礎設施投資**：為支撐 AI 需求，Alphabet 正大幅擴充技術基礎設施，2025 年資本支出已大幅提升，2026 年預計再度顯著增長，涵蓋伺服器、網路設備與資料中心，以提升 AI 計算效能並降低單位成本【GOOGL_10K_2025.html, chunk #179】。  \n- **資金來源**：2026 年公司透過 850 億美元的股權與可轉換優先股募集，明確將募集資金用於 AI 基礎設施與全球算力擴張，顯示管理層以股本而非債務支撐 AI 投資，維持財務彈性【GOOGL_News_20260612_02.txt, chunk #0】。  \n- **競爭與風險**：Alphabet 承認 AI 產品與服務的競爭日益激烈，這可能影響收入增長與毛利率；然而透過自研的 TPUs、Gemini 系列以及在 Google Cloud 上提供 AI‑優化基礎設施與開發平台（Vertex AI、Gemini Enterprise 等），公司正以技術差異化與生態系統黏著度來抵禦競爭壓力【GOOGL_10K_2025.html, chunk #147】。  \n- **成本結構**：AI 服務需要更高的計算資源，導致資料中心折舊、能源與設備成本上升；公司同時在資料中心效率（模型設計、TPU/GPU 效能）上持續優化，以緩解成本上漲對毛利的衝擊【GOOGL_10K_2025.html, chunk #179】。  \n\n**結論**：Google 透過將 AI 深度整合至搜尋與其他核心產品、加速自有 AI 基礎設施建設、擴大非廣告收入來源以及利用股本募集資金支撐 AI 投資，主動「接招」而非被動害怕 AI 取代搜尋業務。",
+      "sources": [
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 179
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 137
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 139
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 147
+        },
+        {
+          "source": "GOOGL_News_20260612_02.txt",
+          "chunk_index": 0
+        }
+      ],
+      "correctness": {
+        "score": 0.7,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer includes Gemini and AI integration into search, mentions Google Cloud and TPU, and contains no fabricated market share or revenue figures.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi2"
+            ],
+            [
+              "mi0",
+              "mi2"
+            ],
+            [
+              "mi0",
+              "mi1",
+              "mi2"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "回答缺少對搜尋廣告核心業務防禦或變現的具體說明，建議補充說明 Google 如何透過 AI 影響搜尋廣告收入或保護其核心廣告業務。"
+    }
+  ]
+}

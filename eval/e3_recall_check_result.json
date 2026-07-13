@@ -1,0 +1,102 @@
+[
+  {
+    "id": "sem-08",
+    "query": "Amazon AWS 雲端事業的長期策略方向是什麼？",
+    "baseline (no rewrite)": {
+      "pool_size": 20,
+      "pool_rank": null,
+      "in_pool": false,
+      "topk_rank": null,
+      "in_topk": false
+    },
+    "with rewrite (register rule)": {
+      "pool_size": 29,
+      "pool_rank": 26,
+      "in_pool": true,
+      "topk_rank": 4,
+      "in_topk": true
+    },
+    "rewrite + translate_en": {
+      "pool_size": 29,
+      "pool_rank": 26,
+      "in_pool": true,
+      "topk_rank": 3,
+      "in_topk": true
+    }
+  },
+  {
+    "id": "col-05",
+    "query": "亞馬遜租伺服器那塊生意，以後想往哪個方向走？",
+    "baseline (no rewrite)": {
+      "pool_size": 20,
+      "pool_rank": null,
+      "in_pool": false,
+      "topk_rank": null,
+      "in_topk": false
+    },
+    "with rewrite (register rule)": {
+      "pool_size": 32,
+      "pool_rank": null,
+      "in_pool": false,
+      "topk_rank": null,
+      "in_topk": false
+    },
+    "rewrite + translate_en": {
+      "pool_size": 28,
+      "pool_rank": null,
+      "in_pool": false,
+      "topk_rank": null,
+      "in_topk": false
+    }
+  },
+  {
+    "id": "sem-11",
+    "query": "Tesla 面臨哪些主要競爭與監管風險？",
+    "baseline (no rewrite)": {
+      "pool_size": 20,
+      "pool_rank": 12,
+      "in_pool": true,
+      "topk_rank": 5,
+      "in_topk": true
+    },
+    "with rewrite (register rule)": {
+      "pool_size": 23,
+      "pool_rank": 12,
+      "in_pool": true,
+      "topk_rank": null,
+      "in_topk": false
+    },
+    "rewrite + translate_en": {
+      "pool_size": 22,
+      "pool_rank": 12,
+      "in_pool": true,
+      "topk_rank": 4,
+      "in_topk": true
+    }
+  },
+  {
+    "id": "col-08",
+    "query": "特斯拉現在最讓人擔心、最頭痛的麻煩有哪些？",
+    "baseline (no rewrite)": {
+      "pool_size": 20,
+      "pool_rank": null,
+      "in_pool": false,
+      "topk_rank": null,
+      "in_topk": false
+    },
+    "with rewrite (register rule)": {
+      "pool_size": 29,
+      "pool_rank": null,
+      "in_pool": false,
+      "topk_rank": null,
+      "in_topk": false
+    },
+    "rewrite + translate_en": {
+      "pool_size": 29,
+      "pool_rank": null,
+      "in_pool": false,
+      "topk_rank": null,
+      "in_topk": false
+    }
+  }
+]

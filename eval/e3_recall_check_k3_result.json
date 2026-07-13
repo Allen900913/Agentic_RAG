@@ -1,0 +1,106 @@
+{
+  "sem-08": {
+    "baseline": {
+      "runs": [
+        null,
+        null,
+        null
+      ],
+      "hit_rate": 0.0
+    },
+    "rewrite": {
+      "runs": [
+        4,
+        4,
+        4
+      ],
+      "hit_rate": 1.0
+    },
+    "rewrite+translate": {
+      "runs": [
+        3,
+        3,
+        4
+      ],
+      "hit_rate": 1.0
+    }
+  },
+  "col-05": {
+    "baseline": {
+      "runs": [
+        null,
+        null,
+        null
+      ],
+      "hit_rate": 0.0
+    },
+    "rewrite": {
+      "runs": [
+        null,
+        null,
+        null
+      ],
+      "hit_rate": 0.0
+    },
+    "rewrite+translate": {
+      "runs": [
+        null,
+        null,
+        null
+      ],
+      "hit_rate": 0.0
+    }
+  },
+  "sem-11": {
+    "baseline": {
+      "runs": [
+        5,
+        5,
+        5
+      ],
+      "hit_rate": 1.0
+    },
+    "rewrite": {
+      "runs": [
+        null,
+        null,
+        null
+      ],
+      "hit_rate": 0.0
+    },
+    "rewrite+translate": {
+      "runs": [
+        4,
+        4,
+        4
+      ],
+      "hit_rate": 1.0
+    }
+  },
+  "col-08": {
+    "baseline": {
+      "runs": [
+        null,
+        null,
+        null
+      ],
+      "hit_rate": 0.0
+    },
+    "rewrite": {
+      "runs": [
+        null,
+        null,
+        null
+      ],
+      "hit_rate": 0.0
+    },
+    "rewrite+translate": {
+      "runs": [
+        null,
+        null,
+        null
+      ],
+      "hit_rate": 0.0
+    }
+  }
+}

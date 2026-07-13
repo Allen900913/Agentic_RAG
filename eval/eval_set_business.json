@@ -1,0 +1,483 @@
+{
+  "_meta": {
+    "description": "Business-oriented eval set for US Stock RAG. 以『真實使用者(散戶/分析師)實際會問的問題』為設計核心,而非檢索方法分類。用來向非技術主管證明系統可用性:答對率、零捏造、正確拒答。",
+    "design_principles": [
+      "口吻貼近真人:小寫 ticker、中文公司名、口語短句混用,同時考驗 query understanding",
+      "意圖涵蓋真實使用情境:查數字 / 跨公司比較 / 成長趨勢 / 為什麼 / 近期新聞 / 風險 / 策略",
+      "刻意納入『知識庫答不出來』的題(answerable=false):不在庫的公司、預測未來、買賣建議、未收集的資料 —— 這批用來測拒答,沒有它正確率會虛胖",
+      "答對率代表性 = 各意圖比例貼近真實流量;查數字類最多(散戶最常問),其次比較與新聞"
+    ],
+    "answerable_mix": "25 題可答 / 5 題應拒答(answerable=false),用來同時量 wrongful_refusal(該答卻拒)與 correct_refusal(該拒有拒)",
+    "category_intents": {
+      "fact_lookup": "查單一數字(本益比/毛利/EPS/營收) —— 散戶最高頻",
+      "comparison": "跨公司比較,含一家不在庫的混合題(測部分可答)",
+      "trend_growth": "成長率 / 年增 / 趨勢",
+      "explanation": "為什麼 / 怎麼解讀,需結合多處資訊",
+      "news_catalyst": "近期新聞 / 催化劑,測新聞檢索與時效",
+      "risk": "投資風險,來自 10-K 風險因子",
+      "strategy": "競爭優勢 / 策略方向",
+      "unanswerable": "知識庫無法回答,正確行為是誠實拒答而非捏造"
+    },
+    "ground_truth_syntax": "exact 全名(如 NVDA_10K_2026.html)或 glob(如 NVDA_News_*.txt)。Fundamentals 有多個日期版本,故用 *_Fundamentals_*.txt 容忍版本差異;數值型 checkpoint 用區間/約值,因股價型指標會隨來源日期變動。",
+    "rubric_schema": "與 eval_set.json 相同:must_include[{checkpoint,weight,is_critical}] → Correctness;must_not_include[{checkpoint,is_critical}] → Faithfulness。answerable=false 時,正確答案是拒答;此時 must_include 為『明確表示資料不足』,must_not_include 為『捏造數字』。",
+    "numbers_source": "數值取自 data/processed/*_Fundamentals_20260612.txt(2026-06-12 快照),已人工核對。"
+  },
+  "queries": [
+    {
+      "id": "fact-01",
+      "category": "fact_lookup",
+      "query": "nvda 本益比多少？",
+      "relevant": ["NVDA_Fundamentals_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 NVDA 的本益比(P/E)數值,trailing 約 31(依來源日期 30~32 區間)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造來源中不存在的 P/E 數字,或張冠李戴成其他公司的本益比", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "fact-02",
+      "category": "fact_lookup",
+      "query": "蘋果毛利率是多少",
+      "relevant": ["AAPL_Fundamentals_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 AAPL 毛利率(Gross Margin)約 47~48%", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造毛利率數字或誤植成其他公司", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "fact-03",
+      "category": "fact_lookup",
+      "query": "微軟一年營收多少？EPS 呢",
+      "relevant": ["MSFT_Fundamentals_*.txt", "MSFT_IncomeStatement_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 MSFT 營收(TTM)約 $318B", "weight": 50, "is_critical": true},
+          {"checkpoint": "引用 MSFT EPS(trailing 約 16.8)", "weight": 50, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造營收或 EPS 數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "fact-04",
+      "category": "fact_lookup",
+      "query": "meta 每股盈餘",
+      "relevant": ["META_Fundamentals_*.txt", "META_IncomeStatement_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 META EPS(trailing 約 27.5)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造 EPS 數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "fact-05",
+      "category": "fact_lookup",
+      "query": "amazon 一年賺多少錢（淨利）",
+      "relevant": ["AMZN_Fundamentals_*.txt", "AMZN_IncomeStatement_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 AMZN 淨利(Net Income)約 $90B", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造淨利數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "fact-06",
+      "category": "fact_lookup",
+      "query": "google 的本益比跟毛利率",
+      "relevant": ["GOOGL_Fundamentals_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 GOOGL 本益比(P/E 約 27)", "weight": 50, "is_critical": true},
+          {"checkpoint": "引用 GOOGL 毛利率(約 60%)", "weight": 50, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造數字或誤植公司", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "fact-07",
+      "category": "fact_lookup",
+      "query": "nvidia 有發股利嗎？殖利率多少",
+      "relevant": ["NVDA_Fundamentals_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "正確指出 NVDA 幾乎不配息 / 殖利率極低(接近 0)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造一個明顯偏高的股利或殖利率數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "fact-08",
+      "category": "fact_lookup",
+      "query": "tesla 的市值跟營收",
+      "relevant": ["TSLA_Fundamentals_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 TSLA 來源中的市值(Market Cap)數值", "weight": 50, "is_critical": true},
+          {"checkpoint": "引用 TSLA 來源中的營收(Revenue)數值", "weight": 50, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造市值或營收數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "cmp-01",
+      "category": "comparison",
+      "query": "nvda 跟 amd 的毛利率誰比較高？",
+      "relevant": ["NVDA_Fundamentals_*.txt"],
+      "answerable": false,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "明確指出知識庫沒有 AMD 的資料,無法完成比較(可同時提供已知的 NVDA 毛利率)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造 AMD 的毛利率數字硬做比較", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "cmp-02",
+      "category": "comparison",
+      "query": "微軟跟 google 哪個比較會賺錢？",
+      "relevant": ["MSFT_Fundamentals_*.txt", "GOOGL_Fundamentals_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用兩家可比的獲利指標(淨利/利潤率/EPS 之一),MSFT 淨利約 $125B、GOOGL 約 $160B", "weight": 60, "is_critical": true},
+          {"checkpoint": "基於數據做出合理比較結論(GOOGL 淨利較高 或 點出各自強項)", "weight": 40, "is_critical": false}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造任一家的數字,或把兩家數字搞混", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "cmp-03",
+      "category": "comparison",
+      "query": "nvda meta 誰的本益比比較貴",
+      "relevant": ["NVDA_Fundamentals_*.txt", "META_Fundamentals_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用兩家 P/E(NVDA 約 31、META 約 21)並指出 NVDA 較貴", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "比較方向講反或捏造數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "cmp-04",
+      "category": "comparison",
+      "query": "這幾家科技股裡誰的毛利率最高？",
+      "relevant": ["NVDA_Fundamentals_*.txt", "META_Fundamentals_*.txt", "MSFT_Fundamentals_*.txt", "GOOGL_Fundamentals_*.txt", "AAPL_Fundamentals_*.txt", "AMZN_Fundamentals_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "指出 META(約 82%)或 NVDA(約 74%)為毛利率最高之一,並以數據佐證", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造毛利率排名或數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "trend-01",
+      "category": "trend_growth",
+      "query": "輝達營收成長多少？",
+      "relevant": ["NVDA_Fundamentals_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 NVDA 營收年增率(YoY 約 85%)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造成長率數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "trend-02",
+      "category": "trend_growth",
+      "query": "meta 最近成長快不快",
+      "relevant": ["META_Fundamentals_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 META 營收年增率(約 33%)並給出快/穩健的判斷", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造成長率", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "trend-03",
+      "category": "trend_growth",
+      "query": "蘋果這幾季營收有在成長嗎",
+      "relevant": ["AAPL_Fundamentals_*.txt", "AAPL_10Q_*.html"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 AAPL 營收年增約 17% 或 10-Q 季度營收資訊,說明仍在成長(溫和)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造成長數字或方向講反", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "exp-01",
+      "category": "explanation",
+      "query": "為什麼 nvidia 的毛利率這麼高？",
+      "relevant": ["NVDA_Fundamentals_*.txt", "NVDA_10K_2026.html", "NVDA_News_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "點出毛利率高的原因(資料中心 GPU 定價力 / CUDA 軟硬整合 / AI 需求強勁),並提及毛利率約 74%", "weight": 70, "is_critical": true},
+          {"checkpoint": "原因有來源依據而非空泛臆測", "weight": 30, "is_critical": false}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造來源未提及的具體百分比或事實", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "exp-02",
+      "category": "explanation",
+      "query": "amazon 毛利率才 50% 算低嗎？為什麼比其他科技股低",
+      "relevant": ["AMZN_Fundamentals_*.txt", "AMZN_10K_2026.html"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "引用 AMZN 毛利率約 50%,並合理解釋成因(零售/電商業務佔比高、實體營運成本)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造數字或編造來源沒有的業務拆解", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "exp-03",
+      "category": "explanation",
+      "query": "microsoft 的獲利主要靠什麼業務？",
+      "relevant": ["MSFT_10K_2026.html", "MSFT_News_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "點出主要獲利來源(雲端 Azure / 生產力 Microsoft 365 / 智慧雲)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造來源未提及的業務營收佔比數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "news-01",
+      "category": "news_catalyst",
+      "query": "蘋果最近有什麼新聞？",
+      "relevant": ["AAPL_News_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "提及來源新聞中的近期主題(如 WWDC / Siri AI 升級等)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造未出現在新聞來源中的事件", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "news-02",
+      "category": "news_catalyst",
+      "query": "nvidia 最近有什麼利多或重要消息",
+      "relevant": ["NVDA_News_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "摘述至少一則 NVDA 新聞來源中的具體消息", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造新聞事件或來源", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "news-03",
+      "category": "news_catalyst",
+      "query": "tesla 最近怎麼了",
+      "relevant": ["TSLA_News_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "摘述 TSLA 新聞來源中的近期主題", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造未出現的新聞", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "risk-01",
+      "category": "risk",
+      "query": "投資 meta 的主要風險是什麼？",
+      "relevant": ["META_10K_2026.html"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "列出 10-K 風險因子中的主要風險(如法規/隱私、廣告營收集中、AI 與元宇宙投資不確定性、競爭)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造來源未提及的風險或具體罰款數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "risk-02",
+      "category": "risk",
+      "query": "買 nvda 要注意什麼風險",
+      "relevant": ["NVDA_10K_2026.html"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "列出 NVDA 10-K 中的主要風險(如客戶集中、出口管制/地緣政治、供應鏈、競爭、需求循環)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造來源未提及的風險", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "strat-01",
+      "category": "strategy",
+      "query": "nvidia 的競爭優勢在哪？護城河深不深",
+      "relevant": ["NVDA_10K_2026.html", "NVDA_News_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "點出 CUDA 軟體生態 / 開發者鎖定 / 軟硬整合作為核心護城河", "weight": 60, "is_critical": true},
+          {"checkpoint": "提及資料中心 GPU 效能領先或系統級整合(NVLink/網路)", "weight": 40, "is_critical": false}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造市佔率百分比或來源未提及的數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "strat-02",
+      "category": "strategy",
+      "query": "google 在 AI 上的策略方向？",
+      "relevant": ["GOOGL_10K_2026.html", "GOOGL_News_*.txt"],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "點出 GOOGL 的 AI 策略主軸(Gemini 模型 / 搜尋整合 AI / Google Cloud AI / DeepMind)", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造來源未提及的產品或數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "unans-01",
+      "category": "unanswerable",
+      "query": "amd 的毛利率多少？",
+      "relevant": [],
+      "answerable": false,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "明確表示知識庫中沒有 AMD 的資料 / 無法回答", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造 AMD 的任何財務數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "unans-02",
+      "category": "unanswerable",
+      "query": "nvda 明年股價會漲到多少？",
+      "relevant": [],
+      "answerable": false,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "說明無法預測未來股價 / 知識庫沒有股價預測資料", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "給出一個具體的未來股價預測數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "unans-03",
+      "category": "unanswerable",
+      "query": "我現在該買進蘋果嗎？",
+      "relevant": ["AAPL_Fundamentals_*.txt"],
+      "answerable": false,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "不直接給買賣建議,改為提供客觀數據或附上免責聲明", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "給出明確的『該買 / 該賣』投資指令", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "unans-04",
+      "category": "unanswerable",
+      "query": "分析師對 tesla 的目標價是多少？",
+      "relevant": [],
+      "answerable": false,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "說明知識庫沒有分析師目標價 / 評等資料", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造一個分析師目標價數字", "is_critical": true}
+        ]
+      }
+    },
+    {
+      "id": "unans-05",
+      "category": "unanswerable",
+      "query": "台積電的本益比多少？",
+      "relevant": [],
+      "answerable": false,
+      "rubric": {
+        "must_include": [
+          {"checkpoint": "明確表示知識庫沒有台積電(TSMC)的資料", "weight": 100, "is_critical": true}
+        ],
+        "must_not_include": [
+          {"checkpoint": "捏造台積電的本益比數字", "is_critical": true}
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,453 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[INFO] Evaluating 10 queries against 'us_stock_rag_unstructured' (retrieval=llama-3.3-70b-versatile, gen=openai/gpt-oss-120b, judge=openai/gpt-oss-20b, judge_votes=3, rewrite=True, repeat=1)
+[INFO] Loading BGE-M3 + reranker...
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<?, ?it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|          | 3/391 [00:00<00:25, 15.07it/s]Loading weights:   1%|▏         | 5/391 [00:04<06:47,  1.06s/it]Loading weights: 100%|██████████| 391/391 [00:04<00:00, 88.96it/s]
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights:  56%|█████▌    | 219/393 [00:00<00:00, 2186.94it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 2670.99it/s]
+[INFO] Opening Qdrant server: http://localhost:6333
+[INFO] Snapshotting collection sources for context-recall fallback...
+
+[col-01] (colloquial) 為什麼大家做 AI 都要買輝達的卡，別家一直追不上它？
+DEBUG - Tier 3 (soft filter / no filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['NVIDIA competitive advantage in AI computing and GPU market share', 'NVIDIA dominance in deep learning and AI hardware acceleration']
+DEBUG - Rewrite merge: 20 → 27 candidates (cap=8/variant)
+DEBUG - Qdrant returned 27 fused candidates (server-side RRF):
+  [1] MSFT_News_20260612_02.txt | chunk #0 | rrf_score=0.500000
+  [2] NVDA_10Q_202510.html | chunk #32 | rrf_score=0.500000
+  [3] NVDA_10K_2026.html | chunk #51 | rrf_score=0.333333
+  [4] MSFT_10K_2025.html | chunk #40 | rrf_score=0.333333
+  [5] NVDA_10Q_202510.html | chunk #36 | rrf_score=0.277778
+  [6] NVDA_10K_2026.html | chunk #37 | rrf_score=0.250000
+  [7] MSFT_10Q_202603.html | chunk #82 | rrf_score=0.250000
+  [8] NVDA_10K_2026.html | chunk #46 | rrf_score=0.227778
+  [9] GOOGL_10K_2025.html | chunk #139 | rrf_score=0.200000
+  [10] AAPL_News_20260612_02.txt | chunk #2 | rrf_score=0.166667
+  [11] AMZN_News_20260612_01.txt | chunk #1 | rrf_score=0.161376
+  [12] NVDA_10K_2026.html | chunk #45 | rrf_score=0.150641
+  [13] NVDA_10Q_202604.html | chunk #60 | rrf_score=0.149733
+  [14] NVDA_10Q_202604.html | chunk #32 | rrf_score=0.142857
+  [15] NVDA_10K_2026.html | chunk #38 | rrf_score=0.133838
+  [16] NVDA_10Q_202604.html | chunk #35 | rrf_score=0.126623
+  [17] AAPL_News_20260612_02.txt | chunk #0 | rrf_score=0.125000
+  [18] NVDA_10Q_202604.html | chunk #12 | rrf_score=0.124060
+  [19] MSFT_10Q_202512.html | chunk #80 | rrf_score=0.100000
+  [20] AAPL_News_20260612_02.txt | chunk #1 | rrf_score=0.100000
+  [21] NVDA_Fundamentals_20260519.txt | chunk #1 | rrf_score=0.500000
+  [22] NVDA_10K_2026.html | chunk #39 | rrf_score=0.433333
+  [23] NVDA_10Q_202510.html | chunk #31 | rrf_score=0.392157
+  [24] NVDA_10K_2026.html | chunk #40 | rrf_score=0.271429
+  [25] NVDA_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.243590
+  [26] NVDA_10K_2026.html | chunk #41 | rrf_score=0.233333
+  [27] NVDA_10K_2026.html | chunk #113 | rrf_score=0.215909
+DEBUG - Reranked top candidates:
+  [1] NVDA_10K_2026.html | chunk #38 | type=10-K | rrf=0.133838 | raw=0.0519 | sigmoid=0.5130
+  [2] NVDA_10K_2026.html | chunk #51 | type=10-K | rrf=0.333333 | raw=0.0130 | sigmoid=0.5032
+  [3] NVDA_10K_2026.html | chunk #37 | type=10-K | rrf=0.250000 | raw=0.0123 | sigmoid=0.5031
+  [4] AAPL_News_20260612_02.txt | chunk #1 | type=news | rrf=0.100000 | raw=0.0120 | sigmoid=0.5030
+  [5] NVDA_10K_2026.html | chunk #39 | type=10-K | rrf=0.433333 | raw=0.0098 | sigmoid=0.5025
+  hall=None correct=0.8 relev=None refusal=False ctx=0.14
+  feedback: Retriever 未抓取包含 NVLink/InfiniBand/Mellanox 的相關片段，導致缺少網路整合說明；建議增強 Retriever 的索引或篩選條件，確保網路技術被納入回覆；同時 LLM 需確認是否已提及這些關鍵網路技術。
+
+[col-02] (colloquial) 蘋果除了賣手機，還靠什麼一直在收錢？這塊以後會不會更會賺？
+DEBUG - Tier 3 (soft filter / no filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['Apple revenue streams beyond iPhone sales and future growth prospects', 'Apple Services and Other Products segment profitability and outlook']
+DEBUG - Rewrite merge: 20 → 22 candidates (cap=8/variant)
+DEBUG - Qdrant returned 22 fused candidates (server-side RRF):
+  [1] AAPL_News_20260519_01.txt | chunk #4 | rrf_score=0.500000
+  [2] AAPL_News_20260612_04.txt | chunk #0 | rrf_score=0.333333
+  [3] AAPL_10K_2025.html | chunk #80 | rrf_score=0.250000
+  [4] AAPL_News_20260612_04.txt | chunk #2 | rrf_score=0.200000
+  [5] AAPL_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.166667
+  [6] AAPL_10Q_202603.html | chunk #30 | rrf_score=0.142857
+  [7] AAPL_Fundamentals_20260519.txt | chunk #0 | rrf_score=0.125000
+  [8] AAPL_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.111111
+  [9] AAPL_News_20260612_05.txt | chunk #1 | rrf_score=0.100000
+  [10] AAPL_News_20260519_01.txt | chunk #2 | rrf_score=0.090909
+  [11] AAPL_10K_2025.html | chunk #7 | rrf_score=0.083333
+  [12] AAPL_News_20260612_04.txt | chunk #1 | rrf_score=0.076923
+  [13] AAPL_10Q_202512.html | chunk #26 | rrf_score=0.071429
+  [14] AAPL_News_20260519_01.txt | chunk #5 | rrf_score=0.066667
+  [15] MSFT_10Q_202512.html | chunk #36 | rrf_score=0.062500
+  [16] MSFT_10Q_202603.html | chunk #36 | rrf_score=0.058824
+  [17] META_10Q_202509.html | chunk #45 | rrf_score=0.055556
+  [18] META_10K_2025.html | chunk #173 | rrf_score=0.052632
+  [19] META_10Q_202603.html | chunk #43 | rrf_score=0.050000
+  [20] AAPL_10Q_202603.html | chunk #10 | rrf_score=0.047619
+  [21] AAPL_News_20260612_03.txt | chunk #0 | rrf_score=0.280303
+  [22] AAPL_10K_2025.html | chunk #81 | rrf_score=0.450000
+DEBUG - Reranked top candidates:
+  [1] AAPL_10Q_202512.html | chunk #26 | type=10-Q | rrf=0.071429 | raw=0.1099 | sigmoid=0.5274
+  [2] AAPL_News_20260519_01.txt | chunk #4 | type=news | rrf=0.500000 | raw=0.0862 | sigmoid=0.5215
+  [3] AAPL_News_20260519_01.txt | chunk #5 | type=news | rrf=0.066667 | raw=0.0757 | sigmoid=0.5189
+  [4] AAPL_10Q_202603.html | chunk #30 | type=10-Q | rrf=0.142857 | raw=0.0522 | sigmoid=0.5131
+  [5] AAPL_News_20260612_05.txt | chunk #1 | type=news | rrf=0.100000 | raw=0.0247 | sigmoid=0.5062
+  hall=None correct=0.8 relev=None refusal=False ctx=0.5
+  feedback: 在回答中加入對龐大裝置安裝基數帶動服務變現的說明，並確保所有數字均引用來源，避免潛在捏造。
+
+[col-03] (colloquial) 微軟賣東西，扣掉成本之後大概還能留下幾成？
+DEBUG - Tier 3 (soft filter / no filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['Microsoft gross margin percentage', 'Microsoft net sales and gross profit ratio']
+DEBUG - Rewrite merge: 20 → 34 candidates (cap=8/variant)
+DEBUG - Qdrant returned 34 fused candidates (server-side RRF):
+  [1] AMZN_10K_2025.html | chunk #32 | rrf_score=0.500000
+  [2] MSFT_10K_2025.html | chunk #10 | rrf_score=0.500000
+  [3] MSFT_10Q_202512.html | chunk #11 | rrf_score=0.333333
+  [4] META_10Q_202509.html | chunk #12 | rrf_score=0.333333
+  [5] MSFT_10Q_202603.html | chunk #11 | rrf_score=0.250000
+  [6] MSFT_10Q_202603.html | chunk #14 | rrf_score=0.250000
+  [7] NVDA_10Q_202604.html | chunk #7 | rrf_score=0.200000
+  [8] MSFT_10Q_202512.html | chunk #17 | rrf_score=0.200000
+  [9] GOOGL_10K_2025.html | chunk #39 | rrf_score=0.166667
+  [10] MSFT_10K_2025.html | chunk #16 | rrf_score=0.166667
+  [11] MSFT_10Q_202512.html | chunk #44 | rrf_score=0.142857
+  [12] META_10Q_202603.html | chunk #12 | rrf_score=0.142857
+  [13] MSFT_10Q_202603.html | chunk #17 | rrf_score=0.125000
+  [14] AMZN_10K_2025.html | chunk #15 | rrf_score=0.125000
+  [15] NVDA_10K_2026.html | chunk #21 | rrf_score=0.111111
+  [16] MSFT_10Q_202603.html | chunk #37 | rrf_score=0.111111
+  [17] GOOGL_10K_2025.html | chunk #48 | rrf_score=0.100000
+  [18] MSFT_10K_2025.html | chunk #13 | rrf_score=0.100000
+  [19] META_10K_2025.html | chunk #5 | rrf_score=0.090909
+  [20] MSFT_10Q_202512.html | chunk #46 | rrf_score=0.090909
+  [21] AAPL_10Q_202603.html | chunk #12 | rrf_score=0.642857
+  [22] AAPL_10K_2025.html | chunk #9 | rrf_score=0.583333
+  [23] AAPL_10Q_202512.html | chunk #12 | rrf_score=0.533333
+  [24] MSFT_10Q_202512.html | chunk #45 | rrf_score=0.308824
+  [25] AAPL_10Q_202512.html | chunk #11 | rrf_score=0.283333
+  [26] AAPL_10K_2025.html | chunk #8 | rrf_score=0.229167
+  [27] MSFT_10Q_202603.html | chunk #42 | rrf_score=0.208333
+  [28] MSFT_Fundamentals_20260519.txt | chunk #0 | rrf_score=0.611111
+  [29] MSFT_10K_2025.html | chunk #40 | rrf_score=0.500000
+  [30] MSFT_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.410256
+  [31] MSFT_10K_2025.html | chunk #58 | rrf_score=0.333333
+  [32] MSFT_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.321429
+  [33] MSFT_10K_2025.html | chunk #43 | rrf_score=0.250000
+  [34] MSFT_10Q_202603.html | chunk #35 | rrf_score=0.225641
+DEBUG - Reranked top candidates:
+  [1] MSFT_10Q_202512.html | chunk #45 | type=10-Q | rrf=0.308824 | raw=0.0067 | sigmoid=0.5017
+  [2] MSFT_10Q_202603.html | chunk #14 | type=10-Q | rrf=0.250000 | raw=0.0064 | sigmoid=0.5016
+  [3] AMZN_10K_2025.html | chunk #32 | type=10-K | rrf=0.500000 | raw=0.0064 | sigmoid=0.5016
+  [4] MSFT_10Q_202603.html | chunk #37 | type=10-Q | rrf=0.111111 | raw=0.0053 | sigmoid=0.5013
+  [5] GOOGL_10K_2025.html | chunk #39 | type=10-K | rrf=0.166667 | raw=0.0043 | sigmoid=0.5011
+  hall=None correct=0.714 relev=None refusal=False ctx=0.12
+  feedback: Retriever层未能召回包含精确毛利率的段落，导致回答缺少关键数字。建议改进检索召回策略，确保返回包含 68.3%（0.683）毛利率的文档片段，并在生成时使用更精确的数值。
+
+[col-04] (colloquial) 微軟租伺服器、做網路那塊生意，跟亞馬遜、谷歌比打得贏嗎？
+DEBUG - Tier 3 (soft filter / no filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['Microsoft Azure competitive position and market share versus Amazon Web Services and Google Cloud', 'Microsoft cloud computing business competitiveness and growth prospects']
+DEBUG - Rewrite merge: 20 → 31 candidates (cap=8/variant)
+DEBUG - Qdrant returned 31 fused candidates (server-side RRF):
+  [1] MSFT_10K_2025.html | chunk #50 | rrf_score=0.500000
+  [2] AMZN_10K_2025.html | chunk #32 | rrf_score=0.500000
+  [3] MSFT_10K_2025.html | chunk #54 | rrf_score=0.333333
+  [4] META_10Q_202509.html | chunk #12 | rrf_score=0.333333
+  [5] MSFT_10K_2025.html | chunk #47 | rrf_score=0.250000
+  [6] MSFT_10Q_202603.html | chunk #14 | rrf_score=0.250000
+  [7] NVDA_10Q_202604.html | chunk #7 | rrf_score=0.200000
+  [8] MSFT_10Q_202603.html | chunk #11 | rrf_score=0.200000
+  [9] MSFT_10Q_202512.html | chunk #11 | rrf_score=0.166667
+  [10] GOOGL_10K_2025.html | chunk #39 | rrf_score=0.166667
+  [11] MSFT_10Q_202603.html | chunk #13 | rrf_score=0.142857
+  [12] META_10Q_202603.html | chunk #12 | rrf_score=0.142857
+  [13] AMZN_10K_2025.html | chunk #15 | rrf_score=0.125000
+  [14] MSFT_10Q_202512.html | chunk #13 | rrf_score=0.125000
+  [15] MSFT_10K_2025.html | chunk #10 | rrf_score=0.111111
+  [16] MSFT_News_20260612_03.txt | chunk #3 | rrf_score=0.111111
+  [17] MSFT_10K_2025.html | chunk #12 | rrf_score=0.100000
+  [18] NVDA_10K_2026.html | chunk #21 | rrf_score=0.100000
+  [19] MSFT_10K_2025.html | chunk #13 | rrf_score=0.090909
+  [20] MSFT_10Q_202512.html | chunk #45 | rrf_score=0.090909
+  [21] MSFT_10K_2025.html | chunk #48 | rrf_score=0.833333
+  [22] MSFT_10K_2025.html | chunk #112 | rrf_score=0.583333
+  [23] MSFT_10Q_202603.html | chunk #37 | rrf_score=0.311111
+  [24] MSFT_10K_2025.html | chunk #111 | rrf_score=0.308824
+  [25] MSFT_Fundamentals_20260508.txt | chunk #1 | rrf_score=0.266667
+  [26] MSFT_10Q_202512.html | chunk #37 | rrf_score=0.250000
+  [27] MSFT_Fundamentals_20260519.txt | chunk #1 | rrf_score=0.233766
+  [28] MSFT_10K_2025.html | chunk #115 | rrf_score=0.558824
+  [29] MSFT_10K_2025.html | chunk #40 | rrf_score=0.518868
+  [30] MSFT_10K_2025.html | chunk #42 | rrf_score=0.375000
+  [31] MSFT_10K_2025.html | chunk #41 | rrf_score=0.326923
+DEBUG - Reranked top candidates:
+  [1] MSFT_10K_2025.html | chunk #115 | type=10-K | rrf=0.558824 | raw=0.0122 | sigmoid=0.5031
+  [2] MSFT_10K_2025.html | chunk #50 | type=10-K | rrf=0.500000 | raw=0.0091 | sigmoid=0.5023
+  [3] MSFT_10K_2025.html | chunk #112 | type=10-K | rrf=0.583333 | raw=0.0060 | sigmoid=0.5015
+  [4] MSFT_10K_2025.html | chunk #111 | type=10-K | rrf=0.308824 | raw=0.0055 | sigmoid=0.5014
+  [5] MSFT_10K_2025.html | chunk #54 | type=10-K | rrf=0.333333 | raw=0.0044 | sigmoid=0.5011
+  [KEY ROTATION] TPD exhausted, switching to GROQ_API_KEY2
+  hall=None correct=0.2 relev=None refusal=False ctx=0.5
+  feedback: 回答缺少對 Azure 面臨其他雲端服務商競爭的說明，以及 AI / Copilot 推動 Azure 成長的具體描述，建議在檢索階段加入相關段落，並在 LLM 生成時明確提及競爭環境與 AI 驅動因素。
+
+[col-05] (colloquial) 亞馬遜租伺服器那塊生意，以後想往哪個方向走？
+DEBUG - Tier 3 (soft filter / no filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['Amazon Web Services AWS future growth strategy and cloud computing outlook', 'AWS expansion into new markets and emerging technologies']
+DEBUG - Rewrite merge: 20 → 32 candidates (cap=8/variant)
+DEBUG - Qdrant returned 32 fused candidates (server-side RRF):
+  [1] AMZN_10K_2025.html | chunk #82 | rrf_score=0.500000
+  [2] MSFT_News_20260612_03.txt | chunk #3 | rrf_score=0.500000
+  [3] AAPL_News_20260519_01.txt | chunk #4 | rrf_score=0.366667
+  [4] GOOGL_10K_2025.html | chunk #155 | rrf_score=0.333333
+  [5] AAPL_News_20260612_04.txt | chunk #0 | rrf_score=0.333333
+  [6] MSFT_News_20260612_02.txt | chunk #0 | rrf_score=0.250000
+  [7] AMZN_News_20260612_01.txt | chunk #1 | rrf_score=0.250000
+  [8] AMZN_10K_2025.html | chunk #86 | rrf_score=0.200000
+  [9] MSFT_News_20260612_03.txt | chunk #0 | rrf_score=0.166667
+  [10] AMZN_10K_2025.html | chunk #56 | rrf_score=0.142857
+  [11] NVDA_News_20260508_01.txt | chunk #0 | rrf_score=0.142857
+  [12] GOOGL_News_20260612_02.txt | chunk #0 | rrf_score=0.125000
+  [13] TSLA_10Q_202509.html | chunk #33 | rrf_score=0.125000
+  [14] GOOGL_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.111111
+  [15] GOOGL_News_20260612_01.txt | chunk #0 | rrf_score=0.111111
+  [16] TSLA_10Q_202603.html | chunk #32 | rrf_score=0.100000
+  [17] AAPL_News_20260612_04.txt | chunk #3 | rrf_score=0.100000
+  [18] AAPL_News_20260519_01.txt | chunk #0 | rrf_score=0.090909
+  [19] MSFT_10Q_202512.html | chunk #11 | rrf_score=0.090909
+  [20] MSFT_10Q_202512.html | chunk #82 | rrf_score=0.083333
+  [21] AMZN_10K_2025.html | chunk #63 | rrf_score=0.625000
+  [22] AMZN_10K_2025.html | chunk #99 | rrf_score=0.385965
+  [23] AMZN_10Q_202509.html | chunk #73 | rrf_score=0.355556
+  [24] AMZN_10Q_202603.html | chunk #47 | rrf_score=0.291667
+  [25] AMZN_10Q_202509.html | chunk #48 | rrf_score=0.271429
+  [26] AMZN_10Q_202603.html | chunk #72 | rrf_score=0.250000
+  [27] AMZN_10Q_202509.html | chunk #45 | rrf_score=0.600000
+  [28] AMZN_10K_2025.html | chunk #95 | rrf_score=0.375000
+  [29] MSFT_10Q_202603.html | chunk #38 | rrf_score=0.365591
+  [30] AMZN_10K_2025.html | chunk #58 | rrf_score=0.333333
+  [31] AMZN_10Q_202603.html | chunk #44 | rrf_score=0.290909
+  [32] MSFT_10K_2025.html | chunk #112 | rrf_score=0.277027
+DEBUG - Reranked top candidates:
+  [1] AMZN_10Q_202603.html | chunk #72 | type=10-Q | rrf=0.250000 | raw=0.0161 | sigmoid=0.5040
+  [2] AMZN_10Q_202509.html | chunk #73 | type=10-Q | rrf=0.355556 | raw=0.0123 | sigmoid=0.5031
+  [3] AMZN_10K_2025.html | chunk #99 | type=10-K | rrf=0.385965 | raw=0.0118 | sigmoid=0.5029
+  [4] AMZN_10Q_202603.html | chunk #47 | type=10-Q | rrf=0.291667 | raw=0.0049 | sigmoid=0.5012
+  [5] AMZN_10K_2025.html | chunk #58 | type=10-K | rrf=0.333333 | raw=0.0047 | sigmoid=0.5012
+  hall=None correct=0.5 relev=None refusal=False ctx=0.67
+  feedback: 最严重问题是未提及 AWS 的获利贡献或营业利益表现，建议在回答中加入 AWS 对整体利润的具体贡献数据或增长情况，以满足 mi0 要求。
+
+[col-06] (colloquial) 蘋果一年下來，平均一股大概幫股東賺多少錢？
+DEBUG - Detected filing filter(s): [{'field': 'fiscal_period', 'value': 'FY', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['Apple earnings per share', 'Apple annual net income per diluted share']
+DEBUG - Rewrite merge: 20 → 25 candidates (cap=8/variant)
+DEBUG - Qdrant returned 25 fused candidates (server-side RRF):
+  [1] AMZN_10K_2025.html | chunk #32 | rrf_score=0.500000
+  [2] AAPL_10K_2025.html | chunk #7 | rrf_score=0.500000
+  [3] GOOGL_10K_2025.html | chunk #39 | rrf_score=0.361111
+  [4] AAPL_10K_2025.html | chunk #36 | rrf_score=0.333333
+  [5] AAPL_10K_2025.html | chunk #14 | rrf_score=0.273810
+  [6] AMZN_10K_2025.html | chunk #15 | rrf_score=0.250000
+  [7] NVDA_10K_2026.html | chunk #21 | rrf_score=0.200000
+  [8] AAPL_10K_2025.html | chunk #80 | rrf_score=0.200000
+  [9] AAPL_10K_2025.html | chunk #92 | rrf_score=0.166667
+  [10] MSFT_10K_2025.html | chunk #13 | rrf_score=0.166667
+  [11] AAPL_10K_2025.html | chunk #5 | rrf_score=0.164134
+  [12] META_10K_2025.html | chunk #9 | rrf_score=0.143590
+  [13] META_10K_2025.html | chunk #5 | rrf_score=0.142857
+  [14] MSFT_10K_2025.html | chunk #23 | rrf_score=0.138528
+  [15] NVDA_10K_2026.html | chunk #14 | rrf_score=0.125000
+  [16] AAPL_10K_2025.html | chunk #70 | rrf_score=0.125000
+  [17] AAPL_10K_2025.html | chunk #76 | rrf_score=0.111111
+  [18] NVDA_10K_2026.html | chunk #20 | rrf_score=0.111111
+  [19] AAPL_10K_2025.html | chunk #18 | rrf_score=0.105556
+  [20] GOOGL_10K_2025.html | chunk #73 | rrf_score=0.100000
+  [21] AAPL_10K_2025.html | chunk #82 | rrf_score=0.625000
+  [22] AAPL_10K_2025.html | chunk #26 | rrf_score=0.285714
+  [23] AAPL_10K_2025.html | chunk #24 | rrf_score=0.211111
+  [24] GOOGL_10K_2025.html | chunk #184 | rrf_score=0.476191
+  [25] AAPL_10K_2025.html | chunk #99 | rrf_score=0.267544
+DEBUG - Reranked top candidates:
+  [1] AAPL_10K_2025.html | chunk #92 | type=10-K | rrf=0.166667 | raw=0.0812 | sigmoid=0.5203
+  [2] AAPL_10K_2025.html | chunk #24 | type=10-K | rrf=0.211111 | raw=0.0128 | sigmoid=0.5032
+  [3] AAPL_10K_2025.html | chunk #14 | type=10-K | rrf=0.273810 | raw=0.0053 | sigmoid=0.5013
+  [4] AAPL_10K_2025.html | chunk #70 | type=10-K | rrf=0.125000 | raw=0.0049 | sigmoid=0.5012
+  [5] GOOGL_10K_2025.html | chunk #73 | type=10-K | rrf=0.100000 | raw=0.0042 | sigmoid=0.5010
+  hall=None correct=1.0 relev=None refusal=False ctx=0.0
+  feedback: 回答已满足所有必需点，无需改进。
+
+[col-07] (colloquial) 臉書一直砸大錢做頭戴裝置跟虛擬世界，到底在賺還在賠？以後想怎麼搞？
+DEBUG - Tier 3 (soft filter / no filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['Meta Platforms Reality Labs operating losses and future profitability', 'Meta Platforms metaverse investments and long-term growth strategy']
+DEBUG - Rewrite merge: 20 → 33 candidates (cap=8/variant)
+DEBUG - Qdrant returned 33 fused candidates (server-side RRF):
+  [1] AMZN_10K_2025.html | chunk #32 | rrf_score=0.500000
+  [2] META_10Q_202603.html | chunk #118 | rrf_score=0.500000
+  [3] META_10K_2025.html | chunk #67 | rrf_score=0.333333
+  [4] META_10Q_202509.html | chunk #12 | rrf_score=0.333333
+  [5] META_10Q_202509.html | chunk #11 | rrf_score=0.250000
+  [6] MSFT_10Q_202603.html | chunk #14 | rrf_score=0.250000
+  [7] NVDA_10Q_202604.html | chunk #7 | rrf_score=0.200000
+  [8] META_10K_2025.html | chunk #45 | rrf_score=0.200000
+  [9] GOOGL_10K_2025.html | chunk #39 | rrf_score=0.166667
+  [10] META_10Q_202603.html | chunk #11 | rrf_score=0.166667
+  [11] META_10Q_202603.html | chunk #12 | rrf_score=0.142857
+  [12] MSFT_10Q_202603.html | chunk #46 | rrf_score=0.142857
+  [13] AMZN_10K_2025.html | chunk #15 | rrf_score=0.125000
+  [14] META_10K_2025.html | chunk #46 | rrf_score=0.125000
+  [15] META_10K_2025.html | chunk #47 | rrf_score=0.111111
+  [16] NVDA_10K_2026.html | chunk #21 | rrf_score=0.111111
+  [17] META_10K_2025.html | chunk #4 | rrf_score=0.100000
+  [18] MSFT_10K_2025.html | chunk #13 | rrf_score=0.100000
+  [19] MSFT_10Q_202512.html | chunk #44 | rrf_score=0.090909
+  [20] META_10K_2025.html | chunk #5 | rrf_score=0.090909
+  [21] META_10K_2025.html | chunk #177 | rrf_score=0.566667
+  [22] META_10Q_202603.html | chunk #43 | rrf_score=0.533333
+  [23] META_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.525000
+  [24] META_10Q_202509.html | chunk #45 | rrf_score=0.416667
+  [25] META_10K_2025.html | chunk #14 | rrf_score=0.366667
+  [26] META_10Q_202603.html | chunk #46 | rrf_score=0.321429
+  [27] META_10K_2025.html | chunk #173 | rrf_score=0.277778
+  [28] META_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.276923
+  [29] META_10K_2025.html | chunk #41 | rrf_score=0.700000
+  [30] META_10Q_202509.html | chunk #115 | rrf_score=0.316667
+  [31] META_News_20260612_01.txt | chunk #0 | rrf_score=0.291667
+  [32] META_10Q_202509.html | chunk #30 | rrf_score=0.184524
+  [33] META_Fundamentals_20260612.txt | chunk #2 | rrf_score=0.183824
+DEBUG - Reranked top candidates:
+  [1] META_10K_2025.html | chunk #67 | type=10-K | rrf=0.333333 | raw=0.0293 | sigmoid=0.5073
+  [2] META_10K_2025.html | chunk #4 | type=10-K | rrf=0.100000 | raw=0.0214 | sigmoid=0.5054
+  [3] META_10Q_202603.html | chunk #11 | type=10-Q | rrf=0.166667 | raw=0.0207 | sigmoid=0.5052
+  [4] META_10Q_202509.html | chunk #11 | type=10-Q | rrf=0.250000 | raw=0.0189 | sigmoid=0.5047
+  [5] META_10Q_202603.html | chunk #118 | type=10-Q | rrf=0.500000 | raw=0.0151 | sigmoid=0.5038
+  hall=None correct=0.8 relev=None refusal=False ctx=0.67
+  feedback: 缺少對 Ray‑Ban Meta 等 AI 眼鏡的具體提及，建議在未來回答中加入此資訊以完整覆蓋 mi2，並可進一步說明數字來源以增強可信度。
+
+[col-08] (colloquial) 特斯拉現在最讓人擔心、最頭痛的麻煩有哪些？
+DEBUG - Tier 3 (soft filter / no filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['Tesla risk factors and challenges', 'Tesla key concerns and operational hurdles']
+DEBUG - Rewrite merge: 20 → 27 candidates (cap=8/variant)
+DEBUG - Qdrant returned 27 fused candidates (server-side RRF):
+  [1] TSLA_10K_2025.html | chunk #74 | rrf_score=0.500000
+  [2] AMZN_10K_2025.html | chunk #32 | rrf_score=0.500000
+  [3] META_10Q_202509.html | chunk #12 | rrf_score=0.333333
+  [4] TSLA_10K_2025.html | chunk #77 | rrf_score=0.333333
+  [5] TSLA_10K_2025.html | chunk #62 | rrf_score=0.250000
+  [6] MSFT_10Q_202603.html | chunk #14 | rrf_score=0.250000
+  [7] NVDA_10Q_202604.html | chunk #7 | rrf_score=0.200000
+  [8] TSLA_10K_2025.html | chunk #79 | rrf_score=0.200000
+  [9] GOOGL_10K_2025.html | chunk #39 | rrf_score=0.166667
+  [10] TSLA_10K_2025.html | chunk #63 | rrf_score=0.166667
+  [11] TSLA_10K_2025.html | chunk #65 | rrf_score=0.142857
+  [12] META_10Q_202603.html | chunk #12 | rrf_score=0.142857
+  [13] AMZN_10K_2025.html | chunk #15 | rrf_score=0.125000
+  [14] TSLA_10K_2025.html | chunk #70 | rrf_score=0.125000
+  [15] TSLA_10K_2025.html | chunk #76 | rrf_score=0.111111
+  [16] NVDA_10K_2026.html | chunk #21 | rrf_score=0.111111
+  [17] META_10Q_202603.html | chunk #126 | rrf_score=0.100000
+  [18] MSFT_10K_2025.html | chunk #13 | rrf_score=0.100000
+  [19] META_10K_2025.html | chunk #5 | rrf_score=0.090909
+  [20] TSLA_10K_2025.html | chunk #66 | rrf_score=0.090909
+  [21] TSLA_10K_2025.html | chunk #61 | rrf_score=0.250000
+  [22] NVDA_10Q_202510.html | chunk #59 | rrf_score=0.200000
+  [23] TSLA_10K_2025.html | chunk #128 | rrf_score=0.198413
+  [24] AMZN_10K_2025.html | chunk #68 | rrf_score=0.194444
+  [25] TSLA_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.458333
+  [26] TSLA_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.255556
+  [27] TSLA_10K_2025.html | chunk #129 | rrf_score=0.215909
+DEBUG - Reranked top candidates:
+  [1] TSLA_10K_2025.html | chunk #128 | type=10-K | rrf=0.198413 | raw=0.0704 | sigmoid=0.5176
+  [2] TSLA_10K_2025.html | chunk #74 | type=10-K | rrf=0.500000 | raw=0.0373 | sigmoid=0.5093
+  [3] TSLA_10K_2025.html | chunk #66 | type=10-K | rrf=0.090909 | raw=0.0193 | sigmoid=0.5048
+  [4] TSLA_10K_2025.html | chunk #70 | type=10-K | rrf=0.125000 | raw=0.0191 | sigmoid=0.5048
+  [5] TSLA_10K_2025.html | chunk #65 | type=10-K | rrf=0.142857 | raw=0.0159 | sigmoid=0.5040
+  hall=None correct=0.0 relev=None refusal=False ctx=0.33
+  feedback: 回答缺少對 EV 市場競爭加劇/價格戰、自動駕駛監管風險以及宏觀經濟/利率/補貼政策風險的提及。建議在分析中加入這些層面，並引用相應文件證據以提升完整性。
+
+[col-09] (colloquial) 蘋果自己跳下去做晶片，對它有什麼好處？
+DEBUG - Tier 3 (soft filter / no filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['Apple vertical integration benefits and semiconductor design advantages', 'Apple in-house chip development and manufacturing cost savings and performance optimization']
+DEBUG - Rewrite merge: 20 → 31 candidates (cap=8/variant)
+DEBUG - Qdrant returned 31 fused candidates (server-side RRF):
+  [1] AMZN_10K_2025.html | chunk #15 | rrf_score=0.500000
+  [2] AAPL_News_20260519_01.txt | chunk #2 | rrf_score=0.500000
+  [3] AAPL_News_20260519_01.txt | chunk #1 | rrf_score=0.333333
+  [4] AMZN_10K_2025.html | chunk #32 | rrf_score=0.333333
+  [5] NVDA_10K_2026.html | chunk #21 | rrf_score=0.250000
+  [6] AAPL_News_20260612_04.txt | chunk #5 | rrf_score=0.250000
+  [7] AAPL_News_20260612_03.txt | chunk #0 | rrf_score=0.200000
+  [8] NVDA_10Q_202604.html | chunk #7 | rrf_score=0.200000
+  [9] TSLA_10Q_202509.html | chunk #3 | rrf_score=0.166667
+  [10] TSLA_News_20260612_01.txt | chunk #3 | rrf_score=0.166667
+  [11] NVDA_10Q_202604.html | chunk #8 | rrf_score=0.142857
+  [12] AAPL_News_20260612_05.txt | chunk #0 | rrf_score=0.142857
+  [13] TSLA_10Q_202603.html | chunk #3 | rrf_score=0.125000
+  [14] AAPL_News_20260612_01.txt | chunk #2 | rrf_score=0.125000
+  [15] AAPL_News_20260612_05.txt | chunk #1 | rrf_score=0.111111
+  [16] MSFT_10Q_202603.html | chunk #14 | rrf_score=0.111111
+  [17] AAPL_News_20260519_01.txt | chunk #4 | rrf_score=0.100000
+  [18] NVDA_10Q_202510.html | chunk #17 | rrf_score=0.100000
+  [19] GOOGL_10Q_202603.html | chunk #9 | rrf_score=0.090909
+  [20] AAPL_News_20260612_04.txt | chunk #0 | rrf_score=0.090909
+  [21] AAPL_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.583333
+  [22] AAPL_Fundamentals_20260519.txt | chunk #0 | rrf_score=0.410256
+  [23] MSFT_10Q_202512.html | chunk #68 | rrf_score=0.371795
+  [24] AAPL_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.316667
+  [25] MSFT_10Q_202603.html | chunk #70 | rrf_score=0.283333
+  [26] AAPL_10K_2025.html | chunk #48 | rrf_score=0.277778
+  [27] AAPL_10K_2025.html | chunk #32 | rrf_score=0.253968
+  [28] AAPL_10K_2025.html | chunk #40 | rrf_score=0.642857
+  [29] AAPL_10K_2025.html | chunk #46 | rrf_score=0.458333
+  [30] AAPL_10K_2025.html | chunk #61 | rrf_score=0.202020
+  [31] AAPL_Fundamentals_20260519.txt | chunk #2 | rrf_score=0.200000
+DEBUG - Reranked top candidates:
+  [1] AAPL_10K_2025.html | chunk #48 | type=10-K | rrf=0.277778 | raw=0.0196 | sigmoid=0.5049
+  [2] AAPL_News_20260519_01.txt | chunk #4 | type=news | rrf=0.100000 | raw=0.0037 | sigmoid=0.5009
+  [3] AAPL_News_20260612_03.txt | chunk #0 | type=news | rrf=0.200000 | raw=0.0034 | sigmoid=0.5008
+  [4] AAPL_10K_2025.html | chunk #46 | type=10-K | rrf=0.458333 | raw=0.0012 | sigmoid=0.5003
+  [5] AAPL_News_20260612_01.txt | chunk #2 | type=news | rrf=0.125000 | raw=0.0010 | sigmoid=0.5003
+  hall=None correct=1.0 relev=None refusal=False ctx=1.0
+  feedback: 回答已满足所有必需点，未出现捏造。建议在每个主张后引用更具体的数据或来源，以进一步提升可信度。
+
+[col-10] (colloquial) 谷歌會不會怕 AI 搶走它網路搜尋的生意？它打算怎麼接招？
+DEBUG - Tier 3 (soft filter / no filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['Alphabet risk factors and competitive threats from AI to search business', 'Google strategic response to AI disruption and search query market share']
+DEBUG - Rewrite merge: 20 → 32 candidates (cap=8/variant)
+DEBUG - Qdrant returned 32 fused candidates (server-side RRF):
+  [1] MSFT_10K_2025.html | chunk #40 | rrf_score=0.500000
+  [2] GOOGL_10K_2025.html | chunk #137 | rrf_score=0.500000
+  [3] GOOGL_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.333333
+  [4] MSFT_News_20260612_02.txt | chunk #0 | rrf_score=0.333333
+  [5] AAPL_News_20260612_02.txt | chunk #0 | rrf_score=0.291667
+  [6] GOOGL_10K_2025.html | chunk #139 | rrf_score=0.262500
+  [7] GOOGL_10K_2025.html | chunk #138 | rrf_score=0.250000
+  [8] MSFT_10Q_202603.html | chunk #82 | rrf_score=0.250000
+  [9] GOOGL_News_20260612_02.txt | chunk #0 | rrf_score=0.200000
+  [10] AAPL_News_20260612_02.txt | chunk #2 | rrf_score=0.166667
+  [11] GOOGL_News_20260612_01.txt | chunk #1 | rrf_score=0.163743
+  [12] GOOGL_10K_2025.html | chunk #179 | rrf_score=0.146277
+  [13] AMZN_News_20260612_01.txt | chunk #1 | rrf_score=0.142857
+  [14] GOOGL_10K_2025.html | chunk #147 | rrf_score=0.142857
+  [15] MSFT_10Q_202512.html | chunk #80 | rrf_score=0.111111
+  [16] NVDA_10Q_202604.html | chunk #60 | rrf_score=0.101313
+  [17] GOOGL_10K_2025.html | chunk #154 | rrf_score=0.101190
+  [18] NVDA_10Q_202510.html | chunk #36 | rrf_score=0.100000
+  [19] GOOGL_10K_2025.html | chunk #9 | rrf_score=0.100000
+  [20] GOOGL_10K_2025.html | chunk #141 | rrf_score=0.094538
+  [21] MSFT_10Q_202603.html | chunk #78 | rrf_score=0.527778
+  [22] GOOGL_10Q_202509.html | chunk #8 | rrf_score=0.500000
+  [23] META_10Q_202603.html | chunk #116 | rrf_score=0.366667
+  [24] GOOGL_10K_2025.html | chunk #15 | rrf_score=0.358333
+  [25] NVDA_10K_2026.html | chunk #91 | rrf_score=0.353741
+  [26] META_10K_2025.html | chunk #65 | rrf_score=0.290909
+  [27] META_10Q_202509.html | chunk #114 | rrf_score=0.253968
+  [28] GOOGL_10K_2025.html | chunk #144 | rrf_score=0.583333
+  [29] GOOGL_10K_2025.html | chunk #189 | rrf_score=0.458333
+  [30] GOOGL_10Q_202603.html | chunk #60 | rrf_score=0.290909
+  [31] GOOGL_10K_2025.html | chunk #148 | rrf_score=0.267857
+  [32] GOOGL_News_20260612_01.txt | chunk #0 | rrf_score=0.228571
+DEBUG - Reranked top candidates:
+  [1] GOOGL_10K_2025.html | chunk #179 | type=10-K | rrf=0.146277 | raw=0.3322 | sigmoid=0.5823
+  [2] GOOGL_10K_2025.html | chunk #137 | type=10-K | rrf=0.500000 | raw=0.2774 | sigmoid=0.5689
+  [3] GOOGL_10K_2025.html | chunk #139 | type=10-K | rrf=0.262500 | raw=0.2265 | sigmoid=0.5564
+  [4] GOOGL_10K_2025.html | chunk #147 | type=10-K | rrf=0.142857 | raw=0.2052 | sigmoid=0.5511
+  [5] GOOGL_News_20260612_02.txt | chunk #0 | type=news | rrf=0.200000 | raw=0.1730 | sigmoid=0.5431
+  hall=None correct=1.0 relev=None refusal=False ctx=0.5
+  feedback: 回答已符合所有要求，未发现错误。建议继续保持信息来源准确性，确保引用的文件与数据保持最新。
+
+══════════════════════════════════════════════════════════════════════════════════
+LLM-AS-JUDGE SUMMARY (5 metrics)
+══════════════════════════════════════════════════════════════════════════════════
+  CAT        n   hall↓  correct   relev  ctxLLM  wRefus  fatal
+  COLLOQUIAL 10    None    0.681    None    None     0.0      0
+  OVERALL   10    None    0.681    None    None     0.0      0
+
+[DONE] Written to eval\regression_colloquial_gen120b_fixed.json

@@ -1,0 +1,138 @@
+{
+  "sem-01": {
+    "query": "NVIDIA 的核心技術護城河是什麼？",
+    "pool_size": 21,
+    "topk_size": 5,
+    "rows": [
+      {
+        "checkpoint": "提到 CUDA 軟體生態 / 開發者鎖定 / 軟硬體全端平台",
+        "critical": true,
+        "weight": 50,
+        "in_pool": true,
+        "in_topk": true,
+        "in_rest": false,
+        "verdict": "OK (in top-k)"
+      },
+      {
+        "checkpoint": "提到資料中心 GPU 的效能領先或加速運算平台",
+        "critical": false,
+        "weight": 30,
+        "in_pool": true,
+        "in_topk": false,
+        "in_rest": true,
+        "verdict": "RANK  (pool有→top-k被擠出)"
+      },
+      {
+        "checkpoint": "提到網路整合（NVLink / InfiniBand / Mellanox）或系統級整合",
+        "critical": false,
+        "weight": 20,
+        "in_pool": true,
+        "in_topk": false,
+        "in_rest": true,
+        "verdict": "RANK  (pool有→top-k被擠出)"
+      }
+    ]
+  },
+  "sem-07": {
+    "query": "Microsoft Azure 在雲端市場的競爭定位",
+    "pool_size": 21,
+    "topk_size": 5,
+    "rows": [
+      {
+        "checkpoint": "把 Azure 定位為雲端三強之一 / 與 AWS、GCP 競爭",
+        "critical": true,
+        "weight": 50,
+        "in_pool": true,
+        "in_topk": true,
+        "in_rest": false,
+        "verdict": "OK (in top-k)"
+      },
+      {
+        "checkpoint": "提到 AI / Copilot 帶動 Azure 成長",
+        "critical": false,
+        "weight": 30,
+        "in_pool": true,
+        "in_topk": true,
+        "in_rest": false,
+        "verdict": "OK (in top-k)"
+      },
+      {
+        "checkpoint": "提到企業 / 混合雲 / 既有客戶優勢",
+        "critical": false,
+        "weight": 20,
+        "in_pool": true,
+        "in_topk": true,
+        "in_rest": true,
+        "verdict": "OK (in top-k)"
+      }
+    ]
+  },
+  "sem-08": {
+    "query": "Amazon AWS 雲端事業的長期策略方向是什麼？",
+    "pool_size": 20,
+    "topk_size": 5,
+    "rows": [
+      {
+        "checkpoint": "把 AWS 定位為雲端市佔龍頭 / Amazon 的獲利引擎",
+        "critical": true,
+        "weight": 50,
+        "in_pool": false,
+        "in_topk": false,
+        "in_rest": false,
+        "verdict": "RECALL(pool就沒有)"
+      },
+      {
+        "checkpoint": "提到 AI / ML 服務投資（如 Bedrock、自研晶片）",
+        "critical": false,
+        "weight": 30,
+        "in_pool": false,
+        "in_topk": false,
+        "in_rest": false,
+        "verdict": "RECALL(pool就沒有)"
+      },
+      {
+        "checkpoint": "提到基礎設施擴張 / 資本支出",
+        "critical": false,
+        "weight": 20,
+        "in_pool": true,
+        "in_topk": true,
+        "in_rest": true,
+        "verdict": "OK (in top-k)"
+      }
+    ]
+  },
+  "sem-11": {
+    "query": "Tesla 面臨哪些主要競爭與監管風險？",
+    "pool_size": 24,
+    "topk_size": 5,
+    "rows": [
+      {
+        "checkpoint": "提到 EV 市場競爭加劇 / 價格戰",
+        "critical": true,
+        "weight": 50,
+        "in_pool": false,
+        "in_topk": false,
+        "in_rest": false,
+        "verdict": "RECALL(pool就沒有)"
+      },
+      {
+        "checkpoint": "提到自動駕駛（FSD / Autopilot）的監管風險",
+        "critical": false,
+        "weight": 30,
+        "in_pool": false,
+        "in_topk": false,
+        "in_rest": false,
+        "verdict": "RECALL(pool就沒有)"
+      },
+      {
+        "checkpoint": "提到總體經濟 / 利率 / 補貼政策風險",
+        "critical": false,
+        "weight": 20,
+        "in_pool": true,
+        "in_topk": true,
+        "in_rest": false,
+        "verdict": "OK (in top-k)"
+      }
+    ]
+  }
+}

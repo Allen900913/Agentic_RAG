@@ -1,0 +1,614 @@
+{
+  "summary": {
+    "semantic": {
+      "n": 11,
+      "hallucination_rate_mean": null,
+      "correctness_mean": 0.473,
+      "n_with_rubric": 11,
+      "relevance_mean": null,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.506,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 1,
+      "hallucination_pass@0.1": null,
+      "correctness_pass@0.6": 0.364,
+      "relevance_pass@0.8": null
+    },
+    "overall": {
+      "n": 11,
+      "hallucination_rate_mean": null,
+      "correctness_mean": 0.473,
+      "n_with_rubric": 11,
+      "relevance_mean": null,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.506,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 1,
+      "hallucination_pass@0.1": null,
+      "correctness_pass@0.6": 0.364,
+      "relevance_pass@0.8": null
+    }
+  },
+  "records": [
+    {
+      "id": "sem-01",
+      "category": "semantic",
+      "query": "NVIDIA 的核心技術護城河是什麼？",
+      "answerable": true,
+      "answer": "NVIDIA 的核心技術護城河是其 GPU 架構和相關技術，包括 CUDA、Tensor Core 和深度學習算法 [NVDA_10K_2026.html, chunk #38]。這些技術使 NVIDIA 能夠提供高性能的計算能力和人工智慧解決方案，從而在數據中心、人工智慧和自動駕駛等領域取得領先地位 [NVDA_10K_2026.html, chunk #37]。此外，NVIDIA 的平台策略，將硬件、系統、軟件、算法和服務整合在一起，為客戶提供了一個完整的解決方案 [NVDA_10K_2026.html, chunk #38]。這些技術和策略使 NVIDIA 能夠保持其在行業中的競爭優勢和技術領先地位 [NVDA_Fundamentals_20260508.txt, chunk #0]。 \n\nNVIDIA 的技術領先地位也體現在其研發投入上，公司自成立以來已經投入超過 76.7 億美元的研發資金 [NVDA_10K_2026.html, chunk #38]。這些投入使 NVIDIA 能夠不斷推出新的技術和產品，從而保持其在行業中的領先地位 [NVDA_10Q_202604.html, chunk #31]。 \n\n因此，NVIDIA 的核心技術護城河是其 GPU 架構、相關技術和平台策略的綜合體 [NVDA_10K_2026.html, chunk #38]。這些技術和策略使 NVIDIA 能夠提供高性能的計算能力和人工智慧解決方案，從而在數據中心、人工智慧和自動駕駛等領域取得領先地位 [NVDA_10K_2026.html, chunk #37]。",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 31
+        }
+      ],
+      "correctness": {
+        "score": 0.8,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly mentions CUDA ecosystem and data‑center GPU performance but omits network integration details.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.14285714285714285,
+      "actionable_feedback": "检索阶段缺失了关于 NVLink/InfiniBand/Mellanox 的信息，导致答案未能覆盖 mi2 要求。建议在检索时加入包含网络整合的文档片段，或在 LLM 生成时主动提示其补充此类细节。"
+    },
+    {
+      "id": "sem-02",
+      "category": "semantic",
+      "query": "Microsoft 在 AI 領域的長期戰略方向？",
+      "answerable": true,
+      "answer": "Microsoft 在 AI 領域的長期戰略方向是致力於推動 AI 的發展和應用，旨在使 AI 的益處廣泛可及 [MSFT_10Q_202603.html, chunk #38]。Microsoft 已經與 OpenAI 建立了長期戰略合作伙伴關係，該合作關係始於 2019 年 [MSFT_10Q_202603.html, chunk #38]。Microsoft 是 OpenAI 的主要投資者，並將繼續從 OpenAI 獲得收入分成支付 [MSFT_10Q_202603.html, chunk #38]。Microsoft 擁有 OpenAI 的知識產權，包括模型和基礎設施，用于集成到其產品中 [MSFT_10Q_202603.html, chunk #38]。\n\nMicrosoft 的 AI 戰略還包括發展和應用 AI 技術，以推動生產力和創新 [MSFT_10K_2025.html, chunk #40]。Microsoft 致力於負責任地設計和部署 AI，注重安全性和可靠性 [MSFT_10K_2025.html, chunk #40]。Microsoft 的 AI 領域投資包括發展 AI 平台、應用和服務，以滿足客戶的需求 [MSFT_10K_2025.html, chunk #42]。\n\n此外，Microsoft 還致力於發展和應用 AI 技術，以推動其各個業務領域的發展，包括雲計算、生產力和協作、個人計算等 [MSFT_10K_2025.html, chunk #42]。Microsoft 的目標是領導 AI 平台的發展，推動客戶的數字化轉型和創新 [MSFT_10K_2025.html, chunk #42]。Microsoft 的 AI 戰略還包括提供 AI 相關的培訓和教育資源，以幫助客戶和開發者掌握 AI 技術 [MSFT_10K_2025.html, chunk #42]。",
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 40
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 42
+        }
+      ],
+      "correctness": {
+        "score": 0.2,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Only the OpenAI partnership point was correctly included.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": "回答缺少对 Copilot 跨 Microsoft 365 產品線整合的描述，這是最關鍵的缺失。建議在回覆中加入 Copilot 的具體應用場景和跨產品線的整合說明，同時補充 Azure AI 作為雲端 AI 基礎設施的成長引擎。"
+    },
+    {
+      "id": "sem-03",
+      "category": "semantic",
+      "query": "Apple 的服務業務未來成長潛力如何？",
+      "answerable": true,
+      "answer": "Apple 的服務業務未來成長潛力看好，服務業務已經成為公司的重要增長引擎 [AAPL_News_20260519_01.txt, chunk #4]。服務業務的收入已經達到 31.0 億美元，同比增長 16% [AAPL_News_20260519_01.txt, chunk #4]。公司的服務業務包括 App Store、廣告、iCloud、Apple Music、Apple TV+ 和支付服務等 [AAPL_News_20260519_01.txt, chunk #4]。此外，公司的服務業務毛利率也在增加 [AAPL_News_20260519_01.txt, chunk #4]。但是，也有一些挑戰，例如全球監管機構正在試圖拆除公司的主要收入來源——App Store [Reference 3: AAPL_News_20260612_04.txt, chunk #1]。因此，公司的服務業務未來成長潛力取決於公司能否克服這些挑戰並繼續創新和發展其服務業務。 \n\n此外，公司的服務業務也面臨著一些風險，例如國際貿易糾紛可能對公司的服務業務產生不利影響 [Reference 2: AAPL_10Q_202603.html, chunk #30]。但是，公司的服務業務也有一些優勢，例如公司的服務業務具有高毛利率和高增長潛力 [Reference 3: AAPL_News_20260612_04.txt, chunk #1]。因此，公司的服務業務未來成長潛力取決於公司能否有效地管理風險和機會。 \n\n總的來說，Apple 的服務業務未來成長潛力看好，但是也面臨著一些挑戰和風險 [Reference 3: AAPL_News_20260612_04.txt, chunk #1]。公司需要繼續創新和發展其服務業務，以克服挑戰和風險，實現長期增長和發展 [AAPL_News_20260519_01.txt, chunk #4]。",
+      "sources": [
+        {
+          "source": "AAPL_News_20260612_05.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 30
+        },
+        {
+          "source": "AAPL_News_20260612_04.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 80
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        }
+      ],
+      "correctness": {
+        "score": 0.0,
+        "critical_miss": false,
+        "fatal_hallucination": true
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [
+          "mn0"
+        ],
+        "reason": "Answer includes required points but also includes a specific growth rate not verified, violating mn0.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答中出现了未在来源中出现的具体增长率，属于信息捏造，应在引用前先核实数据来源；同时缺少对大规模设备安装基数带动服务变现的说明，可在后续补充此点以完善分析。"
+    },
+    {
+      "id": "sem-04",
+      "category": "semantic",
+      "query": "這些公司面臨哪些主要風險與挑戰？",
+      "answerable": true,
+      "answer": "這些公司面臨的主要風險與挑戰包括來自競爭、組織變革、國際運營和投資的風險。例如，NVIDIA 面臨來自灰色市場和未經授權的銷售的風險，這使得需求預測變得困難 [NVDA_10Q_202510.html, chunk #57]。同時，META 公司面臨組織變革的風險，例如員工裁員和辦公室設施的縮減，這可能會導致員工留存率下降和業務複雜性增加 [META_10Q_202509.html, chunk #123]。此外，META 公司還面臨國際運營的風險，包括業務、經濟和法律風險，這可能會影響其財務結果 [META_10Q_202509.html, chunk #123]。Microsoft 也面臨著競爭風險，包括來自其他技術公司的競爭，這可能會影響其業務和財務結果 [MSFT_10K_2025.html, chunk #77]。\n\n這些公司還面臨著投資風險，例如 NVIDIA 的投資可能會產生波動和損失 [NVDA_10Q_202510.html, chunk #57]。此外，META 公司的國際運營也面臨著法律和經濟風險，這可能會影響其財務結果 [META_10K_2025.html, chunk #76]。\n\n總的來說，這些公司面臨著多種風險和挑戰，包括競爭、組織變革、國際運營和投資風險。這些風險可能會影響其業務、財務結果和市場競爭力。 [NVDA_10Q_202510.html, chunk #57], [META_10Q_202509.html, chunk #123], [META_10K_2025.html, chunk #76], [MSFT_10K_2025.html, chunk #77]。",
+      "sources": [
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 57
+        },
+        {
+          "source": "META_10Q_202509.html",
+          "chunk_index": 123
+        },
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 130
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 76
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 77
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer satisfies all must‑include points and contains no must‑not‑include violations.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.2857142857142857,
+      "actionable_feedback": "检索器未能抓取足够的相关片段，导致回答缺乏细节。建议提升检索召回率或使用更精准的检索策略，以确保覆盖更多关键风险信息。"
+    },
+    {
+      "id": "sem-05",
+      "category": "semantic",
+      "query": "What are NVIDIA's competitive advantages in the data center market?",
+      "answerable": true,
+      "answer": "NVIDIA's competitive advantages in the data center market include its unified underlying programmable architecture, large and growing number of developers and installed base, and significant investments in research and development, totaling over $76.7 billion since its inception [Reference 2: NVDA_10K_2026.html, chunk #38]. The company's data center platform is focused on accelerating compute-intensive workloads, such as AI, data processing, graphics, robotics, and scientific computing, delivering superior total cost of ownership relative to conventional CPU-only approaches [Reference 1: NVDA_10K_2026.html, chunk #41]. NVIDIA's data center infrastructure systems include supercomputing platforms and servers, bringing together higher performance, energy-efficient GPUs, CPUs, interconnects, and fully optimized AI and HPC software stacks [Reference 1: NVDA_10K_2026.html, chunk #41]. The company's networking offerings include NVLink interconnects and switches, end-to-end platforms for InfiniBand and Ethernet, consisting of network adapters, cables, DPUs, switch chips, and systems, as well as software [Reference 1: NVDA_10K_2026.html, chunk #41]. Additionally, NVIDIA has a platform strategy, bringing together hardware, systems, software, algorithms, libraries, AI models, and training data sets, and services to create unique value for the markets it serves [Reference 2: NVDA_10K_2026.html, chunk #38]. The company's customers include all major public and private cloud providers, AI model makers, enterprises, and startups, and public sector entities [Reference 1: NVDA_10K_2026.html, chunk #41]. NVIDIA's introduction of new technologies, such as the NVIDIA Blackwell architecture and the NVIDIA Rubin platform, also provides a competitive advantage, with the latter expected to deliver up to a 10x reduction in cost per token compared to Blackwell [Reference 5: NVDA_10K_2026.html, chunk #42].",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_Fundamentals_20260519.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 42
+        }
+      ],
+      "correctness": {
+        "score": 0.5,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer covers accelerated computing and networking but omits explicit mention of CUDA and full‑stack platform.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.14285714285714285,
+      "actionable_feedback": "回答缺少对 CUDA 软件生态和完整平台的直接提及，这是最关键的缺失。建议在描述 NVIDIA 的竞争优势时，明确指出其 CUDA 开发平台、完整的软件堆栈以及与硬件的深度集成，以满足 mi0 要求。"
+    },
+    {
+      "id": "sem-06",
+      "category": "semantic",
+      "query": "Apple Silicon 對 Apple 整體策略的意義？",
+      "answerable": true,
+      "answer": "Apple Silicon 對 Apple 整體策略具有重要意義，因為它代表了公司向自主研發芯片的轉變 [AAPL_News_20260519_01.txt, chunk #4]。這一轉變使得 Apple 能夠更好地控制其產品的核心技術和性能，並且可以更靈活地應對市場的變化 [AAPL_10K_2025.html, chunk #48]。\n\nApple Silicon 的引入也使得公司的產品線更加多樣化和完整，從 iPhone 到 Mac，從 iPad 到 Apple Watch [AAPL_News_20260519_01.txt, chunk #4]。這一系列的產品都采用了 Apple Silicon 芯片，代表了公司對於自主研發芯片的重視和投入 [AAPL_10K_2025.html, chunk #35]。\n\n此外，Apple Silicon 的引入也使得公司的成本結構發生了變化，公司可以通過自主研發芯片來降低成本和提高利潤率 [AAPL_News_20260519_01.txt, chunk #5]。這一點對於公司的財務表現具有重要意義，公司的淨利潤率和現金流都有所提高 [AAPL_News_20260519_01.txt, chunk #5]。\n\n然而，Apple Silicon 的引入也帶來了一些挑戰和風險，例如供應鏈的變化和芯片的可靠性等問題 [AAPL_10K_2025.html, chunk #46]。公司需要繼續投入研發和生產，以確保 Apple Silicon 的質量和可靠性 [AAPL_10K_2025.html, chunk #48]。\n\n總之，Apple Silicon 對 Apple 整體策略具有重要意義，它代表了公司向自主研發芯片的轉變和對於產品線的多樣化和完整化 [AAPL_News_20260519_01.txt, chunk #4]。公司需要繼續投入研發和生產，以確保 Apple Silicon 的質量和可靠性，並且需要管理好供應鏈和風險等問題 [AAPL_10K_2025.html, chunk #46]。",
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 35
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 5
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 46
+        }
+      ],
+      "correctness": {
+        "score": 0.5,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer covers vertical integration but omits performance/energy efficiency and dependence on third parties, with no hallucinations.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答缺少效能/能效優勢和降低對第三方依賴的說明，建議在描述 Apple Silicon 的戰略意義時加入這兩點，並確保引用來源中有相關資訊，避免遺漏關鍵要素。"
+    },
+    {
+      "id": "sem-07",
+      "category": "semantic",
+      "query": "Microsoft Azure 在雲端市場的競爭定位",
+      "answerable": true,
+      "answer": "Microsoft Azure 在雲端市場的競爭定位是提供一套全面的雲端服務，讓開發者、IT專業人員和企業能夠自由地建置、部署和管理應用程式於任何平台或設備 [MSFT_10K_2025.html, chunk #48]。Azure 的競爭優勢包括能夠讓客戶將現有的資料中心與公有雲整合成一個單一的基礎設施，並能夠根據客戶的需求提供適合的規模 [MSFT_10K_2025.html, chunk #50]。此外，Azure 的 AI 服務提供了優勢，讓公司能夠優化和擴大其業務 [MSFT_10K_2025.html, chunk #48]。\n\nAzure 面臨來自其他雲端服務提供商和開源方案的競爭 [MSFT_10K_2025.html, chunk #49]。然而，Microsoft 的長期戰略合作夥伴關係，例如與 OpenAI 的合作，讓 Azure 能夠提供獨特的 AI 服務和解決方案 [MSFT_10Q_202512.html, chunk #38]。此外，Azure 的全球資料中心網路和強大的合作夥伴關係，也讓 Azure 能夠提供高品質的服務和支持 [MSFT_10K_2025.html, chunk #48]。\n\n綜上所述，Microsoft Azure 在雲端市場的競爭定位是提供一套全面的雲端服務，結合 AI 服務和強大的合作夥伴關係，讓客戶能夠自由地建置、部署和管理應用程式於任何平台或設備 [MSFT_10K_2025.html, chunk #48]。",
+      "sources": [
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 50
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 49
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 38
+        }
+      ],
+      "correctness": {
+        "score": 0.5,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer mentions AI and hybrid cloud but omits Azure as one of the cloud trinity.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "Retriever层未能抓取包含Azure与AWS、GCP竞争的段落，导致缺失关键点。建议提升检索召回率或使用更精准的查询，并在LLM层加入提示让模型检查是否提及云端三强。"
+    },
+    {
+      "id": "sem-08",
+      "category": "semantic",
+      "query": "Amazon AWS 雲端事業的長期策略方向是什麼？",
+      "answerable": true,
+      "answer": "Amazon AWS 的長期策略方向是繼續投資於雲端技術和基礎設施，包括計算、儲存、資料庫、分析和機器學習等服務 [AMZN_10K_2025.html, chunk #86]。該公司相信，技術的進步，特別是處理速度、資料儲存和分析的成本降低，以及人工智慧和機器學習的實用應用，將繼續改善用戶的網際網路體驗和增加其在人們生活中的普遍性 [AMZN_10K_2025.html, chunk #86]。因此，Amazon 將繼續投資於 AWS，以提供更廣泛的雲端服務和技術，包括計算、儲存、資料庫、分析和機器學習等 [AMZN_10K_2025.html, chunk #58]。此外，AWS 的銷售額在 2025 年第三季度和 2026 年第一季度分別增加了 20% 和 28% [AMZN_10Q_202509.html, chunk #46] [AMZN_10Q_202603.html, chunk #45]，表明 AWS 的業務正在快速增長。 \n\n總的來說，Amazon AWS 的長期策略方向是繼續投資於雲端技術和基礎設施，提供更廣泛的雲端服務和技術，以滿足用戶的需求和推動業務的增長 [AMZN_10K_2025.html, chunk #86] [AMZN_10K_2025.html, chunk #58] [AMZN_10Q_202509.html, chunk #46] [AMZN_10Q_202603.html, chunk #45]。",
+      "sources": [
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 86
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 58
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 56
+        }
+      ],
+      "correctness": {
+        "score": 0.0,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [],
+        "must_not_violations": [],
+        "reason": "Answer does not cover required key points such as AWS as market leader and profit engine, AI/ML investment details, or capital expenditure.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": "回答缺少關鍵要點：未提及 AWS 為雲端市場領導者及 Amazon 的獲利引擎，亦未說明 AI/ML 投資（如 Bedrock、自研晶片）或基礎設施擴張與資本支出。建議在回覆中加入這些資訊以符合評分標準。"
+    },
+    {
+      "id": "sem-09",
+      "category": "semantic",
+      "query": "Google 在 AI 與搜尋領域的競爭策略？",
+      "answerable": true,
+      "answer": "Google 在 AI 與搜尋領域的競爭策略是透過不斷發展和整合 AI 技術來提供更好的使用者體驗和廣告商效果 [GOOGL_10K_2025.html, chunk #157]。Google 致力於打造最先進、安全和負責任的 AI 技術，透過全棧式方法，包括 AI 優化的基礎設施、世界級的研究和開發，以及將 AI 技術整合到產品和平台中 [GOOGL_10K_2025.html, chunk #139]。\n\nGoogle 的競爭策略還包括繼續投資於技術基礎設施，包括自定義的 Tensor Processing Units (TPUs) 和 Graphics Processing Units (GPUs) [GOOGL_10K_2025.html, chunk #139]。此外，Google 也致力於發展新的 AI 模型和技術，例如 Gemini 3，旨在提供更先進的多模態理解和交互式使用者體驗 [GOOGL_10K_2025.html, chunk #139]。\n\n在搜尋領域，Google 致力於提供更好的搜尋結果和使用者體驗，透過整合 AI 技術和其他先進技術 [GOOGL_10K_2025.html, chunk #157]。Google 也面臨著來自其他搜尋引擎和技術公司的激烈競爭，包括垂直搜尋引擎和電子商務平台 [GOOGL_10K_2025.html, chunk #148]。\n\n總之，Google 在 AI 與搜尋領域的競爭策略是透過不斷發展和整合 AI 技術，提供更好的使用者體驗和廣告商效果，同時繼續投資於技術基礎設施和發展新的 AI 模型和技術 [GOOGL_10K_2025.html, chunk #157] [GOOGL_10K_2025.html, chunk #139] [GOOGL_10K_2025.html, chunk #148]。",
+      "sources": [
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 157
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 179
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 148
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 139
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 72
+        }
+      ],
+      "correctness": {
+        "score": 0.7,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer includes required points and no violations.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "缺少對搜尋廣告核心業務的說明，建議補充相關策略與數據。"
+    },
+    {
+      "id": "sem-10",
+      "category": "semantic",
+      "query": "Meta 在 AI 與 Reality Labs 上的長期投資方向？",
+      "answerable": true,
+      "answer": "Meta 在 AI 與 Reality Labs 上的長期投資方向是發展下一代計算平台，包括虛擬和增強實境技術、AI 和可穿戴設備 [META_10K_2025.html, chunk #67]。在 2026 年，Meta 預計將在 Reality Labs 上花費約 70% 的經費在可穿戴設備的研發上，另外 30% 則用於虛擬實境和 Horizon 項目 [META_10K_2025.html, chunk #45]。Meta 的 Reality Labs 努力包括短期和長期的研究與開發項目，目的是打造下一代的計算平台和社交技術 [META_10K_2025.html, chunk #44]。\n\nMeta 的 AI 投資方向包括開發前沿 AI 模型、基於 AI 的發現引擎和其他新技術 [META_10K_2025.html, chunk #47]。公司預計其 Reality Labs 部門將在可預見的未來繼續虧損，但相信這項投資將為未來的商業和創作者帶來新的機會 [META_10K_2025.html, chunk #47]。\n\n此外，Meta 的投資方向也包括保護用戶的隱私、安全和社交平台的完整性 [META_10K_2025.html, chunk #47]。公司相信開源創新和分享 AI 研究成果將有助於加速 AI 研究和改善其產品 [META_10K_2025.html, chunk #47]。整體而言，Meta 的長期投資方向是圍繞著發展下一代計算平台和社交技術，同時注重用戶體驗、安全和創新。 [META_10K_2025.html, chunk #67] [META_10K_2025.html, chunk #45] [META_10K_2025.html, chunk #44] [META_10K_2025.html, chunk #47]",
+      "sources": [
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 67
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 118
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 47
+        }
+      ],
+      "correctness": {
+        "score": 0.8,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer covers AI investment and Reality Labs losses but omits AI glasses detail.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": "Retriever 未抓取包含 AI 眼鏡（Ray‑Ban Meta）資訊的 chunk，導致 LLM 無法完整回答。建議擴充索引或調整召回策略以包含相關穿戴裝置資料。"
+    },
+    {
+      "id": "sem-11",
+      "category": "semantic",
+      "query": "Tesla 面臨哪些主要競爭與監管風險？",
+      "answerable": true,
+      "answer": "Tesla 面臨著多種競爭和監管風險。首先，該公司在電動汽車市場面臨著來自其他汽車製造商的激烈競爭，尤其是當其他公司也開始生產電動汽車時 [Reference 3: TSLA_10Q_202509.html, chunk #37]。此外，Tesla 還面臨著監管風險，例如政府政策和法規的變化可能會影響電動汽車的需求和銷售 [Reference 3: TSLA_10Q_202509.html, chunk #37]。此外，該公司還需要應對全球經濟的變化，例如通貨膨脹、利率波動和能源價格的變化 [Reference 3: TSLA_10Q_202509.html, chunk #37]。\n\n在監管方面，Tesla 需要遵守各種法規和標準，例如與電動汽車相關的法規和標準 [Reference 4: TSLA_Fundamentals_20260612.txt, chunk #1]。此外，該公司還需要應對與能源儲存和生產相關的法規和標準 [Reference 4: TSLA_Fundamentals_20260612.txt, chunk #1]。\n\n總之，Tesla 面臨著多種競爭和監管風險，包括市場競爭、監管風險、全球經濟變化和法規遵守等 [Reference 3: TSLA_10Q_202509.html, chunk #37] [Reference 4: TSLA_Fundamentals_20260612.txt, chunk #1]。",
+      "sources": [
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 168
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 159
+        },
+        {
+          "source": "TSLA_10Q_202509.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ],
+      "correctness": {
+        "score": 0.2,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer omitted key rubric items and had low context recall.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": "检索层未能抓取包含价格战和自动驾驶监管风险的相关片段，导致回答缺失重要信息。建议提升检索召回率，优先检索包含“价格战”“FSD”“Autopilot”关键词的文档段落，并在生成时检查是否覆盖所有必需点。"
+    }
+  ]
+}

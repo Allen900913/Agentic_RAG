@@ -1,0 +1,844 @@
+{
+  "summary": {
+    "lexical": {
+      "n": 15,
+      "hallucination_rate_mean": null,
+      "correctness_mean": 1.0,
+      "n_with_rubric": 6,
+      "relevance_mean": null,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.689,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 0,
+      "hallucination_pass@0.1": null,
+      "correctness_pass@0.6": 1.0,
+      "relevance_pass@0.8": null
+    },
+    "overall": {
+      "n": 15,
+      "hallucination_rate_mean": null,
+      "correctness_mean": 1.0,
+      "n_with_rubric": 6,
+      "relevance_mean": null,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.689,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 0,
+      "hallucination_pass@0.1": null,
+      "correctness_pass@0.6": 1.0,
+      "relevance_pass@0.8": null
+    }
+  },
+  "records": [
+    {
+      "id": "lex-01",
+      "category": "lexical",
+      "query": "NVDA P/E ratio",
+      "answerable": true,
+      "answer": "NVIDIA’s trailing price‑to‑earnings (P/E) ratio is approximately **31.33**, with a forward P/E of about **16.10** based on the most recent data (June 12 2026) [NVDA_Fundamentals_20260612.txt, chunk #0].\n\n- The June 12 2026 fundamentals list a trailing P/E of 31.325687 and a forward P/E of 16.097084 [NVDA_Fundamentals_20260612.txt, chunk #0].  \n- Earlier snapshots show higher trailing P/Es (45.46 on May 19 2026 and 43.08 on May 8 2026) [NVDA_Fundamentals_20260519.txt, chunk #0; NVDA_Fundamentals_20260508.txt, chunk #0], indicating the ratio has compressed to the current level.",
+      "sources": [
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260519.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 9
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 6
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly provides the required P/E values and labels them as trailing and forward with the correct period.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已满足所有必需点，无需改进。"
+    },
+    {
+      "id": "lex-02",
+      "category": "lexical",
+      "query": "AAPL EPS",
+      "answerable": true,
+      "answer": "Apple’s diluted earnings per share (EPS) for fiscal 2025 was **$7.46** per share【AAPL_IncomeStatement_20260519.txt, chunk #0】.  \n\n- For fiscal 2024, diluted EPS was **$6.08** per share【AAPL_IncomeStatement_20260519.txt, chunk #0】.  \n- The trailing‑12‑month (TTM) EPS reported in the fundamentals snapshot is **$8.25**【AAPL_Fundamentals_20260519.txt, chunk #0】.  \n- The forward‑looking EPS estimate is **$9.59** (rounded) for the next period【AAPL_Fundamentals_20260519.txt, chunk #0】.",
+      "sources": [
+        {
+          "source": "AAPL_IncomeStatement_20260519.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_IncomeStatement_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_IncomeStatement_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_Fundamentals_20260519.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly provides the required EPS figures and period labels, with no violations of the rubric.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.8333333333333334,
+      "actionable_feedback": "回答已满足所有必需点，未出现错误。建议保持简洁，避免多余的 FY2024 与 forward 估计信息，以提升回答聚焦度。"
+    },
+    {
+      "id": "lex-03",
+      "category": "lexical",
+      "query": "MSFT gross margin",
+      "answerable": true,
+      "answer": "Microsoft’s gross margin is 68.31% (0.68309) on a trailing‑12‑month basis [MSFT_Fundamentals_20260612.txt, chunk #0].\n\n- In the most recent quarterly filing, Microsoft reported gross margin of **$55.3 billion** for the three months ended Dec 31 2025, a **16% increase** versus the prior year [MSFT_10Q_202512.html, chunk #14].  \n- For the six‑month period ending Dec 31 2025, gross margin was **$108.9 billion**, up **17%** year‑over‑year [MSFT_10Q_202512.html, chunk #14].  \n\nThese figures illustrate both the high profitability ratio (≈68%) and the absolute dollar growth in gross margin across recent reporting periods.",
+      "sources": [
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_Fundamentals_20260519.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 47
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all rubric requirements.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "回答已满足所有要求，无需改进。"
+    },
+    {
+      "id": "lex-06",
+      "category": "lexical",
+      "query": "NVDA income statement 2026",
+      "answerable": true,
+      "answer": "NVIDIA’s FY 2026 revenue reached **$215.9 billion**, a 65 % increase from the prior year【NVDA_10K_2026.html, chunk #9】.  \n\n**Key income‑statement figures for FY 2026**  \n\n- **Revenue:** $215,938 million【NVDA_10K_2026.html, chunk #9】.  \n- **Cost of revenue:** $62,475 million, yielding **gross profit** of $153,463 million【NVDA_10K_2026.html, chunk #19】.  \n- **Gross margin:** 71.1 % of revenue【NVDA_10K_2026.html, chunk #9】.  \n- **Operating expenses:** $23,076 million (R&D $18,497 million + SG&A $4,579 million)【NVDA_10K_2026.html, chunk #19】.  \n- **Operating income:** $130,387 million, up 60 % YoY【NVDA_10K_2026.html, chunk #9】.  \n- **Interest income:** $2,300 million; **interest expense:** $259 million【NVDA_10K_2026.html, chunk #19】.  \n- **Other income, net:** $9,022 million, giving **total other income** of $11,063 million【NVDA_10K_2026.html, chunk #19】.  \n- **Income before tax:** $141,450 million【NVDA_10K_2026.html, chunk #19】.  \n- **Income tax expense:** $21,383 million【NVDA_10K_2026.html, chunk #19】.  \n- **Net income:** $120,067 million, up 65 % YoY【NVDA_10K_2026.html, chunk #9】.  \n- **Net income per diluted share:** $4.90【NVDA_10K_2026.html, chunk #9】 (basic $4.93)【NVDA_10K_2026.html, chunk #19】.  \n\nThese figures together illustrate a strong top‑line growth, high profitability margins, and a substantial rise in earnings for NVIDIA in 2026.",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 23
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 9
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 10
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all required points and contains no violations.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.25,
+      "actionable_feedback": "回答已满足所有要求，无需改进。保持现有回答结构即可。"
+    },
+    {
+      "id": "lex-08",
+      "category": "lexical",
+      "query": "AMZN EPS",
+      "answerable": true,
+      "answer": "Amazon’s most recent diluted earnings‑per‑share (EPS) was **$7.17 for fiscal year 2025**【AMZN_IncomeStatement_20260612.txt, chunk #0】.  \n\n- The corresponding basic EPS for FY 2025 was **$7.29**【AMZN_IncomeStatement_20260612.txt, chunk #0】.  \n- In the prior year (FY 2024), diluted EPS was **$5.53** and basic EPS was **$5.66**【AMZN_IncomeStatement_20260612.txt, chunk #0】.  \n- The company’s trailing‑12‑month (TTM) EPS, as reported in its fundamentals, is **$7.63**【AMZN_Fundamentals_20260612.txt, chunk #0】.  \n- The forward‑looking EPS estimate (next‑year) is **$9.86**【AMZN_Fundamentals_20260612.txt, chunk #0】.  ",
+      "sources": [
+        {
+          "source": "AMZN_IncomeStatement_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 7
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer includes required EPS values and period information, with no violations.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已满足所有必需点，无需改进。"
+    },
+    {
+      "id": "lex-09",
+      "category": "lexical",
+      "query": "GOOGL gross margin",
+      "answerable": true,
+      "answer": "Alphabet (GOOGL) posted a gross margin of roughly 60.37% for the most recent twelve‑month period [GOOGL_Fundamentals_20260612.txt, chunk #0].\n\nSupporting details: the company generated total revenue of $422.50 billion and gross profit of $255.05 billion, which yields the 60.368% margin [GOOGL_Fundamentals_20260612.txt, chunk #0]. In the FY 2025 income statement, gross profit was $240.30 billion on total revenue of $402.84 billion, implying a gross margin of about 59.7% (derived from the reported figures) [GOOGL_IncomeStatement_20260612.txt, chunk #0]. The FY 2024 figures show gross profit of $203.71 billion on revenue of $350.02 billion, a gross margin of roughly 58.2% [GOOGL_IncomeStatement_20260612.txt, chunk #0].",
+      "sources": [
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10Q_202509.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "GOOGL_IncomeStatement_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "GOOGL_10Q_202509.html",
+          "chunk_index": 30
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all rubric requirements.",
+        "error": null,
+        "vote_detail": {
+          "votes": 3,
+          "must_include_hits_per_call": [
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ],
+            [
+              "mi0",
+              "mi1"
+            ]
+          ],
+          "must_not_violations_per_call": [
+            [],
+            [],
+            []
+          ]
+        }
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.75,
+      "actionable_feedback": "回答符合要求，无需改进。"
+    },
+    {
+      "id": "lex-13",
+      "category": "lexical",
+      "query": "NVIDIA Blackwell GPU architecture",
+      "answerable": true,
+      "answer": "NVIDIA’s Blackwell GPU architecture, introduced in 2024‑2025, is the company’s flagship data‑center and gaming platform that delivers market‑leading performance, efficiency and new AI‑centric features such as neural‑graphics rendering and dramatically lower inference costs [Reference 4, chunk #42] [Reference 5, chunk #115] [Reference 43, chunk #43].\n\n**Key technical and product highlights**\n\n* **Launch timeline and scope** – The first Blackwell data‑center GPUs were launched in fiscal 2024, followed by the Blackwell GeForce RTX 50 Series for gaming in fiscal 2025, and the Blackwell Ultra platform (including the GB300 accelerator) began shipping in Q2 FY 2026 [Reference 43, chunk #43] [Reference 5, chunk #115].  \n* **Integrated CPU‑GPU system** – Blackwell is paired with NVIDIA’s Grace CPUs in a 36‑CPU‑by‑72‑GPU, liquid‑cooled data‑center design that enables real‑time trillion‑parameter AI training and inference [Reference 38, chunk #38].  \n* **Extreme co‑design** – The architecture co‑optimizes GPUs, CPUs, DPUs, NVLink switches, NICs and high‑speed networking, allowing hundreds of thousands of GPUs to be interconnected as a single supercomputer [Reference 37, chunk #37] [Reference 42, chunk #42].  \n* **AI performance and cost efficiency** – Blackwell Ultra, built on the Blackwell foundation, provides a “significant increase in token throughput” and a “reduction in cost per token” versus the prior Hopper generation, with the Rubin platform (expected in H2 FY 2027) promising up to a 10× cost‑per‑token reduction compared with Blackwell [Reference 38, chunk #38] [Reference 42, chunk #42].  \n* **Gaming innovations** – The Blackwell RTX 50 Series introduces “neural graphics,” which fuses AI models with traditional rendering to boost performance, image quality and interactivity, and a next‑generation DLSS powered by a transformer‑based model architecture [Reference 43, chunk #43].  \n* **Revenue significance** – Blackwell‑based products accounted for the majority of NVIDIA’s Data Center revenue in FY 2026, underscoring the architecture’s central role in the company’s financial performance [Reference 115, chunk #115].  \n* **Product cadence** – NVIDIA follows a one‑year product cadence for data‑center compute introductions, with Blackwell Ultra and the upcoming Rubin platform extending the architecture’s roadmap [Reference 115, chunk #115].  \n\nTogether, these elements position Blackwell as a unified, full‑stack platform that powers next‑generation generative and agentic AI workloads, high‑performance computing, and advanced gaming experiences.",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 115
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.16666666666666666,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-14",
+      "category": "lexical",
+      "query": "NVIDIA H100 GPU",
+      "answerable": true,
+      "answer": "The reference materials do not contain specific details or performance figures for the NVIDIA H100 GPU.  \n\nHowever, the documents do describe NVIDIA’s recent GPU and platform developments that succeed the H100 generation:\n\n- NVIDIA’s latest data‑center GPU architecture is **Blackwell**, launched in 2024, and the **Blackwell Ultra** platform was introduced and scaled in fiscal year 2026 to improve token throughput and lower cost per token compared with the prior Hopper generation (which includes the H100)【NVDA_10K_2026.html, chunk #38】.  \n- The Blackwell family connects up to 36 Grace CPUs with 72 Blackwell GPUs in a liquid‑cooled, data‑center‑scale design for real‑time trillion‑parameter inference and training【NVDA_10K_2026.html, chunk #38】.  \n- NVIDIA’s platform strategy spans hardware, systems, software, algorithms, libraries, AI models, training data sets, and services, targeting multi‑billion‑dollar AI markets with a unified programmable architecture【NVDA_10K_2026.html, chunk #38】.  \n- The company’s overall financial strength in 2026 includes a market cap of $5.14 trillion, a trailing P/E of 43.08, and a profit margin of 55.6 % (TTM)【NVDA_Fundamentals_20260508.txt, chunk #0】, indicating substantial resources to fund continued GPU innovation.  \n\nBecause the H100 GPU is not mentioned in the supplied excerpts, no quantitative or qualitative specifics about that product can be provided from these sources.",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 61
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-15",
+      "category": "lexical",
+      "query": "Jensen Huang NVIDIA CEO",
+      "answerable": true,
+      "answer": "Jensen Huang serves as NVIDIA’s President and Chief Executive Officer【NVDA_10K_2026.html, chunk #26】.  \n\nHe co‑founded NVIDIA in 1993 and has held the CEO role since the company’s inception, overseeing its growth into the world’s most valuable AI‑hardware firm【NVDA_10K_2026.html, chunk #58】.  \n\nIn recent public statements, Huang has indicated that he expects China’s market for high‑end U.S. AI chips to open gradually over time, reflecting his ongoing leadership in navigating geopolitical and commercial challenges for NVIDIA【NVDA_News_20260519_03.txt, chunk #0】【NVDA_News_20260519_03.txt, chunk #1】.",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 58
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "NVDA_News_20260519_03.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_News_20260519_03.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_News_20260519_01.txt",
+          "chunk_index": 0
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-16",
+      "category": "lexical",
+      "query": "Tim Cook Apple CEO",
+      "answerable": true,
+      "answer": "Tim Cook is Apple’s Chief Executive Officer (and a Director of the company) [ AAPL_10K_2025.html, chunk #27 ].  \n\nHe signed the 2025 Form 10‑K in his capacity as “Chief Executive Officer and Director (Principal Executive Officer)” on behalf of Apple [ AAPL_10K_2025.html, chunk #27 ].",
+      "sources": [
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 27
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "AAPL_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 24
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-17",
+      "category": "lexical",
+      "query": "Microsoft Copilot AI assistant",
+      "answerable": true,
+      "answer": "Microsoft Copilot is fueling double‑digit growth in Microsoft’s Productivity and Business Processes segment, boosting Microsoft 365 Commercial cloud revenue by 18% year‑over‑year while adding roughly $1.6 billion in AI‑related costs and higher advertising spend [MSFT_10Q_202603.html, chunk #48].  \n\n- **Revenue impact:** Microsoft 365 Commercial cloud revenue grew 18% in the nine‑month period ended March 31 2026, driven by higher revenue per user from Microsoft 365 E5 and Microsoft 365 Copilot, as well as continued seat growth [MSFT_10Q_202603.html, chunk #48]. In the three‑month quarter, Microsoft 365 Commercial cloud also posted strong growth, contributing to a 17% increase in segment revenue [MSFT_10Q_202603.html, chunk #44].  \n\n- **Cost impact:** Cost of revenue rose $1.6 billion (10%) in the nine‑month period, explicitly attributed to investments in AI infrastructure needed to support additional Copilot seats and usage [MSFT_10Q_202603.html, chunk #48]; in the three‑month quarter, cost of revenue increased $680 million (12%) for the same reason [MSFT_10Q_202603.html, chunk #44].  \n\n- **Margin effect:** Gross margin expanded by $12.8 billion (18%) over the nine‑month period, largely driven by the growth in Microsoft 365 Commercial cloud, while gross‑margin percentage improved slightly thanks to efficiency gains in that cloud despite the AI‑related spend [MSFT_10Q_202603.html, chunk #48]; similarly, gross‑margin percentage rose modestly in the three‑month quarter, reflecting efficiency gains in Microsoft 365 Commercial cloud even as AI product usage grew [MSFT_10Q_202603.html, chunk #44].  \n\n- **Operating expense pressure:** Operating expenses increased $1.6 billion (8%) in the nine‑month period, reflecting higher R&D compute capacity, AI talent, data investments, and notably higher Copilot advertising expenses [MSFT_10Q_202603.html, chunk #48]; in the three‑month quarter, operating expenses rose $795 million (11%) for comparable AI‑related investments and Copilot advertising [MSFT_10Q_202603.html, chunk #44].  \n\n- **Strategic positioning:** Microsoft 365 Commercial is described as an AI‑powered productivity platform that integrates Office, Windows, Microsoft 365 Copilot, and Enterprise Mobility + Security, with growth dependent on expanding AI‑enabled tools, features, and “agentic” scenarios across its suite [MSFT_10K_2025.html, chunk #46].  \n\nOverall, Copilot is a central growth engine for Microsoft’s cloud‑based productivity offerings, delivering strong top‑line expansion while prompting sizable AI infrastructure and marketing outlays.",
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 53
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-18",
+      "category": "lexical",
+      "query": "NVIDIA NVLink interconnect",
+      "answerable": true,
+      "answer": "NVLink is NVIDIA’s high‑performance interconnect that powers its data‑center networking solutions and was a key driver of the 142% year‑over‑year increase in Data Center networking revenue in fiscal 2026 [Reference 3, chunk #125].\n\n- **Technology and product integration** – NVLink interconnects and switches are part of NVIDIA’s networking portfolio, which also includes InfiniBand and Ethernet adapters, enabling data‑center‑scale platforms that can link up to hundreds of thousands of compute nodes [Reference 1, chunk #41]. In fiscal 2026 NVIDIA introduced **NVLink Fusion**, allowing hyperscalers and custom ASIC designers to integrate custom CPUs and XPUs with the NVLink‑based platform [Reference 1, chunk #41].\n\n- **Revenue impact** – The surge in Data Center networking revenue (up 142% YoY) was explicitly attributed to the introduction and ramp‑up of the NVLink compute fabric for the GB200 and GB300 systems [Reference 3, chunk #125]. The same NVLink‑based fabric is highlighted in the third‑quarter and nine‑month results for fiscal 2026, where it contributed to a 105% YoY increase in Data Center networking revenue [Reference 5, chunk #40].\n\n- **Recent growth drivers** – In the first quarter of fiscal 2027, NVLink solutions continued to fuel revenue growth in the Compute & Networking segment, alongside Blackwell GPUs, InfiniBand, and Spectrum‑X Ethernet [Reference 4, chunk #41].\n\n- **Market positioning** – NVLink is positioned as a core component of NVIDIA’s full‑stack accelerated computing platform, complementing GPUs, CPUs, DPUs, and software stacks to deliver superior total cost of ownership for AI, HPC, and data‑processing workloads [Reference 2, chunk #42].\n\nOverall, NVLink serves as the backbone of NVIDIA’s data‑center networking strategy, delivering both technical differentiation (high‑bandwidth, low‑latency interconnect) and measurable financial upside through rapid revenue growth in the Compute & Networking segment.",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 125
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 40
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-19",
+      "category": "lexical",
+      "query": "Apple Vision Pro headset",
+      "answerable": true,
+      "answer": "Apple Vision Pro is Apple’s spatial‑computer headset, classified in the Wearables, Home & Accessories segment, which together contributed about 7 % of the company’s total revenue in the most recent quarter [Reference 5, chunk #4].  \n\n- **Product positioning:** Vision Pro is described as a “spatial computer” that runs on Apple’s visionOS operating system and is listed alongside AirPods, Apple Watch, and HomePod in the Wearables, Home & Accessories lineup [Reference 1, chunk #32].  \n- **Revenue context:** The Wearables, Home & Accessories segment (including Vision Pro) accounted for roughly 7 % of Apple’s overall revenue, indicating the headset’s contribution is part of this modest but growing share of the business [Reference 5, chunk #4].  \n- **Strategic emphasis:** Apple’s broader AI‑infrastructure push and increased R&D spending (up 34 % YoY to $11.4 billion) underscore the importance placed on next‑generation hardware such as Vision Pro, though specific financials for the headset alone are not disclosed [Reference 5, chunk #4].  \n\n*No separate revenue or unit‑sales figures for Vision Pro are provided in the available materials.*",
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 32
+        },
+        {
+          "source": "AAPL_Fundamentals_20260508.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_Fundamentals_20260519.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-20",
+      "category": "lexical",
+      "query": "Google TPU Ironwood",
+      "answerable": true,
+      "answer": "Ironwood is Google’s seventh‑generation custom Tensor Processing Unit (TPU) that forms a core component of its AI‑optimized infrastructure and powers both internal products (such as Search and YouTube) and the AI services offered to Google Cloud customers【GOOGL_10K_2025.html, chunk #139】.  \n\n- The TPU family, including Ironwood, is highlighted as a key differentiator that enables Google to deliver AI‑driven features at scale across its ecosystem【GOOGL_10K_2025.html, chunk #139】.  \n- Google Cloud has begun signing limited agreements to supply “multiple gigawatts of TPU hardware” to customers who need on‑premises, high‑scale AI workloads, and the revenue from these deals is recorded in the company’s backlog as of March 31 2026【GOOGL_10Q_202603.html, chunk #54】.  \n- The company’s broader strategy emphasizes continued, significant investment in custom TPUs and related technical infrastructure to support growing AI compute demand, with expectations of expanding capital expenditures on servers, network equipment, and data centers in 2026【GOOGL_10K_2025.html, chunk #179】.  \n\nThese points illustrate that Ironwood is central to Google’s push to scale AI capabilities, both for its own products and for enterprise customers via Google Cloud.",
+      "sources": [
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 139
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 156
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 54
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 72
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 179
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-21",
+      "category": "lexical",
+      "query": "Meta Ray-Ban smart glasses",
+      "answerable": true,
+      "answer": "Meta’s Ray‑Ban smart glasses, launched in 2025 as the **Meta Ray‑Ban Display**, combine AI‑powered eyewear with an integrated lens display and a neuromuscular‑control wristband called the Meta Neural Band [Reference 1, chunk #44].\n\n- The device builds on Meta’s earlier AI‑glass offerings—Ray‑Ban Meta and Oakley Meta—which already embed **Meta AI**, a conversational assistant, and support hands‑free interaction [Reference 1, chunk #44].\n- The 2025 Meta Ray‑Ban Display adds a **built‑in display** directly into the lens, turning the glasses into a true augmented‑reality (AR) visual output platform [Reference 1, chunk #44].\n- Control is provided by the **Meta Neural Band**, a wrist‑worn wearable that reads electromyography (EMG) signals, letting users operate the glasses via neuromuscular gestures [Reference 1, chunk #44].\n- Meta classifies these products under its **Reality Labs (RL) segment**, which encompasses consumer hardware, software, and content for virtual and augmented reality, including the Meta Quest line and other wearables [Reference 2, chunk #1].\n- The company frames the Ray‑Ban glasses as part of a broader **metaverse strategy**, aiming to move beyond 2‑D screens toward immersive experiences that it believes will become the next computing platform [Reference 4, chunk #41].\n- Meta acknowledges significant **risk** that its Reality Labs investments—including the Ray‑Ban smart glasses—may not achieve market acceptance, could divert resources, and may be hampered by limited consumer‑hardware experience and regulatory challenges [Reference 5, chunk #67].\n\nIn summary, the Meta Ray‑Ban smart glasses are a 2025 AR product that merges AI assistance, an integrated lens display, and EMG‑based wrist control, positioned within Meta’s Reality Labs push toward the metaverse, while the company warns of execution and adoption risks.",
+      "sources": [
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 67
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": ""
+    }
+  ]
+}

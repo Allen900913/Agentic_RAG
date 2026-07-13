@@ -1,0 +1,230 @@
+[
+  {
+    "id": "sem-09",
+    "category": "semantic",
+    "query": "Google 在 AI 與搜尋領域的競爭策略？",
+    "answerable": true,
+    "answer": "Google 在 AI 與搜尋領域的競爭策略是「以全堆疊 AI 研發與龐大技術基礎建設為核心，將先進的生成式 AI 直接嵌入搜尋與雲端服務，同時透過多元化收入與持續的資本投入來抵禦競爭與維持利潤」​[GOOGL_10K_2025.html, chunk #157]​[GOOGL_10K_2025.html, chunk #179]​。\n\n**主要做法與支撐細節**  \n\n1. **全堆疊 AI 研發與產品化**  \n   - Google 正在開發前沿的生成式 AI 模型（如 Gemini 3），並將其整合至 Search、YouTube、Google Cloud 等產品，以提升使用者體驗與搜尋相關服務的智能化​[GOOGL_10K_2025.html, chunk #139]​。  \n   - AI 產品與服務被視為高度競爭且快速演變的領域，Google 必須持續投入技術基礎建設、研發與人才，以免被競爭者超前​[GOOGL_10K_2025.html, chunk #157]​。\n\n2. **投資 AI 專屬基礎設施**  \n   - 為支撐 AI 計算需求，Google 持續擴大資料中心、伺服器與網路設備的資本支出，尤其是自家設計的 TPU（如第七代 Ironwood）與 GPU，加速 AI 模型的訓練與部署​[GOOGL_10K_2025.html, chunk #139]​。  \n   - 2025 年已大量投資，預計 2026 年相較 2025 年將進一步提升此類基礎設施投資，以因應 AI 服務所需的更高算力​[GOOGL_10K_2025.html, chunk #179]​。\n\n3. **多元化收入與新商業模式**  \n   - 除了傳統廣告收入，Google 正將 AI 整合至雲端（Google Cloud AI 方案）與消費者訂閱服務，這些新收入來源的成長速度已超過廣告，未來將佔更大比例​[GOOGL_10K_2025.html, chunk #179]​。  \n   - AI 產品的貨幣化方式與以往不同，Google 先以使用者體驗為主，再逐步探索收費模式，這可能影響未來的營收增長與毛利率走勢​[GOOGL_10K_2025.html, chunk #179]​。\n\n4. **持續的研發與併購**  \n   - Google 持續在研發上投入巨額資金，並透過併購擴充 AI 專業知識與技術，以加速新產品的開發與市場佈局​[GOOGL_10K_2025.html, chunk #157]​。  \n   - 這些投資同時支撐了 AI 相關的專利與智慧財產保護，防止競爭者利用相似或更具成本效益的技術侵蝕市場​[GOOGL_10K_2025.html, chunk #157]​。\n\n5. **應對競爭與成本壓力**  \n   - 競爭者可能在產品速度、成本或功能上超前，Google 必須保持快速創新以避免使用者與廣告主流失​[GOOGL_10K_2025.html, chunk #157]​。  \n   - 隨著 AI 基礎設施成本（能源、設備、折舊）上升，Google 仍致力於資料中心效率提升（如 TPU 設計與模型優化），以緩解毛利率下壓的風險​[GOOGL_10K_2025.html, chunk #179]​。\n\n6. **風險與挑戰**  \n   - 若 AI 產品未能快速獲得市場接受或被競爭者以更低成本取代，Google 的營收增長與營運利潤可能受到下行壓力​[GOOGL_10K_2025.html, chunk #157]​。  \n   - 其他業務（如硬體設備與 Other Bets）因毛利較低，亦可能拖累整體營利率，故 Google 必須在 AI 與搜尋核心領域保持領先以抵消這些負面影響​[GOOGL_10K_2025.html, chunk #157]​。\n\n**結論**：Google 透過深耕全堆疊 AI 研發、加速自有硬體（TPU）部署、擴大雲端與訂閱服務的 AI 應用、以及持續的大規模資本與研發投入，形成在 AI 與搜尋領域的競爭優勢，同時以多元化收入與效率提升來對抗日益激烈的市場競爭與成本上升的挑戰。",
+    "sources": [
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 157
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 179
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 156
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 148
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 139
+      }
+    ],
+    "correctness": {
+      "score": 1.0,
+      "critical_miss": false,
+      "fatal_hallucination": false
+    },
+    "correctness_verdict": {
+      "is_refusal": false,
+      "must_include_hits": [
+        "mi0",
+        "mi1",
+        "mi2"
+      ],
+      "must_not_violations": [],
+      "reason": "Answer covers all required points without violations.",
+      "error": null,
+      "vote_detail": {
+        "votes": 3,
+        "must_include_hits_per_call": [
+          [
+            "mi0",
+            "mi1",
+            "mi2"
+          ],
+          [
+            "mi0",
+            "mi1",
+            "mi2"
+          ],
+          [
+            "mi0",
+            "mi2"
+          ]
+        ],
+        "must_not_violations_per_call": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "hallucination_rate": null,
+    "hallucination_claims": [],
+    "relevance_score": null,
+    "relevance_generated_question": "",
+    "is_refusal": false,
+    "wrongful_refusal": false,
+    "context_recall_llm": null,
+    "context_recall_overlap": null,
+    "actionable_feedback": "无严重问题，建议在LLM层面进一步细化数据引用，补充具体数字以增强说服力。"
+  },
+  {
+    "id": "sem-09",
+    "category": "semantic",
+    "query": "Google 在 AI 與搜尋領域的競爭策略？",
+    "answerable": true,
+    "answer": "Google 通过大规模投入 AI 基础设施、研发自有的生成式模型（如 Gemini 3），并把这些模型深度嵌入搜索、云服务和消费產品，以在 AI 與搜尋領域保持領先競爭力【GOOGL_10K_2025.html, chunk #139】。  \n\n- **前沿生成式 AI 研發**：公司正開發「前沿」生成式 AI 模型，將 AI 能力整合至所有產品與服務，並已推出 Gemini 3——具備多模態理解與增強推理能力的最新模型，用於 Search、YouTube 以及 Gemini 應用程式【GOOGL_10K_2025.html, chunk #139】。  \n- **AI 產品化與變現**：在搜尋中推出 AI Overviews 與 AI Mode，並在 Google Cloud 上提供企業 AI 解決方案，先以使用者體驗為核心，再逐步探索變現方式，這可能改變未來的收入增長與毛利走勢【GOOGL_10K_2025.html, chunk #179】。  \n- **技術基礎設施投資**：持續加碼伺服器、網路設備與資料中心建設，特別是自研的 TPU（如第七代 Ironwood）與 GPU，加速 AI 計算需求，同時透過資料中心效率提升降低單位成本【GOOGL_10K_2025.html, chunk #139】。  \n- **資本支出與成本管理**：2025 年已大量投入資本支出，預計 2026 年將進一步提升對 AI 基礎設施的投資，並因 AI 計算需求提升而增加折舊、能源與設備成本；公司亦致力於透過模型設計與硬體優化降低這些成本【GOOGL_10K_2025.html, chunk #179】。  \n- **競爭環境與差異化**：Google 面臨來自大型既有公司與新創企業的激烈競爭，競爭者可能在技術、成本或專利上取得優勢；因此公司必須持續創新、快速推出新產品，並保護其 AI 相關的專利與商標，以免被競爭者侵蝕市場份額【GOOGL_10K_2025.html, chunk #157】、【GOOGL_10K_2025.html, chunk #148】。  \n- **多元業務與毛利壓力**：雲端、消費者訂閱、裝置與 Other Bets 等非廣告收入增長速度快於廣告，但毛利普遍低於廣告，且裝置等低毛利產品的擴張可能進一步壓縮整體營運利潤【GOOGL_10K_2025.html, chunk #179】、【GOOGL_10K_2025.html, chunk #156】。  \n- **人才與研發投入**：公司持續在研發與人才招聘上投入大量資源，透過收購與戰略投資擴大技術與工程能力，確保 AI 產品與服務的持續領先【GOOGL_10K_2025.html, chunk #157】、【GOOGL_10K_2025.html, chunk #156】。  \n\n綜合以上，Google 的競爭策略核心在於「以自研 AI 模型與高效能基礎設施驅動產品創新，並將 AI 深度整合至搜尋與雲端服務，同時透過持續的研發、人才與 IP 保護，抵禦來自多元競爭者的挑戰」【GOOGL_10K_2025.html, chunk #157】。",
+    "sources": [
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 157
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 179
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 156
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 148
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 139
+      }
+    ],
+    "correctness": {
+      "score": 0.7,
+      "critical_miss": false,
+      "fatal_hallucination": false
+    },
+    "correctness_verdict": {
+      "is_refusal": false,
+      "must_include_hits": [
+        "mi0",
+        "mi2"
+      ],
+      "must_not_violations": [],
+      "reason": "Answer covers Gemini and TPU/Cloud but omits search‑ad monetization defense.",
+      "error": null,
+      "vote_detail": {
+        "votes": 3,
+        "must_include_hits_per_call": [
+          [
+            "mi0",
+            "mi2"
+          ],
+          [
+            "mi0",
+            "mi2"
+          ],
+          [
+            "mi0",
+            "mi2"
+          ]
+        ],
+        "must_not_violations_per_call": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "hallucination_rate": null,
+    "hallucination_claims": [],
+    "relevance_score": null,
+    "relevance_generated_question": "",
+    "is_refusal": false,
+    "wrongful_refusal": false,
+    "context_recall_llm": null,
+    "context_recall_overlap": null,
+    "actionable_feedback": "回答缺少對搜尋廣告核心業務防禦或變現的說明，建議補充說明 Google 如何透過 AI 特色功能（如 AI Overviews、AI Mode）提升搜尋廣告收入或保護廣告核心業務。"
+  },
+  {
+    "id": "sem-09",
+    "category": "semantic",
+    "query": "Google 在 AI 與搜尋領域的競爭策略？",
+    "answerable": true,
+    "answer": "Google 透過全堆疊 AI 基礎建設、專屬 TPU 加速器與前沿生成式模型（如 Gemini 3），並將 AI 深度整合至搜尋與雲端服務，打造差異化競爭優勢，以持續吸引用戶、廣告主與企業客戶【Reference 5, chunk #139】。\n\n- **前沿 AI 研發與模型部署**：Google 正開發「前沿」生成式 AI 模型，將 AI 能力嵌入搜尋（AI Overviews、AI Mode）與企業雲端解決方案，並以 Gemini 3 這類多模態、具推理能力的模型提升產品體驗【Reference 1, chunk #157】【Reference 5, chunk #139】。  \n- **全堆疊 AI 基礎設施**：公司投資 AI‑優化的基礎設施，包括自家第七代 TPU（Ironwood）與多樣化 GPU，加速內部產品（Search、YouTube）與 Google Cloud 客戶的 AI 服務，同時透過資料中心效能提升降低成本【Reference 5, chunk #139】。  \n- **資本支出與技術基礎建設擴張**：2025 年大幅增加資本支出，2026 年預計進一步提升伺服器、網路設備與資料中心投資，以因應 AI 計算需求的顯著上升【Reference 2, chunk #179】。  \n- **AI 商業化與營收策略**：在搜尋與雲端產品中先聚焦使用者體驗，再考慮變現方式；AI 相關收入（雲端、消費者訂閱、平台與裝置）已顯示出高於廣告收入的成長率，未來將持續提升其在總營收中的比重，儘管其毛利率普遍低於廣告收入【Reference 2, chunk #179】。  \n- **競爭環境與差異化需求**：Google 面臨來自大型既有公司與新創企業的激烈競爭，競爭者可能在技術、成本或專利上取得優勢；因此必須持續創新、快速推出新產品與服務，並保護其 AI 相關智慧財產，以免被替代或侵權【Reference 1, chunk #157】【Reference 4, chunk #148】。  \n- **多元競爭領域**：除了搜尋，Google 亦在雲端、硬體裝置、數位內容、社交平台與工作空間等多個領域與對手爭奪市場，這要求公司在 AI、硬體與服務上同步投入資源，以維持整體競爭力【Reference 3, chunk #156】【Reference 4, chunk #148】。  \n\n綜合而言，Google 的 AI 與搜尋競爭策略核心在於：**大規模投資自有 AI 基礎設施與前沿模型、將 AI 深度嵌入核心產品、以多元收入來源分散風險，同時持續防禦與創新以應對激烈的市場競爭**。",
+    "sources": [
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 157
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 179
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 156
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 148
+      },
+      {
+        "source": "GOOGL_10K_2025.html",
+        "chunk_index": 139
+      }
+    ],
+    "correctness": {
+      "score": 0.7,
+      "critical_miss": false,
+      "fatal_hallucination": false
+    },
+    "correctness_verdict": {
+      "is_refusal": false,
+      "must_include_hits": [
+        "mi0",
+        "mi2"
+      ],
+      "must_not_violations": [],
+      "reason": "Answer includes Gemini model and TPU/Cloud, and contains no fabricated figures.",
+      "error": null,
+      "vote_detail": {
+        "votes": 3,
+        "must_include_hits_per_call": [
+          [
+            "mi0",
+            "mi2"
+          ],
+          [
+            "mi0",
+            "mi2"
+          ],
+          [
+            "mi0",
+            "mi2"
+          ]
+        ],
+        "must_not_violations_per_call": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "hallucination_rate": null,
+    "hallucination_claims": [],
+    "relevance_score": null,
+    "relevance_generated_question": "",
+    "is_refusal": false,
+    "wrongful_refusal": false,
+    "context_recall_llm": null,
+    "context_recall_overlap": null,
+    "actionable_feedback": "回答缺少對搜尋廣告核心業務的防禦或變現的具體說明，建議在描述 AI 商業化時明確指出搜尋廣告收入的保護或變現策略，並補充相關數據或案例以提升說服力。"
+  }
+]

@@ -1,0 +1,1589 @@
+{
+  "summary": {},
+  "records": [
+    {
+      "id": "sem-01",
+      "category": "semantic",
+      "query": "NVIDIA 的核心技術護城河是什麼？",
+      "answerable": true,
+      "answer": "NVIDIA 的核心技術護城河是其 GPU 架構和加速計算能力，該公司已經投資了超過 $76.7 Billion 美元於研究和開發，創造了多項革命性的技術，包括 CUDA、Tensor Core 和 Blackwell 架構 [NVDA_10K_2026.html, chunk #38]。此外，NVIDIA 的 GPU 可以支援多種計算密集型工作負載，包括人工智慧、科學計算和數據分析 [NVDA_10K_2026.html, chunk #37]。公司的技術領先地位和生態系統 Advantage 使其能夠提供高性能和高效率的計算解決方案，從而鞏固了其在加速計算和人工智慧領域的領導地位 [NVDA_Fundamentals_20260508.txt, chunk #0]。因此，NVIDIA 的核心技術護城河是其在加速計算、人工智慧和 GPU 架構上的領先地位和持續創新能力 [NVDA_10K_2026.html, chunk #38]。",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 31
+        }
+      ],
+      "correctness": {
+        "score": 0.0,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [],
+        "must_not_violations": [],
+        "reason": "Answer does not satisfy any must‑include criteria and contains no must‑not‑include violations.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.14285714285714285,
+      "actionable_feedback": "Retriever未能抓取包含CUDA生态系统、网络集成等关键段落，导致回答缺失重要要点。建议改进检索策略或增大检索范围，以确保检索到完整的技术护城河信息。"
+    },
+    {
+      "id": "sem-02",
+      "category": "semantic",
+      "query": "Microsoft 在 AI 領域的長期戰略方向？",
+      "answerable": true,
+      "answer": "Microsoft 在 AI 領域的長期戰略方向是致力於推動人工智慧的發展和應用，特别是在雲計算、生產力和協作、個人計算等領域 [MSFT_10K_2025.html, chunk #40]。Microsoft 的 AI 戰略包括與 OpenAI 實施長期戰略合作伙伴關係，該合作伙伴關係始於 2019 年 [MSFT_10Q_202603.html, chunk #38]。Microsoft 作為 OpenAI 的主要投資者，兩家公司間存在互相的收入分享安排 [MSFT_10K_2025.html, chunk #112]。Microsoft 將持續投資於雲計算和 AI 基礎設施的開發，以滿足客戶不斷變化的需求 [MSFT_10Q_202512.html, chunk #38]。此外，Microsoft 還致力於開發與 AI 相關的技術和應用，包括微軟 365 Copilot 和其他 AI 驅動的方案 [MSFT_10K_2025.html, chunk #42]。 Microsoft 的目標是要成為 AI 技術領域的領導者，創造新的價值和機會給客戶和合作伙伴 [MSFT_10K_2025.html, chunk #42]。",
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 40
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 42
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer covers all required points and avoids prohibited content.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": "检索层未能抓取足够相关的文档片段，导致上下文回忆率低；建议提升检索召回率或优化检索策略。"
+    },
+    {
+      "id": "sem-03",
+      "category": "semantic",
+      "query": "Apple 的服務業務未來成長潛力如何？",
+      "answerable": true,
+      "answer": "服務業務未來成長潛力約 12.8% 的年度增長率 [Reference 4: AAPL_News_20260612_04.txt, chunk #1]。該業務是公司的重要增長引擎，尤其是服務業務的高利潤率增長，例如來自 App Store 和雲端服務的收入 [Reference 1: AAPL_10Q_202512.html, chunk #26]。服務業務的增長是由多個因素驅動的，包括公司對服務業務的重視和對新服務的不斷研發 [Reference 3: AAPL_10Q_202603.html, chunk #30]。此外，服務業務的增長率遠高於整體公司的平均增長率，表明服務業務的潛力巨大 [Reference 4: AAPL_News_20260612_04.txt, chunk #1]。然而，該業務的增長也面臨著挑戰，例如全球監管機構試圖限制公司在 App Store 上的收費 [Reference 4: AAPL_News_20260612_04.txt, chunk #1]。因此，服務業務的成長潛力雖然巨大，但也伴隨著風險和挑戰 [Reference 1: AAPL_10Q_202512.html, chunk #26]。",
+      "sources": [
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AAPL_News_20260612_05.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 30
+        },
+        {
+          "source": "AAPL_News_20260612_04.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 80
+        }
+      ],
+      "correctness": {
+        "score": 0.0,
+        "critical_miss": false,
+        "fatal_hallucination": true
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [
+          "mn0"
+        ],
+        "reason": "Answer meets key points but incorrectly cites a specific growth rate not supported by the source.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答中出现了未在来源中出现的具体增长率，属于捏造信息。建议在引用数据前先核实来源，避免使用未证实的数字；同时补充关于设备安装基数带动服务变现的说明，以完整覆盖所有必需点。"
+    },
+    {
+      "id": "sem-04",
+      "category": "semantic",
+      "query": "這些公司面臨哪些主要風險與挑戰？",
+      "answerable": true,
+      "answer": "這些公司面臨的主要風險與挑戰包括收購和投資帶來的風險、 Difficulty 這些風險包括難以整合收購公司、可能的合規問題、管理層的注意力分散、以及難以實現預期的投資回報 [MSFT_10K_2025.html, chunk #81]。此外，還有來自灰色市場和非授權零售商的競爭，可能會對公司的收入產生不利影響 [NVDA_10Q_202510.html, chunk #57]。公司還面臨著國際業務帶來的風險，包括經濟和法律風險 [META_10Q_202509.html, chunk #123]。組織變革和重組也可能帶來風險，例如員工流失、成本增加和管理複雜度提高 [META_10K_2025.html, chunk #76]。此外，公司的投資也可能產生波動和損失，特別是對於非上市公司的投資 [NVDA_10Q_202510.html, chunk #57]。 \n\n風險和挑戰還包括難以預測需求、 Difficulty 和來自國際運營的風險 [META_10Q_202603.html, chunk #130]。整體而言，這些公司面臨著一系列風險和挑戰，需要有效管理和應對，以保持其競爭力和財務穩定。",
+      "sources": [
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 81
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 57
+        },
+        {
+          "source": "META_10Q_202509.html",
+          "chunk_index": 123
+        },
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 130
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 76
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer satisfies all rubric points.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.2857142857142857,
+      "actionable_feedback": "检索层召回不足，导致回答缺乏深度。建议优化检索查询或提升召回率，以获取更完整的相关片段。"
+    },
+    {
+      "id": "sem-05",
+      "category": "semantic",
+      "query": "What are NVIDIA's competitive advantages in the data center market?",
+      "answerable": true,
+      "answer": "NVIDIA's competitive advantages in the data center market include its unified underlying programmable architecture, large and growing number of developers and installed base, and significant investments in research and development, totaling over $76.7 billion since its inception [NVDA_10K_2026.html, chunk #38]. The company's data center platform is focused on accelerating compute-intensive workloads, such as AI, data processing, graphics, robotics, and scientific computing, delivering superior total cost of ownership relative to conventional CPU-only approaches [NVDA_10K_2026.html, chunk #41]. Additionally, NVIDIA's introduction of CUDA in 2006 opened the parallel processing capabilities of its GPU to a broad range of compute-intensive applications, paving the way for the emergence of modern AI [NVDA_10K_2026.html, chunk #38]. The company's acquisition of Mellanox in 2020 expanded its offerings to include networking, enabling it to architect data center-scale computing platforms that can interconnect up to hundreds of thousands of compute nodes with high-performance networking [NVDA_10K_2026.html, chunk #38]. Furthermore, NVIDIA's platforms address four large markets where its expertise is critical: Data Center, Gaming, Professional Visualization, and Automotive [NVDA_10K_2026.html, chunk #41]. The company's strong engineering culture drives fast, yet harmonized, product and technology innovations in all dimensions of computing, including silicon, systems, networking, software, and algorithms [NVDA_10K_2026.html, chunk #38]. NVIDIA also has a platform strategy, bringing together hardware, systems, software, algorithms, libraries, AI models, and training data sets, and services to create unique value for the markets it serves [NVDA_10K_2026.html, chunk #38]. Its customers include all major public and private cloud providers, AI model makers, enterprises, and startups, and public sector entities [NVDA_10K_2026.html, chunk #41]. Moreover, NVIDIA's introduction of new technologies, such as the NVIDIA Blackwell architecture and the NVIDIA Rubin platform, has enabled it to deliver market-leading performance and efficiency in processing cutting-edge generative AI and accelerated computing workloads [NVDA_10K_2026.html, chunk #42] [NVDA_10K_2026.html, chunk #5]. The NVIDIA Blackwell architecture excels at processing cutting-edge generative AI and accelerated computing workloads with market-leading performance and efficiency [NVDA_10K_2026.html, chunk #42], while the NVIDIA Rubin platform is expected to deliver up to a 10x reduction in cost per token compared to Blackwell [NVDA_10K_2026.html, chunk #42]. Overall, NVIDIA's competitive advantages in the data center market are driven by its innovative technologies, strong engineering culture, and strategic partnerships [NVDA_Fundamentals_20260519.txt, chunk #1] [NVDA_Fundamentals_20260508.txt, chunk #0].",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_Fundamentals_20260519.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 42
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer includes all required points and no forbidden content.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.14285714285714285,
+      "actionable_feedback": "Retriever层未能检索到足够相关的文档片段，导致回答缺乏完整性。建议增加检索召回率或使用更精准的检索策略。"
+    },
+    {
+      "id": "sem-06",
+      "category": "semantic",
+      "query": "Apple Silicon 對 Apple 整體策略的意義？",
+      "answerable": true,
+      "answer": "Apple Silicon 對 Apple 整體策略的意義在於它使得 Apple 能夠控制自己的芯片設計和制造，從而提高產品的性能、安全性和功耗效率 [AAPL_10K_2025.html, chunk #48]. 這項技術對 Apple 的競爭力和市佔率有重要影響，尤其是在 AI 和機器學習領域 [AAPL_News_20260519_01.txt, chunk #4]. Apple Silicon 也使得 Apple 能夠更好地集成其硬件和軟件產品，創造出更無縫的用戶體驗 [AAPL_10K_2025.html, chunk #46].\n\n此外，Apple Silicon 對公司的成本結構也有影響。由於 Apple 能夠控制自己的芯片設計和制造，公司可以減少對第三方供應商的依賴，從而降低成本和提高利润率 [AAPL_News_20260519_01.txt, chunk #5]. 根據公司公開的財務數據，Apple 的毛利率在過去幾年中不斷提高，達到 47.9% [AAPL_News_20260519_01.txt, chunk #5]。\n\n總的來說，Apple Silicon 是 Apple 公司的一項重要戰略投資，旨在提高公司的競爭力、創新能力和經濟效益 [AAPL_10K_2025.html, chunk #48]。",
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 35
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 5
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 46
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "All required points covered, no violations.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "无明显问题，保持现有做法。"
+    },
+    {
+      "id": "sem-07",
+      "category": "semantic",
+      "query": "Microsoft Azure 在雲端市場的競爭定位",
+      "answerable": true,
+      "answer": "Microsoft Azure 在雲端市場的競爭定位是具有全球規模和廣泛的身份和安全解决方案，能够有效地解 quyết複雜的網路安全挑戰 [MSFT_10K_2025.html, chunk #50]。Azure 的競爭優勢包括啟用混合雲、允許現有的資料中心與公有雲整合為單一的基礎設施，以及能夠根據企業的大小和複雜性提供所需的規模 [MSFT_10K_2025.html, chunk #50]。Microsoft Azure 面臨來自其他雲服務提供商和開源解決方案的競爭 [MSFT_10K_2025.html, chunk #49]。Azure 的雲服務收入主要受到基礎設施即服務和平台即服務的消費基礎服務的影響 [MSFT_10K_2025.html, chunk #48]。Microsoft 和 OpenAI 保持長期的戰略合作關係，Microsoft 是 OpenAI 的主要投資者，兩家公司有互惠的收入分成安排 [MSFT_10Q_202512.html, chunk #38]。這些合作關係和解決方案使得 Microsoft Azure 在雲端市場中具有強大的競爭地位 [MSFT_10K_2025.html, chunk #50]。",
+      "sources": [
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 50
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 49
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 38
+        }
+      ],
+      "correctness": {
+        "score": 0.2,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly mentions hybrid cloud advantage but omits Azure’s status as a cloud trinity competitor and AI/Copilot growth drivers.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "最严重问题在于缺少对 Azure 与 AWS、GCP 的竞争定位以及 AI/Copilot 驱动增长的阐述，建议在检索阶段加入包含这些信息的文档片段，并在 LLM 生成时明确强调 Azure 作为云三强之一的地位。"
+    },
+    {
+      "id": "sem-08",
+      "category": "semantic",
+      "query": "Amazon AWS 雲端事業的長期策略方向是什麼？",
+      "answerable": true,
+      "answer": "Amazon AWS 的長期策略方向是持續投資於雲端事業，提供更廣泛的服務，包括計算、儲存、資料庫、分析和人工智慧等 [AMZN_10K_2025.html, chunk #86]。AWS 將繼續提供給開發者和企業的多種雲端服務，包括計算、儲存、資料庫、分析和人工智慧等 [AMZN_10K_2025.html, chunk #58]。另外，AWS 的銷售額持續增長，例如在 2025 年第三季度，AWS 銷售額增長 20% [AMZN_10Q_202509.html, chunk #46]，而在 2026 年第一季度，AWS 銷售額增長 28% [AMZN_10Q_202603.html, chunk #45]。這些數據表明 Amazon 將繼續發展 AWS 的雲端事業。",
+      "sources": [
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 86
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 58
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 56
+        }
+      ],
+      "correctness": {
+        "score": 0.0,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [],
+        "must_not_violations": [],
+        "reason": "Answer does not cover any required rubric points.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": "回答缺少關鍵要點：未說明 AWS 為雲端市佔龍頭及 Amazon 的獲利引擎，未提及 AI/ML 投資（如 Bedrock、自研晶片）或基礎設施擴張/資本支出。建議在回覆中加入這些資訊並引用具體文件段落，以符合評分標準。"
+    },
+    {
+      "id": "sem-09",
+      "category": "semantic",
+      "query": "Google 在 AI 與搜尋領域的競爭策略？",
+      "answerable": true,
+      "answer": "Google 在 AI 與搜尋領域的競爭策略是透過持續研發和整合 AI 技術，例如透過其自建的 Tensor Processing Units (TPUs) 和 AI 模型，如 Gemini 3 [GOOGL_10K_2025.html, chunk #139]，以提供更先進和安全的搜尋服務。Google 也致力於建造 AI 優化的基礎設施 [GOOGL_10K_2025.html, chunk #139]，以支援其搜尋和雲端計算服務。同時，Google 面臨著來自其他公司的激烈競爭，包括通用搜尋引擎、垂直搜尋引擎、電子商務提供者和其他 AI 產品及服務提供者 [GOOGL_10K_2025.html, chunk #148]。\n\nGoogle 的競爭策略還包括透過其技術基礎設施的投資，以提供更好的用戶體驗和廣告商的效率 [GOOGL_10K_2025.html, chunk #179]。公司也 致力於招聘和留住頂尖人才，以推動其在 AI 和其他領域的發展 [GOOGL_10K_2025.html, chunk #157]。\n\n然而，Google 也面臨著眾多挑戰和不確定性，包括來自競爭對手的激烈競爭、技術進步的快速變化和監管要求的提高 [GOOGL_10Q_202603.html, chunk #72]。因此，公司必須不斷地適應和創新，以保持其在 AI 和搜尋領域的競爭優勢。",
+      "sources": [
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 157
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 179
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 148
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 139
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 72
+        }
+      ],
+      "correctness": {
+        "score": 0.7,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer includes Gemini model and TPU, but misses search ad core business detail and no hallucinations.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "Retriever 未能检索到足够相关的文档，导致回答缺失关键细节。建议增加检索召回率或使用更精准的检索策略。"
+    },
+    {
+      "id": "sem-10",
+      "category": "semantic",
+      "query": "Meta 在 AI 與 Reality Labs 上的長期投資方向？",
+      "answerable": true,
+      "answer": "Meta 在 AI 與 Reality Labs 上的長期投資方向是複雜且長期的 [META_10K_2025.html, chunk #67]。該公司預計會繼續在虛擬和增強實境以及其他技術上進行大量投資 [META_10K_2025.html, chunk #67]。在 2026 年，Meta 預計會將約 70% 的 Reality Labs 營運費用分配到可穿戴裝置的研發上，餘下的 30% 則會用於虛擬實境和 Horizon 等項目 [META_10K_2025.html, chunk #45]。同時，Meta 也會投資於 AI，包括開發新一代的 AI 模型和應用 [META_10K_2025.html, chunk #47]。這些投資都是為了推動下一代的計算平台和 Metaverse 的發展 [META_10K_2025.html, chunk #47]。Reality Labs 的發展預計會涉及到新的和新興技術的開發，以及基礎設施的持續投資 [META_10K_2025.html, chunk #67]。Meta 也期望這些投資會為企業和開發者帶來新的商機，包括廣告、硬件和數字商品 [META_10K_2025.html, chunk #47]。然而，這些投資也存在風險，例如技術不成熟的風險、市場接受度不佳的風險和競爭風險 [META_10K_2025.html, chunk #67]。",
+      "sources": [
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 67
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 118
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 47
+        }
+      ],
+      "correctness": {
+        "score": 0.5,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer covers AI investment but omits VR/AR losses and Ray‑Ban Meta details, and does not violate the no‑fabrication rule.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": "最严重问题在于缺少 Reality Labs 的 VR/AR 长期投入与亏损信息，以及未提及 Ray‑Ban Meta 等穿戴设备。建议在回答中补充这些关键细节，并确保引用来源中的具体数字，避免无依据的推测。"
+    },
+    {
+      "id": "sem-11",
+      "category": "semantic",
+      "query": "Tesla 面臨哪些主要競爭與監管風險？",
+      "answerable": true,
+      "answer": "Tesla 面臨多種競爭與監管風險。公司運營於一個循環性產業中，該產業對消費趨勢、政治和監管不確定性（包括貿易和環境方面）敏感，這些因素可能會因通貨膨脹壓力、能源價格上漲、利率波動和企業客戶的流動性而加劇 [TSLA_10Q_202509.html, chunk #37]。此外，隨著更多競爭者進入市場，推動可持續交通的發展，特斯拉需要適應和執行良好的策略，以維持其勢頭 [TSLA_10Q_202509.html, chunk #37]。\n\n此外，該公司的供應商流動性和分配計劃可能會受到當前汽車工業的挑戰的影響，從而可能減少特斯拉獲得零部件的通道或導致不利的成本變化 [TSLA_10Q_202509.html, chunk #37]。政府和經濟政策、激勵措施或關稅的變化也可能影響特斯拉的生產、成本結構和競爭格局 [TSLA_10Q_202509.html, chunk #37]。\n\n特別地，美國最近宣布的貿易政策變化可能會對消費者支出和耐用消費品及相關服務的需求產生不利影響 [TSLA_10Q_202509.html, chunk #37]。此外，《減少通貨膨脹法案》（OBBBA）中某些條款，包括取消對電動汽車的稅收抵免，可能會影響電動汽車的消費者需求 [TSLA_10Q_202509.html, chunk #37]。",
+      "sources": [
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 168
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 161
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 159
+        },
+        {
+          "source": "TSLA_10Q_202509.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "TSLA_10Q_202509.html",
+          "chunk_index": 33
+        }
+      ],
+      "correctness": {
+        "score": 0.2,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer addresses macroeconomic risk but omits EV market competition/price war and autonomous driving regulatory risk.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": "回答缺少對 EV 市場競爭加劇及價格戰的具體說明，以及自動駕駛（FSD/Autopilot）監管風險的提及。建議在回覆中加入這兩項關鍵點，並引用相應文件以提升準確性與可驗證性。"
+    },
+    {
+      "id": "lex-01",
+      "category": "lexical",
+      "query": "NVDA P/E ratio",
+      "answerable": true,
+      "answer": "The NVDA P/E ratio is 31.325687 trailing and 16.097084 forward [NVDA_Fundamentals_20260612.txt, chunk #0]. The trailing P/E ratio was previously 45.464214 as of 2026-05-19 [NVDA_Fundamentals_20260519.txt, chunk #0] and 43.07536 as of 2026-05-08 [NVDA_Fundamentals_20260508.txt, chunk #0].",
+      "sources": [
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260519.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 9
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 6
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer includes required P/E values and labels.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已满足所有必需点，无需改进。"
+    },
+    {
+      "id": "lex-02",
+      "category": "lexical",
+      "query": "AAPL EPS",
+      "answerable": true,
+      "answer": "AAPL's Diluted EPS is $7.46 and Basic EPS is $7.49 for Fiscal Year 2025 [Reference 1: AAPL_IncomeStatement_20260612.txt, chunk #0]. Similarly, for Fiscal Year 2024, Diluted EPS is $6.08 and Basic EPS is $6.11 [Reference 1: AAPL_IncomeStatement_20260612.txt, chunk #0]. The same EPS values are also reported in other references [Reference 2: AAPL_IncomeStatement_20260519.txt, chunk #0], [Reference 3: AAPL_IncomeStatement_20260508.txt, chunk #0]. Additionally, EPS Trailing is $8.25 and EPS Forward is $9.5861 as per the company fundamentals [Reference 4: AAPL_Fundamentals_20260519.txt, chunk #0], and EPS Forward is $9.5595 in another reference [Reference 5: AAPL_Fundamentals_20260508.txt, chunk #0].",
+      "sources": [
+        {
+          "source": "AAPL_IncomeStatement_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_IncomeStatement_20260519.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_IncomeStatement_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_Fundamentals_20260519.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer includes required EPS values and labels.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.8333333333333334,
+      "actionable_feedback": "回答已满足所有必需点，无违规；建议在Retriever层确保只检索一次相关段落，避免多次引用相同内容，以提升回答简洁度。"
+    },
+    {
+      "id": "lex-03",
+      "category": "lexical",
+      "query": "MSFT gross margin",
+      "answerable": true,
+      "answer": "Microsoft's (MSFT) gross margin is 0.68309 or 68.31% [MSFT_Fundamentals_20260612.txt, chunk #0]. This gross margin percentage is consistent across the provided reference materials, including [MSFT_Fundamentals_20260508.txt, chunk #0] and [MSFT_Fundamentals_20260519.txt, chunk #0], indicating no change in the gross margin over the reported periods. In terms of actual gross profit, MSFT reported $217.41B [MSFT_Fundamentals_20260612.txt, chunk #0] and $108,925 million for the six months ended December 31, 2025 [MSFT_10Q_202512.html, chunk #14]. Additionally, the gross margin percentage increased due to a sales mix shift to higher margin businesses [MSFT_10Q_202603.html, chunk #47].",
+      "sources": [
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_Fundamentals_20260519.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 47
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly states 68.3% gross margin and cites sources.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "Retriever层问题，检索召回率偏低，建议优化检索策略或增大检索范围以覆盖更多相关片段。"
+    },
+    {
+      "id": "lex-04",
+      "category": "mixed",
+      "query": "Apple 最新一份 10-K 年報的風險因素章節中，主要提到哪些風險？",
+      "answerable": true,
+      "answer": "Apple 最新一份 10-K 年報的風險因素章節中，主要提到以下風險：法律和監管風險、財務風險、產品風險、技術風險、供應鏈風險、稅務風險、市場風險等。公司的業務、結果、財務狀況和股票價格可能會受到各種因素的不利影響，包括法律和監管的變化、財務市場的波動、產品和服務的質量問題、技術的變化、供應鏈的中斷、稅務政策的變化和市場的波動 [AAPL_10K_2025.html, chunk #57]。此外，公司還面臨著產品設計和製造缺陷的風險、第三方知識產權的風險、talent 和文化的風險 [AAPL_10K_2025.html, chunk #48]。公司的全球供應鏈和分銷網絡也使其面臨著潛在的風險，包括與第三方供應商和經銷商相關的風險 [AAPL_10K_2025.html, chunk #46]。市場風險包括股票價格的波動、投資的風險和全球經濟的變化 [AAPL_10K_2025.html, chunk #58]。 \n\n公司的業務結果和財務狀況可能會受到各種因素的不利影響，包括稅務政策的變化、財務市場的波動和市場的波動 [AAPL_10K_2025.html, chunk #31]।此外，公司還需要面臨著與全球經營相關的風險，包括法律和監管的變化、財務市場的波動和市場的波動 [AAPL_10K_2025.html, chunk #4]。",
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 57
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 31
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 58
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer lists multiple risks from the 10‑K and cites source chunks, satisfying all must‑include criteria and avoiding the forbidden error.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "建议在回答中补充竞争风险，并精简表述，避免重复出现相同风险类别。"
+    },
+    {
+      "id": "lex-05",
+      "category": "mixed",
+      "query": "MSFT 202603 那一季的 10-Q 裡，Azure / Intelligent Cloud 業務表現如何？",
+      "answerable": true,
+      "answer": "Azure 和 Intelligent Cloud 業務在 MSFT 202603 季度的表現十分強勁，Azure 和其他雲端服務收入增長了 40% [MSFT_10Q_202603.html, chunk #45]。Intelligent Cloud 收入增長了 $7.9 billion 或 30% [MSFT_10Q_202603.html, chunk #45]，而 Server products 和 cloud services 收入增長了 $7.8 billion 或 32% [MSFT_10Q_202603.html, chunk #45]。此外，Azure 和其他雲端服務收入在九個月內增長了 40% [MSFT_10Q_202603.html, chunk #48]，而 Intelligent Cloud 收入增長了 $22.1 billion 或 29% [MSFT_10Q_202603.html, chunk #48]。這些數據顯示 Azure 和 Intelligent Cloud 業務在這個季度有著顯著的增長。另外，Microsoft Cloud 的毛利率為 66% [MSFT_10Q_202603.html, chunk #42]，而 Azure 和其他雲端服務的收入增長主要由對平台上的服務需求推動 [MSFT_10Q_202603.html, chunk #45]。",
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 12
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer satisfies all rubric points.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已符合所有必須項目，未違反任何禁用項。若想進一步提升，可在數字後加上「本季」或「截至本季」的說明，以強化對 202603 季度的明確定位。"
+    },
+    {
+      "id": "lex-06",
+      "category": "lexical",
+      "query": "NVDA income statement 2026",
+      "answerable": true,
+      "answer": "The NVDA income statement for 2026 shows a net income of $120,067 million [NVDA_10K_2026.html, chunk #23]. The revenue for 2026 was $215,938 million, which is a 65% increase from 2025 [NVDA_10K_2026.html, chunk #9]. The gross profit was $153,463 million [NVDA_10K_2026.html, chunk #19], with a gross margin of 71.1% [NVDA_10K_2026.html, chunk #9]. The operating expenses were $23,076 million [NVDA_10K_2026.html, chunk #19], which is a 41% increase from 2025 [NVDA_10K_2026.html, chunk #9]. The operating income was $130,387 million [NVDA_10K_2026.html, chunk #19], which is a 60% increase from 2025 [NVDA_10K_2026.html, chunk #9]. The net income per diluted share was $4.90 [NVDA_10K_2026.html, chunk #9].",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 23
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 9
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 10
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly provides all required FY2026 figures.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.25,
+      "actionable_feedback": "回答已满足所有必需点，无需改进。"
+    },
+    {
+      "id": "lex-07",
+      "category": "mixed",
+      "query": "AAPL 202603 那一季的 10-Q 裡，iPhone 與服務業務營收各自表現如何？",
+      "answerable": true,
+      "answer": "iPhone 的營收在 2026 年 3 月 28 日止的三個月和六個月期間，分別比 2025 年同期增長了 22% 和 23% [Reference 2: AAPL_10Q_202603.html, chunk #10]。服務業務的營收在同期也分別增長了 16% 和 15% [Reference 2: AAPL_10Q_202603.html, chunk #10]。這是因為 iPhone 的 Pro 機型銷售提高 [Reference 1: AAPL_10Q_202603.html, chunk #30]，以及服務業務中的廣告、App Store 和雲端服務的營收增加 [Reference 1: AAPL_10Q_202603.html, chunk #30]。在 2026 年 3 月 28 日止的三個月和六個月期間，iPhone 的營收分別為 56,994 百萬美元和 142,263 百萬美元 [Reference 2: AAPL_10Q_202603.html, chunk #10]，服務業務的營收分別為 30,976 百萬美元和 60,989 百萬美元 [Reference 2: AAPL_10Q_202603.html, chunk #10]。",
+      "sources": [
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 30
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 8
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all required points.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已满足所有要求，无需改进。"
+    },
+    {
+      "id": "lex-08",
+      "category": "lexical",
+      "query": "AMZN EPS",
+      "answerable": true,
+      "answer": "The EPS (Earnings Per Share) for AMZN is $7.17 for the fiscal year 2025, and $5.53 for the fiscal year 2024, with a diluted EPS of $7.17 for 2025 and $5.53 for 2024, while the trailing EPS is $7.63 and the forward EPS is $9.85996 [Reference 1: AMZN_IncomeStatement_20260612.txt, chunk #0], [Reference 2: AMZN_Fundamentals_20260612.txt, chunk #0].",
+      "sources": [
+        {
+          "source": "AMZN_IncomeStatement_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 7
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer includes required EPS values and labels.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已满足所有必需点，无违规。建议删减多余的 forward EPS 信息，保持简洁。"
+    },
+    {
+      "id": "lex-09",
+      "category": "lexical",
+      "query": "GOOGL gross margin",
+      "answerable": true,
+      "answer": "The GOOGL gross margin is 0.60368 for the trailing twelve months (TTM) [GOOGL_Fundamentals_20260612.txt, chunk #0]. Additionally, the annual income statement for fiscal year 2025 reports a gross profit of $240.30B and a cost of revenue of $162.53B, resulting in a gross margin of $240.30B / $402.84B = 0.596 [GOOGL_IncomeStatement_20260612.txt, chunk #0]. For the three months ended March 31, 2026, the gross margin is $68.625B / $109.896B = 0.625 [GOOGL_10Q_202603.html, chunk #26].",
+      "sources": [
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10Q_202509.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "GOOGL_IncomeStatement_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 18
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly states the gross margin (~60.4%) and cites the source period.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.75,
+      "actionable_feedback": "回答已满足要求，但建议只给出最相关的毛利率，避免列出多种时间段导致混淆。"
+    },
+    {
+      "id": "lex-10",
+      "category": "mixed",
+      "query": "Meta 最新年報（10-K）中，對 Reality Labs 業務的虧損與展望怎麼描述？",
+      "answerable": true,
+      "answer": "Meta 的 Reality Labs 業務在 2025 年的虧損為 19.19 億美元，比 2024 年增加了 8% [META_10K_2025.html, chunk #177]。這主要是由於員工薪酬和其他相關費用增加所致 [META_10K_2025.html, chunk #177]。公司預計 Reality Labs 業務將繼續投資虛擬和增強現實技術，並可能會受到各種法律和法規的影響 [META_10K_2025.html, chunk #67]。公司承認這項業務的發展存在不確定性，並可能會對公司的商業、聲譽或財務結果產生不利影響 [META_10K_2025.html, chunk #67]。 Reality Labs 的收入在 2025 年為 2.207 億美元，僅增加了 3% [META_10K_2025.html, chunk #4]。",
+      "sources": [
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 177
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 4
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 67
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 160
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer correctly states Reality Labs loss and long-term investment outlook, meeting all rubric requirements.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答已满足所有必需点，无需改进。"
+    },
+    {
+      "id": "lex-11",
+      "category": "mixed",
+      "query": "TSLA 202603 那一季的 10-Q 裡，毛利率與交付量的表現如何？",
+      "answerable": true,
+      "answer": "2026 年第一季度，TSLA 的毛利率为 21.1% [TSLA_10Q_202603.html, chunk #14]。相比 2025 年同期，毛利率有所增加，2025 年同期的毛利率为 16.3% [TSLA_10Q_202603.html, chunk #14]。\n\n而交付量的具体数字在提供的参考材料中没有直接提及，但是我们可以通过汽车销售和其他相关数据来间接推断出交付量的变化。例如，2026 年第一季度的汽车销售收入为 15,473 百万美元 [TSLA_10Q_202603.html, chunk #8]，而 2025 年同期的汽车销售收入为 12,925 百万美元 [TSLA_10Q_202603.html, chunk #8]。\n\n因此，尽管缺乏直接的交付量数据，但我们可以看到 2026 年第一季度的汽车销售收入同比增加，这可能间接反映了交付量的增长。然而，需要注意的是，销售收入的增长可能不完全等同于交付量的增长，因为价格和产品组合的变化也可能影响销售收入 [TSLA_10Q_202603.html, chunk #8]。",
+      "sources": [
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 11
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 8
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 7
+        }
+      ],
+      "correctness": {
+        "score": 0.375,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer does not correctly reference the 202603 quarter, but provides gross margin figures.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答错误地把 2026 年第一季度当作 202603，导致信息不准确。请先确认检索到的文件中确切的季度标识，再在生成时严格使用该季度的数字。"
+    },
+    {
+      "id": "lex-12",
+      "category": "mixed",
+      "query": "AAPL 202512 那一季的 10-Q 裡，營收成長主要來自哪些產品線？",
+      "answerable": true,
+      "answer": "AAPL 202512 第一季的營收成長主要來自iPhone、Services 和 iPad [AAPL_10Q_202512.html, chunk #26]。根據報告，iPhone 的_net sales_增加是由於更高的 Pro 模型銷售 [AAPL_10Q_202512.html, chunk #26]。Services 的_net sales_增加主要是由於廣告、App Store和雲服務的銷售增加 [AAPL_10Q_202512.html, chunk #26]。同時，iPad 的_net sales_也增加，主要是由於更高的 iPad 和 iPad Pro 銷售，尽管 iPad mini 的銷售略微下降 [AAPL_10Q_202512.html, chunk #26]。 \n\n另外，根據提供的財務數據，AAPL 在 202512 第一季的總營收為 143,756 百萬美元，較去年的 124,300 百萬美元有所增加 [AAPL_10Q_202512.html, chunk #4]。因此，營收的成長主要歸因於這些产品線的強勁表現。",
+      "sources": [
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 8
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 6
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 21
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer meets all required points.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答符合要求，无需改进。"
+    },
+    {
+      "id": "lex-13",
+      "category": "lexical",
+      "query": "NVIDIA Blackwell GPU architecture",
+      "answerable": true,
+      "answer": "The NVIDIA Blackwell GPU architecture delivers a significant increase in token throughput and reduction in cost per token compared to the Hopper generation [NVDA_10K_2026.html, chunk #38]. Introduced in fiscal year 2025, the Blackwell architecture is a full set of data center scale infrastructure that includes GPUs, CPUs, DPUs, interconnects, switch chips and systems, and networking adapters [NVDA_10K_2026.html, chunk #42]. It excels at processing cutting edge generative AI and accelerated computing workloads with market leading performance and efficiency [NVDA_10K_2026.html, chunk #42]. The Blackwell architecture also introduced neural graphics, which combines AI models with traditional rendering to boost game performance, image quality, and interactivity [NVDA_10K_2026.html, chunk #43]. In fiscal year 2026, NVIDIA launched and scaled the Blackwell Ultra platform, optimized for agentic, reasoning, and physical AI [NVDA_10K_2026.html, chunk #38]. The Blackwell architecture represented the majority of NVIDIA's Data Center revenue [NVDA_10K_2026.html, chunk #115].",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 115
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.16666666666666666,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-14",
+      "category": "lexical",
+      "query": "NVIDIA H100 GPU",
+      "answerable": true,
+      "answer": "The NVIDIA H100 GPU is not mentioned in the provided reference materials [NVDA_10K_2026.html, chunk #38], [NVDA_10K_2026.html, chunk #43], [NVDA_Fundamentals_20260508.txt, chunk #0], [NVDA_10Q_202604.html, chunk #61], [NVDA_Fundamentals_20260612.txt, chunk #1]. However, the company's GPU products are discussed in general terms, including the Blackwell architecture [NVDA_10K_2026.html, chunk #38] and the GeForce RTX GPUs for gaming and PCs [NVDA_Fundamentals_20260612.txt, chunk #1]. The company's GPU computing platform enhances productivity and introduces new capabilities for critical workflows in many fields, such as design, engineering, and digital content creation [NVDA_10K_2026.html, chunk #43]. I don't have enough information in my knowledge base to answer this question specifically about the NVIDIA H100 GPU.",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 61
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": true,
+      "wrongful_refusal": true,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-15",
+      "category": "lexical",
+      "query": "Jensen Huang NVIDIA CEO",
+      "answerable": true,
+      "answer": "Jen-Hsun Huang, also known as Jensen Huang, has served as NVIDIA's President, Chief Executive Officer, and a member of the Board of Directors since the company's inception in 1993 [NVDA_10K_2026.html, chunk #58]. He co-founded NVIDIA in 1993 [NVDA_10K_2026.html, chunk #58] and is currently the CEO of the world's most valuable company, due to huge demand for its AI hardware [NVDA_News_20260519_03.txt, chunk #1]. As of February 20, 2026, he holds the position of President and Chief Executive Officer [NVDA_10K_2026.html, chunk #26]. Huang recently traveled to China with US President Donald Trump and expects the Chinese market to open to high-end US chips that can train and run artificial intelligence systems over time [NVDA_News_20260519_03.txt, chunk #0]. He has stated that the Chinese government has to decide how much of their local market they want to protect, but his sense is that over time the market will open [NVDA_News_20260519_03.txt, chunk #1].",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 58
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "NVDA_News_20260519_03.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_News_20260519_03.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_News_20260519_01.txt",
+          "chunk_index": 0
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-16",
+      "category": "lexical",
+      "query": "Tim Cook Apple CEO",
+      "answerable": true,
+      "answer": "Tim Cook is the Chief Executive Officer (CEO) of Apple Inc. [Reference 2: AAPL_10K_2025.html, chunk #27]. He has been serving in this position, as evident from his signing of the 2025 Form 10-K as the Chief Executive Officer and Director (Principal Executive Officer) on October 31, 2025 [Reference 2: AAPL_10K_2025.html, chunk #27]. During his tenure, the company has undergone significant transformations, including the expansion of its product line and services segment, which now contributes substantially to Apple's revenue [Reference 1: AAPL_News_20260519_01.txt, chunk #4]. Under Cook's leadership, Apple has also been investing heavily in AI infrastructure, with R&D spending jumping 34% year-over-year to $11.4 billion in the last quarter [Reference 1: AAPL_News_20260519_01.txt, chunk #4].",
+      "sources": [
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 27
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "AAPL_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 24
+        }
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-17",
+      "category": "lexical",
+      "query": "Microsoft Copilot AI assistant",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-18",
+      "category": "lexical",
+      "query": "NVIDIA NVLink interconnect",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-19",
+      "category": "lexical",
+      "query": "Apple Vision Pro headset",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-20",
+      "category": "lexical",
+      "query": "Google TPU Ironwood",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "lex-21",
+      "category": "lexical",
+      "query": "Meta Ray-Ban smart glasses",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "mix-01",
+      "category": "mixed",
+      "query": "NVIDIA 最新財報的營收成長率",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "mix-02",
+      "category": "mixed",
+      "query": "Apple iPhone 銷售近期趨勢",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "mix-03",
+      "category": "mixed",
+      "query": "Microsoft 雲端業務最新季度表現",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "mix-04",
+      "category": "mixed",
+      "query": "NVDA 最近新聞中的關鍵商業動向",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "mix-05",
+      "category": "mixed",
+      "query": "Apple 服務業務的毛利率與成長",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    },
+    {
+      "id": "mix-06",
+      "category": "mixed",
+      "query": "MSFT EPS 與年增率",
+      "answerable": true,
+      "answer": null,
+      "sources": [],
+      "correctness": null,
+      "correctness_verdict": null,
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": null,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": ""
+    }
+  ]
+}

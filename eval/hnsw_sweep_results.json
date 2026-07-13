@@ -1,0 +1,50 @@
+[
+  {
+    "label": "auto (default)",
+    "ef": "auto",
+    "recall@5": 0.7577,
+    "recall@10": 0.7751,
+    "mrr@10": 0.7778,
+    "avg_latency_ms": 33.61
+  },
+  {
+    "label": "ef=64",
+    "ef": 64,
+    "recall@5": 0.7577,
+    "recall@10": 0.7751,
+    "mrr@10": 0.7778,
+    "avg_latency_ms": 28.82
+  },
+  {
+    "label": "ef=128",
+    "ef": 128,
+    "recall@5": 0.7577,
+    "recall@10": 0.7751,
+    "mrr@10": 0.7778,
+    "avg_latency_ms": 29.24
+  },
+  {
+    "label": "ef=200",
+    "ef": 200,
+    "recall@5": 0.7577,
+    "recall@10": 0.7751,
+    "mrr@10": 0.7778,
+    "avg_latency_ms": 27.76
+  },
+  {
+    "label": "ef=500",
+    "ef": 500,
+    "recall@5": 0.7577,
+    "recall@10": 0.7751,
+    "mrr@10": 0.7778,
+    "avg_latency_ms": 27.88
+  },
+  {
+    "label": "exact (brute)",
+    "ef": "brute",
+    "recall@5": 0.7577,
+    "recall@10": 0.7751,
+    "mrr@10": 0.7778,
+    "avg_latency_ms": 28.17
+  }
+]

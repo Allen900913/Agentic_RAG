@@ -1,0 +1,168 @@
+{
+  "k_runs": 3,
+  "category_summary": {
+    "semantic": {
+      "run_means": [
+        0.527,
+        0.636,
+        0.473
+      ],
+      "mean_of_means": 0.545,
+      "std_across_runs": 0.068
+    },
+    "overall": {
+      "run_means": [
+        0.527,
+        0.636,
+        0.473
+      ],
+      "mean_of_means": 0.545,
+      "std_across_runs": 0.068
+    }
+  },
+  "per_question": {
+    "sem-01": {
+      "category": "semantic",
+      "query": "NVIDIA 的核心技術護城河是什麼？",
+      "n_runs": 3,
+      "scores": [
+        0.0,
+        0.8,
+        0.8
+      ],
+      "score_mean": 0.533,
+      "score_std": 0.377,
+      "critical_miss_rate": 0.333
+    },
+    "sem-02": {
+      "category": "semantic",
+      "query": "Microsoft 在 AI 領域的長期戰略方向？",
+      "n_runs": 3,
+      "scores": [
+        0.5,
+        0.5,
+        0.2
+      ],
+      "score_mean": 0.4,
+      "score_std": 0.141,
+      "critical_miss_rate": 1.0
+    },
+    "sem-03": {
+      "category": "semantic",
+      "query": "Apple 的服務業務未來成長潛力如何？",
+      "n_runs": 3,
+      "scores": [
+        0.8,
+        0.8,
+        0.0
+      ],
+      "score_mean": 0.533,
+      "score_std": 0.377,
+      "critical_miss_rate": 0.0
+    },
+    "sem-04": {
+      "category": "semantic",
+      "query": "這些公司面臨哪些主要風險與挑戰？",
+      "n_runs": 3,
+      "scores": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "score_mean": 1.0,
+      "score_std": 0.0,
+      "critical_miss_rate": 0.0
+    },
+    "sem-05": {
+      "category": "semantic",
+      "query": "What are NVIDIA's competitive advantages in the data center market?",
+      "n_runs": 3,
+      "scores": [
+        1.0,
+        1.0,
+        0.5
+      ],
+      "score_mean": 0.833,
+      "score_std": 0.236,
+      "critical_miss_rate": 0.333
+    },
+    "sem-06": {
+      "category": "semantic",
+      "query": "Apple Silicon 對 Apple 整體策略的意義？",
+      "n_runs": 3,
+      "scores": [
+        0.5,
+        0.8,
+        0.5
+      ],
+      "score_mean": 0.6,
+      "score_std": 0.141,
+      "critical_miss_rate": 0.333
+    },
+    "sem-07": {
+      "category": "semantic",
+      "query": "Microsoft Azure 在雲端市場的競爭定位",
+      "n_runs": 3,
+      "scores": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "score_mean": 0.167,
+      "score_std": 0.236,
+      "critical_miss_rate": 1.0
+    },
+    "sem-08": {
+      "category": "semantic",
+      "query": "Amazon AWS 雲端事業的長期策略方向是什麼？",
+      "n_runs": 3,
+      "scores": [
+        0.8,
+        0.3,
+        0.0
+      ],
+      "score_mean": 0.367,
+      "score_std": 0.33,
+      "critical_miss_rate": 0.667
+    },
+    "sem-09": {
+      "category": "semantic",
+      "query": "Google 在 AI 與搜尋領域的競爭策略？",
+      "n_runs": 3,
+      "scores": [
+        0.5,
+        0.8,
+        0.7
+      ],
+      "score_mean": 0.667,
+      "score_std": 0.125,
+      "critical_miss_rate": 0.0
+    },
+    "sem-10": {
+      "category": "semantic",
+      "query": "Meta 在 AI 與 Reality Labs 上的長期投資方向？",
+      "n_runs": 3,
+      "scores": [
+        0.7,
+        1.0,
+        0.8
+      ],
+      "score_mean": 0.833,
+      "score_std": 0.125,
+      "critical_miss_rate": 0.0
+    },
+    "sem-11": {
+      "category": "semantic",
+      "query": "Tesla 面臨哪些主要競爭與監管風險？",
+      "n_runs": 3,
+      "scores": [
+        0.0,
+        0.0,
+        0.2
+      ],
+      "score_mean": 0.067,
+      "score_std": 0.094,
+      "critical_miss_rate": 1.0
+    }
+  }
+}

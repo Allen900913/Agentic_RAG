@@ -1,0 +1,622 @@
+{
+  "summary": {
+    "semantic": {
+      "n": 11,
+      "hallucination_rate_mean": null,
+      "correctness_mean": 0.691,
+      "n_with_rubric": 11,
+      "relevance_mean": null,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.565,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 1,
+      "hallucination_pass@0.1": null,
+      "correctness_pass@0.6": 0.636,
+      "relevance_pass@0.8": null
+    },
+    "overall": {
+      "n": 11,
+      "hallucination_rate_mean": null,
+      "correctness_mean": 0.691,
+      "n_with_rubric": 11,
+      "relevance_mean": null,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.565,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 1,
+      "hallucination_pass@0.1": null,
+      "correctness_pass@0.6": 0.636,
+      "relevance_pass@0.8": null
+    }
+  },
+  "records": [
+    {
+      "id": "sem-01",
+      "category": "semantic",
+      "query": "NVIDIA 的核心技術護城河是什麼？",
+      "answerable": true,
+      "answer": "NVIDIA 的核心護城河在於其 **全方位加速運算平台**——結合領先的 GPU 硬體、專屬的 CUDA 軟體生態、廣泛的 AI/深度學習庫與高效能互聯網路（NVLink、DPU），以及遍佈資料中心、遊戲、專業視覺化與汽車四大市場的龐大開發者與客戶生態系統【NVDA_10K_2026.html, chunk #38】。\n\n- **硬體領先與可程式化架構**：NVIDIA 以 GPU 為核心，提供數萬個運算核心的平行處理能力，支援深度學習與高效能運算，並在 2023 推出首款資料中心 CPU Grace、2024 的 Blackwell 架構以及 2026 的 Blackwell Ultra，持續提升算力與每個 token 成本的效益【NVDA_10K_2026.html, chunk #38】。  \n- **軟體堆疊與開發者鎖定**：自 2006 年推出 CUDA 以來，NVIDIA 建立了完整的軟體堆疊（CUDA、AI Enterprise、Omniverse、Clara、DRIVE 等），讓第三方 ISV、雲端服務商與科研機構皆依賴其平台開發應用，形成強大的網路效應【NVDA_10K_2026.html, chunk #38】。  \n- **端到端 AI 與物理 AI 平台**：公司提供從資料中心基礎設施、開放模型、嵌入式運算模組到完整軟體框架的全套解決方案，支援生成式 AI、代理式 AI 以及機器人與自動化等物理 AI 應用【NVDA_10K_2026.html, chunk #43】。  \n- **高效能互聯與網路**：收購 Mellanox 後，NVIDIA 引入 NVLink、DPU 及 InfiniBand/Ethernet 交換晶片，讓其平台能在資料中心規模上連接成千上萬的計算節點，提升整體系統效能與成本優勢【NVDA_10K_2026.html, chunk #41】。  \n- **多元市場佈局**：其加速運算平台同時服務資料中心、遊戲、專業視覺化與汽車四大市場，客戶涵蓋雲端服務提供商、AI 模型製造商、企業與初創公司，以及公共部門，形成跨領域的需求壁壘【NVDA_10K_2026.html, chunk #41】。  \n\n綜合以上，NVIDIA 透過硬體、軟體、網路與生態系統的深度整合，建立了難以被競爭者快速複製的技術護城河。",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_Fundamentals_20260519.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "All required points are covered and no prohibited content.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.14285714285714285,
+      "actionable_feedback": "檢索器未能有效抓取相關文檔，導致 context_recall 低（0.14），需提升檢索策略或增加 top‑k/向量匹配精度，以取得更多關鍵 chunk。"
+    },
+    {
+      "id": "sem-02",
+      "category": "semantic",
+      "query": "Microsoft 在 AI 領域的長期戰略方向？",
+      "answerable": true,
+      "answer": "Microsoft 的 AI 長期戰略是以深化與 OpenAI 的夥伴關係、將 AI 深度嵌入 Azure 雲端平台與全產品堆疊（從生產力套件到遊戲與安全），同時投入巨額資源建設 AI 基礎設施並推動負責任的 AI 研發與部署【MSFT_10Q_202512, chunk #38】【MSFT_10K_2025, chunk #40】。\n\n- **夥伴與投資**：Microsoft 自 2019 年起與 OpenAI 建立長期戰略合作，持續以投資者身分取得 OpenAI 的收入分成，並在 2025 年與 2026 年分別延長合作協議，確保 Azure 獨家提供 OpenAI API 以及對 OpenAI 未來算力需求的優先購買權【MSFT_10Q_202512, chunk #38】【MSFT_10Q_202603, chunk #38】【MSFT_10K_2025, chunk #112】。  \n\n- **AI 融入全技術堆疊**：Microsoft 的 AI 產品覆蓋「技術堆疊的每一層」，從 Azure 雲端服務、Microsoft 365 Copilot、生成式 AI 代理人，到 Windows、Edge、Bing、Teams、Xbox 等消費與企業應用，旨在為各行各業提供「轉型性成果」與「生產力提升」【MSFT_10K_2025, chunk #40】。  \n\n- **雲端與平台領導**：公司致力於以 Microsoft Cloud 為基礎，領導 AI 平台浪潮，透過「智能解決方案」幫助客戶最大化數位支出價值，並在 AI 基礎設施（包括 GPU、資料中心擴張）上持續投入，以因應 AI 服務需求的快速增長【MSFT_10K_2025, chunk #42】。  \n\n- **產業與工作場所轉型**：Microsoft 正在打造「現代化、模組化的業務應用」與「AI 驅動的洞察」以改變工作方式，並透過 Microsoft 365 Copilot 與 AI 代理人提供實質的生產力增益【MSFT_10K_2025, chunk #42】。  \n\n- **安全與負責任 AI**：公司將 AI 融入端到端的安全、合規、身分驗證與管理解決方案，並明確承諾從設計階段即注入安全與責任機制，確保 AI 的「安全、可靠」使用【MSFT_10K_2025, chunk #40】。  \n\n- **遊戲與個人電腦**：在遊戲領域，Microsoft 透過 AI 創新遊戲體驗；在 Windows 與個人電腦生態系，利用 AI 推動雲端與本機服務的深度結合，提升 PC 市場份額與使用者互動【MSFT_10K_2025, chunk #42】。  \n\n- **持續的研發與人才投入**：公司將 AI 研發列為核心活動，持續招聘與培養頂尖人才，以保持在快速變化的軟體、設備與雲端服務市場中的競爭優勢【MSFT_10Q_202512, chunk #38】。  \n\n綜合以上，Microsoft 的 AI 長期戰略聚焦於：**深化 OpenAI 合作 → AI 全堆疊整合 → 雲端平台領導 → 大規模基礎設施投資 → 負責任與安全的 AI 應用**，以驅動持續增長與產業轉型。",
+      "sources": [
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 40
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 112
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "All required points are covered and no prohibited content.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": "檢索器未能充分抓取相關文檔，導致 context_recall 只有 0.33，需提升檢索策略或擴大 top‑k，以確保更多關鍵 chunk 被返回。"
+    },
+    {
+      "id": "sem-03",
+      "category": "semantic",
+      "query": "Apple 的服務業務未來成長潛力如何？",
+      "answerable": true,
+      "answer": "Apple 的服務業務未來成長潛力被視為強勁，預計將持續以兩位數的年增率擴張，成為公司營收與獲利的主要驅動力。  \n\n- **持續高速增長**：2026 年第二季服務淨銷售較 2025 年同期上升，主要來自廣告、App Store 與雲端服務的貢獻【Reference 4, chunk #15】；2025 年全年服務淨銷售亦同樣因廣告、App Store 與雲端服務提升而增長【Reference 3, chunk #80】。2025 年 Q1 服務淨銷售亦呈增長趨勢【Reference 1, chunk #15】。  \n\n- **高毛利與毛利率提升**：服務毛利在 2026 年第一季與第二季均上升，且毛利率因服務組合變化而提升【Reference 1, chunk #16】、【Reference 4, chunk #16】。  \n\n- **營收比重與規模**：服務佔 Apple 總營收約 28%，2025 年最後一季服務營收達 310 億美元，較前季成長 16%【Reference 5, chunk #4】；iPhone 仍是最大貢獻者（佔 51%），但服務已成為高毛利的次要支柱。  \n\n- **定價權與價格上調**：公司已成功在服務上提升價格，顯示在生態系統內具備定價能力【Reference 2, chunk #1】。  \n\n- **研發與 AI 基礎設施投入**：Apple 正全力投入 AI 基礎設施，2025 年最後一季研發支出較前一年增長 34% 至 114 億美元，主要用於支撐服務平台與 AI 應用【Reference 5, chunk #4】。此類投資預計會進一步提升服務的功能與吸引力，推動用戶付費升級。  \n\n- **現金流與盈利能力**：過去三年平均營運現金流利潤率 31.1%，營運利潤率 32.6%，均遠高於標準普爾同業中位數，顯示服務的高現金產生能力【Reference 2, chunk #1】。  \n\n- **風險因素**：核心風險在於全球監管機構對 App Store 及相關收費模式的審查，市場對此的中性看法顯示未來可能面臨收入侵蝕的壓力【Reference 2, chunk #1】。此外，關稅與供應鏈成本上升亦可能影響服務毛利的持續提升【Reference 1, chunk #16】。  \n\n**結論**：基於服務銷售持續增長、毛利率提升、公司具備定價權、AI 基礎設施的大幅研發投入以及強勁的現金流與盈利表現，Apple 的服務業務在未來具備顯著的成長潛力；但需持續關注監管環境與成本壓力可能帶來的下行風險。  ",
+      "sources": [
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AAPL_News_20260612_04.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 80
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 30
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        }
+      ],
+      "correctness": {
+        "score": 0.0,
+        "critical_miss": false,
+        "fatal_hallucination": true
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1"
+        ],
+        "must_not_violations": [
+          "mn0"
+        ],
+        "reason": "The answer mentions revenue growth and service ecosystem but fabricates a specific growth rate.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "LLM出現幻覺，捏造了服務業務的具體成長率，需在系統提示中加強來源約束或使用檢查機制以防止未在Chunk中出現的數據。"
+    },
+    {
+      "id": "sem-04",
+      "category": "semantic",
+      "query": "這些公司面臨哪些主要風險與挑戰？",
+      "answerable": true,
+      "answer": "这些科技巨头的主要风险集中在 **并购整合、激烈竞争以及产品研发与供应链执行** 等方面。  \n\n**Microsoft (MSFT)**  \n- 并购风险：收购Activision Blizzard等交易可能出现整合困难、员工和技术保留问题、合规义务增加以及管理层被分散注意力的风险；若未实现预期收益，还可能导致商誉或无形资产减值并产生重大费用【MSFT_10K_2025.html, chunk #81】。  \n- 第三方合作不确定性：对合作伙伴的控制有限，若合作关系提前终止或需重新谈判，可能削弱预期收益【MSFT_10K_2025.html, chunk #81】。  \n\n**NVIDIA (NVDA)**  \n- 市场需求不确定性：产品可能在灰色市场流通，导致需求预测困难并增加收入波动性【NVDA_10Q_202510.html, chunk #57】。  \n- 并购与投资风险：收购整合失败、监管批准延迟、关键人才流失或技术演进使收购价值下降，均可能对业务增长和财务业绩产生负面影响；对非上市或流动性差的私募投资可能导致全部或部分损失并产生减值【NVDA_10Q_202510.html, chunk #57】。  \n\n**Amazon (AMZN)**  \n- 激烈且多元化的竞争：在电商、云计算、数字内容、广告、物流等多个领域面临资源更充足、品牌更强的竞争者，可能迫使公司降价或增加支出，从而压缩利润【AMZN_10K_2025.html, chunk #68】。  \n- 新业务与国际扩张风险：进入新产品、服务和地区时缺乏经验，可能遭遇技术挑战、监管限制、汇率波动、物流成本上升以及本地化合规问题，导致投资回报不及预期甚至需计提减值【AMZN_10K_2025.html, chunk #68】。  \n- 可持续发展计划风险：若未实现预期的技术或运营效益，可能对业务声誉和财务产生负面影响【AMZN_10K_2025.html, chunk #68】。  \n\n**Tesla (TSLA)**  \n- 产品研发与量产风险：新技术（如自动驾驶、机器人出租车）以及新车型的开发、上市和产能提升可能出现延迟或成本失控，影响业务增长和利润率【TSLA_10K_2025.html, chunk #61】。  \n- 制造成本与供应链风险：必须保持高效、低成本的制造流程和供应链，否则会削弱竞争优势并导致财务压力【TSLA_10K_2025.html, chunk #61】。  \n\n**Apple (AAPL)**  \n- 设计与制造缺陷风险：产品可能出现设计或制造缺陷，进而损害公司声誉并对业务产生实质性不利影响【AAPL_10Q_202603.html, chunk #37】。  \n\n综上，这些公司共同面临 **并购整合难题、竞争加剧、技术与产品上市不确定性以及跨地区运营合规与供应链管理** 等关键风险与挑战。",
+      "sources": [
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 81
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 57
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 68
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 61
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 37
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "All required rubric points are satisfied and no prohibited errors are present.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.42857142857142855,
+      "actionable_feedback": "检索器未能充分抓取相关文档，导致上下文召回率仅为0.43，需提升检索覆盖率，例如增加 top‑k、扩展查询或优化向量检索阈值，以获取更多相关章节。"
+    },
+    {
+      "id": "sem-05",
+      "category": "semantic",
+      "query": "What are NVIDIA's competitive advantages in the data center market?",
+      "answerable": true,
+      "answer": "NVIDIA’s primary competitive advantage in the data‑center market is its end‑to‑end AI infrastructure platform that unites best‑in‑class GPUs, CPUs, high‑speed interconnects, DPUs, networking hardware, and a full suite of software, libraries, models and services into a single, highly optimized stack【NVDA_10K_2026.html, chunk #41】【NVDA_10K_2026.html, chunk #38】【NVDA_10K_2026.html, chunk #42】.  \n\n- **Integrated hardware‑software ecosystem** – NVIDIA couples its GPUs with the Grace CPU, NVLink switches, DPUs and Ethernet/InfiniBand adapters, all co‑designed with a unified programmable architecture and delivered with CUDA, AI Enterprise, and domain‑specific frameworks, creating unique value that rivals “CPU‑only” solutions【NVDA_10K_2026.html, chunk #38】【NVDA_10K_2026.html, chunk #42】.  \n\n- **Cutting‑edge architectures** – The Blackwell architecture (launched FY 2025) and the newer Blackwell Ultra platform (FY 2026) deliver market‑leading performance and efficiency for generative and agentic AI workloads, while the upcoming Rubin platform promises up to a 10× reduction in cost per token versus the previous generation【NVDA_10K_2026.html, chunk #38】【NVDA_10K_2026.html, chunk #42】.  \n\n- **High‑performance interconnects** – NVLink Fusion enables hyperscalers and custom ASIC designers to tightly integrate CPUs and “XPUs” (GPU‑CPU hybrids) on a single platform, scaling to hundreds of thousands of compute nodes with low‑latency, high‑bandwidth networking【NVDA_10K_2026.html, chunk #41】.  \n\n- **Networking expertise from Mellanox acquisition** – Ownership of Mellanox’s InfiniBand and Ethernet technologies adds DPUs, NICs, and switch chips to NVIDIA’s portfolio, allowing it to deliver rack‑scale, end‑to‑end data‑center solutions that competitors must source from multiple vendors【NVDA_10K_2026.html, chunk #38】.  \n\n- **Broad developer ecosystem** – Tens of thousands of developers build on CUDA, acceleration libraries, AI models, and SDKs, expanding the installed base and creating network effects that increase platform stickiness and accelerate adoption across multiple multi‑billion‑dollar markets【NVDA_10K_2026.html, chunk #38】.  \n\n- **Strategic partnerships and collaborations** – Alliances with cloud providers, OEMs, and specialized partners (e.g., Tech Mahindra for AI‑powered telco operations, Lumentum for optics, Nebius for hyperscale cloud) extend NVIDIA’s reach and embed its technology deeper into customers’ data‑center stacks【NVDA_Fundamentals_20260519.txt, chunk #1】.  \n\nCollectively, these hardware‑software integration, advanced architectures, proprietary interconnects, networking capabilities, developer community, and strategic alliances give NVIDIA a differentiated, high‑performance, cost‑effective platform that is difficult for rivals to replicate in the data‑center AI market.",
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_Fundamentals_20260519.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_Fundamentals_20260508.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 42
+        }
+      ],
+      "correctness": {
+        "score": 1.0,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "All required points are covered and no prohibited content.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.14285714285714285,
+      "actionable_feedback": "检索器未能有效抓取相关文档，导致上下文召回率仅0.14，需优化检索策略或扩展索引覆盖范围，以提升检索到完整的全栈平台信息。"
+    },
+    {
+      "id": "sem-06",
+      "category": "semantic",
+      "query": "Apple Silicon 對 Apple 整體策略的意義？",
+      "answerable": true,
+      "answer": "Apple Silicon is the cornerstone of Apple’s overall strategy because it lets the company tightly integrate hardware and software, lift product gross margins, and power the AI‑driven services expansion that now fuels a large share of earnings【AAPL_News_20260519_01.txt, chunk #4】.  \n\n**Key strategic implications supported by the filings:**  \n\n1. **Hardware‑software integration and AI capability** – The launch of the MacBook Neo and the M4‑powered iPad Air demonstrates Apple’s rollout of its own silicon across flagship devices, giving Apple full control over the compute stack and enabling the “all‑in on AI infrastructure” push highlighted in the quarter’s commentary【AAPL_News_20260519_01.txt, chunk #4】.  \n\n2. **Margin enhancement** – Apple attributes part of its rising gross‑margin percentages to a more favorable product mix, which includes higher‑margin Apple‑silicon‑based devices; the trailing‑twelve‑month gross margin climbed to 47.9% from 46.2% a year earlier【AAPL_News_20260519_01.txt, chunk #5】, and the 10‑Q notes that products gross‑margin increased in Q1 2026 due to a different mix of products, partially offset by tariff costs【AAPL_10Q_202512.html, chunk #15】.  \n\n3. **R&D investment fueling silicon development** – R&D expense surged 34% YoY to $11.4 billion, a jump the company links to higher infrastructure costs tied to its silicon and AI initiatives【AAPL_News_20260519_01.txt, chunk #4】.  \n\n4. **Services growth and ecosystem lock‑in** – Services now represent 28% of total revenue and grew 16% to a record $31.0 billion, a boost the company credits to higher‑margin services that benefit from on‑device AI and seamless integration with Apple‑silicon hardware【AAPL_News_20260519_01.txt, chunk #4】.  \n\n5. **Financial flexibility to absorb supply‑chain pressures** – While the company flags potential cost pressure from semiconductor, NAND and DRAM supply constraints, its “fortress‑grade” balance sheet—$146.6 billion in cash and marketable securities versus $82.7 billion of term debt—provides ample liquidity to manage any silicon‑related supply‑chain shocks【AAPL_News_20260519_01.txt, chunk #5】.  \n\n6. **Competitive positioning** – By owning the silicon roadmap, Apple can differentiate its products (e.g., iPhone 17 lineup, MacBook Neo) and sustain a premium brand moat, which underpins its ability to maintain high operating margins (32.6%) and generate $129.2 billion in free cash flow over the trailing twelve months【AAPL_News_20260519_01.txt, chunk #5】.  \n\nIn sum, Apple Silicon enables tighter integration, higher profitability, accelerated AI‑enabled services, and a resilient financial posture—making it central to Apple’s hybrid hardware‑services growth model.",
+      "sources": [
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 5
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 40
+        }
+      ],
+      "correctness": {
+        "score": 0.5,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer covers vertical integration but omits performance/efficiency and reduced third‑party reliance.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "LLM层未完整覆盖所有关键要点，需在系统提示中明确要求说明性能/能效优势及降低对Intel等第三方的依赖，以提升答案完整性。"
+    },
+    {
+      "id": "sem-07",
+      "category": "semantic",
+      "query": "Microsoft Azure 在雲端市場的競爭定位",
+      "answerable": true,
+      "answer": "Azure 以 34% 的年度收入增速（FY 2025）保持快速成長，並透過完整的 IaaS/PaaS 服務組合、AI 超算能力、客製化矽晶片以及與多家晶片廠的深度合作，確立了在雲端市場的 AI‑導向領先定位【MSFT_10K_2025.html, chunk #2】。\n\n**支撐此競爭定位的關鍵事實**  \n\n1. **服務範圍與深度**  \n   - Azure 被描述為「提供開發者、IT 專業人員與企業在任何平台或裝置上建置、部署與管理應用」的完整雲服務套件，涵蓋計算、網路、儲存、行動與 Web 應用、AI、物聯網、認知服務與機器學習等功能【MSFT_10K_2025.html, chunk #48】。  \n   - 其服務還包括 GitHub Cloud、Nuance Healthcare Cloud、虛擬桌面等垂直解決方案，形成跨領域的生態系統【MSFT_10K_2025.html, chunk #48】。\n\n2. **AI 超算與客製化硬體**  \n   - 微軟提供「超大型 AI 超算」以支援大規模工作負載，並結合最新模型與硬體，包括自家設計的矽晶片以及與晶片製造商的強大合作夥伴關係，為客戶提供 AI 基礎設施的競爭優勢【MSFT_10K_2025.html, chunk #48】。  \n   - Azure AI Foundry 作為統一平台，讓開發者能設計、客製化與管理 AI 應用與代理人，進一步鞏固其 AI 服務領先地位【MSFT_10K_2025.html, chunk #48】。\n\n3. **財務表現與成長動能**  \n   - 「Intelligent Cloud」整體營收在 FY 2025 增長 21%，其中 Azure 及其他雲服務的收入增長 34%，成為該段增長的主要驅動力【MSFT_10K_2025.html, chunk #2】。  \n   - Azure 相關的成本上升 36%，導致 Microsoft Cloud 的毛利率下降至 69%，但此下降主要歸因於 AI 基礎設施的擴張，顯示公司正積極投資於 AI 能力以換取長期市場份額【MSFT_10K_2025.html, chunk #2】。\n\n4. **與其他 Microsoft 產品的整合**  \n   - Azure 與 Microsoft 365、Dynamics 365、GitHub、LinkedIn 等企業級 SaaS 服務緊密結合，提供端到端的雲端與生產力解決方案，提升客戶黏著度與交叉銷售機會【MSFT_10K_2025.html, chunk #48】。  \n\n5. **市場指標與監測**  \n   - 微軟在 10‑Q 報告中專門列出「Azure and other cloud services revenue growth」作為衡量雲端業務健康度的關鍵指標，顯示公司對 Azure 成長的高度關注與透明度【MSFT_10Q_202603.html, chunk #12】。\n\n**結論**：Azure 透過高速的收入增長、廣泛且深度整合的服務組合、領先的 AI 超算與自研矽晶片，以及與 Microsoft 其他核心產品的協同效應，形成以 AI 為核心的競爭優勢，持續在全球雲端基礎設施市場中提升其市場佔有率與差異化定位。",
+      "sources": [
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 115
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 12
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 12
+        }
+      ],
+      "correctness": {
+        "score": 0.5,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Missing required competition mention",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 1.0,
+      "actionable_feedback": "回答缺少 Azure 面臨的競爭資訊，屬於內容遺漏問題，建議在 Retriever 階段擴大檢索範圍或在 System Prompt 中加入要求列出競爭情況的指示。"
+    },
+    {
+      "id": "sem-08",
+      "category": "semantic",
+      "query": "Amazon AWS 雲端事業的長期策略方向是什麼？",
+      "answerable": true,
+      "answer": "Amazon’s long‑term AWS strategy is to keep expanding and modernising its technology‑and‑infrastructure platform—especially its artificial‑intelligence and machine‑learning capabilities—while using cross‑functional, geographically‑scaled investments to drive higher customer usage and launch new service categories such as satellite broadband and autonomous‑vehicle solutions【1, chunk #86】【5, chunk #45】.  \n\n**Key strategic pillars supported by the filing:**  \n\n1. **Broad, on‑demand service portfolio** – Amazon continues to invest in AWS’s “broad set of on‑demand technology services, including compute, storage, database, analytics, and machine learning” to serve developers and enterprises of all sizes【1, chunk #86】.  \n\n2. **Heavy, ongoing infrastructure spend** – The company expects technology‑and‑infrastructure spending to rise over time as it adds servers, networking equipment, data‑center capacity, and related personnel to support AI/ML initiatives and overall AWS growth【2, chunk #99】【4, chunk #47】.  \n\n3. **AI/ML as a growth engine** – AWS’s future growth is tied to expanding artificial‑intelligence and machine‑learning offerings, with explicit statements that additional AI investments will continue to impact results into 2026【5, chunk #45】.  \n\n4. **Geographic and cross‑functional expansion** – Investments are designed to support “geographic expansion and the cross‑functionality of our systems and operations,” allowing AWS to serve a wider global customer base and to leverage shared infrastructure across Amazon businesses【1, chunk #86】【2, chunk #99】.  \n\n5. **New vertical initiatives** – Amazon is developing a satellite network for global broadband service and autonomous‑vehicle technology, which are being built on the same infrastructure that powers AWS, indicating a strategic intent to diversify cloud‑related revenue streams【1, chunk #86】.  \n\n6. **Capital efficiency and flexibility** – The firm aims to “invest efficiently” and manage shareholder dilution while retaining flexibility to issue shares for strategic purposes such as acquisitions or employee compensation, ensuring that capital can be deployed to sustain AWS’s long‑term growth【1, chunk #86】.  \n\nTogether, these points illustrate that Amazon’s long‑term AWS direction centers on scaling infrastructure, deepening AI/ML capabilities, expanding globally, and leveraging the cloud platform to launch adjacent high‑tech services.",
+      "sources": [
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 86
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 99
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 47
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 45
+        }
+      ],
+      "correctness": {
+        "score": 0.5,
+        "critical_miss": true,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi1",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Missing required profit contribution information",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": "檢查檢索器，確保能抓到包含 AWS 營利貢獻或營業利益的文件片段；可擴大檢索範圍或調整關鍵詞以提升相關 chunk 的召回率。"
+    },
+    {
+      "id": "sem-09",
+      "category": "semantic",
+      "query": "Google 在 AI 與搜尋領域的競爭策略？",
+      "answerable": true,
+      "answer": "Google 的竞争策略是通过在搜索中深度嵌入前沿生成式 AI、加速 AI 基础设施建设并以用户体验为先，同时多元化收入来源以抵御广告业务波动。  \n\n- **将生成式 AI 融入搜索体验**：Google 正在推出 AI Overviews 与 AI Mode 等功能，将生成式模型直接嵌入搜索结果，以提升用户体验并为后续变现奠定基础【GOOGL_10K_2025.html, chunk #179】。  \n- **前沿 AI 模型研发**：公司持续开发“前沿”生成式 AI 模型（如 Gemini 系列），并将这些模型嵌入各类产品与服务，确保技术领先并满足用户需求【GOOGL_10K_2025.html, chunk #157】。  \n- **大规模投资技术基础设施**：为支撑 AI 计算需求，Google 正在显著提升资本支出，扩建服务器、网络设备和数据中心，并通过自研 TPU 与专用 GPU 提供高性价比的 AI 加速器【GOOGL_10K_2025.html, chunk #179】；同时在 AI‑optimized 基础设施、存储和软件层面提供完整方案，帮助客户在云端、边缘或自有数据中心运行 AI 工作负载【GOOGL_10K_2025.html, chunk #147】。  \n- **AI 开发者平台与生态**：通过 Vertex AI 等平台，Google 为开发者提供托管的 AI 开发环境、模型调优与部署工具，支持超过 200 种基础模型（包括 Gemini 系列），构建围绕 AI 的生态系统【GOOGL_10K_2025.html, chunk #147】。  \n- **AI 驱动的企业解决方案**：在 Google Cloud 中推出 AI‑optimized 基础设施、AI 加速器、以及面向安全、数据分析和业务自动化的 AI 产品（如 Gemini Enterprise 与 Gemini for Workspace），以企业收入为新增长点【GOOGL_10K_2025.html, chunk #147】。  \n- **以用户体验先行、后期变现**：在新产品研发时，Google 首先聚焦用户体验，随后再探索变现模式，这一策略帮助其在竞争激烈的 AI 市场中保持领先，同时降低因过早商业化导致的用户流失风险【GOOGL_10K_2025.html, chunk #179】。  \n- **多元化收入结构**：除了广告，Google 正加速云服务、订阅（YouTube、Google One）和硬件（Pixel）等业务的增长，这些业务的利润率普遍低于广告，但有助于分散收入风险并提升整体抗压能力【GOOGL_10K_2025.html, chunk #179】。  \n- **应对竞争与成本压力**：公司承认 AI 领域竞争激烈，可能面临技术、专利和成本方面的挑战；为此持续加大研发投入、通过收购扩展技术能力，并努力提升数据中心效率以缓解基础设施成本上升的压力【GOOGL_10K_2025.html, chunk #157】【GOOGL_10K_2025.html, chunk #179】。  \n\n综上，Google 通过将生成式 AI 深度嵌入搜索、强化自研 AI 基础设施、提供完整的开发者平台与企业 AI 解决方案、以及在保持用户体验的前提下多元化收入来源，构建了在 AI 与搜索领域的竞争优势。",
+      "sources": [
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 157
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 179
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 60
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 147
+        },
+        {
+          "source": "GOOGL_10Q_202509.html",
+          "chunk_index": 64
+        }
+      ],
+      "correctness": {
+        "score": 0.7,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Missing required point mi1 about search ads core business defense.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5,
+      "actionable_feedback": "LLM 未覆盖搜索广告核心业务的防御或变现要点，属于内容完整性不足。建议在系统提示中明确要求包含搜索广告防御策略，或在检索阶段确保相关文档被检出，以提升答案的完整性。"
+    },
+    {
+      "id": "sem-10",
+      "category": "semantic",
+      "query": "Meta 在 AI 與 Reality Labs 上的長期投資方向？",
+      "answerable": true,
+      "answer": "Meta 正在將長期資本集中於以 AI 為核心的可穿戴設備與虛擬/增強實境（VR/AR）產品，未來 Reality Labs 的營運支出約 70% 將投入穿戴式裝置，剩餘 30% 則用於 VR 與 Horizon 相關計畫，以打造下一代計算平台與元宇宙 [Reference 2, chunk #45]。\n\n- **策略定位**：Meta 於 2021 年將業務與產品策略轉向「元宇宙」——一個超越二維螢幕的沉浸式互聯網，並把研發焦點放在 AI、可穿戴裝置與設備上，以建構新一代介面 [Reference 1, chunk #67]。  \n- **AI 與可穿戴產品路線**：  \n  - 已推出搭載 Meta AI 的 Ray‑Ban Meta 與 Oakley Meta 智慧眼鏡，並於 2024 年展示具業界領先視野的 AR 原型 Orion ，2025 年推出結合顯示器的 Meta Ray‑Ban Display，配合可偵測肌電訊號的 Meta Neural Band [Reference 3, chunk #44]。  \n  - 這些裝置旨在提供語音對話、手勢與神經訊號控制等新型互動方式，支撐 Meta 在 AI 驅動的「下一代計算平台」上的長期布局。  \n- **VR 與 Horizon 事業**：Meta Quest 系列與 Horizon Store 的軟硬體生態持續擴張，並加入「透視」功能讓使用者在虛擬環境中仍能感知現實世界，以提升 VR 的接受度與使用黏著度 [Reference 3, chunk #44]。  \n- **資本與基礎建設投入**：Meta 表示未來的投資將涵蓋新興技術開發、基礎設施建設、隱私安全與合規等多面向，並需依賴其他業務產生的利潤來支撐 Reality Labs 的長期支出 [Reference 1, chunk #67]。  \n- **風險與不確定性**：公司承認在消費者硬體、VR/AR 技術及市場接受度方面經驗有限，且可能因法規、隱私與競爭壓力而延遲或增加成本，這些因素都可能影響其長期投資成效 [Reference 1, chunk #67]、[Reference 4, chunk #118]。  \n\n總結而言，Meta 的長期投資方向是以 AI 為驅動，聚焦於可穿戴裝置（約 70% 的 Reality Labs 支出）與 VR/AR 生態（約 30%），透過硬體、軟體與平台整合，構建未來的元宇宙與下一代計算平台，同時持續管理相關的技術與監管風險。",
+      "sources": [
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 67
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 118
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 4
+        }
+      ],
+      "correctness": {
+        "score": 0.7,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Partial coverage of rubric, missing loss details.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.6666666666666666,
+      "actionable_feedback": "LLM 未提及 Reality Labs 的虧損情況，屬於內容遺漏。建議在系統提示中明確要求列出 VR/AR 投入與虧損，或在檢索階段加入包含虧損資訊的 chunk，以提升完整性。"
+    },
+    {
+      "id": "sem-11",
+      "category": "semantic",
+      "query": "Tesla 面臨哪些主要競爭與監管風險？",
+      "answerable": true,
+      "answer": "Tesla 主要面臨的風險是：在汽車、能源與儲能、機器人與自動駕駛領域的激烈競爭，以及來自電池安全、稅收與補貼、淨計量、原材料溯源等多層面的監管挑戰，這些因素可能削減銷量、壓低價格或提升成本【TSLA_10K_2025.html, chunk #58】【TSLA_10K_2025.html, chunk #67】【TSLA_10K_2025.html, chunk #85】。\n\n**競爭風險**  \n1. **汽車與電動車市場**：全球汽車市場競爭高度激烈，越來越多既有車廠與新進者投入電動車與混合動力車的開發，對 Tesla 的車型（Cybertruck、Model S/X、Model 3/Y）形成直接價格與技術壓力【TSLA_10K_2025.html, chunk #58】。  \n2. **自動駕駛與 AI/機器人**：Tesla 的全自動駕駛（FSD）與機器人（Optimus）需與其他公司在 AI、機器人與自駕技術上競爭，若對手在資源、成本或技術上佔優，可能導致 Tesla 市佔率下降或產品推遲【TSLA_10K_2025.html, chunk #67】。  \n3. **能源生成與儲能**：在太陽能與儲能領域，Tesla 必須與傳統公用事業公司以及其他太陽能與儲能供應商在價格、能量密度與效率上競爭；其產品（Powerwall、Megapack、Solar Roof）雖具品牌與模組化優勢，但仍面臨同類替代方案的挑戰【TSLA_10K_2025.html, chunk #58】【TSLA_10K_2025.html, chunk #67】。  \n4. **電池供應鏈**：Tesla 依賴大量鋰離子電池的產能與品質，若競爭對手取得更有利的電池供應或成本優勢，將影響 Tesla 的車輛與儲能產品的毛利率【TSLA_10K_2025.html, chunk #67】。\n\n**監管與政策風險**  \n1. **電池安全與危險品規範**：Tesla 的高壓電池組受美國與國際「危險品」運輸法規限制，必須持續測試與合規，未來法規變更可能增加合規成本或限制產品出貨【TSLA_10K_2025.html, chunk #58】。  \n2. **太陽能淨計量（Net Metering）**：多州的淨計量政策正被削減或取消，若客戶失去電費抵免，將削弱 Tesla 太陽能系統的吸引力【TSLA_10K_2025.html, chunk #58】。  \n3. **政府稅收與補貼變動**：美國與海外的電動車、太陽能與儲能稅收抵免、補貼與碳信用等激勵措施可能被撤銷、縮減或耗盡，直接提升客戶購買成本並抑制需求【TSLA_10K_2025.html, chunk #85】。  \n4. **《礦產來源追溯與公平貿易法案》（OBBBA）**：該法案要求供應鏈提供關鍵礦產的來源證明，若 Tesla 或其供應商無法提供足夠文件，產品將失去稅收優惠，成本上升【TSLA_10K_2025.html, chunk #85】。  \n5. **國際法規與貿易環境**：Tesla 在美國以外的製造與銷售面臨多國的稅務、環保、勞工與貿易規定，任何不確定的政策變動（如關稅、補貼、地方採購要求）都可能影響其利潤與供應鏈穩定性【TSLA_10K_2025.html, chunk #67】。  \n6. **鋰離子電池製造與回收風險**：電池製造過程中的品質問題或回收處理不當可能導致安全事故，進而影響品牌形象與營運持續性【TSLA_10K_2025.html, chunk #67】。\n\n綜合來看，Tesla 必須同時應對來自產品、技術與供應鏈的多方競爭，以及不斷演變的安全、稅收、補貼與國際貿易規範，這些風險若未妥善管理，將對其營收成長與盈利能力產生顯著負面影響。",
+      "sources": [
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 58
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 67
+        },
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 85
+        }
+      ],
+      "correctness": {
+        "score": 0.7,
+        "critical_miss": false,
+        "fatal_hallucination": false
+      },
+      "correctness_verdict": {
+        "is_refusal": false,
+        "must_include_hits": [
+          "mi0",
+          "mi2"
+        ],
+        "must_not_violations": [],
+        "reason": "Answer covers EV competition and subsidy risk but omits autonomous‑driving regulatory risk.",
+        "error": null
+      },
+      "hallucination_rate": null,
+      "hallucination_claims": [],
+      "relevance_score": null,
+      "relevance_generated_question": "",
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.3333333333333333,
+      "actionable_feedback": "檢索層的召回率偏低，未能抓取包含自動駕駛監管風險的相關段落。建議優化檢索查詢或提升 top‑k、向量相似度門檻，以確保相關風險資訊被檢索到；同時在提示中明確要求涵蓋自動駕駛的監管風險。"
+    }
+  ]
+}

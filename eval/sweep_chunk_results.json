@@ -1,0 +1,130 @@
+{
+  "phase1": [
+    {
+      "fetch_n": 40,
+      "rrf_top_n": 20,
+      "ckpt_R": 0.6,
+      "chunk_P": 0.62,
+      "crit_miss": 0.4,
+      "n": 10
+    },
+    {
+      "fetch_n": 40,
+      "rrf_top_n": 40,
+      "ckpt_R": 0.58,
+      "chunk_P": 0.56,
+      "crit_miss": 0.3,
+      "n": 10
+    },
+    {
+      "fetch_n": 60,
+      "rrf_top_n": 20,
+      "ckpt_R": 0.74,
+      "chunk_P": 0.62,
+      "crit_miss": 0.1,
+      "n": 10
+    },
+    {
+      "fetch_n": 60,
+      "rrf_top_n": 40,
+      "ckpt_R": 0.66,
+      "chunk_P": 0.56,
+      "crit_miss": 0.2,
+      "n": 10
+    },
+    {
+      "fetch_n": 60,
+      "rrf_top_n": 60,
+      "ckpt_R": 0.71,
+      "chunk_P": 0.52,
+      "crit_miss": 0.2,
+      "n": 10
+    },
+    {
+      "fetch_n": 80,
+      "rrf_top_n": 20,
+      "ckpt_R": 0.61,
+      "chunk_P": 0.66,
+      "crit_miss": 0.3,
+      "n": 10
+    },
+    {
+      "fetch_n": 80,
+      "rrf_top_n": 40,
+      "ckpt_R": 0.64,
+      "chunk_P": 0.54,
+      "crit_miss": 0.3,
+      "n": 10
+    },
+    {
+      "fetch_n": 80,
+      "rrf_top_n": 60,
+      "ckpt_R": 0.64,
+      "chunk_P": 0.56,
+      "crit_miss": 0.3,
+      "n": 10
+    },
+    {
+      "fetch_n": 100,
+      "rrf_top_n": 20,
+      "ckpt_R": 0.72,
+      "chunk_P": 0.52,
+      "crit_miss": 0.1,
+      "n": 10
+    },
+    {
+      "fetch_n": 100,
+      "rrf_top_n": 40,
+      "ckpt_R": 0.55,
+      "chunk_P": 0.56,
+      "crit_miss": 0.4,
+      "n": 10
+    },
+    {
+      "fetch_n": 100,
+      "rrf_top_n": 60,
+      "ckpt_R": 0.67,
+      "chunk_P": 0.64,
+      "crit_miss": 0.2,
+      "n": 10
+    }
+  ],
+  "phase2": [
+    {
+      "variant_cap": "3",
+      "fetch_n": 60,
+      "rrf_top_n": 20,
+      "ckpt_R": 0.63,
+      "chunk_P": 0.52,
+      "crit_miss": 0.4,
+      "n": 10
+    },
+    {
+      "variant_cap": "5",
+      "fetch_n": 60,
+      "rrf_top_n": 20,
+      "ckpt_R": 0.67,
+      "chunk_P": 0.66,
+      "crit_miss": 0.2,
+      "n": 10
+    },
+    {
+      "variant_cap": "8",
+      "fetch_n": 60,
+      "rrf_top_n": 20,
+      "ckpt_R": 0.74,
+      "chunk_P": 0.62,
+      "crit_miss": 0.2,
+      "n": 10
+    },
+    {
+      "variant_cap": "15",
+      "fetch_n": 60,
+      "rrf_top_n": 20,
+      "ckpt_R": 0.63,
+      "chunk_P": 0.62,
+      "crit_miss": 0.3,
+      "n": 10
+    }
+  ]
+}

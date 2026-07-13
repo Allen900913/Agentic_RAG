@@ -1,0 +1,522 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[INFO] Evaluating 15 queries against 'us_stock_rag_unstructured' (retrieval=llama-3.3-70b-versatile, gen=openai/gpt-oss-120b, judge=openai/gpt-oss-20b, judge_votes=3, rewrite=True, repeat=1)
+[INFO] Loading BGE-M3 + reranker...
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 29945.05it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|          | 3/391 [00:00<00:25, 15.16it/s]Loading weights:   1%|▏         | 5/391 [00:04<06:44,  1.05s/it]Loading weights: 100%|██████████| 391/391 [00:04<00:00, 89.28it/s]
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 9325.21it/s]
+[INFO] Opening Qdrant server: http://localhost:6333
+[INFO] Snapshotting collection sources for context-recall fallback...
+
+[lex-01] (lexical) NVDA P/E ratio
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'NVDA', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] NVDA_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.625000
+  [2] NVDA_10Q_202604.html | chunk #16 | rrf_score=0.540000
+  [3] NVDA_IncomeStatement_20260508.txt | chunk #0 | rrf_score=0.433333
+  [4] NVDA_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.370370
+  [5] NVDA_Fundamentals_20260519.txt | chunk #0 | rrf_score=0.361111
+  [6] NVDA_IncomeStatement_20260612.txt | chunk #0 | rrf_score=0.340909
+  [7] NVDA_IncomeStatement_20260519.txt | chunk #0 | rrf_score=0.311111
+  [8] NVDA_Fundamentals_20260519.txt | chunk #1 | rrf_score=0.200000
+  [9] NVDA_10K_2026.html | chunk #19 | rrf_score=0.195489
+  [10] NVDA_10K_2026.html | chunk #13 | rrf_score=0.184211
+  [11] NVDA_10K_2026.html | chunk #8 | rrf_score=0.176190
+  [12] NVDA_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.166667
+  [13] NVDA_10Q_202510.html | chunk #6 | rrf_score=0.154762
+  [14] NVDA_10Q_202604.html | chunk #6 | rrf_score=0.141667
+  [15] NVDA_10Q_202510.html | chunk #9 | rrf_score=0.134387
+  [16] NVDA_Fundamentals_20260508.txt | chunk #1 | rrf_score=0.125000
+  [17] NVDA_10Q_202510.html | chunk #14 | rrf_score=0.107143
+  [18] NVDA_10K_2026.html | chunk #11 | rrf_score=0.099145
+  [19] NVDA_10Q_202510.html | chunk #11 | rrf_score=0.098086
+  [20] NVDA_News_20260508_01.txt | chunk #2 | rrf_score=0.094444
+DEBUG - Reranked top candidates:
+  [1] NVDA_Fundamentals_20260612.txt | chunk #0 | type=fundamentals | rrf=0.625000 | raw=0.9967 | sigmoid=0.7304
+  [2] NVDA_Fundamentals_20260519.txt | chunk #0 | type=fundamentals | rrf=0.361111 | raw=0.9964 | sigmoid=0.7303
+  [3] NVDA_Fundamentals_20260508.txt | chunk #0 | type=fundamentals | rrf=0.370370 | raw=0.9960 | sigmoid=0.7303
+  [4] NVDA_10Q_202510.html | chunk #9 | type=10-Q | rrf=0.134387 | raw=0.7739 | sigmoid=0.6844
+  [5] NVDA_10Q_202510.html | chunk #6 | type=10-Q | rrf=0.154762 | raw=0.6689 | sigmoid=0.6613
+  hall=None correct=1.0 relev=None refusal=False ctx=1.0
+  feedback: 无明显问题，保持现有做法即可。
+
+[lex-02] (lexical) AAPL EPS
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'AAPL', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] AAPL_IncomeStatement_20260519.txt | chunk #0 | rrf_score=0.833333
+  [2] AAPL_IncomeStatement_20260612.txt | chunk #0 | rrf_score=0.750000
+  [3] AAPL_IncomeStatement_20260508.txt | chunk #0 | rrf_score=0.583333
+  [4] AAPL_Fundamentals_20260519.txt | chunk #0 | rrf_score=0.400000
+  [5] AAPL_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.309524
+  [6] AAPL_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.243590
+  [7] AAPL_10Q_202603.html | chunk #4 | rrf_score=0.184524
+  [8] AAPL_10Q_202512.html | chunk #7 | rrf_score=0.165000
+  [9] AAPL_10Q_202512.html | chunk #4 | rrf_score=0.161111
+  [10] AAPL_10K_2025.html | chunk #68 | rrf_score=0.137427
+  [11] AAPL_10Q_202603.html | chunk #8 | rrf_score=0.137037
+  [12] AAPL_News_20260519_01.txt | chunk #2 | rrf_score=0.125000
+  [13] AAPL_10Q_202512.html | chunk #1 | rrf_score=0.124390
+  [14] AAPL_10Q_202603.html | chunk #1 | rrf_score=0.123167
+  [15] AAPL_News_20260612_04.txt | chunk #1 | rrf_score=0.121324
+  [16] AAPL_10Q_202603.html | chunk #6 | rrf_score=0.119048
+  [17] AAPL_10Q_202512.html | chunk #6 | rrf_score=0.105978
+  [18] AAPL_10K_2025.html | chunk #1 | rrf_score=0.101515
+  [19] AAPL_10K_2025.html | chunk #14 | rrf_score=0.100251
+  [20] AAPL_News_20260612_05.txt | chunk #0 | rrf_score=0.099650
+DEBUG - Reranked top candidates:
+  [1] AAPL_IncomeStatement_20260519.txt | chunk #0 | type=income_statement | rrf=0.833333 | raw=0.9904 | sigmoid=0.7292
+  [2] AAPL_IncomeStatement_20260612.txt | chunk #0 | type=income_statement | rrf=0.750000 | raw=0.9904 | sigmoid=0.7292
+  [3] AAPL_IncomeStatement_20260508.txt | chunk #0 | type=income_statement | rrf=0.583333 | raw=0.9904 | sigmoid=0.7292
+  [4] AAPL_Fundamentals_20260519.txt | chunk #0 | type=fundamentals | rrf=0.400000 | raw=0.9748 | sigmoid=0.7261
+  [5] AAPL_Fundamentals_20260508.txt | chunk #0 | type=fundamentals | rrf=0.243590 | raw=0.9686 | sigmoid=0.7248
+  hall=None correct=1.0 relev=None refusal=False ctx=0.83
+  feedback: 回答已满足所有必需点，无需改进。
+
+[lex-03] (lexical) MSFT gross margin
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'MSFT', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] MSFT_IncomeStatement_20260508.txt | chunk #0 | rrf_score=0.583333
+  [2] MSFT_10Q_202512.html | chunk #42 | rrf_score=0.518182
+  [3] MSFT_10Q_202512.html | chunk #14 | rrf_score=0.476191
+  [4] MSFT_10Q_202603.html | chunk #14 | rrf_score=0.450000
+  [5] MSFT_IncomeStatement_20260519.txt | chunk #0 | rrf_score=0.410256
+  [6] MSFT_10K_2025.html | chunk #13 | rrf_score=0.366667
+  [7] MSFT_IncomeStatement_20260612.txt | chunk #0 | rrf_score=0.321429
+  [8] MSFT_10Q_202603.html | chunk #47 | rrf_score=0.211111
+  [9] MSFT_10Q_202603.html | chunk #42 | rrf_score=0.191057
+  [10] MSFT_10Q_202603.html | chunk #43 | rrf_score=0.170635
+  [11] MSFT_10Q_202512.html | chunk #43 | rrf_score=0.156566
+  [12] MSFT_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.155556
+  [13] MSFT_10K_2025.html | chunk #23 | rrf_score=0.153409
+  [14] MSFT_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.150000
+  [15] MSFT_Fundamentals_20260519.txt | chunk #0 | rrf_score=0.149733
+  [16] MSFT_10Q_202603.html | chunk #15 | rrf_score=0.144608
+  [17] MSFT_News_20260612_03.txt | chunk #1 | rrf_score=0.125000
+  [18] MSFT_10Q_202603.html | chunk #44 | rrf_score=0.100962
+  [19] MSFT_10Q_202512.html | chunk #15 | rrf_score=0.097331
+  [20] MSFT_10Q_202603.html | chunk #20 | rrf_score=0.090297
+DEBUG - Reranked top candidates:
+  [1] MSFT_Fundamentals_20260612.txt | chunk #0 | type=fundamentals | rrf=0.150000 | raw=0.9936 | sigmoid=0.7298
+  [2] MSFT_Fundamentals_20260508.txt | chunk #0 | type=fundamentals | rrf=0.155556 | raw=0.9933 | sigmoid=0.7297
+  [3] MSFT_Fundamentals_20260519.txt | chunk #0 | type=fundamentals | rrf=0.149733 | raw=0.9932 | sigmoid=0.7297
+  [4] MSFT_10Q_202512.html | chunk #14 | type=10-Q | rrf=0.476191 | raw=0.9930 | sigmoid=0.7297
+  [5] MSFT_10Q_202603.html | chunk #47 | type=10-Q | rrf=0.211111 | raw=0.9929 | sigmoid=0.7297
+  hall=None correct=1.0 relev=None refusal=False ctx=0.5
+  feedback: 回答已满足关键要求，但可进一步简化引用格式，避免冗余信息；若检索到多份相同数据，可只列一条即可。
+
+[lex-06] (lexical) NVDA income statement 2026
+DEBUG - Detected filing filter(s): [{'field': 'fiscal_year', 'value': '2026', 'polarity': 'include'}, {'field': 'ticker', 'value': 'NVDA', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] NVDA_10K_2026.html | chunk #19 | rrf_score=0.666667
+  [2] NVDA_10K_2026.html | chunk #20 | rrf_score=0.666667
+  [3] NVDA_10K_2026.html | chunk #23 | rrf_score=0.533333
+  [4] NVDA_10K_2026.html | chunk #10 | rrf_score=0.400000
+  [5] NVDA_10K_2026.html | chunk #9 | rrf_score=0.392857
+  [6] NVDA_10Q_202604.html | chunk #7 | rrf_score=0.350000
+  [7] NVDA_10Q_202604.html | chunk #10 | rrf_score=0.342857
+  [8] NVDA_10Q_202604.html | chunk #6 | rrf_score=0.211111
+  [9] NVDA_10K_2026.html | chunk #14 | rrf_score=0.174242
+  [10] NVDA_10Q_202604.html | chunk #17 | rrf_score=0.168478
+  [11] NVDA_10Q_202510.html | chunk #11 | rrf_score=0.166667
+  [12] NVDA_10K_2026.html | chunk #22 | rrf_score=0.158730
+  [13] NVDA_10Q_202510.html | chunk #12 | rrf_score=0.154762
+  [14] NVDA_10Q_202604.html | chunk #13 | rrf_score=0.111455
+  [15] NVDA_10Q_202510.html | chunk #6 | rrf_score=0.111455
+  [16] NVDA_10K_2026.html | chunk #12 | rrf_score=0.109777
+  [17] NVDA_10Q_202510.html | chunk #17 | rrf_score=0.108466
+  [18] NVDA_10Q_202604.html | chunk #9 | rrf_score=0.108173
+  [19] NVDA_10Q_202510.html | chunk #7 | rrf_score=0.105128
+  [20] NVDA_10K_2026.html | chunk #21 | rrf_score=0.101010
+DEBUG - Reranked top candidates:
+  [1] NVDA_10K_2026.html | chunk #23 | type=10-K | rrf=0.533333 | raw=0.9961 | sigmoid=0.7303
+  [2] NVDA_10K_2026.html | chunk #9 | type=10-K | rrf=0.392857 | raw=0.9957 | sigmoid=0.7302
+  [3] NVDA_10K_2026.html | chunk #19 | type=10-K | rrf=0.666667 | raw=0.9942 | sigmoid=0.7299
+  [4] NVDA_10K_2026.html | chunk #22 | type=10-K | rrf=0.158730 | raw=0.9883 | sigmoid=0.7287
+  [5] NVDA_10Q_202604.html | chunk #10 | type=10-Q | rrf=0.342857 | raw=0.9883 | sigmoid=0.7287
+  hall=None correct=1.0 relev=None refusal=False ctx=0.25
+  feedback: 回答已满足所有必需点，无需改进。若需进一步提升，可简化表述或加入来源链接。
+
+[lex-08] (lexical) AMZN EPS
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'AMZN', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] AMZN_IncomeStatement_20260612.txt | chunk #0 | rrf_score=1.000000
+  [2] AMZN_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.583333
+  [3] AMZN_10Q_202603.html | chunk #8 | rrf_score=0.392157
+  [4] AMZN_News_20260612_01.txt | chunk #1 | rrf_score=0.290000
+  [5] AMZN_10Q_202509.html | chunk #8 | rrf_score=0.252632
+  [6] AMZN_10Q_202603.html | chunk #3 | rrf_score=0.233333
+  [7] AMZN_10Q_202509.html | chunk #7 | rrf_score=0.212121
+  [8] AMZN_10K_2025.html | chunk #32 | rrf_score=0.208333
+  [9] AMZN_10K_2025.html | chunk #83 | rrf_score=0.181818
+  [10] AMZN_10Q_202603.html | chunk #9 | rrf_score=0.171429
+  [11] AMZN_10Q_202603.html | chunk #7 | rrf_score=0.166667
+  [12] AMZN_10K_2025.html | chunk #3 | rrf_score=0.166667
+  [13] AMZN_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.161111
+  [14] AMZN_10Q_202509.html | chunk #10 | rrf_score=0.158824
+  [15] AMZN_News_20260612_01.txt | chunk #0 | rrf_score=0.153571
+  [16] AMZN_10Q_202509.html | chunk #3 | rrf_score=0.142857
+  [17] AMZN_10Q_202509.html | chunk #9 | rrf_score=0.125000
+  [18] AMZN_10K_2025.html | chunk #33 | rrf_score=0.124060
+  [19] AMZN_10Q_202603.html | chunk #13 | rrf_score=0.119048
+  [20] AMZN_10Q_202603.html | chunk #10 | rrf_score=0.118056
+DEBUG - Reranked top candidates:
+  [1] AMZN_IncomeStatement_20260612.txt | chunk #0 | type=income_statement | rrf=1.000000 | raw=0.9854 | sigmoid=0.7282
+  [2] AMZN_Fundamentals_20260612.txt | chunk #0 | type=fundamentals | rrf=0.583333 | raw=0.9649 | sigmoid=0.7241
+  [3] AMZN_10Q_202603.html | chunk #10 | type=10-Q | rrf=0.118056 | raw=0.7678 | sigmoid=0.6830
+  [4] AMZN_10Q_202509.html | chunk #10 | type=10-Q | rrf=0.158824 | raw=0.7186 | sigmoid=0.6723
+  [5] AMZN_10Q_202603.html | chunk #7 | type=10-Q | rrf=0.166667 | raw=0.7134 | sigmoid=0.6712
+  hall=None correct=1.0 relev=None refusal=False ctx=1.0
+  feedback: 回答已满足关键要求，建议继续核对来源与实际数据的一致性，避免未来出现与来源不符的数字；若有多种 EPS 版本，建议在答案中明确区分并标注来源。
+
+[lex-09] (lexical) GOOGL gross margin
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'GOOGL', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] GOOGL_IncomeStatement_20260612.txt | chunk #0 | rrf_score=1.000000
+  [2] GOOGL_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.500000
+  [3] GOOGL_10Q_202509.html | chunk #30 | rrf_score=0.476191
+  [4] GOOGL_10Q_202603.html | chunk #26 | rrf_score=0.416667
+  [5] GOOGL_10Q_202603.html | chunk #11 | rrf_score=0.295455
+  [6] GOOGL_10Q_202509.html | chunk #12 | rrf_score=0.266667
+  [7] GOOGL_10Q_202509.html | chunk #3 | rrf_score=0.220833
+  [8] GOOGL_10K_2025.html | chunk #39 | rrf_score=0.190476
+  [9] GOOGL_10Q_202509.html | chunk #22 | rrf_score=0.160714
+  [10] GOOGL_10Q_202509.html | chunk #40 | rrf_score=0.144444
+  [11] GOOGL_10Q_202509.html | chunk #17 | rrf_score=0.138889
+  [12] GOOGL_10Q_202603.html | chunk #3 | rrf_score=0.128655
+  [13] GOOGL_10K_2025.html | chunk #3 | rrf_score=0.125000
+  [14] GOOGL_10Q_202509.html | chunk #20 | rrf_score=0.124542
+  [15] GOOGL_10Q_202603.html | chunk #34 | rrf_score=0.119231
+  [16] GOOGL_10Q_202603.html | chunk #54 | rrf_score=0.117225
+  [17] GOOGL_10Q_202509.html | chunk #10 | rrf_score=0.116923
+  [18] GOOGL_10Q_202509.html | chunk #19 | rrf_score=0.115132
+  [19] GOOGL_10Q_202509.html | chunk #51 | rrf_score=0.100000
+  [20] GOOGL_News_20260612_02.txt | chunk #0 | rrf_score=0.090909
+DEBUG - Reranked top candidates:
+  [1] GOOGL_Fundamentals_20260612.txt | chunk #0 | type=fundamentals | rrf=0.500000 | raw=0.9921 | sigmoid=0.7295
+  [2] GOOGL_10Q_202509.html | chunk #22 | type=10-Q | rrf=0.160714 | raw=0.8359 | sigmoid=0.6976
+  [3] GOOGL_IncomeStatement_20260612.txt | chunk #0 | type=income_statement | rrf=1.000000 | raw=0.8036 | sigmoid=0.6908
+  [4] GOOGL_10Q_202603.html | chunk #26 | type=10-Q | rrf=0.416667 | raw=0.8018 | sigmoid=0.6904
+  [5] GOOGL_10Q_202509.html | chunk #30 | type=10-Q | rrf=0.476191 | raw=0.7780 | sigmoid=0.6852
+  hall=None correct=1.0 relev=None refusal=False ctx=0.75
+  feedback: 回答已满足所有要求，无需改进。
+
+[lex-13] (lexical) NVIDIA Blackwell GPU architecture
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'NVDA', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] NVDA_10K_2026.html | chunk #42 | rrf_score=0.833333
+  [2] NVDA_10K_2026.html | chunk #37 | rrf_score=0.700000
+  [3] NVDA_10K_2026.html | chunk #43 | rrf_score=0.583333
+  [4] NVDA_10K_2026.html | chunk #115 | rrf_score=0.450000
+  [5] NVDA_10Q_202510.html | chunk #32 | rrf_score=0.333333
+  [6] NVDA_10K_2026.html | chunk #46 | rrf_score=0.250000
+  [7] NVDA_10Q_202604.html | chunk #32 | rrf_score=0.242857
+  [8] NVDA_10K_2026.html | chunk #38 | rrf_score=0.242857
+  [9] NVDA_10K_2026.html | chunk #125 | rrf_score=0.202020
+  [10] NVDA_10Q_202510.html | chunk #33 | rrf_score=0.182540
+  [11] NVDA_10K_2026.html | chunk #45 | rrf_score=0.145833
+  [12] NVDA_10Q_202604.html | chunk #41 | rrf_score=0.140909
+  [13] NVDA_10Q_202510.html | chunk #40 | rrf_score=0.139423
+  [14] NVDA_10Q_202510.html | chunk #31 | rrf_score=0.130952
+  [15] NVDA_Fundamentals_20260519.txt | chunk #1 | rrf_score=0.124060
+  [16] NVDA_10Q_202510.html | chunk #37 | rrf_score=0.122222
+  [17] NVDA_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.116667
+  [18] NVDA_10Q_202510.html | chunk #38 | rrf_score=0.113960
+  [19] NVDA_10K_2026.html | chunk #113 | rrf_score=0.104278
+  [20] NVDA_10K_2026.html | chunk #41 | rrf_score=0.100490
+DEBUG - Reranked top candidates:
+  [1] NVDA_10K_2026.html | chunk #38 | type=10-K | rrf=0.242857 | raw=0.9856 | sigmoid=0.7282
+  [2] NVDA_10K_2026.html | chunk #43 | type=10-K | rrf=0.583333 | raw=0.9765 | sigmoid=0.7264
+  [3] NVDA_10K_2026.html | chunk #37 | type=10-K | rrf=0.700000 | raw=0.9761 | sigmoid=0.7263
+  [4] NVDA_10K_2026.html | chunk #42 | type=10-K | rrf=0.833333 | raw=0.9759 | sigmoid=0.7263
+  [5] NVDA_10K_2026.html | chunk #115 | type=10-K | rrf=0.450000 | raw=0.8430 | sigmoid=0.6991
+  hall=None correct=- relev=None refusal=False ctx=0.17
+
+[lex-14] (lexical) NVIDIA H100 GPU
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'NVDA', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] NVDA_10K_2026.html | chunk #38 | rrf_score=0.833333
+  [2] NVDA_10K_2026.html | chunk #43 | rrf_score=0.566667
+  [3] NVDA_Fundamentals_20260519.txt | chunk #1 | rrf_score=0.458333
+  [4] NVDA_10K_2026.html | chunk #8 | rrf_score=0.400000
+  [5] NVDA_10K_2026.html | chunk #37 | rrf_score=0.392857
+  [6] NVDA_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.326923
+  [7] NVDA_10K_2026.html | chunk #41 | rrf_score=0.242857
+  [8] NVDA_10K_2026.html | chunk #40 | rrf_score=0.200000
+  [9] NVDA_News_20260519_03.txt | chunk #0 | rrf_score=0.166667
+  [10] NVDA_10Q_202510.html | chunk #31 | rrf_score=0.166667
+  [11] NVDA_10K_2026.html | chunk #42 | rrf_score=0.162338
+  [12] NVDA_10K_2026.html | chunk #45 | rrf_score=0.162338
+  [13] NVDA_10K_2026.html | chunk #46 | rrf_score=0.155556
+  [14] NVDA_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.145594
+  [15] NVDA_10K_2026.html | chunk #113 | rrf_score=0.135965
+  [16] NVDA_10K_2026.html | chunk #39 | rrf_score=0.121324
+  [17] NVDA_10Q_202604.html | chunk #31 | rrf_score=0.115385
+  [18] NVDA_News_20260519_03.txt | chunk #1 | rrf_score=0.111111
+  [19] NVDA_10K_2026.html | chunk #115 | rrf_score=0.103742
+  [20] NVDA_10Q_202604.html | chunk #61 | rrf_score=0.080100
+DEBUG - Reranked top candidates:
+  [1] NVDA_10K_2026.html | chunk #38 | type=10-K | rrf=0.833333 | raw=0.3129 | sigmoid=0.5776
+  [2] NVDA_10K_2026.html | chunk #43 | type=10-K | rrf=0.566667 | raw=0.0798 | sigmoid=0.5199
+  [3] NVDA_Fundamentals_20260508.txt | chunk #0 | type=fundamentals | rrf=0.145594 | raw=0.0657 | sigmoid=0.5164
+  [4] NVDA_10Q_202604.html | chunk #61 | type=10-Q | rrf=0.080100 | raw=0.0655 | sigmoid=0.5164
+  [5] NVDA_Fundamentals_20260612.txt | chunk #1 | type=fundamentals | rrf=0.326923 | raw=0.0553 | sigmoid=0.5138
+  hall=None correct=- relev=None refusal=False ctx=0.67
+
+[lex-15] (lexical) Jensen Huang NVIDIA CEO
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'NVDA', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] NVDA_10K_2026.html | chunk #58 | rrf_score=1.000000
+  [2] NVDA_News_20260519_03.txt | chunk #0 | rrf_score=0.533333
+  [3] NVDA_10K_2026.html | chunk #26 | rrf_score=0.476191
+  [4] NVDA_Fundamentals_20260519.txt | chunk #1 | rrf_score=0.333333
+  [5] NVDA_News_20260519_03.txt | chunk #1 | rrf_score=0.291667
+  [6] NVDA_News_20260519_01.txt | chunk #0 | rrf_score=0.275641
+  [7] NVDA_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.271429
+  [8] NVDA_Fundamentals_20260519.txt | chunk #0 | rrf_score=0.225490
+  [9] NVDA_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.205357
+  [10] NVDA_10Q_202510.html | chunk #31 | rrf_score=0.191667
+  [11] NVDA_Fundamentals_20260508.txt | chunk #1 | rrf_score=0.188034
+  [12] NVDA_10K_2026.html | chunk #37 | rrf_score=0.188034
+  [13] NVDA_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.171429
+  [14] NVDA_10Q_202604.html | chunk #31 | rrf_score=0.152632
+  [15] NVDA_10Q_202510.html | chunk #23 | rrf_score=0.138528
+  [16] NVDA_10Q_202604.html | chunk #23 | rrf_score=0.126812
+  [17] NVDA_10K_2026.html | chunk #113 | rrf_score=0.116667
+  [18] NVDA_10K_2026.html | chunk #40 | rrf_score=0.094538
+  [19] NVDA_10K_2026.html | chunk #8 | rrf_score=0.091071
+  [20] NVDA_10K_2026.html | chunk #60 | rrf_score=0.090909
+DEBUG - Reranked top candidates:
+  [1] NVDA_10K_2026.html | chunk #58 | type=10-K | rrf=1.000000 | raw=0.9854 | sigmoid=0.7282
+  [2] NVDA_10K_2026.html | chunk #26 | type=10-K | rrf=0.476191 | raw=0.9569 | sigmoid=0.7225
+  [3] NVDA_News_20260519_03.txt | chunk #0 | type=news | rrf=0.533333 | raw=0.9378 | sigmoid=0.7187
+  [4] NVDA_News_20260519_03.txt | chunk #1 | type=news | rrf=0.291667 | raw=0.7614 | sigmoid=0.6817
+  [5] NVDA_News_20260519_01.txt | chunk #0 | type=news | rrf=0.275641 | raw=0.7406 | sigmoid=0.6771
+  hall=None correct=- relev=None refusal=False ctx=1.0
+
+[lex-16] (lexical) Tim Cook Apple CEO
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'AAPL', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] AAPL_10K_2025.html | chunk #104 | rrf_score=0.833333
+  [2] AAPL_10K_2025.html | chunk #27 | rrf_score=0.700000
+  [3] AAPL_News_20260519_01.txt | chunk #4 | rrf_score=0.416667
+  [4] AAPL_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.309524
+  [5] AAPL_News_20260612_05.txt | chunk #0 | rrf_score=0.279412
+  [6] AAPL_Fundamentals_20260519.txt | chunk #0 | rrf_score=0.277778
+  [7] AAPL_News_20260612_04.txt | chunk #1 | rrf_score=0.266667
+  [8] AAPL_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.215909
+  [9] AAPL_News_20260612_01.txt | chunk #2 | rrf_score=0.200000
+  [10] AAPL_Fundamentals_20260612.txt | chunk #2 | rrf_score=0.182540
+  [11] AAPL_10Q_202512.html | chunk #19 | rrf_score=0.164596
+  [12] AAPL_Fundamentals_20260508.txt | chunk #2 | rrf_score=0.162500
+  [13] AAPL_Fundamentals_20260519.txt | chunk #2 | rrf_score=0.157576
+  [14] AAPL_10K_2025.html | chunk #36 | rrf_score=0.141393
+  [15] AAPL_10Q_202603.html | chunk #16 | rrf_score=0.125641
+  [16] AAPL_10K_2025.html | chunk #5 | rrf_score=0.123333
+  [17] AAPL_10Q_202512.html | chunk #17 | rrf_score=0.111455
+  [18] AAPL_10K_2025.html | chunk #26 | rrf_score=0.105495
+  [19] AAPL_10K_2025.html | chunk #24 | rrf_score=0.101010
+  [20] AAPL_10Q_202603.html | chunk #17 | rrf_score=0.100000
+DEBUG - Reranked top candidates:
+  [1] AAPL_News_20260519_01.txt | chunk #4 | type=news | rrf=0.416667 | raw=0.5285 | sigmoid=0.6291
+  [2] AAPL_10K_2025.html | chunk #27 | type=10-K | rrf=0.700000 | raw=0.2978 | sigmoid=0.5739
+  [3] AAPL_10Q_202512.html | chunk #19 | type=10-Q | rrf=0.164596 | raw=0.2823 | sigmoid=0.5701
+  [4] AAPL_Fundamentals_20260508.txt | chunk #0 | type=fundamentals | rrf=0.215909 | raw=0.2291 | sigmoid=0.5570
+  [5] AAPL_10K_2025.html | chunk #24 | type=10-K | rrf=0.101010 | raw=0.2202 | sigmoid=0.5548
+  hall=None correct=- relev=None refusal=False ctx=1.0
+
+[lex-17] (lexical) Microsoft Copilot AI assistant
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'MSFT', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+  [KEY ROTATION] TPD exhausted, switching to GROQ_API_KEY2
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] MSFT_10K_2025.html | chunk #42 | rrf_score=0.750000
+  [2] MSFT_10Q_202603.html | chunk #82 | rrf_score=0.547619
+  [3] MSFT_10K_2025.html | chunk #52 | rrf_score=0.533333
+  [4] MSFT_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.424242
+  [5] MSFT_10Q_202603.html | chunk #48 | rrf_score=0.326923
+  [6] MSFT_10K_2025.html | chunk #53 | rrf_score=0.283333
+  [7] MSFT_10K_2025.html | chunk #40 | rrf_score=0.266667
+  [8] MSFT_10K_2025.html | chunk #46 | rrf_score=0.212121
+  [9] MSFT_10Q_202603.html | chunk #12 | rrf_score=0.190476
+  [10] MSFT_10Q_202603.html | chunk #43 | rrf_score=0.187500
+  [11] MSFT_10Q_202512.html | chunk #12 | rrf_score=0.163743
+  [12] MSFT_News_20260612_02.txt | chunk #0 | rrf_score=0.162500
+  [13] MSFT_10K_2025.html | chunk #110 | rrf_score=0.144231
+  [14] MSFT_News_20260612_03.txt | chunk #4 | rrf_score=0.142857
+  [15] MSFT_10K_2025.html | chunk #11 | rrf_score=0.125392
+  [16] MSFT_10Q_202603.html | chunk #44 | rrf_score=0.118590
+  [17] MSFT_10Q_202603.html | chunk #35 | rrf_score=0.116883
+  [18] MSFT_10Q_202603.html | chunk #46 | rrf_score=0.111455
+  [19] MSFT_News_20260519_01.txt | chunk #0 | rrf_score=0.111111
+  [20] MSFT_10Q_202512.html | chunk #35 | rrf_score=0.110145
+DEBUG - Reranked top candidates:
+  [1] MSFT_10Q_202603.html | chunk #44 | type=10-Q | rrf=0.118590 | raw=0.6096 | sigmoid=0.6478
+  [2] MSFT_10Q_202603.html | chunk #43 | type=10-Q | rrf=0.187500 | raw=0.4743 | sigmoid=0.6164
+  [3] MSFT_10K_2025.html | chunk #46 | type=10-K | rrf=0.212121 | raw=0.4428 | sigmoid=0.6089
+  [4] MSFT_10Q_202603.html | chunk #48 | type=10-Q | rrf=0.326923 | raw=0.4283 | sigmoid=0.6055
+  [5] MSFT_10K_2025.html | chunk #53 | type=10-K | rrf=0.283333 | raw=0.3783 | sigmoid=0.5935
+  hall=None correct=- relev=None refusal=False ctx=0.33
+
+[lex-18] (lexical) NVIDIA NVLink interconnect
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'NVDA', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] NVDA_10K_2026.html | chunk #41 | rrf_score=1.000000
+  [2] NVDA_10K_2026.html | chunk #37 | rrf_score=0.476191
+  [3] NVDA_Fundamentals_20260519.txt | chunk #1 | rrf_score=0.433333
+  [4] NVDA_Fundamentals_20260508.txt | chunk #1 | rrf_score=0.350000
+  [5] NVDA_10K_2026.html | chunk #42 | rrf_score=0.325000
+  [6] NVDA_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.283333
+  [7] NVDA_10Q_202510.html | chunk #38 | rrf_score=0.280303
+  [8] NVDA_10K_2026.html | chunk #125 | rrf_score=0.236111
+  [9] NVDA_Fundamentals_20260519.txt | chunk #0 | rrf_score=0.206667
+  [10] NVDA_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.176190
+  [11] NVDA_News_20260508_01.txt | chunk #4 | rrf_score=0.166667
+  [12] NVDA_10Q_202604.html | chunk #41 | rrf_score=0.157576
+  [13] NVDA_10K_2026.html | chunk #45 | rrf_score=0.149733
+  [14] NVDA_Fundamentals_20260508.txt | chunk #0 | rrf_score=0.148148
+  [15] NVDA_10Q_202510.html | chunk #40 | rrf_score=0.135747
+  [16] NVDA_10Q_202604.html | chunk #30 | rrf_score=0.116923
+  [17] NVDA_10Q_202510.html | chunk #31 | rrf_score=0.116667
+  [18] NVDA_10K_2026.html | chunk #68 | rrf_score=0.102564
+  [19] NVDA_10K_2026.html | chunk #8 | rrf_score=0.096429
+  [20] NVDA_10K_2026.html | chunk #36 | rrf_score=0.094758
+DEBUG - Reranked top candidates:
+  [1] NVDA_10K_2026.html | chunk #41 | type=10-K | rrf=1.000000 | raw=0.9821 | sigmoid=0.7275
+  [2] NVDA_10K_2026.html | chunk #42 | type=10-K | rrf=0.325000 | raw=0.7920 | sigmoid=0.6883
+  [3] NVDA_10K_2026.html | chunk #125 | type=10-K | rrf=0.236111 | raw=0.5883 | sigmoid=0.6430
+  [4] NVDA_10Q_202604.html | chunk #41 | type=10-Q | rrf=0.157576 | raw=0.5866 | sigmoid=0.6426
+  [5] NVDA_10Q_202510.html | chunk #40 | type=10-Q | rrf=0.135747 | raw=0.3306 | sigmoid=0.5819
+  hall=None correct=- relev=None refusal=False ctx=1.0
+
+[lex-19] (lexical) Apple Vision Pro headset
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'AAPL', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] AAPL_Fundamentals_20260508.txt | chunk #1 | rrf_score=0.750000
+  [2] AAPL_10Q_202512.html | chunk #22 | rrf_score=0.700000
+  [3] AAPL_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.666667
+  [4] AAPL_Fundamentals_20260519.txt | chunk #1 | rrf_score=0.450000
+  [5] AAPL_10K_2025.html | chunk #32 | rrf_score=0.333333
+  [6] AAPL_News_20260519_01.txt | chunk #4 | rrf_score=0.214286
+  [7] AAPL_10K_2025.html | chunk #75 | rrf_score=0.183824
+  [8] AAPL_News_20260612_02.txt | chunk #1 | rrf_score=0.181818
+  [9] AAPL_News_20260612_01.txt | chunk #2 | rrf_score=0.142857
+  [10] AAPL_10Q_202603.html | chunk #22 | rrf_score=0.135714
+  [11] AAPL_News_20260612_05.txt | chunk #0 | rrf_score=0.129167
+  [12] AAPL_News_20260612_04.txt | chunk #2 | rrf_score=0.128968
+  [13] AAPL_10Q_202512.html | chunk #26 | rrf_score=0.126923
+  [14] AAPL_Fundamentals_20260519.txt | chunk #2 | rrf_score=0.125000
+  [15] AAPL_News_20260508_01.txt | chunk #2 | rrf_score=0.116667
+  [16] AAPL_News_20260612_03.txt | chunk #0 | rrf_score=0.115385
+  [17] AAPL_Fundamentals_20260612.txt | chunk #2 | rrf_score=0.111111
+  [18] AAPL_10K_2025.html | chunk #80 | rrf_score=0.110119
+  [19] AAPL_10K_2025.html | chunk #99 | rrf_score=0.102941
+  [20] AAPL_Fundamentals_20260508.txt | chunk #2 | rrf_score=0.100000
+DEBUG - Reranked top candidates:
+  [1] AAPL_10K_2025.html | chunk #32 | type=10-K | rrf=0.333333 | raw=0.2687 | sigmoid=0.5668
+  [2] AAPL_Fundamentals_20260508.txt | chunk #1 | type=fundamentals | rrf=0.750000 | raw=0.2406 | sigmoid=0.5599
+  [3] AAPL_Fundamentals_20260612.txt | chunk #1 | type=fundamentals | rrf=0.666667 | raw=0.2406 | sigmoid=0.5599
+  [4] AAPL_Fundamentals_20260519.txt | chunk #1 | type=fundamentals | rrf=0.450000 | raw=0.2406 | sigmoid=0.5599
+  [5] AAPL_News_20260519_01.txt | chunk #4 | type=news | rrf=0.214286 | raw=0.1468 | sigmoid=0.5366
+  hall=None correct=- relev=None refusal=False ctx=1.0
+
+[lex-20] (lexical) Google TPU Ironwood
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'GOOGL', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite: no variants (query already standard); original only
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] GOOGL_10Q_202603.html | chunk #51 | rrf_score=0.833333
+  [2] GOOGL_10K_2025.html | chunk #139 | rrf_score=0.833333
+  [3] GOOGL_10Q_202603.html | chunk #54 | rrf_score=0.450000
+  [4] GOOGL_10Q_202603.html | chunk #72 | rrf_score=0.392857
+  [5] GOOGL_10K_2025.html | chunk #147 | rrf_score=0.342857
+  [6] GOOGL_10K_2025.html | chunk #156 | rrf_score=0.216667
+  [7] GOOGL_10K_2025.html | chunk #11 | rrf_score=0.208333
+  [8] GOOGL_10K_2025.html | chunk #179 | rrf_score=0.177632
+  [9] GOOGL_10K_2025.html | chunk #192 | rrf_score=0.150000
+  [10] GOOGL_10K_2025.html | chunk #138 | rrf_score=0.130342
+  [11] GOOGL_10Q_202603.html | chunk #11 | rrf_score=0.111111
+  [12] GOOGL_News_20260612_02.txt | chunk #1 | rrf_score=0.109091
+  [13] GOOGL_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.105072
+  [14] GOOGL_10K_2025.html | chunk #140 | rrf_score=0.102564
+  [15] GOOGL_10Q_202509.html | chunk #74 | rrf_score=0.100000
+  [16] GOOGL_10K_2025.html | chunk #172 | rrf_score=0.100000
+  [17] GOOGL_10K_2025.html | chunk #144 | rrf_score=0.092593
+  [18] GOOGL_10K_2025.html | chunk #123 | rrf_score=0.090909
+  [19] GOOGL_10Q_202603.html | chunk #48 | rrf_score=0.083333
+  [20] GOOGL_10K_2025.html | chunk #9 | rrf_score=0.076923
+DEBUG - Reranked top candidates:
+  [1] GOOGL_10K_2025.html | chunk #139 | type=10-K | rrf=0.833333 | raw=0.7937 | sigmoid=0.6886
+  [2] GOOGL_10K_2025.html | chunk #156 | type=10-K | rrf=0.216667 | raw=0.1189 | sigmoid=0.5297
+  [3] GOOGL_10Q_202603.html | chunk #54 | type=10-Q | rrf=0.450000 | raw=0.0995 | sigmoid=0.5249
+  [4] GOOGL_10Q_202603.html | chunk #72 | type=10-Q | rrf=0.392857 | raw=0.0927 | sigmoid=0.5232
+  [5] GOOGL_10K_2025.html | chunk #179 | type=10-K | rrf=0.177632 | raw=0.0305 | sigmoid=0.5076
+  hall=None correct=- relev=None refusal=False ctx=0.33
+
+[lex-21] (lexical) Meta Ray-Ban smart glasses
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'META', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Query rewrite variants (recall expansion only): ['Meta Reality Labs smart glasses revenue and profitability', 'Meta Ray-Ban smart glasses sales growth and market share']
+DEBUG - Rewrite merge: 20 → 22 candidates (cap=8/variant)
+DEBUG - Qdrant returned 22 fused candidates (server-side RRF):
+  [1] META_10K_2025.html | chunk #44 | rrf_score=1.000000
+  [2] META_Fundamentals_20260612.txt | chunk #1 | rrf_score=0.666667
+  [3] META_10Q_202603.html | chunk #43 | rrf_score=0.400000
+  [4] META_Fundamentals_20260612.txt | chunk #0 | rrf_score=0.392857
+  [5] META_10K_2025.html | chunk #41 | rrf_score=0.340909
+  [6] META_10Q_202509.html | chunk #45 | rrf_score=0.333333
+  [7] META_10K_2025.html | chunk #48 | rrf_score=0.253968
+  [8] META_10K_2025.html | chunk #173 | rrf_score=0.225000
+  [9] META_Fundamentals_20260612.txt | chunk #2 | rrf_score=0.188034
+  [10] META_10K_2025.html | chunk #50 | rrf_score=0.147619
+  [11] META_10K_2025.html | chunk #53 | rrf_score=0.126923
+  [12] META_10Q_202603.html | chunk #118 | rrf_score=0.125000
+  [13] META_News_20260612_01.txt | chunk #0 | rrf_score=0.123333
+  [14] META_10K_2025.html | chunk #153 | rrf_score=0.111905
+  [15] META_10K_2025.html | chunk #51 | rrf_score=0.092593
+  [16] META_10K_2025.html | chunk #67 | rrf_score=0.090909
+  [17] META_10K_2025.html | chunk #126 | rrf_score=0.085965
+  [18] META_10Q_202603.html | chunk #99 | rrf_score=0.081731
+  [19] META_10Q_202603.html | chunk #78 | rrf_score=0.080100
+  [20] META_10Q_202509.html | chunk #99 | rrf_score=0.077005
+  [21] META_10Q_202603.html | chunk #39 | rrf_score=0.253968
+  [22] META_10K_2025.html | chunk #46 | rrf_score=0.219780
+DEBUG - Reranked top candidates:
+  [1] META_10K_2025.html | chunk #44 | type=10-K | rrf=1.000000 | raw=0.8288 | sigmoid=0.6961
+  [2] META_Fundamentals_20260612.txt | chunk #1 | type=fundamentals | rrf=0.666667 | raw=0.7409 | sigmoid=0.6772
+  [3] META_10K_2025.html | chunk #48 | type=10-K | rrf=0.253968 | raw=0.2538 | sigmoid=0.5631
+  [4] META_10K_2025.html | chunk #41 | type=10-K | rrf=0.340909 | raw=0.1152 | sigmoid=0.5288
+  [5] META_10K_2025.html | chunk #67 | type=10-K | rrf=0.090909 | raw=0.0659 | sigmoid=0.5165
+  hall=None correct=- relev=None refusal=False ctx=0.5
+
+══════════════════════════════════════════════════════════════════════════════════
+LLM-AS-JUDGE SUMMARY (5 metrics)
+══════════════════════════════════════════════════════════════════════════════════
+  CAT        n   hall↓  correct   relev  ctxLLM  wRefus  fatal
+  LEXICAL   15    None      1.0    None    None     0.0      0
+  OVERALL   15    None      1.0    None    None     0.0      0
+
+[DONE] Written to eval\regression_lexical_gen120b.json
