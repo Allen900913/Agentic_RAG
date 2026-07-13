@@ -1,0 +1,193 @@
+[Title] === MSFT Annual Income Statement ===
+
+[Text] --- Fiscal Year: 2025 ---
+
+[Title] Tax Effect Of Unusual Items: $-77.09M
+
+[Title] Tax Rate For Calcs: $0.18
+
+[Title] Normalized EBITDA: $160.60B
+
+[Title] Total Unusual Items: $-438.00M
+
+[Title] Total Unusual Items Excluding Goodwill: $-438.00M
+
+[Title] Net Income From Continuing Operation Net Minority Interest: $101.83B
+
+[Title] Reconciled Depreciation: $34.15B
+
+[Title] Reconciled Cost Of Revenue: $87.83B
+
+[Text] EBITDA: $160.16B
+
+[Text] EBIT: $126.01B
+
+[Title] Net Interest Income: $262.00M
+
+[Title] Interest Expense: $2.38B
+
+[Title] Interest Income: $2.65B
+
+[Title] Normalized Income: $102.19B
+
+[Title] Net Income From Continuing And Discontinued Operation: $101.83B
+
+[Title] Total Expenses: $153.20B
+
+[Title] Total Operating Income As Reported: $128.53B
+
+[Title] Diluted Average Shares: $7.46B
+
+[Title] Basic Average Shares: $7.43B
+
+[Title] Diluted EPS: $13.64
+
+[Title] Basic EPS: $13.70
+
+[Title] Diluted NI Availto Com Stockholders: $101.83B
+
+[Title] Net Income Common Stockholders: $101.83B
+
+[Title] Net Income: $101.83B
+
+[Title] Net Income Including Noncontrolling Interests: $101.83B
+
+[Title] Net Income Continuous Operations: $101.83B
+
+[Title] Tax Provision: $21.80B
+
+[Title] Pretax Income: $123.63B
+
+[Title] Other Income Expense: $-5.16B
+
+[Title] Other Non Operating Income Expenses: $-4.72B
+
+[Title] Special Income Charges: $-943.00M
+
+[Title] Write Off: $943.00M
+
+[Title] Gain On Sale Of Security: $505.00M
+
+[Title] Net Non Operating Interest Income Expense: $262.00M
+
+[Title] Interest Expense Non Operating: $2.38B
+
+[Title] Interest Income Non Operating: $2.65B
+
+[Title] Operating Income: $128.53B
+
+[Title] Operating Expense: $65.36B
+
+[Title] Research And Development: $32.49B
+
+[Title] Selling General And Administration: $32.88B
+
+[Title] Selling And Marketing Expense: $25.65B
+
+[Title] General And Administrative Expense: $7.22B
+
+[Title] Other Gand A: $7.22B
+
+[Title] Gross Profit: $193.89B
+
+[Title] Cost Of Revenue: $87.83B
+
+[Title] Total Revenue: $281.72B
+
+[Title] Operating Revenue: $281.72B
+
+[Text] --- Fiscal Year: 2024 ---
+
+[Title] Tax Effect Of Unusual Items: $-99.92M
+
+[Title] Tax Rate For Calcs: $0.18
+
+[Title] Normalized EBITDA: $133.56B
+
+[Title] Total Unusual Items: $-549.00M
+
+[Title] Total Unusual Items Excluding Goodwill: $-549.00M
+
+[Title] Net Income From Continuing Operation Net Minority Interest: $88.14B
+
+[Title] Reconciled Depreciation: $22.29B
+
+[Title] Reconciled Cost Of Revenue: $74.11B
+
+[Text] EBITDA: $133.01B
+
+[Text] EBIT: $110.72B
+
+[Title] Net Interest Income: $222.00M
+
+[Title] Interest Expense: $2.94B
+
+[Title] Interest Income: $3.16B
+
+[Title] Normalized Income: $88.59B
+
+[Title] Net Income From Continuing And Discontinued Operation: $88.14B
+
+[Title] Total Expenses: $135.69B
+
+[Title] Total Operating Income As Reported: $109.43B
+
+[Title] Diluted Average Shares: $7.47B
+
+[Title] Basic Average Shares: $7.43B
+
+[Title] Diluted EPS: $11.80
+
+[Title] Basic EPS: $11.86
+
+[Title] Diluted NI Availto Com Stockholders: $88.14B
+
+[Title] Net Income Common Stockholders: $88.14B
+
+[Title] Net Income: $88.14B
+
+[Title] Net Income Including Noncontrolling Interests: $88.14B
+
+[Title] Net Income Continuous Operations: $88.14B
+
+[Title] Tax Provision: $19.65B
+
+[Title] Pretax Income: $107.79B
+
+[Title] Other Income Expense: $-1.87B
+
+[Title] Other Non Operating Income Expenses: $-1.32B
+
+[Title] Special Income Charges: $-206.00M
+
+[Title] Write Off: $206.00M
+
+[Title] Gain On Sale Of Security: $-343.00M
+
+[Title] Net Non Operating Interest Income Expense: $222.00M
+
+[Title] Interest Expense Non Operating: $2.94B
+
+[Title] Interest Income Non Operating: $3.16B
+
+[Title] Operating Income: $109.43B
+
+[Title] Operating Expense: $61.58B
+
+[Title] Research And Development: $29.51B
+
+[Title] Selling General And Administration: $32.06B
+
+[Title] Selling And Marketing Expense: $24.46B
+
+[Title] General And Administrative Expense: $7.61B
+
+[Title] Other Gand A: $7.61B
+
+[Title] Gross Profit: $171.01B
+
+[Title] Cost Of Revenue: $74.11B
+
+[Title] Total Revenue: $245.12B
+
+[Title] Operating Revenue: $245.12B

@@ -1,0 +1,185 @@
+[Title] === TSLA Annual Income Statement ===
+
+[Text] --- Fiscal Year: 2025 ---
+
+[Title] Tax Effect Of Unusual Items: $-133.38M
+
+[Title] Tax Rate For Calcs: $0.27
+
+[Title] Normalized EBITDA: $12.26B
+
+[Title] Total Unusual Items: $-494.00M
+
+[Title] Total Unusual Items Excluding Goodwill: $-494.00M
+
+[Title] Net Income From Continuing Operation Net Minority Interest: $3.79B
+
+[Title] Reconciled Depreciation: $6.15B
+
+[Title] Reconciled Cost Of Revenue: $77.73B
+
+[Title] EBITDA: $11.76B
+
+[Text] EBIT: $5.62B
+
+[Title] Net Interest Income: $1.34B
+
+[Title] Interest Expense: $338.00M
+
+[Title] Interest Income: $1.68B
+
+[Title] Normalized Income: $4.15B
+
+[Title] Net Income From Continuing And Discontinued Operation: $3.79B
+
+[Title] Total Expenses: $89.98B
+
+[Title] Total Operating Income As Reported: $4.36B
+
+[Title] Diluted Average Shares: $3.53B
+
+[Title] Basic Average Shares: $3.22B
+
+[Title] Diluted EPS: $1.08
+
+[Title] Basic EPS: $1.18
+
+[Title] Diluted NI Availto Com Stockholders: $3.79B
+
+[Title] Net Income Common Stockholders: $3.79B
+
+[Title] Net Income: $3.79B
+
+[Title] Minority Interests: $-61.00M
+
+[Title] Net Income Including Noncontrolling Interests: $3.85B
+
+[Title] Net Income Continuous Operations: $3.85B
+
+[Title] Tax Provision: $1.42B
+
+[Title] Pretax Income: $5.28B
+
+[Title] Other Income Expense: $-913.00M
+
+[Title] Other Non Operating Income Expenses: $-419.00M
+
+[Title] Special Income Charges: $-494.00M
+
+[Title] Restructuring And Mergern Acquisition: $494.00M
+
+[Title] Net Non Operating Interest Income Expense: $1.34B
+
+[Title] Interest Expense Non Operating: $338.00M
+
+[Title] Interest Income Non Operating: $1.68B
+
+[Title] Operating Income: $4.85B
+
+[Title] Operating Expense: $12.24B
+
+[Title] Research And Development: $6.41B
+
+[Title] Selling General And Administration: $5.83B
+
+[Title] Gross Profit: $17.09B
+
+[Title] Cost Of Revenue: $77.73B
+
+[Title] Total Revenue: $94.83B
+
+[Title] Operating Revenue: $94.83B
+
+[Text] --- Fiscal Year: 2024 ---
+
+[Title] Tax Effect Of Unusual Items: $-136.80M
+
+[Title] Tax Rate For Calcs: $0.20
+
+[Title] Normalized EBITDA: $15.39B
+
+[Title] Total Unusual Items: $-684.00M
+
+[Title] Total Unusual Items Excluding Goodwill: $-684.00M
+
+[Title] Net Income From Continuing Operation Net Minority Interest: $7.13B
+
+[Title] Reconciled Depreciation: $5.37B
+
+[Title] Reconciled Cost Of Revenue: $80.24B
+
+[Title] EBITDA: $14.71B
+
+[Text] EBIT: $9.34B
+
+[Title] Net Interest Income: $1.22B
+
+[Title] Interest Expense: $350.00M
+
+[Title] Interest Income: $1.57B
+
+[Title] Normalized Income: $7.68B
+
+[Title] Net Income From Continuing And Discontinued Operation: $7.13B
+
+[Title] Total Expenses: $89.93B
+
+[Title] Rent Expense Supplemental: $1.00B
+
+[Title] Total Operating Income As Reported: $7.08B
+
+[Title] Diluted Average Shares: $3.22B
+
+[Title] Basic Average Shares: $3.22B
+
+[Title] Diluted EPS: $2.04
+
+[Title] Basic EPS: $2.23
+
+[Title] Diluted NI Availto Com Stockholders: $7.13B
+
+[Title] Average Dilution Earnings: $0.00
+
+[Title] Net Income Common Stockholders: $7.13B
+
+[Title] Net Income: $7.13B
+
+[Title] Minority Interests: $-23.00M
+
+[Title] Net Income Including Noncontrolling Interests: $7.15B
+
+[Title] Net Income Continuous Operations: $7.15B
+
+[Title] Tax Provision: $1.84B
+
+[Title] Pretax Income: $8.99B
+
+[Title] Other Income Expense: $11.00M
+
+[Title] Other Non Operating Income Expenses: $695.00M
+
+[Title] Special Income Charges: $-684.00M
+
+[Title] Restructuring And Mergern Acquisition: $684.00M
+
+[Title] Net Non Operating Interest Income Expense: $1.22B
+
+[Title] Interest Expense Non Operating: $350.00M
+
+[Title] Interest Income Non Operating: $1.57B
+
+[Title] Operating Income: $7.76B
+
+[Title] Operating Expense: $9.69B
+
+[Title] Research And Development: $4.54B
+
+[Title] Selling General And Administration: $5.15B
+
+[Title] Gross Profit: $17.45B
+
+[Title] Cost Of Revenue: $80.24B
+
+[Title] Total Revenue: $97.69B
+
+[Title] Operating Revenue: $97.69B

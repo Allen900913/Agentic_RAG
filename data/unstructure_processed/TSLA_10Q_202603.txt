@@ -1,0 +1,824 @@
+[Text] UNITED STATES
+
+[Text] SECURITIES AND EXCHANGE COMMISSION
+
+[Text] Washington, D.C. 20549
+
+[Text] FORM
+
+[Text] (Mark One)
+
+[Table]
+| x | QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |
+
+[NarrativeText] For the quarterly period ended
+
+[Text] OR
+
+[Table]
+| o | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |
+
+[Text] For the transition period from _________ to _________
+
+[Text] Commission File Number:
+
+[NarrativeText] (Exact name of registrant as specified in its charter)
+
+[Table]
+| Texas |  | 91-2197729 |
+| --- | --- | --- |
+| (State or other jurisdiction of incorporation or organization) |  | (I.R.S. Employer Identification No.) |
+
+[Table]
+| 1 Tesla Road Austin , Texas |  | 78725 |
+| --- | --- | --- |
+| (Address of principal executive offices) |  | (Zip Code) |
+
+[Text] ()
+
+[NarrativeText] (Registrant’s telephone number, including area code)
+
+[NarrativeText] Securities registered pursuant to Section 12(b) of the Act:
+
+[Table]
+| Title of each class | Trading Symbol(s) | Name of each exchange on which registered |
+| --- | --- | --- |
+| Common stock | TSLA | The Nasdaq Global Select Market |
+
+[NarrativeText] Indicate by check mark whether the registrant (1) has filed all reports required to be filed by Section 13 or 15(d) of the Securities Exchange Act of 1934 (“Exchange Act”) during the preceding 12 months (or for such shorter period that the registrant was required to file such reports), and (2) has been subject to such filing requirements for the past 90 days. x No o
+
+[NarrativeText] Indicate by check mark whether the registrant has submitted electronically every Interactive Data File required to be submitted pursuant to Rule 405 of Regulation S-T (§232.405 of this chapter) during the preceding 12 months (or for such shorter period that the registrant was required to submit such files). x No o
+
+[NarrativeText] Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accelerated filer,” “smaller reporting company” and “emerging growth company” in Rule 12b-2 of the Exchange Act:
+
+[Table]
+| Large accelerated filer |  | x |  | Accelerated filer |  | o |
+| --- | --- | --- | --- | --- | --- | --- |
+| Non-accelerated filer |  | o |  | Smaller reporting company |  | o |
+| Emerging growth company |  | o |  |  |  |  |
+
+[NarrativeText] If an emerging growth company, indicate by check mark if the registrant has elected not to use the extended transition period for complying with any new or revised financial accounting standards provided pursuant to Section 13(a) of the Exchange Act. o
+
+[NarrativeText] Indicate by check mark whether the registrant is a shell company (as defined in Rule 12b-2 of the Exchange Act). Yes o No
+
+[NarrativeText] As of April 16, 2026, there were shares of the registrant’s common stock outstanding.
+
+[Text] TESLA, INC.
+
+[Text] FORM 10-Q FOR THE QUARTER ENDED MARCH 31, 2026
+
+[Text] INDEX
+
+[Table]
+|  |  | Page |
+| --- | --- | --- |
+| PART I. FINANCIAL INFORMATION |  |  |
+| Item 1. | Financial Statements | 4 |
+|  | Consolidated Balance Sheets | 4 |
+|  | Consolidated Statements of Operations | 5 |
+|  | Consolidated Statements of Comprehensive Income | 6 |
+|  | Consolidated Statements of Redeemable Noncontrolling Interests and Equity | 7 |
+|  | Consolidated Statements of Cash Flows | 8 |
+|  | Notes to Consolidated Financial Statements | 9 |
+| Item 2. | Management's Discussion and Analysis of Financial Condition and Results of Operations | 28 |
+| Item 3. | Quantitative and Qualitative Disclosures about Market Risk | 36 |
+| Item 4. | Controls and Procedures | 36 |
+| PART II. OTHER INFORMATION |  |  |
+| Item 1. | Legal Proceedings | 37 |
+| Item 1A. | Risk Factors | 37 |
+| Item 2. | Unregistered Sales of Equity Securities and Use of Proceeds | 37 |
+| Item 3. | Defaults Upon Senior Securities | 37 |
+| Item 4. | Mine Safety Disclosures | 37 |
+| Item 5. | Other Information | 37 |
+| Item 6. | Exhibits | 39 |
+| Signatures |  | 40 |
+
+[Text] Table of Contents
+
+[Text] Forward-Looking Statements
+
+[NarrativeText] The discussions in this Quarterly Report on Form 10-Q contain forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995. Forward-looking statements are based on assumptions with respect to the future and management’s current expectations, involve certain risks and uncertainties and are not guarantees. These forward-looking statements include, but are not limited to, statements concerning supply chain constraints, our strategy, competition, future operations and production capacity, future financial position, future revenues, projected costs, profitability, expected cost reductions, capital adequacy, expectations regarding demand and acceptance for our technologies, growth opportunities and trends in the markets in which we operate, prospects and plans and objectives of management. The words “anticipates,” “believes,” “could,” “estimates,” “expects,” “intends,” “may,” “plans,” “projects,” “will,” “would,” “predicts” and similar expressions are intended to identify forward-looking statements, although not all forward-looking statements contain these identifying words. We may not actually achieve the plans, intentions or expectations disclosed in our forward-looking statements and you should not place undue reliance on our forward-looking statements. Future results may differ materially from the plans, intentions and expectations disclosed in the forward-looking statements that we make. These forward-looking statements involve risks and uncertainties that could cause our actual results to differ materially from those in the forward-looking statements, including, without limitation, the risks set forth in Part I, Item 1A, “Risk Factors” of the Annual Report on Form 10-K for the fiscal year ended December 31, 2025 and that are otherwise described or updated from time to time in our other filings with the Securities and Exchange Commission (the “SEC”). The discussion of such risks is not an indication that any such risks have occurred at the time of this filing. We do not assume any obligation to update any forward-looking statements.
+
+[Text] Table of Contents
+
+[Text] PART I. FINANCIAL INFORMATION
+
+[Text] ITEM 1. FINANCIAL STATEMENTS
+
+[Text] Tesla, Inc.
+
+[Text] Consolidated Balance Sheets
+
+[Text] (in millions, except per share data)
+
+[Text] (unaudited)
+
+[Table]
+|  | March 31, 2026 |  | December 31, 2025 |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Assets |  |  |  |  |  |  |  |
+| Current assets |  |  |  |  |  |  |  |
+| Cash and cash equivalents | $ | 16,603 |  |  | $ | 16,513 |  |
+| Short-term investments | 28,140 |  |  | 27,546 |  |  |  |
+| Accounts receivable, net | 3,959 |  |  | 4,576 |  |  |  |
+| Inventory | 14,434 |  |  | 12,392 |  |  |  |
+| Prepaid expenses and other current assets | 6,612 |  |  | 7,615 |  |  |  |
+| Total current assets | 69,748 |  |  | 68,642 |  |  |  |
+| Operating lease vehicles, net | 4,530 |  |  | 4,912 |  |  |  |
+| Energy generation and storage systems, net | 4,565 |  |  | 4,604 |  |  |  |
+| Property, plant and equipment, net | 43,213 |  |  | 40,643 |  |  |  |
+| Operating lease right-of-use assets | 6,332 |  |  | 6,027 |  |  |  |
+| Digital assets | 786 |  |  | 1,008 |  |  |  |
+| Deferred tax assets | 7,060 |  |  | 6,925 |  |  |  |
+| Other non-current assets | 7,490 |  |  | 5,045 |  |  |  |
+| Total assets | $ | 143,724 |  |  | $ | 137,806 |  |
+| Liabilities |  |  |  |  |  |  |  |
+| Current liabilities |  |  |  |  |  |  |  |
+| Accounts payable | $ | 14,696 |  |  | $ | 13,371 |  |
+| Accrued liabilities and other | 14,554 |  |  | 13,279 |  |  |  |
+| Deferred revenue | 3,441 |  |  | 3,424 |  |  |  |
+| Current portion of debt and finance leases | 1,447 |  |  | 1,640 |  |  |  |
+| Total current liabilities | 34,138 |  |  | 31,714 |  |  |  |
+| Debt and finance leases, net of current portion | 7,782 |  |  | 6,736 |  |  |  |
+| Deferred revenue, net of current portion | 3,847 |  |  | 3,631 |  |  |  |
+| Other long-term liabilities | 13,155 |  |  | 12,860 |  |  |  |
+| Total liabilities | 58,922 |  |  | 54,941 |  |  |  |
+| Commitments and contingencies (Note 10) |  |  |  |  |  |  |  |
+| Redeemable noncontrolling interests in subsidiaries | 57 |  |  | 58 |  |  |  |
+| Equity |  |  |  |  |  |  |  |
+| Stockholders’ equity |  |  |  |  |  |  |  |
+| Preferred stock; $ 0.001 par value; 100 shares authorized; no shares issued and outstanding | — |  |  | — |  |  |  |
+| Common stock; $ 0.001 par value; 6,000 shares authorized; 3,755 and 3,751 shares issued and outstanding as of March 31, 2026 and December 31, 2025, respectively | 3 |  |  | 3 |  |  |  |
+| Additional paid-in capital | 44,299 |  |  | 42,770 |  |  |  |
+| Accumulated other comprehensive income | 334 |  |  | 361 |  |  |  |
+| Retained earnings | 39,480 |  |  | 39,003 |  |  |  |
+| Total stockholders’ equity | 84,116 |  |  | 82,137 |  |  |  |
+| Noncontrolling interests in subsidiaries | 629 |  |  | 670 |  |  |  |
+| Total liabilities and equity | $ | 143,724 |  |  | $ | 137,806 |  |
+
+[NarrativeText] The accompanying notes are an integral part of these consolidated financial statements.
+
+[Text] Table of Contents
+
+[Text] Tesla, Inc.
+
+[Text] Consolidated Statements of Operations
+
+[Text] (in millions, except per share data)
+
+[Text] (unaudited)
+
+[Table]
+|  | Three Months Ended March 31, |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2026 |  | 2025 |  |  |  |  |  |  |
+| Revenues |  |  |  |  |  |  |  |  |  |
+| Automotive sales | $ | 15,473 |  |  | $ | 12,925 |  |  |  |
+| Automotive regulatory credits | 380 |  |  | 595 |  |  |  |  |  |
+| Automotive leasing | 381 |  |  | 447 |  |  |  |  |  |
+| Total automotive revenues | 16,234 |  |  | 13,967 |  |  |  |  |  |
+| Energy generation and storage | 2,408 |  |  | 2,730 |  |  |  |  |  |
+| Services and other | 3,745 |  |  | 2,638 |  |  |  |  |  |
+| Total revenues | 22,387 |  |  | 19,335 |  |  |  |  |  |
+| Cost of revenues |  |  |  |  |  |  |  |  |  |
+| Automotive sales | 12,616 |  |  | 11,461 |  |  |  |  |  |
+| Automotive leasing | 196 |  |  | 239 |  |  |  |  |  |
+| Total automotive cost of revenues | 12,812 |  |  | 11,700 |  |  |  |  |  |
+| Energy generation and storage | 1,456 |  |  | 1,945 |  |  |  |  |  |
+| Services and other | 3,399 |  |  | 2,537 |  |  |  |  |  |
+| Total cost of revenues | 17,667 |  |  | 16,182 |  |  |  |  |  |
+| Gross profit | 4,720 |  |  | 3,153 |  |  |  |  |  |
+| Operating expenses |  |  |  |  |  |  |  |  |  |
+| Research and development | 1,946 |  |  | 1,409 |  |  |  |  |  |
+| Selling, general and administrative | 1,833 |  |  | 1,251 |  |  |  |  |  |
+| Restructuring and other | — |  |  | 94 |  |  |  |  |  |
+| Total operating expenses | 3,779 |  |  | 2,754 |  |  |  |  |  |
+| Income from operations | 941 |  |  | 399 |  |  |  |  |  |
+| Interest income | 434 |  |  | 400 |  |  |  |  |  |
+| Interest expense | ( 92 ) |  |  | ( 91 ) |  |  |  |  |  |
+| Other expense, net | ( 535 ) |  |  | ( 119 ) |  |  |  |  |  |
+| Income before income taxes | 748 |  |  | 589 |  |  |  |  |  |
+| Provision for income taxes | 257 |  |  | 169 |  |  |  |  |  |
+| Net income | 491 |  |  | 420 |  |  |  |  |  |
+| Net income attributable to noncontrolling interests and redeemable noncontrolling interests in subsidiaries | 14 |  |  | 11 |  |  |  |  |  |
+| Net income attributable to common stockholders | $ | 477 |  |  | $ | 409 |  |  |  |
+| Net income per share of common stock attributable to common stockholders |  |  |  |  |  |  |  |  |  |
+| Basic | $ | 0.15 |  |  | $ | 0.13 |  |  |  |
+| Diluted | $ | 0.13 |  |  | $ | 0.12 |  |  |  |
+| Weighted average shares used in computing net income per share of common stock |  |  |  |  |  |  |  |  |  |
+| Basic | 3,234 |  | 3,218 |  |  |  |  |  |  |
+| Diluted | 3,538 |  | 3,521 |  |  |  |  |  |  |
+
+[NarrativeText] The accompanying notes are an integral part of these consolidated financial statements.
+
+[Text] Table of Contents
+
+[Text] Tesla, Inc.
+
+[Text] Consolidated Statements of Comprehensive Income
+
+[Text] (in millions)
+
+[Text] (unaudited)
+
+[Table]
+|  | Three Months Ended March 31, |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2026 |  | 2025 |  |  |  |  |
+| Net income | $ | 491 |  |  | $ | 420 |  |
+| Other comprehensive (loss) income: |  |  |  |  |  |  |  |
+| Foreign currency translation adjustment | ( 17 ) |  |  | 251 |  |  |  |
+| Unrealized net loss on short-term investments, net of tax | ( 10 ) |  |  | ( 5 ) |  |  |  |
+| Total other comprehensive (loss) income: | ( 27 ) |  |  | 246 |  |  |  |
+| Comprehensive income | 464 |  |  | 666 |  |  |  |
+| Less: Comprehensive income attributable to noncontrolling interests and redeemable noncontrolling interests in subsidiaries | 14 |  |  | 11 |  |  |  |
+| Comprehensive income attributable to common stockholders | $ | 450 |  |  | $ | 655 |  |
+
+[NarrativeText] The accompanying notes are an integral part of these consolidated financial statements.
+
+[Text] Table of Contents
+
+[Text] Tesla, Inc.
+
+[Text] Consolidated Statements of Redeemable Noncontrolling Interests and Equity
+
+[Text] (in millions)
+
+[Text] (unaudited)
+
+[Table]
+| Three Months Ended March 31, 2026 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Income |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  | Shares |  | Amount |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Balance as of December 31, 2025 | $ | 58 |  |  |  | 3,751 |  | $ | 3 |  |  | $ | 42,770 |  |  | $ | 361 |  |  | $ | 39,003 |  |  | $ | 82,137 |  |  | $ | 670 |  |  | $ | 82,807 |  |
+| Issuance of common stock for equity incentive awards | — |  |  |  | 4 |  | — |  |  | 361 |  |  | — |  |  | — |  |  | 361 |  |  | — |  |  | 361 |  |  |  |  |  |  |  |  |  |
+| Stock-based compensation | — |  |  |  | — |  | — |  |  | 1,093 |  |  | — |  |  | — |  |  | 1,093 |  |  | — |  |  | 1,093 |  |  |  |  |  |  |  |  |  |
+| Distributions to noncontrolling interests | ( 2 ) |  |  |  | — |  | — |  |  | — |  |  | — |  |  | — |  |  | — |  |  | ( 54 ) |  |  | ( 54 ) |  |  |  |  |  |  |  |  |  |
+| Shareholder settlement, net of $ 23 tax | — |  |  |  | — |  | — |  |  | 75 |  |  | — |  |  | — |  |  | 75 |  |  | — |  |  | 75 |  |  |  |  |  |  |  |  |  |
+| Net income | 1 |  |  |  | — |  | — |  |  | — |  |  | — |  |  | 477 |  |  | 477 |  |  | 13 |  |  | 490 |  |  |  |  |  |  |  |  |  |
+| Other comprehensive loss | — |  |  |  | — |  | — |  |  | — |  |  | ( 27 ) |  |  | — |  |  | ( 27 ) |  |  | — |  |  | ( 27 ) |  |  |  |  |  |  |  |  |  |
+| Balance as of March 31, 2026 | $ | 57 |  |  |  | 3,755 |  | $ | 3 |  |  | $ | 44,299 |  |  | $ | 334 |  |  | $ | 39,480 |  |  | $ | 84,116 |  |  | $ | 629 |  |  | $ | 84,745 |  |
+
+[Table]
+| Three Months Ended March 31, 2025 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Loss |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  | Shares |  | Amount |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Balance as of December 31, 2024 | $ | 63 |  |  |  | 3,216 |  | $ | 3 |  |  | $ | 38,371 |  |  | $ | ( 670 ) |  |  | $ | 35,209 |  |  | $ | 72,913 |  |  | $ | 704 |  |  | $ | 73,617 |  |
+| Issuance of common stock for equity incentive awards | — |  |  |  | 4 |  | — |  |  | 313 |  |  | — |  |  | — |  |  | 313 |  |  | — |  |  | 313 |  |  |  |  |  |  |  |  |  |
+| Stock-based compensation | — |  |  |  | — |  | — |  |  | 662 |  |  | — |  |  | — |  |  | 662 |  |  | — |  |  | 662 |  |  |  |  |  |  |  |  |  |
+| Distributions to noncontrolling interests | ( 2 ) |  |  |  | — |  | — |  |  | — |  |  | — |  |  | — |  |  | — |  |  | ( 11 ) |  |  | ( 11 ) |  |  |  |  |  |  |  |  |  |
+| Shareholder settlement, net | — |  |  |  | — |  | — |  |  | 110 |  |  | — |  |  | — |  |  | 110 |  |  | — |  |  | 110 |  |  |  |  |  |  |  |  |  |
+| Net income | 1 |  |  |  | — |  | — |  |  | — |  |  | — |  |  | 409 |  |  | 409 |  |  | 10 |  |  | 419 |  |  |  |  |  |  |  |  |  |
+| Other comprehensive income | — |  |  |  | — |  | — |  |  | — |  |  | 246 |  |  | — |  |  | 246 |  |  | — |  |  | 246 |  |  |  |  |  |  |  |  |  |
+| Balance as of March 31, 2025 | $ | 62 |  |  |  | 3,220 |  | $ | 3 |  |  | $ | 39,456 |  |  | $ | ( 424 ) |  |  | $ | 35,618 |  |  | $ | 74,653 |  |  | $ | 703 |  |  | $ | 75,356 |  |
+
+[NarrativeText] The accompanying notes are an integral part of these consolidated financial statements.
+
+[Text] Table of Contents
+
+[Text] Tesla, Inc.
+
+[Text] Consolidated Statements of Cash Flows
+
+[Text] (in millions)
+
+[Text] (unaudited)
+
+[Table]
+|  | Three Months Ended March 31, |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2026 |  | 2025 |  |  |  |  |
+| Cash Flows from Operating Activities |  |  |  |  |  |  |  |
+| Net income | $ | 491 |  |  | $ | 420 |  |
+| Adjustments to reconcile net income to net cash provided by operating activities: |  |  |  |  |  |  |  |
+| Depreciation, amortization and impairment | 1,590 |  |  | 1,447 |  |  |  |
+| Stock-based compensation | 1,030 |  |  | 573 |  |  |  |
+| Inventory write-downs | 77 |  |  | 112 |  |  |  |
+| Foreign currency transaction net unrealized loss | 287 |  |  | 30 |  |  |  |
+| Deferred income taxes | ( 136 ) |  |  | ( 43 ) |  |  |  |
+| Digital assets loss, net | 222 |  |  | 125 |  |  |  |
+| Non-cash interest and other operating activities | 1 |  |  | 46 |  |  |  |
+| Changes in operating assets and liabilities: |  |  |  |  |  |  |  |
+| Accounts receivable | 561 |  |  | 630 |  |  |  |
+| Inventory | ( 2,255 ) |  |  | ( 1,704 ) |  |  |  |
+| Operating lease vehicles | 174 |  |  | ( 76 ) |  |  |  |
+| Prepaid expenses and other assets | 231 |  |  | ( 419 ) |  |  |  |
+| Accounts payable, accrued and other liabilities | 1,401 |  |  | 706 |  |  |  |
+| Deferred revenue | 263 |  |  | 309 |  |  |  |
+| Net cash provided by operating activities | 3,937 |  |  | 2,156 |  |  |  |
+| Cash Flows from Investing Activities |  |  |  |  |  |  |  |
+| Purchases of property and equipment excluding finance leases, net of sales | ( 2,493 ) |  |  | ( 1,492 ) |  |  |  |
+| Purchase of SpaceX equity investment | ( 2,002 ) |  |  | — |  |  |  |
+| Purchases of short-term investments | ( 8,318 ) |  |  | ( 6,015 ) |  |  |  |
+| Proceeds from maturities of short-term investments | 7,790 |  |  | 5,856 |  |  |  |
+| Net cash used in investing activities | ( 5,023 ) |  |  | ( 1,651 ) |  |  |  |
+| Cash Flows from Financing Activities |  |  |  |  |  |  |  |
+| Proceeds from issuances of debt | 4,331 |  |  | 625 |  |  |  |
+| Repayments of debt | ( 3,530 ) |  |  | ( 1,301 ) |  |  |  |
+| Proceeds from exercises of stock options and other stock issuances | 361 |  |  | 313 |  |  |  |
+| Principal payments on finance leases | ( 18 ) |  |  | ( 48 ) |  |  |  |
+| Proceeds received from directors in shareholder settlement | — |  |  | 277 |  |  |  |
+| Recovery (payment) of legal fees associated with shareholder settlement | 98 |  |  | ( 176 ) |  |  |  |
+| Distributions paid to noncontrolling interests in subsidiaries | ( 70 ) |  |  | ( 22 ) |  |  |  |
+| Net cash provided by (used in) financing activities | 1,172 |  |  | ( 332 ) |  |  |  |
+| Effect of exchange rate changes on cash and cash equivalents and restricted cash | ( 47 ) |  |  | 40 |  |  |  |
+| Net increase in cash and cash equivalents and restricted cash | 39 |  |  | 213 |  |  |  |
+| Cash and cash equivalents and restricted cash, beginning of period | 17,616 |  |  | 17,037 |  |  |  |
+| Cash and cash equivalents and restricted cash, end of period | $ | 17,655 |  |  | $ | 17,250 |  |
+| Supplemental Non-Cash Investing and Financing Activities |  |  |  |  |  |  |  |
+| Acquisitions of property and equipment included in liabilities | $ | 2,814 |  |  | $ | 1,581 |  |
+| Leased assets obtained in exchange for finance lease liabilities | $ | 6 |  |  | $ | — |  |
+| Leased assets obtained in exchange for operating lease liabilities | $ | 565 |  |  | $ | 342 |  |
+
+[NarrativeText] The accompanying notes are an integral part of these consolidated financial statements.
+
+[Text] Table of Contents
+
+[Text] Tesla, Inc.
+
+[Text] Notes to Consolidated Financial Statements
+
+[Text] (unaudited)
+
+[Text] Note 1 –
+
+[Text] Table of Contents
+
+[Text] 10
+
+[Text] Table of Contents
+
+[Text] 11
+
+[Text] Table of Contents
+
+[Text] 12
+
+[Text] Table of Contents
+
+[Text] 13
+
+[Text] Table of Contents
+
+[Text] Note 2 –
+
+[Text] 14
+
+[Text] Table of Contents
+
+[Text] 15
+
+[Text] Table of Contents
+
+[Text] Note 3 –
+
+[Text] Note 4 –
+
+[Text] 16
+
+[Text] Table of Contents
+
+[Text] Note 5 –
+
+[Text] Note 6 –
+
+[Text] Note 7 –
+
+[Text] 17
+
+[Text] Table of Contents
+
+[Text] Note 8 –
+
+[Text] 18
+
+[Text] Table of Contents
+
+[Text] 19
+
+[Text] Table of Contents
+
+[Text] 20
+
+[Text] Table of Contents
+
+[Text] 21
+
+[Text] Table of Contents
+
+[Text] Note 9 –
+
+[Text] Note 10 –
+
+[Text] 22
+
+[Text] Table of Contents
+
+[Text] 23
+
+[Text] Table of Contents
+
+[Text] 24
+
+[Text] Table of Contents
+
+[Text] Note 11 –
+
+[Text] Note 12 –
+
+[Text] 25
+
+[Text] Table of Contents
+
+[Text] Note 13 –
+
+[Text] 26
+
+[Text] Table of Contents
+
+[Text] Note 14 –
+
+[Text] 27
+
+[Text] Table of Contents
+
+[Text] ITEM 2. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+[NarrativeText] The following discussion and analysis should be read in conjunction with the consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q.
+
+[Text] Overview
+
+[NarrativeText] We are focused on bringing artificial intelligence into the real world, through products and services like FSD (Supervised) and Robotaxi, as well as working to develop and commercialize AI robots (including Optimus). We intend to leverage our current operations, in which we design, develop, manufacture, sell and lease high-performance fully electric vehicles and energy generation and storage systems that increasingly deliver AI-related and enhanced software and services to our customers, to achieve that objective.
+
+[NarrativeText] As a result of rapidly evolving trade and fiscal policy and geopolitical conflicts, uncertainty in the automotive and energy markets continues, posing risks to our global supply chain and cost structure which could have a meaningfully adverse impact on demand for our products and our profitability. The current tariff regime will have a relatively larger impact on our energy generation and storage business compared to our automotive business. While we prepare for near-term challenges to our business under current policies, we are focused on long-term growth opportunities as we continue to make prudent investments.
+
+[NarrativeText] In 2026, we produced approximately 408 thousand consumer vehicles and delivered approximately 358 thousand consumer vehicles through the first quarter. We are focused on profitable growth, further improving and deploying our FSD (Supervised) capabilities, including future autonomous capabilities through our purpose-built Robotaxi product, Cybercab, advancing our battery and AI compute technologies, vertically integrating and localizing our supply chain, and expanding our global infrastructure. We have continued to expand and refine our Robotaxi service after its June 2025 launch, capitalizing on our AI investments and scalable mobility infrastructure to advance a service-driven business model.
+
+[NarrativeText] In 2026, we deployed 8.8 GWh of energy storage products through the first quarter. We are focused on ramping the production, increasing the market penetration of our energy storage products, developing our battery technologies and vertically integrating, localizing and expanding our supply chain.
+
+[NarrativeText] During the three months ended March 31, 2026, we recognized total revenues of $22.39 billion, representing an increase of $3.05 billion compared to the same period in the prior year. During the three months ended March 31, 2026, our net income attributable to common stockholders was $477 million, representing an increase of $68 million compared to the same period in the prior year. We continue to ramp production and build and optimize our manufacturing capacity, expand our operations while focusing on further cost reductions and operational efficiencies, including through vertical integration of our battery and semiconductor supply chains, to enable increased deliveries and deployments of our products, and invest in research and development to accelerate our AI, software and fleet-based profits for further revenue growth.
+
+[NarrativeText] We ended the first quarter of 2026 with $44.74 billion in cash and cash equivalents and short-term investments, representing an increase of $684 million from the end of 2025. Our cash flows provided by operating activities were $3.94 billion during the three months ended March 31, 2026, compared to $2.16 billion during the same period ended March 31, 2025, representing an increase of $1.78 billion. Capital expenditures amounted to $2.49 billion during the three months ended March 31, 2026, compared to $1.49 billion during the same period ended March 31, 2025, representing an increase of $1.00 billion. Overall growth has allowed our business to generally fund itself. As we make critical high-value investments in our AI initiatives and expand manufacturing capabilities, including for our semiconductor and Optimus businesses, we intend to manage the business such that we maintain a strong balance sheet and sufficient liquidity.
+
+[Text] 28
+
+[Text] Table of Contents
+
+[Text] Management Opportunities, Challenges and Uncertainties and 2026 Outlook
+
+[Text] Automotive and AI Enabled Products—Production
+
+[NarrativeText] We are focused on growing and optimizing our manufacturing capacity, which includes capacity for manufacturing newer vehicle models and future vehicles utilizing aspects of our next generation platform, while maximizing production rate and efficiency at our Gigafactories. The next phase of production growth will be initiated by advances in autonomy and the introduction of new products, including those built on our next generation vehicle platform, as well as our ability to efficiently manufacture our own cells that we are developing to have high-volume output, lower capital and production costs and longer range. In the first quarter of 2026, we made significant progress towards these objectives as we began pilot production of Cybercab, as well as ramps across our new battery and material factories, including cathode material and lithium refining in Texas. Our goals are to improve vehicle performance, decrease production costs and increase affordability and customer awareness. We are also capitalizing on our strengths in real-world AI data to advance the development of Optimus, a general purpose, autonomous humanoid robot, as we make preparations and investments in large-scale production.
+
+[NarrativeText] These plans are subject to uncertainties inherent in establishing and ramping manufacturing operations, which may be exacerbated by new product and manufacturing technologies we introduce, the number of concurrent international projects, any industry-wide component constraints, labor shortages and any future impact from events outside of our control. For example, changes to fiscal and trade policy with respect to tariffs, export controls and other restrictions may impact our global supply chain cost structure and availability, affecting not only vehicle production, but also facility expansions. Moreover, we have set ambitious technological targets with our plans for battery cells as well as for iterative manufacturing and design improvements for our vehicles.
+
+[Text] Automotive and AI Enabled Products—Demand, Sales and Deliveries and Supporting Infrastructure
+
+[NarrativeText] Our cost reduction efforts, cost innovation strategies, and additional localized procurement and manufacturing are key to our vehicles’ affordability and have allowed us to competitively price our vehicles. We will also continue to generate demand by improving our vehicles’ performance and functionality, including through product offerings and features utilizing artificial intelligence such as FSD (Supervised) and other software, and delivering new vehicles and vehicle options. In addition, we believe the launch of our Robotaxi service unlocks the potential for significant business growth to advance a service-driven business model. We will continue to improve safety and profitability while scaling the network. In addition, we have been increasing awareness, and expanding our vehicle financing programs, including attractive leasing terms for our customers. We will also continue to work on developing our robotics offerings.
+
+[NarrativeText] However, we operate in a cyclical industry that is sensitive to shifting consumer trends, geopolitical conflicts, political and regulatory uncertainty, including with respect to trade and the environment, all of which can be compounded by inflationary pressures, rising energy prices, interest rate fluctuations and the liquidity of enterprise customers. For example, as inflationary pressures increased across the markets in which we operate, central banks in developed countries raised interest rates rapidly and substantially, which impacted the affordability of vehicle lease and finance arrangements. Further, sales of vehicles in the automotive industry also tend to be cyclical in many markets, which may expose us to increased volatility as we expand and adjust our operations. Moreover, as additional competitors enter the marketplace and help bring the world closer to sustainable transportation, we will have to adjust and continue to execute well to maintain our momentum. Additionally, our suppliers’ liquidity and allocation plans may be affected by current challenges in the automotive industry, which could reduce our access to components or result in unfavorable changes to cost. These macroeconomic and industry trends have had, and will likely continue to have, an impact on the pricing of, and order rate for our vehicles, and in turn our operating margin.
+
+[NarrativeText] Changes in government and economic policies, incentives or tariffs may also impact our production, cost structure and the competitive landscape. For instance, while the final scope and application of recently announced changes in trade policy remain uncertain at this time, tariffs on imports and subsequent retaliatory tariffs could impact consumer spending and demand for durable goods and related services. Furthermore, certain provisions of the OBBBA, including the removal of tax credits for electric vehicles, may also impact consumer demand for electric vehicles in general. We will continue to adjust accordingly to such developments, and we believe our ongoing cost reduction efforts, including through production innovation, process improvements and logistics optimization, and focus on operating leverage, vertical integration and supply chain localization will continue to benefit us in relation to our competitors. Our new products and our advances in autonomy and robotics, position us for future growth.
+
+[Text] 29
+
+[Text] Table of Contents
+
+[NarrativeText] As our vehicle production increases, we must work constantly to similarly increase vehicle delivery capability so that it does not become a bottleneck on our total deliveries. As we expand our manufacturing operations and vehicle lineup globally, we will also have to continue to increase and staff our delivery, servicing and charging infrastructure accordingly, maintain our vehicle reliability and optimize our Supercharger locations to ensure cost effectiveness and customer satisfaction. In particular, as other automotive manufacturers have announced their adoption of NACS and agreements with us to utilize our Superchargers, we must correspondingly expand our network in order to ensure adequate availability to meet customer demands. We have also begun deploying public Megachargers in preparation for the ramp of Tesla Semi. In addition, we remain focused on continued enhancements of the capability and efficiency of our servicing operations. In tandem with the launch of our Robotaxi business, we are focused on developing and optimizing dedicated infrastructure, including in relation to vehicle cleaning and maintenance, charging, security, teleoperations and fleet management, to ensure service quality as we continue to scale.
+
+[Text] Energy Generation and Storage Demand, Production and Deployment
+
+[NarrativeText] The long-term success of this business is dependent upon incremental volume growth. We continue to increase the production and capabilities of our energy storage products to meet high levels of demand, including the ramps of our Megafactories in Shanghai and Lathrop, California, and the construction of a new Megafactory near Houston, Texas. In 2025, we introduced Megapack 3 and Megablock, our next-generation industrial storage product, and began manufacturing a new residential retrofit solar panel. For Megapack, energy storage deployments can vary meaningfully quarter to quarter depending on the timing of specific project milestones and logistics. As these product lines grow, we will have to maintain adequate battery cell supply for our energy storage products. At the same time, changes in government and economic incentives or tariffs may also impact our sales, cost structure and the competitive landscape. For instance, import tariffs by the US government and the provisions of the OBBBA could significantly increase battery cell expenses and impact costs for our consumers, negatively impacting consumer demand. Despite these challenges, as AI infrastructure drives rapid load growth, we see opportunities for our energy storage products to stabilize the grid, shift energy when it is needed most and provide additional power capacity.
+
+[Text] Infrastructure
+
+[NarrativeText] To support our businesses in clean energy and transport and autonomous robots, we are investing in and developing the necessary infrastructure. We continue to expand Cortex, our onsite training clusters at Gigafactory Texas, to provide sufficient compute resources for the development of our AI products and services, and are expanding our scope of manufacturing to include semiconductor fabrication. We are focused on exploring opportunities independently and with strategic partners to develop bespoke and scalable solutions, including through vertical integration, to optimize for cost, functionality, efficiency and safety.
+
+[Text] Cash Flow and Capital Expenditure Trends
+
+[NarrativeText] Our capital expenditures are typically difficult to project beyond the short-term given the number and breadth of our core projects at any given time, and may further be impacted by uncertainties in future global market conditions and shifting global trade and fiscal policy. We are simultaneously developing and ramping new products, building or ramping manufacturing facilities on three continents, piloting the development and manufacture of new battery cell technologies, expanding our Supercharger network and investing in autonomy, robotics and other artificial intelligence enabled training and products and its supporting infrastructure, and the pace of our capital spend may vary depending on overall priority among projects, the pace at which we meet milestones, production adjustments to and among our various products, increased capital efficiencies and the addition of new projects. We are focused on long-term growth opportunities through critical, high-value investments. We currently expect our capital expenditures to be in excess of $25 billion in 2026, driven by our AI initiatives, including investments in compute infrastructure and data centers, the expansion and ramp of our manufacturing and R&D production lines and facilities, and growth in our fleet of company-operated AI-enabled assets and our retail, service and charging footprint. We believe this strategy will position our Company for further growth as we make investments in a capital efficient manner.
+
+[NarrativeText] Our business has generally been consistently generating cash flow from operations in excess of our level of capital spend, and with better working capital management resulting in shorter days sales outstanding than days payable outstanding, our sales growth is also generally facilitating positive cash generation. We have and will continue to utilize such cash flows, among other things, to invest in autonomy and robotics, further vertically integrate our supply chain, expand our product roadmap and provide financing options to our customers. At the same time, periods of heightened levels of capital expenditures due to capital-intensive projects and other potential variables such as rising material prices and increases in supply chain and labor expenses resulting from changes in global trade conditions and labor availability, will necessitate additional funding beyond our operating cash flow.
+
+[Text] 30
+
+[Text] Table of Contents
+
+[Text] Critical Accounting Policies and Estimates
+
+[NarrativeText] For a description of our critical accounting policies and estimates, refer to Part II, Item 7, Critical Accounting Policies and Estimates in our Annual Report on Form 10-K for the year ended December 31, 2025. There have been no material changes to our critical accounting policies and estimates since our Annual Report on Form 10-K for the year ended December 31, 2025.
+
+[Text] Recent Accounting Pronouncements
+
+[NarrativeText] See Note 1, Summary of Significant Accounting Policies, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q.
+
+[Text] Results of Operations
+
+[Text] Revenues
+
+[Table]
+|  | Three Months Ended March 31, | Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) | 2026 |  | 2025 |  | $ |  | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Automotive sales | $ | 15,473 |  |  | $ | 12,925 |  |  | $ | 2,548 |  |  | 20 | % |  |  |  |  |  |  |  |  |
+| Automotive regulatory credits | 380 |  |  | 595 |  |  | (215) |  |  | (36) | % |  |  |  |  |  |  |  |  |  |  |  |
+| Automotive leasing | 381 |  |  | 447 |  |  | (66) |  |  | (15) | % |  |  |  |  |  |  |  |  |  |  |  |
+| Total automotive revenues | 16,234 |  |  | 13,967 |  |  | 2,267 |  |  | 16 | % |  |  |  |  |  |  |  |  |  |  |  |
+| Services and other | 3,745 |  |  | 2,638 |  |  | 1,107 |  |  | 42 | % |  |  |  |  |  |  |  |  |  |  |  |
+| Total automotive & services and other segment revenue | 19,979 |  |  | 16,605 |  |  | 3,374 |  |  | 20 | % |  |  |  |  |  |  |  |  |  |  |  |
+| Energy generation and storage segment revenue | 2,408 |  |  | 2,730 |  |  | (322) |  |  | (12) | % |  |  |  |  |  |  |  |  |  |  |  |
+| Total revenues | $ | 22,387 |  |  | $ | 19,335 |  |  | $ | 3,052 |  |  | 16 | % |  |  |  |  |  |  |  |  |
+
+[Text] Automotive & Services and Other Segment
+
+[NarrativeText] Automotive sales revenue increased $2.55 billion, or 20%, in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025 due to an increase of approximately 10% in cash deliveries, in part from bringing down all of our vehicle factories simultaneously for the changeover to the New Model Y in the prior period, and a higher average selling price per unit primarily driven by sales mix and a positive impact from the weakening of the United States dollar when compared to foreign currencies year over year.
+
+[NarrativeText] Automotive regulatory credits revenue decreased $215 million, or 36%, in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025. Fluctuations in automotive regulatory credits are impacted by our supply of credits, subject to changes in regulation, production and sales. Recent governmental and regulatory actions have restricted certain regulatory credit programs tied to our products. Furthermore, we are impacted by the demand for credits by other automobile manufacturers.
+
+[NarrativeText] Services and other revenue increased $1.11 billion, or 42%, in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to increases in used vehicle sales volume, non-warranty maintenance services and collision revenue, paid Supercharging sessions and automotive insurance business revenue.
+
+[Text] Energy Generation and Storage Segment
+
+[NarrativeText] Energy generation and storage revenue decreased $322 million, or 12%, in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to decreases in Megapack and Powerwall deployments.
+
+[Text] 31
+
+[Text] Table of Contents
+
+[Text] Cost of Revenues and Gross Margin
+
+[Table]
+|  | Three Months Ended March 31, |  | Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) | 2026 |  | 2025 |  | $ |  | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Cost of revenues |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Automotive sales | $ | 12,616 |  |  | $ | 11,461 |  |  | $ | 1,155 |  |  | 10 | % |  |  |  |  |  |  |  |  |
+| Automotive leasing | 196 |  |  | 239 |  |  | (43) |  |  | (18) | % |  |  |  |  |  |  |  |  |  |  |  |
+| Total automotive cost of revenues | 12,812 |  |  | 11,700 |  |  | 1,112 |  |  | 10 | % |  |  |  |  |  |  |  |  |  |  |  |
+| Services and other | 3,399 |  |  | 2,537 |  |  | 862 |  |  | 34 | % |  |  |  |  |  |  |  |  |  |  |  |
+| Total automotive & services and other segment cost of revenues | 16,211 |  |  | 14,237 |  |  | 1,974 |  |  | 14 | % |  |  |  |  |  |  |  |  |  |  |  |
+| Energy generation and storage segment | 1,456 |  |  | 1,945 |  |  | (489) |  |  | (25) | % |  |  |  |  |  |  |  |  |  |  |  |
+| Total cost of revenues | $ | 17,667 |  |  | $ | 16,182 |  |  | $ | 1,485 |  |  | 9 | % |  |  |  |  |  |  |  |  |
+| Gross profit total automotive | $ | 3,422 |  |  | $ | 2,267 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Gross margin total automotive | 21.1 | % |  | 16.2 | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Gross profit total automotive & services and other segment | $ | 3,768 |  |  | $ | 2,368 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Gross margin total automotive & services and other segment | 18.9 | % |  | 14.3 | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Gross profit energy generation and storage segment | $ | 952 |  |  | $ | 785 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Gross margin energy generation and storage segment | 39.5 | % |  | 28.8 | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Total gross profit | $ | 4,720 |  |  | $ | 3,153 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Total gross margin | 21.1 | % |  | 16.3 | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+[Text] Automotive & Services and Other Segment
+
+[NarrativeText] Cost of automotive sales revenue increased $1.16 billion, or 10%, in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, due to the increase in deliveries year over year as discussed above. Average cost per unit was consistent from an unfavorable sales mix and a negative impact from the weakening of the United States dollar when compared to foreign currencies year over year, offset by one-time benefits related to warranty and tariffs.
+
+[NarrativeText] Cost of services and other revenue increased $862 million, or 34%, in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to increases in used vehicle sales volume, cost related to non-warranty maintenance services and collision revenue, and cost of paid Supercharging sessions.
+
+[NarrativeText] Gross margin for total automotive increased from 16.2% to 21.1% in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to the changes in automotive sales revenue and cost of automotive sales revenue and a decrease in regulatory credits revenue, as discussed above.
+
+[NarrativeText] Gross margin for total automotive & services and other segment increased from 14.3% to 18.9% in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to the changes in automotive sales gross margin, as discussed above.
+
+[Text] Energy Generation and Storage Segment
+
+[NarrativeText] Cost of energy generation and storage revenue decreased $489 million, or 25%, in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to decreases in average cost per unit for Megapack and Powerwall driven by lower materials costs and one-time benefits related to tariffs. Additionally, there were decreases in cost of energy generation and storage revenue from decreases in Megapack and Powerwall deployments.
+
+[NarrativeText] Gross margin for energy generation and storage increased from 28.8% to 39.5% in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to the changes in energy generation and storage revenue and cost of energy generation and storage revenue, as discussed above.
+
+[Text] 32
+
+[Text] Table of Contents
+
+[Text] Research and Development Expense
+
+[Table]
+|  | Three Months Ended March 31, | Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) | 2026 |  | 2025 |  | $ |  | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Research and development | $ | 1,946 |  |  | $ | 1,409 |  |  | $ | 537 |  |  | 38 | % |  |  |  |  |  |  |  |  |
+| As a percentage of revenues | 9 | % |  | 7 | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+[NarrativeText] Research and development (“R&D”) expenses increased $537 million, or 38%, in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to increases in costs related to AI and other programs as we continue to expand our product roadmap and technologies and an increase in stock-based compensation of $145 million.
+
+[NarrativeText] R&D expenses as a percentage of revenue increased from 7% to 9% in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to higher R&D expense and an increase in total revenues as compared to the prior period.
+
+[Text] Selling, General and Administrative Expense
+
+[Table]
+|  | Three Months Ended March 31, |  | Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) | 2026 |  | 2025 |  | $ |  | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Selling, general and administrative | $ | 1,833 |  |  | $ | 1,251 |  |  | $ | 582 |  |  | 47 | % |  |  |  |  |  |  |  |  |
+| As a percentage of revenues | 8 | % |  | 6 | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+[NarrativeText] Selling, general and administrative (“SG&A”) expenses increased $582 million, or 47%, in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, driven by a $294 million increase in stock-based compensation, a $139 million increase in employee and labor costs, including professional services, and an $87 million increase in operating expenses including legal charges.
+
+[Text] Interest Income
+
+[Table]
+|  | Three Months Ended March 31, |  | Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) | 2026 |  | 2025 |  | $ |  | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Interest income | $ | 434 |  |  | $ | 400 |  |  | $ | 34 |  |  | 9 | % |  |  |  |  |  |  |  |  |
+
+[NarrativeText] Interest income increased $34 million, or 9%, in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to higher interest earned on our cash and cash equivalents and short-term investments due to an increase in our average portfolio balance, partially offset by a lower average interest rate.
+
+[Text] Other Expense, Net
+
+[Table]
+|  | Three Months Ended March 31, |  | Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) | 2026 |  | 2025 |  | $ |  | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Other expense, net | $ | (535) |  |  | $ | (119) |  |  | $ | (416) |  |  | 350 | % |  |  |  |  |  |  |  |  |
+
+[NarrativeText] Other expense, net, changed unfavorably by $416 million in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to fluctuations in foreign currency exchange rates on our intercompany balances and mark-to-market adjustments on our bitcoin digital assets. As our intercompany balances are significant in nature and we do not typically hedge foreign currency risk, we can experience significant fluctuations in foreign currency exchange rate gains and losses from period to period.
+
+[Text] 33
+
+[Text] Table of Contents
+
+[Text] Provision for Income Taxes
+
+[Table]
+|  | Three Months Ended March 31, |  | Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) | 2026 |  | 2025 |  | $ |  | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Provision for income taxes | $ | 257 |  |  | $ | 169 |  |  | $ | 88 |  |  | 52 | % |  |  |  |  |  |  |  |  |
+| Effective tax rate | 34 | % |  | 29 | % |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+[NarrativeText] Our provision for income taxes increased by $88 million in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to the change in our pre-tax income year over year. Our effective tax rate increased from 29% to 34% in the three months ended March 31, 2026 as compared to the three months ended March 31, 2025, primarily due to changes in the mix of our jurisdictional earnings and the non-deductibility of stock-based compensation expense related to the 2025 CEO Performance Award.
+
+[NarrativeText] See Note 9, Income Taxes, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q for further details.
+
+[Text] Liquidity and Capital Resources
+
+[NarrativeText] We generally expect to continue to generate net positive operating cash flow. The cash we generate from our core operations enables us to fund ongoing operations and production, our research and development projects for new products and technologies including our proprietary battery cells, additional manufacturing ramps at existing manufacturing facilities, the construction of future factories, and the continued expansion of our retail and service locations, body shops, Mobile Service fleet, Supercharger, energy product installation capabilities and autonomy and other artificial intelligence enabled products.
+
+[NarrativeText] In addition, because a large portion of our future expenditures will be to fund our growth, we expect that if needed we will be able to adjust our capital and operating expenditures by operating segment. For example, if our near-term manufacturing operations decrease in scale or ramp more slowly than expected, including due to global economic, tax, trade or business conditions, we may choose to correspondingly slow the pace of our capital expenditures. Finally, we continually evaluate our cash needs and may decide it is best to raise additional capital or seek alternative financing sources to fund the rapid growth of our business, including through drawdowns on existing or new debt facilities or financing funds. Conversely, we may also from time to time determine that it is in our best interests to voluntarily repay certain indebtedness early.
+
+[NarrativeText] Accordingly, we believe that our current sources of funds will provide us with adequate liquidity during the 12-month period following March 31, 2026, as well as in the long-term.
+
+[NarrativeText] See the sections below for more details regarding the material requirements for cash in our business and our sources of liquidity to meet such needs.
+
+[Text] Material Cash Requirements
+
+[NarrativeText] From time to time in the ordinary course of business, we enter into agreements with vendors for the purchase of components and raw materials to be used in the manufacture of our products. However, due to contractual terms, variability in the precise growth curves of our development and production ramps, and opportunities to renegotiate pricing, we generally do not have binding and enforceable purchase orders under such contracts beyond the short-term, and the timing and magnitude of purchase orders beyond such period is difficult to accurately project.
+
+[NarrativeText] As discussed in and subject to the considerations referenced in Part I, Item 2, Management's Discussion and Analysis of Financial Condition and Results of Operations—Management Opportunities, Challenges and Uncertainties and 2026 Outlook—Cash Flow and Capital Expenditure Trends in this Quarterly Report on Form 10-Q, we currently expect our capital expenditures to exceed $25 billion in 2026 driven by our AI initiatives, including investments in compute infrastructure and data centers, the expansion and ramp of our manufacturing and R&D production lines and facilities, and growth in our fleet of company-operated AI-enabled assets and our retail, service and charging footprint. Changes in trade policy may necessitate adjustments to our project timelines, potentially impacting our capital expenditure expectations.
+
+[Text] 34
+
+[Text] Table of Contents
+
+[NarrativeText] As of March 31, 2026, we and our subsidiaries had outstanding $9.04 billion in aggregate principal amount of indebtedness, of which $1.38 billion is current. For details regarding our indebtedness, refer to Note 7, Debt, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q.
+
+[Text] Sources and Conditions of Liquidity
+
+[NarrativeText] Our sources to fund our material cash requirements are predominantly from our deliveries and servicing of new and used vehicles, deployments and servicing of our energy storage products, interest income, and proceeds from debt facilities and equity offerings, when applicable.
+
+[NarrativeText] As of March 31, 2026, we had $16.60 billion and $28.14 billion of cash and cash equivalents and short-term investments, respectively. Balances held in foreign currencies had a U.S. dollar equivalent of $4.11 billion and consisted primarily of euros and Chinese yuan. We had $5.00 billion of unused committed credit amounts as of March 31, 2026. For details regarding our indebtedness, refer to Note 7, Debt, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q.
+
+[NarrativeText] We continue adapting our strategy to meet our liquidity and risk objectives, such as investing in U.S. government securities and other investments, investing in autonomy, further vertically integrating our supply chain, expanding our product roadmap and providing financing options to our customers.
+
+[Text] Summary of Cash Flows
+
+[Table]
+|  | Three Months Ended March 31, |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) | 2026 |  | 2025 |  |  |  |  |
+| Net cash provided by operating activities | $ | 3,937 |  |  | $ | 2,156 |  |
+| Net cash used in investing activities | $ | (5,023) |  |  | $ | (1,651) |  |
+| Net cash provided by (used in) financing activities | $ | 1,172 |  |  | $ | (332) |  |
+
+[Text] Cash Flows from Operating Activities
+
+[NarrativeText] Net cash provided by operating activities increased by $1.78 billion to $3.94 billion during the three months ended March 31, 2026 from $2.16 billion during the three months ended March 31, 2025. This increase was primarily due to favorable changes in net operating assets and liabilities of $929 million and an increase in net income excluding non-cash expenses, gains and losses of $852 million.
+
+[Text] Cash Flows from Investing Activities
+
+[NarrativeText] Net cash flows from investing activities and their variability across each period related primarily to capital expenditures, which were $2.49 billion and $1.49 billion for the three months ended March 31, 2026 and 2025, respectively, mainly for global AI and operational infrastructure and factory expansion, as well as machinery and equipment as we expand and enhance our product roadmap. We also purchased $528 million and $159 million of short-term investments, net of proceeds from maturities and sales, for the three months ended March 31, 2026 and 2025, respectively. Additionally, we invested $2.00 billion in SpaceX common stock during the three months ended March 31, 2026. Refer to Note 12, Related Party Transactions, for additional information regarding the equity investment.
+
+[Text] Cash Flows from Financing Activities
+
+[NarrativeText] Net cash flows from financing activities changed by $1.50 billion to $1.17 billion net cash inflows during the three months ended March 31, 2026 from $332 million net cash outflows during the three months ended March 31, 2025. The change was primarily due to a $3.71 billion increase in proceeds from issuances of debt, partially offset by a $2.23 billion increase in repayments of debt. See Note 7, Debt, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q for further details regarding our debt obligations.
+
+[Text] 35
+
+[Text] Table of Contents
+
+[Text] ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+[Text] Foreign Currency Risk
+
+[NarrativeText] We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). In general, we are a net receiver of currencies other than the U.S. dollar for our foreign subsidiaries. Accordingly, changes in exchange rates affect our operating results as expressed in U.S. dollars as we do not typically hedge foreign currency risk.
+
+[NarrativeText] We have also experienced, and will continue to experience, fluctuations in our net income as a result of gains (losses) on the settlement and the re-measurement of monetary assets and liabilities denominated in currencies that are not the local currency (primarily consisting of our intercompany and cash and cash equivalents balances).
+
+[NarrativeText] We considered the historical trends in foreign currency exchange rates and determined that it is reasonably possible that adverse changes in foreign currency exchange rates of 10% for all currencies could be experienced in the near-term. These changes were applied to our total monetary assets and liabilities denominated in currencies other than our local currencies at the balance sheet date to compute the impact these changes would have had on our net income before income taxes. These changes would have resulted in a gain or loss of $1.69 billion at March 31, 2026 and $1.70 billion at December 31, 2025, assuming no foreign currency hedging.
+
+[Text] ITEM 4. CONTROLS AND PROCEDURES
+
+[Text] Evaluation of Disclosure Controls and Procedures
+
+[NarrativeText] Our management, with the participation of our Chief Executive Officer and our Chief Financial Officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Securities Exchange Act of 1934, as amended (the “Exchange Act”). In designing and evaluating the disclosure controls and procedures, our management recognizes that any controls and procedures, no matter how well designed and operated, can provide only reasonable assurance of achieving the desired control objectives. In addition, the design of disclosure controls and procedures must reflect the fact that there are resource constraints and that our management is required to apply its judgment in evaluating the benefits of possible controls and procedures relative to their costs.
+
+[NarrativeText] Based on this evaluation, our Chief Executive Officer and our Chief Financial Officer concluded that, as of March 31, 2026, our disclosure controls and procedures were designed at a reasonable assurance level and were effective to provide reasonable assurance that the information we are required to disclose in reports that we file or submit under the Exchange Act is recorded, processed, summarized and reported within the time periods specified in the SEC rules and forms, and that such information is accumulated and communicated to our management, including our Chief Executive Officer and our Chief Financial Officer, as appropriate, to allow timely decisions regarding required disclosures.
+
+[Text] Changes in Internal Control over Financial Reporting
+
+[NarrativeText] There was no change in our internal control over financial reporting that occurred during the quarter ended March 31, 2026, which has materially affected, or is reasonably likely to materially affect, our internal control over financial reporting.
+
+[Text] 36
+
+[Text] Table of Contents
+
+[Text] PART II. OTHER INFORMATION
+
+[Text] ITEM 1. LEGAL PROCEEDINGS
+
+[NarrativeText] For a description of our material pending legal proceedings, see Note 10, Commitments and Contingencies, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q.
+
+[Text] ITEM 1A. RISK FACTORS
+
+[NarrativeText] Our operations and financial results are subject to various risks and uncertainties, including the factors discussed in Part I, Item 1A, Risk Factors in our Annual Report on Form 10-K for the year ended December 31, 2025, which could adversely affect our business, financial conditions and future results.
+
+[Text] ITEM 2. UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
+
+[Text] None.
+
+[Text] ITEM 3. DEFAULTS UPON SENIOR SECURITIES
+
+[Text] None.
+
+[Text] ITEM 4. MINE SAFETY DISCLOSURES
+
+[Text] Not applicable.
+
+[Text] ITEM 5. OTHER INFORMATION
+
+[Text] Rule 10b5-1 Trading Arrangements
+
+[NarrativeText] None of the Company’s directors or officers , modified or a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended March 31, 2026, as such terms are defined under Item 408(a) of Regulation S-K.
+
+[Text] CEO Compensation
+
+[NarrativeText] As previously disclosed in the Company’s annual report on Form 10-K for the year ended December 31, 2025, a special committee of the Board consisting of disinterested directors Robyn Denholm and Kathleen Wilson-Thompson (the “Special Committee”), consistent with its purpose, reconvened to consider, evaluate and determine all aspects of the retention and incentivization of our chief executive officer, Mr. Elon Musk, and any methods, approaches or manners for doing so, including with respect to the 2025 CEO Interim Award and the 2018 CEO Performance Award.
+
+[NarrativeText] Following the Delaware Supreme Court’s reinstatement of the 2018 CEO Performance Award on December 19, 2025, reversing the Chancery Court decision purporting to rescind the 2018 CEO Performance Award and the Chancery Court’s final order on March 18, 2026 implementing such reversal, on April 21, 2026, the disinterested directors of the Board (with Mr. Elon Musk and Mr. Kimbal Musk recused), acting as administrator of the 2025 CEO Interim Award, approved the determination that a final order and judgment allowing Mr. Elon Musk to exercise the 2018 CEO Performance Award in full constituted a Tornetta Decision Event (as defined in the 2025 CEO Interim Award), resulting in the forfeiture of the 2025 CEO Interim Award by Mr. Musk on April 21, 2026. These actions are consistent with the “no double dip” principle, which precludes Mr. Musk from getting a windfall in the event that he may exercise the 2018 CEO Performance Award, as articulated in the Special Committee’s August 3, 2025 letter to shareholders regarding the Interim Award, attached as Exhibit 99.1 to the Current Report on Form 8-K, filed with the SEC on August 4, 2025.
+
+[NarrativeText] As a result of the foregoing events, the Special Committee considered the impact of the potential exercise of the 2018 CEO Performance Award on the Company. The Special Committee considered a number of factors, including the negative impact on the Company resulting from the likely sale of a significant number of shares of the Company’s stock to cover the exercise price and tax obligations. On April 17, 2026, the Special Committee recommended and on April 21, 2026, the Board (with Mr. Elon Musk and Mr. Kimbal Musk recused) approved the Company’s entry into the Implementation Agreement, implementing a process for Mr. Musk’s exercise of the 2018 CEO Performance Award that the Board determined is in the best interests of the Company and intended to mitigate any negative impact of significant share sales on the Company.
+
+[Text] 37
+
+[Text] Table of Contents
+
+[NarrativeText] The Implementation Agreement provides Mr. Musk with no additional economic benefit and incorporates features similar to those in the 2025 CEO Performance Award and the 2025 CEO Interim Award that were each designed and approved by the Special Committee to retain and incentivize Mr. Musk. Consequently, the Implementation Agreement (i) focuses on retaining Mr. Musk’s continued service at a critical time for the Company and restricts the timing of Mr. Musk’s access to the economics associated with the 2018 CEO Performance Award by imposing a service-based vesting condition on restricted shares of common stock to be issued to Mr. Musk upon exercise of the 2018 CEO Performance Award, requiring him to remain in continuous service as CEO or as an executive officer responsible for product development or operations (as approved by the Board’s disinterested directors) through January 19, 2028, and by commencing the five-year holding period on such vesting date (rather than the exercise date), (ii) provides that Mr. Musk may satisfy the exercise price of the 2018 CEO Performance Award by electing net settlement by the Company or paying cash, and (iii) provides for cooperation between the Company and Mr. Musk to create a mutually-agreeable plan to address satisfaction of applicable tax obligations between the Company and Mr. Musk, thus providing a path to mitigate potential negative impacts on the Company.
+
+[NarrativeText] The foregoing summary of the terms of the 2025 CEO Interim Award is qualified in its entirety by reference to the 2025 CEO Interim Restricted Stock Agreement, a copy of which was attached as Exhibit 10.1 to the Current Report on Form 8-K, as filed with the SEC on August 3, 2025, which is incorporated by reference herein. The foregoing summary of the terms of the Implementation Agreement is qualified in its entirety by reference to the Implementation Agreement, a copy of which is attached as Exhibit 10.1 to this Quarterly Report on Form 10-Q, and the Performance Stock Option Award Agreement, dated January 21, 2018, between Mr. Musk and the Company, a copy of which was filed as Exhibit 10.14 to the Company’s Annual Report on Form 10-K for the year ended December 31, 2025, each of which is incorporated by reference herein. See Note 8, Equity Incentive Plans, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q for more information regarding the accounting consequences of the Implementation Agreement.
+
+[Text] 38
+
+[Text] Table of Contents
+
+[Text] ITEM 6. EXHIBITS
+
+[NarrativeText] See Index to Exhibits at the end of this Quarterly Report on Form 10-Q for the information required by this Item.
+
+[Text] INDEX TO EXHIBITS
+
+[Table]
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
+| 10.1 |  | Implementation Agreement, dated as of April 21, 2026, between the Registrant and Elon Musk |  |  |  |  |  |  |  |  |  | X |
+| 31.1 |  | Rule 13a-14(a) / 15(d)-14(a) Certification of Principal Executive Officer |  | — |  | — |  | — |  | — |  | X |
+| 31.2 |  | Rule 13a-14(a) / 15(d)-14(a) Certification of Principal Financial Officer |  | — |  | — |  | — |  | — |  | X |
+| 32.1* |  | Section 1350 Certifications |  | — |  | — |  | — |  | — |  |  |
+| 101.INS |  | Inline XBRL Instance Document |  | — |  | — |  | — |  | — |  | X |
+| 101.SCH |  | Inline XBRL Taxonomy Extension Schema Document |  | — |  | — |  | — |  | — |  | X |
+| 101.CAL |  | Inline XBRL Taxonomy Extension Calculation Linkbase Document. |  | — |  | — |  | — |  | — |  | X |
+| 101.DEF |  | Inline XBRL Taxonomy Extension Definition Linkbase Document |  | — |  | — |  | — |  | — |  | X |
+| 101.LAB |  | Inline XBRL Taxonomy Extension Label Linkbase Document |  | — |  | — |  | — |  | — |  | X |
+| 101.PRE |  | Inline XBRL Taxonomy Extension Presentation Linkbase Document |  | — |  | — |  | — |  | — |  | X |
+| 104 |  | Cover Page Interactive Data File (formatted as inline XBRL with applicable taxonomy extension information contained in Exhibits 101) |  |  |  |  |  |  |  |  |  |  |
+
+[ListItem] Furnished herewith
+
+[Text] 39
+
+[Text] Table of Contents
+
+[Text] SIGNATURES
+
+[NarrativeText] Pursuant to the requirements of Section 13 or 15(d) the Securities Exchange Act of 1934, the registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized.
+
+[Table]
+|  | Tesla, Inc. |
+| --- | --- |
+| Date: April 22, 2026 | /s/ Vaibhav Taneja |
+|  | Vaibhav Taneja |
+|  | Chief Financial Officer |
+|  | (Principal Financial Officer and Duly Authorized Officer) |
+
+[Text] 40

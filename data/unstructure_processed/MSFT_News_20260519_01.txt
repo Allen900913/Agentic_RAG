@@ -1,0 +1,79 @@
+[NarrativeText] Title : Anthropic to let partners share Mythos cybersecurity findings with others
+
+[Title] Source : Reuters [full]
+
+[Title] URL : https://finance.yahoo.com/sectors/technology/articles/anthropic-let-partners-share-mythos-222802181.html
+
+[Text] Published: 2026-05-18T22:28:02Z
+
+[NarrativeText] Anthropic to let partners share Mythos cybersecurity findings with others
+
+[Title] Juby Babu
+
+[Text] Tue, May 19, 2026 at 6:28 AM GMT+8
+
+[Title] 2 min read
+
+[Title] ANTH.PVT
+
+[Title] AMZN
+
+[Text] +0.27%
+
+[Title] MSFT
+
+[Text] +0.38%
+
+[Title] NVDA
+
+[ListItem] 1.33%
+
+[Title] AAPL
+
+[ListItem] 0.80%
+
+[Title] By Juby Babu
+
+[NarrativeText] May 18 (Reuters) - Anthropic said on Monday it is revising its earlier position to allow users of its Mythos cybersecurity model вЂЊto share information about cyber threats with others who may be exposed вЂЊto similar vulnerabilities.
+
+[NarrativeText] Mythos, announced on April 7, is being deployed as part of Anthropic's "Project Glasswing," a controlled вЂ‹initiative under which select organizations, including major tech firms such as Amazon,
+
+[Title] Microsoft
+
+[Text] ,
+
+[Title] Nvidia
+
+[Title] and
+
+[Title] Apple
+
+[NarrativeText] , are permitted to use the unreleased Claude Mythos Preview model for defensive cybersecurity purposes.
+
+[NarrativeText] Mythos' capabilities to code at a high level have given it a potentially вЂЊunprecedented ability to identify cybersecurity вЃ vulnerabilities and devise ways to exploit them, according to experts.
+
+[NarrativeText] Last week, Anthropic began telling partners that they are generally permitted to disclose вЃ their involvement in Glasswing and, at their own discretion, share findings, best practices, tools or code developed through the program.
+
+[NarrativeText] "We fully support our partners sharing findings with each вЂ‹other and вЂ‹companies outside of Glasswing to triage vulnerabilities," вЂ‹an Anthropic spokesperson said in a вЂЊstatement.
+
+[NarrativeText] "While there was never a specific Glasswing NDA, confidentiality protections were something partners asked for at the outset and were built into agreements partners signed."
+
+[NarrativeText] The protections were included in agreements with participating companies under which the model is provided, after partners sought assurances before sharing sensitive findings and expressed concern about being targeted by вЂЊattackers.
+
+[NarrativeText] "As the program has matured, we've adapted them вЂ‹to ensure key information can be shared broadly - вЂ‹including outside the program - for maximum вЂ‹defensive impact," the spokesperson added.
+
+[NarrativeText] Anthropic said partners may share that вЂЊinformation with security teams at other companies, вЂ‹industry bodies, regulators and вЂ‹government agencies, open-source maintainers, the media or the public, subject to responsible-disclosure norms.
+
+[NarrativeText] The Pentagon is deploying Mythos to find and patch software vulnerabilities across вЂ‹the U.S. government even as вЂЊit races to complete a transition away from the AI company, the вЂ‹Defense Department's top technology official said last week.
+
+[NarrativeText] (Reporting by Juby Babu вЂ‹in Mexico City; Editing by Shailesh Kuber)
+
+[Title] Terms
+
+[Title] and
+
+[Title] Privacy Policy
+
+[Title] Privacy Dashboard
+
+[Title] More Info

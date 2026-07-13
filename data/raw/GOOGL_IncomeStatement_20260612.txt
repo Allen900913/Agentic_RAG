@@ -1,0 +1,101 @@
+=== GOOGL Annual Income Statement ===
+
+--- Fiscal Year: 2025 ---
+  Tax Effect Of Unusual Items: $4.07B
+  Tax Rate For Calcs: $0.17
+  Normalized EBITDA: $156.46B
+  Total Unusual Items: $24.24B
+  Total Unusual Items Excluding Goodwill: $24.24B
+  Net Income From Continuing Operation Net Minority Interest: $132.17B
+  Reconciled Depreciation: $21.14B
+  Reconciled Cost Of Revenue: $162.53B
+  EBITDA: $180.70B
+  EBIT: $159.56B
+  Net Interest Income: $3.60B
+  Interest Expense: $736.00M
+  Interest Income: $4.34B
+  Normalized Income: $112.00B
+  Net Income From Continuing And Discontinued Operation: $132.17B
+  Total Expenses: $273.80B
+  Total Operating Income As Reported: $129.04B
+  Diluted Average Shares: $12.23B
+  Basic Average Shares: $12.12B
+  Diluted EPS: $10.81
+  Basic EPS: $10.91
+  Diluted NI Availto Com Stockholders: $132.17B
+  Net Income Common Stockholders: $132.17B
+  Net Income: $132.17B
+  Net Income Including Noncontrolling Interests: $132.17B
+  Net Income Continuous Operations: $132.17B
+  Tax Provision: $26.66B
+  Pretax Income: $158.83B
+  Other Income Expense: $26.19B
+  Other Non Operating Income Expenses: $1.67B
+  Special Income Charges: $281.00M
+  Write Off: $-281.00M
+  Earnings From Equity Interest: $281.00M
+  Gain On Sale Of Security: $24.24B
+  Net Non Operating Interest Income Expense: $3.60B
+  Interest Expense Non Operating: $736.00M
+  Interest Income Non Operating: $4.34B
+  Operating Income: $129.04B
+  Operating Expense: $111.26B
+  Research And Development: $61.09B
+  Selling General And Administration: $50.17B
+  Selling And Marketing Expense: $28.69B
+  General And Administrative Expense: $21.48B
+  Other Gand A: $21.48B
+  Gross Profit: $240.30B
+  Cost Of Revenue: $162.53B
+  Total Revenue: $402.84B
+  Operating Revenue: $402.84B
+
+--- Fiscal Year: 2024 ---
+  Tax Effect Of Unusual Items: $370.97M
+  Tax Rate For Calcs: $0.16
+  Normalized EBITDA: $133.13B
+  Total Unusual Items: $2.26B
+  Total Unusual Items Excluding Goodwill: $2.26B
+  Net Income From Continuing Operation Net Minority Interest: $100.12B
+  Reconciled Depreciation: $15.31B
+  Reconciled Cost Of Revenue: $146.31B
+  EBITDA: $135.39B
+  EBIT: $120.08B
+  Net Interest Income: $4.21B
+  Interest Expense: $268.00M
+  Interest Income: $4.48B
+  Normalized Income: $98.23B
+  Net Income From Continuing And Discontinued Operation: $100.12B
+  Total Expenses: $237.63B
+  Total Operating Income As Reported: $112.39B
+  Diluted Average Shares: $12.45B
+  Basic Average Shares: $12.32B
+  Diluted EPS: $8.04
+  Basic EPS: $8.13
+  Diluted NI Availto Com Stockholders: $100.12B
+  Net Income Common Stockholders: $100.12B
+  Net Income: $100.12B
+  Net Income Including Noncontrolling Interests: $100.12B
+  Net Income Continuous Operations: $100.12B
+  Tax Provision: $19.70B
+  Pretax Income: $119.81B
+  Other Income Expense: $3.21B
+  Other Non Operating Income Expenses: $1.14B
+  Special Income Charges: $-188.00M
+  Write Off: $188.00M
+  Earnings From Equity Interest: $-188.00M
+  Gain On Sale Of Security: $2.26B
+  Net Non Operating Interest Income Expense: $4.21B
+  Interest Expense Non Operating: $268.00M
+  Interest Income Non Operating: $4.48B
+  Operating Income: $112.39B
+  Operating Expense: $91.32B
+  Research And Development: $49.33B
+  Selling General And Administration: $42.00B
+  Selling And Marketing Expense: $27.81B
+  General And Administrative Expense: $14.19B
+  Other Gand A: $14.19B
+  Gross Profit: $203.71B
+  Cost Of Revenue: $146.31B
+  Total Revenue: $350.02B
+  Operating Revenue: $350.02B

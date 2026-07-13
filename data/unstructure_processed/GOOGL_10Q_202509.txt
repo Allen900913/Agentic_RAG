@@ -1,0 +1,1356 @@
+[Text] UNITED STATES
+
+[Text] SECURITIES AND EXCHANGE COMMISSION
+
+[Text] Washington, D.C. 20549
+
+[Text] ________________________________________________________________________________________
+
+[Text] FORM
+
+[Text] _______________________________________________________________________________________
+
+[Text] (Mark One)
+
+[Table]
+| ☒ | QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |
+
+[NarrativeText] For the quarterly period ended
+
+[Text] OR
+
+[Table]
+| ☐ | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |
+
+[Text] For the transition period from _______ to _______
+
+[Text] Commission file number:
+
+[Text] ________________________________________________________________________________________
+
+[NarrativeText] (Exact name of registrant as specified in its charter)
+
+[Text] ________________________________________________________________________________________
+
+[Table]
+| Delaware | 61-1767919 |
+| --- | --- |
+| (State or other jurisdiction of incorporation or organization) | (I.R.S. Employer Identification Number) |
+
+[NarrativeText] (Address of principal executive offices, including zip code)
+
+[Text] ()
+
+[NarrativeText] (Registrant's telephone number, including area code)
+
+[Table]
+| Securities registered pursuant to Section 12(b) of the Act: |  |  |
+| --- | --- | --- |
+| Title of each class | Trading Symbol(s) | Name of each exchange on which registered |
+| Class A Common Stock, $0.001 par value | GOOGL | Nasdaq Stock Market LLC |
+|  |  | (Nasdaq Global Select Market) |
+| Class C Capital Stock, $0.001 par value | GOOG | Nasdaq Stock Market LLC |
+|  |  | (Nasdaq Global Select Market) |
+| 2.500% Senior Notes due 2029 | — | Nasdaq Stock Market LLC |
+| 3.000% Senior Notes due 2033 | — | Nasdaq Stock Market LLC |
+| 3.375% Senior Notes due 2037 | — | Nasdaq Stock Market LLC |
+| 3.875% Senior Notes due 2045 | — | Nasdaq Stock Market LLC |
+| 4.000% Senior Notes due 2054 | — | Nasdaq Stock Market LLC |
+
+[Text] ________________________________________________________________________________________
+
+[NarrativeText] Indicate by check mark whether the registrant: (1) has filed all reports required to be filed by Section 13 or 15(d) of the Securities Exchange Act of 1934 during the preceding 12 months (or for such shorter period that the registrant was required to file such reports), and (2) has been subject to such filing requirements for the past 90 days. ☒ No ☐
+
+[NarrativeText] Indicate by check mark whether the registrant has submitted electronically every Interactive Data File required to be submitted pursuant to Rule 405 of Regulation S-T (§232.405 of this chapter) during the preceding 12 months (or for such shorter period that the registrant was required to submit such files). ☒ No ☐
+
+[NarrativeText] Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accelerated filer,” “smaller reporting company,” and "emerging growth company" in Rule 12b-2 of the Exchange Act.
+
+[Table]
+| Large accelerated filer | ☒ |  | Accelerated filer | ☐ |
+| --- | --- | --- | --- | --- |
+| Non-accelerated filer | ☐ |  | Smaller reporting company | ☐ |
+| Emerging growth company | ☐ |  |  |  |
+
+[NarrativeText] If an emerging growth company, indicate by check mark if the registrant has elected not to use the extended transition period for complying with any new or revised financial accounting standards provided pursuant to Section 13(a) of the Exchange Act. ☐
+
+[NarrativeText] Indicate by check mark whether the registrant is a shell company (as defined in Rule 12b-2 of the Exchange Act). Yes No ☒
+
+[NarrativeText] As of October 22, 2025, there were million shares of Alphabet’s Class A stock outstanding, million shares of Alphabet's Class B stock outstanding, and million shares of Alphabet's Class C stock outstanding.
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] Alphabet Inc.
+
+[Text] Form 10-Q
+
+[Text] For the Quarterly Period Ended September 30, 2025
+
+[Text] TABLE OF CONTENTS
+
+[Table]
+|  |  | Page No. |
+| --- | --- | --- |
+| Note About Forward-Looking Statements | 3 |  |
+| PART I. FINANCIAL INFORMATION |  |  |
+| Item 1 | Financial Statements | 5 |
+|  | Consolidated Balance Sheets - December 31, 2024 and September 30, 2025 | 5 |
+|  | Consolidated Statements of Income - Three and Nine Months Ended September 30 , 2024 and 2025 | 6 |
+|  | Consolidated Statements of Comprehensive Income - Three and Nine Months Ended September 30 , 2024 and 2025 | 7 |
+|  | Consolidated Statements of Stockholders' Equity - Three and Nine Months Ended September 30 , 2024 and 2025 | 8 |
+|  | Consolidated Statements of Cash Flows - Nine Months Ended September 30 , 2024 and 2025 | 10 |
+|  | Notes to Consolidated Financial Statements | 11 |
+| Item 2 | Management’s Discussion and Analysis of Financial Condition and Results of Operations | 36 |
+| Item 3 | Quantitative and Qualitative Disclosures About Market Risk | 51 |
+| Item 4 | Controls and Procedures | 51 |
+| PART II. OTHER INFORMATION |  |  |
+| Item 1 | Legal Proceedings | 52 |
+| Item 1A | Risk Factors | 52 |
+| Item 2 | Unregistered Sales of Equity Securities and Use of Proceeds | 52 |
+| Item 5 | Other Information | 52 |
+| Item 6 | Exhibits | 54 |
+| Signatures | 55 |  |
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] Note About Forward-Looking Statements
+
+[NarrativeText] This Quarterly Report on Form 10-Q contains forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995. These include, among other things, statements regarding:
+
+[ListItem] the growth of our business and revenues and our expectations about the factors that influence our success and trends in our business;
+
+[ListItem] fluctuations in our revenues and margins and various factors contributing to such fluctuations;
+
+[ListItem] our expectation that the continuing shift to an online world as the digital economy evolves will continue to benefit our business;
+
+[ListItem] our expectation that the revenues that we derive beyond advertising will continue to increase and may affect our margins;
+
+[ListItem] our expectation that our traffic acquisition costs (TAC) and the associated TAC rate will fluctuate, which could affect our overall margins;
+
+[ListItem] our expectation that our monetization trends will fluctuate, which could affect our revenues and margins;
+
+[ListItem] fluctuations in paid clicks and cost-per-click as well as impressions and cost-per-impression, and various factors contributing to such fluctuations;
+
+[ListItem] our expectation that we will continue to periodically review, refine, and update our methodologies for monitoring, gathering, and counting the number of paid clicks and impressions, and for identifying the revenues generated by the corresponding click and impression activity;
+
+[ListItem] our expectation that our results will be affected by our performance in international markets as users in developing economies increasingly come online;
+
+[ListItem] our expectation that our foreign exchange risk management program will not fully offset our net exposure to fluctuations in foreign currency exchange rates;
+
+[ListItem] the expected variability of gains and losses related to hedging activities under our foreign exchange risk management program;
+
+[ListItem] the amount and timing of revenue recognition from customer contracts with commitments for performance obligations, including our estimate of the remaining amount of commitments and when we expect to recognize revenue;
+
+[ListItem] our expectation that our capital expenditures will increase, including our expected spend and the expected increase in our technical infrastructure investment to support the growth of our business and our long-term initiatives, in particular in support of artificial intelligence (AI) products and services;
+
+[ListItem] our plans to continue to invest in new businesses, products, services and technologies, and systems, as well as to continue to invest in acquisitions and strategic investments;
+
+[ListItem] our pace of hiring and our plans to provide competitive compensation programs;
+
+[ListItem] our expectation that our cost of revenues, research and development (R&D) expenses, sales and marketing expenses, and general and administrative expenses may increase in amount and/or may increase as a percentage of revenues and may be affected by a number of factors;
+
+[ListItem] estimates of our future employee compensation expenses;
+
+[ListItem] our expectation that our other income (expense), net (OI&E), will fluctuate in the future, as it is largely driven by market dynamics;
+
+[ListItem] fluctuations in our effective tax rate;
+
+[ListItem] seasonal fluctuations in internet usage, advertising expenditures, and underlying business trends such as traditional retail seasonality, which are likely to cause fluctuations in our quarterly results;
+
+[ListItem] the sufficiency of our sources of funding;
+
+[ListItem] our potential exposure in connection with new and pending investigations, proceedings, and other contingencies, including the possibility that certain legal proceedings to which we are a party could harm our business, financial condition, and operating results;
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[ListItem] our expectation that we will continue to face heightened regulatory scrutiny, and changes in regulatory conditions, laws, and public policies, which could affect our business practices and financial results;
+
+[ListItem] the expected timing, amount, and effect of Alphabet Inc.'s share repurchases and dividends;
+
+[ListItem] our long-term sustainability goals;
+
+[ListItem] our expectations regarding the timing and successful closing and integration of the Wiz, Inc. ("Wiz") acquisition, including the realization of anticipated benefits; and
+
+[ListItem] ongoing developments surrounding international trade and the related impact on the macroeconomic environment and our business;
+
+[NarrativeText] as well as other statements regarding our future operations, financial condition and prospects, and business strategies. Forward-looking statements may appear throughout this report and other documents we file with the Securities and Exchange Commission (SEC), including without limitation, the following sections: Part I, Item 2, "Management's Discussion and Analysis of Financial Condition and Results of Operations" in this Quarterly Report on Form 10-Q and Part I, Item 1A, “Risk Factors” in our Annual Report on Form 10-K for the fiscal year ended December 31, 2024. Forward-looking statements generally can be identified by words such as "anticipates," "believes," "could," "estimates," "expects," "intends," "may," "plans," "predicts," "projects," "will be," "will continue," "will likely result," and similar expressions. These forward-looking statements are based on current expectations and assumptions that are subject to risks and uncertainties, which could cause our actual results to differ materially from those reflected in the forward-looking statements. Factors that could cause or contribute to such differences include, but are not limited to, those discussed in this Quarterly Report on Form 10-Q; the risks discussed in Part I, Item 1A, "Risk Factors" and the trends discussed in Part II, Item 7, "Management's Discussion and Analysis of Financial Condition and Results of Operations" in our Annual Report on Form 10-K for the fiscal year ended December 31, 2024; and those discussed in other documents we file with the SEC. We undertake no obligation to revise or publicly release the results of any revision to these forward-looking statements, except as required by law. Given these risks and uncertainties, readers are cautioned not to place undue reliance on such forward-looking statements.
+
+[NarrativeText] As used herein, "Alphabet," "the company," "we," "us," "our," and similar terms include Alphabet Inc. and its subsidiaries, unless the context indicates otherwise.
+
+[NarrativeText] "Alphabet," "Google," and other trademarks of ours appearing in this report are our property. We do not intend our use or display of other companies' trade names or trademarks to imply an endorsement or sponsorship of us by such companies, or any relationship with any of these companies.
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] PART I. FINANCIAL INFORMATION
+
+[Text] ITEM 1.FINANCIAL STATEMENTS
+
+[Text] Alphabet Inc.
+
+[Text] CONSOLIDATED BALANCE SHEETS
+
+[Text] (in millions, except par value per share amounts)
+
+[Table]
+|  | As of December 31, 2024 |  | As of September 30, 2025 |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  | (unaudited) |  |  |  |  |
+| Assets |  |  |  |  |  |  |  |
+| Current assets: |  |  |  |  |  |  |  |
+| Cash and cash equivalents | $ | 23,466 |  |  | $ | 23,090 |  |
+| Marketable securities | 72,191 |  |  | 75,406 |  |  |  |
+| Total cash, cash equivalents, and marketable securities | 95,657 |  |  | 98,496 |  |  |  |
+| Accounts receivable, net | 52,340 |  |  | 57,148 |  |  |  |
+| Other current assets | 15,714 |  |  | 18,303 |  |  |  |
+| Total current assets | 163,711 |  |  | 173,947 |  |  |  |
+| Non-marketable securities | 37,982 |  |  | 63,800 |  |  |  |
+| Deferred income taxes | 17,180 |  |  | 10,331 |  |  |  |
+| Property and equipment, net | 171,036 |  |  | 223,787 |  |  |  |
+| Operating lease assets | 13,588 |  |  | 14,524 |  |  |  |
+| Goodwill | 31,885 |  |  | 33,269 |  |  |  |
+| Other non-current assets | 14,874 |  |  | 16,811 |  |  |  |
+| Total assets | $ | 450,256 |  |  | $ | 536,469 |  |
+| Liabilities and Stockholders’ Equity |  |  |  |  |  |  |  |
+| Current liabilities: |  |  |  |  |  |  |  |
+| Accounts payable | $ | 7,987 |  |  | $ | 10,546 |  |
+| Accrued compensation and benefits | 15,069 |  |  | 13,944 |  |  |  |
+| Accrued expenses and other current liabilities | 51,228 |  |  | 59,437 |  |  |  |
+| Accrued revenue share | 9,802 |  |  | 10,081 |  |  |  |
+| Deferred revenue | 5,036 |  |  | 5,542 |  |  |  |
+| Total current liabilities | 89,122 |  |  | 99,550 |  |  |  |
+| Long-term debt | 10,883 |  |  | 21,607 |  |  |  |
+| Income taxes payable, non-current | 8,782 |  |  | 10,072 |  |  |  |
+| Operating lease liabilities | 11,691 |  |  | 12,106 |  |  |  |
+| Other long-term liabilities | 4,694 |  |  | 6,267 |  |  |  |
+| Total liabilities | 125,172 |  |  | 149,602 |  |  |  |
+| Commitments and Contingencies (Note 10) |  |  |  |  |  |  |  |
+| Stockholders’ equity: |  |  |  |  |  |  |  |
+| Preferred stock, $ 0.001 par value per share, 100 shares authorized; no shares issued and outstanding | 0 |  |  | 0 |  |  |  |
+| Class A, Class B, and Class C stock and additional paid-in capital, $ 0.001 par value per share: 300,000 shares authorized (Class A 180,000 , Class B 60,000 , Class C 60,000 ); 12,211 (Class A 5,835 , Class B 861 , Class C 5,515 ) and 12,077 (Class A 5,818 , Class B 842 , Class C 5,417 ) s hares issued and outstanding | 84,800 |  |  | 91,695 |  |  |  |
+| Accumulated other comprehensive income (loss) | ( 4,800 ) |  |  | ( 2,054 ) |  |  |  |
+| Retained earnings | 245,084 |  |  | 297,226 |  |  |  |
+| Total stockholders’ equity | 325,084 |  |  | 386,867 |  |  |  |
+| Total liabilities and stockholders’ equity | $ | 450,256 |  |  | $ | 536,469 |  |
+
+[NarrativeText] See accompanying notes.
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] Alphabet Inc.
+
+[Text] CONSOLIDATED STATEMENTS OF INCOME
+
+[Text] (in millions, except per share amounts; unaudited)
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Revenues | $ | 88,268 |  |  | $ | 102,346 |  |  | $ | 253,549 |  |  | $ | 289,007 |  |
+| Costs and expenses: |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Cost of revenues | 36,474 |  |  | 41,369 |  |  | 105,693 |  |  | 116,768 |  |  |  |  |  |
+| Research and development | 12,447 |  |  | 15,151 |  |  | 36,210 |  |  | 42,515 |  |  |  |  |  |
+| Sales and marketing | 7,227 |  |  | 7,205 |  |  | 20,445 |  |  | 20,478 |  |  |  |  |  |
+| General and administrative | 3,599 |  |  | 7,393 |  |  | 9,783 |  |  | 16,141 |  |  |  |  |  |
+| Total costs and expenses | 59,747 |  |  | 71,118 |  |  | 172,131 |  |  | 195,902 |  |  |  |  |  |
+| Income from operations | 28,521 |  |  | 31,228 |  |  | 81,418 |  |  | 93,105 |  |  |  |  |  |
+| Other income (expense), net | 3,185 |  |  | 12,759 |  |  | 6,154 |  |  | 26,604 |  |  |  |  |  |
+| Income before income taxes | 31,706 |  |  | 43,987 |  |  | 87,572 |  |  | 119,709 |  |  |  |  |  |
+| Provision for income taxes | 5,405 |  |  | 9,008 |  |  | 13,990 |  |  | 21,994 |  |  |  |  |  |
+| Net income | $ | 26,301 |  |  | $ | 34,979 |  |  | $ | 73,582 |  |  | $ | 97,715 |  |
+| Basic net income per share (Note 12) | $ | 2.14 |  |  | $ | 2.89 |  |  | $ | 5.96 |  |  | $ | 8.06 |  |
+| Diluted net income per share (Note 12) | $ | 2.12 |  |  | $ | 2.87 |  |  | $ | 5.90 |  |  | $ | 7.99 |  |
+
+[NarrativeText] See accompanying notes.
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] Alphabet Inc.
+
+[Text] CONSOLIDATED STATEMENTS OF COMPREHENSIVE INCOME
+
+[Text] (in millions; unaudited)
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Net income | $ | 26,301 |  |  | $ | 34,979 |  |  | $ | 73,582 |  |  | $ | 97,715 |  |
+| Other comprehensive income (loss): |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Change in foreign currency translation adjustment, net of income tax benefit (expense) of $ 93 , $( 60 ), $ 49 , and $ 175 | 1,184 |  |  | ( 642 ) |  |  | 234 |  |  | 2,631 |  |  |  |  |  |
+| Available-for-sale investments: |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Change in net unrealized gains (losses) | 1,208 |  |  | 230 |  |  | 755 |  |  | 1,066 |  |  |  |  |  |
+| Less: reclassification adjustment for net (gains) losses included in net income | 88 |  |  | ( 36 ) |  |  | 629 |  |  | ( 149 ) |  |  |  |  |  |
+| Net change, net of income tax benefit (expense) of $( 368 ), $( 54 ), $( 394 ), and $( 259 ) | 1,296 |  |  | 194 |  |  | 1,384 |  |  | 917 |  |  |  |  |  |
+| Cash flow hedges: |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Change in net unrealized gains (losses) | ( 698 ) |  |  | 338 |  |  | ( 280 ) |  |  | ( 895 ) |  |  |  |  |  |
+| Less: reclassification adjustment for net (gains) losses included in net income | 2 |  |  | 183 |  |  | ( 164 ) |  |  | 93 |  |  |  |  |  |
+| Net change, net of income tax benefit (expense) of $ 138 , $( 123 ), $ 88 , and $ 216 | ( 696 ) |  |  | 521 |  |  | ( 444 ) |  |  | ( 802 ) |  |  |  |  |  |
+| Other comprehensive income (loss) | 1,784 |  |  | 73 |  |  | 1,174 |  |  | 2,746 |  |  |  |  |  |
+| Comprehensive income | $ | 28,085 |  |  | $ | 35,052 |  |  | $ | 74,756 |  |  | $ | 100,461 |  |
+
+[NarrativeText] See accompanying notes.
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] Alphabet Inc.
+
+[Text] CONSOLIDATED STATEMENTS OF STOCKHOLDERS’ EQUITY
+
+[Text] (in millions; unaudited)
+
+[Table]
+|  | Three Months Ended September 30, 2024 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Class A, Class B, Class C Stock and Additional Paid-In Capital |  | Accumulated Other Comprehensive Income (Loss) |  | Retained Earnings |  | Total Stockholders’ Equity |  |  |  |  |  |  |  |  |  |  |  |
+|  | Shares |  | Amount |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Balance as of June 30, 2024 | 12,322 |  |  | $ | 79,732 |  |  | $ | ( 5,012 ) |  |  | $ | 226,033 |  |  | $ | 300,753 |  |
+| Stock issued | 32 |  |  | 0 |  |  | 0 |  |  | 0 |  |  | 0 |  |  |  |  |  |
+| Stock-based compensation | 0 |  |  | 5,903 |  |  | 0 |  |  | 0 |  |  | 5,903 |  |  |  |  |  |
+| Tax withholding related to vesting of restricted stock units and other | 0 |  |  | ( 3,082 ) |  |  | 0 |  |  | ( 14 ) |  |  | ( 3,096 ) |  |  |  |  |  |
+| Repurchases of stock | ( 90 ) |  |  | ( 822 ) |  |  | 0 |  |  | ( 14,477 ) |  |  | ( 15,299 ) |  |  |  |  |  |
+| Dividends and dividend equivalents declared ($ 0.20 per share) | 0 |  |  | 14 |  |  | 0 |  |  | ( 2,526 ) |  |  | ( 2,512 ) |  |  |  |  |  |
+| Sale of interest in consolidated entities | 0 |  |  | 285 |  |  | 0 |  |  | 0 |  |  | 285 |  |  |  |  |  |
+| Net income | 0 |  |  | 0 |  |  | 0 |  |  | 26,301 |  |  | 26,301 |  |  |  |  |  |
+| Other comprehensive income (loss) | 0 |  |  | 0 |  |  | 1,784 |  |  | 0 |  |  | 1,784 |  |  |  |  |  |
+| Balance as of September 30, 2024 | 12,264 |  |  | $ | 82,030 |  |  | $ | ( 3,228 ) |  |  | $ | 235,317 |  |  | $ | 314,119 |  |
+
+[Table]
+|  | Nine Months Ended September 30, 2024 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Class A, Class B, Class C Stock and Additional Paid-In Capital |  | Accumulated Other Comprehensive Income (Loss) |  | Retained Earnings |  | Total Stockholders’ Equity |  |  |  |  |  |  |  |  |  |  |  |
+|  | Shares |  | Amount |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Balance as of December 31, 2023 | 12,460 |  |  | $ | 76,534 |  |  | $ | ( 4,402 ) |  |  | $ | 211,247 |  |  | $ | 283,379 |  |
+| Stock issued | 97 |  |  | 0 |  |  | 0 |  |  | 0 |  |  | 0 |  |  |  |  |  |
+| Stock-based compensation | 0 |  |  | 17,104 |  |  | 0 |  |  | 0 |  |  | 17,104 |  |  |  |  |  |
+| Tax withholding related to vesting of restricted stock units and other | 0 |  |  | ( 9,390 ) |  |  | 0 |  |  | ( 14 ) |  |  | ( 9,404 ) |  |  |  |  |  |
+| Repurchases of stock | ( 293 ) |  |  | ( 2,529 ) |  |  | 0 |  |  | ( 44,425 ) |  |  | ( 46,954 ) |  |  |  |  |  |
+| Dividends and dividend equivalents declared ($ 0.40 per share) | 0 |  |  | 18 |  |  | 0 |  |  | ( 5,073 ) |  |  | ( 5,055 ) |  |  |  |  |  |
+| Sale of interest in consolidated entities | 0 |  |  | 293 |  |  | 0 |  |  | 0 |  |  | 293 |  |  |  |  |  |
+| Net income | 0 |  |  | 0 |  |  | 0 |  |  | 73,582 |  |  | 73,582 |  |  |  |  |  |
+| Other comprehensive income (loss) | 0 |  |  | 0 |  |  | 1,174 |  |  | 0 |  |  | 1,174 |  |  |  |  |  |
+| Balance as of September 30, 2024 | 12,264 |  |  | $ | 82,030 |  |  | $ | ( 3,228 ) |  |  | $ | 235,317 |  |  | $ | 314,119 |  |
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Table]
+|  | Three Months Ended September 30, 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Class A, Class B, Class C Stock and Additional Paid-In Capital |  | Accumulated Other Comprehensive Income (Loss) |  | Retained Earnings |  | Total Stockholders’ Equity |  |  |  |  |  |  |  |  |  |  |  |
+|  | Shares |  | Amount |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Balance as of June 30, 2025 | 12,104 |  |  | $ | 89,283 |  |  | $ | ( 2,127 ) |  |  | $ | 275,760 |  |  | $ | 362,916 |  |
+| Stock issued | 29 |  |  | 0 |  |  | 0 |  |  | 0 |  |  | 0 |  |  |  |  |  |
+| Stock-based compensation | 0 |  |  | 6,413 |  |  | 0 |  |  | 0 |  |  | 6,413 |  |  |  |  |  |
+| Tax withholding related to vesting of restricted stock units and other | 0 |  |  | ( 3,400 ) |  |  | 0 |  |  | 0 |  |  | ( 3,400 ) |  |  |  |  |  |
+| Repurchases of stock | ( 56 ) |  |  | ( 641 ) |  |  | 0 |  |  | ( 10,912 ) |  |  | ( 11,553 ) |  |  |  |  |  |
+| Dividends and dividend equivalents declared ($ 0.21 per share) | 0 |  |  | 40 |  |  | 0 |  |  | ( 2,601 ) |  |  | ( 2,561 ) |  |  |  |  |  |
+| Sale of interest in consolidated entities | 0 |  |  | 0 |  |  | 0 |  |  | 0 |  |  | 0 |  |  |  |  |  |
+| Net income | 0 |  |  | 0 |  |  | 0 |  |  | 34,979 |  |  | 34,979 |  |  |  |  |  |
+| Other comprehensive income (loss) | 0 |  |  | $ | 0 |  |  | $ | 73 |  |  | $ | 0 |  |  | $ | 73 |  |
+| Balance as of September 30, 2025 | 12,077 |  |  | $ | 91,695 |  |  | $ | ( 2,054 ) |  |  | $ | 297,226 |  |  | $ | 386,867 |  |
+
+[Table]
+|  | Nine Months Ended September 30, 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Class A, Class B, Class C Stock and Additional Paid-In Capital |  | Accumulated Other Comprehensive Income (Loss) |  | Retained Earnings |  | Total Stockholders’ Equity |  |  |  |  |  |  |  |  |  |  |  |
+|  | Shares |  | Amount |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Balance as of December 31, 2024 | 12,211 |  |  | $ | 84,800 |  |  | $ | ( 4,800 ) |  |  | $ | 245,084 |  |  | $ | 325,084 |  |
+| Stock issued | 86 |  |  | 0 |  |  | 0 |  |  | 0 |  |  | 0 |  |  |  |  |  |
+| Stock-based compensation | 0 |  |  | 18,011 |  |  | 0 |  |  | 0 |  |  | 18,011 |  |  |  |  |  |
+| Tax withholding related to vesting of restricted stock units and other | 0 |  |  | ( 9,349 ) |  |  | 0 |  |  | 0 |  |  | ( 9,349 ) |  |  |  |  |  |
+| Repurchases of stock | ( 220 ) |  |  | ( 2,267 ) |  |  | 0 |  |  | ( 37,850 ) |  |  | ( 40,117 ) |  |  |  |  |  |
+| Dividends and dividend equivalents decla red ($ 0.62 per share) | 0 |  |  | 100 |  |  | 0 |  |  | ( 7,723 ) |  |  | ( 7,623 ) |  |  |  |  |  |
+| Sale of interest in consolidated entities | 0 |  |  | 400 |  |  | 0 |  |  | 0 |  |  | 400 |  |  |  |  |  |
+| Net income | 0 |  |  | 0 |  |  | 0 |  |  | 97,715 |  |  | 97,715 |  |  |  |  |  |
+| Other comprehensive income (loss) | 0 |  |  | 0 |  |  | 2,746 |  |  | 0 |  |  | 2,746 |  |  |  |  |  |
+| Balance as of September 30, 2025 | 12,077 |  |  | $ | 91,695 |  |  | $ | ( 2,054 ) |  |  | $ | 297,226 |  |  | $ | 386,867 |  |
+
+[NarrativeText] See accompanying notes.
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] Alphabet Inc.
+
+[Text] CONSOLIDATED STATEMENTS OF CASH FLOWS
+
+[Text] (in millions; unaudited)
+
+[Table]
+|  | Nine Months Ended |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  |  |  |  |
+| Operating activities |  |  |  |  |  |  |  |
+| Net income | $ | 73,582 |  |  | $ | 97,715 |  |
+| Adjustments: |  |  |  |  |  |  |  |
+| Depreciation of property and equipment | 11,106 |  |  | 15,096 |  |  |  |
+| Stock-based compensation expense | 16,975 |  |  | 17,882 |  |  |  |
+| Deferred income taxes | ( 3,809 ) |  |  | 7,130 |  |  |  |
+| Loss (gain) on debt and equity securities, net | ( 2,738 ) |  |  | ( 22,266 ) |  |  |  |
+| Other | 2,592 |  |  | 843 |  |  |  |
+| Changes in assets and liabilities, net of effects of acquisitions: |  |  |  |  |  |  |  |
+| Accounts receivable, net | ( 1,321 ) |  |  | ( 3,582 ) |  |  |  |
+| Income taxes, net | ( 2,797 ) |  |  | ( 3,292 ) |  |  |  |
+| Other assets | ( 2,334 ) |  |  | ( 4,060 ) |  |  |  |
+| Accounts payable | ( 42 ) |  |  | ( 771 ) |  |  |  |
+| Accrued expenses and other liabilities | ( 6,366 ) |  |  | 6,199 |  |  |  |
+| Accrued revenue share | 478 |  |  | 100 |  |  |  |
+| Deferred revenue | 860 |  |  | 1,317 |  |  |  |
+| Net cash provided by operating activities | 86,186 |  |  | 112,311 |  |  |  |
+| Investing activities |  |  |  |  |  |  |  |
+| Purchases of property and equipment | ( 38,259 ) |  |  | ( 63,596 ) |  |  |  |
+| Purchases of marketable securities | ( 65,034 ) |  |  | ( 60,834 ) |  |  |  |
+| Maturities and sales of marketable securities | 81,779 |  |  | 61,301 |  |  |  |
+| Purchases of non-marketable securities | ( 3,234 ) |  |  | ( 3,312 ) |  |  |  |
+| Maturities and sales of non-marketable securities | 732 |  |  | 1,196 |  |  |  |
+| Acquisitions, net of cash acquired, and purchases of intangible assets | ( 2,840 ) |  |  | ( 1,425 ) |  |  |  |
+| Other investing activities | ( 2,500 ) |  |  | ( 1,845 ) |  |  |  |
+| Net cash used in investing activities | ( 29,356 ) |  |  | ( 68,515 ) |  |  |  |
+| Financing activities |  |  |  |  |  |  |  |
+| Net payments related to stock-based award activities | ( 9,141 ) |  |  | ( 9,001 ) |  |  |  |
+| Repurchases of stock | ( 46,671 ) |  |  | ( 40,210 ) |  |  |  |
+| Dividend payments | ( 4,921 ) |  |  | ( 7,513 ) |  |  |  |
+| Proceeds from issuance of debt, net of costs | 8,694 |  |  | 38,002 |  |  |  |
+| Repayments of debt | ( 8,951 ) |  |  | ( 26,094 ) |  |  |  |
+| Proceeds from sale of interest in consolidated entities, net | 293 |  |  | 400 |  |  |  |
+| Net cash used in financing activities | ( 60,697 ) |  |  | ( 44,416 ) |  |  |  |
+| Effect of exchange rate changes on cash and cash equivalents | ( 222 ) |  |  | 244 |  |  |  |
+| Net increase (decrease) in cash and cash equivalents | ( 4,089 ) |  |  | ( 376 ) |  |  |  |
+| Cash and cash equivalents at beginning of period | 24,048 |  |  | 23,466 |  |  |  |
+| Cash and cash equivalents at end of period | $ | 19,959 |  |  | $ | 23,090 |  |
+
+[NarrativeText] See accompanying notes.
+
+[Text] 10
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] Alphabet Inc.
+
+[Text] NOTES TO CONSOLIDATED FINANCIAL STATEMENTS
+
+[Text] (Unaudited)
+
+[Text] Note 1.
+
+[Text] 11
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] Note 2.
+
+[Text] Note 3.
+
+[Text] 12
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] 13
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] 14
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] 15
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] 16
+
+[Table]
+| Table of Contents | Alphabet Inc. |
+| --- | --- |
+
+[Text] 17
+
+[Text] 18
+
+[Text] 19
+
+[Text] 20
+
+[Text] Note 4.
+
+[Text] 21
+
+[Text] 22
+
+[Text] Note 5.
+
+[Text] Note 6.
+
+[Text] 23
+
+[Text] Note 7.
+
+[Text] 24
+
+[Text] 25
+
+[Text] Note 8.
+
+[Text] 26
+
+[Text] Note 9.
+
+[Text] Note 10.
+
+[Text] 27
+
+[Text] 28
+
+[Text] 29
+
+[Text] Note 11.
+
+[Text] Note 12.
+
+[Text] 30
+
+[Text] 31
+
+[Text] 32
+
+[Text] Note 13.
+
+[Text] Note 14.
+
+[Text] Note 15.
+
+[Text] 33
+
+[Text] 34
+
+[Text] 35
+
+[Text] ITEM 2.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+[NarrativeText] Please read the following discussion and analysis of our financial condition and results of operations together with "Note About Forward-Looking Statements" and our consolidated financial statements and related notes included under Item 1 of this Quarterly Report on Form 10-Q as well as our Annual Report on Form 10-K for the fiscal year ended December 31, 2024, including Part I, Item 1A "Risk Factors."
+
+[Text] Understanding Alphabet’s Financial Results
+
+[NarrativeText] Alphabet is a collection of businesses — the largest of which is Google. We report Google in two segments, Google Services and Google Cloud; we also report all non-Google businesses collectively as Other Bets. For further details on our segments, see Note 15 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] Revenues and Monetization Metrics
+
+[NarrativeText] We generate revenues by delivering relevant, cost-effective online advertising; cloud-based solutions that provide enterprise customers of all sizes with infrastructure, platform services, and applications; sales of other products and services, such as fees received for subscription-based products, apps and in-app purchases, and devices. For additional information on how we recognize revenue, see Note 1 of the Notes to Consolidated Financial Statements included in Part II, Item 8 in our Annual Report on Form 10-K for the fiscal year ended December 31, 2024.
+
+[NarrativeText] In addition to the long-term trends and their financial effect on our business discussed in "Trends in Our Business and Financial Effect" in Part II, Item 7 of our Annual Report on Form 10-K for the fiscal year ended December 31, 2024, fluctuations in our revenues have been and may continue to be affected by a combination of factors, including:
+
+[ListItem] changes in foreign currency exchange rates;
+
+[ListItem] changes in pricing, such as those resulting from changes in fee structures, discounts, and customer incentives;
+
+[ListItem] general economic conditions and various external dynamics, including geopolitical events, regulations, and other measures and their effect on advertiser, consumer, and enterprise spending;
+
+[ListItem] new product, service, and market launches; and
+
+[ListItem] seasonality.
+
+[NarrativeText] Additionally, fluctuations in our revenues generated from advertising ("Google advertising"), other sources ("Google subscriptions, platforms, and devices"), Google Cloud, and Other Bets have been, and may continue to be, affected by other factors unique to each set of revenues, as described below.
+
+[Text] Google Services
+
+[NarrativeText] Google Services revenues consist of Google advertising as well as Google subscriptions, platforms, and devices revenues.
+
+[Text] Google Advertising
+
+[NarrativeText] Google advertising revenues are comprised of the following:
+
+[ListItem] Google Search & other, which includes revenues generated on Google search properties (including revenues from traffic generated by search distribution partners who use Google.com as their default search in browsers, toolbars, etc.), and other Google owned and operated properties like Gmail, Google Maps, and Google Play;
+
+[ListItem] YouTube ads, which includes revenues generated on YouTube properties; and
+
+[ListItem] Google Network, which includes revenues generated on Google Network properties participating in AdMob, AdSense, and Google Ad Manager.
+
+[NarrativeText] We use certain metrics to track how well traffic across various properties is monetized as it relates to our advertising revenues: paid clicks and cost-per-click pertain to traffic on Google Search & other properties, while impressions and cost-per-impression pertain to traffic on our Google Network properties.
+
+[Text] 36
+
+[NarrativeText] Paid clicks represent engagement by users and include clicks on advertisements by end-users on Google search properties and other Google owned and operated properties including Gmail, Google Maps, and Google Play. Cost-per-click is defined as click-driven revenues divided by our total number of paid clicks and represents the average amount we charge advertisers for each engagement by users.
+
+[NarrativeText] Impressions include impressions displayed to users on Google Network properties participating primarily in AdMob, AdSense, and Google Ad Manager. Cost-per-impression is defined as impression-based and click-based revenues divided by our total number of impressions, and represents the average amount we charge advertisers for each impression displayed to users.
+
+[NarrativeText] As our business evolves, we periodically review, refine, and update our methodologies for monitoring, gathering, and counting the number of paid clicks and the number of impressions, and for identifying the revenues generated by the corresponding click and impression activity.
+
+[NarrativeText] Fluctuations in our advertising revenues, as well as the change in paid clicks and cost-per-click on Google Search & other properties and the change in impressions and cost-per-impression on Google Network properties and the correlation between these items have been, and may continue to be, affected by factors in addition to the general factors described above, such as:
+
+[ListItem] advertiser competition for keywords;
+
+[ListItem] changes in advertising quality, formats, delivery, or policy;
+
+[ListItem] changes in device mix;
+
+[ListItem] seasonal fluctuations in internet usage, advertising expenditures, and underlying business trends, such as traditional retail seasonality; and
+
+[ListItem] traffic growth in emerging markets compared to more mature markets and across various verticals and channels.
+
+[Text] Google subscriptions, platforms, and devices
+
+[NarrativeText] Google subscriptions, platforms, and devices revenues are comprised of the following:
+
+[ListItem] consumer subscriptions, which primarily include revenues from YouTube services, such as YouTube TV, YouTube Music and Premium, and NFL Sunday Ticket, as well as Google One;
+
+[ListItem] platforms, which primarily include revenues from Google Play sales of apps and in-app purchases;
+
+[ListItem] devices, which primarily include sales of the Pixel family of devices; and
+
+[ListItem] other products and services.
+
+[NarrativeText] Fluctuations in our Google subscriptions, platforms, and devices revenues have been, and may continue to be, affected by factors in addition to the general factors described above, such as changes in customer usage and demand, number of subscribers, and the timing of product launches.
+
+[Text] Google Cloud
+
+[NarrativeText] Google Cloud revenues are comprised of the following:
+
+[ListItem] Google Cloud Platform, which generates consumption-based fees and subscriptions for infrastructure, platform, and other services. These services provide access to solutions such as AI offerings including our AI infrastructure, Vertex AI platform, and Gemini Enterprise: cybersecurity; and data and analytics;
+
+[ListItem] Google Workspace, which includes subscriptions for cloud-based communication and collaboration tools for enterprises, such as Calendar, Gmail, Docs, Drive, and Meet, with integrated features like Gemini for Google Workspace; and
+
+[ListItem] other enterprise services.
+
+[NarrativeText] Fluctuations in our Google Cloud revenues have been, and may continue to be, affected by factors in addition to the general factors described above, such as changes in customer usage and demand.
+
+[Text] Other Bets
+
+[NarrativeText] Revenues from Other Bets are generated primarily from the sale of autonomous transportation services, healthcare-related services, and internet services.
+
+[Text] 37
+
+[Text] Costs and Expenses
+
+[NarrativeText] Our cost structure has two components: cost of revenues and operating expenses. Our operating expenses include costs related to R&D, sales and marketing, and general and administrative functions. Certain of our costs and expenses, including those associated with the operation of our technical infrastructure as well as components of our operating expenses, are generally less variable in nature and may not correlate to changes in revenue. Additionally, fluctuations in employee compensation expenses may not directly correlate with changes in headcount due to factors such as annual SBC awards that generally vest over four years.
+
+[Text] Cost of Revenues
+
+[NarrativeText] Cost of revenues is comprised of TAC and other costs of revenues.
+
+[ListItem] TAC includes:
+
+[ListItem] amounts paid to our distribution partners who make available our search access points and services. Our distribution partners include browser providers, mobile carriers, original equipment manufacturers, and software developers; and
+
+[ListItem] amounts paid to Google Network partners primarily for ads displayed on their properties.
+
+[ListItem] Other cost of revenues primarily includes:
+
+[ListItem] content acquisition costs, which are payments to content providers from whom we license video and other content for distribution, primarily related to YouTube (we pay fees to these content providers based on revenues generated, subscriber counts, or a flat fee);
+
+[ListItem] depreciation expense related to our technical infrastructure;
+
+[ListItem] employee compensation expenses related to our technical infrastructure and other operations such as content review and customer and product support;
+
+[ListItem] inventory and other costs related to the devices we sell; and
+
+[ListItem] other technical infrastructure operations costs, including network capacity, energy, and equipment costs.
+
+[NarrativeText] TAC as a percentage of revenues generated from ads placed on Google Network properties are significantly higher than TAC as a percentage of revenues generated from ads placed on Google Search & other properties, because most of the advertiser revenues from ads served on Google Network properties are paid as TAC to our Google Network partners.
+
+[Text] Operating Expenses
+
+[NarrativeText] Operating expenses are generally incurred during our normal course of business, which we categorize as either R&D, sales and marketing, or general and administrative.
+
+[NarrativeText] The main components of our R&D expenses are:
+
+[ListItem] depreciation;
+
+[ListItem] employee compensation expenses for engineering and technical employees responsible for R&D related to our existing and new products and services; and
+
+[ListItem] third-party services fees primarily relating to consulting and outsourced services in support of our engineering and product development efforts.
+
+[NarrativeText] The main components of our sales and marketing expenses are:
+
+[ListItem] employee compensation expenses for employees engaged in sales and marketing, sales support, and certain customer service functions; and
+
+[ListItem] spend relating to our advertising and promotional activities in support of our products and services.
+
+[NarrativeText] The main components of our general and administrative expenses are:
+
+[ListItem] employee compensation expenses for employees in finance, human resources, information technology, legal, and other administrative support functions;
+
+[ListItem] expenses relating to legal and other matters, including certain fines and settlements; and
+
+[Text] 38
+
+[ListItem] third-party services fees, including audit, consulting, outside legal, and other outsourced administrative services.
+
+[Text] Other Income (Expense), Net
+
+[NarrativeText] OI&E, net primarily consists of interest income (expense), the effect of foreign currency exchange gains (losses), net gains (losses) and impairment on our marketable and non-marketable securities, performance fees, and income (loss) and impairment from our equity method investments.
+
+[NarrativeText] For additional information, including how we account for our investments and factors that can drive fluctuations in the value of our investments, see Note 1 of the Notes to Consolidated Financial Statements included in Part II, Item 8 and Item 7A, “Quantitative and Qualitative Disclosures About Market Risk” in our Annual Report on Form 10-K for the fiscal year ended December 31, 2024 as well as Note 3 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] Provision for Income Taxes
+
+[NarrativeText] Provision for income taxes represents the estimated amount of federal, state, and foreign income taxes incurred in the U.S. and the many jurisdictions in which we operate. The provision includes the effect of reserve provisions and changes to reserves that are considered appropriate as well as the related net interest and penalties.
+
+[NarrativeText] For additional information, see Note 1 of the Notes to Consolidated Financial Statements included in Part II, Item 8 in our Annual Report on Form 10-K for the fiscal year ended December 31, 2024 as well as Note 14 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] Executive Overview
+
+[NarrativeText] The following table summarizes consolidated financial results (in millions, except per share information and percentages):
+
+[Table]
+|  |  | Three Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  |  | 2024 |  | 2025 |  | $ Change |  | % Change |  |  |  |  |  |  |  |
+| Consolidated revenues |  | $ | 88,268 |  |  | $ | 102,346 |  |  | $ | 14,078 |  |  | 16 | % |
+| Change in consolidated constant currency revenues (1) |  |  |  |  |  |  |  | 15 | % |  |  |  |  |  |  |
+| Cost of revenues |  | $ | 36,474 |  |  | $ | 41,369 |  |  | $ | 4,895 |  |  | 13 | % |
+| Operating expenses |  | $ | 23,273 |  |  | $ | 29,749 |  |  | $ | 6,476 |  |  | 28 | % |
+| Operating income |  | $ | 28,521 |  |  | $ | 31,228 |  |  | $ | 2,707 |  |  | 9 | % |
+| Operating margin |  | 32 | % |  | 31 | % |  |  |  | (1) | % |  |  |  |  |
+| Other income (expense), net |  | $ | 3,185 |  |  | $ | 12,759 |  |  | $ | 9,574 |  |  | 301 | % |
+| Net income |  | $ | 26,301 |  |  | $ | 34,979 |  |  | $ | 8,678 |  |  | 33 | % |
+| Diluted EPS (2) |  | $ | 2.12 |  |  | $ | 2.87 |  |  | $ | 0.75 |  |  | 35 | % |
+
+[NarrativeText] (1) See "Use of Non-GAAP Constant Currency Information" below for details relating to our use of constant currency information.
+
+[NarrativeText] (2) For additional information on the calculation of diluted EPS, see Note 12 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[ListItem] Revenues were $102.3 billion, an increase of 16% year over year, primarily driven by an increase in Google Services revenues of $10.5 billion, or 14%, and an increase in Google Cloud revenues of $3.8 billion, or 34%.
+
+[ListItem] Total constant currency revenues, which exclude the effect of hedging, increased 15% year over year.
+
+[ListItem] Cost of revenues was $41.4 billion, an increase of 13% year over year, primarily driven by increases in content acquisition costs, TAC, depreciation expense, and other technical infrastructure operations costs.
+
+[Text] 39
+
+[ListItem] Operating expenses were $29.7 billion, an increase of 28% year over year, primarily driven by increases in expenses related to legal and other matters, employee compensation expenses, and depreciation expense.
+
+[Text] Other Information:
+
+[ListItem] On September 5, 2025, the EC announced its decision that Google had infringed European competition laws. The EC decision imposed a $3.5 billion fine which we accrued in general and administrative expenses in our Google Services segment for the three months ended September 30, 2025.
+
+[ListItem] OI&E of $12.8 billion for the three months ended September 30, 2025 included net gains on equity securities of $10.7 billion, primarily related to unrealized gains on our non-marketable equity securities.
+
+[ListItem] Changes to U.S. tax law enacted on July 4, 2025, allow, among other things, for immediate expensing of domestic research and experimentation costs and accelerated depreciation on eligible capital expenditures, the effects of which are included in operating cash flows for the three months ended September 30, 2025.
+
+[ListItem] Repurchases of Class A and Class C shares were $926 million and $10.6 billion, respectively, totaling $11.6 billion for the three months ended September 30, 2025.
+
+[ListItem] Operating cash flow was $48.4 billion for the three months ended September 30, 2025.
+
+[ListItem] Capital expenditures, which primarily reflected investments in technical infrastructure, were $24.0 billion for the three months ended September 30, 2025.
+
+[ListItem] As of September 30, 2025, we had 190,167 employees.
+
+[NarrativeText] We are monitoring ongoing developments surrounding international trade and the macroeconomic environment. As a result of volatility in international trade and financial markets, we may experience direct and indirect effects on our business, operations, and financial results. Our past results may not be indicative of our future performance, and our financial results may differ materially from historical trends.
+
+[Text] Financial Results
+
+[Text] Revenues
+
+[NarrativeText] The following table presents revenues by type (in millions):
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Google Search & other | $ | 49,385 |  |  | $ | 56,567 |  |  | $ | 144,050 |  |  | $ | 161,459 |  |
+| YouTube ads | 8,921 |  |  | 10,261 |  |  | 25,674 |  |  | 28,984 |  |  |  |  |  |
+| Google Network | 7,548 |  |  | 7,354 |  |  | 22,405 |  |  | 21,964 |  |  |  |  |  |
+| Google advertising | 65,854 |  |  | 74,182 |  |  | 192,129 |  |  | 212,407 |  |  |  |  |  |
+| Google subscriptions, platforms, and devices | 10,656 |  |  | 12,870 |  |  | 28,707 |  |  | 34,452 |  |  |  |  |  |
+| Google Services total | 76,510 |  |  | 87,052 |  |  | 220,836 |  |  | 246,859 |  |  |  |  |  |
+| Google Cloud | 11,353 |  |  | 15,157 |  |  | 31,274 |  |  | 41,041 |  |  |  |  |  |
+| Other Bets | 388 |  |  | 344 |  |  | 1,248 |  |  | 1,167 |  |  |  |  |  |
+| Hedging gains (losses) | 17 |  |  | (207) |  |  | 191 |  |  | (60) |  |  |  |  |  |
+| Total revenues | $ | 88,268 |  |  | $ | 102,346 |  |  | $ | 253,549 |  |  | $ | 289,007 |  |
+
+[Text] Google Services
+
+[Text] Google advertising revenues
+
+[Text] Google Search & other
+
+[NarrativeText] Google Search & other revenues increased $7.2 billion and $17.4 billion from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025. The overall growth was driven by interrelated factors including increases in search queries resulting from growth in user adoption and usage on mobile devices; growth in advertiser spending; and improvements we have made in ad formats and delivery.
+
+[Text] 40
+
+[Text] YouTube ads
+
+[NarrativeText] YouTube ads revenues increased $1.3 billion and $3.3 billion from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025. The growth was driven by our direct response advertising products followed by our brand advertising products, both of which benefited from increased spending by our advertisers.
+
+[Text] Google Network
+
+[NarrativeText] Google Network revenues decreased $194 million from the three months ended September 30, 2024 to the three months ended September 30, 2025, primarily due to a decrease in AdSense, partially offset by an increase in AdMob revenues.
+
+[NarrativeText] Google Network revenues decreased $441 million from the nine months ended September 30, 2024 to the nine months ended September 30, 2025, primarily due to a decrease in AdSense and Google Ad Manager revenues.
+
+[Text] Monetization Metrics
+
+[NarrativeText] The following table presents changes in monetization metrics for Google Search & other revenues (paid clicks and cost-per-click) and Google Network revenues (impressions and cost-per-impression), expressed as a percentage, from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025:
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |
+| --- | --- | --- | --- | --- | --- |
+|  | September 30, 2025 |  | September 30, 2025 |  |  |
+| Google Search & other |  |  |  |  |  |
+| Paid clicks change | 7 | % |  | 4 | % |
+| Cost-per-click change | 7 | % |  | 7 | % |
+| Google Network |  |  |  |  |  |
+| Impressions change | (5) | % |  | (5) | % |
+| Cost-per-impression change | 6 | % |  | 6 | % |
+
+[NarrativeText] Changes in paid clicks and impressions are driven by a number of interrelated factors, including changes in advertiser spending; ongoing product and policy changes; and, as it relates to paid clicks, fluctuations in search queries resulting from changes in user adoption and usage, primarily on mobile devices.
+
+[NarrativeText] Changes in cost-per-click and cost-per-impression are driven by a number of interrelated factors including changes in device mix, geographic mix, advertiser spending, ongoing product and policy changes, product mix, property mix, and changes in foreign currency exchange rates.
+
+[Text] Google subscriptions, platforms, and devices
+
+[NarrativeText] Google subscriptions, platforms, and devices revenues increased $2.2 billion and $5.7 billion from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025. The growth was primarily driven by an increase in subscriptions revenues. This increase was primarily due to the contribution from growth in paid subscriptions across both YouTube services and Google One.
+
+[Text] Google Cloud
+
+[NarrativeText] Google Cloud revenues increased $3.8 billion and $9.8 billion from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025 primarily driven by growth in Google Cloud Platform largely from infrastructure services.
+
+[Text] 41
+
+[Text] Revenues by Geography
+
+[NarrativeText] The following table presents revenues by geography as a percentage of revenues, determined based on the addresses of our customers:
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |
+| United States | 49 | % |  | 48 | % |  | 49 | % |  | 48 | % |
+| EMEA | 29 | % |  | 29 | % |  | 29 | % |  | 29 | % |
+| APAC | 16 | % |  | 17 | % |  | 16 | % |  | 17 | % |
+| Other Americas | 6 | % |  | 6 | % |  | 6 | % |  | 6 | % |
+| Hedging gains (losses) | 0 | % |  | 0 | % |  | 0 | % |  | 0 | % |
+
+[NarrativeText] For additional information, see Note 2 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] Use of Non-GAAP Constant Currency Information
+
+[NarrativeText] International revenues, which represent a significant portion of our revenues, are generally transacted in multiple currencies and therefore are affected by fluctuations in foreign currency exchange rates.
+
+[NarrativeText] The effect of currency exchange rates on our business is an important factor in understanding period-to-period comparisons. We use non-GAAP constant currency revenues ("constant currency revenues") and non-GAAP percentage change in constant currency revenues ("percentage change in constant currency revenues") for financial and operational decision-making and as a means to evaluate period-to-period comparisons. We believe the presentation of results on a constant currency basis in addition to GAAP results helps improve the ability to understand our performance, because it excludes the effects of foreign currency volatility that are not indicative of our core operating results.
+
+[NarrativeText] Constant currency information compares results between periods as if exchange rates had remained constant period over period. We define constant currency revenues as revenues excluding the effect of foreign currency exchange rate movements ("FX Effect") as well as hedging activities, which are recognized at the consolidated level. We use constant currency revenues to determine the constant currency revenue percentage change on a year-on-year basis. Constant currency revenues are calculated by translating current period revenues using prior year comparable period exchange rates, as well as excluding any hedging effects realized in the current period.
+
+[NarrativeText] Constant currency revenue percentage change is calculated by determining the change in current period revenues over prior year comparable period revenues where current period foreign currency revenues are translated using prior year comparable period exchange rates and hedging effects are excluded from revenues of both periods.
+
+[NarrativeText] These results should be considered in addition to, not as a substitute for, results reported in accordance with GAAP. Results on a constant currency basis, as we present them, may not be comparable to similarly titled measures used by other companies and are not a measure of performance presented in accordance with GAAP.
+
+[Text] 42
+
+[NarrativeText] The following table presents the foreign currency exchange effect on international revenues and total revenues (in millions, except percentages):
+
+[Table]
+|  |  |  |  |  | Three Months Ended September 30, 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |  |  |  | % Change from Prior Period |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | Three Months Ended September 30, |  | Less FX Effect |  | Constant Currency Revenues |  | As Reported |  | Less Hedging Effect |  | Less FX Effect |  | Constant Currency Revenues |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| United States | $ | 43,139 |  |  | $ | 48,758 |  |  | $ | 0 |  |  | $ | 48,758 |  |  | 13 | % |  |  |  | 0 | % |  | 13 | % |
+| EMEA | 25,472 |  |  | 29,911 |  |  | 1,261 |  |  | 28,650 |  |  | 17 | % |  |  |  | 5 | % |  | 12 | % |  |  |  |  |
+| APAC | 14,547 |  |  | 17,819 |  |  | 128 |  |  | 17,691 |  |  | 22 | % |  |  |  | 0 | % |  | 22 | % |  |  |  |  |
+| Other Americas | 5,093 |  |  | 6,065 |  |  | (50) |  |  | 6,115 |  |  | 19 | % |  |  |  | (1) | % |  | 20 | % |  |  |  |  |
+| Revenues, excluding hedging effect | 88,251 |  |  | 102,553 |  |  | 1,339 |  |  | 101,214 |  |  | 16 | % |  |  |  | 1 | % |  | 15 | % |  |  |  |  |
+| Hedging gains (losses) | 17 |  |  | (207) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Total revenues (1) | $ | 88,268 |  |  | $ | 102,346 |  |  |  |  | $ | 101,214 |  |  | 16 | % |  | 0 | % |  | 1 | % |  | 15 | % |  |
+
+[NarrativeText] (1)Total constant currency revenues of $101.2 billion for the three months ended September 30, 2025 increased $13.0 billion compared to $88.3 billion in revenues, excluding hedging effect, for the three months ended September 30, 2024.
+
+[NarrativeText] EMEA revenue growth was favorably affected by changes in foreign currency exchange rates, primarily due to the U.S. dollar weakening relative to the euro and British pound.
+
+[NarrativeText] APAC revenue growth was not materially affected by changes in foreign currency exchange rates.
+
+[NarrativeText] Other Americas revenue growth was unfavorably affected by changes in foreign currency exchange rates, primarily due to the U.S. dollar strengthening relative to the Argentine peso.
+
+[Table]
+|  |  |  |  |  | Nine Months Ended September 30, 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |  |  |  | % Change from Prior Period |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | Nine months ended September 30, |  | Less FX Effect |  | Constant Currency Revenues |  | As Reported |  | Less Hedging Effect |  | Less FX Effect |  | Constant Currency Revenues |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| United States | $ | 123,072 |  |  | $ | 138,785 |  |  | $ | 0 |  |  | $ | 138,785 |  |  | 13 | % |  |  |  | 0 | % |  | 13 | % |
+| EMEA | 73,943 |  |  | 84,096 |  |  | 1,317 |  |  | 82,779 |  |  | 14 | % |  |  |  | 2 | % |  | 12 | % |  |  |  |  |
+| APAC | 41,659 |  |  | 49,153 |  |  | (138) |  |  | 49,291 |  |  | 18 | % |  |  |  | 0 | % |  | 18 | % |  |  |  |  |
+| Other Americas | 14,684 |  |  | 17,033 |  |  | (902) |  |  | 17,935 |  |  | 16 | % |  |  |  | (6) | % |  | 22 | % |  |  |  |  |
+| Revenues, excluding hedging effect | 253,358 |  |  | 289,067 |  |  | 277 |  |  | 288,790 |  |  | 14 | % |  |  |  | 0 | % |  | 14 | % |  |  |  |  |
+| Hedging gains (losses) | 191 |  |  | (60) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Total revenues (1) | $ | 253,549 |  |  | $ | 289,007 |  |  |  |  | $ | 288,790 |  |  | 14 | % |  | 0 | % |  | — | % |  | 14 | % |  |
+
+[NarrativeText] (1)Total constant currency revenues of $288.8 billion for the nine months ended September 30, 2025 increased $35.4 billion compared to $253.4 billion in revenues, excluding hedging effect, for the nine months ended September 30, 2024.
+
+[NarrativeText] EMEA revenue growth was favorably affected by changes in foreign currency exchange rates, primarily due to the U.S. dollar weakening relative to the euro and British pound, partially offset by the U.S. dollar strengthening relative to the Turkish lira.
+
+[NarrativeText] APAC revenue growth was not materially affected by changes in foreign currency exchange rates, primarily due to the U.S. dollar strengthening relative to the Australian dollar and Indian rupee, partially offset by the U.S dollar weakening relative to the Japanese yen.
+
+[NarrativeText] Other Americas revenue growth was unfavorably affected by changes in foreign currency exchange rates, primarily due to the U.S. dollar strengthening relative to the Brazilian real and Mexican peso.
+
+[Text] Costs and Expenses
+
+[Text] 43
+
+[Text] Cost of Revenues
+
+[NarrativeText] The following table presents cost of revenues, including TAC (in millions, except percentages):
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| TAC | $ | 13,719 |  |  | $ | 14,876 |  |  | $ | 40,052 |  |  | $ | 43,329 |  |
+| Other cost of revenues | 22,755 |  |  | 26,493 |  |  | 65,641 |  |  | 73,439 |  |  |  |  |  |
+| Total cost of revenues | $ | 36,474 |  |  | $ | 41,369 |  |  | $ | 105,693 |  |  | $ | 116,768 |  |
+| Total cost of revenues as a percentage of revenues | 41 | % |  | 40 | % |  | 42 | % |  | 40 | % |  |  |  |  |
+
+[NarrativeText] Cost of revenues increased $4.9 billion from the three months ended September 30, 2024 to the three months ended September 30, 2025 due to an increase in other cost of revenues and TAC of $3.7 billion and $1.2 billion, respectively. Cost of revenues increased $11.1 billion from the nine months ended September 30, 2024 to the nine months ended September 30, 2025 due to an increase in other cost of revenues and TAC of $7.8 billion and $3.3 billion, respectively.
+
+[NarrativeText] The increase in TAC from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025 was largely due to an increase in TAC paid to distribution partners, primarily driven by growth in revenues subject to TAC. The TAC rate decreased from 20.8% to 20.1% from the three months ended September 30, 2024 to the three months ended September 30, 2025 and decreased from 20.8% to 20.4% from the nine months ended September 30, 2024 to the nine months ended September 30, 2025, primarily due to a revenue mix shift from Google Network properties to Google Search & other properties. The TAC rates on Google Search & other and Google Network revenues were substantially consistent from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025.
+
+[NarrativeText] The increase in other cost of revenues from the three months ended September 30, 2024 to the three months ended September 30, 2025 was primarily due to increases in content acquisition costs, largely for YouTube, depreciation expense, other technical infrastructure operations costs, and devices costs.
+
+[NarrativeText] The increase in other cost of revenues from the nine months ended September 30, 2024 to the nine months ended September 30, 2025 was primarily due to increases in content acquisition costs, largely for YouTube, depreciation expense, and other technical infrastructure operations costs.
+
+[Text] Research and Development
+
+[NarrativeText] The following table presents R&D expenses (in millions, except percentages):
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Research and development expenses | $ | 12,447 |  |  | $ | 15,151 |  |  | $ | 36,210 |  |  | $ | 42,515 |  |
+| Research and development expenses as a percentage of revenues | 14 | % |  | 15 | % |  | 14 | % |  | 15 | % |  |  |  |  |
+
+[NarrativeText] R&D expenses increased $2.7 billion from the three months ended September 30, 2024 to the three months ended September 30, 2025, primarily driven by increases in employee compensation expenses of $1.5 billion, depreciation expense of $659 million, and other technical infrastructure operations costs of $407 million.
+
+[NarrativeText] R&D expenses increased $6.3 billion from the nine months ended September 30, 2024 to the nine months ended September 30, 2025, primarily driven by increases in employee compensation expenses of $3.0 billion and depreciation expense of $1.7 billion.
+
+[Text] 44
+
+[Text] Sales and Marketing
+
+[NarrativeText] The following table presents sales and marketing expenses (in millions, except percentages):
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Sales and marketing expenses | $ | 7,227 |  |  | $ | 7,205 |  |  | $ | 20,445 |  |  | $ | 20,478 |  |
+| Sales and marketing expenses as a percentage of revenues | 8 | % |  | 7 | % |  | 8 | % |  | 7 | % |  |  |  |  |
+
+[NarrativeText] Sales and marketing expenses decreased $22 million from the three months ended September 30, 2024 to the three months ended September 30, 2025, due to a combination of factors, none of which were individually significant.
+
+[NarrativeText] Sales and marketing expenses increased $33 million from the nine months ended September 30, 2024 to the nine months ended September 30, 2025, primarily driven by an increase in advertising and promotional activities of $550 million, partially offset by a decrease in employee compensation expenses of $369 million.
+
+[Text] General and Administrative
+
+[NarrativeText] The following table presents general and administrative expenses (in millions, except percentages):
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| General and administrative expenses | $ | 3,599 |  |  | $ | 7,393 |  |  | $ | 9,783 |  |  | $ | 16,141 |  |
+| General and administrative expenses as a percentage of revenues | 4 | % |  | 7 | % |  | 4 | % |  | 6 | % |  |  |  |  |
+
+[NarrativeText] General and administrative expenses increased $3.8 billion from the three months ended September 30, 2024 to the three months ended September 30, 2025, primarily driven by an increase in expenses related to legal and other matters of $3.8 billion, largely the result of the $3.5 billion EC fine.
+
+[NarrativeText] General and administrative expenses increased $6.4 billion from the nine months ended September 30, 2024 to the nine months ended September 30, 2025, primarily driven by an increase in expenses related to legal and other matters of $6.3 billion, largely the result of the $3.5 billion EC fine accrued in the third quarter of 2025 and a $1.4 billion legal accrual made in the second quarter of 2025.
+
+[Text] Segment Profitability
+
+[NarrativeText] We report our segment results as Google Services, Google Cloud, and Other Bets. Additionally, certain costs are not allocated to our segments because they represent Alphabet-level activities. For further details on our segments, see Note 15 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[NarrativeText] The following table presents segment operating income (loss) (in millions):
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Operating income (loss): |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Google Services | $ | 30,856 |  |  | $ | 33,527 |  |  | $ | 88,427 |  |  | $ | 99,272 |  |
+| Google Cloud | 1,947 |  |  | 3,594 |  |  | 4,019 |  |  | 8,597 |  |  |  |  |  |
+| Other Bets | (1,116) |  |  | (1,426) |  |  | (3,270) |  |  | (3,898) |  |  |  |  |  |
+| Alphabet-level activities (1) | (3,166) |  |  | (4,467) |  |  | (7,758) |  |  | (10,866) |  |  |  |  |  |
+| Total income from operations | $ | 28,521 |  |  | $ | 31,228 |  |  | $ | 81,418 |  |  | $ | 93,105 |  |
+
+[NarrativeText] (1)In addition to the costs included in Alphabet-level activities, hedging gains (losses) related to revenue were $17 million and $(207) million for the three months ended September 30, 2024 and 2025, respectively, and $191 million and $(60) million for the nine months ended September 30, 2024 and 2025, respectively. Alphabet-level activities include charges related to employee severance and office space charges.
+
+[Text] 45
+
+[Text] Google Services
+
+[NarrativeText] Google Services operating income increased $2.7 billion and $10.8 billion from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025, respectively. The increase in operating income was primarily driven by an increase in revenues, partially offset by an increase in expenses related to legal and other matters, content acquisition costs, and TAC.
+
+[Text] Google Cloud
+
+[NarrativeText] Google Cloud operating income increased $1.6 billion and $4.6 billion from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025, respectively. The increase in operating income was primarily driven by an increase in revenues, partially offset by increases in usage costs for technical infrastructure and employee compensation expenses.
+
+[Text] Other Bets
+
+[NarrativeText] Other Bets operating loss increased $310 million and $628 million from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025, respectively. The increase in operating loss was due to a combination of factors, none of which were individually significant.
+
+[Text] Other Income (Expense), Net
+
+[NarrativeText] The following table presents OI&E (in millions):
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Interest income | $ | 1,243 |  |  | $ | 1,076 |  |  | $ | 3,394 |  |  | $ | 3,128 |  |
+| Interest expense | (54) |  |  | (143) |  |  | (215) |  |  | (438) |  |  |  |  |  |
+| Foreign currency exchange gain (loss), net | 23 |  |  | (143) |  |  | (388) |  |  | (318) |  |  |  |  |  |
+| Gain (loss) on debt securities, net | 160 |  |  | 122 |  |  | (612) |  |  | 489 |  |  |  |  |  |
+| Gain (loss) on equity securities, net | 1,821 |  |  | 10,734 |  |  | 3,350 |  |  | 21,778 |  |  |  |  |  |
+| Performance fees | 29 |  |  | (174) |  |  | 261 |  |  | (297) |  |  |  |  |  |
+| Income (loss) and impairment from equity method investments, net | (107) |  |  | (30) |  |  | (101) |  |  | 367 |  |  |  |  |  |
+| Other | 70 |  |  | 1,317 |  |  | 465 |  |  | 1,895 |  |  |  |  |  |
+| Other income (expense), net | $ | 3,185 |  |  | $ | 12,759 |  |  | $ | 6,154 |  |  | $ | 26,604 |  |
+
+[NarrativeText] OI&E, net increased $9.6 billion and $20.5 billion from the three and nine months ended September 30, 2024 to the three and nine months ended September 30, 2025, respectively. The increase was primarily due to increases in net unrealized gains on equity securities resulting from fair value adjustments on non-marketable equity securities.
+
+[NarrativeText] For additional information, see Note 3 and Note 7 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] Provision for Income Taxes
+
+[NarrativeText] The following table presents provision for income taxes (in millions, except effective tax rate):
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Income before provision for income taxes | $ | 31,706 |  |  | $ | 43,987 |  |  | $ | 87,572 |  |  | $ | 119,709 |  |
+| Provision for income taxes | $ | 5,405 |  |  | $ | 9,008 |  |  | $ | 13,990 |  |  | $ | 21,994 |  |
+| Effective tax rate | 17.0 | % |  | 20.5 | % |  | 16.0 | % |  | 18.4 | % |  |  |  |  |
+
+[NarrativeText] The effective tax rate increased from the three months ended September 30, 2024 to the three months ended September 30, 2025. This increase was primarily due to a decrease in the U.S. Federal Foreign Derived Intangible Income tax deduction, and a non-deductible EC fine, partially offset by changes in prior period tax positions.
+
+[NarrativeText] The effective tax rate increased from the nine months ended September 30, 2024 to the nine months ended September 30, 2025. This increase was primarily due to a decrease in the U.S. Federal Foreign Derived Intangible
+
+[Text] 46
+
+[NarrativeText] Income tax deduction, a non-deductible EC fine and legal settlement in the U.S., a decrease in SBC-related tax benefits, partially offset by changes in prior period tax positions.
+
+[NarrativeText] Changes to U.S. tax law enacted on July 4, 2025, allow for immediate expensing of domestic research and experimentation costs, accelerated depreciation on eligible capital expenditures, and other tax law changes impacting 2025 with certain changes effective in 2026. These changes are reflected in our results for the three and nine months ended September 30, 2025.
+
+[NarrativeText] The Organization for Economic Cooperation and Development (OECD) is coordinating negotiations among more than 140 countries with the goal of achieving consensus around substantial changes to international tax policies, including the implementation of a minimum global effective tax rate of 15%. Some countries have already implemented the legislation effective January 1, 2024, and we expect others to follow, however this did not have a material effect on our income tax provision for the period ending September 30, 2025.
+
+[Text] Financial Condition
+
+[Text] Cash, Cash Equivalents, and Marketable Securities
+
+[NarrativeText] As of September 30, 2025, we had $98.5 billion in cash, cash equivalents, and short-term marketable securities. Cash equivalents and marketable securities are comprised of time deposits, money market funds, highly liquid government bonds, corporate debt securities, mortgage-backed and asset-backed securities, and marketable equity securities.
+
+[Text] Sources, Uses of Cash and Related Trends
+
+[NarrativeText] Our principal sources of liquidity are cash, cash equivalents, and marketable securities, as well as the cash flow that we generate from operations. The primary use of capital continues to be to invest for the long-term growth of the business. We regularly evaluate our cash and capital structure, including the size, pace, and form of capital return to stockholders.
+
+[NarrativeText] The following table presents cash flows (in millions):
+
+[Table]
+|  | Nine Months Ended |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  |  |  |  |
+| Net cash provided by operating activities | $ | 86,186 |  |  | $ | 112,311 |  |
+| Net cash used in investing activities | $ | (29,356) |  |  | $ | (68,515) |  |
+| Net cash used in financing activities | $ | (60,697) |  |  | $ | (44,416) |  |
+
+[Text] Cash Provided by Operating Activities
+
+[NarrativeText] Our largest source of cash provided by operations are advertising revenues generated by Google Search & other properties, Google Network properties, and YouTube properties. In Google Services, we also generate cash through consumer subscriptions, the sale of apps and in-app purchases, and devices. In Google Cloud, we generate cash through consumption-based fees and subscriptions for infrastructure, platform, applications, and other cloud services.
+
+[NarrativeText] Our primary uses of cash from operating activities include payments to distribution and Google Network partners, to employees for compensation, and to content providers. Other uses of cash from operating activities include payments to suppliers for devices, to tax authorities for income taxes, and other general corporate expenditures.
+
+[NarrativeText] Net cash provided by operating activities increased from the nine months ended September 30, 2024 to the nine months ended September 30, 2025 due to an increase in cash received from customers, partially offset by an increase in cash payments for cost of revenues and operating expenses.
+
+[Text] Cash Used in Investing Activities
+
+[NarrativeText] Cash provided by investing activities consists primarily of maturities and sales of investments in marketable and non-marketable securities. Cash used in investing activities consists primarily of purchases of marketable and non-marketable securities, purchases of property and equipment, and payments for acquisitions.
+
+[NarrativeText] Net cash used in investing activities increased from the nine months ended September 30, 2024 to the nine months ended September 30, 2025 primarily due to an increase in purchases of property and equipment, driven by investments in technical infrastructure, and a decrease in maturities and sales of marketable securities.
+
+[Text] 47
+
+[Text] Cash Used in Financing Activities
+
+[NarrativeText] Cash provided by financing activities consists primarily of proceeds from issuance of debt and proceeds from the sale of interests in consolidated entities. Cash used in financing activities consists primarily of repurchases of stock, net payments related to stock-based award activities, payment of dividends, and repayments of debt.
+
+[NarrativeText] Net cash used in financing activities decreased from the nine months ended September 30, 2024 to the nine months ended September 30, 2025 due to an increase in proceeds from issuance of debt, net of repayments.
+
+[Text] Liquidity and Material Cash Requirements
+
+[NarrativeText] We expect existing cash, cash equivalents, short-term marketable securities, and cash flows from operations and financing activities to continue to be sufficient to fund our operating activities and cash commitments for investing and financing activities for at least the next 12 months, and thereafter for the foreseeable future.
+
+[Text] Capital Expenditures and Leases
+
+[NarrativeText] We make investments in land, buildings, and servers and network equipment through purchases of property and equipment and lease arrangements to provide capacity for the growth of our services and products.
+
+[Text] Capital Expenditures
+
+[NarrativeText] Our capital investments in property and equipment consist primarily of the following major categories:
+
+[ListItem] technical infrastructure, which consists of our investments in servers and network equipment for computing, storage, and networking requirements for ongoing business activities, including AI, and data center land and building construction; and
+
+[ListItem] office facilities, ground-up development projects, and building improvements (also referred to as "fit-outs").
+
+[NarrativeText] Assets not yet in service are those that are not ready for our intended use, including assets in the process of construction or assembly, and consists primarily of technical infrastructure. The time frame from date of purchase to placement in service of these assets may extend from months to years. For example, our data center construction projects are generally multi-year projects with multiple phases, where we acquire land and buildings, construct buildings, and secure and install servers and network equipment.
+
+[NarrativeText] During the nine months ended September 30, 2024 and 2025, we spent $38.3 billion and $63.6 billion on capital expenditures, respectively. We expect full year 2025 capital expenditures to exceed full year 2024. In 2026, we expect to significantly increase, relative to 2025, our investment in our technical infrastructure, including servers, network equipment, and data centers, to support the growth of our business and our long-term initiatives, in particular in support of AI products and services. Depreciation of our property and equipment commences when such assets are ready for our intended use. For the nine months ended September 30, 2024 and 2025, depreciation on property and equipment was $11.1 billion and $15.1 billion, respectively.
+
+[Text] Leases
+
+[NarrativeText] As of September 30, 2025, the amount of total future lease payments under operating and finance leases was $17.5 billion and $2.9 billion, respectively.
+
+[NarrativeText] As of September 30, 2025, we have entered into leases primarily related to data centers that have not yet commenced with future lease payments of $42.6 billion, including a purchase option considered reasonably certain to be exercised. These leases will commence between 2025 and 2031 with non-cancelable lease terms between one and 25 years.
+
+[NarrativeText] For additional information on leases, see Note 4 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] Financing
+
+[NarrativeText] We have a short-term debt financing program of up to $25.0 billion through the issuance of commercial paper. Net proceeds from this program are used for general corporate purposes. As of September 30, 2025, we had $3.0 billion of short-term commercial paper outstanding.
+
+[NarrativeText] In May 2025, we issued $5.0 billion of U.S. dollar-denominated fixed-rate senior unsecured notes in four tranches: $750 million of 4.00% notes due 2030, $1.25 billion of 4.50% notes due 2035, $1.5 billion of 5.25% notes due 2055, and $1.5 billion of 5.30% notes due 2065. Additionally in May 2025, we issued €6.75 billion of euro-denominated fixed-rate senior unsecured notes in five tranches: €1.5 billion of 2.50% notes due 2029, €1.5 billion of 3.00% notes due 2033, €1.25 billion of 3.38% notes due 2037, €1.25 billion of 3.88% notes due 2045, and
+
+[Text] 48
+
+[NarrativeText] €1.25 billion of 4.00% notes due 2054. The net proceeds from all notes issued in May 2025 are used for general corporate purposes.
+
+[NarrativeText] As of September 30, 2025, we had senior unsecured notes outstanding with a total carrying value of $23.6 billion.
+
+[NarrativeText] As of September 30, 2025, we had $10.0 billion of revolving credit facilities, $4.0 billion expiring in April 2026 and $6.0 billion expiring in April 2030. The interest rates for all credit facilities are determined based on a formula using certain market rates. No amounts have been borrowed under the credit facilities.
+
+[NarrativeText] For additional information, see Note 6 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[NarrativeText] We primarily utilize contract manufacturers for the assembly of our servers used in our technical infrastructure and devices we sell. We have agreements where we may purchase components directly from suppliers and then supply these components to contract manufacturers for use in the assembly of the servers and devices. Certain of these arrangements result in a portion of the cash received from and paid to the contract manufacturers to be presented as financing activities in the Consolidated Statements of Cash Flows included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] Share Repurchase Program
+
+[NarrativeText] In the three and nine months ended September 30, 2025, we repurchased and subsequently retired 56 million and 220 million shares for $11.6 billion and $40.1 billion, respectively.
+
+[NarrativeText] In April 2024, the Board of Directors of Alphabet authorized the company to repurchase up to $70.0 billion of its Class A and Class C shares. In April 2025, the Board of Directors of Alphabet authorized the company to repurchase up to an additional $70.0 billion of Class A and Class C shares. As of September 30, 2025, $74.8 billion remained available for Class A and Class C share repurchases.
+
+[NarrativeText] The following table presents Class A and Class C shares repurchased and subsequently retired (in millions):
+
+[Table]
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, 2025 |  | September 30, 2025 |  |  |  |  |  |  |  |  |
+|  | Shares |  | Amount |  | Shares |  | Amount |  |  |  |  |
+| Class A share repurchases | 5 |  | $ | 926 |  |  | 36 |  | $ | 6,229 |  |
+| Class C share repurchases | 51 |  | 10,627 |  |  | 184 |  | 33,888 |  |  |  |
+| Total share repurchases (1) | 56 |  | $ | 11,553 |  |  | 220 |  | $ | 40,117 |  |
+
+[NarrativeText] (1)Shares repurchased include unsettled repurchases.
+
+[NarrativeText] For additional information, see Note 11 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] Dividend Program
+
+[NarrativeText] In the three and nine months ended September 30, 2025, total cash dividends were $1.2 billion and $3.6 billion for Class A, $177 million and $527 million for Class B, and $1.1 billion and $3.4 billion for Class C shares, respectively.
+
+[NarrativeText] In April 2025, the Board of Directors of Alphabet increased the quarterly cash dividend by 5% to $0.21 per share of outstanding Class A, Class B, and Class C shares.
+
+[NarrativeText] The company has declared a quarterly cash dividend in the current quarter, and intends to pay quarterly cash dividends in the future, subject to review and approval by the company’s Board of Directors in its sole discretion.
+
+[Text] European Commission Fines
+
+[NarrativeText] In 2018 and 2019, the EC announced decisions that certain actions taken by Google infringed European competition law and imposed fines of €4.3 billion ($5.1 billion as of June 30, 2018) and €1.5 billion ($1.7 billion as of March 20, 2019), respectively.
+
+[NarrativeText] In September 2022, the General Court affirmed the EC decision but reduced the 2018 fine from €4.3 billion to €4.1 billion. We subsequently appealed the General Court's affirmation of the EC decision with the European Court of Justice, which remains pending.
+
+[Text] 49
+
+[NarrativeText] In September 2024, the EU's General Court overturned the 2019 decision and annulled the €1.5 billion fine. The EC has appealed the General Court's decision to the European Court of Justice.
+
+[NarrativeText] In September 2025, the EC announced its decision that Google had infringed European competition laws through “self-preferencing” practices on the buy-side and the sell-side relating to its advertising technology. The EC imposed a €3.0 billion fine ($3.5 billion as of September 5, 2025), which was accrued in the third quarter of 2025.
+
+[NarrativeText] We included the outstanding EC fines, including any under appeal, in accrued expenses and other current liabilities on our Consolidated Balance Sheets. For additional information, see Note 10 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] Taxes
+
+[NarrativeText] As of September 30, 2025, we had long-term income taxes payable of $10.1 billion primarily related to uncertain tax positions.
+
+[Text] Purchase Commitments and Other Contractual Obligations
+
+[NarrativeText] We have material purchase commitments and other contractual obligations primarily related to energy contracts, licenses (including content licenses), and technical infrastructure and inventory orders. As of September 30, 2025, the total for these commitments was $93.7 billion, of which $72.5 billion was short-term, mostly related to technical infrastructure and inventory orders. These amounts reflect commitments and obligations through open purchase orders as well as the non-cancelable portion or the minimum cancellation fee in certain agreements. For those agreements with variable terms, we do not estimate the non-cancelable obligation beyond any minimum quantities and/or pricing as of September 30, 2025. In certain instances, the amount of our contractual obligations may change based on the expected timing of order fulfillment from our suppliers. For more information related to our content licenses, see Note 10 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[NarrativeText] In addition, we regularly enter into multi-year, non-cancellable agreements to purchase renewable energy and energy attributes, such as renewable energy certificates. These agreements do not include a minimum dollar commitment. The amounts to be paid under these agreements are based on the actual volumes to be generated and are not readily determinable.
+
+[NarrativeText] We may experience increases in the costs associated with our purchase commitments and other contractual obligations as a result of ongoing developments surrounding international trade. For details on risks related to our manufacturing and supply chain and other risks, refer to Part I, Item 1A, "Risk Factors" in our Annual Report on Form 10-K for the fiscal year ending December 31, 2024.
+
+[Text] Pending Acquisition
+
+[NarrativeText] In March 2025, we entered into a definitive agreement to acquire Wiz, a leading cloud security platform, for $32.0 billion, subject to closing adjustments, in an all-cash transaction. The acquisition of Wiz is expected to close in 2026, subject to customary closing conditions, including the receipt of regulatory approvals. For additional information, see Note 8 of the Notes to Consolidated Financial Statements included in Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] Critical Accounting Estimates
+
+[Text] See Part II, Item 7, "Critical Accounting Estimates" in our Annual Report on Form 10-K for the year ended December 31, 2024.
+
+[Text] Available Information
+
+[NarrativeText] Our website is located at www.abc.xyz, and our investor relations website is located at www.abc.xyz/investor. Access to our Annual Reports on Form 10-K, Quarterly Reports on Form 10-Q, Current Reports on Form 8-K, and our Proxy Statements, and any amendments to these reports, is available on our investor relations website, free of charge, after we file or furnish them with the SEC and they are available on the SEC's website at www.sec.gov.
+
+[NarrativeText] We webcast via our investor relations YouTube channel and website our earnings calls and certain events we participate in or host with members of the investment community. Our investor relations website also provides notifications of news or announcements regarding our financial performance and other items that may be material or of interest to our investors, including SEC filings, investor events, press and earnings releases, and blogs. We also share Google news and product updates on Google’s Keyword blog at https://www.blog.google/ and News From Google page on X at x.com/NewsFromGoogle, and our executive officers may also use certain social media channels, such as X and LinkedIn, to communicate information about earnings results and company updates, which
+
+[Text] 50
+
+[NarrativeText] may be of interest or material to our investors. Further, corporate governance information, including our certificate of incorporation, bylaws, governance guidelines, board committee charters, and code of conduct, is also available on our investor relations website under the heading "Governance." The information contained on, or that may be accessed through our websites or our executive officers' social media channels, is not incorporated by reference into this Quarterly Report on Form 10-Q or in any other report or document we file with the SEC, and any references to our websites are intended to be inactive textual references only.
+
+[Text] ITEM 3.QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+[NarrativeText] For quantitative and qualitative disclosures about market risk, refer to Part II, Item 7A, "Quantitative and Qualitative Disclosures About Market Risk" in our Annual Report on Form 10-K for the year ended December 31, 2024.
+
+[Text] ITEM 4.CONTROLS AND PROCEDURES
+
+[Text] Evaluation of Disclosure Controls and Procedures
+
+[NarrativeText] Our management, with the participation of our chief executive officer and chief financial officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Exchange Act, as of the end of the period covered by this Quarterly Report on Form 10-Q.
+
+[NarrativeText] Based on this evaluation, our chief executive officer and chief financial officer concluded that, as of September 30, 2025, our disclosure controls and procedures are designed at a reasonable assurance level and are effective to provide reasonable assurance that information we are required to disclose in reports that we file or submit under the Exchange Act is recorded, processed, summarized, and reported within the time periods specified in the SEC’s rules and forms, and that such information is accumulated and communicated to our management, including our chief executive officer and chief financial officer, as appropriate, to allow timely decisions regarding required disclosure.
+
+[Text] Changes in Internal Control over Financial Reporting
+
+[NarrativeText] There have been no changes in our internal control over financial reporting that occurred during the quarter ended September 30, 2025 that have materially affected, or are reasonably likely to materially affect, our internal control over financial reporting.
+
+[Text] Limitations on Effectiveness of Controls and Procedures
+
+[NarrativeText] In designing and evaluating the disclosure controls and procedures, management recognizes that any controls and procedures, no matter how well designed and operated, can provide only reasonable assurance of achieving the desired control objectives. In addition, the design of disclosure controls and procedures must reflect the fact that there are resource constraints and that management is required to apply its judgment in evaluating the benefits of possible controls and procedures relative to their costs.
+
+[Text] 51
+
+[Text] PART II. OTHER INFORMATION
+
+[Text] ITEM 1.LEGAL PROCEEDINGS
+
+[NarrativeText] For a description of our material pending legal proceedings, see Note 10 “Commitments and Contingencies - Legal Matters” of the Notes to Consolidated Financial Statements included in Part I, Item 1 of this Quarterly Report on Form 10-Q, which is incorporated herein by reference.
+
+[Text] ITEM 1A.RISK FACTORS
+
+[NarrativeText] Our operations and financial results are subject to various risks and uncertainties, including but not limited to those described in Part I, Item 1A, "Risk Factors" in our Annual Report on Form 10-K for the year ended December 31, 2024, which could harm our business, reputation, financial condition, and operating results, and affect the trading price of our Class A and Class C stock.
+
+[NarrativeText] For additional information about the ongoing material legal proceedings to which we are subject, see Legal Proceedings in Part II, Item 1 of this Quarterly Report on Form 10-Q.
+
+[Text] ITEM 2.UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
+
+[Text] Issuer Purchases of Equity Securities
+
+[NarrativeText] The following table presents information with respect to Alphabet's repurchases of Class A and Class C stock during the quarter ended September 30, 2025.
+
+[Table]
+| Period |  | Total Number of Class A Shares Purchased (in thousands) (1) |  | Total Number of Class C Shares Purchased (in thousands) (1) |  | Average Price Paid per Class A Share (2) |  | Average Price Paid per Class C Share (2) |  | Total Number of Shares Purchased as Part of Publicly Announced Programs (in thousands) (1) |  | Approximate Dollar Value of Shares that May Yet Be Purchased Under the Program (in millions) |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| July 1 - 31 |  | 2,571 |  |  | 19,077 |  |  | $ | 185.81 |  |  | $ | 186.76 |  |  | 21,648 |  |  | $ | 82,307 |  |
+| August 1 - 31 |  | 1,548 |  |  | 17,148 |  |  | $ | 203.08 |  |  | $ | 203.43 |  |  | 18,696 |  |  | $ | 78,523 |  |
+| September 1 - 30 |  | 551 |  |  | 14,738 |  |  | $ | 241.96 |  |  | $ | 242.62 |  |  | 15,289 |  |  | $ | 74,825 |  |
+| Total |  | 4,670 |  |  | 50,963 |  |  |  |  |  |  | 55,633 |  |  |  |  |  |  |  |  |  |
+
+[NarrativeText] (1) Repurchases are being executed from time to time, subject to general business and market conditions and other investment opportunities, through open market purchases or privately negotiated transactions, including through Rule 10b5-1 plans. The repurchase program does not have an expiration date. For additional information related to share repurchases, see Note 11 of the Notes to Consolidated Financial Statements included in Part I, Item 1 of this Quarterly Report on Form 10-Q.
+
+[NarrativeText] (2) Average price paid per share includes costs associated with the repurchases.
+
+[Text] ITEM 5.OTHER INFORMATION
+
+[Text] 10b5-1 Trading Plans
+
+[NarrativeText] During the quarter ended September 30, 2025, the following Section 16 director adopted, modified, or terminated a “Rule 10b5-1 trading arrangement” (as defined in Item 408 of Regulation S-K of the Exchange Act).
+
+[NarrativeText] There were no “non-Rule 10b5-1 trading arrangements” (as defined in Item 408 of Regulation S-K of the Exchange Act) , modified, or during the quarter ended September 30, 2025 by our directors and Section 16 officers.
+
+[Text] Required Disclosure Pursuant to Section 13(r) of the Exchange Act
+
+[NarrativeText] During the quarter ended September 30, 2025, Google LLC, a subsidiary of Alphabet, filed a notification with the Russian Federal Security Service (FSB) pursuant to Russian encryption control requirements, which must be complied with prior to the import of covered items. Neither we nor our subsidiaries generated any gross revenues or
+
+[Text] 52
+
+[NarrativeText] net profits directly from such activity and neither we nor our subsidiaries sell to the FSB. In the ordinary course of its business, Alphabet expects that Google LLC will continue to file these notifications as required under Russian law.
+
+[Text] 53
+
+[Text] ITEM 6.EXHIBITS
+
+[Table]
+| Exhibit Number |  |  | Description |  | Incorporated by reference herein |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  | Form |  | Date |  |  |  |
+| 31.01 | * |  | Certification of Chief Executive Officer pursuant to Exchange Act Rules 13a-14(a) and 15d-14(a), as adopted pursuant to Section 302 of the Sarbanes-Oxley Act of 2002 |  |  |  |  |
+| 31.02 | * |  | Certification of Chief Financial Officer pursuant to Exchange Act Rules 13a-14(a) and 15d-14(a), as adopted pursuant to Section 302 of the Sarbanes-Oxley Act of 2002 |  |  |  |  |
+| 32.01 | ‡ |  | Certifications of Chief Executive Officer and Chief Financial Officer pursuant to 18 U.S.C. Section 1350, as adopted pursuant to Section 906 of the Sarbanes-Oxley Act of 2002 |  |  |  |  |
+| 101.INS | * |  | Inline XBRL Instance Document - the instance document does not appear in the Interactive Data File because its XBRL tags are embedded within the Inline XBRL document. |  |  |  |  |
+| 101.SCH | * |  | Inline XBRL Taxonomy Extension Schema Document |  |  |  |  |
+| 101.CAL | * |  | Inline XBRL Taxonomy Extension Calculation Linkbase Document |  |  |  |  |
+| 101.DEF | * |  | Inline XBRL Taxonomy Extension Definition Linkbase Document |  |  |  |  |
+| 101.LAB | * |  | Inline XBRL Taxonomy Extension Label Linkbase Document |  |  |  |  |
+| 101.PRE | * |  | Inline XBRL Taxonomy Extension Presentation Linkbase Document |  |  |  |  |
+| 104 | * |  | Cover Page Interactive Data File (formatted as Inline XBRL and contained in Exhibit 101) |  |  |  |  |
+
+[Text] __________________________
+
+[Table]
+| * | Filed herewith. |
+| --- | --- |
+| ‡ | Furnished herewith. |
+
+[Text] 54
+
+[Text] SIGNATURES
+
+[NarrativeText] Pursuant to the requirements of the Securities Exchange Act of 1934, the registrant has duly caused this report to be signed on its behalf by the undersigned thereunto duly authorized.
+
+[Table]
+|  |  | ALPHABET INC. |
+| --- | --- | --- |
+| October 29, 2025 | By: | /s/ ANAT ASHKENAZI |
+|  |  | Anat Ashkenazi |
+|  |  | Senior Vice President, Chief Financial Officer |
+
+[Table]
+|  |  | ALPHABET INC. |
+| --- | --- | --- |
+| October 29, 2025 | By: | /s/ AMIE THUENER O'TOOLE |
+|  |  | Amie Thuener O'Toole |
+|  |  | Vice President, Corporate Controller and Principal Accounting Officer |
+
+[Text] 55

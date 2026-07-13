@@ -1,0 +1,47 @@
+=== AAPL Company Fundamentals ===
+Generated: 2026-06-12
+
+--- Company Overview ---
+Name : Apple Inc.
+Sector : Technology
+Industry : Consumer Electronics
+Employees: 166,000
+
+--- Valuation Metrics ---
+Market Cap : $4342.02B
+Enterprise Value : $4358.23B
+P/E Ratio Trailing: 35.83394
+P/E Ratio Forward : 30.810581
+Price/Sales (TTM) : 9.618119
+Price/Book : 40.720387
+EV/EBITDA : 27.243
+
+--- Profitability ---
+Revenue (TTM) : $451.44B
+Gross Profit : $216.07B
+EBITDA : $159.98B
+Net Income : $122.58B
+Profit Margin : 0.27152002
+Operating Margin: 0.32275
+Gross Margin : 0.47862
+
+--- Growth ---
+Revenue Growth (YoY): 0.166
+Earnings Growth : 0.218
+EPS Trailing : 8.25
+EPS Forward : 9.59508
+
+--- Balance Sheet ---
+Total Cash : $68.51B
+Total Debt : $84.71B
+Debt/Equity: 79.548
+Current Ratio: 1.07
+
+--- Dividends & Returns ---
+Dividend Yield : 0.37
+Return on Equity: 1.4147099
+Return on Assets: 0.26229
+Free Cash Flow : $101.09B
+
+--- Business Summary ---
+Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. The company offers iPhone, a line of smartphones; Mac, a line of personal computers; iPad, a line of multi-purpose tablets; and wearables, home, and accessories comprising AirPods, Apple Vision Pro, Apple TV, Apple Watch, Beats products, and HomePod, as well as Apple branded and third-party accessories. It also provides AppleCare support and cloud services; and operates various platforms, including the App Store that allow customers to discover and download applications and digital content, such as books, music, video, games, and podcasts, as well as advertising services include third-party licensing arrangements and its own advertising platforms. In addition, the company offers various subscription-based services, such as Apple Arcade, a game subscription service; Apple Fitness+, a personalized fitness service; Apple Music, which offers users a curated listening experience with on-demand radio stations; Apple News+, a subscription news and magazine service; Apple TV, which offers exclusive original content and live sports; Apple Card, a co-branded credit card; and Apple Pay, a cashless payment service, as well as licenses its intellectual property. The company serves consumers, and small and mid-sized businesses; and the education, enterprise, and government markets. It distributes third-party applications for its products through the App Store. The company also sells its products through its retail and online stores, and direct sales force; and third-party cellular network carriers and resellers. The company was formerly known as Apple Computer, Inc. and changed its name to Apple Inc. in January 2007. Apple Inc. was founded in 1976 and is headquartered in Cupertino, California.

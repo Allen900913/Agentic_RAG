@@ -1,0 +1,41 @@
+Title    : Anthropic to let partners share Mythos cybersecurity findings with others
+Source   : Reuters [full]
+URL      : https://finance.yahoo.com/sectors/technology/articles/anthropic-let-partners-share-mythos-222802181.html
+Published: 2026-05-18T22:28:02Z
+
+Anthropic to let partners share Mythos cybersecurity findings with others
+Juby Babu
+Tue, May 19, 2026 at 6:28 AM GMT+8
+2 min read
+ANTH.PVT
+AMZN
++0.27%
+MSFT
++0.38%
+NVDA
+-1.33%
+AAPL
+-0.80%
+By Juby Babu
+May 18 (Reuters) - Anthropic said on Monday it is revising its earlier position to allow users of its Mythos cybersecurity model ‌to share information about cyber threats with others who may be exposed ‌to similar vulnerabilities.
+Mythos, announced on April 7, is being deployed as part of Anthropic's "Project Glasswing," a controlled ​initiative under which select organizations, including major tech firms such as Amazon,
+Microsoft
+,
+Nvidia
+and
+Apple
+, are permitted to use the unreleased Claude Mythos Preview model for defensive cybersecurity purposes.
+Mythos' capabilities to code at a high level have given it a potentially ‌unprecedented ability to identify cybersecurity ⁠vulnerabilities and devise ways to exploit them, according to experts.
+Last week, Anthropic began telling partners that they are generally permitted to disclose ⁠their involvement in Glasswing and, at their own discretion, share findings, best practices, tools or code developed through the program.
+"We fully support our partners sharing findings with each ​other and ​companies outside of Glasswing to triage vulnerabilities," ​an Anthropic spokesperson said in a ‌statement.
+"While there was never a specific Glasswing NDA, confidentiality protections were something partners asked for at the outset and were built into agreements partners signed."
+The protections were included in agreements with participating companies under which the model is provided, after partners sought assurances before sharing sensitive findings and expressed concern about being targeted by ‌attackers.
+"As the program has matured, we've adapted them ​to ensure key information can be shared broadly - ​including outside the program - for maximum ​defensive impact," the spokesperson added.
+Anthropic said partners may share that ‌information with security teams at other companies, ​industry bodies, regulators and ​government agencies, open-source maintainers, the media or the public, subject to responsible-disclosure norms.
+The Pentagon is deploying Mythos to find and patch software vulnerabilities across ​the U.S. government even as ‌it races to complete a transition away from the AI company, the ​Defense Department's top technology official said last week.
+(Reporting by Juby Babu ​in Mexico City; Editing by Shailesh Kuber)
+Terms
+and
+Privacy Policy
+Privacy Dashboard
+More Info
