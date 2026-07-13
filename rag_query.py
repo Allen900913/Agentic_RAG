@@ -885,18 +885,22 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
 
     # ── 3. Cross-encoder rerank ──────────────────────────────────────────────
     docs = [(p.payload or {}).get("document", "") for p in fused]
+    # batch_size=1：CPU 上消除 padding 浪費的免費加速（2026-07-13 實測 2.33x、top-5 不變）。
+    # 預設 batch=32 會把整批 pad 到批內最長（常常是 2048 token），中位數 253 token 的
+    # 短候選被迫多算數倍的 O(L²) attention；CPU 的矩陣運算單筆就能吃滿核心，批次
+    # 平行沒有額外收益，逐筆跑純賺。若未來換 GPU，這個值應改回預設（GPU 吃批次平行）。
     if len(rerank_queries) > 1:
         # 逐一用「原 query + 各 rewrite 變體」評分，每個候選取跨 query 的最高分。
         # 只換評分用的 query 措辭，不動候選數（RERANK_INPUT_N/top_k 不變）。
         raw_scores = [float("-inf")] * len(docs)
         for rq in rerank_queries:
             cross_input = [[rq, doc] for doc in docs]
-            scores = rerank_model.predict(cross_input)
+            scores = rerank_model.predict(cross_input, batch_size=1)
             scores = scores.tolist() if hasattr(scores, "tolist") else list(scores)
             raw_scores = [max(a, b) for a, b in zip(raw_scores, scores)]
     else:
         cross_input = [[rerank_query, doc] for doc in docs]
-        raw_scores  = rerank_model.predict(cross_input)
+        raw_scores  = rerank_model.predict(cross_input, batch_size=1)
         raw_scores  = raw_scores.tolist() if hasattr(raw_scores, "tolist") else list(raw_scores)
 
     enriched = []

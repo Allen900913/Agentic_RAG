@@ -7,6 +7,21 @@
 
 ## 2026-07-13
 
+### Rerank 延遲攻堅（第二輪）：`batch_size=1` 免費 2.33x、零損失（已接生產）；ONNX int8 / 小模型 / 級聯三條路都試過且都不行（負面結果全記錄）
+- **背景**：`max_length=2048` 之後精排單次仍要 ~85s（20 候選、CPU），雙 query 生產設定端到端 retrieve ~170s，還是不能上線。續攻。
+- **✅ 已採用：`CrossEncoder.predict(..., batch_size=1)`——85.61s → 36.81s（2.33x），top-5 完全一致，數學上零損失**：
+  - 根因是 padding 浪費：預設 batch=32 把 20 個候選塞成一批、全部 pad 到批內最長（2048 token），而 chunk token 中位數只有 253——短候選被迫按 2048 算 O(L²) attention，浪費數倍運算。batch=1 完全沒有 padding，每筆只算實際長度；CPU 的 GEMM 單筆就能吃滿核心，批次平行在 CPU 上沒有額外收益，所以逐筆跑純賺（batch=4 實測只有 1.33x，佐證批越小越省）。
+  - 改動：`rag_query.py` `retrieve()` 內兩處 `rerank_model.predict()` 都加 `batch_size=1`。api_server 走同一條路自動繼承。**若未來換 GPU 要改回預設**——GPU 靠批次平行吃滿算力，batch=1 會反過來變慢（已寫在代碼注釋）。
+  - 端到端驗證（生產設定 rewrite+雙 query）：sem-09 query retrieve **78s**（改前同設定實測 ~173s），top-5 = `[#157,#179,#156,#148,#139]` 與 07-12 驗證完全一致。
+  - **疊加戰果**：原始（8192 + batch32）130s/次 → 現在（2048 + batch1）~37s/次，**約 3.5x，全程零品質損失**。
+- **❌ 已試無效①：ONNX Runtime**（`optimum` 匯出 + onnxruntime CPU 推論）：
+  - fp32：88.90s vs torch 92.95s（1.05x）——**沒有加速**。瓶頸是矩陣運算本身，onnxruntime 和 torch 在 CPU 上打平。死因機制型（同樣的 GEMM 換引擎不會變快），無復活條件（除非 onnxruntime 出專門的 CPU 優化 EP）。
+  - int8 動態量化：42.73s（2.18x）但 **score correlation 掉到 0.858、top-5 排序改變**，甚至有 NVDA chunk 混進 Tesla 問題的 top-5——XLM-R 系多語言模型對動態量化敏感是已知現象。死因機制型。復活條件：改用 QAT（quantization-aware training）或校準式靜態量化且有完整 eval 驗證，但成本遠超收益，不建議。
+  - 實驗後已把 `optimum`/`onnx` 移除、`transformers` 復原到 5.5.0（安裝 optimum 時被連帶降到 4.57.6，不能讓失敗實驗的副作用留在生產環境）；匯出的 2.7GB 模型檔已刪。
+- **❌ 已試無效②：換小模型 `bge-reranker-base`**：7.28s（11.78x）但 correlation 只有 0.688、top-5 順序明顯不同——速度極誘人但品質風險大，若要走這條路需要全套 eval 重驗證。復活條件：GPU 到位前若對延遲的要求高過品質（例如 demo 場景），可以重新評估，但必須先跑全量 lexical/mixed/semantic 確認可接受。
+- **❌ 已試無效③：級聯精排**（base 先篩 top-10 → v2-m3 只精排 10 個）：sem-11/sem-09 完美（2.3~2.6x、top-5 一致），但 **lex 題翻車——base 把 v2-m3 認定的 rank-1（NVDA `#38`，正是資料中心營收關鍵 chunk）整個踢出 top-10**，critical-miss 級錯誤。死因交互型：base 模型對數字/表格型內容的排序偏好與 v2-m3 差太多。復活條件：若第一階段改用「保守篩選」（例如 keep=15）收益只剩 ~1.2x 不值得；若換一個與 v2-m3 排序相關性高的小模型（如蒸餾版）可重試。
+- **現狀與剩餘選項**：生產 retrieve 現在 ~78s（雙 query）。CPU 上無損優化已到底；要再快只剩：①GPU（數十倍，治本）；②降品質換速度（base 模型，需全量驗證）；③關雙 query（回到 ~40s，犧牲 sem-09/sem-11 修復）。使用者決策點。
+
 ### CrossEncoder `max_length` 截斷：解掉延遲診斷發現的「reranker 預設不截斷」問題——512 先試過但證實不安全，改用 2048
 - **動機**：延續上方「端到端延遲實測」條目，找到的根因是 `CrossEncoder(RERANK_MODEL)` 沒設 `max_length`，套用模型預設 8192（等於完全不截斷），CPU 上單次 predict 20 候選要 46~60 秒。
 - **第一次嘗試（512）：紙面驗證誤判為安全，全量回歸才抓到真回歸**：
