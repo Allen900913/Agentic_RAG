@@ -12,13 +12,16 @@ __pycache__/
 *.pyd
 *.egg-info/
 
-# === Vector Database (ChromaDB) ===
+# === Vector Database ===
 chroma_db/
+qdrant_db/
 *.db
 *.sqlite
 
 # === Hash State (Incremental Update) ===
 hashes.json
+hashes_unstructure.json
+*.bak
 data/.seen_news_keys.json
 
 # === IDE ===

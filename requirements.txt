@@ -2,9 +2,21 @@
 
 # === Core RAG Pipeline ===
 sentence-transformers>=2.6.0
-chromadb>=0.5.0
+qdrant-client>=1.12.0
 openai>=1.14.0
 python-dotenv>=1.0.0
+
+# === Hybrid Retrieval (Dense + Sparse via BGE-M3, server-side RRF via Qdrant) ===
+FlagEmbedding>=1.2.10
+langchain-huggingface>=0.0.3
+langchain-experimental>=0.0.50
+google-genai>=0.3.0
+
+# === Web Frontend (FastAPI backend + Streamlit UI, SSE streaming) ===
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+sse-starlette>=2.0.0
+streamlit>=1.33.0
 
 # === Data Processing Support ===
 beautifulsoup4>=4.12.0
@@ -21,3 +33,7 @@ requests>=2.31.0
 
 # === SEC EDGAR (Financial Reports) ===
 edgartools>=2.0.0
+
+# === Eval: BM25 comparison lane (eval_retrieval.py) ===
+rank-bm25>=0.2.2
+jieba>=0.42.1

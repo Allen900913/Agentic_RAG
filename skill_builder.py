@@ -20,13 +20,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ── Config ─────────────────────────────────────────────────────────────────────
-CHROMA_PERSIST  = os.getenv("CHROMA_PERSIST_DIR", "./chroma_db")
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL",
-                             "paraphrase-multilingual-MiniLM-L12-v2")
-COLLECTION_NAME = "us_stock_rag"
-DEFAULT_MODEL   = "gpt-oss:20b"
-DEFAULT_OUTPUT  = "skill.md"
-TOP_K           = 3   # 降低 chunks 數量以避免 gpt-oss:20b 運算過久 Timeout
+QDRANT_PATH        = os.getenv("QDRANT_PATH", "./qdrant_db")
+EMBEDDING_MODEL    = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
+COLLECTION_NAME    = "us_stock_rag_unstructured"
+DENSE_VECTOR_NAME  = "dense"
+SPARSE_VECTOR_NAME = "sparse"
+DEFAULT_MODEL      = "gpt-oss:20b"
+DEFAULT_OUTPUT     = "skill.md"
+TOP_K              = 3      # 最終餵給 LLM 的 chunk 數
+FETCH_N            = 20     # 每路 prefetch 的候選數
+RRF_TOP_N          = 6      # RRF 融合後保留多少筆給 LLM（取 TOP_K 用）
 
 SYSTEM_PROMPT_ANALYST = """\
 You are a senior equity research analyst at a top-tier investment bank, \
@@ -51,34 +54,51 @@ and structure output for use by AI agents.
 def rag_query(
     question: str,
     model_name: str,
-    embed_model,
+    bge_m3,
     client,
 ) -> tuple[str, list[str]]:
-    """Run one RAG query; return (answer_text, [source_filenames])."""
+    """Run one hybrid RAG query (Qdrant dense+sparse + RRF); return (answer, [sources])."""
     import openai
+    from qdrant_client import models
 
-    collection = client.get_or_create_collection(
-        name=COLLECTION_NAME,
-        metadata={"hnsw:space": "cosine"},
-    )
-    total = collection.count()
+    try:
+        total = client.count(collection_name=COLLECTION_NAME, exact=True).count
+    except Exception:
+        return "No data found. Please run data_update.py first.", []
     if total == 0:
         return "No data found. Please run data_update.py first.", []
 
-    q_vec = embed_model.encode([question])[0].tolist()
-    n     = min(TOP_K, total)
-
-    results = collection.query(
-        query_embeddings=[q_vec],
-        n_results=n,
-        include=["documents", "metadatas"],
+    # Encode query → dense + sparse in one shot
+    encoded = bge_m3.encode(
+        [question], return_dense=True, return_sparse=True, return_colbert_vecs=False,
     )
+    q_dense  = encoded["dense_vecs"][0].tolist()
+    q_sparse = encoded["lexical_weights"][0]
+    s_indices = [int(tok) for tok in q_sparse.keys()]
+    s_values  = [float(w)  for w   in q_sparse.values()]
+
+    # Hybrid retrieval via Qdrant server-side RRF
+    fused = client.query_points(
+        collection_name=COLLECTION_NAME,
+        prefetch=[
+            models.Prefetch(query=q_dense, using=DENSE_VECTOR_NAME, limit=FETCH_N),
+            models.Prefetch(
+                query=models.SparseVector(indices=s_indices, values=s_values),
+                using=SPARSE_VECTOR_NAME, limit=FETCH_N,
+            ),
+        ],
+        query=models.FusionQuery(fusion=models.Fusion.RRF),
+        limit=max(TOP_K, RRF_TOP_N),
+        with_payload=True,
+    ).points
 
     context = ""
     sources: list[str] = []
-    for doc, meta in zip(results["documents"][0], results["metadatas"][0]):
-        src = meta.get("source", "unknown")
-        idx = meta.get("chunk_index", 0)
+    for p in fused[:TOP_K]:
+        payload = p.payload or {}
+        src = payload.get("source", "unknown")
+        idx = payload.get("chunk_index", 0)
+        doc = payload.get("document", "")
         context += f"\n[{src}, chunk #{idx}]\n{doc.strip()}\n"
         if src not in sources:
             sources.append(src)
@@ -254,22 +274,36 @@ Examples:
     args = parser.parse_args()
 
     # ── Load deps ───────────────────────────────────────────────────────────────
-    import chromadb
-    from sentence_transformers import SentenceTransformer
+    from qdrant_client import QdrantClient
+    from FlagEmbedding import BGEM3FlagModel
 
-    print(f"[INFO] Loading embedding model : {EMBEDDING_MODEL}")
-    embed_model = SentenceTransformer(EMBEDDING_MODEL)
-    client = chromadb.PersistentClient(path=CHROMA_PERSIST)
+    print(f"[INFO] Loading BGE-M3 (dense+sparse): {EMBEDDING_MODEL}")
+    bge_m3 = BGEM3FlagModel(EMBEDDING_MODEL, use_fp16=True)
+    print(f"[INFO] Opening Qdrant: {QDRANT_PATH}")
+    client = QdrantClient(path=QDRANT_PATH)
 
     print(f"[INFO] LLM model               : {args.model}")
     print(f"[INFO] Output file             : {args.output}")
 
     # ── Discover Covered Companies ──────────────────────────────────────────────
+    all_sources: set[str] = set()
     try:
-        collection = client.get_or_create_collection(COLLECTION_NAME,
-            metadata={"hnsw:space": "cosine"})
-        items = collection.get(include=["metadatas"], limit=collection.count())
-        all_sources = set(m.get("source", "") for m in (items["metadatas"] or []))
+        # Scroll through every point's payload to harvest source filenames
+        next_offset = None
+        while True:
+            points, next_offset = client.scroll(
+                collection_name=COLLECTION_NAME,
+                limit=256,
+                offset=next_offset,
+                with_payload=["source"],
+                with_vectors=False,
+            )
+            for p in points:
+                src = (p.payload or {}).get("source", "")
+                if src:
+                    all_sources.add(src)
+            if next_offset is None:
+                break
     except Exception:
         all_sources = set()
 
@@ -312,7 +346,7 @@ Examples:
 
     for i, (key, question) in enumerate(global_questions, 1):
         print(f"[{i}/{len(global_questions)}] {question[:80]}...")
-        answer, sources = rag_query(question, args.model, embed_model, client)
+        answer, sources = rag_query(question, args.model, bge_m3, client)
         qa_results.append((key, answer, sources))
         all_sources.update(sources)
         print(f"  ✓ sources: {', '.join(sources[:4])}")
