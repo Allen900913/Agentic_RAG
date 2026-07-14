@@ -45,8 +45,16 @@ DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"
 NVIDIA_BASE_URL    = "https://integrate.api.nvidia.com/v1"
 DEFAULT_NVIDIA_MODEL = "meta/llama-3.3-70b-instruct"
 
+# retrieval_model 與 gen_model 是兩個獨立維度（對齊 CLI 的 --model / --gen-model，
+# 以及 CLAUDE.md「model_name 陷阱」）：
+#   - retrieval_model：retrieve() 內部 filter/rewrite/translate 用，必須跟 eval 的
+#     retrieval side（rq.DEFAULT_MODEL = llama-3.3-70b-versatile）一致，否則 web 路徑
+#     量到的檢索行為會與 eval 不符。
+#   - gen_model：生成答案用，預設 rq.DEFAULT_GEN_MODEL（gpt-oss-120b，見 CHANGELOG 07-09）。
+# 兩者都經同一個 LLM_BACKEND（retrieval 走 monkeypatch 後的 rq.call_llm，gen 走 stream_llm）。
 if LLM_BACKEND == "groq":
-    DEFAULT_MODEL = os.getenv("LLM_MODEL", DEFAULT_GROQ_MODEL)
+    DEFAULT_RETRIEVAL_MODEL = os.getenv("LLM_MODEL", rq.DEFAULT_MODEL)
+    DEFAULT_GEN_MODEL       = os.getenv("LLM_GEN_MODEL", rq.DEFAULT_GEN_MODEL)
 
     def call_llm_groq(messages: list[dict], model_name: str, temperature: float = 0.0) -> str:
         # temperature 預設 0：這個函式會被 monkeypatch 成 rq.call_llm，供 retrieve() 內部的
@@ -62,7 +70,8 @@ if LLM_BACKEND == "groq":
     # 讓 retrieve() 內部的 query-filter LLM call 也走 Groq
     rq.call_llm = call_llm_groq
 elif LLM_BACKEND == "nvidia":
-    DEFAULT_MODEL = os.getenv("LLM_MODEL", DEFAULT_NVIDIA_MODEL)
+    DEFAULT_RETRIEVAL_MODEL = os.getenv("LLM_MODEL", DEFAULT_NVIDIA_MODEL)
+    DEFAULT_GEN_MODEL       = os.getenv("LLM_GEN_MODEL", DEFAULT_NVIDIA_MODEL)
 
     def call_llm_nvidia(messages: list[dict], model_name: str, temperature: float = 0.0) -> str:
         import openai
@@ -76,7 +85,8 @@ elif LLM_BACKEND == "nvidia":
     # 讓 retrieve() 內部的 query-filter LLM call 也走 NVIDIA NIM
     rq.call_llm = call_llm_nvidia
 else:
-    DEFAULT_MODEL = os.getenv("LLM_MODEL", rq.DEFAULT_MODEL)
+    DEFAULT_RETRIEVAL_MODEL = os.getenv("LLM_MODEL", rq.DEFAULT_MODEL)
+    DEFAULT_GEN_MODEL       = os.getenv("LLM_GEN_MODEL", rq.DEFAULT_GEN_MODEL)
 
 
 # ── 串流 LLM 生成（依後端切換）────────────────────────────────────────────────────
@@ -147,7 +157,8 @@ async def lifespan(app: FastAPI):
     collection = os.getenv("COLLECTION_NAME", rq.COLLECTION_NAME)
     rq.COLLECTION_NAME = collection
 
-    print(f"[INFO] LLM backend = {LLM_BACKEND}  (model={DEFAULT_MODEL})")
+    print(f"[INFO] LLM backend = {LLM_BACKEND}  "
+          f"(retrieval={DEFAULT_RETRIEVAL_MODEL}, gen={DEFAULT_GEN_MODEL})")
     print(f"[INFO] Loading BGE-M3 (dense+sparse): {rq.EMBEDDING_MODEL}")
     app.state.bge_m3 = BGEM3FlagModel(rq.EMBEDDING_MODEL, use_fp16=True)
     print(f"[INFO] Loading reranker: {rq.RERANK_MODEL}")
@@ -177,6 +188,11 @@ class ChatRequest(BaseModel):
     query: str
     history: list[dict] = []           # [{"role":"user"/"assistant","content":...}, ...]
     top_k: int = rq.DEFAULT_TOP_K
+    # retrieval_model / gen_model 各自可覆寫（對齊 CLI）；留空用後端預設。
+    retrieval_model: str | None = None
+    gen_model: str | None = None
+    # 舊欄位：前端（app.py）只有單一「model」框 → 視為 gen_model 覆寫（最貼近使用者感知的
+    # 「回答用哪個模型」）。retrieval_model 保持預設以維持與 eval 一致的檢索行為。
     model: str | None = None
 
 
@@ -194,7 +210,10 @@ def health():
         "collection": app.state.collection,
         "count": count,
         "llm_backend": LLM_BACKEND,
-        "model": DEFAULT_MODEL,
+        "retrieval_model": DEFAULT_RETRIEVAL_MODEL,
+        "gen_model": DEFAULT_GEN_MODEL,
+        # 舊欄位保留（前端 health 顯示）：對外仍以 gen_model 為「當前模型」。
+        "model": DEFAULT_GEN_MODEL,
     }
 
 
@@ -204,7 +223,10 @@ def _sse(event: str, data: dict) -> dict:
 
 @app.post("/chat")
 async def chat(req: ChatRequest):
-    model = req.model or DEFAULT_MODEL
+    # retrieval 側必須跟 eval 對齊（CLAUDE.md model_name 陷阱）→ 預設不受前端單一 model 框影響；
+    # 只有明確帶 retrieval_model 才覆寫。gen 側可由 gen_model 或舊 model 欄位覆寫。
+    retrieval_model = req.retrieval_model or DEFAULT_RETRIEVAL_MODEL
+    gen_model       = req.gen_model or req.model or DEFAULT_GEN_MODEL
 
     async def event_gen():
         # 序列化：同一時間只跑一題（模型/Qdrant 非 thread-safe）
@@ -219,7 +241,7 @@ async def chat(req: ChatRequest):
                 def _retrieve():
                     return rq.retrieve(
                         req.query, app.state.bge_m3, app.state.rerank_model,
-                        app.state.client, top_k=req.top_k, model_name=model,
+                        app.state.client, top_k=req.top_k, model_name=retrieval_model,
                         enable_rewrite=rq.DEFAULT_ENABLE_REWRITE,
                         translate_query_en=rq.DEFAULT_TRANSLATE_QUERY_EN,
                     )
@@ -232,6 +254,13 @@ async def chat(req: ChatRequest):
                     yield _sse("token", {"text": msg})
                     yield _sse("done", {})
                     return
+
+                # 檢索後句級抽取（生成前把相關句逐字抽出擺 chunk 前面；見 CHANGELOG 2026-07-14）。
+                # 用 retrieval_model（檢索側，遵守 model_name 紀律）。放在 sources 之前，讓
+                # sources 事件回報的也是含摘錄的 chunk。
+                if rq.DEFAULT_ENABLE_COMPRESS:
+                    chunks = await loop.run_in_executor(
+                        None, lambda: rq.compress_chunks(req.query, chunks, retrieval_model))
 
                 yield _sse("status", {"stage": "reranking"})
                 if fallback_note:
@@ -257,7 +286,7 @@ async def chat(req: ChatRequest):
                 yield _sse("status", {"stage": "generating"})
 
                 # 串流生成：把同步 generator 逐塊抽到 threadpool，避免阻塞 event loop
-                gen = stream_llm(messages, model)
+                gen = stream_llm(messages, gen_model)
                 sentinel = object()
                 while True:
                     piece = await loop.run_in_executor(None, lambda: next(gen, sentinel))

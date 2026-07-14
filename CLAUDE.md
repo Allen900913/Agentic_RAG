@@ -181,10 +181,10 @@ Retrieval 前，`parse_query_filters()` 呼叫 LLM 萃取 filing 條件（fiscal
 07-11 加入 rewrite 語域轉換規則；07-12 先用 E5 驗證「全有全無替換」版的 `translate_query_en` 發現 sem-09 退步（見下方「E5」腳注），接著把 `translate_query_en=True` 的實作改成「rerank 對每個候選同時用原始 query 與翻譯 query 各評一次分、取逐候選最高分」（而非整組替換），重新跑 k=3 全量驗證：
 - `sem-09`（Google AI/搜尋策略）：**完全修好**——crit_miss_rate=0.0，mean=1.0（3/3 滿分）。舊版全有全無替換會把關鍵 10-K chunk（#139）擠出 top-5，新版讓每個候選各自取較高分後兩個關鍵 chunk（#139/#179）都留住。
 - `sem-11`（Tesla）：**修復維持**——crit_miss_rate=0.0，mean=0.7（price-reduction chunk #67 穩定進最終答案），未因換了 translate_query_en 的實作而退步。
-- `sem-08`（AWS）：**變好但未穩定**——crit_miss_rate 從 1.0 降到 0.333（scores=[0.7, 1.0, 0.2]）。根因已於 07-12 查明是**生成層問題**，非語言/語域問題：讀 E5 的三次已存答案發現，含 AWS 獲利內容的 chunk（AMZN #100）**穩定進 top-5，但三次答案都完全沒引用它**（只引用其他四個更「乾淨」的 chunk）——#100 混雜 FTC 訴訟/稅務等大量不相關內容，目標句子只是其中一個從屬子句，生成模型選擇性忽略。這次改動沒有針對這個病灶，2/3 過關的改善可能只是候選組成變化的副作用，不能當作穩定修好。
+- `sem-08`（AWS）：**已接受極限（2026-07-14 定案，不再嘗試系統側修法）**。根因於 07-12 查明是生成層問題：含 AWS 獲利內容的 chunk（AMZN #100）穩定進 top-5，但生成模型選擇性忽略（#100 混雜 FTC 訴訟/稅務等大量不相關內容，目標句子只是從屬子句）。07-14 依序試了三種系統側修法、**全部因同一個真因失敗**：① chunk 切成單一主題（retrieval 層有效、生成層無可靠增益）；② prompt 加規則要求策略題必含財務表現（Rule 10，3/3 穩定失敗，已撤除）；③ 檢索後句級抽取把目標句逐字搬到 chunk 最前面（compressor 正確運作，生成仍 2/3 次不引用）。**決定性診斷**：連「目標句已在模型眼前」都救不了，證明病灶不是「訊號埋沒」，而是模型判定「AWS 營業利益成長」與「AWS**策略方向**」這個問法無關而主動略過，疊加 judge/gen 雜訊（std 大、crit_miss 非 1.0，屬「禁止優化」的雜訊題）。**復活條件**：非系統可解，只能靠調整 rubric（若判定「策略方向」题不該強制要求獲利數字）或維持現狀接受為已知天花板（同 col-08 的處理方式）；除非之後 rubric 改變，不要再對此題嘗試檢索/prompt 層修法。
 - `sem-04` 已修（Rule 9，穩定滿分），`sem-02`/`sem-07` 已由 rubric/生成端修法解決。
 
-**`enable_rewrite`/`translate_query_en` 已於 2026-07-13 轉生產預設**（CLI 與 api_server 都開啟，見上方「Query Rewrite + Translate-EN rerank」與 CHANGELOG 07-13）。驗證乾淨：lexical 1.0、mixed 0.897、semantic 0.842±0.026、colloquial 表面 0.67（逐題拆解無新回歸）。**殘留風險**：sem-08 仍有 1/3 crit_miss（生成層問題，非本次修法能解），這是轉正時接受的已知殘留，不是新引入的問題。
+**`enable_rewrite`/`translate_query_en` 已於 2026-07-13 轉生產預設**（CLI 與 api_server 都開啟，見上方「Query Rewrite + Translate-EN rerank」與 CHANGELOG 07-13）。驗證乾淨：lexical 1.0、mixed 0.897、semantic 0.842±0.026、colloquial 表面 0.67（逐題拆解無新回歸）。**殘留風險**：sem-08 仍有 crit_miss（生成層問題，見上方「已接受極限」），這是轉正時接受的已知殘留，不是新引入的問題，07-14 已確認非本次或任何系統側修法能解。
 
 ### colloquial（10 題）
 
@@ -200,13 +200,13 @@ Retrieval 前，`parse_query_filters()` 呼叫 LLM 萃取 filing 條件（fiscal
 |---|---|---|
 | lexical correctness | 1.000 | k=1，`--rewrite --translate-query-en`（新版），數字查詢全對 |
 | mixed correctness | 0.897 | k=1，同上設定，fatal=0，無回歸 |
-| semantic correctness | 0.842 ± 0.026 | k=3，同上設定（新版 `translate_query_en`）；sem-09 完全修好、sem-11 維持、sem-08 改善但未穩定 |
+| semantic correctness | 0.842 ± 0.026 | k=3，同上設定（新版 `translate_query_en`）；sem-09 完全修好、sem-11 維持、sem-08 已接受極限（07-14 定案，見上） |
 | colloquial correctness | 0.67 ± 0.085 | k=3，同上設定；表面低於舊 baseline，但逐題拆解後無新回歸（見上） |
 | ckpt_R (chunk recall) | 0.7307 | rewrite+no-cap，n=20，單次跑 |
 
 > **量測紀律**：semantic 單次跑的 mean 在 0.47~0.64 間晃，噪音來源：生成抽樣（temp=0.3，已知代價，split-temp 設計下的必要成本）＋ judge 變異＋評分懸崖放大（critical 未中 → 自由落體）。judge 已於 07-12 從 `openai/gpt-oss-20b` 換成 `qwen/qwen3-32b`（回歸套件 10/11，優於 20b 的 9/11，且不與 gen_model 共用 TPD 池），`--judge-votes 3` 已是標準做法。
 >
-> **待辦**：① sem-08 的稀釋型 chunk 問題需要語域規則以外的修法（chunk 邊界或更精準的變體）；② sem-09 的 `translate_query_en` 副作用需要判定是生成沒寫清楚還是 judge OR 邏輯誤判（重判已存答案即可，成本低）；③ colloquial 版 E5 尚未跑。
+> **待辦**：① ~~sem-08~~ 已於 2026-07-14 定案為已接受極限，不再是待辦（見上「已接受極限」條目）；② ~~sem-09 的 judge OR 邏輯誤判~~ 已於 2026-07-14 修好（`col10_or_logic`：OR 邏輯從 prompt 移進程式碼用 `any()` 聚合，judge_regression 11/11 通過，見 CHANGELOG 07-14）；③ ~~colloquial 版 E5~~ 已被雙 query 取最高分取代並跑過 k=3（`e6_colloquial_dualquery_k3`，見上表，逐題拆解無新回歸），不再是待辦；④ semantic k=3 在 `max_length=2048`（生產設定）下尚未重跑——07-13 只驗證過 lexical/mixed 零回歸與單題診斷，完整 semantic k=3 待 Groq 額度恢復後補跑（`eval/eval_generation_llm_judge.py --category semantic --repeat 3 ...`），預期 sem-11 mean 回到 ~0.7。
 
 ---
 
@@ -215,4 +215,4 @@ Retrieval 前，`parse_query_filters()` 呼叫 LLM 萃取 filing 條件（fiscal
 - `data/raw/` 檔名編碼 metadata：`TICKER_TYPE_DATE`（如 `NVDA_News_20260519_01.txt`、`AAPL_10Q_202605.html`）。`infer_source_type()` 解析 type；`extract_filing_metadata()` 優先讀 XBRL `dei:` tags、fallback 到 filename regex。`eval_set.json` 的 `relevant_sources` 用 glob pattern（如 `NVDA_News_*.txt`），新增日期版本不需修改 eval set。
 - **Bilingual**：docstrings 和 comments 用繁體中文，identifiers 和 log messages 用英文。修改時維持這個慣例。
 - eval 腳本全部從 **repo root** 執行（腳本內用相對路徑 `eval/eval_set.json`）。
-- `eval/` 目前**未被 git 追蹤**（`git ls-files eval/` 為空）。腳本和標準答案若重要，應 `git add eval/` 納入版控。
+- `eval/` **已納入 git**：腳本（`*.py`，含 `judge_regression.py` 內嵌的回歸案例）、標準答案（`eval_set.json` / `eval_set_business.json`）、文件（`*.md`）都追蹤。跑分輸出（結果 `*.json`、`*_log.txt`）由 [`eval/.gitignore`](eval/.gitignore) 排除（可由腳本重現，不進版控），2026-07-14 已把先前誤入版控的 96 個結果檔 `git rm --cached` 退出追蹤。

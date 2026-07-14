@@ -23,7 +23,8 @@ with st.sidebar:
     st.header("⚙️ 設定")
     api_url = st.text_input("API base URL", value="http://localhost:8000")
     top_k   = st.slider("Top-k（送進 LLM 的引用數）", 1, 10, 5)
-    model   = st.text_input("Model（留空用後端預設）", value="")
+    model   = st.text_input("Gen model（留空用後端預設）", value="",
+                            help="覆寫生成答案用的模型；檢索側模型固定用後端預設以與 eval 對齊")
 
     st.divider()
     if st.button("🩺 檢查後端"):
@@ -32,7 +33,8 @@ with st.sidebar:
             if h.get("status") == "ok":
                 st.success(
                     f"✅ collection=`{h['collection']}`，{h['count']} chunks\n\n"
-                    f"LLM：{h['llm_backend']} / `{h['model']}`"
+                    f"LLM：{h['llm_backend']}｜檢索 `{h.get('retrieval_model', '?')}`"
+                    f"｜生成 `{h.get('gen_model', h.get('model', '?'))}`"
                 )
             else:
                 st.error(f"後端有問題：{h.get('status')}")

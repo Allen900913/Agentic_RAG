@@ -1,0 +1,17 @@
+# eval/ 版控策略：腳本(*.py)、eval set、rubric、judge 回歸案例(judge_regression.py 內嵌)、
+# 文件(*.md) 進版控；大體積且會頻繁變動的「跑分輸出 JSON」與 log 不進版控。
+#
+# 決策依據：所有 A/B / 迴歸決策都靠 eval_set.json + 腳本 + judge 案例，這些是專案最有價值的資產，
+# 必須與 code 同版控（CLAUDE.md「eval/ 未被 git 追蹤」待辦）。跑分結果可由腳本重現，故忽略。
+
+# 所有跑分結果 JSON 一律忽略……
+*.json
+# ……但標準答案 / 測試輸入集必須追蹤
+!eval_set.json
+!eval_set_business.json
+
+# 跑分 log（stdout dump）
+*_log.txt
+
+# Python 快取
+__pycache__/

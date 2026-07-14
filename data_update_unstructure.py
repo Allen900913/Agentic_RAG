@@ -349,6 +349,53 @@ def _find_caption(elements: list, table_idx: int) -> str:
     return ""
 
 
+# 累積到這個大小才允許在下一個 section header 硬切段。動機：純用 header 當硬邊界會把
+# 「header + 一句話」切成孤立小 chunk，cross-encoder 對無上下文的孤立段落評分結構性偏低
+# （見 CHANGELOG「孤立段落」機制型死路）；設一個 soft-min 讓太小的小節往後併，只有累積到
+# 夠份量時才切，兼顧「拆開稀釋型大 chunk（sem-08）」與「不製造孤兒 chunk」。
+SECTION_SOFT_MIN_CHARS = 350
+
+
+def _is_section_header(el) -> bool:
+    """判斷一個文字 element 是否為小節標題（section header），用來當 chunk 硬邊界。
+
+    signal：unstructured 把 10-K MD&A 的小節標題（'Operating Income'、'Interest Income and
+    Expense'、'Income Taxes' …）歸類為 Title 或**通用 Text**（body 段落是 NarrativeText，
+    是 Text 的子類但 __name__ 不同）。故 Title 一律視為 header；通用 Text 若「短、字數少、
+    不以句末標點結尾」也視為 header。"""
+    from unstructured.documents.elements import Title
+
+    txt = (el.text or "").strip()
+    if not txt:
+        return False
+    if isinstance(el, Title):
+        return True
+    if type(el).__name__ == "Text":
+        return (len(txt) <= 60 and len(txt.split()) <= 8
+                and not txt.endswith((".", "。", ":", "：", ";", "；", ",", "，")))
+    return False
+
+
+def _split_text_elements_into_sections(text_elements: list) -> list[list]:
+    """把文字 elements 依 section header 切成多段（section）。每遇到一個 header 且目前累積
+    內容已達 SECTION_SOFT_MIN_CHARS 就開新 section（硬邊界）；否則繼續累積（小節往後併，
+    避免孤兒 chunk）。回傳 list[list[element]]。"""
+    sections: list[list] = []
+    current: list = []
+    cur_len = 0
+    for el in text_elements:
+        txt = (el.text or "").strip()
+        if _is_section_header(el) and cur_len >= SECTION_SOFT_MIN_CHARS:
+            sections.append(current)
+            current, cur_len = [el], len(txt)
+        else:
+            current.append(el)
+            cur_len += len(txt)
+    if current:
+        sections.append(current)
+    return sections
+
+
 def build_chunk_records(elements: list, semantic_chunker) -> list[dict]:
     """回傳 [{"text": ..., "chunk_type": "table" | "text"}, ...]
 
@@ -384,12 +431,17 @@ def build_chunk_records(elements: list, semantic_chunker) -> list[dict]:
             if txt:
                 text_elements.append(el)
 
-    text_blob = "\n\n".join(
-        el.text.strip() for el in text_elements if el.text and el.text.strip()
-    )
-    if text_blob.strip():
-        docs = semantic_chunker.create_documents([text_blob])
-        for doc in docs:
+    # 依 section header 切段後，每段各自跑 SemanticChunker。等於在 SemanticChunker 之上加
+    # 「小節硬邊界」：相鄰但主題不同的財務小節（Operating Income / Interest Income / Income
+    # Taxes …）不再因語意相近被併成稀釋型大 chunk（見 sem-08：AWS 獲利句被埋在 5 個主題的
+    # 5170 字大 chunk 裡，生成端選擇性忽略）。段內若仍過長，SemanticChunker 照常語意再切。
+    for section in _split_text_elements_into_sections(text_elements):
+        sec_blob = "\n\n".join(
+            el.text.strip() for el in section if el.text and el.text.strip()
+        )
+        if not sec_blob.strip():
+            continue
+        for doc in semantic_chunker.create_documents([sec_blob]):
             content = doc.page_content.strip()
             if len(content) > 20:
                 records.append({"text": content, "chunk_type": "text"})

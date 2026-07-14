@@ -316,9 +316,10 @@ Grading rules (TASK A):
   sources. A purely qualitative comparative claim (e.g. "far exceeds competitors", "leads the market",
   "significantly higher margin") with NO specific figure attached is NOT a fabrication, even if it sounds
   like a strong claim — do not flag it.
-- OR-CHECKPOINTS: when a must_include checkpoint text contains "/" between two or more concepts (e.g.
-  "提到 Gemini 模型 / AI 整合進搜尋"), that "/" means OR — the checkpoint is satisfied if the answer
-  clearly covers ANY ONE of the listed concepts. Do not require all of them.
+- ATOMIC CHECKPOINTS: each must_include line is a single atomic concept — judge it independently and
+  literally. OR conditions ("A / B", satisfied by any one concept) are already split into separate
+  ids (e.g. "mi0_0", "mi0_1") and re-aggregated with any() in code, so you never need to reason about
+  OR yourself; just decide HIT/MISS for the exact concept on each line.
 - NUMERIC TOLERANCE: when a must_include checkpoint is annotated with "tolerance=±Xpp" (percentage points)
   next to a target number, it is a HIT whenever the answer's stated figure is within that tolerance of the
   target — do NOT require an exact decimal match. E.g. a checkpoint "給出毛利率約 68.3%" with
@@ -334,6 +335,38 @@ Diagnostic rules (TASK B, 依優先序):
 """
 
 
+# ── OR-checkpoint 拆解（col10_or_logic 修法，見 CHANGELOG 2026-07-14）─────────────────
+# 背景：checkpoint 文字用「A / B」表示 OR（滿足任一即命中）。過去靠 prompt 規則叫 judge 自己
+# 判 OR，但 LLM 對「A 或 B 擇一命中」這種組合邏輯不穩定（col-10 的 mi0 在多次跑之間反覆橫跳、
+# 換 judge model 也沒好，是 LLM-as-judge 的已知痛點）。改法（rubric decomposition）：在 Python
+# 端把 OR 拆成獨立原子 checkpoint，judge 只做單一原子的二元判定（穩定），再用 any() 聚合回原
+# mi{i}。這是把組合邏輯從 prompt 移進程式碼。
+_PAREN_OPEN = "（(【[「『｛{"
+_PAREN_CLOSE = "）)】]」』｝}"
+
+
+def _split_or_checkpoint(text: str) -> list[str]:
+    """把「A / B」形式的 OR checkpoint 拆成原子概念清單。切割條件（保守，寧可不切也不亂切）：
+      1. 斜線前後皆為空白（人工撰寫頂層 OR 的慣例）→ 不切 '68.3%/年'、日期、URL 這類無空白斜線；
+      2. 斜線位於括號 depth 0 → 括號內的斜線是列舉範例（如「（NVLink / InfiniBand / Mellanox）」），
+         切了會產生破碎片段，故不切。
+    無可切處回傳單元素清單（原字串），非 OR checkpoint 行為完全不變。"""
+    parts, depth, last = [], 0, 0
+    for i, ch in enumerate(text):
+        if ch in _PAREN_OPEN:
+            depth += 1
+        elif ch in _PAREN_CLOSE:
+            depth = max(0, depth - 1)
+        elif ch in "/／" and depth == 0 \
+                and i > 0 and text[i - 1].isspace() \
+                and i + 1 < len(text) and text[i + 1].isspace():
+            parts.append(text[last:i].strip())
+            last = i + 1
+    parts.append(text[last:].strip())
+    parts = [p for p in parts if p]
+    return parts if len(parts) >= 2 else [text]
+
+
 def evaluate_correctness_with_feedback(
     query: str,
     answer: str,
@@ -347,12 +380,24 @@ def evaluate_correctness_with_feedback(
     model: str,
 ) -> dict:
     """Correctness + Actionable Feedback 合併單次 LLM call。"""
-    mi_lines = "\n".join(
-        f'  id="mi{i}" (weight={p["weight"]}, critical={p["is_critical"]}'
-        + (f', tolerance=±{p["tolerance_pct"]}pp' if p.get("tolerance_pct") is not None else '')
-        + f'): {p["checkpoint"]}'
-        for i, p in enumerate(rubric["must_include"])
-    )
+    # OR-checkpoint 拆解：含「A / B」的 must_include 拆成獨立原子 line（id=mi{i}_{k}），judge 對每個
+    # 原子概念各自二元判定；非 OR checkpoint 維持 id=mi{i}（無 regression）。judge 回傳的原子命中
+    # 由 atom_to_parent 用 any() 聚合回父 mi{i}，下游 compute_correctness 仍看到原本的 mi{i} id。
+    atom_to_parent: dict[str, str] = {}
+    _mi_line_list: list[str] = []
+    for i, cp in enumerate(rubric["must_include"]):
+        meta = (f'weight={cp["weight"]}, critical={cp["is_critical"]}'
+                + (f', tolerance=±{cp["tolerance_pct"]}pp' if cp.get("tolerance_pct") is not None else ''))
+        concepts = _split_or_checkpoint(cp["checkpoint"])
+        if len(concepts) == 1:
+            atom_to_parent[f"mi{i}"] = f"mi{i}"
+            _mi_line_list.append(f'  id="mi{i}" ({meta}): {cp["checkpoint"]}')
+        else:
+            for k, concept in enumerate(concepts):
+                lid = f"mi{i}_{k}"
+                atom_to_parent[lid] = f"mi{i}"
+                _mi_line_list.append(f'  id="{lid}" ({meta}): {concept}')
+    mi_lines = "\n".join(_mi_line_list)
     mn_lines = "\n".join(
         f'  id="mn{i}": {p["checkpoint"]}'
         for i, p in enumerate(rubric["must_not_include"])
@@ -388,9 +433,12 @@ def evaluate_correctness_with_feedback(
     raw = call_judge_llm(messages, model)
     try:
         p = _parse_json(raw)
+        # 原子命中 → any() 聚合回父 mi{i}（任一原子命中即父 checkpoint 命中）。未知 id 忽略。
+        parent_hits = sorted({atom_to_parent[h] for h in p.get("must_include_hits", [])
+                              if h in atom_to_parent})
         return {
             "is_refusal": bool(p.get("is_refusal", False)),
-            "must_include_hits": list(p.get("must_include_hits", [])),
+            "must_include_hits": parent_hits,
             "must_not_violations": list(p.get("must_not_violations", [])),
             "reason": str(p.get("reason", "")),
             "actionable_feedback": str(p.get("actionable_feedback", "")),
@@ -751,6 +799,10 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
             if not chunks:
                 answer = "I don't have enough information in my knowledge base to answer this."
             else:
+                # 檢索後句級抽取（見 CHANGELOG 2026-07-14）：用 retrieval_model（檢索側，
+                # 遵守 model_name 紀律）。預設關（--compress 才開），維持既有 baseline 向後相容。
+                if args.compress:
+                    chunks = rq.compress_chunks(query_str, chunks, args.retrieval_model)
                 user_prompt = rq.build_user_prompt(query_str, chunks, fallback_note)
                 answer = rq.call_llm(
                     [{"role": "system", "content": rq.SYSTEM_PROMPT},
@@ -992,6 +1044,8 @@ def main() -> None:
                              "預設 1（與舊版單次呼叫行為完全相同）；>1 時每題多花 (votes-1) 次 judge call，"
                              "只影響 correctness 判定，不影響 hallucination/relevance/context-recall。")
     parser.add_argument("--category", default=None)
+    parser.add_argument("--ids", nargs="+", default=None,
+                        help="只評指定 query id（如 sem-08），對單題除錯/驗證省 TPD。可與 --category 疊用。")
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--correctness-only", action="store_true",
                         help="只跑 generate + Correctness 評分，跳過 hallucination / "
@@ -1003,6 +1057,9 @@ def main() -> None:
                              "k>1 時每輪寫入 {output_stem}_run{i}.json，最終彙整（mean/std）寫入 --output。")
     parser.add_argument("--translate-query-en", action="store_true",
                         help="入口把 query 翻成英文一次，dense/sparse/rewrite/rerank 全部改用（解 cross-lingual 失真，見 CHANGELOG 2026-07-08）")
+    parser.add_argument("--compress", action="store_true",
+                        help="檢索後句級抽取：生成前把每個 chunk 的相關句逐字抽出擺前面（見 CHANGELOG "
+                             "2026-07-14）。預設關，維持既有 baseline 向後相容。")
     parser.add_argument("--rerank-multi-query", action="store_true",
                         help="cross-encoder 精排改用「原 query + rewrite 變體」逐一評分取跨 query 最高分"
                              "（需搭配 --rewrite；見 CHANGELOG 2026-07-08 復活案例：英文+glossary 變體下對 sem-02 有效）")
@@ -1014,6 +1071,8 @@ def main() -> None:
     queries = eval_set["queries"]
     if args.category:
         queries = [q for q in queries if q["category"] == args.category]
+    if args.ids:
+        queries = [q for q in queries if q["id"] in set(args.ids)]
     if args.limit:
         queries = queries[: args.limit]
     print(f"[INFO] Evaluating {len(queries)} queries against '{rq.COLLECTION_NAME}' "
@@ -1025,7 +1084,9 @@ def main() -> None:
 
     print("[INFO] Loading BGE-M3 + reranker...")
     bge_m3 = BGEM3FlagModel(rq.EMBEDDING_MODEL, use_fp16=True)
-    rerank_model = CrossEncoder(rq.RERANK_MODEL)
+    # max_length 對齊生產（rag_query 用 RERANK_MAX_LENGTH=2048）；未帶會套模型預設 8192＝不截斷，
+    # 讓 eval 的 rerank 看到比生產更多的 token、排序可能與生產不一致（同 model_name 陷阱精神）。
+    rerank_model = CrossEncoder(rq.RERANK_MODEL, max_length=rq.RERANK_MAX_LENGTH)
     client = rq.make_qdrant_client()
 
     print("[INFO] Snapshotting collection sources for context-recall fallback...")

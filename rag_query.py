@@ -65,6 +65,15 @@ GEN_TEMPERATURE = 0.3    # 生成答案用；檢索側（filter/rewrite）與 ju
 # 只有生產入口（CLI / api_server）預設打開這兩個。
 DEFAULT_ENABLE_REWRITE     = True
 DEFAULT_TRANSLATE_QUERY_EN = True
+# 檢索後句級抽取（contextual compression）：生成前用一次 LLM 呼叫把每個 top-k chunk 對
+# 這個 query 的相關句子逐字抽出、放到 chunk 開頭當「重點摘錄」。
+# **預設關（實驗性，未轉正）**——見 CHANGELOG 2026-07-14：原用來修 sem-08，實測 compressor
+# 確實把目標句逐字拉到 chunk 最前面，但生成端仍 2/3 次不引用（scores=[1.0,0.5,0.5]），證實
+# sem-08 病灶不是「訊號埋沒」而是「模型判定獲利與策略題無關 + judge/gen 雜訊」，此法解不了。
+# 且它是全域生成端改動、加一次 LLM 呼叫（+延遲），未做跨類全量回歸，故不預設開。要轉正需先跑
+# 全量 lexical/mixed/semantic/colloquial 確認無回歸（尤其 lexical 數字題的 citation 不被打亂）。
+# 保留 --compress 開關供實驗；rewrite/translate 當初也是全量 k=3 驗證後才轉生產預設的。
+DEFAULT_ENABLE_COMPRESS    = False
 GROQ_BASE_URL   = "https://api.groq.com/openai/v1"
 MAX_HISTORY     = 3
 
@@ -937,14 +946,103 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# Contextual compression（檢索後句級抽取）
+# ══════════════════════════════════════════════════════════════════════════════
+
+COMPRESS_SYSTEM_PROMPT = """\
+You are a precise evidence extractor for a financial RAG system. You receive a user \
+QUESTION and several numbered REFERENCE passages. For EACH reference, extract the \
+sentences (or minimal sentence fragments) that are directly relevant to answering the \
+question — including any that state financial performance (operating income, profit \
+contribution, revenue growth, margins) even when they are buried inside a passage that \
+mostly discusses unrelated topics. This surfacing of buried but relevant sentences is \
+the WHOLE POINT of your job.
+
+Hard rules:
+- Copy sentences VERBATIM from the reference. Do NOT paraphrase, summarize, translate, \
+or invent. Every extracted string must appear character-for-character in that reference.
+- If a reference has nothing relevant, return an empty list for it.
+- Do NOT add commentary, numbers, or facts not present in the reference.
+
+Output ONLY a JSON object mapping each reference number (as a string) to a list of \
+verbatim extracted strings, e.g.:
+{"1": ["<verbatim sentence>", "<verbatim sentence>"], "2": [], "3": ["<verbatim>"]}"""
+
+
+def compress_chunks(query: str, chunks: list[dict], model_name: str = DEFAULT_MODEL) -> list[dict]:
+    """檢索後句級抽取：一次 LLM 呼叫把每個 chunk 對 query 的相關句子逐字抽出，寫進該 chunk
+    dict 的 'key_excerpts' 欄位（list[str]）。build_user_prompt() 會把有 key_excerpts 的 chunk
+    把摘錄擺到全文前面（highlight 附加、不替換原文，最壞情況＝現狀）。
+
+    設計（見 CHANGELOG 2026-07-14「方案 A」）：
+    - 逐字抽取、禁止改寫 → 不在生成前引入幻覺（額外做一次 verbatim 驗證：抽出的字串必須真的
+      是原 chunk 子字串，否則丟棄，防止抽取器自己幻覺）。
+    - 一次呼叫打包全部 chunk（非逐 chunk）→ 延遲只 +1 次 LLM 呼叫。
+    - temp=0、用 retrieval-side model（遵守溫度分工與 model_name 紀律）。
+    - 任何失敗（LLM 掛掉 / JSON 解析失敗）→ 原樣回傳 chunks（不加 key_excerpts）＝現狀，
+      不成為單點故障。"""
+    import json
+    import re as _re
+
+    if not chunks:
+        return chunks
+
+    refs = "\n\n".join(
+        f"[Reference {i+1}]\n{c['content'].strip()}" for i, c in enumerate(chunks)
+    )
+    user_msg = f"=== QUESTION ===\n{query}\n\n=== REFERENCES ===\n{refs}"
+
+    try:
+        raw = call_llm(
+            [
+                {"role": "system", "content": COMPRESS_SYSTEM_PROMPT},
+                {"role": "user", "content": user_msg},
+            ],
+            model_name,
+        )
+        raw = _re.sub(r"^```(?:json)?|```$", "", raw.strip(), flags=_re.MULTILINE).strip()
+        m = _re.search(r"\{.*\}", raw, _re.DOTALL)
+        parsed = json.loads(m.group(0) if m else raw, strict=False)
+    except Exception as e:
+        print(f"WARN  - contextual compression failed ({e!r}); using full chunks only")
+        return chunks
+
+    if not isinstance(parsed, dict):
+        return chunks
+
+    for i, c in enumerate(chunks):
+        excerpts = parsed.get(str(i + 1), [])
+        if not isinstance(excerpts, list):
+            continue
+        content = c["content"]
+        # verbatim 防線：只留真的是原 chunk 子字串的抽取（抵禦抽取器自己改寫/幻覺）。
+        kept = [s.strip() for s in excerpts
+                if isinstance(s, str) and s.strip() and s.strip() in content]
+        if kept:
+            c["key_excerpts"] = kept
+    return chunks
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # Prompt assembly
 # ══════════════════════════════════════════════════════════════════════════════
 
 def build_user_prompt(query: str, chunks: list[dict], fallback_note: str = "") -> str:
     context_parts = []
     for i, c in enumerate(chunks):
+        excerpts = c.get("key_excerpts")
+        if excerpts:
+            # highlight 附加：重點摘錄擺全文前面放大訊號；原文全保留（citation/期間提示不受影響）。
+            excerpt_block = (
+                "KEY EXCERPTS (verbatim, most relevant to the question):\n"
+                + "\n".join(f"- {s}" for s in excerpts)
+                + "\nFULL CONTEXT:\n"
+            )
+        else:
+            excerpt_block = ""
         context_parts.append(
             f"[Reference {i+1}: {c['source']}, chunk #{c['chunk_index']}]\n"
+            f"{excerpt_block}"
             f"{c['content'].strip()}"
         )
     context = "\n\n".join(context_parts)
@@ -1052,7 +1150,8 @@ def call_llm(messages: list[dict], model_name: str, temperature: float = 0.0) ->
 # ══════════════════════════════════════════════════════════════════════════════
 
 def run_single_query(query, retrieval_model, gen_model, top_k, bge_m3, rerank_model, client,
-                     enable_rewrite=DEFAULT_ENABLE_REWRITE, translate_query_en=DEFAULT_TRANSLATE_QUERY_EN):
+                     enable_rewrite=DEFAULT_ENABLE_REWRITE, translate_query_en=DEFAULT_TRANSLATE_QUERY_EN,
+                     enable_compress=DEFAULT_ENABLE_COMPRESS):
     print(f"\n🔍 Query: {query}")
     print("⏳ Hybrid retrieval (Qdrant dense + sparse → RRF → rerank)...")
 
@@ -1065,6 +1164,10 @@ def run_single_query(query, retrieval_model, gen_model, top_k, bge_m3, rerank_mo
 
     if fallback_note:
         print(f"⚠️  {fallback_note}")
+
+    if enable_compress:
+        print("✂️  Contextual compression (verbatim excerpt extraction)...")
+        chunks = compress_chunks(query, chunks, retrieval_model)
 
     user_prompt = build_user_prompt(query, chunks, fallback_note)
     messages    = [
@@ -1083,11 +1186,13 @@ def run_single_query(query, retrieval_model, gen_model, top_k, bge_m3, rerank_mo
 
 
 def run_interactive(retrieval_model, gen_model, top_k, bge_m3, rerank_model, client,
-                    enable_rewrite=DEFAULT_ENABLE_REWRITE, translate_query_en=DEFAULT_TRANSLATE_QUERY_EN):
+                    enable_rewrite=DEFAULT_ENABLE_REWRITE, translate_query_en=DEFAULT_TRANSLATE_QUERY_EN,
+                    enable_compress=DEFAULT_ENABLE_COMPRESS):
     print("\n🚀 US Stock Intelligence RAG — Qdrant Hybrid (Interactive)")
     print(f"   Retrieval model: {retrieval_model}  |  Gen model: {gen_model}  |  "
           f"Top-k: {top_k}  |  Rewrite: {'on' if enable_rewrite else 'off'}  |  "
-          f"Translate-EN rerank: {'on' if translate_query_en else 'off'}")
+          f"Translate-EN rerank: {'on' if translate_query_en else 'off'}  |  "
+          f"Compress: {'on' if enable_compress else 'off'}")
     print("   Type your question, or 'quit' / 'exit' to exit.")
     print("═" * 60)
 
@@ -1114,6 +1219,10 @@ def run_interactive(retrieval_model, gen_model, top_k, bge_m3, rerank_model, cli
 
         if fallback_note:
             print(f"⚠️  {fallback_note}")
+
+        if enable_compress:
+            print("✂️  Contextual compression (verbatim excerpt extraction)...")
+            chunks = compress_chunks(query, chunks, retrieval_model)
 
         user_prompt = build_user_prompt(query, chunks, fallback_note)
         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
@@ -1170,6 +1279,10 @@ Examples:
                         default=DEFAULT_TRANSLATE_QUERY_EN,
                         help="rerank 用「原句 + 英文翻譯」逐候選取最高分（解 cross-lingual rerank 失真，"
                              "見 CHANGELOG 2026-07-12/13）；生產預設開啟，用 --no-translate-query-en 關閉")
+    parser.add_argument("--compress", action=argparse.BooleanOptionalAction,
+                        default=DEFAULT_ENABLE_COMPRESS,
+                        help="檢索後句級抽取：生成前把每個 chunk 的相關句逐字抽出擺前面（見 CHANGELOG "
+                             "2026-07-14）。實驗性，**預設關**（未做全量回歸），用 --compress 開啟")
     args = parser.parse_args()
     gen_model = args.gen_model
 
@@ -1187,11 +1300,11 @@ Examples:
     if args.query:
         run_single_query(args.query, args.model, gen_model, args.top_k,
                          bge_m3, rerank_model, client, enable_rewrite=args.rewrite,
-                         translate_query_en=args.translate_query_en)
+                         translate_query_en=args.translate_query_en, enable_compress=args.compress)
     else:
         run_interactive(args.model, gen_model, args.top_k,
                         bge_m3, rerank_model, client, enable_rewrite=args.rewrite,
-                        translate_query_en=args.translate_query_en)
+                        translate_query_en=args.translate_query_en, enable_compress=args.compress)
 
 
 if __name__ == "__main__":

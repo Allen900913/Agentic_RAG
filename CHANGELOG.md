@@ -5,6 +5,59 @@
 
 ---
 
+## 2026-07-14
+
+### 📌 sem-08 定案：已接受極限，不再嘗試系統側修法（CLAUDE.md 已同步更新）
+- **使用者決定**：接受 sem-08 為已知天花板，同 col-08 的處理方式。
+- **依據**：本日依序試了三種系統側修法（chunk 切分、Rule 10 prompt 規則、檢索後句級抽取），**全部因同一個真因失敗**——見下方三則條目。決定性診斷是句級抽取：把目標句逐字搬到 chunk 最前面，生成仍 2/3 次不引用，證明病灶不是「模型找不到」，而是「模型判定該事實與問法無關而主動略過」＋ judge/gen 雜訊。這是 query/rubric 框架錯配，不是檢索/呈現層能修的問題。
+- **CLAUDE.md 同步更新**：「已知問題與分析」章節的 sem-08 條目改寫為「已接受極限」定性（不再是「變好但未穩定」的開放狀態）；待辦清單中 sem-08 一項標記關閉；順帶關閉了同章節另一個已完成的待辦——col-10 的 judge OR 邏輯誤判（見下方 col10_or_logic 條目，已於本日修好，原待辦措辭誤把它記在 sem-09 名下）。
+- **復活條件**：非系統可解，只有兩條非系統路徑——調整 rubric（若判定「策略方向」題不該強制要求獲利數字）、或維持現狀接受。除非 rubric 改變，不要再對此題嘗試檢索/prompt 層修法。
+
+### 🔬 新功能（實驗性，預設關）：檢索後句級抽取（contextual compression）——附帶證偽了「sem-08 是訊號埋沒」的假設
+- **動機**：sem-08 連續兩種修法（chunk 切分、Rule 10）都失敗，剩下的通用解是「生成前把相關句物理性拉到模型眼前」。實作 `compress_chunks()`：生成前一次 LLM 呼叫，把每個 top-k chunk 對 query 的相關句**逐字**抽出，`build_user_prompt` 把它們擺 chunk 開頭當「KEY EXCERPTS」（highlight 附加、原文全保留，最壞＝現狀）。設計：一次呼叫打包全 chunk、temp=0、retrieval-side model、verbatim 防線（抽出字串必須是原 chunk 子字串，否則丟棄，抵禦抽取器幻覺）、失敗 fallback 原 chunk。接了 CLI（`--compress`）、api_server、eval（`--compress`）。
+- **決定性診斷結果**：compressor **完全正常**——sem-08 的 chunk #100 被逐字抽出正確目標句「The increase in AWS operating income in 2025... due to increased sales...」擺到最前面。**但生成端仍 2/3 次不引用**：k=3 scores=`[1.0, 0.5, 0.5]`、crit_miss_rate=0.667（`eval/sem08_compress_gen_k3.json`）——跟 baseline（crit_miss 0.333）在雜訊內、沒有可靠改善。
+- **這證偽了「sem-08 是訊號埋沒」的假設**：把目標句拉到模型眼前都救不了 → 病灶不在「模型找不到」，而在「模型判定『AWS 營業利益成長』與『AWS **策略方向**』這個問法無關而略過」＋ judge/gen 雜訊。**chunk 切分、Rule 10、compression 三種修法全因同一個真因失敗**：它們都在解「訊號呈現」，但 sem-08 的真因是「query/rubric 框架錯配」。
+- **sem-08 結案定性**：屬**雜訊/框架受限題**（std 大、crit_miss≠1.0），依 CLAUDE.md「禁止對雜訊題優化」，**不再嘗試系統側修法**。真要動只剩兩條非系統路徑：① 調 rubric（若「策略方向」本就不該強制要求獲利數字，是 rubric 過嚴）；② 當成已知天花板文件化（如 col-08 的處理）。
+- **compression 功能狀態**：**預設關（`DEFAULT_ENABLE_COMPRESS=False`）**、保留 `--compress` 開關。它是通用技術（放大相關句訊號），但①沒修好目標題、②加一次 LLM 呼叫（+延遲，你們 retrieve 已 78s）、③是全域生成端改動未做跨類回歸。轉正條件同 rewrite/translate：先跑全量 lexical/mixed/semantic/colloquial 確認無回歸（尤其 lexical 數字題 citation 不被打亂）再改預設。
+
+### ❌ 已試無效：生成 prompt 加 Rule 10（策略題必須含財務表現）修 sem-08——指令打不過 chunk 內訊號埋沒
+- **動機**：sem-08 的病灶是生成端選擇性忽略埋在稀釋 chunk 裡的 AWS 獲利句；sem-04 曾用同手法（Rule 9）修好，故先試最便宜的 prompt 規則。
+- **改法**：`SYSTEM_PROMPT` 加 Rule 10——「問策略/方向/前景時，材料裡若有該業務的財務表現必須寫進來；就算埋在混雜 chunk 裡也要挖出來用」。
+- **結果（k=3，`eval/sem08_rule10_gen_k3.json`）：完全無效且形態變差**——scores=`[0.5, 0.5, 0.5]`、std=0、crit_miss_rate=**1.0**（3/3 穩定失敗）。**查證排除檢索問題**：chunk #100（含 AWS 獲利句）就在 top-5 rank 3，指令也在，但三次答案完全不提獲利/營業利益（只引用 #86/#85/#45，從不引用 #100——與 07-12 觀察一致）。
+- **死因：機制型**。Rule 9 能成功是因為那是「回答框架」問題（指令可糾正）；sem-08 是**注意力層級**問題——5170 字 chunk 裡 FTC/稅務/利息/Rivian 佔絕大多數，AWS 獲利只是從屬子句，模型讀 context 時根本沒「撿起」那句話，指令命令不了它看見沒看見的東西。prompt 規則類修法對「chunk 內埋沒」這一類病灶整體無效，之後不要再對同類問題嘗試加規則。Rule 10 已撤除（不留在生產 prompt 增加回歸風險）。
+- **復活條件**：若生成前的 context 呈現方式改變——例如檢索後句級抽取（contextual compression）把相關句拉到 chunk 開頭、或全量改用單一主題 chunking——「訊號埋沒」前提消失，屆時也不需要 Rule 10 了（病灶直接消失，非規則復活）。
+- **反向佐證**：這個負面結果驗證了「句級抽取」路線的機制正確性——問題不在指令，在訊號呈現，必須物理性地把目標句拉到模型眼前。
+
+### 工程債清理：api_server 拆 retrieval/gen model + eval/ 版控策略
+- **api_server.py 單一 model 兩用 → 拆成 `retrieval_model` / `gen_model`（對齊 CLI 與 CLAUDE.md「model_name 陷阱」）**：
+  - 舊行為：`/chat` 用同一個 `model` 同時跑 retrieve() 內部（filter/rewrite/translate）與生成，前端「Model」框一改就把**檢索側**模型也換掉，讓 web 路徑的檢索行為與 eval（固定 `llama-3.3-70b-versatile`）不一致——潛伏的正確性風險。
+  - 改法：新增模組常數 `DEFAULT_RETRIEVAL_MODEL`（= `rq.DEFAULT_MODEL`，對齊 eval 檢索側）與 `DEFAULT_GEN_MODEL`（= `rq.DEFAULT_GEN_MODEL` gpt-oss-120b）。`ChatRequest` 新增 `retrieval_model` / `gen_model` 可各自覆寫；舊 `model` 欄位向後相容，視為 gen_model 覆寫（最貼近前端「回答用哪個模型」語意），**檢索側預設不受前端單一 model 框影響**。`/health` 回傳與 app.py 顯示同步拆兩個模型。
+- **eval/ 版控策略**：CLAUDE.md 記載「eval/ 未被 git 追蹤」**已過時**——實測 eval/ 早已在 git（23 支 py、eval_set.json、judge_regression.py 都在）。新增 [`eval/.gitignore`](eval/.gitignore)：追蹤腳本/eval_set/judge 案例/文件，忽略跑分輸出（結果 `*.json`、`*_log.txt`，可由腳本重現）。把先前誤入版控的 96 個結果檔 `git rm --cached` 退出追蹤，讓 tracked 狀態與策略一致。
+
+### col-10 judge OR 邏輯：從 prompt 移進程式碼，用 any() 聚合（`col10_or_logic` 修法，已驗證 11/11）
+- **背景**：checkpoint「A / B」代表 OR，過去靠 prompt 規則叫 judge 自己判「擇一命中」。但 LLM 對這種組合邏輯不穩定——col-10 的 mi0 在多次跑之間反覆橫跳、換 judge model 也沒好（測量層 bug，非系統 bug；見 07-12）。
+- **改法（rubric decomposition）**：`eval_generation_llm_judge.py` 在 Python 端把含「A / B」的 must_include 拆成獨立原子 checkpoint（id=`mi{i}_{k}`），judge 只做單一原子的二元判定（穩定），再用 `any()` 聚合回父 `mi{i}`。下游 `compute_correctness` 仍看到原本的 `mi{i}` id（非 OR checkpoint 行為完全不變、零 regression）。拆解器 `_split_or_checkpoint()` 保守設計：只切「前後有空白」且「括號 depth 0」的斜線——避免切壞 `68.3%/年` 這種單位、以及「（NVLink / InfiniBand / Mellanox）」這種括號內列舉（切了會產生破碎片段）。prompt 的 OR-CHECKPOINTS 規則改成 ATOMIC-CHECKPOINTS 說明（judge 不再需要自己推 OR）。
+- **驗證**：`judge_regression.py --votes 3` **11/11 通過**（含 col10_or_logic → mi0 命中、col10_true_miss_negative → mi0 不命中兩個對稱案例）；col-10 兩案例再獨立重跑 2 次全數 PASS，確認原本的「跨跑橫跳」已消除。純 judge-side 改動，不燒 retrieve/generate 成本。
+
+### ❌ 已試無效：換小 reranker `bge-reranker-base`（重試 07-13 的死路，找到更硬的死因）
+- **觸發**：使用者要求重試小模型換速度，命中 07-13「換小模型」條目的復活條件（延遲需求高過品質）。
+- **關鍵新發現：`bge-reranker-base` 的 position embedding 硬上限只有 512 token**——設 `max_length=2048`（生產值）直接 `index 514 out of bounds` crash。意即它**結構性**只能看每個候選的前 512 token。而全庫 chunk p99=2278 token、生產用 2048 正是為了不截斷長 chunk；base 模型連這個前提都達不到，對「關鍵句在段落中後段」的長/稀釋 chunk（正是 sem-08 的病灶）尤其致命。07-13 只記了 correlation 0.688，沒點出這個 512 硬牆——這是比排序相關性更硬的機制型死因。
+- **同場 A/B（`eval/rerank_model_ab_probe.py`，judge-free，base@512 vs v2-m3@2048，生產設定）**：3 題 semantic top-5 平均 overlap 只有 **2.33/5**；sem-09 base 丟掉了 v2-m3 保住的關鍵 chunk `#139`/`#157`（sem-09 正是靠 translate_query_en 修到 mean 1.0 的題，base 會直接打回原形）。
+- **結論**：確認非無損、且非可接受的降級。死因升級為**機制型**（512 token 硬牆，不是資料相關的交互型）——除非換一個支援長 context 的小模型，否則永久死路。CPU 上要治本仍是 07-13 記的兩條路：託管 rerank API（Cohere/Jina/Voyage）或 GPU（TEI/Infinity）。
+
+### 🔬 實驗（正面但待全量驗證）：section-aware chunking 拆稀釋型大 chunk（針對 sem-08）
+- **背景**：sem-08（AMZN AWS）的病灶是 `AMZN_10K #100` 是一個 **5170 字、橫跨 5 個 MD&A 主題**（Other Operating Expense/Operating Income/Interest/Other Income/Income Taxes）的稀釋型大 chunk，AWS 營業利益成長句被埋在中段當從屬子句，生成端與 coverage-judge 都選擇性忽略（見 07-12）。使用者要求「切成多個單一主題 chunk 試試看」。
+- **根因**：`build_chunk_records()` 把所有非表格 element 串成一個大 text_blob 再丟 SemanticChunker，**element 的角色結構（Title/Text=標題 vs NarrativeText=段落）在串接時全丟失**；SemanticChunker 又因這些財務小節語意相近（都是 MD&A 敘述）不超過 90 百分位斷點，把 5 個主題併成一個 mega-chunk。
+- **改法**：`data_update_unstructure.py` 在 SemanticChunker 之上加「小節硬邊界」——`_split_text_elements_into_sections()` 用 section header（unstructured 把 10-K 小節標題歸類為 `Title` 或通用 `Text`，body 段落是 `NarrativeText`）當硬切點，段內再各自跑 SemanticChunker。為避免「header + 一句話」切出孤兒小 chunk（cross-encoder 對無上下文孤立段落評分結構性偏低，是機制型死路），設 `SECTION_SOFT_MIN_CHARS=350` soft floor：累積夠份量才允許在下一個 header 切段，太小的小節往後併。
+- **驗證（retrieval 層，judge-free）**：重切**全部 3 個 AMZN filing**（10-K 113→217 chunks、兩個 10-Q 也重切；只重切 10-K 不公平，因為 AWS 訊號也存在未重切的 10-Q 稀釋 chunk 裡）。sem-08 top-5 **前後對比**：
+  - 改前：AWS 營業利益只出現在稀釋型大 chunk（10-K #100 5170 字 / 10-Q #49 4170 字）裡，被埋沒。
+  - 改後：top-5 出現**乾淨的單一主題 chunk `AMZN_10K #164`（1290 字，整段就是 segment operating income 含 AWS 貢獻）排 rank 4**，另有 AI 投資 chunk `#130` 排 rank 2。AWS 內容第一次以「聚焦 chunk」而非「稀釋大 chunk 裡的子句」進入生成 context。
+- **generation 層驗證（k=3，`--ids sem-08 --rewrite --translate-query-en --gen-model openai/gpt-oss-120b --judge-model qwen/qwen3-32b --judge-votes 3`，`eval/sem08_afterchunk_gen_k3.json`）：沒有可靠改善**：mean=0.567、std=0.33、crit_miss_rate=0.667、scores=`[0.5, 0.2, 1.0]`。對照 07-12 baseline（scores `[0.7, 1.0, 0.2]`、crit_miss 0.333、mean ~0.633）——**在雜訊範圍內、甚至略差**，且 crit_miss_rate 未達 1.0（非穩定失敗）。依 CLAUDE.md「std 大、crit_miss≠1.0 的題禁止優化（會 fit 到雜訊）」，sem-08 屬雜訊主導題，這個結果**不足以支撐「chunk 切分修好了 sem-08」**。
+  - **判讀**：chunk 切分確實改善了**檢索前置條件**（乾淨的單一主題 AWS chunk 進 top-5，這是實打實的結構改善），但沒有轉化成 end-to-end correctness 的穩定提升——印證 sem-08 的根因是生成層「選擇性忽略 + judge/gen 變異」，不是 retrieval 給不出乾淨 chunk。單靠 chunk 邊界解不了生成層問題。
+- **狀態＝實驗結束，程式碼保留、collection 已還原 baseline**：① 生成層已驗，無可靠增益（見上）；② 實驗期間曾把 3 個 AMZN filing 用新 chunker 重切（2367→2616 points），驗證後**已用舊 chunker 重新 ingest 還原成 baseline（回到 2367 points、AMZN_10K 113 chunks）**，避免 eval collection 停在「只有 AMZN 用新切法」的混合狀態污染跨 ticker baseline；③ 依 CLAUDE.md「chunk 邊界改變需全量重驗」紀律，轉正需 `--rebuild` 全量重切 + 重跑四類 eval，成本高而 sem-08 收益不明——**性價比不足**。程式改動（`data_update_unstructure.py` 的 section-aware chunker）本身是通用的 chunk 品質改善、**保留在 code**（未 commit，供未來若有「多題受益於單一主題 chunk」的證據時，一次 `--rebuild` 全量採用）；但不建議只為 sem-08 付全量成本。sem-08 的真正解仍指向生成層（contextual compression / 句級抽取 / 生成 prompt 強化），非 chunk 邊界。
+- **附帶產出（保留）**：新增 `eval/rerank_model_ab_probe.py`（judge-free 比對兩個 reranker 的 top-5，problem 1 用）；`eval_generation_llm_judge.py` 新增 `--ids` 單題過濾（省 TPD 做單題驗證）並把 eval 端 reranker 的 `max_length` 對齊生產 2048（原本沒設＝8192 不截斷，與生產不一致，同 model_name 陷阱精神）。
+- **復活/交互掃描**：本次動了 chunk 邊界，命中 07-13「`max_length=512` 已試無效」的復活條件（「若 chunking 上限被大幅壓低，512 可能重新安全」）。但 dry-run 顯示新 chunker 仍有 4260/3861/3553/3171 字的大 chunk（單一主題但天生長），512 仍會截斷最大那批，**條件未強觸發**，暫不重測 512；若之後再加 hard size cap 讓 chunk 全面 ≤2048 token，屆時才需要按規範重掃 512。
+
 ## 2026-07-13
 
 ### Rerank 延遲攻堅（第二輪）：`batch_size=1` 免費 2.33x、零損失（已接生產）；ONNX int8 / 小模型 / 級聯三條路都試過且都不行（負面結果全記錄）
