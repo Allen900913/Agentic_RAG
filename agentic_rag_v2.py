@@ -8,7 +8,11 @@ agentic_rag_v2.py — Supervisor + Subagent + RAG-as-Tool 版 agentic RAG（2026
 架構（顯式 LangGraph StateGraph，四個主節點；待辦清單是 state 的一等公民）：
   plan       ── Supervisor/Planner：一次 LLM 呼叫把問題拆成待辦清單 todos=[{id,task,status,result}]。
                 「屬於 agent 系統（規劃拆解），但實作上是單次 LLM 呼叫、不是完整工具迴圈 agent」。
-  execute    ── Executor = 兩個 agent 的團隊，處理下一個 pending 待辦：
+  execute    ── Executor = 兩個 agent 的團隊，處理「目前這一波」所有 pending 待辦（2026-07-31 改為
+                分波 pipeline，見 _node_execute）：同一波內彼此獨立的子問題用 thread pool 重疊執行
+                ——retrieve 仍靠 _RETRIEVE_LOCK 序列化，grade/生成這類 LLM API 呼叫才真的重疊。整波
+                做完才 replan 一次（取代舊版每個 todo 各自 replan）；next-hop 待辦是下一輪 replan 才
+                新增，天然落在下一波，跟這一波獨立 todos 不需要額外相依標記去分辨。單一子問題內部：
                 · Agent A｜Researcher+Generator：真正的 ReAct agent（langgraph create_react_agent），
                   工具 = [rag_search, web_search]，動態決定搜尋策略、看 rerank 分數決定續搜/改關鍵字/上網。
                   **system prompt 鎖定**：收到「評估已通過」前只用工具回報事實、絕不自行生成摘要。
@@ -47,11 +51,11 @@ from __future__ import annotations
 
 import argparse
 import contextlib
-import io
 import json
 import os
 import re
 import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime
 from typing import TypedDict
 
@@ -122,8 +126,13 @@ WRITER_BUDGET_CAP       = int(os.getenv("AGENTIC_WRITER_BUDGET_CAP", "16"))
 USE_REACT_EXECUTOR = os.getenv("AGENTIC_REACT_EXECUTOR", "false").lower() in ("true", "1", "yes")
 
 # ── Supervisor / Subagent 架構專屬常數 ────────────────────────────────────────
-MAX_ITERS      = int(os.getenv("AGENTIC_MAX_ITERS", "8"))   # execute↔replan 總迴圈上限（防 replanner 無限加待辦）。
+MAX_ITERS      = int(os.getenv("AGENTIC_MAX_ITERS", "8"))   # 總「子問題執行次數」上限（防 replanner 無限加待辦）。
 MAX_TODOS      = MAX_SUBQUERIES   # 待辦清單總數上限（沿用 7：Magnificent Seven 逐一列滿 + replan 新增後仍守此上限）。
+# 2026-07-31：execute 節點改成一次處理「一整波」pending 待辦（見 _node_execute），同一波內彼此獨立
+# 的子問題用 thread pool 重疊執行——retrieve 仍靠 _RETRIEVE_LOCK 天然序列化，grade/生成這類 LLM API
+# 呼叫才是真的重疊（pipeline，不是無腦全平行）。worker 數不需要很大：retrieve 本來就會在鎖上排隊，
+# 多開只是讓更多子問題的「等 LLM 回應」那段時間疊在一起，3~4 個足夠打滿這個疊法的效益。
+AGENTIC_PIPELINE_WORKERS = int(os.getenv("AGENTIC_PIPELINE_WORKERS", "3"))
 # Agent A（Researcher+Generator，真正的 ReAct agent）用的 chat model；預設同 GEN_MODEL（中文生成流暢）。
 # ⚠ 若設 gpt-oss-120b，即 CHANGELOG 續九的 tool-call harmony 洩漏來源——崩潰時 execute 有降級保證。
 SUBAGENT_MODEL = os.getenv("AGENTIC_SUBAGENT_MODEL", GEN_MODEL)
@@ -158,7 +167,7 @@ REFLECTION_MAX_REVISIONS       = 1  # reflection 抓到幻覺後重生成的上�
 _CITE_RE = re.compile(r"[\[【]([^\[\]【】,，]+?)[,，]\s*chunk\s*#?\s*(\d+)[\]】]", re.IGNORECASE)
 _REF_PREFIX_RE = re.compile(r"^\s*reference\s*\d+\s*:\s*", re.IGNORECASE)
 
-# [TRACE]：把每個節點的當下決策印到 stderr（retrieve 的 DEBUG 已被 redirect_stdout 靜音）。
+# [TRACE]：把每個節點的當下決策印到 stderr（retrieve 的 DEBUG 已被 _quiet() 靜音）。
 _TRACE = os.getenv("AGENTIC_TRACE", "false").lower() in ("true", "1", "yes")
 
 
@@ -166,6 +175,60 @@ def _trace(msg: str) -> None:
     if _TRACE:
         import sys
         print(f"[TRACE] {msg}", file=sys.stderr, flush=True)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 執行緒安全的「靜音 print()」：取代 contextlib.redirect_stdout(io.StringIO())。
+# retrieve/call_llm 底層（sentence-transformers、tqdm…）會印大量雜訊，全檔一律靠這個抑制。
+# ⚠ 不能繼續用 contextlib.redirect_stdout：它是整個 process 共用同一個 sys.stdout 做存/還原，
+# 子問題 pipeline 平行執行（多執行緒同時各自 with redirect_stdout(...)）會互相踩存/還原的時機——
+# 最壞情況是某個執行緒的 throwaway StringIO 被錯誤地「還原」成全 process 的 sys.stdout，之後
+# 整個程式永久印不出任何東西（不是單純雜訊，是真的會壞掉）。改用 thread-local 靜音旗標：
+# sys.stdout 只包一次，各執行緒各自控制「自己」要不要被吃掉，互不影響。
+# ──────────────────────────────────────────────────────────────────────────────
+
+class _ThreadLocalMuteStream:
+    """包一層 sys.stdout：write() 先看目前這個執行緒有沒有被靜音，靜音就丟掉，否則照樣印。"""
+
+    def __init__(self, real_stream) -> None:
+        self._real = real_stream
+        self._local = threading.local()
+
+    def _muted(self) -> bool:
+        return getattr(self._local, "muted", False)
+
+    def write(self, s: str) -> int:
+        if self._muted():
+            return len(s)
+        return self._real.write(s)
+
+    def flush(self) -> None:
+        self._real.flush()
+
+    def isatty(self) -> bool:
+        return False
+
+    def set_muted(self, muted: bool) -> None:
+        self._local.muted = muted
+
+
+_stdout_mute: _ThreadLocalMuteStream | None = None
+
+
+@contextlib.contextmanager
+def _quiet():
+    """取代裸的 contextlib.redirect_stdout(io.StringIO())：靜音範圍只限「呼叫這段的那個執行緒」，
+    跨執行緒平行呼叫彼此不干擾，也不會有 sys.stdout 被永久錯誤還原的風險。"""
+    global _stdout_mute
+    import sys as _sys
+    if _stdout_mute is None or _sys.stdout is not _stdout_mute:
+        _stdout_mute = _ThreadLocalMuteStream(_sys.stdout)
+        _sys.stdout = _stdout_mute
+    _stdout_mute.set_muted(True)
+    try:
+        yield
+    finally:
+        _stdout_mute.set_muted(False)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -657,7 +720,7 @@ def _plan_subqueries(query: str, freshness_mode: str) -> list[str]:
     """Planner 節點的核心：把問題拆成原子子問題。拆解失敗(解不出 JSON) → 退回單一問題,不讓規劃器失手就整個 run 掛。"""
     system_prompt = _PLANNER_PROMPT + "\n\n" + _build_temporal_contract(freshness_mode)
     messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": query}]
-    with contextlib.redirect_stdout(io.StringIO()):
+    with _quiet():
         raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
     data = _loads_json_lenient(raw)
     subs = [str(x).strip() for x in data if str(x).strip()] if isinstance(data, list) else []
@@ -712,7 +775,7 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
     scope_block = f"時間與資料邊界:\n{temporal_scope}\n\n" if temporal_scope else ""
     user = f"{scope_block}子問題:{subquery}\n\n檢索到的候選片段:\n{ctx}"
     messages = [{"role": "system", "content": _CHECKER_PROMPT}, {"role": "user", "content": user}]
-    with contextlib.redirect_stdout(io.StringIO()):
+    with _quiet():
         raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
     data = _loads_json_lenient(raw)
     if not isinstance(data, dict):
@@ -746,7 +809,7 @@ def _retrieve_chunks(query: str) -> list[dict]:
     補救迭代與首輪用完全相同組態,唯一差別是 active_query 已被 Checker 改寫(補救的主力施力點)。"""
     bge_m3, rerank_model, client = _get_models()
     with _RETRIEVE_LOCK:
-        with contextlib.redirect_stdout(io.StringIO()):   # 靜音 retrieve 的 DEBUG print
+        with _quiet():   # 靜音 retrieve 的 DEBUG print
             chunks, _note = rq.retrieve(
                 query, bge_m3, rerank_model, client,
                 top_k=rq.RERANK_INPUT_N,   # 多取一些進池(池會重排,advance 時只收 top-k)
@@ -769,7 +832,7 @@ def _write_final_answer(query: str, chunks: list[dict], model_name: str, extra_u
         {"role": "system", "content": rq.SYSTEM_PROMPT},
         {"role": "user", "content": user_prompt},
     ]
-    with contextlib.redirect_stdout(io.StringIO()):
+    with _quiet():
         return rq.call_llm(messages, model_name, temperature=rq.GEN_TEMPERATURE)
 
 
@@ -862,7 +925,7 @@ def _reflect_and_fix(query: str, answer: str, chunks: list[dict], model_name: st
         {"role": "system", "content": _REFLECT_PROMPT},
         {"role": "user", "content": f"問題:{query}\n\n答案:\n{answer}\n\n來源 chunk 全文:\n{sources_text}"},
     ]
-    with contextlib.redirect_stdout(io.StringIO()):
+    with _quiet():
         result = rq.call_llm(messages, model_name, temperature=0.0)
     issues = (result or "").strip()
     if not issues or issues.upper().startswith("NONE"):
@@ -1110,7 +1173,7 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
             f"當前子問題：{task}\n\n時間與資料邊界：\n{temporal_scope}\n\n"
             "請開始用工具檢索、回報找到的事實（先不要生成摘要）。"))]
         for rnd in range(MAX_REWRITES + 1):
-            with contextlib.redirect_stdout(io.StringIO()):
+            with _quiet():
                 out = app.invoke({"messages": messages},
                                  config={"recursion_limit": SUBAGENT_RECURSION_LIMIT})
             messages = out["messages"]
@@ -1125,7 +1188,7 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
                     "評估已通過、證據充足。現在解除先前的限制，根據你剛剛用工具檢索到的所有片段，"
                     "生成一份邏輯連貫、精確的局部答案／摘要，回答上述子問題。每個關鍵事實後面標上你檢索到的"
                     " id（格式 [source, chunk #N]，新聞/網路來源用 [web: 網址]）；沒有依據的內容不要寫。")))
-                with contextlib.redirect_stdout(io.StringIO()):
+                with _quiet():
                     fin = app.invoke({"messages": messages},
                                      config={"recursion_limit": SUBAGENT_RECURSION_LIMIT})
                 summary = _last_ai_text(fin["messages"])
@@ -1139,7 +1202,7 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
     except Exception as e:
         _trace(f"execute[{subq_index}] subagent 崩潰 → 降級單次檢索+生成：{e!r}")
         if not state.pool:
-            with contextlib.redirect_stdout(io.StringIO()):
+            with _quiet():
                 state.pool.extend(_merge_chunks([], _retrieve_chunks(task)))
         summary = _fallback_local_summary(task, state.pool[:WRITER_MAX_CHUNKS])
 
@@ -1187,7 +1250,7 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
     except Exception as e:
         _trace(f"execute[{subq_index}] deterministic executor 例外 → 降級：{e!r}")
         if not state.pool:
-            with contextlib.redirect_stdout(io.StringIO()):
+            with _quiet():
                 state.pool.extend(_merge_chunks([], _retrieve_chunks(task)))
 
     summary = _fallback_local_summary(task, state.pool[:WRITER_MAX_CHUNKS])  # 走生產契約單次生成（內含 try/except 保底）
@@ -1251,30 +1314,17 @@ def _node_plan(state: SupervisorState) -> dict:
     return {"todos": todos, "collected": [], "web_notes": [], "iterations": 0, "sufficient": False}
 
 
-def _node_execute(state: SupervisorState) -> dict:
-    """處理下一個 pending 待辦：跑兩個 agent（A 檢索+生成 ⇄ B 評分），寫回 result、併入 collected。"""
-    todos = [dict(t) for t in state["todos"]]
-    idx = next((i for i, t in enumerate(todos) if t["status"] == "pending"), None)
-    iters = state.get("iterations", 0) + 1
-    if idx is None:
-        return {"iterations": iters}   # 沒有 pending（可能被 replan 全部 drop）→ 交給 route 收斂
-    todos[idx]["status"] = "in_progress"
-    task = todos[idx]["task"]
+def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
+    """在自己的 thread（因此也是自己獨立的 contextvars context）內跑完一個子問題：retrieve↔grade
+    迴圈 + commit 篩選，回傳這個子問題的完整結果。不觸碰任何跨子問題共用的可變狀態，讓 wave 執行
+    可以安全平行呼叫（已用 ThreadPoolExecutor 實測驗證 contextvars 在 submit() 下天生隔離）。"""
+    task = todo["task"]
     summary, web_notes = _run_executor(
-        task,
-        todos[idx].get("temporal_scope", ""),
-        state.get("freshness_mode", FRESHNESS_LIVE),
-        todos[idx]["id"],
-        state.get("verbose", False),
+        task, todo.get("temporal_scope", ""), freshness_mode, todo["id"], verbose,
     )
-    todos[idx]["result"] = summary
-    todos[idx]["web_used"] = bool(web_notes)
-    todos[idx]["status"] = "done"
-    # run pool 的 top-k 收進 collected（沿用 _fair_select 分桶依據 _subq）。executor 剛跑完、還在同一個
-    # context 內，_current_run_state() 拿到的就是這個子問題剛剛用的那份 run state（見上方 contextvars 說明）。
-    # 優先用 Grader 圈選的 relevant_ids 過濾（見 _check_sufficiency）：不再是「rerank 前 k 名就全收」，
-    # 濾掉高分但離題的 chunk（例：問 A 公司卻混進 B 公司財報）。Grader 沒給圈選訊號（欄位空）→ 退回
-    # 舊行為，避免因為新欄位解析失敗就誤濾成 0 筆。
+    # executor 剛跑完、還在同一個 thread/context 內，_current_run_state() 拿到的就是這個子問題
+    # 剛剛用的那份 run state。優先用 Grader 圈選的 relevant_ids 過濾（見 _check_sufficiency）：
+    # 不再是「rerank 前 k 名就全收」，濾掉高分但離題的 chunk。Grader 沒給圈選訊號 → 退回舊行為。
     run_state = _current_run_state()
     if run_state.relevant_ids:
         approved = [c for c in run_state.pool if _chunk_id(c) in run_state.relevant_ids]
@@ -1283,15 +1333,62 @@ def _node_execute(state: SupervisorState) -> dict:
         picked = list(run_state.pool[:COMMIT_TOP_K])
     # 每家保底覆蓋（Phase 1）：子問題點名多家公司時，保證每一家至少有一個 chunk 被 commit 進
     # collected（否則 COMMIT_TOP_K 截斷會把被比較的公司整個擠掉，見 mh-01）。deterministic、無 LLM。
-    _mentioned = _mentioned_tickers(task)
-    if len(_mentioned) > 1:
-        picked = rq._ensure_ticker_coverage(run_state.pool, picked, _mentioned)
+    mentioned = _mentioned_tickers(task)
+    if len(mentioned) > 1:
+        picked = rq._ensure_ticker_coverage(run_state.pool, picked, mentioned)
     for c in picked:
-        c["_subq"] = todos[idx]["id"]
-    collected = _merge_chunks(state.get("collected", []), picked)
-    web = list(state.get("web_notes", [])) + web_notes
-    _trace(f"execute[{todos[idx]['id']}] done: summary={len(summary)}c, +{len(picked)} chunk, "
-           f"+{len(web_notes)} web → collected={len(collected)}")
+        c["_subq"] = todo["id"]
+    return {"id": todo["id"], "summary": summary, "web_used": bool(web_notes),
+            "web_notes": web_notes, "picked": picked}
+
+
+def _node_execute(state: SupervisorState) -> dict:
+    """處理「目前這一波」所有 pending 待辦（2026-07-31 改為分波，取代舊版每次只處理一個）。
+    同一波內的子問題彼此獨立（來自 planner 一次拆解，或前一輪 replan 一次新增），用 thread pool
+    重疊執行：retrieve 仍靠 _RETRIEVE_LOCK 天然序列化，grade/生成這類 LLM API 呼叫才是真的重疊
+    ——等一個子問題的 retrieve 做完，下一個子問題的 retrieve 就能接著開始，不必等前一個的 grading
+    也做完（pipeline，不是無腦全平行）。整波做完才 replan 一次，不再是每個 todo 各自 replan 一次
+    ——次數變少也順便省了 LLM 呼叫。next-hop 待辦是下一輪 replan 才會新增，天然排在下一波，不需要
+    額外的相依標記去分辨「這一波的獨立 todos」跟「replan 新增的 next-hop todos」。"""
+    todos = [dict(t) for t in state["todos"]]
+    pending_idxs = [i for i, t in enumerate(todos) if t["status"] == "pending"]
+    if not pending_idxs:
+        return {"iterations": state.get("iterations", 0)}   # 沒有 pending（可能被 replan 全部 drop）→ 交給 route 收斂
+    for i in pending_idxs:
+        todos[i]["status"] = "in_progress"
+    freshness_mode = state.get("freshness_mode", FRESHNESS_LIVE)
+    verbose = state.get("verbose", False)
+
+    results: dict[int, dict] = {}
+    workers = min(AGENTIC_PIPELINE_WORKERS, len(pending_idxs))
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        future_to_idx = {ex.submit(_run_one_todo, todos[i], freshness_mode, verbose): i
+                         for i in pending_idxs}
+        for fut in as_completed(future_to_idx):
+            i = future_to_idx[fut]
+            try:
+                results[i] = fut.result()
+            except Exception as e:
+                # _run_executor 內部已有多層安全網，理論上不該 raise 到這裡；這層只防禦徹底沒預料到
+                # 的例外，確保一個子問題爆炸不會拖垮整波其他子問題的結果。
+                _trace(f"execute[{todos[i]['id']}] wave worker 未預期例外 → {e!r}")
+                results[i] = {"id": todos[i]["id"],
+                              "summary": f"（子問題「{todos[i]['task']}」執行時發生未預期錯誤）",
+                              "web_used": False, "web_notes": [], "picked": []}
+
+    collected = state.get("collected", [])
+    web = list(state.get("web_notes", []))
+    for i in pending_idxs:   # 依原始順序合併（thread 完成順序不影響結果，只影響合併時機）
+        r = results[i]
+        todos[i]["result"] = r["summary"]
+        todos[i]["web_used"] = r["web_used"]
+        todos[i]["status"] = "done"
+        collected = _merge_chunks(collected, r["picked"])
+        web += r["web_notes"]
+    # 保留舊語意：MAX_ITERS 是「總子問題執行次數」上限，不是「總波次」上限，避免分波後這個防線變寬鬆。
+    iters = state.get("iterations", 0) + len(pending_idxs)
+    _trace(f"execute wave: {len(pending_idxs)} todos ({[todos[i]['id'] for i in pending_idxs]}) done → "
+           f"collected={len(collected)}")
     return {"todos": todos, "collected": collected, "web_notes": web, "iterations": iters}
 
 
@@ -1307,7 +1404,7 @@ def _node_replan(state: SupervisorState) -> dict:
     freshness_mode = state.get("freshness_mode", FRESHNESS_LIVE)
     system_prompt = _REPLANNER_PROMPT + "\n\n" + _build_temporal_contract(freshness_mode)
     messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user}]
-    with contextlib.redirect_stdout(io.StringIO()):
+    with _quiet():
         raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
     data = _loads_json_lenient(raw)
 
@@ -1463,7 +1560,7 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
         # 確保「LLM API 暫時不穩」不會讓整支 CLI/eval 崩潰,至少走一次乾淨的生產單發查詢兜底。
         _trace(f"run_agentic: graph.invoke 崩潰（{e!r}）→ 降級走一次生產單發檢索+生成")
         bge_m3, rerank_model, client = _get_models()
-        with contextlib.redirect_stdout(io.StringIO()):
+        with _quiet():
             chunks_fb, _note = rq.retrieve(query, bge_m3, rerank_model, client,
                                            top_k=WRITER_MAX_CHUNKS, model_name=RETRIEVAL_MODEL,
                                            enable_rewrite=False, full_translate_en=True)
