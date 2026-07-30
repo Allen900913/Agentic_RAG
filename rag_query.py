@@ -38,7 +38,7 @@ QDRANT_PATH      = os.getenv("QDRANT_PATH", "./qdrant_db")
 QDRANT_URL       = os.getenv("QDRANT_URL", "")   # 若設定則走 server mode（Docker）
 EMBEDDING_MODEL  = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
 RERANK_MODEL     = os.getenv("RERANK_MODEL", "BAAI/bge-reranker-v2-m3")
-COLLECTION_NAME  = "us_stock_rag_unstructured"
+COLLECTION_NAME  = "us_stock_rag_edgar_exp4"
 DENSE_VECTOR_NAME  = "dense"
 SPARSE_VECTOR_NAME = "sparse"
 
@@ -53,17 +53,29 @@ RERANK_MAX_LENGTH  = 2048 # cross-encoder 每筆輸入截斷 token 數；預設(
                            # 因為該候選相關內容不在前 512 token 內。全庫 2367 chunk 的 token 分布
                            # p99=2278、僅 1.6% 超過 2048 token；2048 在 sem-11 測試中與未截斷（8192）
                            # top-5 逐位分數完全一致，仍有 ~1.8 倍加速（見 CHANGELOG 2026-07-13）。
-DEFAULT_MODEL   = "llama-3.3-70b-versatile"   # retrieval 側預設（filter/rewrite/translate）；預設走 Groq（避免 Gemini 免費額度 20/天 限制）
+DEFAULT_MODEL   = "openai/gpt-oss-120b"       # retrieval 側預設（filter/rewrite/translate）；2026-07-21 統一改走 NVIDIA NIM
+                                               # （單一 OpenAI-compatible endpoint、單把 NVIDIA_API_KEY，取代 Groq 4-key TPD
+                                               # 輪換）。見 agentic_rag_nv.py 已驗證的模型選型：gpt-oss-120b 在 NVIDIA 上快
+                                               # 且合法；meta/llama-3.3-70b-instruct 反而會 timeout，不可用。
 DEFAULT_GEN_MODEL = "openai/gpt-oss-120b"     # 生成答案側預設（見 CHANGELOG 2026-07-09 乾淨隔離 A/B：
                                                # retrieval 固定 70b、只換 gen model，120b 對 k=3 全量 11 題 semantic
-                                               # 零回歸、mean 0.627→0.870 且更穩定，故轉正式預設；retrieval side 仍用 DEFAULT_MODEL）
+                                               # 零回歸、mean 0.627→0.870 且更穩定，故轉正式預設）。此 model id 在 NVIDIA NIM
+                                               # 目錄下同名，換 backend 不必換 id。
 GEN_TEMPERATURE = 0.3    # 生成答案用；檢索側（filter/rewrite）與 judge 一律 temp=0（call_llm 預設）。
                          # 實測：生成用 temp=0（greedy）會重複/mode collapse，反而漏 rubric 點（見 CHANGELOG 2026-07-06）。
-# 生產預設（2026-07-13 轉正，見 CHANGELOG）：rewrite 擴召回 + translate_query_en 的
-# 「雙 query 取最高分」rerank。k=3 全量驗證 sem-09 完全修好、sem-11 維持、lexical/mixed/
-# colloquial 零新回歸。retrieve() 本身的參數預設維持 False（保持 eval 腳本向後相容），
-# 只有生產入口（CLI / api_server）預設打開這兩個。
-DEFAULT_ENABLE_REWRITE     = True
+# 生產預設：只用「1 query + translate_query_en 雙 query 取最高分 rerank」，不開 rewrite 擴召回。
+# retrieve() 本身的參數預設維持 False（保持 eval 腳本向後相容），只有生產入口（CLI / api_server）
+# 預設打開 translate。
+#
+# 2026-07-20 變更：rewrite 從 True 改 False。動機——rewrite × translate 的 2×2 全量拆解
+# （r3v3 設定，retrieval=gpt-oss-20b、NVIDIA、--repeat 3 --judge-votes 3）顯示兩者是**負交互**：
+#   baseline 0.806 / +rewrite 0.820 / +translate 0.824 / +rewrite+translate 0.795（四格最差、低於 baseline）。
+# 各自單開都是小增益，疊起來被 rewrite 灌進池的雜訊候選抵銷（colloquial 受創最深：0.721→0.646）。
+# 單一乾淨 query（靠 translate 補英文語感）勝過「1 query + 一堆變體」。
+# ⚠ regime caveat：此結論確立於 gpt-oss-20b retrieval regime（Groq TPD 燒乾後的實際 regime）。
+# rewrite 在名義生產模型 llama-3.3-70b（DEFAULT_MODEL）上 07-13 曾驗證有效；若改回 llama-70b
+# retrieval，需重跑本 2×2 才能確認 rewrite 是否仍該關。rewrite 程式碼保留為 opt-in（eval/agentic 仍用）。
+DEFAULT_ENABLE_REWRITE     = False
 DEFAULT_TRANSLATE_QUERY_EN = True
 # 檢索後句級抽取（contextual compression）：生成前用一次 LLM 呼叫把每個 top-k chunk 對
 # 這個 query 的相關句子逐字抽出、放到 chunk 開頭當「重點摘錄」。
@@ -74,35 +86,10 @@ DEFAULT_TRANSLATE_QUERY_EN = True
 # 全量 lexical/mixed/semantic/colloquial 確認無回歸（尤其 lexical 數字題的 citation 不被打亂）。
 # 保留 --compress 開關供實驗；rewrite/translate 當初也是全量 k=3 驗證後才轉生產預設的。
 DEFAULT_ENABLE_COMPRESS    = False
-GROQ_BASE_URL   = "https://api.groq.com/openai/v1"
+GROQ_BASE_URL   = "https://api.groq.com/openai/v1"    # 保留常數供其他檔案沿用（如 agentic_rag_nv.py
+                                                        # 的 AGENTIC_BRAIN_PROVIDER=groq 選項）；生產 call_llm 已不走這條路徑。
+NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 MAX_HISTORY     = 3
-
-# ── Groq key rotation（支援最多 4 個 key，TPD 耗盡時自動切換）────────────────
-_groq_keys: list[str] = []
-_groq_key_idx: int = 0
-
-def _get_groq_key() -> str:
-    global _groq_keys
-    if not _groq_keys:
-        _groq_keys = [k for k in [
-            os.getenv("GROQ_API_KEY"),
-            os.getenv("GROQ_API_KEY2"),
-            os.getenv("GROQ_API_KEY3"),
-            os.getenv("GROQ_API_KEY4"),
-        ] if k]
-    return _groq_keys[_groq_key_idx % len(_groq_keys)]
-
-def _rotate_groq_key(err_str: str) -> bool:
-    global _groq_key_idx, _groq_keys
-    if "tokens per day" not in err_str and "TPD" not in err_str:
-        return False
-    _get_groq_key()  # 確保 _groq_keys 已初始化
-    next_idx = _groq_key_idx + 1
-    if next_idx >= len(_groq_keys):
-        return False
-    _groq_key_idx = next_idx
-    print(f"  [KEY ROTATION] TPD exhausted, switching to GROQ_API_KEY{_groq_key_idx + 1}")
-    return True
 
 
 def make_qdrant_client():
@@ -129,9 +116,14 @@ note what is missing — do NOT refuse outright. Prefer a partial answer over a 
 refusal. Use "I don't have enough information in my knowledge base to answer this." \
 ONLY when nothing in the materials relates to the question at all.
 4. Structure every answer this way:
-   (a) Lead with the single most important conclusion or headline number that \
-directly answers the question — in the FIRST sentence.
-   (b) Then provide supporting details and secondary figures.
+   (a) Lead with a PLAIN-LANGUAGE direct answer to the question in the FIRST sentence — \
+phrase the single most important conclusion the way you would explain it to a smart \
+non-specialist, and include the key headline number if the question asks for one. Avoid \
+opening with dense jargon; the first sentence should be immediately understandable.
+   (b) Then provide the supporting details and secondary figures, using precise financial \
+terms and exact numbers (with their time period) — do NOT sacrifice numerical precision or \
+correct terminology for simplicity; the plain-language framing applies to how you LEAD and \
+explain, not to dropping or rounding away the specific figures the sources give.
    Do NOT open with background, caveats, or peripheral details.
 5. If the question asks for a rate or figure (growth rate, margin, P/E, etc.), the \
 headline number MUST appear first. If only component figures are present, compute \
@@ -155,6 +147,60 @@ explicitly and bind its specific risks/figures/strategy to it. A citation tag al
 NOT sufficient attribution — the company name must appear in the sentence. Cover at \
 least the distinct companies the materials support.
 """
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Evidence-first generation（實驗性，見 CHANGELOG 2026-07-20 方案 A）
+#
+# 動機：sem-08 家族的決定性診斷（07-14 句級抽取實驗）證明目標句已經在 chunk 最前面、
+# 模型看得到，3 次生成仍 2 次不引用——病灶是模型「一次性完成相關性判定+寫作」時
+# 內部略過了它認為與問法無關的內容，不是訊號埋沒。之前三種修法（chunk 切分、
+# Rule 10 prompt、句級抽取）全部是「把訊號推到模型眼前」的同一族，對這個病灶
+# 無效（死路表已載）。
+#
+# 這裡改變的是「相關性判定發生的位置」：強制模型先輸出一個 Evidence Log，對
+# 每個 reference 逐一顯式表態相關/不相關，再根據標記為相關的部分作答。格式要求
+# 的服從性遠高於「你應該認為這段相關」這種內容說服（模型對輸出格式指令的服從性
+# 普遍比對內容判斷的說服力更可靠），且逐 chunk 盤點把篩選過程變成可稽核的顯式
+# 步驟，不再是模型腦內看不見的一次性判斷。
+#
+# opt-in：預設不使用，需呼叫端主動選用 SYSTEM_PROMPT_EVIDENCE_FIRST 並在生成後
+# 呼叫 extract_final_answer() 剝除 Evidence Log、只把 Answer 區塊留給使用者/judge。
+# ══════════════════════════════════════════════════════════════════════════════
+
+SYSTEM_PROMPT_EVIDENCE_FIRST = SYSTEM_PROMPT + """
+10. Before writing your answer, you MUST first produce an Evidence Log: go through
+EVERY numbered reference in order and write ONE line per reference stating whether it
+is relevant to the question. Do this even for references that seem tangential — a
+reference can be partially relevant (e.g. it mentions the topic inside a passage that
+mostly discusses something else) or fully relevant; only mark "not relevant" if it
+truly contains nothing useful for this specific question. If a reference contains ANY
+information bearing on the question (numbers, named products, stated positions), you
+MUST mark it relevant and quote the key phrase, even if the reference's main topic is
+something else.
+Then write your final Answer, following rules 1-9 above, drawing on every reference you
+marked relevant in the Evidence Log — do not silently drop a reference you just marked
+relevant.
+
+Output format (use exactly these two headers, nothing before "## Evidence Log"):
+## Evidence Log
+[Reference N]: relevant — <key phrase quoted verbatim> | OR | [Reference N]: not relevant — <one-clause reason>
+(one line per reference, in order)
+
+## Answer
+<your final answer, following rules 1-9>
+"""
+
+_ANSWER_SECTION_RE = re.compile(r"##\s*Answer\b", re.IGNORECASE)
+
+
+def extract_final_answer(raw: str) -> str:
+    """evidence-first 模式專用：把生成輸出的 Evidence Log 前綴剝除，只留 '## Answer' 之後
+    的內容給使用者/judge 看。找不到標記時保守回傳整段原文（向後相容、不遺失內容，
+    例如模型沒有遵守格式指令的情況）。"""
+    m = _ANSWER_SECTION_RE.search(raw)
+    if not m:
+        return raw
+    return raw[m.end():].strip()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -196,7 +242,7 @@ def looks_like_news_query(query: str) -> bool:
 # 的 must（include）/ must_not（exclude）條件，在排序前就把不符合的候選排除。
 # ══════════════════════════════════════════════════════════════════════════════
 
-FILTERABLE_FIELDS = ("filing_type", "fiscal_year", "fiscal_period", "report_period_code", "ticker")
+FILTERABLE_FIELDS = ("filing_type", "fiscal_year", "fiscal_period", "report_period_code", "ticker", "period_basis")
 
 # deterministic 抽取：6 位數期間碼（yyyymm）和 ticker
 _PERIOD_CODE_RE = re.compile(r"\b(20\d{2}(?:0[1-9]|1[0-2]))\b")
@@ -233,15 +279,57 @@ def _detect_ticker(query: str) -> str | None:
     return _find_ticker_alias(query.lower(), query)
 
 
+def _find_all_ticker_aliases(q_lower: str, query: str) -> list[str]:
+    """deterministic（無 LLM）：偵測『所有』命中的公司別名（英文或中文），回傳去重後的
+    ticker 清單（保留首次出現順序）。與 _find_ticker_alias（只回第一個）相對——多公司比較題
+    需要圈出全部提及的公司，否則 ticker hard filter 只鎖第一個會漏掉其餘公司（見對話 2026-07-30
+    mh-01 trace：'Amazon、Microsoft、Alphabet、Meta' 只鎖到 MSFT）。"""
+    found: list[str] = []
+    for name, symbol in _COMPANY_TICKER.items():
+        hit = (name in query) if _CJK_RE.search(name) \
+            else bool(re.search(r"\b" + re.escape(name) + r"\b", q_lower))
+        if hit and symbol not in found:
+            found.append(symbol)
+    return found
+
+
+# 「最近十二個月 (TTM / trailing twelve months / 滾動)」口徑訊號。命中 → 硬 filter 導向
+# Fundamentals（period_basis=TTM），避免抓到年度(fiscal_year)結算數字造成口徑歧義
+# （見對話 2026-07-30：mh-01~05 這類 TTM 比較題原本會撈到 10-K/IncomeStatement 的年度數）。
+_TTM_RE = re.compile(
+    r"\bttm\b|\bltm\b"
+    r"|(?:最近|近|過去|滾動|過往)\s*(?:十二|12)\s*個?\s*月"
+    r"|trailing\s*(?:twelve|12)\s*months?|last\s*twelve\s*months?",
+    re.IGNORECASE,
+)
+
+
+def _detect_period_basis(query: str) -> str | None:
+    """deterministic（無 LLM）：偵測問題是否明確要「最近十二個月 (TTM)」口徑。
+    命中回傳 'TTM'，否則 None（不注入 basis filter，維持原行為）。
+    目前只單向偵測 TTM——fiscal_year 口徑刻意不硬性路由（避免回歸既有『年度』題），
+    但語料端每個 filing/statement/fundamentals chunk 都已標好 period_basis 供未來擴充。"""
+    return "TTM" if _TTM_RE.search(query or "") else None
+
+
 def _extract_structural_filters(query: str) -> list[dict]:
-    """deterministic（無 LLM）：從問題抽出 yyyymm 期間碼和 ticker（含中文別名）。"""
+    """deterministic（無 LLM）：所有「乾淨字面訊號」的統一入口——從問題抽出 yyyymm 期間碼、
+    ticker（含中文別名）、以及 period_basis 口徑（TTM）。這三者都不需要 LLM，天生適合 regex，
+    集中在此一處吐出，與 LLM 只管的「模糊散文約束」（filing_type/fiscal_year/fiscal_period）分工。"""
     filters: list[dict] = []
     m = _PERIOD_CODE_RE.search(query)
     if m:
         filters.append({"field": "report_period_code", "value": m.group(1), "polarity": "include"})
-    ticker = _find_ticker_alias(query.lower(), query)
-    if ticker:
-        filters.append({"field": "ticker", "value": ticker, "polarity": "include"})
+    tickers = _find_all_ticker_aliases(query.lower(), query)
+    if tickers:
+        # 單一 → 字串（MatchValue，行為不變）；多個 → list（build_qdrant_filter 轉 MatchAny/OR），
+        # 讓多公司比較題一次圈出所有提及的公司，不再只鎖第一個。
+        filters.append({"field": "ticker",
+                        "value": tickers[0] if len(tickers) == 1 else tickers,
+                        "polarity": "include"})
+    basis = _detect_period_basis(query)
+    if basis:
+        filters.append({"field": "period_basis", "value": basis, "polarity": "include"})
     return filters
 
 QUERY_FILTER_SYSTEM_PROMPT = """\
@@ -281,13 +369,35 @@ clear negation aimed at that specific field ("not", "don't want", "exclude", \
 """
 
 
+# LLM query-filter 只可能抽出 filing_type / fiscal_year / fiscal_period；若問題裡「完全沒有」
+# 這些字樣，呼叫 LLM 必然回空、純屬浪費（且是每次 retrieve、每個子問題、每個補救輪都打的高頻呼叫）。
+# 這個 gate：偵測不到任何 filing/期別 hint → 直接跳過 LLM，只回 deterministic 抽取（ticker + yyyymm
+# 期碼，本來就不需 LLM）。偏保守（寧可誤觸發去呼叫 LLM＝維持原行為，也不漏掉該抽的條件）。
+# 涵蓋 LLM 能抽的全部目標：10-K/10-Q、年報/季報、fiscal/FY/Qx、獨立四位數年份（yyyymm 期碼不算）。
+_FILING_HINT_RE = re.compile(
+    r"10\s*-?\s*[kq]"
+    r"|annual\s+report|quarterly\s+report|\bannual\b|\bquarterly\b"
+    r"|\bfiscal\b|\bfy\b|\bq[1-4]\b"
+    r"|年報|季報|年度|季度|財年|會計年度|全年|第\s*[一二三四1-4]\s*季"
+    r"|\b20\d{2}\b",
+    re.IGNORECASE,
+)
+
+
 def parse_query_filters(query: str, model_name: str = DEFAULT_MODEL) -> list[dict]:
     """用 LLM 把問題中『明確』提到的 filing 篩選條件抽取成結構化清單：
         [{"field": "fiscal_year", "value": "2025", "polarity": "include"}, ...]
     polarity 區分「要」(include -> must) 與「不要」(exclude -> must_not)。
-    解析失敗或沒有明確條件時回傳 []（= 不套用篩選，行為等同原本）。"""
+    解析失敗或沒有明確條件時回傳 []（= 不套用篩選，行為等同原本）。
+
+    效率 gate（見 _FILING_HINT_RE）：問題裡沒有任何 filing/期別字樣時，跳過 LLM 呼叫，
+    只回 deterministic 抽取（ticker + yyyymm 期碼）——省掉最高頻的 retrieval-side LLM 呼叫，
+    語意等價（LLM 對這類 query 本來就只會回空）。"""
     import json
     import re as _re
+
+    if not _FILING_HINT_RE.search(query or ""):
+        return _extract_structural_filters(query)
 
     try:
         raw = call_llm(
@@ -565,7 +675,9 @@ def build_qdrant_filter(filters: list[dict], strict: bool = False):
     must, must_not = [], []
     for f in filters:
         field, value = f["field"], f["value"]
-        condition = models.FieldCondition(key=field, match=models.MatchValue(value=value))
+        # value 為 list（如多個 ticker）→ MatchAny（OR/IN 查詢）；單值 → MatchValue。
+        _match = models.MatchAny(any=value) if isinstance(value, list) else models.MatchValue(value=value)
+        condition = models.FieldCondition(key=field, match=_match)
 
         if f["polarity"] == "exclude":
             must_not.append(condition)
@@ -599,10 +711,12 @@ def build_qdrant_filter(filters: list[dict], strict: bool = False):
 
 
 def _build_tier2_filter(filters: list[dict]):
-    """Tier 2：只保留 ticker + filing_type（放掉年份/期碼），strict 模式。
-    讓「問 2026 但庫裡只有 2025」退回最新一份 filing，而不是拒答。"""
+    """Tier 2：只保留 ticker + filing_type + doc_type（放掉年份/期碼），strict 模式。
+    讓「問 2026 但庫裡只有 2025」退回最新一份 filing，而不是拒答。
+    doc_type 一併保留：新聞 hard filter（doc_type=news）在 Tier1 若因帶了 news 不具備的
+    report_period_code 而落空時，Tier2 仍守住「只回新聞」的意圖，不會漏放財報 chunk 進來。"""
     tier2 = [f for f in filters
-             if f["field"] in ("ticker", "filing_type") and f["polarity"] == "include"]
+             if f["field"] in ("ticker", "filing_type", "doc_type") and f["polarity"] == "include"]
     return build_qdrant_filter(tier2, strict=True) if tier2 else None
 
 
@@ -625,7 +739,8 @@ def _build_fallback_note(filters: list[dict], fused_points: list) -> str:
                 actual.add(pl[key])
 
     actual_str = ", ".join(sorted(actual, reverse=True)) if actual else "unknown"
-    scope_parts = [f["value"] for f in [ticker_f, type_f] if f]
+    scope_parts = [", ".join(f["value"]) if isinstance(f["value"], list) else f["value"]
+                   for f in [ticker_f, type_f] if f]
     scope = " ".join(scope_parts) or "the requested filing"
 
     return (
@@ -633,6 +748,37 @@ def _build_fallback_note(filters: list[dict], fused_points: list) -> str:
         f"({requested}). The following answer is based on the most recent available data "
         f"(period: {actual_str}).]"
     )
+
+
+def _ensure_ticker_coverage(ranked: list[dict], selected: list[dict], want_tickers) -> list[dict]:
+    """每家 ticker 保底覆蓋（Dynamic Top-K Expansion，Phase 1）：保證 want_tickers 每一家在
+    selected（已截斷的回傳/commit 集合）裡至少有一個 chunk；缺的就從 ranked（完整 rerank 降序池）
+    補上該家分數最高的一個，必要時擴充集合大小。回傳仍按 rerank 降序。
+
+    動機：cross-encoder 分數跨公司不可比，top-k 截斷會讓高分公司佔滿名額、把其他被比較的公司
+    整個擠掉（mh-01：四公司題只有一家的 chunk 存活）。ranked 需已按 raw_rerank_score 降序。
+    單一或零 ticker（want<=1）時原樣回傳（一般單公司題不需保底）。"""
+    want = [want_tickers] if isinstance(want_tickers, str) else list(want_tickers or [])
+    if len(want) <= 1:
+        return selected
+    want_set = set(want)
+    present = {c.get("ticker", "") for c in selected}
+    missing = want_set - present
+    if not missing:
+        return selected
+    out = list(selected)
+    seen = {(c["source"], c["chunk_index"]) for c in selected}
+    for c in ranked:                       # ranked 已降序：每家第一個命中就是該家最高分 chunk
+        if not missing:
+            break
+        t = c.get("ticker", "")
+        key = (c["source"], c["chunk_index"])
+        if t in missing and key not in seen:
+            out.append(c)
+            seen.add(key)
+            missing.discard(t)
+    out.sort(key=lambda x: x["raw_rerank_score"], reverse=True)
+    return out
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -644,7 +790,7 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
              disable_filter: bool = False, rewrite_merge_top_n: int | None = None,
              rewrite_fusion: bool = False, return_pool: bool = False,
              rerank_multi_query: bool = False, translate_query_en: bool = False,
-             sparse_translate_en: bool = False):
+             sparse_translate_en: bool = False, full_translate_en: bool = False):
     """回傳 (chunks, fallback_note) 或 (chunks, fallback_note, pool)。
     fallback_note 為空字串表示正常命中；非空表示退回了次佳 tier，內含給使用者的說明。
     disable_filter=True 時完全跳過 query-understanding hard filter（不呼叫
@@ -701,6 +847,19 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
     # 用原始 query（結構化代碼抽取，語言無關——ticker/filing_type/fiscal_year 不管中英文
     # 問法都對應同一組代碼，翻譯與否不影響 filter 準確度，見 CHANGELOG 2026-07-08）。
     detected_filters = [] if disable_filter else parse_query_filters(query, model_name)
+    # 新聞意圖 → 硬篩 doc_type=news（見 CHANGELOG 2026-07-21）。用 deterministic 關鍵字偵測
+    # （looks_like_news_query，無 LLM），與 filing 期別 filter 疊加：「NVDA 最近新聞」→
+    # ticker=NVDA AND doc_type=news。動機：News/Fundamentals/IncomeStatement 的 .txt 只有
+    # ticker、無 filing_type，新聞題原本走 Tier3 軟 filter 與長篇財報 chunk 同池競爭、常被
+    # reranker 壓過（looks_like_news_query 舊有只印 WARN、未做路由）；ingest 端已為每個 chunk
+    # 補 doc_type，這裡把「偵測到但沒用」變成真正的硬排除。disable_filter（eval nofilter 對照）
+    # 時一併關閉，維持乾淨 baseline。
+    if not disable_filter and looks_like_news_query(query) \
+            and not any(f["field"] == "doc_type" for f in detected_filters):
+        detected_filters.append({"field": "doc_type", "value": "news", "polarity": "include"})
+    # 註：period_basis（TTM 口徑）已由 _extract_structural_filters 統一吐出（走 parse_query_filters
+    # 的 deterministic 抽取，含 gate-skip 路徑），不再在此另外注入。硬 filter 效果不變——Tier1
+    # strict 命中 Fundamentals，某 ticker 無 TTM chunk 則自動退回 Tier2/3（不會因 basis 過濾而拒答）。
     if detected_filters:
         print(f"DEBUG - Detected filing filter(s): {detected_filters}")
 
@@ -713,11 +872,13 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
     #      RANK（pool 有但被擠出 top-5）——BGE-M3 dense 本身已是多語言、中文召回
     #      不需要翻譯，翻譯反而引入一次 paraphrase drift 改變候選池組成。
     #      故意只留 rerank_query 用 en_query，dense/sparse encode 仍用原始 query。
-    en_query = translate_query_to_english(query, model_name) if translate_query_en else query
-    if translate_query_en and en_query != query:
+    _want_en = translate_query_en or full_translate_en
+    en_query = translate_query_to_english(query, model_name) if _want_en else query
+    if _want_en and en_query != query:
         # ascii-safe：Windows cp950 終端無法印某些字元，debug 訊息不值得為此崩潰
         _safe = en_query.encode("ascii", "replace").decode()
-        print(f"DEBUG - Query translated to EN (rerank only): {_safe!r}")
+        _scope = "recall+rerank" if full_translate_en else "rerank only"
+        print(f"DEBUG - Query translated to EN ({_scope}): {_safe!r}")
 
     # ── 1. Encode query → dense + sparse（helper，供原 query 與改寫變體共用）────
     def _encode(text: str) -> dict:
@@ -753,8 +914,13 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
             with_payload=True,
         ).points
 
-    q_vecs = _encode(query)  # 召回一律用原始 query（見上方 0b 說明：翻譯對 dense/sparse 中性偏負）
-    if sparse_translate_en:
+    # 召回 query：預設用原始 query（見上方 0b 說明：翻譯對 dense/sparse 中性偏負）；
+    # full_translate_en=True 時整個檢索階段（dense+sparse 召回 + rerank）一律改用英文譯句
+    # ——2026-07-26 定案的架構決定：中文問、中文答，但檢索中間層全英文以消除 cross-lingual
+    # 失真（推翻先前「dense 召回用英文會傷 sem-11」的保留結論，改為端到端 eval 背書）。
+    recall_query = en_query if full_translate_en else query
+    q_vecs = _encode(recall_query)
+    if sparse_translate_en and not full_translate_en:
         # dense 保留原始 query 的向量；sparse 換成翻譯後英文的向量（實驗性，見上方 docstring）。
         sparse_source = en_query if translate_query_en else translate_query_to_english(query, model_name)
         if sparse_source != query:
@@ -778,8 +944,10 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
     # 進 top-5，但同時把 sem-09 需要的一個純英文 10-K chunk（#139）擠出去；改成每個
     # 候選各自取「原句/翻譯句」較高分後，兩題同時通過（每個候選各自挑對自己有利的
     # 語言，不再是全域二選一的 trade-off）。
-    if translate_query_en and en_query != query:
-        rerank_queries = [query, en_query]
+    if full_translate_en and en_query != query:
+        rerank_queries = [en_query]           # 一律英文：召回與 rerank 都用單一英文譯句
+    elif translate_query_en and en_query != query:
+        rerank_queries = [query, en_query]    # 舊模式：原句 + 英譯句，逐候選取 max
     else:
         rerank_queries = [rerank_query]  # rerank_multi_query=True 時，額外併入 rewrite 變體
 
@@ -787,9 +955,11 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
         has_period_code = any(f["field"] == "report_period_code" and f["polarity"] == "include"
                               for f in detected_filters)
         if has_period_code:
-            # 只保留 ticker + report_period_code（唯一定位，排除衝突的年份欄位）
+            # 只保留 ticker + report_period_code + doc_type（唯一定位，排除衝突的年份欄位；
+            # doc_type 保留是為了「NVDA 202605 的新聞」這種罕見的期別+新聞混合意圖——news 無
+            # report_period_code 故 Tier1 strict 會落空，隨即由 Tier2（含 doc_type）接住只回新聞）
             tier1_key_filters = [f for f in detected_filters
-                                 if f["field"] in ("ticker", "report_period_code")
+                                 if f["field"] in ("ticker", "report_period_code", "doc_type")
                                  and f["polarity"] == "include"]
         else:
             tier1_key_filters = detected_filters
@@ -920,6 +1090,7 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
             "content":          payload.get("document", ""),
             "source":           source,
             "source_type":      infer_source_type(source),
+            "ticker":           payload.get("ticker", ""),   # 供每家保底覆蓋（_ensure_ticker_coverage）
             "chunk_index":      payload.get("chunk_index", 0),
             "chunk_type":       payload.get("chunk_type", "n/a"),
             "rrf_score":        float(p.score),
@@ -940,9 +1111,17 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
     if looks_like_news_query(query) and not any(c["source_type"] == "news" for c in enriched):
         print("WARN  - This looks like a news query, but no news chunks were retrieved.")
 
+    # 每家保底覆蓋：query 明確點名多家 ticker 時，保證每一家在回傳 top_k 裡至少有一個 chunk
+    # （缺的從完整排序池補上，必要時擴充；見 _ensure_ticker_coverage）。
+    result = enriched[:top_k]
+    _ticker_f = next((f for f in detected_filters
+                      if f["field"] == "ticker" and f["polarity"] == "include"), None)
+    if _ticker_f:
+        result = _ensure_ticker_coverage(enriched, result, _ticker_f["value"])
+
     if return_pool:
-        return enriched[:top_k], fallback_note, pre_rerank_pool
-    return enriched[:top_k], fallback_note
+        return result, fallback_note, pre_rerank_pool
+    return result, fallback_note
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1095,8 +1274,9 @@ def format_sources(chunks: list[dict]) -> str:
 
 def call_llm(messages: list[dict], model_name: str, temperature: float = 0.0) -> str:
     """依 model 名稱路由：'gemini-' 開頭走 Google GenAI（GEMINI_API_KEY），
-    其餘走 Groq OpenAI-compatible（GROQ_API_KEY）。messages 為 OpenAI 格式
-    （[{role, content}]），Gemini 路徑會就地轉成 contents + system_instruction。
+    其餘走 NVIDIA NIM OpenAI-compatible endpoint（NVIDIA_API_KEY）——2026-07-21 統一由 Groq
+    換過來（見 agentic_rag_nv.py 的驗證：單一 key、無 Groq 免費層那種 TPD/TPM 硬牆）。
+    messages 為 OpenAI 格式（[{role, content}]），Gemini 路徑會就地轉成 contents + system_instruction。
 
     temperature 預設 0.0：filter / rewrite / judge 等「檢索與評分」呼叫要確定性、可重現。
     生成答案的呼叫端應顯式傳 GEN_TEMPERATURE(=0.3)——temp=0 的 greedy 生成會重複並漏 rubric 點。"""
@@ -1132,17 +1312,15 @@ def call_llm(messages: list[dict], model_name: str, temperature: float = 0.0) ->
         )
         return response.text
 
-    # 其餘一律走 Groq（OpenAI-compatible）；messages 已是 OpenAI 格式可直接送。
+    # 其餘一律走 NVIDIA NIM（OpenAI-compatible）；messages 已是 OpenAI 格式可直接送。
     import openai
-    for _attempt in range(5):
-        try:
-            client = openai.OpenAI(api_key=_get_groq_key(), base_url=GROQ_BASE_URL)
-            resp = client.chat.completions.create(model=model_name, messages=messages, temperature=temperature)
-            return resp.choices[0].message.content
-        except Exception as _e:
-            if _rotate_groq_key(str(_e)):
-                continue
-            raise
+
+    nv_key = os.getenv("NVIDIA_API_KEY")
+    if not nv_key:
+        raise RuntimeError("NVIDIA_API_KEY 未設定，call_llm 無法路由到 NVIDIA NIM。")
+    client = openai.OpenAI(api_key=nv_key, base_url=NVIDIA_BASE_URL)
+    resp = client.chat.completions.create(model=model_name, messages=messages, temperature=temperature)
+    return resp.choices[0].message.content
 
 
 # ══════════════════════════════════════════════════════════════════════════════
