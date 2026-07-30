@@ -37,8 +37,8 @@ call_llm / 重模型建構。無 tool-call 的呼叫（planner/grader/replanner/
 
 ⚠ 硬性約束（沿用舊版，仍成立）：
   1. 重模型（bge_m3/rerank_model/client）整個 process 只建一次、共享；local Qdrant 單寫者鎖。
-  2. retrieve 用 _RETRIEVE_LOCK 序列化（重模型非執行緒安全）；graph.invoke 同步單執行緒，故 run-scoped
-     檢索池（_run_pool）用模組全域即可，execute 每個待辦前歸零。
+  2. retrieve 用 _RETRIEVE_LOCK 序列化（重模型非執行緒安全）；run-scoped 檢索池走 contextvars（見
+     _RunState/_reset_run_pool），子問題之間天生互相隔離，execute 每個待辦前換上全新一份。
   3. retrieve 內部 filter/translate 的 model_name 用 RETRIEVAL_MODEL。
   4. retrieve / subagent 會 print 大量雜訊 → redirect_stdout 靜音。
 """
@@ -881,28 +881,55 @@ def _reflect_and_fix(query: str, answer: str, chunks: list[dict], model_name: st
 # ──────────────────────────────────────────────────────────────────────────────
 # RAG-as-tool：把檢索 / 網路搜尋包成 subagent 可呼叫的 @tool
 #
-# run-scoped 檢索池（_run_pool）：Agent A 每次呼叫 rag_search 就把撈到的 chunk 去重併入這個模組全域池，
+# run-scoped 檢索池：Agent A 每次呼叫 rag_search 就把撈到的 chunk 去重併入「目前子問題」的池，
 # execute 節點在 subagent 跑完後直接讀它拿「這個待辦實際檢索到什麼」（不信任 agent 轉述——沿用舊 deepagents
-# 版 _RUN_SELECTIONS 教訓，但因 graph.invoke 是同步單執行緒，用模組全域 + 每個待辦前歸零即可，不需碎裂的
-# checkpoint_ns key）。_web_notes_run 同理累積 web_search 的網路結果（另標，不進 KB citation allowlist）。
+# 版 _RUN_SELECTIONS 教訓）。
+#
+# 2026-07-30：改用 contextvars.ContextVar 裝整包 run state（取代先前的模組全域 list/set/int）。
+# 動機：子問題平行/pipeline 執行時，兩個子問題可能同時「在途中」（例如 A 在等 Grader 的 LLM 回應、
+# B 已經開始下一輪 retrieve）——如果狀態是單一模組全域，會被彼此互相踩到、池會混在一起。
+# ⚠ 不能直接「用 query 字串分池」：同一個子問題內部的補救重試（MAX_REWRITES）每一輪 active_query
+# 都不同（Grader 的 targeted rewrite），照字面 query 分 key 反而會把同一子問題自己的重試輪次拆散，
+# 破壞現有「跨輪累積」的 _merge_chunks 語意。真正要隔離的單位是「子問題」，不是「這一輪用的 query」。
+# 也不能用參數顯式傳遞：rag_search / web_search 是 LangChain tool，LLM 呼叫時只會帶 query 這個參數，
+# 沒有管道夾帶「目前是哪個子問題」。ContextVar 是分辨這兩者的正確工具：同步單執行緒下行為與舊版
+# 完全一致（只有一個 context 在跑）；未來若用 asyncio 讓子問題重疊執行，每個 asyncio.Task 建立時會
+# 拷貝當下 context，之後彼此獨立、互不污染，rag_search/web_search 簽名完全不用改。
 # ──────────────────────────────────────────────────────────────────────────────
 
+import contextvars
 from langchain_core.tools import tool
 
-_run_pool: list[dict] = []
-_web_notes_run: list[str] = []
-_run_relevant_ids: set[str] = set()   # Grader 最近一次圈選「真正相關」的 chunk id（見 _check_sufficiency）
-_web_call_count = 0   # 當前待辦已呼叫 web_search 幾次（工程層硬上限，見 WEB_SEARCH_MAX_CALLS）
-_rag_call_count = 0   # 當前待辦已呼叫 rag_search 幾次（工程層硬上限，見 RAG_SEARCH_MAX_CALLS）
+
+class _RunState:
+    """一個子問題的 run-scoped 狀態：檢索池、web 筆記、Grader 圈選的相關 id、工具呼叫次數。"""
+    __slots__ = ("pool", "web_notes", "relevant_ids", "rag_calls", "web_calls")
+
+    def __init__(self) -> None:
+        self.pool: list[dict] = []
+        self.web_notes: list[str] = []
+        self.relevant_ids: set[str] = set()
+        self.rag_calls = 0
+        self.web_calls = 0
+
+
+_run_state_var: contextvars.ContextVar[_RunState] = contextvars.ContextVar("agentic_run_state")
+
+
+def _current_run_state() -> _RunState:
+    """取得目前 context 的 run state；理論上 executor 一律先呼叫 _reset_run_pool()，這裡的
+    LookupError 保底只防禦「忘了先 reset」的意外情況，不讓 tool call 直接炸掉。"""
+    try:
+        return _run_state_var.get()
+    except LookupError:
+        state = _RunState()
+        _run_state_var.set(state)
+        return state
 
 
 def _reset_run_pool() -> None:
-    global _web_call_count, _rag_call_count
-    _run_pool.clear()
-    _web_notes_run.clear()
-    _run_relevant_ids.clear()
-    _web_call_count = 0
-    _rag_call_count = 0
+    """開始處理一個新子問題前呼叫：換上一份全新、獨立的 run state。"""
+    _run_state_var.set(_RunState())
 
 
 def _tavily_search(query: str) -> str:
@@ -936,17 +963,17 @@ def rag_search(query: str) -> str:
     """在美股情報知識庫（10-K / 10-Q 財報、財經新聞、財務數據）做混合檢索
     （dense + sparse → RRF → cross-encoder rerank）。傳入一句檢索 query（可用更具體的關鍵字 / 實體 /
     財報標準術語 / 英文），回傳排序後的 top 候選片段，每則含 rerank 分數與可引用的 id（source#chunk）。"""
-    global _rag_call_count
-    if _rag_call_count >= RAG_SEARCH_MAX_CALLS:
+    state = _current_run_state()
+    if state.rag_calls >= RAG_SEARCH_MAX_CALLS:
         _trace(f"  tool rag_search({query[:40]!r}) → 已達硬上限 {RAG_SEARCH_MAX_CALLS} 次,拒絕")
         return (f"（rag_search 已達本子問題上限 {RAG_SEARCH_MAX_CALLS} 次，停止搜尋。"
-                f"目前池中已有 {len(_run_pool)} 個候選、最高 rerank 已到頂——請**不要再搜尋**，"
+                f"目前池中已有 {len(state.pool)} 個候選、最高 rerank 已到頂——請**不要再搜尋**，"
                 f"直接根據已檢索到的內容回報事實 / 作答。）")
-    _rag_call_count += 1
+    state.rag_calls += 1
     chunks = _retrieve_chunks(query)
-    merged = _merge_chunks(_run_pool, chunks)
-    _run_pool.clear()
-    _run_pool.extend(merged)
+    merged = _merge_chunks(state.pool, chunks)
+    state.pool.clear()
+    state.pool.extend(merged)
     if not merged:
         return "（知識庫查無相關片段——若問題是近期新聞/最新事件，考慮改用 web_search）"
     top = merged[:POOL_RETURN_K]
@@ -964,16 +991,16 @@ def web_search(query: str) -> str:
     知識庫（本系統的主要事實來源）優先；不要一遇到「最近／最新」字樣就跳來用它。每個子問題最多用幾次，
     用完就要停、改用已檢索到的知識庫內容作答或如實說明查無。傳入搜尋 query，回傳網路結果（外部資料，
     引用請用 [web: 網址] 標註）。"""
-    global _web_call_count
-    if _web_call_count >= WEB_SEARCH_MAX_CALLS:
+    state = _current_run_state()
+    if state.web_calls >= WEB_SEARCH_MAX_CALLS:
         _trace(f"  tool web_search({query[:40]!r}) → 已達硬上限 {WEB_SEARCH_MAX_CALLS} 次,拒絕")
         return (f"（web_search 已達本子問題上限 {WEB_SEARCH_MAX_CALLS} 次，不再搜尋。"
                 f"請改用你已從 rag_search 檢索到的知識庫內容作答；若知識庫確實查無，就如實說明查無。）")
-    _web_call_count += 1
+    state.web_calls += 1
     note = _tavily_search(query)
     if note and not note.startswith("（"):
-        _web_notes_run.append(note)
-    _trace(f"  tool web_search({query[:40]!r}) [{_web_call_count}/{WEB_SEARCH_MAX_CALLS}] → {len(note)} chars")
+        state.web_notes.append(note)
+    _trace(f"  tool web_search({query[:40]!r}) [{state.web_calls}/{WEB_SEARCH_MAX_CALLS}] → {len(note)} chars")
     return note
 
 
@@ -1075,6 +1102,7 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
     from langchain_core.messages import HumanMessage
 
     _reset_run_pool()
+    state = _current_run_state()
     summary = ""
     try:
         app = _get_subagent(freshness_mode)
@@ -1086,10 +1114,10 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
                 out = app.invoke({"messages": messages},
                                  config={"recursion_limit": SUBAGENT_RECURSION_LIMIT})
             messages = out["messages"]
-            verdict = _check_sufficiency(task, _run_pool, temporal_scope)   # Agent B｜Grader（單次 LLM、無工具）
-            _run_relevant_ids.clear()
-            _run_relevant_ids.update(verdict.get("relevant_ids", []))
-            _trace(f"execute[{subq_index}] round={rnd} pool={len(_run_pool)} "
+            verdict = _check_sufficiency(task, state.pool, temporal_scope)   # Agent B｜Grader（單次 LLM、無工具）
+            state.relevant_ids.clear()
+            state.relevant_ids.update(verdict.get("relevant_ids", []))
+            _trace(f"execute[{subq_index}] round={rnd} pool={len(state.pool)} "
                    f"sufficient={verdict['sufficient']} missing={verdict['missing'][:40]!r}")
             if verdict["sufficient"] or rnd >= MAX_REWRITES:
                 # 通過（或次數用盡強制放行）：發最後觸發訊息，解除生成鎖，要 A 產出局部摘要
@@ -1110,15 +1138,15 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
                 f"記得：繼續用工具搜尋、**不要生成摘要**。")))
     except Exception as e:
         _trace(f"execute[{subq_index}] subagent 崩潰 → 降級單次檢索+生成：{e!r}")
-        if not _run_pool:
+        if not state.pool:
             with contextlib.redirect_stdout(io.StringIO()):
-                _run_pool.extend(_merge_chunks([], _retrieve_chunks(task)))
-        summary = _fallback_local_summary(task, _run_pool[:WRITER_MAX_CHUNKS])
+                state.pool.extend(_merge_chunks([], _retrieve_chunks(task)))
+        summary = _fallback_local_summary(task, state.pool[:WRITER_MAX_CHUNKS])
 
     if not (summary or "").strip():
         # react 跑完但沒吐摘要（弱腦跳過）→ 降級用池裡的 chunk 生成
-        summary = _fallback_local_summary(task, _run_pool[:WRITER_MAX_CHUNKS])
-    return summary, list(_web_notes_run)
+        summary = _fallback_local_summary(task, state.pool[:WRITER_MAX_CHUNKS])
+    return summary, list(state.web_notes)
 
 
 def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: str,
@@ -1130,19 +1158,20 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
     設計依據 [[multi-intent-agentA-is-the-leak]]：乾淨 decomposition 的 gold-chunk 覆蓋(35/75)遠勝
     真實 ReAct v2(16/75)、也贏單管線(25/75)——差別只在拿掉 Agent A 的 query 亂改。"""
     _reset_run_pool()
+    state = _current_run_state()
     web_notes: list[str] = []
     active_query = task
     verdict = {"sufficient": False, "missing": "", "new_query": ""}
     try:
         for rnd in range(MAX_REWRITES + 1):
             chunks = _retrieve_chunks(active_query)            # planner/Grader 的 query 直接檢索（無 ReAct 改寫）
-            merged = _merge_chunks(list(_run_pool), chunks)     # 併池：只加不減，補救輪不洗掉先前好 chunk
-            _run_pool.clear()
-            _run_pool.extend(merged)
-            verdict = _check_sufficiency(task, _run_pool, temporal_scope)   # Agent B｜Grader
-            _run_relevant_ids.clear()
-            _run_relevant_ids.update(verdict.get("relevant_ids", []))
-            _trace(f"execute[{subq_index}] det round={rnd} q={active_query[:32]!r} pool={len(_run_pool)} "
+            merged = _merge_chunks(list(state.pool), chunks)    # 併池：只加不減，補救輪不洗掉先前好 chunk
+            state.pool.clear()
+            state.pool.extend(merged)
+            verdict = _check_sufficiency(task, state.pool, temporal_scope)   # Agent B｜Grader
+            state.relevant_ids.clear()
+            state.relevant_ids.update(verdict.get("relevant_ids", []))
+            _trace(f"execute[{subq_index}] det round={rnd} q={active_query[:32]!r} pool={len(state.pool)} "
                    f"sufficient={verdict['sufficient']} missing={verdict['missing'][:40]!r}")
             if verdict["sufficient"] or rnd >= MAX_REWRITES:
                 break
@@ -1157,11 +1186,11 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
                 _trace(f"execute[{subq_index}] det web fallback → {len(note)} chars")
     except Exception as e:
         _trace(f"execute[{subq_index}] deterministic executor 例外 → 降級：{e!r}")
-        if not _run_pool:
+        if not state.pool:
             with contextlib.redirect_stdout(io.StringIO()):
-                _run_pool.extend(_merge_chunks([], _retrieve_chunks(task)))
+                state.pool.extend(_merge_chunks([], _retrieve_chunks(task)))
 
-    summary = _fallback_local_summary(task, _run_pool[:WRITER_MAX_CHUNKS])  # 走生產契約單次生成（內含 try/except 保底）
+    summary = _fallback_local_summary(task, state.pool[:WRITER_MAX_CHUNKS])  # 走生產契約單次生成（內含 try/except 保底）
     return summary, web_notes
 
 
@@ -1241,20 +1270,22 @@ def _node_execute(state: SupervisorState) -> dict:
     todos[idx]["result"] = summary
     todos[idx]["web_used"] = bool(web_notes)
     todos[idx]["status"] = "done"
-    # run pool 的 top-k 收進 collected（沿用 _fair_select 分桶依據 _subq）。
+    # run pool 的 top-k 收進 collected（沿用 _fair_select 分桶依據 _subq）。executor 剛跑完、還在同一個
+    # context 內，_current_run_state() 拿到的就是這個子問題剛剛用的那份 run state（見上方 contextvars 說明）。
     # 優先用 Grader 圈選的 relevant_ids 過濾（見 _check_sufficiency）：不再是「rerank 前 k 名就全收」，
     # 濾掉高分但離題的 chunk（例：問 A 公司卻混進 B 公司財報）。Grader 沒給圈選訊號（欄位空）→ 退回
     # 舊行為，避免因為新欄位解析失敗就誤濾成 0 筆。
-    if _run_relevant_ids:
-        approved = [c for c in _run_pool if _chunk_id(c) in _run_relevant_ids]
-        picked = approved[:COMMIT_TOP_K] if approved else list(_run_pool[:COMMIT_TOP_K])
+    run_state = _current_run_state()
+    if run_state.relevant_ids:
+        approved = [c for c in run_state.pool if _chunk_id(c) in run_state.relevant_ids]
+        picked = approved[:COMMIT_TOP_K] if approved else list(run_state.pool[:COMMIT_TOP_K])
     else:
-        picked = list(_run_pool[:COMMIT_TOP_K])
+        picked = list(run_state.pool[:COMMIT_TOP_K])
     # 每家保底覆蓋（Phase 1）：子問題點名多家公司時，保證每一家至少有一個 chunk 被 commit 進
     # collected（否則 COMMIT_TOP_K 截斷會把被比較的公司整個擠掉，見 mh-01）。deterministic、無 LLM。
     _mentioned = _mentioned_tickers(task)
     if len(_mentioned) > 1:
-        picked = rq._ensure_ticker_coverage(_run_pool, picked, _mentioned)
+        picked = rq._ensure_ticker_coverage(run_state.pool, picked, _mentioned)
     for c in picked:
         c["_subq"] = todos[idx]["id"]
     collected = _merge_chunks(state.get("collected", []), picked)
