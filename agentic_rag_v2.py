@@ -13,7 +13,11 @@ agentic_rag_v2.py — Supervisor + Subagent + RAG-as-Tool 版 agentic RAG（2026
                   工具 = [rag_search, web_search]，動態決定搜尋策略、看 rerank 分數決定續搜/改關鍵字/上網。
                   **system prompt 鎖定**：收到「評估已通過」前只用工具回報事實、絕不自行生成摘要。
                 · Agent B｜Grader：不是 tool-loop agent，是 Evaluator/Reflection（單次 LLM、無工具，
-                  複用 _check_sufficiency），審查目前檢索池 → {sufficient, missing, new_query}。
+                  複用 _check_sufficiency），審查目前檢索池 → {sufficient, missing, new_query, relevant_ids}。
+                  relevant_ids（2026-07-30 新增）：Grader 從看到的候選裡明確圈選「真正相關」的 id，
+                  commit 進 collected 時優先用這份圈選結果過濾，不再是「rerank 前 k 名就全收」（見
+                  [[multi-intent-agentA-is-the-leak]] 殘留雜訊案例：不相關公司的 chunk 分數夠高就混進
+                  citation）。Grader 沒給圈選（欄位空/解析失敗）→ 退回舊行為，不誤濾成 0 筆。
                 內部控制流（見 _run_executor）：A 純檢索 → Grader 評分 → 不夠就餵糾正訊息續搜（有界
                 MAX_REWRITES）；夠了才發「解除限制、生成摘要」觸發訊息 → A 產出局部摘要 → 跳出。
   replan     ── Replanner：一次 LLM 呼叫，依已完成待辦的局部結果動態更新清單——KB 查無新聞 → 新增
@@ -672,6 +676,10 @@ _CHECKER_PROMPT = """你是嚴格的「資訊充足度評論家」。給你一�
   1. 具體指出「缺什麼」(哪個數據 / 實體 / 面向沒出現)。
   2. 給一個「改寫後、更可能撈到那個缺漏資訊的新檢索 query」——換措辭或用更具體的關鍵字 / 實體 /
      財報標準術語 / 英文,**不要照抄原句**(照抄通常撈到一模一樣的東西)。
+- 不論 sufficient 是 true 還是 false,都要從下面列出的候選片段中,把「跟子問題主題真正相關、可以拿來
+  當作答案依據」的片段挑出來,填進 relevant_ids(用片段的 "id=" 那串,不是 [數字] 編號)。跟子問題主題
+  無關或講的是別的實體/公司的候選(例如子問題問 A 公司,片段其實是 B 公司)**不要**列入——寧可少列,
+  也不要為了湊數把離題片段也算進去。
 
 ⏱ KB 時間天花板(重要,避免無限空轉):「時間與資料邊界」會列出這個知識庫實際涵蓋到的最新期間
 (KB Coverage Snapshot)。若候選片段已經涵蓋到「該主題在 KB 中最新可得的資料」,則**即使子問題
@@ -681,17 +689,22 @@ _CHECKER_PROMPT = """你是嚴格的「資訊充足度評論家」。給你一�
 內、KB 應該要有卻沒撈到」的資料時,才判 sufficient=false。
 
 只輸出一個 JSON 物件,不要任何其他文字:
-{"sufficient": true 或 false, "missing": "缺什麼(夠則空字串)", "new_query": "改寫後的新 query(夠則空字串)"}"""
+{"sufficient": true 或 false, "missing": "缺什麼(夠則空字串)", "new_query": "改寫後的新 query(夠則空字串)",
+ "relevant_ids": ["真正相關的候選 id", ...]}"""
 
 
 def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = "") -> dict:
-    """Sufficiency Checker 節點的核心:一次 LLM 呼叫吐出 {sufficient, missing, new_query}。
+    """Sufficiency Checker 節點的核心:一次 LLM 呼叫吐出 {sufficient, missing, new_query, relevant_ids}。
     temporal_scope(KB coverage + 時間政策)一併餵給 Grader,讓它能分辨「搜得不夠好」與「KB 天花板已到」
     ——否則對『要求比 KB 更新期間』的題(如指定未來日期的新聞題)Grader 會一路判不足、逼 Agent 空轉
-    撞牆(實測:news 類多題因此跑滿 MAX_REWRITES、拖到 ~1 小時/題)。"""
+    撞牆(實測:news 類多題因此跑滿 MAX_REWRITES、拖到 ~1 小時/題)。
+    relevant_ids:Grader 從「這次實際看到的候選」裡圈選出來的相關 chunk id,只接受出現在 shown_ids
+    的值(擋 LLM 憑空造 id)。_node_execute commit 進 collected 時用它過濾,不再是「rerank top-k 全收」
+    ——修 execute[1] 誤把不相關公司的高分 chunk 一起 commit 進 citation 的殘留雜訊。"""
     if not pool:
-        return {"sufficient": False, "missing": "尚未檢索到任何候選片段", "new_query": subquery}
+        return {"sufficient": False, "missing": "尚未檢索到任何候選片段", "new_query": subquery, "relevant_ids": []}
     top = pool[:POOL_RETURN_K]
+    shown_ids = {_chunk_id(c) for c in top}
     ctx = "\n".join(
         f"[{i}] rerank={c['rerank_score']:.3f} | id={_chunk_id(c)}\n    {_snippet(c['content'], subquery)}"
         for i, c in enumerate(top, start=1)
@@ -704,14 +717,19 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
     data = _loads_json_lenient(raw)
     if not isinstance(data, dict):
         # 解不出 → 保守當「夠」(避免無限迴圈:池非空但 checker 壞掉時,寧可收下現有候選也不空轉)
+        # relevant_ids 也保守給全部(未圈選 = 無過濾訊號,退回舊行為,不誤濾成 0 筆)
         _trace(f"check[{subquery[:24]!r}] ✗ 無法解析 JSON,保守收下現有候選")
-        return {"sufficient": True, "missing": "", "new_query": ""}
+        return {"sufficient": True, "missing": "", "new_query": "", "relevant_ids": sorted(shown_ids)}
     sufficient = _coerce_bool(data.get("sufficient", False))
     missing = str(data.get("missing", "") or "").strip()
     new_query = str(data.get("new_query", "") or "").strip()
+    raw_ids = data.get("relevant_ids", [])
+    relevant_ids = ([str(x).strip() for x in raw_ids
+                     if isinstance(x, str) and str(x).strip() in shown_ids]
+                    if isinstance(raw_ids, list) else [])
     _trace(f"check[{subquery[:24]!r}] sufficient={sufficient} missing={missing[:50]!r} "
-           f"new_query={new_query[:50]!r}")
-    return {"sufficient": sufficient, "missing": missing, "new_query": new_query}
+           f"new_query={new_query[:50]!r} relevant_ids={len(relevant_ids)}/{len(shown_ids)}")
+    return {"sufficient": sufficient, "missing": missing, "new_query": new_query, "relevant_ids": relevant_ids}
 
 
 def _retrieve_chunks(query: str) -> list[dict]:
@@ -873,6 +891,7 @@ from langchain_core.tools import tool
 
 _run_pool: list[dict] = []
 _web_notes_run: list[str] = []
+_run_relevant_ids: set[str] = set()   # Grader 最近一次圈選「真正相關」的 chunk id（見 _check_sufficiency）
 _web_call_count = 0   # 當前待辦已呼叫 web_search 幾次（工程層硬上限，見 WEB_SEARCH_MAX_CALLS）
 _rag_call_count = 0   # 當前待辦已呼叫 rag_search 幾次（工程層硬上限，見 RAG_SEARCH_MAX_CALLS）
 
@@ -881,6 +900,7 @@ def _reset_run_pool() -> None:
     global _web_call_count, _rag_call_count
     _run_pool.clear()
     _web_notes_run.clear()
+    _run_relevant_ids.clear()
     _web_call_count = 0
     _rag_call_count = 0
 
@@ -1067,6 +1087,8 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
                                  config={"recursion_limit": SUBAGENT_RECURSION_LIMIT})
             messages = out["messages"]
             verdict = _check_sufficiency(task, _run_pool, temporal_scope)   # Agent B｜Grader（單次 LLM、無工具）
+            _run_relevant_ids.clear()
+            _run_relevant_ids.update(verdict.get("relevant_ids", []))
             _trace(f"execute[{subq_index}] round={rnd} pool={len(_run_pool)} "
                    f"sufficient={verdict['sufficient']} missing={verdict['missing'][:40]!r}")
             if verdict["sufficient"] or rnd >= MAX_REWRITES:
@@ -1118,6 +1140,8 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
             _run_pool.clear()
             _run_pool.extend(merged)
             verdict = _check_sufficiency(task, _run_pool, temporal_scope)   # Agent B｜Grader
+            _run_relevant_ids.clear()
+            _run_relevant_ids.update(verdict.get("relevant_ids", []))
             _trace(f"execute[{subq_index}] det round={rnd} q={active_query[:32]!r} pool={len(_run_pool)} "
                    f"sufficient={verdict['sufficient']} missing={verdict['missing'][:40]!r}")
             if verdict["sufficient"] or rnd >= MAX_REWRITES:
@@ -1217,8 +1241,15 @@ def _node_execute(state: SupervisorState) -> dict:
     todos[idx]["result"] = summary
     todos[idx]["web_used"] = bool(web_notes)
     todos[idx]["status"] = "done"
-    # run pool 的 top-k 收進 collected（沿用 _fair_select 分桶依據 _subq）
-    picked = list(_run_pool[:COMMIT_TOP_K])
+    # run pool 的 top-k 收進 collected（沿用 _fair_select 分桶依據 _subq）。
+    # 優先用 Grader 圈選的 relevant_ids 過濾（見 _check_sufficiency）：不再是「rerank 前 k 名就全收」，
+    # 濾掉高分但離題的 chunk（例：問 A 公司卻混進 B 公司財報）。Grader 沒給圈選訊號（欄位空）→ 退回
+    # 舊行為，避免因為新欄位解析失敗就誤濾成 0 筆。
+    if _run_relevant_ids:
+        approved = [c for c in _run_pool if _chunk_id(c) in _run_relevant_ids]
+        picked = approved[:COMMIT_TOP_K] if approved else list(_run_pool[:COMMIT_TOP_K])
+    else:
+        picked = list(_run_pool[:COMMIT_TOP_K])
     # 每家保底覆蓋（Phase 1）：子問題點名多家公司時，保證每一家至少有一個 chunk 被 commit 進
     # collected（否則 COMMIT_TOP_K 截斷會把被比較的公司整個擠掉，見 mh-01）。deterministic、無 LLM。
     _mentioned = _mentioned_tickers(task)
