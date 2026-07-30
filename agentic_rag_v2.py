@@ -513,8 +513,13 @@ def _best_window_start(text_lower: str, terms: set[str], n: int) -> tuple[int, i
     return best_start, best_score
 
 
-def _snippet(text: str, query: str = "", n: int = 400) -> str:
-    """query-aware 截片段：掃全文找跟 query 詞彙重疊最高的 ~n 字為中心取，避免只看前 n 字漏掉後段重點。"""
+def _snippet(text: str, query: str = "", n: int = 1200) -> str:
+    """query-aware 截片段：掃全文找跟 query 詞彙重疊最高的 ~n 字為中心取，避免只看前 n 字漏掉後段重點。
+    n=1200（2026-07-30 從 400 調升）：Grader 看的片段太短會漏掉關鍵數字——中文 query 對英文
+    Fundamentals 內容零詞彙命中時會退回前綴截斷 t[:n]，400 字剛好切在 header/overview，把
+    後段的 'Revenue (TTM): $742.78B / Gross Margin' 切掉，導致 Grader 明明有 chunk 卻誤判
+    insufficient、逼執行層漂移到錯口徑（見 mh-01 診斷）。Fundamentals chunk 最長 ~1421 字，
+    1200 足以讓短的 key-value chunk 全顯示。_mechanical_summary 仍顯式傳 n=200 不受影響。"""
     t = " ".join((text or "").split())
     if len(t) <= n:
         return t
