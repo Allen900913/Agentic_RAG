@@ -55,6 +55,7 @@ import json
 import os
 import re
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime
 from typing import TypedDict
@@ -76,17 +77,66 @@ _NVIDIA_BASE_URL_RQ = "https://integrate.api.nvidia.com/v1"
 _orig_call_llm = rq.call_llm
 
 
+# 429/5xx 指數退避（fix 2026-07-31）：實測長跑會把 NVIDIA NIM 配額燒到 429 Too Many Requests，
+# 原本裸呼叫無重試 → 一撞就永久失敗、退機械傾印（見 eval 56/100 fallback 事故）。這裡對「暫時性」
+# 錯誤（429 限速 + 500/502/503/504 + 連線/逾時）做有界指數退避；honor Retry-After header；重試用盡
+# 才 raise，讓上層既有 fallback 當最後保底。注意：若是「配額整個耗盡」而非瞬時 RPM 尖峰，退避只能
+# 撐過短暫尖峰，救不了長時間見底——那種情況要靠降併發 / 降呼叫量 / 等配額重置。
+_LLM_MAX_RETRIES   = int(os.getenv("AGENTIC_LLM_MAX_RETRIES", "5"))
+_LLM_BACKOFF_BASE  = float(os.getenv("AGENTIC_LLM_BACKOFF_BASE", "2.0"))   # 秒；2,4,8,16,32...
+_LLM_BACKOFF_CAP   = float(os.getenv("AGENTIC_LLM_BACKOFF_CAP", "30.0"))   # 單次退避上限
+
+
+def _retry_after_seconds(exc) -> float | None:
+    """從例外的 response header 取 Retry-After（秒）；取不到回 None。"""
+    resp = getattr(exc, "response", None)
+    headers = getattr(resp, "headers", None) or {}
+    val = headers.get("retry-after") or headers.get("Retry-After")
+    if val is None:
+        return None
+    try:
+        return float(val)
+    except (TypeError, ValueError):
+        return None
+
+
 def _nvidia_call_llm(messages: list[dict], model_name: str, temperature: float = 0.0) -> str:
-    """取代 rq.call_llm：gemini- 開頭仍走原本的 Gemini 路徑，其餘一律走 NVIDIA（而非 Groq）。"""
+    """取代 rq.call_llm：gemini- 開頭仍走原本的 Gemini 路徑，其餘一律走 NVIDIA（而非 Groq）。
+    對暫時性錯誤（429 / 5xx / 連線 / 逾時）做有界指數退避重試（見上方註解）。"""
     if model_name.startswith("gemini-"):
         return _orig_call_llm(messages, model_name, temperature)
+    import random
     import openai
     nv_key = os.getenv("NVIDIA_API_KEY")
     if not nv_key:
         raise RuntimeError("agentic_rag_nv 需要 NVIDIA_API_KEY，但環境變數裡沒有。")
     client = openai.OpenAI(api_key=nv_key, base_url=_NVIDIA_BASE_URL_RQ)
-    resp = client.chat.completions.create(model=model_name, messages=messages, temperature=temperature)
-    return resp.choices[0].message.content
+    _RETRYABLE = (openai.RateLimitError, openai.APIConnectionError, openai.APITimeoutError)
+    last_exc = None
+    for attempt in range(_LLM_MAX_RETRIES + 1):
+        try:
+            resp = client.chat.completions.create(
+                model=model_name, messages=messages, temperature=temperature)
+            return resp.choices[0].message.content
+        except _RETRYABLE as e:
+            # RateLimitError(429) 是 APIStatusError 的子類，必須排在下面 APIStatusError 之前先攔，
+            # 否則會被當成「非 5xx status error」立刻 re-raise（實測踩過）。連線/逾時也在此重試。
+            last_exc = e
+        except openai.APIStatusError as e:
+            # 其餘 status error：只重試暫時性 5xx；4xx（請求本身的問題）重試無益，直接 raise。
+            if e.status_code not in (500, 502, 503, 504):
+                raise
+            last_exc = e
+        if attempt >= _LLM_MAX_RETRIES:
+            break
+        # 優先 honor Retry-After，否則指數退避 + jitter，避免 thread pool 多 worker 同步重試撞同一波。
+        delay = _retry_after_seconds(last_exc)
+        if delay is None:
+            delay = min(_LLM_BACKOFF_BASE * (2 ** attempt), _LLM_BACKOFF_CAP)
+        delay += random.uniform(0, delay * 0.25)
+        _trace(f"LLM {type(last_exc).__name__} → 退避重試 {attempt + 1}/{_LLM_MAX_RETRIES}，等 {delay:.1f}s")
+        time.sleep(delay)
+    raise last_exc
 
 
 rq.call_llm = _nvidia_call_llm
@@ -131,8 +181,11 @@ MAX_TODOS      = MAX_SUBQUERIES   # 待辦清單總數上限（沿用 7：Magnif
 # 2026-07-31：execute 節點改成一次處理「一整波」pending 待辦（見 _node_execute），同一波內彼此獨立
 # 的子問題用 thread pool 重疊執行——retrieve 仍靠 _RETRIEVE_LOCK 天然序列化，grade/生成這類 LLM API
 # 呼叫才是真的重疊（pipeline，不是無腦全平行）。worker 數不需要很大：retrieve 本來就會在鎖上排隊，
-# 多開只是讓更多子問題的「等 LLM 回應」那段時間疊在一起，3~4 個足夠打滿這個疊法的效益。
-AGENTIC_PIPELINE_WORKERS = int(os.getenv("AGENTIC_PIPELINE_WORKERS", "3"))
+# 多開只是讓更多子問題的「等 LLM 回應」那段時間疊在一起，2~3 個足夠打滿這個疊法的效益。
+# ⚠ 預設調回 2（fix 2026-07-31）：實測 workers=3 的併發尖峰會加速把 NVIDIA NIM 打到 429（配額/RPM），
+# 生成大量退機械 fallback（見 eval 56/100 事故）。搭配 _nvidia_call_llm 的退避重試，2 個 worker 兼顧
+# 疊 LLM 等待與不打爆限速；配額充足時可再手動調高。
+AGENTIC_PIPELINE_WORKERS = int(os.getenv("AGENTIC_PIPELINE_WORKERS", "2"))
 # Agent A（Researcher+Generator，真正的 ReAct agent）用的 chat model；預設同 GEN_MODEL（中文生成流暢）。
 # ⚠ 若設 gpt-oss-120b，即 CHANGELOG 續九的 tool-call harmony 洩漏來源——崩潰時 execute 有降級保證。
 SUBAGENT_MODEL = os.getenv("AGENTIC_SUBAGENT_MODEL", GEN_MODEL)
