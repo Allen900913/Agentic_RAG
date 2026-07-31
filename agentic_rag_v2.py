@@ -148,8 +148,12 @@ rq.call_llm = _nvidia_call_llm
 # 與 CHECKER_MODEL（推理）、GEN_MODEL（生成）分離。這類簡單工作直接用小模型 gpt-oss-20b
 # （同 gpt-oss 家族，NVIDIA 上與 120b 同樣快且合法、JSON 輸出穩）。
 RETRIEVAL_MODEL = os.getenv("AGENTIC_RETRIEVAL_MODEL", "openai/gpt-oss-20b")
-# GEN_MODEL：實際寫答案的 Generator（品質優先，GLM 中文流暢）。
-GEN_MODEL       = os.getenv("AGENTIC_GEN_MODEL", "z-ai/glm-5.2")
+# GEN_MODEL：實際寫答案的 Generator（品質優先，中文流暢）。
+# 2026-07-31 從 z-ai/glm-5.2 換成 deepseek-v4-pro：實測 glm-5.2 在 NIM 上單發生成要 150~220s
+# （eval 100 題每題 3 發生成 → 十幾小時，不可行），deepseek-v4-pro ~40s/發、中文品質相當甚至更佳、
+# 引用格式 [source, chunk #N] 正確（gpt-oss-120b 雖 8s 最快，但會吐全形【】引用、需另外校正）。
+# benchmark 見 experiments/agentic/_bench_gen.txt。
+GEN_MODEL       = os.getenv("AGENTIC_GEN_MODEL", "deepseek-ai/deepseek-v4-pro")
 # CHECKER_MODEL：planner 拆解 / sufficiency 判斷 / reflection 幻覺稽核共用（要結構化 JSON 可靠 + 快）。
 # gpt-oss-120b：tool-call/結構化輸出快又合法、無下架風險。
 CHECKER_MODEL   = os.getenv("AGENTIC_CHECKER_MODEL", "openai/gpt-oss-120b")
