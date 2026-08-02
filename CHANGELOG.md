@@ -46,10 +46,12 @@
 
 ## 2026-08-02
 
-- **生成層讀法紀律：SYSTEM_PROMPT 新增 Rule 11-13**（`rag_query.py`，單管線＋agentic 共用）。逐題讀 bincorr 錯誤分出三族「生成讀壞」：**Rule 11 單位**（億/billion 差 10x）、**Rule 12 方向**（符號脫落＋兩期數值臆測時序反轉）、**Rule 13 per-intent**（多意圖某腿有 chunk 卻假性拒答「無資訊」）。agentic smoke：mi-14「improved」→「下降 17.2→16.8」、mix-02「OEM 上升2%」→「fell -2%」、mh-10「not disclosed」→`$60.46B`(=gold)、mi-12 正確不捏造。
-- **確定性單位換算 `convert_usd_units_to_yi()`**（`rag_query.py` + `agentic_rag_v2.py` synthesize 接入）：billion→億 是 LLM 翻譯層 token 習慣，prompt 只能隨機壓（news-09「叫它×10」兩跑一對一全錯）。正解＝Rule 11 要 Writer 原樣保留 `$X billion`，再由**純程式**乘算成正確億（零誤報）。end-to-end news-09 六數字全對（847.5/347.5/400/100/1,850/915 億美元）。
-- **忠實度稽核升級**（`agentic_rag_v2._REFLECT_PROMPT`）：模糊「找幻覺」→ **逐 claim 蘊含 + 雙向**（捏造/矛盾 ＋ 假性查無）；護欄：判事實不判措辭、billion↔億 / FY↔TTM 口徑差不算錯。同模型 gpt-oss-120b（不換模型）。smoke：移除 col-14「GPU vesting」/ mi-10「15 產品全用 Gemini」兩個真 embellishment；**正確不誤殺** col-03（原文真有 $15B OpenAI Series C）、mi-02（74.9%Q1 vs 71.1%TTM 口徑差）。
-- **eval 側**：mi-11 gold 單位錯修正（`$380 billion` 誤寫「380 億」）；發現 col-03/mi-02/mi-10 為 false-negative gold 或口徑差 → 先前 bincorr「~26 真 error」被高估，真實正確率高於 0.645。詳見 [`GENERATION_QUALITY_STATUS.md`](GENERATION_QUALITY_STATUS.md)。**未動**檢索/filter/模型/agentic 結構。
+> 本日改動集中在**生成契約**（`rag_query.py`，單管線與 agentic 共用此契約）。agentic 端的 synthesize
+> 接入、忠實度稽核升級與逐題 smoke 驗證見 [`CHANGELOG_AGENTIC.md`](CHANGELOG_AGENTIC.md) ⑧。
+
+- **`SYSTEM_PROMPT` 新增 Rule 11-13**（`rag_query.py`）。逐題讀錯誤分出三族「生成讀壞」，各補一條通用讀法紀律：**Rule 11 單位**（來源 `$X billion` 原樣保留、別轉億——billion→億 是 ×10）、**Rule 12 方向**（引用來源方向詞原文、保留符號、兩期數值靠日期定先後，禁臆測「在改善」）、**Rule 13 per-intent**（多意圖某腿有相關 chunk 卻假性拒答「無資訊」→ 禁止）。evidence-first 變體舊 Rule 11 順移 14、內文 `rules 1-10`→`1-13`。
+- **確定性單位換算 `convert_usd_units_to_yi()`**（`rag_query.py` 純文字後處理）：billion→億 是 LLM 翻譯層 token 習慣，prompt 只能隨機壓（news-09「叫它×10」兩跑一對一全錯）。正解＝Rule 11 要 Writer 原樣保留 `$X billion`，再由**純程式**乘算成正確億（billion×10 / million×0.01 / trillion×10000），**零誤報**（`X billion` render 成 `X 億` 100% 是錯）。任何呼叫端可套用；邊界安全（%、EPS `$1 to $3`、GPU 台數、已是億的值都不動）。
+- **eval 側 gold**：mi-11 單位錯修正（源文 `$380 billion` 誤寫「380 億」）；確認 col-03（源文真有 $15B OpenAI Series C）/mi-02（74.9%Q1 vs 71.1%TTM 口徑差）/mi-10（FY vs TTM）為 false-negative gold 或口徑差，非系統錯 → 先前 bincorr「~26 真 error」被高估、真實正確率高於 0.645。⚠ `reference_answers.json` 為 gitignore 生成物，gold 修正不進版控。**未動**檢索/filter/模型/agentic 結構。
 
 ---
 
