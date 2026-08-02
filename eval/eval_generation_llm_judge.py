@@ -1,21 +1,29 @@
 """
-eval_generation_llm_judge.py — 五維評估 RAG 生成品質（重構版）
+eval_generation_llm_judge.py — RAG 生成品質評估（重構版）
 
 指標體系（全部改用二元判斷 + Python 算比例，不叫 LLM 直接吐刻度分）：
 
 1. Correctness  (0-1)   — 命中 rubric must_include 得分點的加權比例；is_critical 未命中封頂 0.5；
                           must_not_include 命中（幻覺）直接歸 0。Python 算，LLM 只回傳 hit list。
-2. Hallucination Rate   — 先讓 LLM 把回答拆成原子主張（Atomic Claims），再逐條判 Supported/Unsupported；
-                          hallucination_rate = Unsupported / Total。LLM 回傳二元 list，Python 算比例。
-3. Answer Relevance     — 讓 LLM「反推」該回答在解決什麼問題，再用 BGE-M3 embedding 計算
-                          cosine_sim(原始問題, 推測問題)。LLM 不吐分數，只吐一個字串。
-4. Refusal              — is_refusal bool；wrongful_refusal = answerable 題卻拒答。
-5. Context Recall       — LLM 逐條判斷「retrieved chunks 能否推導 rubric 每個得分點」；
+2. Refusal              — is_refusal bool；wrongful_refusal = answerable 題卻拒答。
+3. Context Recall       — LLM 逐條判斷「retrieved chunks 能否推導 rubric 每個得分點」；
                           context_recall_score = 能推導的數 / 總 rubric 數。
                           無 rubric 的題 fallback 到來源檔名 overlap（與 eval_retrieval.py 對齊）。
 
-所有 judge LLM 呼叫走 Groq（response_format=json_object, temperature=0），
+2026-07-23：移除自製 Hallucination Rate（原子主張判定）與 Answer Relevance（反推問題+embedding
+cosine sim）——兩者與 RAGAS 的 Faithfulness/Answer Relevancy 相關性太低（Exp 0 baseline
+_corr_vs_selfmade 顯示多數類別接近零相關，見 experiments/exp0_baseline/SUMMARY.md），確定
+Faithfulness/Answer Correctness 一律以 RAGAS（eval_ragas_vs_rubric.py）為準，不需要這裡再算
+一份不可信的 proxy，省下每題兩次額外 LLM 呼叫。
+
+所有 judge LLM 呼叫走 NVIDIA NIM（response_format=json_object, temperature=0），
 RAG 生成走相同 endpoint 但不強制 JSON format（以免破壞 parse_query_filters 的輸出）。
+
+2026-07-23：拿掉 Groq 支援（key rotation、GROQ_BASE_URL、EVAL_LLM_PROVIDER/EVAL_JUDGE_PROVIDER
+切換），全部改走 NVIDIA NIM——全專案已於 2026-07-21/22 統一遷移，繼續保留 Groq 分支只會讓
+"--gen-model 忘記覆寫預設值" 這類設定漂移悄悄發生（實測：Exp4 fixed pipeline 因 --gen-model
+沿用舊的 DEFAULT_GROQ_MODEL="llama-3.3-70b-versatile"，打去 NVIDIA endpoint 直接 404，
+第一題就整輪中止）。
 
 Usage:
   python eval/eval_generation_llm_judge.py
@@ -32,8 +40,6 @@ import statistics
 import sys
 from pathlib import Path
 
-import numpy as np
-
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from dotenv import load_dotenv
@@ -41,11 +47,16 @@ load_dotenv(override=True)
 
 import rag_query as rq
 
-GROQ_BASE_URL = "https://api.groq.com/openai/v1"
-DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"
-# 2026-07-12：judge 預設從 gpt-oss-20b 換成 qwen3-32b（見 CHANGELOG）——回歸套件
-# 10/11（20b 是 9/11），且不與任何 gen_model 共用 Groq TPD 池。
-DEFAULT_JUDGE_MODEL = "qwen/qwen3-32b"
+NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
+DEFAULT_GEN_MODEL = rq.DEFAULT_MODEL   # "openai/gpt-oss-120b"，與生產 rag_query.py 一致
+# 2026-07-19：judge 預設從 qwen3-32b 換成 gpt-oss-20b。qwen/qwen3-32b 已下架
+# （404 model_not_found），NVIDIA 目錄亦無任何可用的 Qwen 替身：qwen3-next-80b /
+# seed-oss-36b 都帶 Deprecation:2026-07-27、nemotron-nano-3-30b 直接 404。
+# 選 gpt-oss-20b 的依據是 judge_regression.py 實測（11 案例含 5 反案例，走 NVIDIA）：
+#   openai/gpt-oss-20b   10/11  ← 與被下架的 qwen3-32b 同分
+#   openai/gpt-oss-120b   9/11  ← 大模型反而更差，且與 gen_model 同一支（自評偏誤）
+# 兩者都栽在 lex12_fiscal_calendar（財年措辭誤判，已知系統性 bug 家族，換模型救不了）。
+DEFAULT_JUDGE_MODEL = "openai/gpt-oss-20b"
 
 REFUSAL_MARKERS = [
     "don't have enough information",
@@ -53,39 +64,28 @@ REFUSAL_MARKERS = [
     "知識庫", "無法回答", "沒有足夠",
 ]
 
-# Groq key rotation：TPD 用完自動切換到備用 key
-_GROQ_KEYS: list[str] = []
-_groq_key_idx = 0
-
-def _get_groq_key() -> str:
-    """取得當前使用的 Groq API key。"""
-    global _GROQ_KEYS
-    if not _GROQ_KEYS:
-        _GROQ_KEYS = [k for k in [
-            os.getenv("GROQ_API_KEY"),
-            os.getenv("GROQ_API_KEY2"),
-            os.getenv("GROQ_API_KEY3"),
-            os.getenv("GROQ_API_KEY4"),
-        ] if k]
-    return _GROQ_KEYS[_groq_key_idx % len(_GROQ_KEYS)]
-
-def _rotate_groq_key(err_str: str) -> bool:
-    """若是 TPD 耗盡錯誤，嘗試換下一個 key；回傳是否成功換 key。"""
-    global _groq_key_idx
-    if "tokens per day" not in err_str and "TPD" not in err_str:
-        return False
-    next_idx = _groq_key_idx + 1
-    if next_idx >= len(_GROQ_KEYS):
-        return False
-    _groq_key_idx = next_idx
-    print(f"  [KEY ROTATION] TPD exhausted, switching to GROQ_API_KEY{_groq_key_idx + 1}")
-    return True
+# ── 靜默降級偵測（2026-07-19 新增）───────────────────────────────────────────
+# rag_query.py 有三個「吞掉 LLM 例外、降級後繼續跑」的點，對 A/B 是致命的：
+#   rewrite_query()             → 回傳 []       = 這題根本沒 rewrite
+#   parse_query_filters()       → regex-only filter
+#   translate_query_to_english()→ 回傳原 query
+# 這些設計對「線上服務」是對的（保住可用性），但對「量測 rewrite 有沒有效」是災難——
+# 07-17 就是這樣產出一份看起來完整、實則過半題目沒開 rewrite 的結果檔。
+# 這裡不改 rag_query.py 的生產行為，改成在 eval 端記錄「LLM 呼叫真的失敗過」，
+# 由 run_single_pass 在每題結束後檢查並整輪中止（已完成的題目已逐題落盤，可 resume 續跑）。
+# 注意：rewrite_query 合法地回傳 []（問題本身已是標準英文）不算降級，只有真正的
+# API 例外才會被記進來，兩者不會混淆。
+_DEGRADATION_EVENTS: list[dict] = []
 
 
-# ── LLM 呼叫（生成用 / judge 用，judge 自動偵測 provider）──────────────────
+def _record_degradation(model_name: str, err: Exception) -> None:
+    """在 LLM 呼叫確定失敗（retry/key rotation 都用盡、即將往上拋）時記錄一筆。"""
+    _DEGRADATION_EVENTS.append({"model": model_name, "error": repr(err)[:300]})
 
-def call_llm_groq(messages: list[dict], model_name: str, temperature: float = 0.0) -> str:
-    """生成用：model_name 以 'gemini-' 開頭走 Google GenAI SDK，其餘走 Groq（支援 key rotation）。
+# ── LLM 呼叫（生成用 / judge 用，一律 NVIDIA NIM；'gemini-' 開頭走 Google GenAI）──
+
+def call_llm_nvidia(messages: list[dict], model_name: str, temperature: float = 0.0) -> str:
+    """生成用：model_name 以 'gemini-' 開頭走 Google GenAI SDK，其餘走 NVIDIA NIM。
     temperature 預設 0.0（供 monkey-patch 後的 filter / rewrite 用，要確定性）；
     生成答案的呼叫端顯式傳 rq.GEN_TEMPERATURE(=0.3)——temp=0 的 greedy 生成會漏 rubric 點。"""
     import time
@@ -106,26 +106,38 @@ def call_llm_groq(messages: list[dict], model_name: str, temperature: float = 0.
                 resp = client.models.generate_content(model=model_name, contents=contents, config=config)
                 return resp.text
             import openai
-            client = openai.OpenAI(api_key=_get_groq_key(), base_url=GROQ_BASE_URL)
+            nv = os.getenv("NVIDIA_API_KEY")
+            if not nv:
+                raise RuntimeError("找不到 NVIDIA_API_KEY（.env）。")
+            client = openai.OpenAI(api_key=nv, base_url=NVIDIA_BASE_URL)
             resp = client.chat.completions.create(model=model_name, messages=messages, temperature=temperature)
-            return resp.choices[0].message.content
+            content = resp.choices[0].message.content
+            if content is None:
+                # 某些 NVIDIA 上的推理模型（實測 qwen/qwen3.5-122b-a10b）content 為 None，
+                # 下游 .strip() 會炸；當成失敗處理而不是回傳 None 讓它在別處爆。
+                raise RuntimeError(f"{model_name} returned null content")
+            return content
         except Exception as e:
             err_str = str(e)
-            if _rotate_groq_key(err_str):
-                continue
             retryable = any(code in err_str for code in ("429", "503", "529", "UNAVAILABLE", "rate_limit"))
             if retryable and attempt < 3:
                 wait = 15 * (2 ** attempt)
                 print(f"  [GEN RETRY {attempt+1}/3] {err_str[:80]} — waiting {wait}s...")
                 time.sleep(wait)
             else:
+                # 記錄後才拋：rag_query.py 的 rewrite_query/parse_query_filters/
+                # translate_query_to_english 會把這個例外吞掉並靜默降級，run_single_pass
+                # 靠這筆記錄才知道「這題的檢索側其實已經不是原本的設定」。
+                _record_degradation(model_name, e)
                 raise
 
 
 def call_judge_llm(messages: list[dict], model_name: str, _retries: int = 4) -> str:
-    """Judge 用：temperature=0，JSON mode，自動 retry + key rotation。
+    """Judge 用：temperature=0，JSON mode，自動 retry。
     - model_name 以 'gemini-' 開頭 → Google GenAI SDK（GEMINI_API_KEY）
-    - 其餘 → Groq OpenAI-compatible（GROQ_API_KEY / GROQ_API_KEY2）
+    - 其餘 → NVIDIA NIM（NVIDIA_API_KEY），支援 json_object 且無 Groq 免費層那種 TPM/TPD 天花板
+      （correctness 遇長答案曾 400 json_validate_failed，context_recall 塞 chunk 全文曾
+      413 Request too large，都是 Groq 免費層 8000 TPM 撞出來的，NVIDIA 無此限制）。
     """
     import time
 
@@ -148,7 +160,10 @@ def call_judge_llm(messages: list[dict], model_name: str, _retries: int = 4) -> 
                 return resp.text
             else:
                 import openai
-                client = openai.OpenAI(api_key=_get_groq_key(), base_url=GROQ_BASE_URL)
+                nv = os.getenv("NVIDIA_API_KEY")
+                if not nv:
+                    raise RuntimeError("找不到 NVIDIA_API_KEY（.env）。")
+                client = openai.OpenAI(api_key=nv, base_url=NVIDIA_BASE_URL)
                 resp = client.chat.completions.create(
                     model=model_name,
                     messages=messages,
@@ -159,8 +174,6 @@ def call_judge_llm(messages: list[dict], model_name: str, _retries: int = 4) -> 
 
         except Exception as e:
             err_str = str(e)
-            if _rotate_groq_key(err_str):
-                continue  # 立刻用新 key 重試，不 sleep
             retryable = any(code in err_str for code in ("429", "503", "529", "UNAVAILABLE", "rate_limit"))
             if retryable and attempt < _retries - 1:
                 wait = 15 * (2 ** attempt)  # 15s → 30s → 60s → 120s
@@ -170,110 +183,13 @@ def call_judge_llm(messages: list[dict], model_name: str, _retries: int = 4) -> 
                 raise
 
 
-# 生成走 Groq，patch rq.call_llm。
-rq.call_llm = call_llm_groq
+# 生成走 NVIDIA，patch rq.call_llm。
+rq.call_llm = call_llm_nvidia
 
 
 def _parse_json(raw: str) -> dict:
     cleaned = re.sub(r"^```(?:json)?|```$", "", raw.strip(), flags=re.MULTILINE).strip()
     return json.loads(cleaned)
-
-
-# ── 指標 2：Hallucination Rate（原子主張拆解 + 支撐驗證）──────────────────
-
-_HALLUCINATION_SYSTEM = """\
-You are evaluating whether an AI answer's factual claims are supported by retrieved context chunks.
-
-Task:
-1. Extract every distinct, atomic factual claim from the answer (numbers, names, percentages, events, rankings).
-2. For each claim, judge whether it is directly supported by the retrieved chunks.
-3. Determine if the answer is a refusal (says it lacks information / cannot answer).
-
-Output ONLY a JSON object:
-{
-  "is_refusal": <true|false>,
-  "claims": [
-    {"claim": "<one atomic factual statement>", "supported": <true|false>, "reason": "<one short sentence>"},
-    ...
-  ]
-}
-
-Rules:
-- A claim is "supported" ONLY if the chunks explicitly state or clearly imply it.
-- If is_refusal is true, set claims to [].
-- Do NOT include vague or hedging phrases as claims (e.g. "results may vary").
-- Be strict on numbers: a different number means unsupported.
-"""
-
-
-def evaluate_hallucination(answer: str, chunks: list[dict], model: str) -> dict:
-    """把回答拆成原子主張，逐條判 Supported/Unsupported → hallucination_rate。"""
-    parts = [f"[Chunk {i+1}: {c['source']}]\n{c['content'].strip()}"
-             for i, c in enumerate(chunks)]
-    context = "\n\n".join(parts) if parts else "(no chunks retrieved)"
-
-    messages = [
-        {"role": "system", "content": _HALLUCINATION_SYSTEM},
-        {"role": "user", "content": (
-            f"=== Retrieved Chunks ===\n{context}\n\n"
-            f"=== Answer to Evaluate ===\n{answer}\n\n"
-            "Extract all atomic claims and verify each. Output ONLY the JSON object."
-        )},
-    ]
-    raw = call_judge_llm(messages, model)
-    try:
-        p = _parse_json(raw)
-        claims = p.get("claims", [])
-        total = len(claims)
-        unsupported = sum(1 for c in claims if not c.get("supported", True))
-        return {
-            "is_refusal": bool(p.get("is_refusal", False)),
-            "claims": claims,
-            "total_claims": total,
-            "unsupported_claims": unsupported,
-            "hallucination_rate": round(unsupported / total, 3) if total > 0 else 0.0,
-            "error": None,
-        }
-    except Exception as e:
-        return {
-            "is_refusal": None, "claims": [], "total_claims": 0,
-            "unsupported_claims": 0, "hallucination_rate": None,
-            "error": f"{e!r} | raw={raw[:300]!r}",
-        }
-
-
-# ── 指標 3：Answer Relevance（反推問題 + Embedding cosine sim）──────────────
-
-_REVERSE_QUESTION_SYSTEM = """\
-You are given an AI-generated answer about financial data. Infer the single question this answer was written to address.
-
-Output ONLY a JSON object:
-{"generated_question": "<the question this answer is addressing>"}
-
-Be concise and specific. Do not include any other text.
-"""
-
-
-def generate_reverse_question(answer: str, model: str) -> str:
-    messages = [
-        {"role": "system", "content": _REVERSE_QUESTION_SYSTEM},
-        {"role": "user", "content": f"=== Answer ===\n{answer}\n\nWhat question does this answer address?"},
-    ]
-    raw = call_judge_llm(messages, model)
-    try:
-        return _parse_json(raw).get("generated_question", "")
-    except Exception:
-        return ""
-
-
-def compute_relevance_score(original_q: str, generated_q: str, bge_m3) -> float | None:
-    """cosine_sim(原始問題 embedding, 反推問題 embedding)，用已載入的 BGE-M3。"""
-    if not generated_q:
-        return None
-    vecs = bge_m3.encode([original_q, generated_q], batch_size=2, max_length=512)["dense_vecs"]
-    v1, v2 = vecs[0], vecs[1]
-    cos_sim = float(np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2) + 1e-10))
-    return round(cos_sim, 4)
 
 
 # ── 指標 1：Correctness + Actionable Feedback（合併單次 LLM call）───────────
@@ -284,7 +200,7 @@ You are a strict rubric evaluator AND diagnostic expert for a financial RAG syst
 You will receive:
 1. The user's question and the system's answer
 2. A grading RUBRIC with must_include and must_not_include lists
-3. Pre-computed metric results: hallucination_rate, relevance_score, context_recall
+3. Pre-computed metric results: context_recall
 
 TASK A — Grade the answer against the rubric.
 TASK B — Based on ALL metrics (including your grading), output a 1-3 sentence Chinese diagnostic.
@@ -328,10 +244,8 @@ Grading rules (TASK A):
 
 Diagnostic rules (TASK B, 依優先序):
 1. context_recall_score 低（< 0.5）→ 問題在 Retriever 沒撈到正確 Chunks，與 LLM 無關。
-2. hallucination_rate 高（> 0.2）且 context_recall 尚可 → 問題在 LLM 動用預訓練記憶捏造。
-3. correctness_score 低但 hallucination 低 → 回答雖忠實但漏講關鍵得分點。
-4. wrongful_refusal = true → 知識庫有資料但 LLM 卻拒答，檢查 System Prompt 或 top-k。
-5. relevance_score 低（< 0.7）→ 回答答非所問，可能 query understanding 有誤。
+2. correctness_score 低 → 回答漏講關鍵得分點。
+3. wrongful_refusal = true → 知識庫有資料但 LLM 卻拒答，檢查 System Prompt 或 top-k。
 """
 
 
@@ -371,8 +285,6 @@ def evaluate_correctness_with_feedback(
     query: str,
     answer: str,
     rubric: dict,
-    hall_result: dict,
-    relevance_score: float | None,
     ctx_recall_llm: dict | None,
     ctx_recall_overlap: float | None,
     is_refusal_hint: bool | None,
@@ -403,14 +315,10 @@ def evaluate_correctness_with_feedback(
         for i, p in enumerate(rubric["must_not_include"])
     ) or "  (none)"
 
-    unsupported = [c["claim"] for c in hall_result.get("claims", []) if not c.get("supported", True)]
     uncovered_ctx = [item.get("id", "?") for item in (ctx_recall_llm or {}).get("coverage", [])
                      if not item.get("covered", True)]
 
     metrics_summary = (
-        f"hallucination_rate: {hall_result.get('hallucination_rate')}\n"
-        f"unsupported_claims: {unsupported or '（無）'}\n"
-        f"relevance_score: {relevance_score}\n"
         f"context_recall_llm: {ctx_recall_llm.get('context_recall_score') if ctx_recall_llm else 'N/A'}\n"
         f"context_recall_overlap: {ctx_recall_overlap}\n"
         f"uncovered_rubric_in_chunks: {uncovered_ctx or '（無）'}\n"
@@ -499,7 +407,7 @@ def evaluate_correctness_with_feedback_voted(*, votes: int, **kwargs) -> dict:
 def evaluate_correctness(query: str, answer: str, rubric: dict, model: str) -> dict:
     """舊版單獨 correctness call（無 rubric 時不呼叫，保留相容性）。"""
     return evaluate_correctness_with_feedback(
-        query, answer, rubric, {}, None, None, None, None, None, model
+        query, answer, rubric, None, None, None, None, model
     )
 
 
@@ -601,10 +509,8 @@ _FEEDBACK_SYSTEM = """\
 
 診斷邏輯（依優先序）：
 1. context_recall_score 低（< 0.5）→ 問題在 Retriever 沒撈到正確 Chunks，與 LLM 無關。
-2. hallucination_rate 高（> 0.2）且 context_recall 尚可 → 問題在 LLM 動用預訓練記憶捏造。
-3. correctness_score 低但 hallucination 低 → 問題在回答雖然忠實，但漏講關鍵得分點。
-4. wrongful_refusal = true → 知識庫有資料但 LLM 卻拒答，檢查 System Prompt 或 top-k 設定。
-5. relevance_score 低（< 0.7）→ 回答答非所問，可能 query understanding 有誤。
+2. correctness_score 低 → 回答漏講關鍵得分點。
+3. wrongful_refusal = true → 知識庫有資料但 LLM 卻拒答，檢查 System Prompt 或 top-k 設定。
 可以同時提多個問題，但最多 3 句，每句對應一個具體問題與建議動作。
 """
 
@@ -614,8 +520,6 @@ def generate_actionable_feedback(
     rubric: dict | None,
     correctness: dict | None,
     correctness_verdict: dict | None,
-    hall_result: dict,
-    relevance_score: float | None,
     ctx_recall_llm: dict | None,
     ctx_recall_overlap: float | None,
     is_refusal: bool | None,
@@ -637,24 +541,16 @@ def generate_actionable_feedback(
             if not item.get("covered", True):
                 uncovered_ctx.append(item.get("id", "?"))
 
-    unsupported_claims = [
-        c["claim"] for c in hall_result.get("claims", [])
-        if not c.get("supported", True)
-    ]
-
     metrics_summary = (
-        f"hallucination_rate: {hall_result.get('hallucination_rate')}\n"
         f"correctness_score: {correctness['score'] if correctness else 'N/A'}\n"
         f"critical_miss: {correctness.get('critical_miss') if correctness else 'N/A'}\n"
         f"fatal_hallucination: {correctness.get('fatal_hallucination') if correctness else 'N/A'}\n"
-        f"relevance_score: {relevance_score}\n"
         f"context_recall_llm: {ctx_recall_llm.get('context_recall_score') if ctx_recall_llm else 'N/A'}\n"
         f"context_recall_overlap: {ctx_recall_overlap}\n"
         f"is_refusal: {is_refusal}\n"
         f"wrongful_refusal: {wrongful_refusal}\n"
         f"missed_rubric_points: {missed_points or '（無）'}\n"
-        f"uncovered_in_chunks: {uncovered_ctx or '（無）'}\n"
-        f"unsupported_claims: {unsupported_claims or '（無）'}"
+        f"uncovered_in_chunks: {uncovered_ctx or '（無）'}"
     )
 
     messages = [
@@ -710,9 +606,7 @@ def expand_relevant(patterns, all_sources):
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 def agg(rows):
-    hall = [r["hallucination_rate"] for r in rows if r["hallucination_rate"] is not None]
     corr = [r["correctness"]["score"] for r in rows if r["correctness"] is not None]
-    rel  = [r["relevance_score"] for r in rows if r["relevance_score"] is not None]
     ctx_llm = [
         r["context_recall_llm"]["context_recall_score"]
         for r in rows
@@ -725,30 +619,26 @@ def agg(rows):
     fatal = [r for r in rows if r["correctness"] and r["correctness"].get("fatal_hallucination")]
     return {
         "n": len(rows),
-        "hallucination_rate_mean":    round(statistics.mean(hall), 3) if hall else None,
         "correctness_mean":           round(statistics.mean(corr), 3) if corr else None,
         "n_with_rubric":              len(corr),
-        "relevance_mean":             round(statistics.mean(rel), 3) if rel else None,
         "context_recall_llm_mean":    round(statistics.mean(ctx_llm), 3) if ctx_llm else None,
         "context_recall_overlap_mean":round(statistics.mean(ctx_ovlp), 3) if ctx_ovlp else None,
         "wrongful_refusal_rate":      round(sum(wref) / len(wref), 3) if wref else None,
         "fatal_hallucination_count":  len(fatal),
         # Pass@ thresholds
-        "hallucination_pass@0.1":     round(sum(1 for s in hall if s <= 0.1) / len(hall), 3) if hall else None,
         "correctness_pass@0.6":       round(sum(1 for s in corr if s >= 0.6) / len(corr), 3) if corr else None,
-        "relevance_pass@0.8":         round(sum(1 for s in rel  if s >= 0.8) / len(rel),  3) if rel  else None,
     }
 
 
 def print_summary_table(summary: dict) -> None:
-    print(f"\n{'═'*82}\nLLM-AS-JUDGE SUMMARY (5 metrics)\n{'═'*82}")
-    hdr = (f"  {'CAT':<9}{'n':>3}  {'hall↓':>6} {'correct':>8} {'relev':>7} "
+    print(f"\n{'═'*82}\nLLM-AS-JUDGE SUMMARY (3 metrics)\n{'═'*82}")
+    hdr = (f"  {'CAT':<9}{'n':>3}  {'correct':>8} "
            f"{'ctxLLM':>7} {'wRefus':>7} {'fatal':>6}")
     print(hdr)
     for cat, s in summary.items():
         print(f"  {cat.upper():<9}{s['n']:>3}  "
-              f"{str(s['hallucination_rate_mean']):>6} {str(s['correctness_mean']):>8} "
-              f"{str(s['relevance_mean']):>7} {str(s['context_recall_llm_mean']):>7} "
+              f"{str(s['correctness_mean']):>8} "
+              f"{str(s['context_recall_llm_mean']):>7} "
               f"{str(s['wrongful_refusal_rate']):>7} {str(s['fatal_hallucination_count']):>6}")
 
 
@@ -758,7 +648,7 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
     多輪重跑（--repeat）時每輪各自獨立 resume，互不干擾。"""
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # 載入已完成的題目，跳過 hallucination_rate 不為 None 的
+    # 載入已完成的題目，跳過已有 correctness 或 answer 的
     existing_records: dict = {}
     if out_path.exists():
         try:
@@ -766,9 +656,7 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
             for r in existing_data.get("records", []):
                 # skip if any metric was computed OR an answer was generated (no-rubric queries);
                 # re-run only if answer is None (ERROR-skipped due to quota exhaustion)
-                if (r.get("hallucination_rate") is not None
-                        or r.get("correctness") is not None
-                        or r.get("answer") is not None):
+                if r.get("correctness") is not None or r.get("answer") is not None:
                     existing_records[r["id"]] = r
             if existing_records:
                 print(f"[INFO] Resuming: {len(existing_records)} questions already done, will skip them.")
@@ -789,12 +677,14 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
 
         print(f"\n[{qid}] ({category}) {query_str}")
 
+        raw_answer_with_evidence = None
         try:
             # ── Retrieve + Generate ──────────────────────────────────────
             chunks, fallback_note = rq.retrieve(query_str, bge_m3, rerank_model, client,
                                                top_k=args.top_k, model_name=args.retrieval_model,
                                                enable_rewrite=args.rewrite,
                                                translate_query_en=args.translate_query_en,
+                                               full_translate_en=args.full_translate_en,
                                                rerank_multi_query=args.rerank_multi_query)
             if not chunks:
                 answer = "I don't have enough information in my knowledge base to answer this."
@@ -804,28 +694,17 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
                 if args.compress:
                     chunks = rq.compress_chunks(query_str, chunks, args.retrieval_model)
                 user_prompt = rq.build_user_prompt(query_str, chunks, fallback_note)
+                gen_system_prompt = rq.SYSTEM_PROMPT_EVIDENCE_FIRST if args.evidence_first else rq.SYSTEM_PROMPT
                 answer = rq.call_llm(
-                    [{"role": "system", "content": rq.SYSTEM_PROMPT},
+                    [{"role": "system", "content": gen_system_prompt},
                      {"role": "user", "content": user_prompt}],
                     args.gen_model, temperature=rq.GEN_TEMPERATURE)
+                if args.evidence_first:
+                    raw_answer_with_evidence = answer
+                    answer = rq.extract_final_answer(answer)
 
-            # correctness-only 模式：跳過幻覺/相關性/context-recall，省一半 LLM 額度
+            # correctness-only 模式：跳過 context-recall，省一半 LLM 額度
             co = args.correctness_only
-
-            # ── 指標 2：Hallucination Rate（原子主張，每題都跑）────────
-            if co:
-                hall_result = {"claims": [], "total_claims": 0, "unsupported_claims": 0,
-                               "hallucination_rate": None, "is_refusal": None, "error": None}
-            else:
-                hall_result = evaluate_hallucination(answer, chunks, args.judge_model)
-
-            # ── 指標 3：Answer Relevance（反推問題 + cosine sim，每題都跑）
-            if co:
-                generated_q = ""
-                relevance_score = None
-            else:
-                generated_q = generate_reverse_question(answer, args.judge_model)
-                relevance_score = compute_relevance_score(query_str, generated_q, bge_m3)
 
             # ── 指標 5：Context Recall（只有 rubric 題才跑）──────────
             ctx_recall_llm = None
@@ -837,7 +716,7 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
             ctx_recall_overlap = (len(ctx_hits) / len(relevant)) if relevant else None
 
             # ── 先推算初步 refusal（給合併 call 參考）────────────────
-            is_refusal_hint = hall_result.get("is_refusal") or looks_like_refusal(answer)
+            is_refusal_hint = looks_like_refusal(answer)
             wrongful_refusal_hint = bool(is_refusal_hint and answerable)
 
             # ── 指標 1 + 診斷建議（合併單次 LLM call，rubric 題）─────
@@ -850,8 +729,6 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
                     query=query_str,
                     answer=answer,
                     rubric=rubric,
-                    hall_result=hall_result,
-                    relevance_score=relevance_score,
                     ctx_recall_llm=ctx_recall_llm,
                     ctx_recall_overlap=ctx_recall_overlap,
                     is_refusal_hint=is_refusal_hint,
@@ -868,8 +745,6 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
                     rubric=rubric,
                     correctness=None,
                     correctness_verdict=None,
-                    hall_result=hall_result,
-                    relevance_score=relevance_score,
                     ctx_recall_llm=ctx_recall_llm,
                     ctx_recall_overlap=ctx_recall_overlap,
                     is_refusal=is_refusal_hint,
@@ -886,16 +761,12 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
 
             # ── 印進度 ────────────────────────────────────────────────
             ctx_display = (ctx_recall_llm or {}).get("context_recall_score", ctx_recall_overlap)
-            print(f"  hall={hall_result['hallucination_rate']} "
-                  f"correct={correctness['score'] if correctness else '-'} "
-                  f"relev={relevance_score} "
+            print(f"  correct={correctness['score'] if correctness else '-'} "
                   f"refusal={is_refusal} "
                   f"ctx={None if ctx_display is None else round(ctx_display, 2)}")
             if actionable_feedback:
                 print(f"  feedback: {actionable_feedback}")
             for key in ("error",):
-                if hall_result.get(key):
-                    print(f"  [WARN] hallucination parse error: {hall_result[key]}")
                 if correctness_verdict and correctness_verdict.get(key):
                     print(f"  [WARN] correctness parse error: {correctness_verdict[key]}")
                 if ctx_recall_llm and ctx_recall_llm.get(key):
@@ -904,10 +775,6 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
         except Exception as e:
             print(f"  [ERROR] skipping query: {e!r}")
             chunks, answer = [], None
-            hall_result = {"claims": [], "total_claims": 0, "unsupported_claims": 0,
-                           "hallucination_rate": None, "is_refusal": None, "error": repr(e)}
-            generated_q = ""
-            relevance_score = None
             correctness_verdict = correctness = None
             ctx_recall_llm = None
             ctx_recall_overlap = None
@@ -917,17 +784,17 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
         records.append({
             "id": qid, "category": category, "query": query_str,
             "answerable": answerable, "answer": answer,
+            "raw_answer_with_evidence": raw_answer_with_evidence,
             "sources": [{"source": c["source"], "chunk_index": c["chunk_index"]}
                         for c in chunks],
+            # RAGAS 的 context_recall / context_precision / ContextRelevance / faithfulness
+            # 需要「檢索到的 chunk 文字」本身（見 eval_ragas_vs_rubric.py）；只存 source/chunk_index
+            # 不夠。這裡一併把 top-k chunk 的原文落盤，讓 standalone 的 RAGAS 腳本讀結果檔即可，
+            # 不必 re-retrieve（RAGAS 跑在獨立 .venv-ragas，也載不了 rag_query 的重依賴）。
+            "contexts": [c["content"] for c in chunks],
             # 指標 1
             "correctness": correctness,
             "correctness_verdict": correctness_verdict,
-            # 指標 2
-            "hallucination_rate": hall_result.get("hallucination_rate"),
-            "hallucination_claims": hall_result.get("claims", []),
-            # 指標 3
-            "relevance_score": relevance_score,
-            "relevance_generated_question": generated_q,
             # 指標 4
             "is_refusal": is_refusal,
             "wrongful_refusal": wrongful_refusal,
@@ -941,9 +808,27 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump({"summary": {}, "records": records}, f, indent=2, ensure_ascii=False)
 
-        # 每題之間稍等，避免打到 Gemini RPM 上限（免費 10 req/min）
-        import time as _time
-        _time.sleep(8)
+        # ── 靜默降級 → 整輪中止（2026-07-19）────────────────────────────────
+        # 有任何一次 LLM 呼叫真的失敗過，就代表從那一刻起 rewrite/filter/translate
+        # 可能已經被 rag_query.py 靜默降級，這輪的數據不再是它宣稱的那個設定。
+        # 寧可停在第 N 題（已完成的題目都已落盤，重跑會自動 resume），也不要產出
+        # 一份混雜了「有 rewrite」與「沒 rewrite」兩種條件的結果檔（見 07-17 事故）。
+        if _DEGRADATION_EVENTS:
+            print("\n" + "=" * 78)
+            print(f"[ABORT] LLM 呼叫失敗 {len(_DEGRADATION_EVENTS)} 次，檢索側可能已靜默降級，")
+            print("        本輪數據不再可信，中止以免產出污染的結果檔。")
+            for ev in _DEGRADATION_EVENTS[:5]:
+                print(f"          - {ev['model']}: {ev['error'][:160]}")
+            print(f"        已完成 {len(records)} 題並寫入 {out_path}；")
+            print("        修正額度/連線後重跑同一道指令會自動 resume 續跑。")
+            print("=" * 78)
+            raise SystemExit(2)
+
+        # 每題之間稍等，避免打到 Gemini RPM 上限（免費 10 req/min）。
+        # NVIDIA 單一 key 無此限制，--sleep-between 0 可省下 91x8s≈12min/臂。
+        if args.sleep_between > 0:
+            import time as _time
+            _time.sleep(args.sleep_between)
 
     # ── Aggregate（此輪）──────────────────────────────────────────────────
     cats = sorted({r["category"] for r in records}) + ["overall"]
@@ -1024,32 +909,34 @@ def main() -> None:
             stream.reconfigure(encoding="utf-8", errors="replace")
 
     parser = argparse.ArgumentParser(
-        description="Five-metric LLM-as-judge: correctness / hallucination / "
-                    "relevance / refusal / context-recall",
+        description="LLM-as-judge: correctness / refusal / context-recall",
     )
     parser.add_argument("--eval-set", default="eval/eval_set.json")
     parser.add_argument("--output", default="eval/generation_judge.json")
     parser.add_argument("--collection", default=rq.COLLECTION_NAME)
     parser.add_argument("--top-k", type=int, default=rq.DEFAULT_TOP_K)
-    parser.add_argument("--gen-model", default=DEFAULT_GROQ_MODEL)
+    parser.add_argument("--gen-model", default=DEFAULT_GEN_MODEL)
     parser.add_argument("--retrieval-model", default=rq.DEFAULT_MODEL,
                         help="retrieve() 內部 filter/rewrite/translate 呼叫用的模型，"
                              "與 --gen-model 獨立（見 CHANGELOG 2026-07-08 diagnose_crit_miss.py "
                              "bug：同一變數餵兩個維度會讓 gen-model A/B 混入檢索路徑差異）。"
                              "預設與生產 rag_query.DEFAULT_MODEL 一致，不指定時行為不變。")
     parser.add_argument("--judge-model", default=DEFAULT_JUDGE_MODEL)
+    parser.add_argument("--sleep-between", type=float, default=8.0,
+                        help="每題之間的等待秒數（預設 8，為 Gemini 免費層 10 req/min 設的）。"
+                             "走 NVIDIA（--gen-model 非 gemini-*）時可設 0 省下 91x8s≈12 分鐘/臂。")
     parser.add_argument("--judge-votes", type=int, default=1,
                         help="correctness judge 對 must_include/must_not_include 逐項多數決的獨立呼叫次數"
                              "（見 CHANGELOG 2026-07-08 sem-03 false positive 待辦：3 票多數決）。"
                              "預設 1（與舊版單次呼叫行為完全相同）；>1 時每題多花 (votes-1) 次 judge call，"
-                             "只影響 correctness 判定，不影響 hallucination/relevance/context-recall。")
+                             "只影響 correctness 判定，不影響 context-recall。")
     parser.add_argument("--category", default=None)
     parser.add_argument("--ids", nargs="+", default=None,
                         help="只評指定 query id（如 sem-08），對單題除錯/驗證省 TPD。可與 --category 疊用。")
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--correctness-only", action="store_true",
-                        help="只跑 generate + Correctness 評分，跳過 hallucination / "
-                             "relevance / context-recall（每題 2 次 LLM call，省一半額度）")
+                        help="只跑 generate + Correctness 評分，跳過 context-recall"
+                             "（每題少 1 次 LLM call）")
     parser.add_argument("--rewrite", action="store_true",
                         help="Enable rag_query's query-rewrite recall expansion (enable_rewrite=True)")
     parser.add_argument("--repeat", type=int, default=1,
@@ -1057,12 +944,20 @@ def main() -> None:
                              "k>1 時每輪寫入 {output_stem}_run{i}.json，最終彙整（mean/std）寫入 --output。")
     parser.add_argument("--translate-query-en", action="store_true",
                         help="入口把 query 翻成英文一次，dense/sparse/rewrite/rerank 全部改用（解 cross-lingual 失真，見 CHANGELOG 2026-07-08）")
+    parser.add_argument("--full-translate-en", action="store_true",
+                        help="檢索中間層一律用英文（dense+sparse recall + rerank 全英文），對齊 agentic_rag_v2 的 full_translate_en=True，做「單次檢索 vs agentic」公平對照用")
     parser.add_argument("--compress", action="store_true",
                         help="檢索後句級抽取：生成前把每個 chunk 的相關句逐字抽出擺前面（見 CHANGELOG "
                              "2026-07-14）。預設關，維持既有 baseline 向後相容。")
     parser.add_argument("--rerank-multi-query", action="store_true",
                         help="cross-encoder 精排改用「原 query + rewrite 變體」逐一評分取跨 query 最高分"
                              "（需搭配 --rewrite；見 CHANGELOG 2026-07-08 復活案例：英文+glossary 變體下對 sem-02 有效）")
+    parser.add_argument("--evidence-first", action="store_true",
+                        help="生成改用 SYSTEM_PROMPT_EVIDENCE_FIRST：模型先逐 reference 顯式表態"
+                             "相關/不相關（Evidence Log），再根據標記為相關者作答，答案透過"
+                             "extract_final_answer() 剝除 Evidence Log 部分（見 CHANGELOG 2026-07-20 "
+                             "方案 A，對症 sem-08 家族「chunk 已在 top-5、生成仍主動略過」）。"
+                             "原始含 Evidence Log 的輸出保留在 records[].raw_answer_with_evidence 供複查。")
     args = parser.parse_args()
 
     rq.COLLECTION_NAME = args.collection
@@ -1077,7 +972,11 @@ def main() -> None:
         queries = queries[: args.limit]
     print(f"[INFO] Evaluating {len(queries)} queries against '{rq.COLLECTION_NAME}' "
           f"(retrieval={args.retrieval_model}, gen={args.gen_model}, judge={args.judge_model}, "
-          f"judge_votes={args.judge_votes}, rewrite={args.rewrite}, repeat={args.repeat})")
+          f"judge_votes={args.judge_votes}, rewrite={args.rewrite}, repeat={args.repeat}, "
+          f"evidence_first={args.evidence_first})")
+    print(f"[INFO] Providers: llm=nvidia judge=nvidia "
+          f"| sleep_between={args.sleep_between}s "
+          f"| fail-fast on silent degradation: ON")
 
     from FlagEmbedding import BGEM3FlagModel
     from sentence_transformers import CrossEncoder

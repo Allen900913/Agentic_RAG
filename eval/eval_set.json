@@ -1,1823 +1,970 @@
 {
   "_meta": {
-    "description": "Retrieval evaluation set for US Stock RAG. Each query is annotated with the ground-truth source files that *should* be retrieved.",
-    "labeling_granularity": "source_file (any chunk from the listed file is considered a hit)",
+    "description": "重建版 eval_set：6 類 x 15 = 90 題 + multi_hop x 10 = 100 題（2026-07-29：multi_intent 收斂為嚴格『1 財務指標 + 1 新聞事實』的平行雙意圖；新增 multi_hop 類——hop-2 的查詢關鍵字須待 hop-1 答案才能形成，單管線結構上做不到，作為 Agentic replan 的正當評測靶）。純 RAGAS 架構：reference 由 eval/gen_reference_answers.py 從 relevant 黃金來源撈 chunk 自動生成。",
     "categories": {
-      "semantic": "Conceptual / strategic / qualitative queries — dense embedding should excel",
-      "lexical": "Specific numbers, tickers, dates, document names — sparse keyword matching should excel",
-      "mixed": "Combine semantic concept + lexical anchor — hybrid retrieval should win",
-      "colloquial": "Layperson / everyday-language questions that deliberately AVOID the documents' financial jargon (no 'gross margin', 'EPS', 'moat', 'Azure', etc.). They share ground truth with an existing semantic/lexical query (see 'maps_to') but force the retriever to bridge the vocabulary gap — this is the scenario where query-rewrite (colloquial→standard English term) should actually help. Use these to fairly evaluate --rewrite."
+      "semantic": "Conceptual / strategic / qualitative queries (10-K Item 1/1A) — dense embedding should excel",
+      "lexical": "Specific numbers, tickers, dates, document names (Fundamentals/IncomeStatement/10-K/10-Q) — sparse keyword matching should excel",
+      "mixed": "Segment-level concept (growth driver) + concrete lexical anchor (10-Q MD&A) — hybrid retrieval should win",
+      "colloquial": "Layperson phrasing avoiding financial jargon; each question maps_to an existing semantic/lexical/mixed/news/multi_intent question sharing its ground truth — tests query-rewrite vocabulary bridging",
+      "news": "Answerable ONLY from news (analyst ratings, deals, financings, executive statements, stock moves) — validates doc_type=news hard filter",
+      "multi_intent": "Parallel dual-intent: exactly ONE financial figure (Fundamentals/IncomeStatement/10-Q) AND ONE news fact, retrievable independently in parallel — tests single-pass decomposition, NOT multi-hop.",
+      "multi_hop": "True multi-hop: answering requires CHAINED retrieval where hop-2's search key is unknowable until hop-1 is resolved (cross-company superlative -> winner's attribute; or news-event -> entity -> financials). Each hop crosses doc_type. Single-pass RAG structurally cannot chain; this is Agentic replan's rightful test bed."
     },
     "ground_truth_syntax": {
       "exact": "Provide the full filename, e.g. 'NVDA_10K_2026.html'",
-      "glob": "Use wildcards to auto-match any current/future files, e.g. 'NVDA_News_*.txt' matches all NVDA news regardless of date suffix",
-      "expansion": "At eval time, eval_retrieval.py snapshots the current Qdrant collection's source filenames and expands glob patterns via fnmatch. Patterns matching zero sources cause that query to be skipped with a warning."
+      "glob": "Use wildcards, e.g. 'NVDA_News_*.txt' matches all NVDA news regardless of date suffix"
     },
-    "notes": "Ground truth is best-effort. After running eval once, inspect results.json's 'retrieved' vs 'relevant_expanded' fields to fix any wrong assumptions.",
-    "rubric_schema": {
-      "answerable": "bool — 知識庫中是否可答；用於拒答率（answerable=true 卻拒答=錯誤拒答）",
-      "rubric.must_include": "正面得分點 [{checkpoint, weight, is_critical}] → Correctness",
-      "rubric.must_not_include": "負面致命點 [{checkpoint, is_critical}] → Faithfulness（命中即幻覺）",
-      "scoring": "Correctness = 命中 must_include 權重和 / 總權重；漏 is_critical 或命中 must_not_include 視為嚴重失分",
-      "null_rubric": "rubric=null 表示純檢索題，不做 generation 評分"
-    }
+    "schema": "Each query: {id, category, query, relevant (source globs), answerable}. colloquial queries add maps_to (id of the question sharing its ground truth).",
+    "reference_answers": "Generate via: .venv/Scripts/python.exe eval/gen_reference_answers.py --output eval/reference_answers.json"
   },
   "queries": [
+    {
+      "id": "news-01",
+      "category": "news",
+      "query": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+      "relevant": [
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-02",
+      "category": "news",
+      "query": "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？",
+      "relevant": [
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-03",
+      "category": "news",
+      "query": "最近分析師對 Apple 股票有哪些利多的看法？",
+      "relevant": [
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-04",
+      "category": "news",
+      "query": "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？",
+      "relevant": [
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-05",
+      "category": "news",
+      "query": "關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？",
+      "relevant": [
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-06",
+      "category": "news",
+      "query": "NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？",
+      "relevant": [
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-07",
+      "category": "news",
+      "query": "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？",
+      "relevant": [
+        "MSFT_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-08",
+      "category": "news",
+      "query": "有沒有 Microsoft 參與 AI 資安合作的新聞？",
+      "relevant": [
+        "MSFT_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-09",
+      "category": "news",
+      "query": "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+      "relevant": [
+        "GOOGL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-10",
+      "category": "news",
+      "query": "最近有哪些關於 Meta 的利多分析與 AI 投資消息？",
+      "relevant": [
+        "META_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-11",
+      "category": "news",
+      "query": "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+      "relevant": [
+        "AMZN_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-12",
+      "category": "news",
+      "query": "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？",
+      "relevant": [
+        "TSLA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-13",
+      "category": "news",
+      "query": "最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？",
+      "relevant": [
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-14",
+      "category": "news",
+      "query": "新聞如何評價 Apple 服務業務的成長與獲利能力？",
+      "relevant": [
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-15",
+      "category": "news",
+      "query": "新聞報導 Apple 為什麼被視為值得長期持有的股票？",
+      "relevant": [
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-01",
+      "category": "multi_intent",
+      "query": "NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？",
+      "relevant": [
+        "NVDA_Fundamentals_*.txt",
+        "NVDA_IncomeStatement_*.txt",
+        "NVDA_10Q_202604.html",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-02",
+      "category": "multi_intent",
+      "query": "NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？",
+      "relevant": [
+        "NVDA_Fundamentals_*.txt",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-03",
+      "category": "multi_intent",
+      "query": "Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？",
+      "relevant": [
+        "AAPL_Fundamentals_*.txt",
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-04",
+      "category": "multi_intent",
+      "query": "Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？",
+      "relevant": [
+        "AAPL_Fundamentals_*.txt",
+        "AAPL_IncomeStatement_*.txt",
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-05",
+      "category": "multi_intent",
+      "query": "Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？",
+      "relevant": [
+        "MSFT_Fundamentals_20260612.txt",
+        "MSFT_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-06",
+      "category": "multi_intent",
+      "query": "Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？",
+      "relevant": [
+        "MSFT_Fundamentals_*.txt",
+        "MSFT_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-07",
+      "category": "multi_intent",
+      "query": "Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？",
+      "relevant": [
+        "AMZN_Fundamentals_*.txt",
+        "AMZN_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-08",
+      "category": "multi_intent",
+      "query": "Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？",
+      "relevant": [
+        "AMZN_Fundamentals_*.txt",
+        "AMZN_IncomeStatement_*.txt",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-09",
+      "category": "multi_intent",
+      "query": "Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？",
+      "relevant": [
+        "GOOGL_Fundamentals_*.txt",
+        "GOOGL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-10",
+      "category": "multi_intent",
+      "query": "Alphabet 近一年的營收成長率是多少？加上新聞中 Navan 與 Google Gemini 的合作案例，反映出 Google 在 AI 生態系布局上的哪些進展？",
+      "relevant": [
+        "GOOGL_Fundamentals_*.txt",
+        "GOOGL_IncomeStatement_*.txt",
+        "GOOGL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-11",
+      "category": "multi_intent",
+      "query": "Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？",
+      "relevant": [
+        "META_Fundamentals_*.txt",
+        "META_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-12",
+      "category": "multi_intent",
+      "query": "Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？",
+      "relevant": [
+        "META_Fundamentals_*.txt",
+        "META_IncomeStatement_*.txt",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-13",
+      "category": "multi_intent",
+      "query": "Tesla 目前的毛利率表現如何？加上新聞中 SpaceX 即將 IPO 讓 Tesla 關注度降溫的報導，這對 Tesla 目前的市場處境有何影響？",
+      "relevant": [
+        "TSLA_Fundamentals_20260612.txt",
+        "TSLA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-14",
+      "category": "multi_intent",
+      "query": "Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？",
+      "relevant": [
+        "TSLA_10Q_202606.html",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-15",
+      "category": "multi_intent",
+      "query": "NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？",
+      "relevant": [
+        "NVDA_Fundamentals_20260612.txt",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
     {
       "id": "sem-01",
       "category": "semantic",
       "query": "NVIDIA 的核心技術護城河是什麼？",
       "relevant": [
-        "NVDA_10K_2026.html",
-        "NVDA_News_*.txt"
+        "NVDA_10K_2026.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 CUDA 軟體生態 / 開發者鎖定 / 軟硬體全端平台",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到資料中心 GPU 的效能領先或加速運算平台",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到網路整合（NVLink / InfiniBand / Mellanox）或系統級整合",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的具體市佔率百分比或營收數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "sem-02",
       "category": "semantic",
-      "query": "Microsoft 在 AI 領域的長期戰略方向？",
+      "query": "NVIDIA 如何用同一套底層架構同時佈局資料中心、遊戲、專業視覺化與車用市場？",
       "relevant": [
-        "MSFT_10K_2025.html",
-        "MSFT_10Q_202603.html",
-        "MSFT_News_*.txt"
+        "NVDA_10K_2026.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 Copilot 跨 Microsoft 365 / 產品線的 AI 整合",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到 Azure AI / 雲端 AI 基礎設施作為成長引擎",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到與 OpenAI 的合作或自研 AI 模型投資",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的具體 AI 營收數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "sem-03",
       "category": "semantic",
-      "query": "Apple 的服務業務未來成長潛力如何？",
+      "query": "Microsoft 如何把 Copilot 整合進 Microsoft 365 的產品策略？",
       "relevant": [
-        "AAPL_10K_2025.html",
-        "AAPL_10Q_202603.html"
+        "MSFT_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到服務業務營收成長或其高毛利特性",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到訂閱服務生態（App Store / iCloud / Music / TV+ 等）",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到龐大裝置安裝基數帶動服務變現",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的服務業務具體成長率百分比",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "sem-04",
       "category": "semantic",
-      "query": "這些公司面臨哪些主要風險與挑戰？",
+      "query": "Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？",
       "relevant": [
-        "NVDA_10K_2026.html",
-        "MSFT_10K_2025.html",
-        "AAPL_10K_2025.html",
-        "AMZN_10K_2025.html",
-        "GOOGL_10K_2025.html",
-        "META_10K_2025.html",
-        "TSLA_10K_2025.html"
+        "MSFT_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "具體點出至少兩家公司的風險，而非泛泛而談",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "涵蓋競爭 / 監管 / 供應鏈 / 總體經濟 其中數項具體風險",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "風險陳述有對應到正確的公司",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把某公司的風險錯誤歸屬到另一家公司",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "sem-05",
       "category": "semantic",
-      "query": "What are NVIDIA's competitive advantages in the data center market?",
+      "query": "Amazon 在 AWS 基礎設施與 AI 領域（含與 Anthropic 的合作）的投資策略是什麼？",
       "relevant": [
-        "NVDA_10K_2026.html",
-        "NVDA_News_*.txt"
+        "AMZN_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "Mentions full-stack platform / CUDA software ecosystem",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "Mentions performance leadership or accelerated computing",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "Mentions networking (NVLink / InfiniBand / Mellanox) or system integration",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "Fabricates a market-share percentage or revenue figure not in the sources",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "sem-06",
       "category": "semantic",
-      "query": "Apple Silicon 對 Apple 整體策略的意義？",
+      "query": "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？",
       "relevant": [
-        "AAPL_10K_2025.html"
+        "AMZN_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到垂直整合 / 自研晶片讓 Apple 掌控軟硬體",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到效能或能效優勢",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到降低對第三方（如 Intel）的依賴",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的晶片效能具體數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "sem-07",
       "category": "semantic",
-      "query": "Microsoft Azure 在雲端市場的競爭定位",
+      "query": "Google 如何把 Gemini AI 整合進搜尋與其他產品生態系？",
       "relevant": [
-        "MSFT_10K_2025.html",
-        "MSFT_10Q_202603.html"
+        "GOOGL_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 Azure 面臨其他雲端服務商 / hyperscaler / 開源方案的競爭（不要求明確點名 AWS 或 Google/GCP，來源文件本身未指名道姓）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到 AI / Copilot 帶動 Azure 成長",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到企業 / 混合雲 / 既有客戶優勢",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的 Azure 市佔率或營收數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "sem-08",
       "category": "semantic",
-      "query": "Amazon AWS 雲端事業的長期策略方向是什麼？",
+      "query": "Google 搜尋如何演變出 AI Overviews 與 AI Mode 來回應生成式 AI 對搜尋的衝擊？",
       "relevant": [
-        "AMZN_10K_2025.html",
-        "AMZN_10Q_202603.html",
-        "AMZN_News_*.txt"
+        "GOOGL_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 AWS 的獲利貢獻或營業利益表現（如營業利益增長、為 Amazon 重要獲利來源）——不要求出現「市佔龍頭 / market leader」等來源文件本身未使用的具名定位措辭",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到 AI / ML 服務投資（如 Bedrock、自研晶片）",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到基礎設施擴張 / 資本支出",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把 Amazon 整體營收當成 AWS 營收",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "sem-09",
       "category": "semantic",
-      "query": "Google 在 AI 與搜尋領域的競爭策略？",
+      "query": "Meta 在 AI 與 Reality Labs 上的長期願景與投資方向是什麼？",
       "relevant": [
-        "GOOGL_10K_2025.html",
-        "GOOGL_10Q_202603.html",
-        "GOOGL_News_*.txt"
+        "META_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 Gemini 模型 / AI 整合進搜尋",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到搜尋廣告核心業務的防禦或變現",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到 Google Cloud 或自研 TPU",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的搜尋市佔或 AI 營收數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "sem-10",
       "category": "semantic",
-      "query": "Meta 在 AI 與 Reality Labs 上的長期投資方向？",
+      "query": "Meta 的廣告獲利模式與 Meta AI 在旗下 App 中扮演的角色是什麼？",
       "relevant": [
-        "META_10K_2025.html",
-        "META_10Q_202603.html",
-        "META_News_*.txt"
+        "META_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 AI 投資（基礎模型 / 推薦系統 / Meta AI）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到 Reality Labs 的 VR/AR 長期投入與虧損",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到 AI 眼鏡（Ray-Ban Meta）等穿戴裝置",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的 Reality Labs 具體虧損或營收數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "sem-11",
       "category": "semantic",
-      "query": "Tesla 面臨哪些主要競爭與監管風險？",
+      "query": "Tesla 如何把自動駕駛（FSD/Autopilot）技術當作與競爭對手的核心差異化？",
       "relevant": [
-        "TSLA_10K_2025.html",
-        "TSLA_10Q_202603.html",
-        "TSLA_News_*.txt"
+        "TSLA_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 EV 市場競爭加劇 / 價格戰",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到自動駕駛（FSD / Autopilot）的監管風險",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到總體經濟 / 利率 / 補貼政策風險",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的具體召回或訴訟金額",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
-      "id": "lex-01",
-      "category": "lexical",
-      "query": "NVDA P/E ratio",
+      "id": "sem-12",
+      "category": "semantic",
+      "query": "Tesla 在電動車市場面臨什麼樣的競爭態勢？",
       "relevant": [
-        "NVDA_Fundamentals_*.txt"
+        "TSLA_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出 P/E 數值，trailing 約 31.3（forward 約 16.1 亦可）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "標明是 trailing 或 forward，或註明資料期間",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "給出與來源（trailing≈31.3）明顯不符的本益比",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
-      "id": "lex-02",
-      "category": "lexical",
-      "query": "AAPL EPS",
+      "id": "sem-13",
+      "category": "semantic",
+      "query": "Tesla 的能源生成與儲能業務在公司整體策略中扮演什麼角色？",
       "relevant": [
-        "AAPL_Fundamentals_*.txt",
-        "AAPL_IncomeStatement_*.txt"
+        "TSLA_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出 EPS 數值（trailing 約 8.25，或 FY2025 diluted 7.46）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "標明 trailing / 年度 / 對應期間",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "給出與來源明顯不符的 EPS 數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
-      "id": "lex-03",
-      "category": "lexical",
-      "query": "MSFT gross margin",
-      "relevant": [
-        "MSFT_Fundamentals_*.txt",
-        "MSFT_IncomeStatement_*.txt",
-        "MSFT_10K_2025.html",
-        "MSFT_10Q_202603.html"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出毛利率約 68.3%（0.683）",
-            "weight": 50,
-            "is_critical": true,
-            "tolerance_pct": 1.0
-          },
-          {
-            "checkpoint": "標明資料期間或來源",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "給出與來源（約 68%）明顯不符的毛利率",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-04",
-      "category": "mixed",
-      "query": "Apple 最新一份 10-K 年報的風險因素章節中，主要提到哪些風險？",
+      "id": "sem-14",
+      "category": "semantic",
+      "query": "Apple 自己在 10-K 中如何描述它在智慧型手機、PC、平板市場面臨的競爭壓力與市佔地位？",
       "relevant": [
         "AAPL_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "具體點出至少兩項風險（競爭 / 供應鏈 / 監管 / 總體經濟其中數項）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "風險陳述來自該份 10-K，而非泛泛而談",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把其他公司的風險錯誤歸屬到 Apple",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
-      "id": "lex-05",
-      "category": "mixed",
-      "query": "MSFT 202603 那一季的 10-Q 裡，Azure / Intelligent Cloud 業務表現如何？",
+      "id": "sem-15",
+      "category": "semantic",
+      "query": "Apple 的第三方開發者生態系相對於 Android、Windows 等平台的黏著度是如何建立的？",
       "relevant": [
-        "MSFT_10Q_202603.html"
+        "AAPL_10K_2025.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 202603 那一季",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "指出 Azure / Intelligent Cloud 的成長表現或引用數字",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把其他季度的數字當成 202603 季",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-06",
-      "category": "lexical",
-      "query": "NVDA income statement 2026",
-      "relevant": [
-        "NVDA_IncomeStatement_*.txt",
-        "NVDA_10K_2026.html"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出 FY2026 總營收 $215.94B",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "給出 FY2026 毛利 $153.46B 或淨利 $120.07B 或 diluted EPS $4.90",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把 FY2025 的數字（營收 $130.50B 等）當成 FY2026",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-07",
-      "category": "mixed",
-      "query": "AAPL 202603 那一季的 10-Q 裡，iPhone 與服務業務營收各自表現如何？",
-      "relevant": [
-        "AAPL_10Q_202603.html"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 202603 那一季",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "分別指出 iPhone 與服務業務的營收表現或趨勢",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把其他季度的數字當成 202603 季",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-08",
-      "category": "lexical",
-      "query": "AMZN EPS",
-      "relevant": [
-        "AMZN_Fundamentals_*.txt",
-        "AMZN_IncomeStatement_*.txt"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出 EPS 數值（trailing 約 7.63，或 FY2025 diluted 7.17）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "標明 trailing / 年度 / 對應期間",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "給出與來源明顯不符的 EPS 數字",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-09",
-      "category": "lexical",
-      "query": "GOOGL gross margin",
-      "relevant": [
-        "GOOGL_Fundamentals_*.txt",
-        "GOOGL_IncomeStatement_*.txt",
-        "GOOGL_10K_2025.html",
-        "GOOGL_10Q_202603.html"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出毛利率約 60.4%（0.604）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "標明資料期間或來源",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "給出與來源（約 60%）明顯不符的毛利率",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-10",
-      "category": "mixed",
-      "query": "Meta 最新年報（10-K）中，對 Reality Labs 業務的虧損與展望怎麼描述？",
-      "relevant": [
-        "META_10K_2025.html"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 Reality Labs 的虧損或長期投入",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到對 VR/AR 或 Metaverse 的長期展望",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的 Reality Labs 具體虧損或營收數字",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-11",
-      "category": "mixed",
-      "query": "TSLA 202603 那一季的 10-Q 裡，毛利率與交付量的表現如何？",
-      "relevant": [
-        "TSLA_10Q_202603.html"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 202603 那一季",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "給出毛利率或交付量相關數字 / 趨勢",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把其他季度的數字當成 202603 季",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-12",
-      "category": "mixed",
-      "query": "AAPL 202512 那一季的 10-Q 裡，營收成長主要來自哪些產品線？",
-      "relevant": [
-        "AAPL_10Q_202512.html"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 202512 那一季",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "指出至少一項驅動營收成長的產品線或業務",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把其他季度的數字當成 202512 季",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-13",
-      "category": "lexical",
-      "query": "NVIDIA Blackwell GPU architecture",
-      "relevant": [
-        "NVDA_10K_2026.html",
-        "NVDA_10Q_202510.html",
-        "NVDA_10Q_202604.html",
-        "NVDA_News_20260508_01.txt",
-        "NVDA_News_20260508_02.txt",
-        "NVDA_News_20260519_03.txt"
-      ],
-      "answerable": true,
-      "rubric": null
-    },
-    {
-      "id": "lex-14",
-      "category": "lexical",
-      "query": "NVIDIA H100 GPU",
-      "relevant": [
-        "NVDA_10K_2026.html",
-        "NVDA_10Q_202510.html",
-        "NVDA_10Q_202604.html"
-      ],
-      "answerable": true,
-      "rubric": null
-    },
-    {
-      "id": "lex-15",
-      "category": "lexical",
-      "query": "Jensen Huang NVIDIA CEO",
-      "relevant": [
-        "NVDA_News_20260519_01.txt",
-        "NVDA_News_20260519_03.txt"
-      ],
-      "answerable": true,
-      "rubric": null
-    },
-    {
-      "id": "lex-16",
-      "category": "lexical",
-      "query": "Tim Cook Apple CEO",
-      "relevant": [
-        "AAPL_News_20260519_01.txt"
-      ],
-      "answerable": true,
-      "rubric": null
-    },
-    {
-      "id": "lex-17",
-      "category": "lexical",
-      "query": "Microsoft Copilot AI assistant",
-      "relevant": [
-        "MSFT_10K_2025.html",
-        "MSFT_10Q_202603.html",
-        "MSFT_Fundamentals_20260508.txt",
-        "MSFT_Fundamentals_20260519.txt",
-        "MSFT_Fundamentals_20260612.txt",
-        "MSFT_News_20260612_03.txt"
-      ],
-      "answerable": true,
-      "rubric": null
-    },
-    {
-      "id": "lex-18",
-      "category": "lexical",
-      "query": "NVIDIA NVLink interconnect",
-      "relevant": [
-        "NVDA_10K_2026.html",
-        "NVDA_10Q_202510.html",
-        "NVDA_10Q_202604.html"
-      ],
-      "answerable": true,
-      "rubric": null
-    },
-    {
-      "id": "lex-19",
-      "category": "lexical",
-      "query": "Apple Vision Pro headset",
-      "relevant": [
-        "AAPL_10K_2025.html",
-        "AAPL_Fundamentals_20260508.txt",
-        "AAPL_Fundamentals_20260519.txt",
-        "AAPL_Fundamentals_20260612.txt",
-        "AAPL_News_20260519_01.txt"
-      ],
-      "answerable": true,
-      "rubric": null
-    },
-    {
-      "id": "lex-20",
-      "category": "lexical",
-      "query": "Google TPU Ironwood",
-      "relevant": [
-        "GOOGL_10K_2025.html",
-        "GOOGL_News_*.txt"
-      ],
-      "answerable": true,
-      "rubric": null
-    },
-    {
-      "id": "lex-21",
-      "category": "lexical",
-      "query": "Meta Ray-Ban smart glasses",
-      "relevant": [
-        "META_10K_2025.html",
-        "META_News_*.txt"
-      ],
-      "answerable": true,
-      "rubric": null
+      "answerable": true
     },
     {
       "id": "mix-01",
       "category": "mixed",
-      "query": "NVIDIA 最新財報的營收成長率",
+      "query": "Microsoft Azure 最新一季的營收成長率是多少？",
       "relevant": [
-        "NVDA_10Q_202604.html",
-        "NVDA_10Q_202510.html",
-        "NVDA_IncomeStatement_*.txt",
-        "NVDA_Fundamentals_*.txt"
+        "MSFT_10Q_202603.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出營收 YoY 成長率（約 85%）或引用具體季度成長",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "引用營收絕對值或對應期間",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造與來源不符的營收成長率",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-02",
       "category": "mixed",
-      "query": "Apple iPhone 銷售近期趨勢",
+      "query": "Microsoft More Personal Computing 部門最新一季營收表現如何？哪些因素互相抵銷？",
       "relevant": [
-        "AAPL_News_*.txt",
-        "AAPL_10K_2025.html",
-        "AAPL_10Q_202603.html"
+        "MSFT_10Q_202603.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "指出 iPhone 銷售 / 營收的趨勢方向（成長或下滑）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "引用財報或新聞作為依據",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "給出未在來源出現的精確 iPhone 銷量數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-03",
       "category": "mixed",
-      "query": "Microsoft 雲端業務最新季度表現",
+      "query": "Microsoft 最新一季整體營業利益成長多少？主要由哪些部門帶動？",
       "relevant": [
-        "MSFT_10Q_202603.html",
-        "MSFT_10K_2025.html",
-        "MSFT_News_*.txt"
+        "MSFT_10Q_202603.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 Azure / Intelligent Cloud 的成長表現",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "引用季度營收或成長率",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把其他季度的數字當成最新季度",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-04",
       "category": "mixed",
-      "query": "NVDA 最近新聞中的關鍵商業動向",
+      "query": "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？",
       "relevant": [
-        "NVDA_News_*.txt"
+        "AMZN_10Q_202603.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "指出至少一項具體商業動向（新品 / 合作 / 訂單）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "動向來自新聞來源",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在新聞中出現的事件",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-05",
       "category": "mixed",
-      "query": "Apple 服務業務的毛利率與成長",
+      "query": "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？",
       "relevant": [
-        "AAPL_10K_2025.html",
-        "AAPL_10Q_202603.html",
-        "AAPL_Fundamentals_*.txt"
+        "AMZN_10Q_202603.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "指出服務業務的高毛利特性",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "指出服務業務的成長趨勢",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "在來源未提供時捏造服務毛利率的具體百分比",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-06",
       "category": "mixed",
-      "query": "MSFT EPS 與年增率",
+      "query": "Google Cloud 部門最新一季的營收成長多少？",
       "relevant": [
-        "MSFT_Fundamentals_*.txt",
-        "MSFT_IncomeStatement_*.txt",
-        "MSFT_10Q_202603.html"
+        "GOOGL_10Q_202606.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出 EPS（trailing 約 16.78，或 FY2025 diluted 13.64）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "給出年增率（盈餘成長約 23%，或 EPS YoY）",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造與來源不符的 EPS 或年增率",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-07",
       "category": "mixed",
-      "query": "NVIDIA AI 晶片業務的最新財務狀況",
+      "query": "Google 收購 Wiz 花了多少錢？這如何影響 Google Cloud 部門？",
       "relevant": [
-        "NVDA_10Q_202604.html",
-        "NVDA_10Q_202510.html",
-        "NVDA_10K_2026.html",
-        "NVDA_News_*.txt",
-        "NVDA_Fundamentals_*.txt"
+        "GOOGL_10Q_202603.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "指出資料中心 / AI 晶片營收強勁成長",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "引用營收或成長數字",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "錯置財報期間或捏造數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-08",
       "category": "mixed",
-      "query": "Amazon AWS 最新季度的營收成長表現",
+      "query": "Meta 最新一季總營收成長多少？主要驅動因素是什麼？",
       "relevant": [
-        "AMZN_10Q_202603.html",
-        "AMZN_IncomeStatement_*.txt",
-        "AMZN_Fundamentals_*.txt",
-        "AMZN_News_*.txt"
+        "META_10Q_202603.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "指出 AWS 營收成長表現",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "引用季度數字或成長率",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把 Amazon 整體營收當成 AWS 營收",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-09",
       "category": "mixed",
-      "query": "Google 雲端業務最新財報表現",
+      "query": "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？",
       "relevant": [
-        "GOOGL_10Q_202603.html",
-        "GOOGL_10K_2025.html",
-        "GOOGL_News_*.txt"
+        "AAPL_10Q_202603.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "指出 Google Cloud 的成長或獲利表現",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "引用數字",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把其他季度或整體營收當成 Google Cloud 最新季度",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-10",
       "category": "mixed",
-      "query": "Meta 廣告業務的盈利率與成長",
+      "query": "Apple iPhone 營收成長主要是由哪些機型帶動的？",
       "relevant": [
-        "META_10K_2025.html",
-        "META_10Q_202603.html",
-        "META_Fundamentals_*.txt"
+        "AAPL_10Q_202603.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "指出廣告業務營收成長",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "指出營業利益率 / 盈利能力（營業利益率約 40.6%）",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造與來源不符的盈利率或成長率",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-11",
       "category": "mixed",
-      "query": "Tesla 最新財報與新聞中的市場反應",
+      "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
       "relevant": [
-        "TSLA_10Q_202603.html",
-        "TSLA_News_*.txt",
-        "TSLA_Fundamentals_*.txt"
+        "NVDA_10Q_202604.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "指出財報重點（營收 / 獲利 / 毛利率約 19%）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "結合新聞或市場反應",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的市場反應或股價變動",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-12",
       "category": "mixed",
-      "query": "NVDA 最新一期財報的毛利率變化",
-      "relevant": [
-        "NVDA_10Q_202604.html",
-        "NVDA_Fundamentals_*.txt",
-        "NVDA_IncomeStatement_*.txt"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出毛利率數值（TTM 約 74.1%，或該季 GAAP 毛利率）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "指出毛利率的變化方向或與前期比較",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造與來源不符的毛利率",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-22",
-      "category": "mixed",
-      "query": "MSFT 202512 那一季的毛利率是多少？",
-      "relevant": [
-        "MSFT_10Q_202512.html"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 202512 那一季",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "給出該季毛利率數值",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把其他季度（如 202603）的毛利率當成 202512 季",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-23",
-      "category": "mixed",
-      "query": "NVDA 202604 那一季的毛利率變化如何？",
+      "query": "NVIDIA 這一季在中國市場的資料中心晶片出貨狀況如何？跟去年同期相比有何變化？",
       "relevant": [
         "NVDA_10Q_202604.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 202604 那一季",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "給出毛利率數值或與前期比較",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把 202510 季的數字當成 202604 季",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "lex-24",
-      "category": "mixed",
-      "query": "NVDA 202510 那一季的營業利益率表現如何？",
-      "relevant": [
-        "NVDA_10Q_202510.html"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 202510 那一季",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "給出營業利益率數值或與前期比較",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把 202604 季的數字當成 202510 季",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-13",
       "category": "mixed",
-      "query": "Apple 202603 季度的營收表現",
+      "query": "Tesla 能源生成與儲能業務最新一季營收表現如何？",
       "relevant": [
-        "AAPL_10Q_202603.html"
+        "TSLA_10Q_202606.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 2026 年 3 月底結束的季度（202603）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "引用該季的營收數字",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把 202512 季的數字當成 202603 季",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-14",
       "category": "mixed",
-      "query": "Apple 202512 季度的營收表現",
+      "query": "Tesla 汽車銷售營收最新一季成長多少？主要驅動因素是什麼？",
       "relevant": [
-        "AAPL_10Q_202512.html"
+        "TSLA_10Q_202606.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 2025 年 12 月底結束的季度（202512）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "引用該季的營收數字",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把 202603 季的數字當成 202512 季",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
       "id": "mix-15",
       "category": "mixed",
-      "query": "NVIDIA 202510 那一季的資料中心營收",
+      "query": "Tesla 2026 年至今生產與交付了多少輛消費性車輛？",
       "relevant": [
-        "NVDA_10Q_202510.html"
+        "TSLA_10Q_202606.html"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 202510 那一季",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "引用該季的資料中心營收數字",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把 202604 季的數字當成 202510 季",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
     },
     {
-      "id": "mix-16",
-      "category": "mixed",
-      "query": "NVIDIA 202604 那一季的資料中心營收",
+      "id": "lex-01",
+      "category": "lexical",
+      "query": "NVIDIA 目前的 Market Cap（市值）是多少？",
       "relevant": [
-        "NVDA_10Q_202604.html"
+        "NVDA_Fundamentals_*.txt"
       ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "明確對應到 202604 那一季",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "引用該季的資料中心營收數字",
-            "weight": 30,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把 202510 季的數字當成 202604 季",
-            "is_critical": true
-          }
-        ]
-      }
+      "answerable": true
+    },
+    {
+      "id": "lex-02",
+      "category": "lexical",
+      "query": "NVIDIA 的 trailing P/E Ratio 是多少？",
+      "relevant": [
+        "NVDA_Fundamentals_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-03",
+      "category": "lexical",
+      "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
+      "relevant": [
+        "NVDA_IncomeStatement_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-04",
+      "category": "lexical",
+      "query": "NVIDIA 是哪一年推出 CUDA 開發平台的？",
+      "relevant": [
+        "NVDA_10K_2026.html"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-05",
+      "category": "lexical",
+      "query": "NVIDIA 收購 Mellanox 是哪一年？",
+      "relevant": [
+        "NVDA_10K_2026.html"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-06",
+      "category": "lexical",
+      "query": "Apple 目前的 Market Cap（市值）是多少？",
+      "relevant": [
+        "AAPL_Fundamentals_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-07",
+      "category": "lexical",
+      "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+      "relevant": [
+        "AAPL_IncomeStatement_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-08",
+      "category": "lexical",
+      "query": "Microsoft 目前的 Free Cash Flow 是多少？",
+      "relevant": [
+        "MSFT_Fundamentals_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-09",
+      "category": "lexical",
+      "query": "Amazon 目前的 Total Debt 是多少？",
+      "relevant": [
+        "AMZN_Fundamentals_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-10",
+      "category": "lexical",
+      "query": "Amazon 在 2025 年的現金資本支出（cash capital expenditures）是多少？",
+      "relevant": [
+        "AMZN_10K_2025.html"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-11",
+      "category": "lexical",
+      "query": "Alphabet（Google）目前的員工人數是多少？",
+      "relevant": [
+        "GOOGL_Fundamentals_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-12",
+      "category": "lexical",
+      "query": "Google 完成收購 Wiz 的確切日期是哪一天？金額是多少？",
+      "relevant": [
+        "GOOGL_10Q_202603.html"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-13",
+      "category": "lexical",
+      "query": "Meta 目前的 Return on Equity（股東權益報酬率）是多少？",
+      "relevant": [
+        "META_Fundamentals_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-14",
+      "category": "lexical",
+      "query": "Meta fiscal year 2025 的 Diluted EPS 是多少？",
+      "relevant": [
+        "META_IncomeStatement_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "lex-15",
+      "category": "lexical",
+      "query": "Tesla 在 2026 年 1 月啟用的鋰精煉廠位於哪裡？",
+      "relevant": [
+        "TSLA_10K_2025.html"
+      ],
+      "answerable": true
     },
     {
       "id": "col-01",
       "category": "colloquial",
-      "maps_to": "sem-01",
-      "query": "為什麼大家做 AI 都要買輝達的卡，別家一直追不上它？",
+      "query": "為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？",
       "relevant": [
-        "NVDA_10K_2026.html",
-        "NVDA_News_*.txt"
+        "NVDA_10K_2026.html"
       ],
       "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 CUDA 軟體生態 / 開發者鎖定 / 軟硬體全端平台",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到資料中心 GPU 的效能領先或加速運算平台",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到網路整合（NVLink / InfiniBand / Mellanox）或系統級整合",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的具體市佔率百分比或營收數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "maps_to": "sem-01"
     },
     {
       "id": "col-02",
       "category": "colloquial",
-      "maps_to": "sem-03",
-      "query": "蘋果除了賣手機，還靠什麼一直在收錢？這塊以後會不會更會賺？",
+      "query": "微軟是怎麼把 AI 塞進 Office 那些軟體裡的？",
       "relevant": [
-        "AAPL_10K_2025.html",
-        "AAPL_10Q_202603.html"
+        "MSFT_10K_2025.html"
       ],
       "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到服務業務營收成長或其高毛利特性",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到訂閱服務生態（App Store / iCloud / Music / TV+ 等）",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到龐大裝置安裝基數帶動服務變現",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的服務業務具體成長率百分比",
-            "is_critical": true
-          }
-        ]
-      }
+      "maps_to": "sem-03"
     },
     {
       "id": "col-03",
       "category": "colloquial",
-      "maps_to": "lex-03",
-      "query": "微軟賣東西，扣掉成本之後大概還能留下幾成？",
+      "query": "亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？",
       "relevant": [
-        "MSFT_Fundamentals_*.txt",
-        "MSFT_IncomeStatement_*.txt",
-        "MSFT_10K_2025.html",
-        "MSFT_10Q_202603.html"
+        "AMZN_10K_2025.html",
+        "AMZN_10Q_202509.html"
       ],
       "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出毛利率約 68.3%（0.683）",
-            "weight": 50,
-            "is_critical": true,
-            "tolerance_pct": 1.0
-          },
-          {
-            "checkpoint": "標明資料期間或來源",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "給出與來源（約 68%）明顯不符的毛利率",
-            "is_critical": true
-          }
-        ]
-      }
+      "maps_to": "sem-05"
     },
     {
       "id": "col-04",
       "category": "colloquial",
-      "maps_to": "sem-07",
-      "query": "微軟租伺服器、做網路那塊生意，跟亞馬遜、谷歌比打得贏嗎？",
+      "query": "Google 的 AI 助手現在有整合進搜尋引擎裡嗎？",
       "relevant": [
-        "MSFT_10K_2025.html",
-        "MSFT_10Q_202603.html"
+        "GOOGL_10K_2025.html"
       ],
       "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 Azure 面臨其他雲端服務商 / hyperscaler / 開源方案的競爭（不要求明確點名 AWS 或 Google/GCP，來源文件本身未指名道姓）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到 AI / Copilot 帶動 Azure 成長",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到企業 / 混合雲 / 既有客戶優勢",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的 Azure 市佔率或營收數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "maps_to": "sem-07"
     },
     {
       "id": "col-05",
       "category": "colloquial",
-      "maps_to": "sem-08",
-      "query": "亞馬遜租伺服器那塊生意，以後想往哪個方向走？",
+      "query": "Meta 搞的那些 VR 眼鏡跟 AI，到底想往哪個方向發展？",
       "relevant": [
-        "AMZN_10K_2025.html",
-        "AMZN_10Q_202603.html",
-        "AMZN_News_*.txt"
+        "META_10K_2025.html"
       ],
       "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 AWS 的獲利貢獻或營業利益表現（如營業利益增長、為 Amazon 重要獲利來源）——不要求出現「市佔龍頭 / market leader」等來源文件本身未使用的具名定位措辭",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到 AI / ML 服務投資（如 Bedrock、自研晶片）",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到基礎設施擴張 / 資本支出",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "把 Amazon 整體營收當成 AWS 營收",
-            "is_critical": true
-          }
-        ]
-      }
+      "maps_to": "sem-09"
     },
     {
       "id": "col-06",
       "category": "colloquial",
-      "maps_to": "lex-02",
-      "query": "蘋果一年下來，平均一股大概幫股東賺多少錢？",
+      "query": "特斯拉的自動駕駛跟別家車廠比，厲害在哪裡？",
       "relevant": [
-        "AAPL_Fundamentals_*.txt",
-        "AAPL_IncomeStatement_*.txt"
+        "TSLA_10K_2025.html"
       ],
       "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "給出 EPS 數值（trailing 約 8.25，或 FY2025 diluted 7.46）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "標明 trailing / 年度 / 對應期間",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "給出與來源明顯不符的 EPS 數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "maps_to": "sem-11"
     },
     {
       "id": "col-07",
       "category": "colloquial",
-      "maps_to": "sem-10",
-      "query": "臉書一直砸大錢做頭戴裝置跟虛擬世界，到底在賺還在賠？以後想怎麼搞？",
-      "relevant": [
-        "META_10K_2025.html",
-        "META_10Q_202603.html",
-        "META_News_*.txt"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 Reality Labs 的 VR/AR 長期投入與虧損（問題本身在問「賺還是賠」，這是直接對應的答案）",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到 AI 投資（基礎模型 / 推薦系統 / Meta AI）作為「以後想怎麼搞」的一部分",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到 AI 眼鏡（Ray-Ban Meta）等穿戴裝置",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的 Reality Labs 具體虧損或營收數字",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "col-08",
-      "category": "colloquial",
-      "maps_to": "sem-11",
-      "query": "特斯拉現在最讓人擔心、最頭痛的麻煩有哪些？",
-      "relevant": [
-        "TSLA_10K_2025.html",
-        "TSLA_10Q_202603.html",
-        "TSLA_News_*.txt"
-      ],
-      "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 EV 市場競爭加劇 / 價格戰",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到自動駕駛（FSD / Autopilot）的監管風險",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到總體經濟 / 利率 / 補貼政策風險",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的具體召回或訴訟金額",
-            "is_critical": true
-          }
-        ]
-      }
-    },
-    {
-      "id": "col-09",
-      "category": "colloquial",
-      "maps_to": "sem-06",
-      "query": "蘋果自己跳下去做晶片，對它有什麼好處？",
+      "query": "蘋果自己是不是也承認在手機市場其實不算市佔龍頭？",
       "relevant": [
         "AAPL_10K_2025.html"
       ],
       "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到垂直整合 / 自研晶片讓 Apple 掌控軟硬體",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到效能或能效優勢",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到降低對第三方（如 Intel）的依賴",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的晶片效能具體數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "maps_to": "sem-14"
+    },
+    {
+      "id": "col-08",
+      "category": "colloquial",
+      "query": "NVIDIA 現在值多少錢（市值）？",
+      "relevant": [
+        "NVDA_Fundamentals_*.txt"
+      ],
+      "answerable": true,
+      "maps_to": "lex-01"
+    },
+    {
+      "id": "col-09",
+      "category": "colloquial",
+      "query": "蘋果公司現在市值多少？",
+      "relevant": [
+        "AAPL_Fundamentals_*.txt"
+      ],
+      "answerable": true,
+      "maps_to": "lex-06"
     },
     {
       "id": "col-10",
       "category": "colloquial",
-      "maps_to": "sem-09",
-      "query": "谷歌會不會怕 AI 搶走它網路搜尋的生意？它打算怎麼接招？",
+      "query": "微軟每年能自由運用的現金大概有多少？",
       "relevant": [
-        "GOOGL_10K_2025.html",
-        "GOOGL_10Q_202603.html",
-        "GOOGL_News_*.txt"
+        "MSFT_Fundamentals_*.txt"
       ],
       "answerable": true,
-      "rubric": {
-        "must_include": [
-          {
-            "checkpoint": "提到 Gemini 模型 / AI 整合進搜尋",
-            "weight": 50,
-            "is_critical": true
-          },
-          {
-            "checkpoint": "提到搜尋廣告核心業務的防禦或變現",
-            "weight": 30,
-            "is_critical": false
-          },
-          {
-            "checkpoint": "提到 Google Cloud 或自研 TPU",
-            "weight": 20,
-            "is_critical": false
-          }
-        ],
-        "must_not_include": [
-          {
-            "checkpoint": "捏造未在來源出現的搜尋市佔或 AI 營收數字",
-            "is_critical": true
-          }
-        ]
-      }
+      "maps_to": "lex-08"
+    },
+    {
+      "id": "col-11",
+      "category": "colloquial",
+      "query": "微軟的雲端服務最近成長得快不快？",
+      "relevant": [
+        "MSFT_10Q_202603.html"
+      ],
+      "answerable": true,
+      "maps_to": "mix-01"
+    },
+    {
+      "id": "col-12",
+      "category": "colloquial",
+      "query": "Meta 最近這一季賺（營收）成長多少？",
+      "relevant": [
+        "META_10Q_202603.html"
+      ],
+      "answerable": true,
+      "maps_to": "mix-08"
+    },
+    {
+      "id": "col-13",
+      "category": "colloquial",
+      "query": "蘋果在大中華區最近賣得好不好？",
+      "relevant": [
+        "AAPL_10Q_202603.html"
+      ],
+      "answerable": true,
+      "maps_to": "mix-09"
+    },
+    {
+      "id": "col-14",
+      "category": "colloquial",
+      "query": "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？",
+      "relevant": [
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true,
+      "maps_to": "news-04"
+    },
+    {
+      "id": "col-15",
+      "category": "colloquial",
+      "query": "特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？",
+      "relevant": [
+        "TSLA_10Q_202606.html",
+        "TSLA_News_*.txt"
+      ],
+      "answerable": true,
+      "maps_to": "mi-13"
+    },
+    {
+      "id": "mh-01",
+      "category": "multi_hop",
+      "query": "在 Amazon、Microsoft、Alphabet、Meta 這四家公司中，最近十二個月（TTM）總營收規模最大的是哪一家？該公司同期的毛利率又是多少？",
+      "relevant": [
+        "AMZN_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-02",
+      "category": "multi_hop",
+      "query": "在 Meta、NVIDIA、Microsoft 這三家公司中，最近十二個月（TTM）毛利率最高的是哪一家公司？該公司同期的總營收是多少？",
+      "relevant": [
+        "META_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-03",
+      "category": "multi_hop",
+      "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+      "relevant": [
+        "NVDA_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-04",
+      "category": "multi_hop",
+      "query": "在 Microsoft、Alphabet、Apple 這三家公司中，最近十二個月（TTM）營業利益率（operating margin）最高的是哪一家？該公司同期的總營收是多少？",
+      "relevant": [
+        "MSFT_Fundamentals_20260612.txt",
+        "GOOGL_Fundamentals_20260612.txt",
+        "AAPL_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-05",
+      "category": "multi_hop",
+      "query": "在 Alphabet、Microsoft、Amazon 這三家公司中，最近十二個月（TTM）淨利（net income）最高的是哪一家？該公司最近一年的營收年增率是多少？",
+      "relevant": [
+        "GOOGL_Fundamentals_20260612.txt",
+        "MSFT_Fundamentals_20260612.txt",
+        "AMZN_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-06",
+      "category": "multi_hop",
+      "query": "新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？",
+      "relevant": [
+        "AAPL_News_*.txt",
+        "AAPL_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-07",
+      "category": "multi_hop",
+      "query": "新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？",
+      "relevant": [
+        "AMZN_News_*.txt",
+        "AMZN_10K_2025.html",
+        "AMZN_IncomeStatement_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-08",
+      "category": "multi_hop",
+      "query": "新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？",
+      "relevant": [
+        "GOOGL_News_*.txt",
+        "GOOGL_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-09",
+      "category": "multi_hop",
+      "query": "新聞中宣布自研七個 AI 模型、並加入 Anthropic 主導的 Mythos 資安計畫的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？",
+      "relevant": [
+        "MSFT_News_*.txt",
+        "MSFT_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-10",
+      "category": "multi_hop",
+      "query": "新聞中被 Morgan Stanley 特別稱許其 AI 護城河、同時大舉提高資本支出的是哪一家公司？該公司最新年度的淨利（net income）是多少？",
+      "relevant": [
+        "META_News_*.txt",
+        "META_IncomeStatement_20260612.txt"
+      ],
+      "answerable": true
     }
   ]
 }
