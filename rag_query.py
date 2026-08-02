@@ -146,6 +146,44 @@ faces Y [cite]", NOT a generic "these companies face X and Y". Name each company
 explicitly and bind its specific risks/figures/strategy to it. A citation tag alone is \
 NOT sufficient attribution — the company name must appear in the sentence. Cover at \
 least the distinct companies the materials support.
+10. PERIOD BASIS — the SAME metric appears on different time bases across the sources, so \
+every financial figure you state MUST carry its basis label. Use "FY2025" for a full \
+fiscal year, "TTM as of YYYY-MM" for a trailing-twelve-month figure, and "Q2 FY2026" (or \
+"three months ended <date>") for a single quarter. As a rule of thumb: *_Fundamentals_* \
+files are TTM; 10-K / 10-Q / income-statement figures are fiscal-year or quarterly. Never \
+give a bare revenue / margin / growth number without its basis. When the question uses a \
+relative term ("latest", "most recent year", "past year", "近一年") that could map to more \
+than one basis AND the sources carry DIFFERENT values on different bases, do NOT silently \
+pick one — state BOTH and label them (e.g. "on a full-year basis FY2025 revenue grew ~22%; \
+on a trailing-twelve-month basis it grew ~33%"). For "most recent fiscal year", use the \
+latest COMPLETED fiscal year present in the sources (e.g. FY2025, not the prior FY2024).
+11. UNIT & MAGNITUDE — the safest rule: KEEP the source's own unit token VERBATIM. If the \
+source writes "$84.75 billion", write "$84.75 billion" (or "$185 billion", "$34.75 billion") \
+in your answer — do NOT convert it into 億 at all. "billion" is NOT "億": mechanically \
+rendering "X billion" as "X 億" is a 10x error (the actual value is 10X 億, e.g. $84.75 \
+billion = 847.5 億). Because that transliteration is the single most common mistake, avoid \
+the conversion entirely — preserve "billion" / "million" exactly as the source states them. \
+Only when a source gives a raw number with a stated scale (e.g. a statement line "in \
+millions" showing "131,819" = $131,819 million = $131.8 billion) do you compose the unit \
+yourself, and then state it as "$131.8 billion". If you ever do write 億, anchor it: 1 \
+billion = 10 億, 1 million = 0.01 億 — and sanity-check that a mega-cap's quarterly segment \
+revenue lands in the tens of billions (數百億), not the 兆 range. Apply this to EVERY figure \
+in the answer, including every bullet and secondary number.
+12. DIRECTION & SIGN — never infer the direction of a change yourself; quote the source's \
+own direction word (rose / fell / increased / decreased / up / down / 上升 / 下降). Preserve \
+every sign: a value shown as "(2)%", "decreased 2%", or "-2%" is NEGATIVE — do NOT report it \
+as +2%. When two period values are given (e.g. two quarters or two years), decide which is \
+earlier vs later STRICTLY from the explicit dates / period labels in the source — do NOT \
+assume the larger number is the later one or that the trend is "improving". If the source \
+shows margin went 18.7% → 16.8% over time, that is a DECLINE; do not flip it into a rise.
+13. PER-INTENT EVIDENCE CHECK (extends Rule 3) — for a multi-part question, evaluate EACH \
+sub-question separately against ALL references. If ANY reference carries information bearing \
+on a sub-question — even a single news item, one figure, or a passage whose main topic is \
+something else — you MUST use it and answer that part. Do NOT write "no information" / "the \
+materials do not mention this" / "not disclosed" for a sub-question when a relevant reference \
+is actually present in the materials. Saying a fact is missing is permitted ONLY after you \
+have scanned every reference and none touches it. Answering one intent well does not excuse \
+dropping the other with a false "no info".
 """
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -168,7 +206,7 @@ least the distinct companies the materials support.
 # ══════════════════════════════════════════════════════════════════════════════
 
 SYSTEM_PROMPT_EVIDENCE_FIRST = SYSTEM_PROMPT + """
-10. Before writing your answer, you MUST first produce an Evidence Log: go through
+14. Before writing your answer, you MUST first produce an Evidence Log: go through
 EVERY numbered reference in order and write ONE line per reference stating whether it
 is relevant to the question. Do this even for references that seem tangential — a
 reference can be partially relevant (e.g. it mentions the topic inside a passage that
@@ -177,7 +215,7 @@ truly contains nothing useful for this specific question. If a reference contain
 information bearing on the question (numbers, named products, stated positions), you
 MUST mark it relevant and quote the key phrase, even if the reference's main topic is
 something else.
-Then write your final Answer, following rules 1-9 above, drawing on every reference you
+Then write your final Answer, following rules 1-13 above, drawing on every reference you
 marked relevant in the Evidence Log — do not silently drop a reference you just marked
 relevant.
 
@@ -187,7 +225,7 @@ Output format (use exactly these two headers, nothing before "## Evidence Log"):
 (one line per reference, in order)
 
 ## Answer
-<your final answer, following rules 1-9>
+<your final answer, following rules 1-13>
 """
 
 _ANSWER_SECTION_RE = re.compile(r"##\s*Answer\b", re.IGNORECASE)
@@ -201,6 +239,44 @@ def extract_final_answer(raw: str) -> str:
     if not m:
         return raw
     return raw[m.end():].strip()
+
+
+# ── 確定性單位換算後處理（billion / million / trillion → 億）─────────────────────
+# 動機：LLM 把英文 "$84.75 billion" 音譯成 "84.75 億"（正確是 847.5 億）是翻譯層 token
+# 習慣，prompt（Rule 11）只能隨機壓住、reflect 也共用同盲點。正解＝Rule 11 要 Writer
+# 「原樣保留 billion」，再由**這支純程式**把 billion→億 的乘 10 算對（程式算不會錯、零誤報，
+# 因為 "X billion" render 成 "X 億" 100% 是錯）。1 billion=10 億、1 trillion=10,000 億、
+# 1 million=0.01 億。只轉「數字+英文單位詞」，不碰已經是 億/% 的值。
+_USD_UNIT_RE = re.compile(
+    r'(?:((?:US)?\$)\s?)?([0-9][0-9,]*(?:\.[0-9]+)?)\s*(billion|trillion|million|bn|mn)\b'
+    r'(?:\s*(?:美元|美金|dollars?|USD))?',
+    re.IGNORECASE)
+_UNIT_TO_YI = {"billion": 10.0, "bn": 10.0, "trillion": 10000.0, "million": 0.01, "mn": 0.01}
+
+
+def _fmt_yi(yi: float) -> str:
+    """把億值格式化：整數不留小數、否則去尾零，千分位加逗號。"""
+    if abs(yi - round(yi)) < 1e-9:
+        return f"{int(round(yi)):,}"
+    return f"{yi:,.4f}".rstrip("0").rstrip(".")
+
+
+def convert_usd_units_to_yi(text: str) -> str:
+    """把答案裡的 "$X billion / X million 美元 / ..." 一律換算成正確的「X 億(美元)」。
+    純確定性、無 LLM。保留幣別語意：原文帶 $ 或「美元/USD」→ 輸出「… 億美元」，否則「… 億」。"""
+    def _repl(m: "re.Match") -> str:
+        num_s, unit = m.group(2), m.group(3).lower().rstrip()
+        mult = _UNIT_TO_YI.get(unit)
+        if mult is None:
+            return m.group(0)
+        try:
+            yi = float(num_s.replace(",", "")) * mult
+        except ValueError:
+            return m.group(0)
+        whole = m.group(0)
+        has_ccy = bool(m.group(1)) or any(k in whole for k in ("美元", "美金", "dollar", "USD", "usd"))
+        return f"{_fmt_yi(yi)} 億{'美元' if has_ccy else ''}"
+    return _USD_UNIT_RE.sub(_repl, text or "")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
