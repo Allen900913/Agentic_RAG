@@ -297,7 +297,21 @@
         "TSLA_10Q_202606.html",
         "NVDA_News_*.txt"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 77
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 75
+        }
+      ]
     },
     {
       "id": "mi-15",
@@ -451,7 +465,17 @@
       "relevant": [
         "MSFT_10Q_202603.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 110
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 46
+        }
+      ]
     },
     {
       "id": "mix-02",
@@ -460,7 +484,17 @@
       "relevant": [
         "MSFT_10Q_202603.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 104
+        }
+      ]
     },
     {
       "id": "mix-03",
@@ -469,7 +503,21 @@
       "relevant": [
         "MSFT_10Q_202603.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 104
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 46
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 44
+        }
+      ]
     },
     {
       "id": "mix-04",
@@ -478,7 +526,17 @@
       "relevant": [
         "AMZN_10Q_202603.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 12
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 75
+        }
+      ]
     },
     {
       "id": "mix-05",
@@ -487,7 +545,21 @@
       "relevant": [
         "AMZN_10Q_202603.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 13
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 12
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 75
+        }
+      ]
     },
     {
       "id": "mix-06",
@@ -496,7 +568,17 @@
       "relevant": [
         "GOOGL_10Q_202606.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 47
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 48
+        }
+      ]
     },
     {
       "id": "mix-07",
@@ -505,7 +587,17 @@
       "relevant": [
         "GOOGL_10Q_202603.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 77
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 52
+        }
+      ]
     },
     {
       "id": "mix-08",
@@ -514,7 +606,13 @@
       "relevant": [
         "META_10Q_202603.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 164
+        }
+      ]
     },
     {
       "id": "mix-09",
@@ -523,7 +621,17 @@
       "relevant": [
         "AAPL_10Q_202603.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 9
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 65
+        }
+      ]
     },
     {
       "id": "mix-10",
@@ -532,7 +640,17 @@
       "relevant": [
         "AAPL_10Q_202603.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 66
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 65
+        }
+      ]
     },
     {
       "id": "mix-11",
@@ -541,7 +659,21 @@
       "relevant": [
         "NVDA_10Q_202604.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 9
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 46
+        }
+      ]
     },
     {
       "id": "mix-12",
@@ -550,7 +682,21 @@
       "relevant": [
         "NVDA_10Q_202604.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 0
+        }
+      ]
     },
     {
       "id": "mix-13",
@@ -559,7 +705,17 @@
       "relevant": [
         "TSLA_10Q_202606.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 77
+        }
+      ]
     },
     {
       "id": "mix-14",
@@ -568,7 +724,17 @@
       "relevant": [
         "TSLA_10Q_202606.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 77
+        }
+      ]
     },
     {
       "id": "mix-15",
@@ -577,7 +743,13 @@
       "relevant": [
         "TSLA_10Q_202606.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 66
+        }
+      ]
     },
     {
       "id": "lex-01",
@@ -685,7 +857,17 @@
       "relevant": [
         "GOOGL_10Q_202603.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 77
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 52
+        }
+      ]
     },
     {
       "id": "lex-13",
@@ -823,7 +1005,21 @@
         "MSFT_10Q_202603.html"
       ],
       "answerable": true,
-      "maps_to": "mix-01"
+      "maps_to": "mix-01",
+      "pin_chunks": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 102
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 110
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 46
+        }
+      ]
     },
     {
       "id": "col-12",
@@ -833,7 +1029,13 @@
         "META_10Q_202603.html"
       ],
       "answerable": true,
-      "maps_to": "mix-08"
+      "maps_to": "mix-08",
+      "pin_chunks": [
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 164
+        }
+      ]
     },
     {
       "id": "col-13",
@@ -843,7 +1045,17 @@
         "AAPL_10Q_202603.html"
       ],
       "answerable": true,
-      "maps_to": "mix-09"
+      "maps_to": "mix-09",
+      "pin_chunks": [
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 9
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 65
+        }
+      ]
     },
     {
       "id": "col-14",
@@ -871,7 +1083,10 @@
       "category": "multi_hop",
       "query": "在 Amazon、Microsoft、Alphabet、Meta 這四家公司中，最近十二個月（TTM）總營收規模最大的是哪一家？該公司同期的毛利率又是多少？",
       "relevant": [
-        "AMZN_Fundamentals_20260612.txt"
+        "AMZN_Fundamentals_20260612.txt",
+        "MSFT_Fundamentals_20260612.txt",
+        "GOOGL_Fundamentals_20260612.txt",
+        "META_Fundamentals_20260612.txt"
       ],
       "answerable": true
     },
@@ -880,7 +1095,9 @@
       "category": "multi_hop",
       "query": "在 Meta、NVIDIA、Microsoft 這三家公司中，最近十二個月（TTM）毛利率最高的是哪一家公司？該公司同期的總營收是多少？",
       "relevant": [
-        "META_Fundamentals_20260612.txt"
+        "META_Fundamentals_20260612.txt",
+        "NVDA_Fundamentals_20260612.txt",
+        "MSFT_Fundamentals_20260612.txt"
       ],
       "answerable": true
     },
@@ -889,7 +1106,9 @@
       "category": "multi_hop",
       "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
       "relevant": [
-        "NVDA_Fundamentals_20260612.txt"
+        "NVDA_Fundamentals_20260612.txt",
+        "META_Fundamentals_20260612.txt",
+        "GOOGL_Fundamentals_20260612.txt"
       ],
       "answerable": true
     },

@@ -519,6 +519,51 @@ def _mentioned_tickers(text: str) -> set[str]:
     return found
 
 
+# ── multi_hop 第二跳依賴解析（Type B：「新聞中做了 X 的是哪家？該公司的財報指標多少」）──────────
+# planner 對這種兩跳題會把 hop-2 寫成「該公司的毛利率是多少」——帶未解回指代名詞、句中沒點名公司。
+# 若讓它跟 hop-1 同一波平行檢索,「該公司」永遠沒被填 → 無 ticker 的破檢索撈回隨機 chunk。
+# 解法(全確定性,不動 replanner LLM)：execute 分波時延後這種依賴型 hop,等 hop-1 辨識出公司、
+# 把代名詞回填成具體公司名後,下一波才檢索。
+_BACKREF_RE = re.compile(r"該公司|該企業|該家公司|這家公司|此公司|上述公司|前述公司|上述那家公司")
+# ticker → 可被 _mentioned_tickers / retrieve 重新偵測的正規公司名（回填第二跳用）
+_TICKER_CANON = {"AAPL": "Apple", "MSFT": "Microsoft", "NVDA": "NVIDIA",
+                 "AMZN": "Amazon", "GOOGL": "Alphabet", "META": "Meta", "TSLA": "Tesla"}
+
+
+def _is_dependent_hop(task: str) -> bool:
+    """依賴型第二跳：帶未解回指代名詞(該公司…)且句中沒點名任何具體公司。這種子問題要等
+    第一跳辨識出公司、回填實體後才能正確檢索。已含具體公司名 → 不算未解(planner 已自行填好)。"""
+    if not _BACKREF_RE.search(task or ""):
+        return False
+    return not _mentioned_tickers(task)
+
+
+def _resolve_hop_entity(todos: list[dict], collected: list[dict]) -> str | None:
+    """從已完成待辦推出「第一跳辨識出的公司」正規名,供第二跳回填『該公司』。純確定性:
+    先看非依賴型 done 待辦的局部結果文字命中的 ticker(眾數),再退回已 commit chunk 的 owner ticker。"""
+    from collections import Counter
+    cnt: Counter = Counter()
+    for t in todos:
+        if t.get("status") == "done" and not _is_dependent_hop(t.get("task", "")):
+            res = t.get("result", "") or ""
+            for tk in rq._find_all_ticker_aliases(res.lower(), res):
+                cnt[tk] += 1
+    if not cnt:   # summary 沒明確命中 → 退回 commit chunk 的 owner ticker
+        for c in collected:
+            tk = c.get("ticker") or (c.get("payload") or {}).get("ticker")
+            if tk:
+                cnt[tk] += 1
+    if not cnt:
+        return None
+    top_ticker = cnt.most_common(1)[0][0]
+    return _TICKER_CANON.get(top_ticker, top_ticker)
+
+
+def _fill_dependent_hop(task: str, entity: str) -> str:
+    """把第二跳子問題裡的『該公司…』回指代名詞換成解出的具體公司名。"""
+    return _BACKREF_RE.sub(entity, task)
+
+
 def _build_temporal_contract(freshness_mode: str) -> str:
     coverage_text = _format_kb_coverage(_get_kb_coverage())
     if freshness_mode == FRESHNESS_SNAPSHOT:
@@ -763,8 +808,15 @@ _PLANNER_PROMPT = f"""你是美股情報 RAG 的規劃器。把使用者問題�
 - 【時間消歧】絕不依靠自身記憶推算或猜測季度、年份、月份。只有原問題明確指定、或下方
   KB Coverage Snapshot 明確列出時,才能在子問題寫入具體期間。使用者指定的期間不得被「最新期間」
   覆蓋;「最近新聞」也不得被改寫成最新財報季度。
+- 【檢索標的檢驗】每個子問題都必須指向一個「向量庫裡撈得到的離散事實」——具體的財報數字、或一則具體的
+  新聞事件/分析師動作。子問題若只是要求「解讀 / 影響 / 意義 / 背景 / 綜合看法 / 透露什麼訊息 / 反映什麼
+  策略」,它**沒有自己的檢索標的**(答案要靠把上面撈到的事實做綜合,那是最後生成階段的工作),絕不可拆成獨立子問題:
+  · 「這則新聞對 X 股價/處境的影響是什麼」「這透露了 X 的什麼策略訊息」→ 併進「那則新聞的內容是什麼」子問題,
+    不要另外切一刀。撈的是同一個 chunk,多切只會撈回同一片段+噪音,傷準確率。
+  · 「市場對 X 的綜合看法 / 整體評價是什麼」這種泛化收束句,若原問題沒有明確點名要它 → **當作杜撰,直接刪掉**。
+  · 同一個新聞事件/分析師動作裡的多個面向(例:同一家投行「調升目標價」與「調升評等」)是**一則新聞**,合成一個子問題。
 - 【精簡優先】在**不違反上面「意圖保全」與「集合詞逐一列滿」**的前提下,用**最少**的子問題涵蓋所有意圖:
-  · 典型複合題 2~3 個原子子問題就夠;不要為了湊數而過度拆解。
+  · 典型「財報數字 + 新聞事件」複合題就是 **2 個**子問題(一個問數字、一個問那則新聞);不要為了湊數而過度拆解。
   · **同一公司同一面向不要拆成多個近義子問題**——例如同一則新聞事件拆成兩問、或把同一個指標換句話問兩次
     (「毛利率是多少」vs「毛利率水準如何」)都算重複,合成一個即可。不同指標(毛利率 vs 淨利率)才算不同意圖。
   · 只有「集合詞需逐一列舉成員」或「多實體/多年度比較」時,才可以超過 3 個(此時以意圖保全為準,不受精簡限制)。
@@ -883,11 +935,20 @@ def _retrieve_chunks(query: str) -> list[dict]:
 # 「生成」不在 agent 迴圈裡,是消除「跳過生成 / 背景知識幻覺 / 弄丟 citation」的結構性關鍵。
 # ──────────────────────────────────────────────────────────────────────────────
 
+# agentic 輸出語言硬約束(繁中產品定位):整段敘述繁體中文,但依 Rule 11 保留來源 "$X billion/million"
+# 單位詞與英文術語/代號原文不改(數字後續由 rq.convert_usd_units_to_yi 雙寫成「億(＄X billion)」)。
+_ZH_ANSWER_DIRECTIVE = (
+    "\n\nLANGUAGE — 你的整段回答必須用【繁體中文】書寫,不得用英文段落、不得用簡體字。"
+    "保留英文金融術語、股票代號(NVDA/MSFT/…)、以及來源的 \"$X billion / $Y million\" 單位詞【照原文】"
+    "(依 Rule 11,不要自己換算成億);只有敘述文字要繁體中文,數字與其單位詞不改。"
+)
+
+
 def _write_final_answer(query: str, chunks: list[dict], model_name: str, extra_user: str = "") -> str:
     """單次 Generator 呼叫:把 chunks 全文塞進生產生成契約產出答案。extra_user 夾帶糾錯指示(重生成用)。"""
     user_prompt = rq.build_user_prompt(query, chunks) + extra_user
     messages = [
-        {"role": "system", "content": rq.SYSTEM_PROMPT},
+        {"role": "system", "content": rq.SYSTEM_PROMPT + _ZH_ANSWER_DIRECTIVE},
         {"role": "user", "content": user_prompt},
     ]
     with _quiet():
@@ -1418,13 +1479,35 @@ def _node_execute(state: SupervisorState) -> dict:
     ——次數變少也順便省了 LLM 呼叫。next-hop 待辦是下一輪 replan 才會新增，天然排在下一波，不需要
     額外的相依標記去分辨「這一波的獨立 todos」跟「replan 新增的 next-hop todos」。"""
     todos = [dict(t) for t in state["todos"]]
-    pending_idxs = [i for i, t in enumerate(todos) if t["status"] == "pending"]
-    if not pending_idxs:
-        return {"iterations": state.get("iterations", 0)}   # 沒有 pending（可能被 replan 全部 drop）→ 交給 route 收斂
-    for i in pending_idxs:
-        todos[i]["status"] = "in_progress"
     freshness_mode = state.get("freshness_mode", FRESHNESS_LIVE)
     verbose = state.get("verbose", False)
+    all_pending = [i for i, t in enumerate(todos) if t["status"] == "pending"]
+    if not all_pending:
+        return {"iterations": state.get("iterations", 0)}   # 沒有 pending（可能被 replan 全部 drop）→ 交給 route 收斂
+    # multi_hop 依賴解析（Type B「辨識再查」）：帶未解「該公司」代名詞的第二跳,要等第一跳把公司辨識
+    # 出來才能檢索。這一波若還有無依賴的 pending(含第一跳),就先只跑它們、把依賴型 hop 留到下一波
+    # ——等 hop-1 結果進 collected 後,下一波(此時 ready 為空)才回填實體並檢索。Type A/單跳無「該公司」
+    # 代名詞,ready 涵蓋全部 pending,行為與舊版完全一致。
+    ready = [i for i in all_pending if not _is_dependent_hop(todos[i]["task"])]
+    deferred = [i for i in all_pending if _is_dependent_hop(todos[i]["task"])]
+    if ready:
+        pending_idxs = ready
+    else:
+        # 只剩依賴型 → 第一跳已完成:把「該公司」回填成解出的具體公司,再檢索(否則無 ticker → 撈回隨機 chunk)。
+        entity = _resolve_hop_entity(todos, state.get("collected", []))
+        for i in deferred:
+            if entity:
+                filled = _fill_dependent_hop(todos[i]["task"], entity)
+                if filled != todos[i]["task"]:
+                    _trace(f"execute: 第二跳回填實體 {entity!r} → {filled!r}")
+                    todos[i]["task"] = filled
+                    sc, gp = _build_todo_temporal_scope(filled, freshness_mode)
+                    todos[i]["temporal_scope"], todos[i]["freshness_gaps"] = sc, gp
+            else:   # 解不出實體(理論上不該發生)→ 原樣檢索,降級但不 deadlock
+                _trace(f"execute: 第二跳無法解出實體,原樣檢索(降級) → {todos[i]['task']!r}")
+        pending_idxs = deferred
+    for i in pending_idxs:
+        todos[i]["status"] = "in_progress"
 
     results: dict[int, dict] = {}
     workers = min(AGENTIC_PIPELINE_WORKERS, len(pending_idxs))
@@ -1475,12 +1558,17 @@ def _node_replan(state: SupervisorState) -> dict:
         raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
     data = _loads_json_lenient(raw)
 
+    # multi_hop 保護：還沒跑的依賴型第二跳(帶未解「該公司」代名詞)是回答原始問題的必要一跳,
+    # 不能被機率性 replanner 誤 drop、也不能因 hop-1 一做完就被判 sufficient 跳過。此時強制續跑。
+    has_pending_dependent = any(
+        t["status"] == "pending" and _is_dependent_hop(t["task"]) for t in todos)
+
     sufficient = False
     if isinstance(data, dict):
         sufficient = _coerce_bool(data.get("sufficient", False))
         drop_ids = {int(x) for x in (data.get("drop", []) or []) if str(x).lstrip("-").isdigit()}
         for t in todos:
-            if t["id"] in drop_ids and t["status"] == "pending":
+            if t["id"] in drop_ids and t["status"] == "pending" and not _is_dependent_hop(t["task"]):
                 t["status"] = "dropped"
         next_id = max((t["id"] for t in todos), default=-1) + 1
         for a in (data.get("add", []) or []):
@@ -1501,6 +1589,8 @@ def _node_replan(state: SupervisorState) -> dict:
                     "result": "",
                 })
                 next_id += 1
+    if has_pending_dependent:   # 第二跳未跑 → 一律不收斂,強制回 execute 把它做完
+        sufficient = False
     if sufficient:
         for t in todos:
             if t["status"] == "pending":

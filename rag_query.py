@@ -28,6 +28,7 @@ import math
 import os
 import re
 import sys
+import threading
 
 from dotenv import load_dotenv
 
@@ -248,10 +249,13 @@ def extract_final_answer(raw: str) -> str:
 # 因為 "X billion" render 成 "X 億" 100% 是錯）。1 billion=10 億、1 trillion=10,000 億、
 # 1 million=0.01 億。只轉「數字+英文單位詞」，不碰已經是 億/% 的值。
 _USD_UNIT_RE = re.compile(
-    r'(?:((?:US)?\$)\s?)?([0-9][0-9,]*(?:\.[0-9]+)?)\s*(billion|trillion|million|bn|mn)\b'
+    r'(?:((?:US)?\$)\s?)?([0-9][0-9,]*(?:\.[0-9]+)?)\s*'
+    r'(billion|trillion|million|bn|mn|十億|百萬|兆)(?![A-Za-z])'
     r'(?:\s*(?:美元|美金|dollars?|USD))?',
     re.IGNORECASE)
-_UNIT_TO_YI = {"billion": 10.0, "bn": 10.0, "trillion": 10000.0, "million": 0.01, "mn": 0.01}
+# 含中文單位詞安全網：LLM 若沒照 Rule 11、寫成「$13.63 十億 / 890 百萬」也一律歸成億。
+_UNIT_TO_YI = {"billion": 10.0, "bn": 10.0, "trillion": 10000.0, "million": 0.01, "mn": 0.01,
+               "十億": 10.0, "兆": 10000.0, "百萬": 0.01}
 
 
 def _fmt_yi(yi: float) -> str:
@@ -261,9 +265,19 @@ def _fmt_yi(yi: float) -> str:
     return f"{yi:,.4f}".rstrip("0").rstrip(".")
 
 
+# 前置正規化：財報源常用「$37.01B / $2899.62B / $510M」縮寫（B/M/T 附在金額後）。要求 $ 前綴
+# 且大寫 B/M/T（不吃小寫、不吃無 $ 的裸字母，避免誤傷），先展開成 billion/million/trillion。
+_DOLLAR_ABBR_RE = re.compile(r'((?:US)?\$\s?[0-9][0-9,]*(?:\.[0-9]+)?)\s*([BMT])(?![A-Za-z])')
+_ABBR_WORD = {"B": " billion", "M": " million", "T": " trillion"}
+
+
 def convert_usd_units_to_yi(text: str) -> str:
-    """把答案裡的 "$X billion / X million 美元 / ..." 一律換算成正確的「X 億(美元)」。
-    純確定性、無 LLM。保留幣別語意：原文帶 $ 或「美元/USD」→ 輸出「… 億美元」，否則「… 億」。"""
+    """把答案裡的 "$X billion / X million 美元 / ..." 換算成正確的「X 億(美元)（$X billion）」雙寫。
+    純確定性、無 LLM。保留幣別語意：原文帶 $ 或「美元/USD」→ 輸出「… 億美元」，否則「… 億」。
+    **雙寫**：億值在前（給中文使用者、且已由程式乘對），來源原始英文數字 verbatim 留在括號內——
+    一來可人工稽核，二來讓 RAGAS faithfulness 判官在答案裡找得到與 context 對得上的原始
+    "$X billion" 字串（只留「億」時判官不會算單位換算 → 把答對的當幻覺打 faith=0，見 CHANGELOG_AGENTIC ⑨）。
+    只呼叫一次（synthesize 尾端），故不處理重入時二次匹配。"""
     def _repl(m: "re.Match") -> str:
         num_s, unit = m.group(2), m.group(3).lower().rstrip()
         mult = _UNIT_TO_YI.get(unit)
@@ -275,8 +289,10 @@ def convert_usd_units_to_yi(text: str) -> str:
             return m.group(0)
         whole = m.group(0)
         has_ccy = bool(m.group(1)) or any(k in whole for k in ("美元", "美金", "dollar", "USD", "usd"))
-        return f"{_fmt_yi(yi)} 億{'美元' if has_ccy else ''}"
-    return _USD_UNIT_RE.sub(_repl, text or "")
+        src = f"{m.group(1) or ('$' if has_ccy else '')}{num_s} {m.group(3).rstrip()}"
+        return f"{_fmt_yi(yi)} 億{'美元' if has_ccy else ''}（{src}）"
+    text = _DOLLAR_ABBR_RE.sub(lambda m: m.group(1) + _ABBR_WORD[m.group(2)], text or "")
+    return _USD_UNIT_RE.sub(_repl, text)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -298,13 +314,23 @@ def infer_source_type(source: str) -> str:
     return "other"
 
 
+# 新聞意圖詞：純子字串比對即可的一組，加上需守衛的「報導」。
+# 「報導」單獨子字串比對會誤中「財報導致 / 季報導向」（財報/季報 + 導 X）——用 negative
+# lookbehind 擋掉 財/季/年/月/週/日/快/半 這些「X報」前綴，避免財報題被誤判成 news
+# 而觸發 doc_type=news 硬篩、把財報 chunk 全排除（見 Gap 2 mi-14：planner 用「報導」而非
+# 「新聞」措辭，原本漏判→市場級新聞路徑沒啟動）。
+_NEWS_KEYWORDS = (
+    "news", "headline", "headlines", "favorable", "unfavorable",
+    "新聞", "消息", "利多", "利空", "有利", "不利", "媒體", "頭條", "外電",
+)
+_NEWS_GUARDED_RE = re.compile(r"(?<![財季年月週日快半])報導")
+
+
 def looks_like_news_query(query: str) -> bool:
     query_lower = query.lower()
-    keywords = (
-        "news", "headline", "headlines", "favorable", "unfavorable",
-        "新聞", "消息", "利多", "利空", "有利", "不利",
-    )
-    return any(keyword in query_lower for keyword in keywords)
+    if any(keyword in query_lower for keyword in _NEWS_KEYWORDS):
+        return True
+    return bool(_NEWS_GUARDED_RE.search(query or ""))
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -407,6 +433,125 @@ def _extract_structural_filters(query: str) -> list[dict]:
     if basis:
         filters.append({"field": "period_basis", "value": basis, "polarity": "include"})
     return filters
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 「最新一季」deterministic 路由（2026-08-02，Gap 1 修）
+#
+# 病灶（mix-06 chunk-level probe 實證）：問「最新一季」的財報指標時，cross-encoder 無法
+# 區分同公司「Google Cloud 營收」講的是哪一季——舊季(202603)/年報(2025) 的同主題 chunk
+# 分數與最新季(202606) 幾乎並列(0.70~0.73)，把最新季的 gold 表格 chunk 壓到 rank 7/13/17、
+# commit 門檻(top-5)之外 → context_recall=0。治本：偵測到「最新一季 + 財報指標 + 單一公司」
+# 時，deterministic 解出該公司 KB 中最新的 10-Q 期碼，注入 report_period_code 硬 filter，
+# 把舊季/年報 chunk 在排序前就排除，讓最新季 gold 浮上 top。與 TTM 單向硬 filter 同一哲學。
+#
+# 觸發需「同時」滿足（刻意收窄，避免誤觸跨期/質化/TTM/新聞/Fundamentals 題）：
+#   ① 相對時間詞（最近/最新/近期/這一季/current…）
+#   ② 季度/財報指標訊號（季/營收/成長/利益/銷售/賣/margin/revenue…）——把「最近做了什麼/
+#      搭上線」這類跨期質化題（col-03）與「目前市值/FCF」這類 Fundamentals 題擋在門外
+#   ③ 恰好一家公司（多/零公司 → 不明確，不路由）
+#   ④ 非新聞（looks_like_news_query）  ⑤ 非 TTM（_detect_period_basis）
+#   ⑥ 問題未自帶明確 yyyymm 期碼（尊重使用者指定的期間）
+# 任一不滿足 → 回 None（原行為）。即使誤觸，report_period_code 硬 filter 仍有 Tier2 fallback 兜底。
+# ══════════════════════════════════════════════════════════════════════════════
+
+_LATEST_QUARTER_TIME_RE = re.compile(
+    r"最近|最新|近期|這一季|當季|本季|目前|現在"
+    r"|\b(?:latest|recent|current|most\s+recent|this\s+quarter)\b",
+    re.IGNORECASE,
+)
+# 季度 / 財報指標訊號：命中其一即算「問的是某季的財務數字」。刻意不含「市值/FCF/員工數」等
+# Fundamentals 專屬指標（那些走 .txt、無 report_period_code，硬 filter 到 10-Q 期碼只會空轉）。
+_QUARTER_METRIC_RE = re.compile(
+    r"季|營收|營業|收入|成長|增長|利益|利潤|毛利|淨利|銷售|賣"
+    r"|\b(?:eps|margin|revenue|growth|sales|profit|operating\s+income|net\s+income)\b",
+    re.IGNORECASE,
+)
+# 年度（10-K）意圖訊號：命中即「問的是年報/全年」，不該被季路由搶走。動機（2026-08-02）：
+# 「NVIDIA 最新年度營收成長多少？」同時帶相對時間(最新)＋財報指標(營收/成長)，若無此 guard
+# 會誤觸季路由、被導向最新 10-Q（該走 10-K）。年度題本就走 LLM 抽 filing_type=10-K + Tier fallback，
+# 不需硬路由——命中此 RE → 讓季路由讓路（return None）。
+_ANNUAL_INTENT_RE = re.compile(
+    r"年度|年報|全年|財年|會計年度"
+    r"|\b(?:annual|full[\s-]*year|fiscal\s+year|\bfy\b)\b",
+    re.IGNORECASE,
+)
+
+# 每個 ticker 最新 10-Q 期碼的 cache（以 collection 為界；eval 切 collection 時自動重算）。
+_latest_10q_cache: dict | None = None
+_latest_10q_cache_collection: str | None = None
+_latest_10q_lock = threading.Lock()
+
+
+def _get_latest_10q_periods(client) -> dict:
+    """掃目前 COLLECTION_NAME，回傳 {ticker: 最新 10-Q report_period_code(yyyymm 字串)}。
+    只讀少量 payload（不取 vector/document）；cache 以 collection 為界。掃描失敗回空 dict
+    （→ 上層 resolve 回 None → 退回原行為，不讓 coverage 故障拖垮檢索）。"""
+    global _latest_10q_cache, _latest_10q_cache_collection
+    if _latest_10q_cache is not None and _latest_10q_cache_collection == COLLECTION_NAME:
+        return _latest_10q_cache
+    with _latest_10q_lock:
+        if _latest_10q_cache is not None and _latest_10q_cache_collection == COLLECTION_NAME:
+            return _latest_10q_cache
+        latest: dict[str, str] = {}
+        offset = None
+        try:
+            while True:
+                points, offset = client.scroll(
+                    collection_name=COLLECTION_NAME, limit=256, offset=offset,
+                    with_payload=["ticker", "filing_type", "doc_type", "report_period_code"],
+                    with_vectors=False,
+                )
+                for p in points:
+                    pl = p.payload or {}
+                    ft = str(pl.get("filing_type") or "").upper()
+                    dt = str(pl.get("doc_type") or "").lower()
+                    if ft != "10-Q" and dt != "10-q":
+                        continue
+                    tk = str(pl.get("ticker") or "").upper().strip()
+                    code = re.sub(r"\D", "", str(pl.get("report_period_code") or ""))
+                    if not tk or len(code) < 6:
+                        continue
+                    if tk not in latest or code > latest[tk]:
+                        latest[tk] = code
+                if offset is None:
+                    break
+        except Exception as e:
+            print(f"WARN  - latest-10Q coverage scan failed ({e!r}); latest-quarter routing disabled")
+        _latest_10q_cache = latest
+        _latest_10q_cache_collection = COLLECTION_NAME
+        return _latest_10q_cache
+
+
+def _resolve_latest_quarter_filter(query: str, client) -> dict | None:
+    """Gap 1（2026-08-02）：偵測「最新一季財報指標 + 單一公司」→ 回傳該公司最新 10-Q 的
+    report_period_code include filter；任一觸發條件不滿足回 None。判定準則見上方註解。"""
+    q = query or ""
+    if not _LATEST_QUARTER_TIME_RE.search(q):
+        return None
+    if not _QUARTER_METRIC_RE.search(q):
+        return None
+    if looks_like_news_query(q):          # 新聞題走 doc_type=news，不搶
+        return None
+    if _detect_period_basis(q):           # TTM 走既有口徑硬 filter，不搶
+        return None
+    if _ANNUAL_INTENT_RE.search(q):       # 年度/年報意圖 → 走 10-K + Tier fallback，不搶
+        return None
+    if _PERIOD_CODE_RE.search(q):         # 使用者已指定明確期碼，尊重原期間
+        return None
+    tickers = _find_all_ticker_aliases(q.lower(), q)
+    if len(tickers) != 1:                 # 多/零公司 → 不明確，不路由
+        return None
+    latest = _get_latest_10q_periods(client).get(tickers[0])
+    if not latest:
+        return None
+    # routed_latest 標記：Tier1 對此期碼放寬成「== 期碼 OR report_period_code 為空」，
+    # 只排除「衝突期別的 filing」而不動 News/Fundamentals（其 report_period_code=None）。
+    # 動機（col-15，2026-08-02）：新聞+財報混合題（如「馬斯克另一家公司上市搶風頭 + 這季賺多少」）
+    # 會同時觸發本路由，若硬 filter「只收該期」會把新聞 gold 整批排除、Tier2 又因財報 chunk 充足
+    # 不觸發。使用者/LLM 明確指定的期碼不帶此標記，維持原嚴格語意。
+    return {"field": "report_period_code", "value": latest,
+            "polarity": "include", "routed_latest": True}
 
 QUERY_FILTER_SYSTEM_PROMPT = """\
 You are a query-understanding assistant for a financial RAG system whose knowledge \
@@ -734,7 +879,8 @@ def translate_query_to_english(query: str, model_name: str = DEFAULT_MODEL) -> s
         return query
 
 
-def build_qdrant_filter(filters: list[dict], strict: bool = False):
+def build_qdrant_filter(filters: list[dict], strict: bool = False,
+                        relax_empty_fields: set | None = None):
     """把 parse_query_filters() 的結果轉成 qdrant_client.models.Filter。
 
     strict=True（Tier 1）：include 條件完全不加 IsEmptyCondition，確保只撈到
@@ -744,10 +890,15 @@ def build_qdrant_filter(filters: list[dict], strict: bool = False):
     strict=False（Tier 3，預設）：include 條件包成 should=[match OR IsEmpty(field)]，
       讓沒有 filing metadata 的 News/Fundamentals/IncomeStatement chunk 也能進候選。
 
+    relax_empty_fields（strict 模式專用）：即使在 Tier1 strict 下，這些欄位也改成
+      should=[match OR IsEmpty(field)]。用於「最新一季」路由（Gap 1，col-15）——只想排除
+      衝突期別的 filing，不想連沒有期碼的 News/Fundamentals 一起排除。
+
     exclude 條件兩種模式都維持單純 must_not。
     """
     from qdrant_client import models
 
+    relax_empty_fields = relax_empty_fields or set()
     must, must_not = [], []
     for f in filters:
         field, value = f["field"], f["value"]
@@ -763,7 +914,13 @@ def build_qdrant_filter(filters: list[dict], strict: bool = False):
                 ))
             continue
 
-        if strict:
+        if strict and field in relax_empty_fields:
+            # Tier 1 但放寬此欄：值相符 OR 欄位為空（放行無期碼的 News/Fundamentals）
+            must.append(models.Filter(should=[
+                condition,
+                models.IsEmptyCondition(is_empty=models.PayloadField(key=field)),
+            ]))
+        elif strict:
             # Tier 1：精確命中，fiscal_year 加 report_label_year OR
             if field == "fiscal_year":
                 must.append(models.Filter(should=[
@@ -792,7 +949,8 @@ def _build_tier2_filter(filters: list[dict]):
     doc_type 一併保留：新聞 hard filter（doc_type=news）在 Tier1 若因帶了 news 不具備的
     report_period_code 而落空時，Tier2 仍守住「只回新聞」的意圖，不會漏放財報 chunk 進來。"""
     tier2 = [f for f in filters
-             if f["field"] in ("ticker", "filing_type", "doc_type") and f["polarity"] == "include"]
+             if f["field"] in ("ticker", "mentioned_tickers", "filing_type", "doc_type")
+             and f["polarity"] == "include"]
     return build_qdrant_filter(tier2, strict=True) if tier2 else None
 
 
@@ -814,15 +972,19 @@ def _build_fallback_note(filters: list[dict], fused_points: list) -> str:
             if pl.get(key):
                 actual.add(pl[key])
 
-    actual_str = ", ".join(sorted(actual, reverse=True)) if actual else "unknown"
+    actual_str = ", ".join(sorted(actual, reverse=True)) if actual else "未知"
     scope_parts = [", ".join(f["value"]) if isinstance(f["value"], list) else f["value"]
                    for f in [ticker_f, type_f] if f]
-    scope = " ".join(scope_parts) or "the requested filing"
+    scope = " ".join(scope_parts) or "所詢問的文件"
 
+    # 繁中揭露句：此字串同時是（a）api_server SSE 直接顯示給使用者的提示、（b）注入
+    # generator prompt 的事實。改中文的動機（2026-08-02）：中文系統對中文使用者顯示英文
+    # note 不一致；且注入英文句要 generator 二次翻譯、忠實度不穩。值仍全動態（scope/
+    # requested/actual 皆由 filter 與實際 payload 算出，無任何年份寫死）。呈現層的「請揭露」
+    # 指示在 build_user_prompt 以模板包裹，與此使用者可見句分離。
     return (
-        f"[Note: The knowledge base does not contain {scope} for the requested period "
-        f"({requested}). The following answer is based on the most recent available data "
-        f"(period: {actual_str}).]"
+        f"知識庫沒有「{scope}」在所詢問期間（{requested}）的資料，"
+        f"以下回答改用最接近的可得期間（{actual_str}）。"
     )
 
 
@@ -933,9 +1095,36 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
     if not disable_filter and looks_like_news_query(query) \
             and not any(f["field"] == "doc_type" for f in detected_filters):
         detected_filters.append({"field": "doc_type", "value": "news", "polarity": "include"})
+    # 市場級新聞（Gap 2，2026-08-02）：news 的 ticker 硬篩改用 mentioned_tickers（內文實際提到的
+    # 公司陣列，migrate_add_mentioned_tickers 補）而非 owner ticker。市場級新聞（「Magnificent
+    # Seven 全跌」等）物理歸檔在某一家、內文卻提及多家；用 owner ticker 硬篩會讓它對其他被提及公司
+    # 完全隱形（mi-08/12/14 probe：被誤殺的正是 rerank 最高的 gold，0.71~0.73）。改 mentioned_tickers
+    # 「陣列包含 X 即命中」，owner 一律已 union 進陣列故不傷單公司新聞。只在 news 查詢改；財報
+    # （10-Q/10-K/Fundamentals）維持 owner ticker——那些提到競爭對手不代表報表「是」對方的。
+    _is_news_q = any(f["field"] == "doc_type" and f["value"] == "news" and f["polarity"] == "include"
+                     for f in detected_filters)
+    if _is_news_q:
+        for f in detected_filters:
+            if f["field"] == "ticker" and f["polarity"] == "include":
+                f["field"] = "mentioned_tickers"
     # 註：period_basis（TTM 口徑）已由 _extract_structural_filters 統一吐出（走 parse_query_filters
     # 的 deterministic 抽取，含 gate-skip 路徑），不再在此另外注入。硬 filter 效果不變——Tier1
     # strict 命中 Fundamentals，某 ticker 無 TTM chunk 則自動退回 Tier2/3（不會因 basis 過濾而拒答）。
+    #
+    # 「最新一季」deterministic 路由（Gap 1，2026-08-02）：問最新單季財報指標、單一公司、且未
+    # 自帶期碼時，解出該公司 KB 中最新 10-Q 期碼注入 report_period_code 硬 filter，排除舊季/年報
+    # chunk 對排序的污染（見 _resolve_latest_quarter_filter 註解）。放在 news filter 之後：新聞題
+    # 已先被 looks_like_news_query 擋掉，不會兩者同時注入。已有 report_period_code（使用者指定或
+    # LLM 抽出）時不覆蓋。coverage 掃描需 client，故在此（而非 parse_query_filters）注入。
+    # env RQ_LATEST_QUARTER_ROUTING=0/off/false 可關閉（供 eval on/off A/B；預設開）
+    _lq_routing_on = os.getenv("RQ_LATEST_QUARTER_ROUTING", "1").strip().lower() \
+        not in ("0", "off", "false", "no")
+    if _lq_routing_on and not disable_filter \
+            and not any(f["field"] == "report_period_code" for f in detected_filters):
+        _lq_filter = _resolve_latest_quarter_filter(query, client)
+        if _lq_filter is not None:
+            detected_filters.append(_lq_filter)
+            print(f"DEBUG - latest-quarter routing → report_period_code={_lq_filter['value']}")
     if detected_filters:
         print(f"DEBUG - Detected filing filter(s): {detected_filters}")
 
@@ -1040,7 +1229,10 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
         else:
             tier1_key_filters = detected_filters
 
-        tier1_filter = build_qdrant_filter(tier1_key_filters, strict=True)
+        # 「最新一季」路由（routed_latest）產生的 report_period_code 在 Tier1 放寬成
+        # 「== 期碼 OR 期碼為空」——排除衝突期別 filing，但保留 News/Fundamentals（col-15）。
+        _relax = {f["field"] for f in tier1_key_filters if f.get("routed_latest")}
+        tier1_filter = build_qdrant_filter(tier1_key_filters, strict=True, relax_empty_fields=_relax)
         fused = _query_points(q_vecs, tier1_filter)
         if fused:
             winning_filter = tier1_filter
@@ -1302,7 +1494,12 @@ def build_user_prompt(query: str, chunks: list[dict], fallback_note: str = "") -
         )
     context = "\n\n".join(context_parts)
 
-    note_section = f"{fallback_note}\n\n" if fallback_note else ""
+    # fallback_note 是「只有 retrieval 層知道」的事實（使用者問的期間 KB 沒有、已降級到最近可得）。
+    # 用中文指示模板包裹，要 generator 在回答開頭主動揭露（而非靜默拿替代期間當原期間答）。
+    note_section = (
+        "=== 資料期間提示（系統偵測，請在回答開頭以繁體中文主動告知使用者）===\n"
+        f"{fallback_note}\n\n"
+    ) if fallback_note else ""
 
     # 期間代碼消歧義提示（見 CHANGELOG 2026-07-10）：使用者若在問題裡打了 YYYYMM 期間碼
     # （如「202512」），但 AAPL/MSFT/NVDA 等非日曆財年公司的來源文件本身用 fiscal quarter
