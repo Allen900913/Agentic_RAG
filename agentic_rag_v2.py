@@ -519,6 +519,58 @@ def _mentioned_tickers(text: str) -> set[str]:
     return found
 
 
+# ── ratio 題財務錨源保底（doc_type 版的 _ensure_ticker_coverage）─────────────────────
+# 病灶（見 trace/probe）：毛利率/淨利率/成長率等「可從 10-K/10-Q 原始行自行計算」的指標，池中
+#   同時有 ① Fundamentals（預算好的 TTM 比率，寫死值，rerank rank0）② 10-K/10-Q（原始行，可現算）
+#   兩個近似平手來源。Grader 一次只圈 1 個 → 在兩來源間擲硬幣，時而圈中 10-Q（季度口徑、與 gold 的
+#   Fundamentals 錨點不一致）。市值/P/E/ROE 等「單一來源」指標不受影響（想挑錯都沒得挑），故 recall 高。
+# 修法：ratio 意圖時，若 commit 集合裡沒有該公司的 Fundamentals，就從池中把它補回（純確定性、零 LLM、
+#   只加不減）——Grader 的語意判斷照跑，這層只接住「圈錯來源」的壞 run，消掉 run 間變異。
+_RATIO_INTENT_RE = re.compile(
+    r"毛利率|淨利率|净利率|利潤率|利润率|營業利益率|营业利益率|營業利潤率|獲利率|获利率|"
+    r"淨利潤率|净利润率|營收成長|营收成长|成長率|成长率|營收增長|营收增长|"
+    r"gross\s*margin|net\s*margin|operating\s*margin|profit\s*margin|\bmargin\b|growth\s*rate",
+    re.IGNORECASE,
+)
+
+
+def _is_ratio_intent(task: str) -> bool:
+    """子問題是否問「可從 10-K/10-Q 現算、故有雙來源」的比率/成長率指標（毛利率/淨利率/成長率…）。
+    這類指標 Fundamentals 已預算好寫死值，應以 Fundamentals 為錨、繞開 10-Q 現算路徑（路由非算術）。
+    單一來源指標（市值/P/E/ROE/EPS/自由現金流）不觸發：無雙來源擲硬幣風險，補了也只是多餘。"""
+    return bool(_RATIO_INTENT_RE.search(task or ""))
+
+
+def _ensure_ratio_source_coverage(ranked: list[dict], selected: list[dict], want_tickers) -> list[dict]:
+    """ratio 題財務錨源保底：保證 want_tickers 每一家在 selected 裡至少有一個 Fundamentals chunk；
+    缺的就從 ranked（完整 rerank 降序池）補上該家分數最高的 Fundamentals，回傳仍按 rerank 降序。
+    照 rq._ensure_ticker_coverage 的結構（只加不減）。零/未知 ticker 時原樣回傳。
+    Fundamentals 靠 source 檔名判定（payload doc_type 實測常為空，見 probe）。"""
+    want = [want_tickers] if isinstance(want_tickers, str) else list(want_tickers or [])
+    if not want:
+        return selected
+    is_fund = lambda c: "Fundamentals" in (c.get("source") or "")
+    covered = {c.get("ticker", "") for c in selected if is_fund(c)}
+    missing = set(want) - covered
+    if not missing:
+        return selected
+    out = list(selected)
+    seen = {(c["source"], c["chunk_index"]) for c in selected}
+    for c in ranked:                       # ranked 已降序：每家第一個 Fundamentals 命中即該家最高分
+        if not missing:
+            break
+        if not is_fund(c):
+            continue
+        t = c.get("ticker", "")
+        key = (c["source"], c["chunk_index"])
+        if t in missing and key not in seen:
+            out.append(c)
+            seen.add(key)
+            missing.discard(t)
+    out.sort(key=lambda x: x["raw_rerank_score"], reverse=True)
+    return out
+
+
 # ── multi_hop 第二跳依賴解析（Type B：「新聞中做了 X 的是哪家？該公司的財報指標多少」）──────────
 # planner 對這種兩跳題會把 hop-2 寫成「該公司的毛利率是多少」——帶未解回指代名詞、句中沒點名公司。
 # 若讓它跟 hop-1 同一波平行檢索,「該公司」永遠沒被填 → 無 ticker 的破檢索撈回隨機 chunk。
@@ -1464,6 +1516,10 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
     mentioned = _mentioned_tickers(task)
     if len(mentioned) > 1:
         picked = rq._ensure_ticker_coverage(run_state.pool, picked, mentioned)
+    # ratio 題財務錨源保底（Phase 2）：ratio 意圖時保證每家至少有一個 Fundamentals，接住 Grader 對
+    # 「Fundamentals vs 10-K/10-Q」雙來源的擲硬幣（見 _ensure_ratio_source_coverage）。deterministic、無 LLM。
+    if mentioned and _is_ratio_intent(task):
+        picked = _ensure_ratio_source_coverage(run_state.pool, picked, mentioned)
     for c in picked:
         c["_subq"] = todo["id"]
     return {"id": todo["id"], "summary": summary, "web_used": bool(web_notes),
