@@ -346,7 +346,7 @@
       "category": "semantic",
       "query": "Microsoft 如何把 Copilot 整合進 Microsoft 365 的產品策略？",
       "relevant": [
-        "MSFT_10K_2025.html"
+        "MSFT_10K_*.html"
       ],
       "answerable": true
     },
@@ -355,7 +355,7 @@
       "category": "semantic",
       "query": "Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？",
       "relevant": [
-        "MSFT_10K_2025.html"
+        "MSFT_10K_*.html"
       ],
       "answerable": true,
       "pin_chunks": [
@@ -921,7 +921,7 @@
       "category": "colloquial",
       "query": "微軟是怎麼把 AI 塞進 Office 那些軟體裡的？",
       "relevant": [
-        "MSFT_10K_2025.html"
+        "MSFT_10K_*.html"
       ],
       "answerable": true,
       "maps_to": "sem-03"
@@ -931,9 +931,8 @@
       "category": "colloquial",
       "query": "亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？",
       "relevant": [
-        "AMZN_10K_2025.html",
-        "AMZN_10Q_202509.html",
-        "AMZN_10Q_202603.html"
+        "AMZN_10K_*.html",
+        "AMZN_10Q_*.html"
       ],
       "answerable": true,
       "maps_to": "sem-05",

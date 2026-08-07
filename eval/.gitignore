@@ -10,6 +10,11 @@
 !eval_set.json
 !eval_set_business.json
 !eval_set_agentic.json
+# reference_answers.json = RAGAS 的 ground truth，跟 eval_set 一樣是「標準答案」而非跑分輸出。
+# 先前被 *.json 一併忽略是漏網：它不是腳本能免費重現的東西（要花一次 LLM 全量生成，
+# 且 2026-08-07 稽核後含 14 題 24 處人工校正，重生成會覆蓋掉），一旦誤刪就永久遺失
+# ——本專案已經發生過未追蹤的 eval 檔被刪、git 完全救不回的情況。
+!reference_answers.json
 
 # 跑分 log（stdout dump）
 *_log.txt

@@ -642,6 +642,31 @@ def print_summary_table(summary: dict) -> None:
               f"{str(s['wrongful_refusal_rate']):>7} {str(s['fatal_hallucination_count']):>6}")
 
 
+def build_run_meta(args) -> dict:
+    """把這輪的可重現設定寫進結果檔。
+    為什麼必要：舊結果檔 `meta` 是空的（如 gj_single_zh_full100_20260803.json），事後
+    完全無從確認它用了哪個 collection、哪個生成模型、full_translate_en 開沒開——而
+    agentic 檢索層固定開、生產 rag_query 預設關，這個 flag 直接決定兩管線能不能對比。
+    2026-08-07 要做單管線 vs agentic 對照時，就是因為舊檔沒有 meta 而必須整份重跑。
+    對齊 run_agentic_on_evalset.py 的 meta 欄位，讓兩邊結果檔可互相稽核。"""
+    return {
+        "producer": "eval_generation_llm_judge.py",
+        "module": "rag_query (single-pass)",
+        "collection": args.collection,
+        "gen_model": args.gen_model,
+        "retrieval_model": args.retrieval_model,
+        "judge_model": args.judge_model,
+        "top_k": args.top_k,
+        "full_translate_en": bool(args.full_translate_en),
+        "translate_query_en": bool(args.translate_query_en),
+        "rewrite": bool(args.rewrite),
+        "compress": bool(args.compress),
+        "rerank_multi_query": bool(args.rerank_multi_query),
+        "evidence_first": bool(args.evidence_first),
+        "eval_set": str(args.eval_set),
+    }
+
+
 def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, out_path: Path):
     """跑一輪完整 eval（每題 retrieve+generate+judge），寫入 out_path，回傳 (records, summary)。
     支援 per-run resume（沿用既有邏輯：檔案已存在且該題已有結果就跳過），
@@ -806,7 +831,8 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
         })
 
         with open(out_path, "w", encoding="utf-8") as f:
-            json.dump({"summary": {}, "records": records}, f, indent=2, ensure_ascii=False)
+            json.dump({"meta": build_run_meta(args), "summary": {}, "records": records},
+                      f, indent=2, ensure_ascii=False)
 
         # ── 靜默降級 → 整輪中止（2026-07-19）────────────────────────────────
         # 有任何一次 LLM 呼叫真的失敗過，就代表從那一刻起 rewrite/filter/translate
@@ -839,7 +865,8 @@ def run_single_pass(queries, all_sources, bge_m3, rerank_model, client, args, ou
     print_summary_table(summary)
 
     with open(out_path, "w", encoding="utf-8") as f:
-        json.dump({"summary": summary, "records": records}, f, indent=2, ensure_ascii=False)
+        json.dump({"meta": build_run_meta(args), "summary": summary, "records": records},
+                  f, indent=2, ensure_ascii=False)
     print(f"\n[DONE] Written to {out_path}")
 
     return records, summary

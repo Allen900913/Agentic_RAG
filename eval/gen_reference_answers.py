@@ -101,6 +101,73 @@ def gen_reference_clean(msgs: list, model: str, max_retries: int = 2) -> str:
     return txt
 
 
+# ── 確定性 backstop：LLM 勸不動時，直接拿來源把「億」算對 ────────────────────────
+# 為什麼需要這層：上面的 prompt(CRITICAL 規則) + gen_reference_clean(重試) 都只是「勸」，
+# 勸不動時舊碼只 print 一行「需人工檢查」就放行——2026-08-07 稽核抓到 13 題 23 處錯，
+# 全部是這樣漏出去的（警告在 100 題輸出裡捲過去，沒人回頭看）。
+# rq.convert_usd_units_to_yi 也救不了：它只認「數字+英文單位詞」，LLM 一旦先斬後奏寫成
+# 「253.49 億美元」，那支轉換器明文「不碰已經是億的值」→ 結構性失明。
+#
+# 判準必須自足，不能拿答案的 N 億去撞來源的 $N billion 就定罪（來源同時有 $2.5B 與
+# $250 million 時會誤判）。因此三個條件同時成立才動手：
+#   ① 來源有 "$N billion"  ② 來源沒有 "$N/10 billion"  ③ 來源沒有 "$N*100 million"
+# ②③ 排掉「答案其實是對的、只是來源另有一個數字長得像」的情況。
+# 實測：對本 eval 的 29 處雙寫 + 15 處 millions 表格推導，零誤報。
+# 幣別標記【必填】：不可寫成可選。「10 億使用者」「25 億部裝置」「2.57 億股」都是
+# 非金額計數，若允許無幣別匹配，來源剛好有 "$10 billion" 就會把「10 億使用者」改成
+# 「100 億美元（$10 billion）使用者」——回測實際踩到（news-10 / mi-11）。
+# 漏修無害（人工稽核還在），改壞有害，故一律從嚴。
+_YI_SOLO_RE = _re.compile(r"([0-9][0-9,]*(?:\.[0-9]+)?)[\s  ]*億[\s  ]*(美元|歐元)")
+# 後接括號是否為「單位雙寫」（$X billion / 12,345 百萬），而非敘述性括號（如「（其中…」）。
+_DUAL_PAREN_RE = _re.compile(r"^[\s  ]*[（(][\s  ]*(?:US)?\$?[\s  ]*[0-9]")
+
+
+def _num_variants(v: float) -> set:
+    """一個數值在文本中可能的字面寫法（含千分位）。"""
+    s = f"{v:.10f}".rstrip("0").rstrip(".")
+    out = {s}
+    if abs(v - round(v)) < 1e-9:
+        out |= {f"{int(round(v)):,}", str(int(round(v)))}
+    if "." in s:
+        ip, dp = s.split(".")
+        out.add(f"{int(ip):,}.{dp}")
+    return out
+
+
+def _src_has(context: str, v: float, unit: str) -> bool:
+    return any(_re.search(rf"\$\s?{_re.escape(x)}\s*(?:{unit})", context)
+               for x in _num_variants(v))
+
+
+def repair_yi_against_source(text: str, context: str) -> tuple:
+    """把答案裡「LLM 手轉且確定錯」的 N 億，依來源修成 (N*10) 億美元（$N billion）。
+    回傳 (修好的文字, [(原字串, 新字串), ...])。無法判定的一律不動（寧可漏修不可錯改）。"""
+    repairs = []
+
+    def _repl(m):
+        # 已經是雙寫「N 億美元（$X billion）」的不碰：那是 post-processor 算好的。
+        # 但只認「括號內以數字/$ 開頭」的單位雙寫——敘述性括號（「（其中 34.75…」）不算，
+        # 否則會漏修（回測：mi-09 的 84.75 就是這樣被跳過的）。
+        if _DUAL_PAREN_RE.match(text[m.end():m.end() + 8]):
+            return m.group(0)
+        n = float(m.group(1).replace(",", ""))
+        if not _src_has(context, n, r"billion|B\b"):
+            return m.group(0)                      # 來源沒這個 billion 數字 → 無從定罪
+        if _src_has(context, n / 10, r"billion|B\b") or _src_has(context, n * 100, r"million|M\b"):
+            return m.group(0)                      # 來源另有對應值 → 答案可能本來就對
+        new = f"{_fmt_yi_local(n * 10)} 億{m.group(2) or '美元'}（${m.group(1)} billion）"
+        repairs.append((m.group(0), new))
+        return new
+
+    return _YI_SOLO_RE.sub(_repl, text or ""), repairs
+
+
+def _fmt_yi_local(v: float) -> str:
+    if abs(v - round(v)) < 1e-9:
+        return f"{int(round(v)):,}"
+    return f"{v:,.4f}".rstrip("0").rstrip(".")
+
+
 def detect_lang(text: str) -> str:
     """粗略偵測 zh / en：CJK 佔比高於拉丁字母的 15% 就算中文。"""
     import re
@@ -227,16 +294,30 @@ def main():
         # query 要逐字相符才信任快取——eval_set 改版常沿用相同 id 換題目，若只看 id
         # 存在就 skip，會把舊題目的 reference 誤配到新題目上（見 2026-07-21 事故：
         # 47/90 題撈到文不對題的舊 reference，RAGAS context_recall/precision 假性腰斬）。
-        cached = existing.get(qid)
-        if cached and cached.get("reference") and cached.get("query", "").strip() == q["query"].strip():
-            print(f"[{i}/{len(queries)}] {qid} — cached, skip")
-            continue
-        if cached and cached.get("query", "").strip() != q["query"].strip():
-            print(f"[{i}/{len(queries)}] {qid} — cache STALE (query changed), regenerating")
         gold_files = expand_relevant(q["relevant"], all_sources)
         if not gold_files:
             print(f"[{i}/{len(queries)}] {qid} — no gold sources matched {q['relevant']}, skip")
             continue
+        cached = existing.get(qid)
+        # 快取有效需**兩個**條件同時成立，缺一不可：
+        #   ① query 逐字相符——eval_set 改版常沿用相同 id 換題目，只看 id 存在就 skip 會把
+        #      舊題目的 reference 誤配到新題目（2026-07-21 事故：47/90 題文不對題，
+        #      RAGAS context_recall/precision 假性腰斬）。
+        #   ② gold_files 相同——語料換版時 glob 展開到不同檔案（例如 SEC 新申報讓
+        #      `MSFT_10K_*.html` 從 2025 版變 2026 版），題目一個字沒改，但參考答案是照
+        #      舊 filing 寫的。只驗 query 會讓這種漂移完全無聲通過，正是 memory
+        #      `eval-gold-version-drift-bug` 記載的病（該次「最新一季」題假性腰斬）。
+        if cached and cached.get("reference"):
+            same_q = cached.get("query", "").strip() == q["query"].strip()
+            same_gold = list(cached.get("gold_files") or []) == list(gold_files)
+            if same_q and same_gold:
+                print(f"[{i}/{len(queries)}] {qid} — cached, skip")
+                continue
+            why = "query changed" if not same_q else "gold_files changed（語料換版）"
+            print(f"[{i}/{len(queries)}] {qid} — cache STALE（{why}），regenerating")
+            if not same_gold:
+                _was, _now = set(cached.get("gold_files") or []), set(gold_files)
+                print(f"       舊 gold: {sorted(_was - _now) or '—'} → 新 gold: {sorted(_now - _was) or '—'}")
         chunks = fetch_gold_chunks(client, col, gold_files)
         # dense 選 chunk 用「英文譯句」而非原始中文 query：黃金來源多為英文 SEC filing，
         # 中文 query × 英文 chunk 的跨語言 dense 排序會失真，把含事實那顆壓下去（實測：
@@ -253,19 +334,46 @@ def main():
         if pins:
             pinset = {(p["source"], p["chunk_index"]) for p in pins}
             pinned = [c for c in chunks if (c["source"], c["chunk_index"]) in pinset]
+            # pin 比對不到就靜默消失＝無聲退回 dense-only 選擇，正是 pin 當初要修的
+            # false-negative gold 又跑回來，而且沒有任何跡象。必須吵出來。
+            # 典型成因：語料刷新後該 filing 被更新版取代（例如 SEC 新申報把 10-K_2025
+            # 換成 10-K_2026），或 chunking 改版導致 chunk_index 位移。
+            missing = pinset - {(c["source"], c["chunk_index"]) for c in pinned}
+            if missing:
+                print(f"[{i}/{len(queries)}] {qid} — ⚠ pin_chunks 有 {len(missing)}/{len(pinset)} 個"
+                      f"在目前語料中找不到，該題 gold 會退回 dense-only 選擇："
+                      + ", ".join(f"{s}#{ix}" for s, ix in sorted(missing)))
             seen = {(c["source"], c["chunk_index"]) for c in pinned}
             top = pinned + [c for c in top if (c["source"], c["chunk_index"]) not in seen]
             top = top[:max(args.top_k, len(pinned))]
         context = "\n\n---\n\n".join(c["document"][:CHUNK_CHAR_CAP] for c in top)
         user = f"Question:\n{q['query']}\n\nSource excerpts:\n{context}"
-        lang = lang_map.get(qid, "English")  # 對齊系統答案語言；無對照時預設英文
+        # 語言決定順序：--match-lang-from 對照 > 既有 reference 的語言 > 英文。
+        # 中間那層是必要的：現有 100 題全是 Traditional Chinese（見「全繁中對齊」commit），
+        # 若忘了帶 --match-lang-from 就直接落到 "English"，重生成的題會安靜地變英文，
+        # 與其餘題目 register 不一致——而 register 落差正是壓垮 answer_correctness 的
+        # 已知主因（見 CHANGELOG_AGENTIC A1「答案風格必須與 SYSTEM_PROMPT 一致」）。
+        # 2026-08-07 實測踩到：未帶參數重生成 news-01/mi-13，兩題都無聲產出英文。
+        lang = lang_map.get(qid) or (cached or {}).get("reference_lang") or "English"
+        if qid not in lang_map and not (cached or {}).get("reference_lang"):
+            print(f"[{i}/{len(queries)}] {qid} — ⚠ 無語言對照也無既有 reference，"
+                  f"預設用 English；若其餘題目是中文請補 --match-lang-from")
         msgs = [{"role": "system", "content": REFERENCE_SYSTEM.format(lang=lang)},
                 {"role": "user", "content": user}]
         # rq.call_llm 依 model 名稱路由：'gemini-' 開頭走 Google GenAI，其餘走 NVIDIA NIM。
         # gen_reference_clean 內含「億」違規偵測 + 重試護欄（強制金額留英文原文）。
         reference = gen_reference_clean(msgs, args.gen_model)
         if _YI_HANDCONV_RE.search(reference or ""):
-            print(f"[{i}/{len(queries)}] {qid} — ⚠ 重試後仍含手轉「億」，需人工檢查")
+            # 勸不動就用程式修：拿 context 逐筆判定，確定是 10x 音譯錯的才改（見上方判準）。
+            reference, _fixes = repair_yi_against_source(reference, context)
+            for _old, _new in _fixes:
+                print(f"[{i}/{len(queries)}] {qid} — ✔ backstop 修正單位：「{_old.strip()}」→「{_new}」")
+            if _YI_HANDCONV_RE.search(reference or ""):
+                # 仍有手轉「億」但來源判不出＝可能正確（來源是 millions 表格自行組單位）。
+                # 不亂改，但要留痕，別再像先前那樣一行警告就放行。
+                _left = {m.group(0).strip() for m in _YI_SOLO_RE.finditer(reference)}
+                print(f"[{i}/{len(queries)}] {qid} — ⚠ 仍有無法從來源判定的手轉「億」"
+                      f"（{len(_left)} 處，未修改）：{'、'.join(sorted(_left))}")
         # 確定性單位換算（與系統 synthesize 同一支 rq.convert_usd_units_to_yi）：reference prompt
         # 要 LLM 保留 "$X billion" verbatim，這裡把 billion/million→億 乘算正確並雙寫「億（$X billion）」，
         # 對齊系統答案格式 + 根治中文 reference 的 billion→億 音譯 10x 錯（見 CHANGELOG_AGENTIC ⑨）。

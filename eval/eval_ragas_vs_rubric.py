@@ -334,6 +334,9 @@ def main():
     ap.add_argument("--categories", nargs="*", default=None,
                     help="只跑指定類別（semantic/lexical/mixed/colloquial/news/multi_intent）")
     ap.add_argument("--limit", type=int, default=None, help="每類最多幾個 id（smoke test 用）")
+    ap.add_argument("--ids", nargs="*", default=None,
+                    help="只評指定 query id。RAGAS 每題獨立評分，改了少數題的 reference 時"
+                         "可只重跑那幾題再拼接回原結果，避免整份重跑多吃 judge 噪音。")
     ap.add_argument("--max-workers", type=int, default=2, help="RAGAS 併發（NVIDIA 限速，別開太高）")
     ap.add_argument("--timeout", type=int, default=120, help="RAGAS 每次 judge 呼叫的逾時秒數")
     ap.add_argument("--max-retries", type=int, default=1, help="RAGAS 單次呼叫內部重試次數")
@@ -370,6 +373,8 @@ def main():
     rows = []
     seen_cats = defaultdict(int)
     for qid, meta in eval_set.items():
+        if args.ids and qid not in args.ids:
+            continue
         if args.categories and meta["category"] not in args.categories:
             continue
         if qid not in answers or qid in prior_per_id:

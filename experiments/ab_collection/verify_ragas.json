@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "ragas_model": "openai/gpt-oss-120b",
+    "ragas_metrics": [
+      "context_recall",
+      "context_precision",
+      "nv_context_relevance",
+      "faithfulness",
+      "answer_relevancy",
+      "answer_correctness"
+    ],
+    "ground_truth": "reference_answers.json（缺則 rubric.must_include 合成）",
+    "from_results": [
+      "experiments/ab_collection/verify_pilot.json"
+    ]
+  },
+  "summary": {
+    "colloquial": {
+      "n": 2,
+      "rubric": NaN,
+      "context_recall": 0.214,
+      "context_precision": 0.0,
+      "nv_context_relevance": 0.75,
+      "faithfulness": 0.368,
+      "answer_relevancy": 0.754,
+      "answer_correctness": 0.355,
+      "_corr_vs_selfmade": {}
+    },
+    "semantic": {
+      "n": 2,
+      "rubric": NaN,
+      "context_recall": 0.5,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.452,
+      "answer_relevancy": 0.867,
+      "answer_correctness": 0.552,
+      "_corr_vs_selfmade": {}
+    },
+    "_overall": {
+      "n": 4,
+      "rubric": NaN,
+      "context_recall": 0.357,
+      "context_precision": 0.5,
+      "nv_context_relevance": 0.875,
+      "faithfulness": 0.41,
+      "answer_relevancy": 0.81,
+      "answer_correctness": 0.454,
+      "_corr_vs_selfmade": {}
+    }
+  },
+  "per_id": {
+    "sem-03": {
+      "category": "semantic",
+      "rubric": NaN,
+      "context_recall": 0.429,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.55,
+      "answer_relevancy": 0.855,
+      "answer_correctness": 0.496,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "sem-04": {
+      "category": "semantic",
+      "rubric": NaN,
+      "context_recall": 0.571,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.353,
+      "answer_relevancy": 0.879,
+      "answer_correctness": 0.609,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "col-02": {
+      "category": "colloquial",
+      "rubric": NaN,
+      "context_recall": 0.429,
+      "context_precision": 0.0,
+      "nv_context_relevance": 0.5,
+      "faithfulness": 0.429,
+      "answer_relevancy": 0.837,
+      "answer_correctness": 0.503,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "col-03": {
+      "category": "colloquial",
+      "rubric": NaN,
+      "context_recall": 0.0,
+      "context_precision": 0.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.308,
+      "answer_relevancy": 0.671,
+      "answer_correctness": 0.207,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    }
+  }
+}

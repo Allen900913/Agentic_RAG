@@ -59,10 +59,11 @@
 | 檔案 | 用途 | 跑在哪 |
 |---|---|---|
 | [`eval/eval_set.json`](eval/eval_set.json) | **100 題**題庫（news/multi_intent/semantic/mixed/lexical/colloquial 各 15 + **multi_hop 10**），只含 query/relevant/answerable，不含 rubric | — |
-| [`eval/gen_reference_answers.py`](eval/gen_reference_answers.py) | 從 `relevant` 黃金來源檔生成完整參考答案 → `eval/reference_answers.json`（RAGAS 的 ground truth）。dense 選 chunk 用**英文譯句**（2026-08-01 修：中文 query 跨語言 dense 會漏事實 chunk→ false-negative gold），`GOLD_TOP_K=8` | 專案 `.venv`，`rq.call_llm` |
+| [`eval/reference_answers.json`](eval/reference_answers.json) | RAGAS 的 ground truth。**已納入版控**（2026-08-07 前被 `*.json` 誤忽略）——它跟 eval_set 同級是「標準答案」不是跑分輸出，且非腳本可免費重現（需一次 LLM 全量生成 ＋ 含 24 處人工校正） | — |
+| [`eval/gen_reference_answers.py`](eval/gen_reference_answers.py) | 從 `relevant` 黃金來源檔生成完整參考答案 → `eval/reference_answers.json`（RAGAS 的 ground truth）。dense 選 chunk 用**英文譯句**（2026-08-01 修：中文 query 跨語言 dense 會漏事實 chunk→ false-negative gold），`GOLD_TOP_K=8`。**快取雙條件**：`query` 與 `gold_files` 都相同才 skip（只驗 query 會讓語料換版無聲沿用舊 filing 的答案）。**語言**：`--match-lang-from` > 既有 `reference_lang` > English——忘帶參數不會再無聲變英文。手轉「億」勸不動時由 `repair_yi_against_source()` 拿來源確定性修正 | 專案 `.venv`，`rq.call_llm` |
 | [`eval/run_agentic_on_evalset.py`](eval/run_agentic_on_evalset.py) | 把 agentic 模組（`--module`，預設 `agentic_rag_v2`）跑在 eval_set → generation_judge schema 結果檔（含 `contexts`，供 RAGAS）。`--freshness-mode` 預設 `snapshot` | 專案 `.venv`，NVIDIA |
 | [`eval/eval_generation_llm_judge.py`](eval/eval_generation_llm_judge.py) | **單管線**（rag_query）版：真實 retrieve+generate + 3 維判定（Correctness/Refusal/Context Recall）→ 同 generation_judge schema | 專案 `.venv`，NVIDIA（`--gen-model` 指定 NVIDIA 名） |
-| [`eval/eval_ragas_vs_rubric.py`](eval/eval_ragas_vs_rubric.py) | 讀結果檔 + `reference_answers.json` → RAGAS 六指標（context_recall/precision、nv_context_relevance、faithfulness、answer_relevancy、answer_correctness）。`--from-results` 可指任一結果檔、`--output` 自訂 | **獨立 `.venv-ragas`**（`ragas==0.2.15` 需 `langchain<0.4`，會弄壞生產 `.venv`）；NVIDIA |
+| [`eval/eval_ragas_vs_rubric.py`](eval/eval_ragas_vs_rubric.py) | 讀結果檔 + `reference_answers.json` → RAGAS 六指標（context_recall/precision、nv_context_relevance、faithfulness、answer_relevancy、answer_correctness）。`--from-results` 可指任一結果檔、`--output` 自訂、`--ids` 只評指定題（改少數題 reference 時免整份重跑）| **獨立 `.venv-ragas`**（`ragas==0.2.15` 需 `langchain<0.4`，會弄壞生產 `.venv`）；NVIDIA |
 
 > **兩個 Python 環境，別混用**：生產 `.venv`（`requirements.txt`，langchain 1.x + langgraph）／評測 `.venv-ragas`（[`requirements-ragas.txt`](requirements-ragas.txt)，langchain 0.3.x + ragas 0.2.15）。ragas 0.2.x 綁 `langchain-core<0.4`，裝進生產環境會把 langchain 降版、弄壞 agentic 管線與 SemanticChunker。
 > 新機器還原：`python -m venv .venv-ragas` → `pip install -r requirements-ragas.txt`（2026-08-07 用 `pip install --dry-run` 驗過：解析出 97 個套件，與現有環境數量與關鍵版本一致）。
@@ -72,5 +73,6 @@
 2. 產生結果檔：agentic 版跑 `run_agentic_on_evalset.py`；單管線版跑 `eval_generation_llm_judge.py`
 3. 切 `.venv-ragas` 跑 `eval_ragas_vs_rubric.py --from-results <結果檔> --reference-file eval/reference_answers.json --output <輸出>`
 
-> 只改動少數題的 reference 時**不必重跑全部 RAGAS**：RAGAS 每題獨立評分，把改動題的新分數拼接回原結果、其餘沿用即可（重跑只多出 judge 噪音）。
+> 只改動少數題的 reference 時**不必重跑全部 RAGAS**：RAGAS 每題獨立評分，用 `--ids <題號…>` 只評改動題，再把新分數拼接回原結果（重跑只多出 judge 噪音）。
+> **`eval/` 只放輸入與標準答案**（`eval_set.json`／`eval_set_agentic.json`／`reference_answers.json`），跑分輸出一律寫到 `experiments/`。過期產物在 `eval/_archive_stale/`（2026-08-07 歸檔 6 個；未硬刪是因為它們未納版控，刪掉即永久遺失）。⚠ `eval_generation_llm_judge.py` 與 `eval_ragas_vs_rubric.py` 的 `--output` **預設值仍指向 `eval/`**，跑的時候要自己帶 `--output experiments/...`，否則輸出又會混進來。
 > `answer_correctness` 偏低常是量尺問題（長度對齊／false-negative gold），非系統答錯——先讀 memory `ragas-correctness-length-artifact`、`eval-false-negative-gold` 再下結論。
