@@ -231,12 +231,23 @@ LLM 呼叫依用途拆成兩種溫度（受控實驗定案，詳見 [`CHANGELOG.
 
 ### 4-1. 建立虛擬環境
 
+本專案需要**兩個互相隔離的虛擬環境**（原因見下方警告）：
+
 ```bash
-python --version           # 需 >= 3.10
+python --version                       # 需 >= 3.10
+
+# ① 生產環境：查詢、agentic、ingest 都跑在這裡
 python -m venv .venv
-.venv\Scripts\activate     # Windows PowerShell（Linux/macOS: source .venv/bin/activate）
+.venv\Scripts\activate                 # Linux/macOS: source .venv/bin/activate
 pip install -r requirements.txt
+
+# ② 評測環境：只給 RAGAS 用
+python -m venv .venv-ragas
+.venv-ragas\Scripts\activate           # Linux/macOS: source .venv-ragas/bin/activate
+pip install -r requirements-ragas.txt
 ```
+
+> ⚠️ **兩個環境不能合併**：`ragas 0.2.x` 綁 `langchain-core<0.4`，但生產端的 LangGraph agentic 管線與 `SemanticChunker` 需要 `langchain 1.x`。裝在一起時後裝的會覆蓋先裝的版本，結果是生產管線壞掉。實測差異：`.venv` 是 langchain 1.3.14 / langgraph 1.2.9，`.venv-ragas` 是 langchain 0.3.30 / ragas 0.2.15。
 
 > ⚠️ 首次執行時會自動從 HuggingFace 下載 `BAAI/bge-m3`（~2.3GB）與 `BAAI/bge-reranker-v2-m3`（~2.3GB），請確保網路暢通。下載完成後後續執行完全離線。
 
@@ -338,7 +349,7 @@ streamlit run app.py
 | 題庫 | [`eval/eval_set.json`](eval/eval_set.json)，**100 題**：news / multi_intent / semantic / mixed / lexical / colloquial 各 15，＋ multi_hop 10 |
 | 參考答案 | `gen_reference_answers.py` 從黃金來源檔生成 → `reference_answers.json`（RAGAS 的 ground truth） |
 | 指標 | RAGAS 六項：context_recall、context_precision、nv_context_relevance、faithfulness、answer_relevancy、answer_correctness |
-| 執行環境 | RAGAS 須跑在**獨立的 `.venv-ragas`**（`ragas==0.2.15` 綁 `langchain<0.4`，裝進生產 `.venv` 會壞掉） |
+| 執行環境 | RAGAS 須跑在**獨立的 `.venv-ragas`**（`ragas==0.2.15` 綁 `langchain-core<0.4`，裝進生產 `.venv` 會把 langchain 降版、弄壞 agentic 管線與 SemanticChunker） |
 
 標準跑法（三步，reference 生成一次即可重用）：
 

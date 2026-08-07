@@ -1,0 +1,44 @@
+# RAGAS 評測專用環境（.venv-ragas）—— 不要裝進生產的 .venv
+#
+# 為什麼要獨立一個環境：
+#   ragas 0.2.x 綁 langchain-core <0.4，而生產 .venv 跑的是 langchain 1.x
+#   （agentic_rag_v2.py 的 LangGraph、SemanticChunker 都依賴它）。兩者裝在一起，
+#   後裝的會把先裝的降版／升版，結果是生產管線壞掉。實測差異：
+#     .venv        langchain 1.3.14 / langchain-core 1.4.9 / langgraph 1.2.9
+#     .venv-ragas  langchain 0.3.30 / langchain-core 0.3.86 / ragas 0.2.15
+#
+# 建立方式（與生產環境完全隔離的第二個 venv）：
+#   python -m venv .venv-ragas
+#   .venv-ragas\Scripts\activate          # Linux/macOS: source .venv-ragas/bin/activate
+#   pip install -r requirements-ragas.txt
+#
+# 用法（只跑這一支腳本，不要用它跑生產程式）：
+#   .venv-ragas/Scripts/python.exe eval/eval_ragas_vs_rubric.py \
+#       --from-results <結果檔> --reference-file eval/reference_answers.json --output <輸出>
+#
+# 版本一律精確 pin：這個環境存在的理由就是版本約束脆弱，用 >= 會在重建時漂掉。
+
+# === RAGAS 本體（版本錨點，決定了下面整組 langchain 的版本上限）===
+ragas==0.2.15
+
+# === LangChain 0.3.x 系（被 ragas 的 <0.4 約束鎖住）===
+# eval_ragas_vs_rubric.py 直接 import：langchain_core.embeddings.Embeddings、
+# langchain_openai.ChatOpenAI；ragas 內部另需 langchain / langchain-community。
+langchain==0.3.30
+langchain-core==0.3.86
+langchain-community==0.3.31
+langchain-openai==0.3.35
+
+# === RAGAS 的資料容器（evaluate() 吃 datasets.Dataset）===
+datasets==5.0.0
+
+# === 自訂 embeddings（nv_context_relevance 等指標用本地 BGE-M3，避免額外 API 成本）===
+# 不 pin torch：讓 sentence-transformers 依當前平台/CUDA 解出相容版本。
+sentence-transformers==5.6.0
+
+# === 其他直接 import ===
+numpy>=2.0
+python-dotenv>=1.0.0
+
+# 判官模型走 NVIDIA NIM 的 OpenAI-compatible endpoint，需要 .env 的 NVIDIA_API_KEY
+# （openai 套件由 langchain-openai 帶入，不另外 pin）
