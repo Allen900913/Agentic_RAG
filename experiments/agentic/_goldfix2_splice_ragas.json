@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "ragas_model": "openai/gpt-oss-120b",
+    "ragas_metrics": [
+      "context_recall",
+      "context_precision",
+      "nv_context_relevance",
+      "faithfulness",
+      "answer_relevancy",
+      "answer_correctness"
+    ],
+    "ground_truth": "reference_answers.json（缺則 rubric.must_include 合成）",
+    "from_results": [
+      "experiments/agentic/_goldfix2_splice_mini.json"
+    ]
+  },
+  "summary": {
+    "lexical": {
+      "n": 1,
+      "rubric": NaN,
+      "context_recall": 0.5,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.953,
+      "answer_correctness": 0.347,
+      "_corr_vs_selfmade": {}
+    },
+    "mixed": {
+      "n": 1,
+      "rubric": NaN,
+      "context_recall": 0.667,
+      "context_precision": 0.125,
+      "nv_context_relevance": 0.5,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.741,
+      "answer_correctness": 0.552,
+      "_corr_vs_selfmade": {}
+    },
+    "_overall": {
+      "n": 2,
+      "rubric": NaN,
+      "context_recall": 0.584,
+      "context_precision": 0.562,
+      "nv_context_relevance": 0.75,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.847,
+      "answer_correctness": 0.45,
+      "_corr_vs_selfmade": {}
+    }
+  },
+  "per_id": {
+    "mix-12": {
+      "category": "mixed",
+      "rubric": NaN,
+      "context_recall": 0.667,
+      "context_precision": 0.125,
+      "nv_context_relevance": 0.5,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.741,
+      "answer_correctness": 0.552,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "lex-10": {
+      "category": "lexical",
+      "rubric": NaN,
+      "context_recall": 0.5,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.953,
+      "answer_correctness": 0.347,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    }
+  }
+}

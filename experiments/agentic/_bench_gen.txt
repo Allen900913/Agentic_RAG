@@ -1,0 +1,21 @@
+chunks=8 sources=['NVDA_10K_2026.html', 'NVDA_10K_2026.html', 'NVDA_10K_2026.html', 'NVDA_10K_2026.html', 'NVDA_10K_2026.html', 'NVDA_10Q_202510.html', 'NVDA_10Q_202604.html', 'NVDA_10Q_202510.html']
+
+=== z-ai/glm-5.2 ===
+  latency=217.6s  len=2046
+  head: NVIDIA 能成為 AI 產業的核心，是因為它打造了一個從晶片、網路、系統到軟體的「全端平台」，加上十幾年累積的龐大開發者生態系，讓競爭對手難以短期複製。  以下從幾個關鍵面向說明：  **1. 全端加速運算平台（硬體+軟體+網路）** NVIDIA 不只賣 GPU，而是提供涵蓋 AI 訓練與推論的完整端到端加速運算平台，包含 GPU、CPU 與 DPU 三種處理器，以及互連、系統與軟體 [NVDA_10K_2026.html, ch
+
+=== openai/gpt-oss-120b ===
+  latency=8.0s  len=1526
+  head: NVIDIA 之所以成為 AI 開發的事實標準，是因為它同時提供了領先的硬體效能、完整的軟體生態與廣泛的開發者與雲端合作夥伴網路，讓任何規模的 AI 工作負載都能在同一平台上快速、低成本地部署與擴展【NVDA_10K_2026.html, chunk #20】。  **硬體與架構優勢**   - NVIDIA GPU 具備「數萬個運算核心」與專為深度學習設計的 Tensor Core，能在訓練與推論上提供遠超其他處理器的吞吐量與能效【N
+
+=== deepseek-ai/deepseek-v4-flash ===
+  latency=2116.1s  len=1527
+  head: 大家做 AI 都要靠 NVIDIA 的技術，核心原因是 NVIDIA 建立了一個「硬體 + 軟體 + 生態系」三位一體、難以複製的完整加速運算平台，而不只是賣晶片。  首先，NVIDIA 擁有從晶片到系統的全面硬體領先優勢。其 GPU 具備數萬個運算核心的平行處理能力，是深度學習演算法的關鍵基礎 [NVDA_10K_2026.html, chunk #20]。NVIDIA 更進一步提供資料中心等級的全端解決方案，涵蓋 GPU、CPU 和
+
+=== deepseek-ai/deepseek-v4-pro ===
+  latency=40.2s  len=1660
+  head: 大家做 AI 都要靠 NVIDIA，最核心的原因是它不只賣晶片，而是提供了一個從硬體到軟體、從開發工具到完整系統的「全端加速運算平台」，這個平台經過十多年的生態系累積，讓客戶和開發者一旦採用就很難離開，競爭對手短期內難以複製 [NVDA_10K_2026.html, chunk #20][NVDA_10K_2026.html, chunk #28]。  具體來說，NVIDIA 建立起難以撼動的護城河，主要來自以下幾個環環相扣的層面：  
+
+=== 01-ai/yi-large ===
+  FAIL 0.4s  NotFoundError: 'Error code: 404 - {\'status\': 404, \'title\': \'Not Found\', \'detail\': "Function \'23bd454d-b225-49a3-8118-582a62fc51b8\': Not found for account \'2y1-93Ufr
+

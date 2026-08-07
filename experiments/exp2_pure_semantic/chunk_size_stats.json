@@ -1,0 +1,297 @@
+{
+  "collection": "us_stock_rag_edgar_exp1",
+  "payload_field": "document",
+  "reranker_model": "BAAI/bge-reranker-v2-m3",
+  "truncate_limit": 2048,
+  "soft_limit": 1200,
+  "overall": {
+    "n": 2974,
+    "mean": 395.6,
+    "p50": 223,
+    "p90": 980,
+    "p95": 1306,
+    "p99": 2220,
+    "max": 6516,
+    "n_over_1200": 195,
+    "pct_over_1200": 6.56,
+    "n_over_2048_truncated": 46,
+    "pct_over_2048_truncated": 1.55
+  },
+  "by_chunk_type": {
+    "table": {
+      "n": 63,
+      "mean": 811.3,
+      "p50": 763,
+      "p90": 1072,
+      "p95": 1187,
+      "p99": 1200,
+      "max": 1290,
+      "n_over_1200": 1,
+      "pct_over_1200": 1.59,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "text": {
+      "n": 2911,
+      "mean": 386.6,
+      "p50": 214,
+      "p90": 975,
+      "p95": 1327,
+      "p99": 2229,
+      "max": 6516,
+      "n_over_1200": 194,
+      "pct_over_1200": 6.66,
+      "n_over_2048_truncated": 46,
+      "pct_over_2048_truncated": 1.58
+    }
+  },
+  "by_doc_type": {
+    "10-K": {
+      "n": 1290,
+      "mean": 422.1,
+      "p50": 254,
+      "p90": 1025,
+      "p95": 1337,
+      "p99": 2158,
+      "max": 6516,
+      "n_over_1200": 90,
+      "pct_over_1200": 6.98,
+      "n_over_2048_truncated": 18,
+      "pct_over_2048_truncated": 1.4
+    },
+    "10-Q": {
+      "n": 1251,
+      "mean": 467.6,
+      "p50": 304,
+      "p90": 1099,
+      "p95": 1512,
+      "p99": 2381,
+      "max": 3663,
+      "n_over_1200": 105,
+      "pct_over_1200": 8.39,
+      "n_over_2048_truncated": 28,
+      "pct_over_2048_truncated": 2.24
+    },
+    "fundamentals": {
+      "n": 42,
+      "mean": 208.6,
+      "p50": 222,
+      "p90": 352,
+      "p95": 437,
+      "p99": 437,
+      "max": 437,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "income_statement": {
+      "n": 105,
+      "mean": 123.5,
+      "p50": 131,
+      "p90": 139,
+      "p95": 142,
+      "p99": 144,
+      "max": 150,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "news": {
+      "n": 286,
+      "mean": 87.9,
+      "p50": 76,
+      "p90": 161,
+      "p95": 191,
+      "p99": 309,
+      "max": 421,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    }
+  },
+  "oversized_examples": [
+    {
+      "source": "META_10K_2025.html",
+      "chunk_index": 12,
+      "chunk_type": "text",
+      "tokens": 6516
+    },
+    {
+      "source": "AMZN_10Q_202603.html",
+      "chunk_index": 14,
+      "chunk_type": "text",
+      "tokens": 3663
+    },
+    {
+      "source": "META_10Q_202509.html",
+      "chunk_index": 41,
+      "chunk_type": "text",
+      "tokens": 3247
+    },
+    {
+      "source": "TSLA_10Q_202509.html",
+      "chunk_index": 52,
+      "chunk_type": "text",
+      "tokens": 3100
+    },
+    {
+      "source": "META_10Q_202603.html",
+      "chunk_index": 113,
+      "chunk_type": "text",
+      "tokens": 2777
+    },
+    {
+      "source": "TSLA_10K_2025.html",
+      "chunk_index": 128,
+      "chunk_type": "text",
+      "tokens": 2751
+    },
+    {
+      "source": "AMZN_10Q_202603.html",
+      "chunk_index": 22,
+      "chunk_type": "text",
+      "tokens": 2707
+    },
+    {
+      "source": "TSLA_10Q_202509.html",
+      "chunk_index": 23,
+      "chunk_type": "text",
+      "tokens": 2639
+    },
+    {
+      "source": "NVDA_10Q_202604.html",
+      "chunk_index": 7,
+      "chunk_type": "text",
+      "tokens": 2606
+    },
+    {
+      "source": "AMZN_10K_2025.html",
+      "chunk_index": 24,
+      "chunk_type": "text",
+      "tokens": 2602
+    },
+    {
+      "source": "GOOGL_10Q_202603.html",
+      "chunk_index": 20,
+      "chunk_type": "text",
+      "tokens": 2583
+    },
+    {
+      "source": "META_10Q_202509.html",
+      "chunk_index": 116,
+      "chunk_type": "text",
+      "tokens": 2576
+    },
+    {
+      "source": "NVDA_10K_2026.html",
+      "chunk_index": 159,
+      "chunk_type": "text",
+      "tokens": 2549
+    },
+    {
+      "source": "MSFT_10Q_202512.html",
+      "chunk_index": 9,
+      "chunk_type": "text",
+      "tokens": 2533
+    },
+    {
+      "source": "MSFT_10Q_202603.html",
+      "chunk_index": 9,
+      "chunk_type": "text",
+      "tokens": 2522
+    },
+    {
+      "source": "NVDA_10Q_202510.html",
+      "chunk_index": 3,
+      "chunk_type": "text",
+      "tokens": 2521
+    },
+    {
+      "source": "AAPL_10K_2025.html",
+      "chunk_index": 16,
+      "chunk_type": "text",
+      "tokens": 2437
+    },
+    {
+      "source": "META_10Q_202603.html",
+      "chunk_index": 101,
+      "chunk_type": "text",
+      "tokens": 2381
+    },
+    {
+      "source": "TSLA_10Q_202603.html",
+      "chunk_index": 17,
+      "chunk_type": "text",
+      "tokens": 2363
+    },
+    {
+      "source": "MSFT_10K_2025.html",
+      "chunk_index": 146,
+      "chunk_type": "text",
+      "tokens": 2330
+    },
+    {
+      "source": "AAPL_10Q_202603.html",
+      "chunk_index": 3,
+      "chunk_type": "text",
+      "tokens": 2307
+    },
+    {
+      "source": "META_10K_2025.html",
+      "chunk_index": 181,
+      "chunk_type": "text",
+      "tokens": 2296
+    },
+    {
+      "source": "GOOGL_10K_2025.html",
+      "chunk_index": 64,
+      "chunk_type": "text",
+      "tokens": 2277
+    },
+    {
+      "source": "NVDA_10K_2026.html",
+      "chunk_index": 145,
+      "chunk_type": "text",
+      "tokens": 2276
+    },
+    {
+      "source": "META_10Q_202603.html",
+      "chunk_index": 47,
+      "chunk_type": "text",
+      "tokens": 2253
+    },
+    {
+      "source": "META_10K_2025.html",
+      "chunk_index": 127,
+      "chunk_type": "text",
+      "tokens": 2252
+    },
+    {
+      "source": "META_10Q_202603.html",
+      "chunk_index": 119,
+      "chunk_type": "text",
+      "tokens": 2246
+    },
+    {
+      "source": "META_10Q_202509.html",
+      "chunk_index": 37,
+      "chunk_type": "text",
+      "tokens": 2241
+    },
+    {
+      "source": "AAPL_10Q_202512.html",
+      "chunk_index": 3,
+      "chunk_type": "text",
+      "tokens": 2235
+    },
+    {
+      "source": "MSFT_10Q_202512.html",
+      "chunk_index": 3,
+      "chunk_type": "text",
+      "tokens": 2229
+    }
+  ]
+}

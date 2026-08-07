@@ -1,0 +1,502 @@
+{
+  "news-01": {
+    "category": "news",
+    "verdict": "correct",
+    "why": "System answer accurately states the settlement amount ($95 per device, $250 million cap) and key facts about the lawsuit, matching the reference; additional details do not contradict the reference."
+  },
+  "news-02": {
+    "category": "news",
+    "verdict": "correct",
+    "why": "System answer accurately reports the key WWDC announcements about Siri AI – its rebranding, beta rollout in the US English market this fall, context‑aware capabilities, use of Google Gemini models and Apple Intelligence – matching the reference; extra details do not contradict the core facts."
+  },
+  "news-03": {
+    "category": "news",
+    "verdict": "incorrect",
+    "why": "System includes contradictory and unsupported facts such as a services gross margin of >48% (reference states 74.2%) and iPhone 17 revenue growth figures not mentioned in the reference, making its answer factually incorrect."
+  },
+  "news-04": {
+    "category": "news",
+    "verdict": "correct",
+    "why": "System answer correctly states the $3.4 billion five‑year AI Cloud contract, the $2.1 billion equity purchase right (30 million shares at $70), and the deployment targets (480 MW/150k GPUs in 2026, 1,210 MW in 2027). These match the reference; additional details do not contradict the core facts."
+  },
+  "news-05": {
+    "category": "news",
+    "verdict": "correct",
+    "why": "System answer accurately reflects all key facts from the reference about H200 licensing, ongoing bans on Blackwell and Rubin, Trump‑Xi agreement, and Huang's comments on gradual market opening"
+  },
+  "news-06": {
+    "category": "news",
+    "verdict": "correct",
+    "why": "System answer accurately lists the same competitors (Cerebras, AMD, Amazon, Google) and China challenges, and correctly identifies the market focus on AI chip demand and overall AI industry growth, matching the reference facts."
+  },
+  "news-07": {
+    "category": "news",
+    "verdict": "correct",
+    "why": "System answer accurately reports the seven new self‑built AI models, GPU allocation, and TD Cowen’s reiterated Buy rating with a $540 target as in the reference; the additional analyst comment does not contradict the core facts."
+  },
+  "news-08": {
+    "category": "news",
+    "verdict": "partial",
+    "why": "System answer correctly states that Microsoft is involved in AI security cooperation, but it cites a different partnership (OpenAI) and omits the specific Anthropic Project Glasswing news described in the reference."
+  },
+  "news-09": {
+    "category": "news",
+    "verdict": "incorrect",
+    "why": "System misstates the scale of the equity raise and capex by using “億” (hundred‑million) units, e.g., 84.75 億美元 (≈$8.5 B) instead of $84.75 billion, so the reported amounts are off by a factor of ten despite matching the reference’s breakdown"
+  },
+  "news-10": {
+    "category": "news",
+    "verdict": "correct",
+    "why": "System answer accurately restates the reference’s key facts about the $380 billion cap‑ex plan, the $1‑$3 EPS uplift, the >$10 billion search revenue potential, and the tiered subscription rollout, without any contradictory information"
+  },
+  "news-11": {
+    "category": "news",
+    "verdict": "correct",
+    "why": "All key facts from the reference (€10 billion investment, robotics upgrades, Proteus rollout in H1 2027, STARK expansion, 25,000 jobs, Amazon Now in Manchester/Birmingham, $1 billion training) are correctly stated; extra details do not contradict the reference"
+  },
+  "news-12": {
+    "category": "news",
+    "verdict": "incorrect",
+    "why": "System adds a second news item (Tesla earnings call on July 20 2026 about mergers and new businesses) that is not present in the reference; this fact cannot be verified and contradicts the reference’s sole focus on the SpaceX IPO, making the answer factually incorrect."
+  },
+  "news-13": {
+    "category": "news",
+    "verdict": "incorrect",
+    "why": "System misstates key facts from the reference: it says Nvidia fell 1.33% (reference reports Nvidia rose 2.22% in the same session) and gives contradictory Tesla moves, while omitting the overall ETF decline, hedge‑fund net‑selling and SpaceX IPO pressure that are central to the reference answer."
+  },
+  "news-14": {
+    "category": "news",
+    "verdict": "correct",
+    "why": "System answer accurately reflects the news' view of fast, double‑digit services growth, its high margin contribution, 16% YoY increase to $31 B (≈28% of revenue), and bullish outlook of >14% growth and margins above 48%, without contradicting the reference facts."
+  },
+  "news-15": {
+    "category": "news",
+    "verdict": "correct",
+    "why": "The system answer accurately lists the same core reasons as the reference—strong cash generation and margins, growing services and AI revenue, massive installed base, pricing power, disciplined share‑repurchase program, and analyst/investor endorsement—while providing additional supporting details that do not contradict the reference."
+  },
+  "mi-01": {
+    "category": "multi_intent",
+    "verdict": "incorrect",
+    "why": "System answer misstates key partnership figures: it claims a $210 million investment right and a 5 GW AI infrastructure deal, whereas the reference specifies up to $21 billion investment rights and a 60 MW initial deployment (no 5 GW figure)."
+  },
+  "mi-02": {
+    "category": "multi_intent",
+    "verdict": "incorrect",
+    "why": "System states NVIDIA's current gross margin as 74.1%, but the reference indicates it is about 71.1%; this factual error makes the answer incorrect despite correct commentary on the China market."
+  },
+  "mi-03": {
+    "category": "multi_intent",
+    "verdict": "incorrect",
+    "why": "System states Apple’s overall gross margin is ~47.9% (TTM) and 46.9% for 2025, contradicting the reference that analysts expect it to stay above 48%; it also characterizes market sentiment as neutral, whereas the reference describes a generally optimistic/positive view with only some cautious investors."
+  },
+  "mi-04": {
+    "category": "multi_intent",
+    "verdict": "partial",
+    "why": "System gives a specific 16.6% (and 12.8%) revenue growth figure, but the reference states no single company‑wide growth percentage is provided, only that growth is double‑digit; thus the revenue figure is unsupported. The discussion of Siri AI’s impact aligns with the reference."
+  },
+  "mi-05": {
+    "category": "multi_intent",
+    "verdict": "partial",
+    "why": "AI section correctly states the seven self‑developed models and their strategic implications, but the revenue part omits the overall ~18.3% YoY growth figure and total revenue, providing only segment growth numbers instead of the requested overall growth rate."
+  },
+  "mi-06": {
+    "category": "multi_intent",
+    "verdict": "correct",
+    "why": "The system correctly states Microsoft’s net‑profit margin (~39.3%) and accurately describes its participation in Anthropic’s Mythos/Project Glasswing AI‑security initiative, matching the reference details."
+  },
+  "mi-07": {
+    "category": "multi_intent",
+    "verdict": "partial",
+    "why": "Provides correct gross‑margin (≈50.6%) and accurate strategy details, but misstates the European investment amount as €10 億 (≈1 billion) instead of the correct >€10 billion (≈100 billion €)"
+  },
+  "mi-08": {
+    "category": "multi_intent",
+    "verdict": "incorrect",
+    "why": "System gives a 12% full‑year growth (and a 17% Q1 figure) which does not match the reference’s 16.6% trailing‑12‑month growth, and it incorrectly claims no information on the hedge‑fund sell‑off around the SpaceX IPO, omitting the cited market‑sentiment details."
+  },
+  "mi-09": {
+    "category": "multi_intent",
+    "verdict": "correct",
+    "why": "System provides the same gross margin (~60.4%), equity‑raising amount (~$85 billion) and capex target (~$185 billion) as the reference and correctly interprets these actions as an aggressive, equity‑backed push to fund Alphabet’s AI infrastructure and development."
+  },
+  "mi-10": {
+    "category": "multi_intent",
+    "verdict": "incorrect",
+    "why": "System answer adds a false detail that all 15 of Alphabet’s half‑billion‑user products now use Gemini models, which is not supported by the reference and appears inaccurate, making the answer factually incorrect despite the correct revenue growth figure."
+  },
+  "mi-11": {
+    "category": "multi_intent",
+    "verdict": "incorrect",
+    "why": "System inflates Morgan Stanley's cited AI capital spend to $3800 億美元 (≈$380 billion) instead of the correct $380 億美元 (≈$38 billion), contradicting the reference."
+  },
+  "mi-12": {
+    "category": "multi_intent",
+    "verdict": "incorrect",
+    "why": "The system correctly states Meta's ~33% YoY revenue growth, but incorrectly claims no information exists about hedge‑fund selling of tech stocks before the SpaceX IPO and thus does not provide the required analysis of its impact on Meta's stock, contradicting the reference."
+  },
+  "mi-13": {
+    "category": "multi_intent",
+    "verdict": "correct",
+    "why": "System correctly states Tesla's gross margin (~19.1%) and accurately describes the market impact of SpaceX's upcoming IPO—reduced investor focus and flat stock performance with potential for a rebound—matching the reference."
+  },
+  "mi-14": {
+    "category": "multi_intent",
+    "verdict": "incorrect",
+    "why": "The system claims Tesla's automotive margin improved year‑to‑date (rising from ~16.8% to 18.7%) whereas the reference states the margin is falling (from 18.7% to 16.8% quarter‑over‑quarter and from 17.2% to 16.8% over six months); this contradicts the core fact asked."
+  },
+  "mi-15": {
+    "category": "multi_intent",
+    "verdict": "incorrect",
+    "why": "System incorrectly claims the H200 chip is authorized for sale in China, contradicting the reference which says H200 (along with Blackwell and Rubin) remains banned, making the statement about the CEO's comments factually wrong."
+  },
+  "sem-01": {
+    "category": "semantic",
+    "verdict": "correct",
+    "why": "System answer correctly describes NVIDIA's full‑stack hardware‑software platform (GPU, CPU, DPU, NVLink, CUDA, libraries, AI software, ecosystem) as the core moat, matching the reference and adding consistent, non‑contradictory details"
+  },
+  "sem-02": {
+    "category": "semantic",
+    "verdict": "correct",
+    "why": "System answer accurately describes NVIDIA's unified GPU‑CUDA based architecture and its application across data center, gaming, professional visualization, and automotive markets, matching the reference without factual errors."
+  },
+  "sem-03": {
+    "category": "semantic",
+    "verdict": "correct",
+    "why": "System answer accurately states that Microsoft embeds Copilot across the Microsoft 365 Commercial suite (Office, Windows, EMS, Power BI, Exchange, SharePoint, Teams, Security & Compliance), treats it as an AI‑driven productivity layer, counts its usage in Microsoft 365 Commercial cloud revenue and seat growth, and uses it to drive subscription and revenue growth, matching the core facts of the reference."
+  },
+  "sem-04": {
+    "category": "semantic",
+    "verdict": "correct",
+    "why": "System answer accurately describes Windows as the entry point that fuels Microsoft’s cloud business and boosts Copilot engagement, matching the reference’s core explanation"
+  },
+  "sem-05": {
+    "category": "semantic",
+    "verdict": "correct",
+    "why": "System answer accurately describes Amazon's strategy of investing capital to expand AWS infrastructure and deepen AI/ML capabilities, including its partnership with Anthropic, which aligns with the reference; the additional quantitative details and OpenAI mention do not contradict the reference."
+  },
+  "sem-06": {
+    "category": "semantic",
+    "verdict": "partial",
+    "why": "The answer correctly notes antitrust investigations affecting AWS, Prime and e‑commerce, but omits many specific regulatory risks highlighted in the reference (e.g., foreign‑investment, licensing and cybersecurity rules for AWS; payments‑card, co‑branded‑card and labor‑market risks for Prime; broader competition and foreign‑investment constraints for the marketplace)."
+  },
+  "sem-07": {
+    "category": "semantic",
+    "verdict": "partial",
+    "why": "System correctly notes Gemini AI is embedded in Search and other core products like Workspace and Enterprise, but omits many products (YouTube, Maps, Photos, Android, Chrome, Drive, Play) and key integration details (AI Overviews, AI Mode, hardware infrastructure) described in the reference, making the answer incomplete."
+  },
+  "sem-08": {
+    "category": "semantic",
+    "verdict": "correct",
+    "why": "System accurately describes Google Search's evolution to AI Overviews and AI Mode using Gemini models to address generative AI impact, matching the reference; additional details do not contradict the core facts."
+  },
+  "sem-09": {
+    "category": "semantic",
+    "verdict": "correct",
+    "why": "All core facts about Meta's long‑term metaverse vision, AI and Reality Labs investment focus, product roadmap (Ray‑Ban/Oakley glasses, Orion prototype, 2025 Ray‑Ban Display and Neural Band), and the 70/30 Reality Labs expense split for 2026 match the reference; no contradictory statements are made."
+  },
+  "sem-10": {
+    "category": "semantic",
+    "verdict": "correct",
+    "why": "System answer accurately describes Meta's ad revenue model (impression- and action‑based pricing, revenue recognition, average price calculation) and correctly outlines Meta AI's roles in content ranking, recommendation, ad tool optimization, generative AI and product efficiency, matching the reference; extra details about an AI assistant do not contradict the core facts."
+  },
+  "sem-11": {
+    "category": "semantic",
+    "verdict": "correct",
+    "why": "System answer accurately describes Tesla's use of AI‑driven FSD/Autopilot, OTA updates, vision‑based neural nets, custom chips, subscription model, Robotaxi service and Supercharger network as core differentiators, matching the reference without factual errors."
+  },
+  "sem-12": {
+    "category": "semantic",
+    "verdict": "partial",
+    "why": "System answer correctly states the intense, growing competition from incumbents and new entrants and its impact on sales/pricing, but omits key aspects mentioned in the reference such as talent competition, government incentive biases, and challenges from Tesla's direct‑sales model"
+  },
+  "sem-13": {
+    "category": "semantic",
+    "verdict": "correct",
+    "why": "The answer accurately describes the energy‑generation and storage business as a core, growth‑driving pillar that leverages automotive technology, modular battery design, software platforms (Powerhub, Autobidder), and vertical integration to diversify revenue and support long‑term profitability, matching the reference."
+  },
+  "sem-14": {
+    "category": "semantic",
+    "verdict": "incorrect",
+    "why": "The answer claims the 10‑K states Apple holds a \"minority\" market share in smartphones, PCs and tablets, but the reference explicitly says the filing provides no specific market‑share numbers; thus the system introduces a fact not present in the source."
+  },
+  "sem-15": {
+    "category": "semantic",
+    "verdict": "incorrect",
+    "why": "System answer describes developer stickiness as driven by perceived revenue, talent retention and low market share, which contradicts the reference that attributes stickiness to mandatory App Store distribution, payment‑system commissions, legal restrictions on external purchasing, and Apple‑provided APIs and integration; it also makes a false claim about Apple’s market share"
+  },
+  "mix-01": {
+    "category": "mixed",
+    "verdict": "incorrect",
+    "why": "System states Azure grew 40% in Q2 FY2026, but the reference shows the growth was in the third quarter of fiscal 2026 (ended 31 Mar 2026), so it provides a wrong fact about the quarter"
+  },
+  "mix-02": {
+    "category": "mixed",
+    "verdict": "incorrect",
+    "why": "System states Windows OEM revenue increased 2% while the reference says Windows OEM revenue fell 2%, contradicting the core fact about the segment’s decline"
+  },
+  "mix-03": {
+    "category": "mixed",
+    "verdict": "incorrect",
+    "why": "The system states the operating income grew by $6.4 billion (≈20%), whereas the reference says it rose by $20.4 billion (≈22%); this discrepancy makes the core growth figure wrong despite correctly naming the driving segments."
+  },
+  "mix-04": {
+    "category": "mixed",
+    "verdict": "correct",
+    "why": "System answer correctly states that the International segment accounted for about 22 percent of total net sales in the most recent quarter, matching the reference."
+  },
+  "mix-05": {
+    "category": "mixed",
+    "verdict": "incorrect",
+    "why": "System adds that tech/infrastructure investment was a core driver of profit growth, which contradicts the reference that attributes the growth solely to revenue increase; this is a wrong fact."
+  },
+  "mix-06": {
+    "category": "mixed",
+    "verdict": "incorrect",
+    "why": "System gives the correct growth rate (≈82%) but reports the revenue figures and increase amount as $13.6 B to $24.8 B (≈$11 B increase), which is ten‑times smaller than the reference values of $136.24 B to $247.68 B (≈$111 B increase), a factual error."
+  },
+  "mix-07": {
+    "category": "mixed",
+    "verdict": "correct",
+    "why": "System answer accurately reports the $29.5 billion purchase price and correctly describes that Wiz’s results are consolidated into Google Cloud, affecting its financial statements and strategic positioning, which aligns with the reference."
+  },
+  "mix-08": {
+    "category": "mixed",
+    "verdict": "correct",
+    "why": "The system correctly states a ~33% YoY revenue increase to $56.3 B and identifies advertising as the main driver, matching the reference. Additional details (ad impressions, price per ad, non‑advertising growth, Reality Labs dip) are consistent with the reference figures and do not contradict any core facts."
+  },
+  "mix-09": {
+    "category": "mixed",
+    "verdict": "correct",
+    "why": "Provides the same positive growth direction and identifies iPhone sales and RMB strength as drivers, matching the reference, and adds a specific 28% figure consistent with the cited source"
+  },
+  "mix-10": {
+    "category": "mixed",
+    "verdict": "incorrect",
+    "why": "The system claims iPhone revenue growth was driven by Pro‑model iPhones, contradicting the reference which states the growth was driven by the new iPhone 17e and overall iPhone sales increase."
+  },
+  "mix-11": {
+    "category": "mixed",
+    "verdict": "correct",
+    "why": "System answer matches the reference on the 92% YoY (21% sequential) growth to $75.2 billion and correctly identifies Blackwell 300, InfiniBand, Spectrum‑X Ethernet and NVLink as the primary drivers."
+  },
+  "mix-12": {
+    "category": "mixed",
+    "verdict": "correct",
+    "why": "System correctly states that NVIDIA shipped no data‑center chips to China this quarter and shipped about $4.6 billion in the comparable quarter a year earlier, matching the reference; extra revenue details do not contradict the core facts."
+  },
+  "mix-13": {
+    "category": "mixed",
+    "verdict": "correct",
+    "why": "System correctly reports the latest quarter revenue (~$3.14 billion) and YoY increase (~12.6%, matching the reference’s ~13%); no factual errors."
+  },
+  "mix-14": {
+    "category": "mixed",
+    "verdict": "incorrect",
+    "why": "While the growth figures are correct, the answer adds extra primary drivers (higher ASP from sales mix/FX and FSD subscriptions) that are not supported by the reference and contradict the reference’s statement that the surge in vehicle deliveries was the main driver"
+  },
+  "mix-15": {
+    "category": "mixed",
+    "verdict": "correct",
+    "why": "System answer matches the reference figures of ~860 k produced and ~838 k delivered as of Q2 2026"
+  },
+  "lex-01": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System answer correctly states NVIDIA's market cap as approximately $4.962 trillion ($4,962.16 B), matching the reference data."
+  },
+  "lex-02": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System answer matches the reference value of approximately 31.33 (31.325687) for NVIDIA's trailing P/E Ratio"
+  },
+  "lex-03": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System answer correctly states the diluted EPS for FY2026 as $4.90, matching the reference."
+  },
+  "lex-04": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System correctly states that NVIDIA launched the CUDA development platform in 2006, matching the reference."
+  },
+  "lex-05": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System correctly states the acquisition occurred in 2020, matching the reference."
+  },
+  "lex-06": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System answer correctly states Apple’s market cap as about $4,342 billion, matching the reference value of $4,342.02 billion."
+  },
+  "lex-07": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System correctly states diluted EPS as $7.46, matching the reference"
+  },
+  "lex-08": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "The system answer states Microsoft’s free cash flow as $37.01 billion, which matches the reference figure."
+  },
+  "lex-09": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System answer correctly states Amazon's total debt as $235.54 billion, matching the reference."
+  },
+  "lex-10": {
+    "category": "lexical",
+    "verdict": "incorrect",
+    "why": "System states cash capital expenditures of $131.8 billion, which contradicts the reference value of about $128.3 billion for 2025"
+  },
+  "lex-11": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System answer states the current employee count as 194,668, matching the reference, and extra comparative detail does not contradict the core fact."
+  },
+  "lex-12": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System provides the exact same date (2026‑03‑11) and amount (295 億美元) as the reference, matching all factual details."
+  },
+  "lex-13": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System answer correctly states Meta's ROE as about 32.9% (≈32.93%), matching the reference value"
+  },
+  "lex-14": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "System answer correctly states Meta FY2025 Diluted EPS as $23.49, matching the reference"
+  },
+  "lex-15": {
+    "category": "lexical",
+    "verdict": "correct",
+    "why": "The system correctly states the refinery is in Texas, matching the reference."
+  },
+  "col-01": {
+    "category": "colloquial",
+    "verdict": "correct",
+    "why": "The system answer accurately restates the reference’s core reasons—NVIDIA’s massive parallel GPU hardware, CUDA‑based software stack, extensive libraries, full‑stack AI platform, large developer community, and deep integration with cloud providers—and adds consistent, factual details without contradicting the reference."
+  },
+  "col-02": {
+    "category": "colloquial",
+    "verdict": "partial",
+    "why": "the answer correctly notes that AI is embedded via Microsoft 365 Copilot and AI‑enabled tools in Office, but it omits the core details about licensing OpenAI’s large‑language models and running them on Azure via the Azure OpenAI Service, which are essential parts of the reference explanation"
+  },
+  "col-03": {
+    "category": "colloquial",
+    "verdict": "incorrect",
+    "why": "The answer incorrectly states that Amazon invested $15 billion in OpenAI and partnered with OpenAI, whereas the reference shows Amazon’s AI investment was a $1.3 billion convertible note (plus a planned $1.4 billion) in Anthropic, not OpenAI, with much smaller amounts."
+  },
+  "col-04": {
+    "category": "colloquial",
+    "verdict": "correct",
+    "why": "The system correctly states that Google’s AI‑assistant features (AI Overviews and AI Mode powered by Gemini) are now integrated into Google Search, matching the reference."
+  },
+  "col-05": {
+    "category": "colloquial",
+    "verdict": "correct",
+    "why": "The system accurately describes Meta’s strategy of combining VR headsets and AI‑enabled AR glasses into an immersive, AI‑driven metaverse platform, matching the reference’s core direction and key facts (Quest series, Horizon Store, passthrough, Ray‑Ban/Oakley AI glasses, 2025 Meta Ray‑Ban Display with Neural Band, AI investment for content, ads, generative AI, and the goal of a personal super‑intelligence). Missing ancillary details (e.g., Orion prototype, exact 70/30 spend split) does not affect the correctness of the overall answer to the asked direction."
+  },
+  "col-06": {
+    "category": "colloquial",
+    "verdict": "correct",
+    "why": "The system answer accurately states Tesla’s advantages—vision‑based sensors, self‑developed AI chip, OTA updates, and hardware designed for autonomy—which are consistent with the reference’s points about proprietary AI/software and integration, and it does not contain any false statements."
+  },
+  "col-07": {
+    "category": "colloquial",
+    "verdict": "incorrect",
+    "why": "The system claims insufficient information, but the reference clearly states Apple does not admit it is not the smartphone market leader, so the system fails to provide the correct answer."
+  },
+  "col-08": {
+    "category": "colloquial",
+    "verdict": "correct",
+    "why": "System provides NVIDIA’s market cap as $4.96 trillion ($4,962.16 B), matching the reference figure; the extra enterprise‑value note does not contradict the asked market‑value."
+  },
+  "col-09": {
+    "category": "colloquial",
+    "verdict": "correct",
+    "why": "System answer matches the reference market cap value"
+  },
+  "col-10": {
+    "category": "colloquial",
+    "verdict": "correct",
+    "why": "System answer correctly states the free‑cash‑flow as $37.01 billion, matching the reference and answering the question about cash Microsoft can freely use each year."
+  },
+  "col-11": {
+    "category": "colloquial",
+    "verdict": "partial",
+    "why": "Core claim that Microsoft’s cloud services are growing very quickly is correct, but the reported growth rates for Microsoft 365 Commercial (18% vs. 17% in reference) and Microsoft 365 Consumer (29% vs. 33% in reference) are inaccurate."
+  },
+  "col-12": {
+    "category": "colloquial",
+    "verdict": "incorrect",
+    "why": "The system answer does not state the correct overall revenue growth of about 33% YoY and incorrectly claims the reference lacks a consolidated growth figure, contradicting the reference."
+  },
+  "col-13": {
+    "category": "colloquial",
+    "verdict": "incorrect",
+    "why": "System reports Q2 2026 Greater China net sales as $20,497 billion, contradicting the reference figure of $204.97 billion (off by a factor of 10), thus stating a wrong fact about recent sales performance"
+  },
+  "col-14": {
+    "category": "colloquial",
+    "verdict": "incorrect",
+    "why": "System correctly names IREN Limited but adds a false detail that Nvidia’s investment rights vest only after IREN deploys 600,000 GPUs, which is not in the reference and contradicts the known terms."
+  },
+  "col-15": {
+    "category": "colloquial",
+    "verdict": "incorrect",
+    "why": "System claims the report did not mention SpaceX’s IPO, contradicting the reference which states SpaceX is preparing a June 2026 IPO, and provides a net income figure (≈$1.1 B) not supported by the reference’s financials, which only show a modest operating profit of $398 M"
+  },
+  "mh-01": {
+    "category": "multi_hop",
+    "verdict": "correct",
+    "why": "System correctly identifies Amazon as the TTM revenue leader with $742.78 billion and a gross margin of about 50.6%, matching the reference."
+  },
+  "mh-02": {
+    "category": "multi_hop",
+    "verdict": "correct",
+    "why": "System correctly states Meta has the highest TTM gross margin and provides the matching revenue of $214.96 billion; the additional company data does not contradict the reference."
+  },
+  "mh-03": {
+    "category": "multi_hop",
+    "verdict": "incorrect",
+    "why": "The answer adds YoY growth figures for Meta and Alphabet that contradict the reference, which states those data are not listed; thus it contains wrong facts despite the correct core answer."
+  },
+  "mh-04": {
+    "category": "multi_hop",
+    "verdict": "correct",
+    "why": "System correctly identifies Microsoft as having the highest TTM operating margin (46.33%) and gives its revenue as $318.27 B, matching the reference."
+  },
+  "mh-05": {
+    "category": "multi_hop",
+    "verdict": "correct",
+    "why": "The system correctly identifies Alphabet as having the highest TTM net income (~$160.2 B) and states its revenue growth as ~21.8 % YoY, matching the reference."
+  },
+  "mh-06": {
+    "category": "multi_hop",
+    "verdict": "correct",
+    "why": "The system correctly identifies Apple Inc. as the company Evercore ISI upgraded and states its gross margin as 47.9%, matching the reference."
+  },
+  "mh-07": {
+    "category": "multi_hop",
+    "verdict": "correct",
+    "why": "System correctly identifies Amazon as the company and states its FY2025 total revenue as $716.9 billion, matching the reference figures."
+  },
+  "mh-08": {
+    "category": "multi_hop",
+    "verdict": "correct",
+    "why": "The system correctly identifies Alphabet Inc. as the company and states its revenue grew 21.8% year‑over‑year, matching the reference."
+  },
+  "mh-09": {
+    "category": "multi_hop",
+    "verdict": "correct",
+    "why": "System correctly identifies Microsoft as the company and states its operating margin as about 46.3%, matching the reference."
+  },
+  "mh-10": {
+    "category": "multi_hop",
+    "verdict": "incorrect",
+    "why": "System claims Meta's net income is not disclosed, contradicting the reference which states the net income is $60.46 billion"
+  }
+}

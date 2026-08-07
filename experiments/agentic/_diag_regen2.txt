@@ -1,0 +1,32 @@
+======================================================================
+[mi-04] reference_lang=English
+gold_files: ['AAPL_10K_2025.html', 'AAPL_Fundamentals_20260612.txt', 'AAPL_IncomeStatement_20260612.txt', 'AAPL_News_20260508_01.txt', 'AAPL_News_20260519_01.txt', 'AAPL_News_20260612_01.txt', 'AAPL_News_20260612_02.txt', 'AAPL_News_20260612_03.txt', 'AAPL_News_20260612_04.txt', 'AAPL_News_20260612_05.txt']
+gold_chunks_used: [('AAPL_News_20260612_03.txt', 0), ('AAPL_News_20260519_01.txt', 4), ('AAPL_News_20260612_01.txt', 0), ('AAPL_News_20260612_02.txt', 0), ('AAPL_News_20260612_05.txt', 1), ('AAPL_News_20260612_05.txt', 0), ('AAPL_News_20260612_01.txt', 2), ('AAPL_News_20260519_01.txt', 2)]
+--- reference ---
+Apple 在過去一年裡的營收成長率約為 **17%**，即 2026 年第一季的總營收達到 **111.2 億美元**，較去年同期提升了 17%。  
+
+這一增長背後的主要驅動力包括 iPhone 營收的強勁表現（升至 570 億美元，年增 22%）以及服務部門的雙位數成長（服務營收年增 16%），兩者合計已佔公司總營收的近 80%。  
+
+在同一時期舉行的 WWDC 上，Apple 公布了全新升級的 **Siri AI**（亦稱 Siri AI / Apple Intelligence），其意義可從以下幾點說明：
+
+1. **提升使用者黏著度與生態系統價值**：新 Siri 能夠安全地從使用者的應用程式中抽取個人化上下文，直接在語音指令中完成資訊檢索與第三方 App 自動化，讓 iPhone、Mac、iPad、Wearables 等裝置的日常使用更依賴 Apple 生態系統。  
+
+2. **加速服務收入的貨幣化**：透過更智慧的語音助理，Apple 可在 Siri 介面內嵌入 App Store、廣告、iCloud、Apple Music、Apple TV+ 等服務的推薦與付費入口，預期將提升服務部門的持續性收入與毛利率。  
+
+3. **提升競爭力與品牌形象**：分析師指出，Siri AI 的功能設計旨在與 ChatGPT、Grok、Gemini 等外部大型語言模型競爭，同時結合 Google 的 AI 技術作為底層模型，為 Apple 在生成式 AI 版圖中奪回話語權，進一步提振市場情緒與股價預期。  
+
+4. **支撐未來多年度升級與營收動能**：評論認為，隨著 Apple Intelligence 在 Safari、密碼與訊息等核心應用中的滲透，未來幾年將出現「多年度升級」的循環，帶來硬體升級需求與服務訂閱的同步成長，形成長期的收入增長曲線。  
+
+綜合來看，Apple 近一年 17% 的營收成長已顯示出硬體與服務雙輪驅動的良好基礎；而 WWDC 推出的 Siri AI 則有望進一步強化服務收入、提升生態系統黏著度，並為公司在 AI 競爭中贏得更大的市場份額，從而為未來的營收與獲利增長提供新的動能。
+
+======================================================================
+[col-03] reference_lang=English
+gold_files: ['AMZN_10K_2025.html']
+gold_chunks_used: [('AMZN_10K_2025.html', 124), ('AMZN_10K_2025.html', 198), ('AMZN_10K_2025.html', 106), ('AMZN_10K_2025.html', 215), ('AMZN_10K_2025.html', 187), ('AMZN_10K_2025.html', 211), ('AMZN_10K_2025.html', 136), ('AMZN_10K_2025.html', 186)]
+--- reference ---
+Amazon is dramatically increasing the money it spends on artificial‑intelligence research, development and the infrastructure needed to run those models, but the filing does not name any external AI firm that it has partnered with.  
+
+The 2025 Form 10‑K says that Amazon expects “spending in technology and infrastructure will increase over time, which can negatively impact short‑term free cash flow, as we add infrastructure and employees, including to support our artificial intelligence and machine learning initiatives, to support long‑term growth.”  It also notes that the company will “continue making additional investments in our artificial intelligence initiatives” and that these factors “will continue to impact our results of operations into Q1 2026.”  The filing highlights the intense competition for software engineers, computer scientists and other technical staff—including those who work on AI/ML—while the total workforce stood at roughly 1.58 million full‑time and part‑time employees as of December 31 2025.  
+
+No excerpt in the filing mentions a specific AI company that Amazon has teamed up with; the only legal dispute referenced involves InterDigital over video‑related patents, not an AI partnership.  Consequently, based on the provided documents, Amazon’s recent AI‑related activity consists of higher internal spending and hiring, without a disclosed collaboration with an outside AI firm.
+

@@ -1,0 +1,129 @@
+{
+  "collection": "us_stock_rag_edgar_exp4",
+  "payload_field": "document",
+  "reranker_model": "BAAI/bge-reranker-v2-m3",
+  "truncate_limit": 2048,
+  "soft_limit": 1200,
+  "overall": {
+    "n": 3719,
+    "mean": 367.8,
+    "p50": 270,
+    "p90": 807,
+    "p95": 938,
+    "p99": 1196,
+    "max": 3448,
+    "n_over_1200": 34,
+    "pct_over_1200": 0.91,
+    "n_over_2048_truncated": 2,
+    "pct_over_2048_truncated": 0.05
+  },
+  "by_chunk_type": {
+    "table": {
+      "n": 563,
+      "mean": 380.9,
+      "p50": 160,
+      "p90": 1004,
+      "p95": 1207,
+      "p99": 1625,
+      "max": 3448,
+      "n_over_1200": 30,
+      "pct_over_1200": 5.33,
+      "n_over_2048_truncated": 2,
+      "pct_over_2048_truncated": 0.36
+    },
+    "text": {
+      "n": 3156,
+      "mean": 365.5,
+      "p50": 279,
+      "p90": 803,
+      "p95": 867,
+      "p99": 1116,
+      "max": 1208,
+      "n_over_1200": 4,
+      "pct_over_1200": 0.13,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    }
+  },
+  "by_doc_type": {
+    "10-K": {
+      "n": 1743,
+      "mean": 362.4,
+      "p50": 254,
+      "p90": 804,
+      "p95": 955,
+      "p99": 1201,
+      "max": 2614,
+      "n_over_1200": 18,
+      "pct_over_1200": 1.03,
+      "n_over_2048_truncated": 1,
+      "pct_over_2048_truncated": 0.06
+    },
+    "10-Q": {
+      "n": 1731,
+      "mean": 398.7,
+      "p50": 315,
+      "p90": 809,
+      "p95": 963,
+      "p99": 1196,
+      "max": 3448,
+      "n_over_1200": 16,
+      "pct_over_1200": 0.92,
+      "n_over_2048_truncated": 1,
+      "pct_over_2048_truncated": 0.06
+    },
+    "fundamentals": {
+      "n": 42,
+      "mean": 208.6,
+      "p50": 222,
+      "p90": 352,
+      "p95": 437,
+      "p99": 437,
+      "max": 437,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "income_statement": {
+      "n": 105,
+      "mean": 123.5,
+      "p50": 131,
+      "p90": 139,
+      "p95": 142,
+      "p99": 144,
+      "max": 150,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "news": {
+      "n": 98,
+      "mean": 249.8,
+      "p50": 177,
+      "p90": 591,
+      "p95": 673,
+      "p99": 793,
+      "max": 964,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    }
+  },
+  "oversized_examples": [
+    {
+      "source": "META_10Q_202509.html",
+      "chunk_index": 5,
+      "chunk_type": "table",
+      "tokens": 3448
+    },
+    {
+      "source": "TSLA_10K_2025.html",
+      "chunk_index": 16,
+      "chunk_type": "table",
+      "tokens": 2614
+    }
+  ]
+}

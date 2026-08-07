@@ -1,0 +1,77 @@
+{
+  "collection": "us_stock_rag_edgar_exp3_smoketest",
+  "payload_field": "document",
+  "reranker_model": "BAAI/bge-reranker-v2-m3",
+  "truncate_limit": 2048,
+  "soft_limit": 1200,
+  "overall": {
+    "n": 380,
+    "mean": 399.5,
+    "p50": 315,
+    "p90": 801,
+    "p95": 889,
+    "p99": 1054,
+    "max": 1200,
+    "n_over_1200": 0,
+    "pct_over_1200": 0.0,
+    "n_over_2048_truncated": 0,
+    "pct_over_2048_truncated": 0.0
+  },
+  "by_chunk_type": {
+    "table": {
+      "n": 9,
+      "mean": 775,
+      "p50": 763,
+      "p90": 889,
+      "p95": 1054,
+      "p99": 1054,
+      "max": 1054,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "text": {
+      "n": 371,
+      "mean": 390.3,
+      "p50": 306,
+      "p90": 801,
+      "p95": 877,
+      "p99": 1028,
+      "max": 1200,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    }
+  },
+  "by_doc_type": {
+    "10-K": {
+      "n": 214,
+      "mean": 383.3,
+      "p50": 275,
+      "p90": 803,
+      "p95": 922,
+      "p99": 1125,
+      "max": 1200,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "10-Q": {
+      "n": 166,
+      "mean": 420.3,
+      "p50": 357,
+      "p90": 799,
+      "p95": 875,
+      "p99": 1027,
+      "max": 1057,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    }
+  },
+  "oversized_examples": []
+}

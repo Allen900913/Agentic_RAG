@@ -1,0 +1,7 @@
+[col-03 只10-K] en='What has Amazon recently invested in AI, and which AI company has it partnered with?'
+  Anthropic #75 排名: {('AMZN_10K_2025.html', 75): (88, 221, 0.39197108149528503)}
+[col-03 +10-Q]
+  Anthropic 兩處排名: {('AMZN_10Q_202509.html', 37): (7, 343, 0.49711254239082336), ('AMZN_10K_2025.html', 75): (118, 343, 0.40736696124076843)}
+
+[mi-04 全10檔] en="What is Apple's overall revenue growth rate over the past year, and what is the significance of the new Siri AI features announced at WWDC for the company's future growth drivers?"
+  10-K 總營收 chunk 排名: {('AAPL_10K_2025.html', 155): (17, 201, 0.5561055541038513), ('AAPL_10K_2025.html', 0): (23, 201, 0.539167046546936), ('AAPL_10K_2025.html', 8): (78, 201, 0.47030478715896606)}

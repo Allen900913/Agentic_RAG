@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "producer": "run_agentic_on_evalset.py",
+    "module": "agentic_rag_v2",
+    "collection": "us_stock_rag_edgar_exp4",
+    "retrieval_model": "openai/gpt-oss-20b",
+    "checker_model": "openai/gpt-oss-120b",
+    "gen_model": "openai/gpt-oss-120b",
+    "validator": true,
+    "web_search": false,
+    "freshness_mode": "snapshot",
+    "eval_set": "eval\\eval_set.json"
+  },
+  "records": [
+    {
+      "id": "mh-09",
+      "category": "multi_hop",
+      "query": "新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？",
+      "answerable": true,
+      "answer": "Alphabet Inc.（NASDAQ: GOOGL）在 6 月 5 日的 847.5 億美元（$84.75 billion） 融資案被穆迪評為「信用正面（credit‑positive）」，其最新的營業利益率為 0.36121（約 36.1%）【GOOGL_News_20260612_02.txt, chunk #0】【GOOGL_Fundamentals_20260612.txt, chunk #0】。  \n\n- 依據穆迪的評價，Alphabet 正在進行總額 847.5 億美元（$84.75 billion） 的資本募集，並獲得信用正面評等【GOOGL_News_20260612_02.txt, chunk #0】。  \n- 公司的營業利益率（Operating Margin）在最近的 TTM 數據中為 0.36121，代表營業收入佔總收入的 36.121%【GOOGL_Fundamentals_20260612.txt, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_Fundamentals_20260612.txt #0 (rerank=0.727)\n  - GOOGL_News_20260612_02.txt #0 (rerank=0.724)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_News_20260612_02.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[GOOGL] === GOOGL Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Alphabet Inc. Sector : Communication Services Industry : Internet Content & Information Employees: 194,668\n\n--- Valuation Metrics --- Market Cap : $4362.98B Enterprise Value : $4303.78B P/E Ratio Trailing: 27.331549 P/E Ratio Forward : 24.706831 Price/Sales (TTM) : 10.3266325 Price/Book : 9.054259 EV/EBITDA : 26.679\n\n--- Profitability --- Revenue (TTM) : $422.50B Gross Profit : $255.05B EBITDA : $161.32B Net Income : $160.21B Profit Margin : 0.37919 Operating Margin: 0.36121 Gross Margin : 0.60368\n\n--- Growth --- Revenue Growth (YoY): 0.218 Earnings Growth : 0.82 EPS Trailing : 13.09 EPS Forward : 14.48061",
+        "[GOOGL] Title    : Is Alphabet Inc. (GOOGL) One of the Best Forever Stocks to Buy on $85B Capital Raise? Source   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/alphabet-inc-googl-one-best-032550927.html\nPublished: 2026-06-12T03:25:50Z\n\nIs Alphabet Inc. (GOOGL) One of the Best Forever Stocks to Buy on $85B Capital Raise? Abdul Rahman\nFri, June 12, 2026 at 11:25 AM GMT+8\n2 min read\nGOOG\n+0.92%\nBRK-B\n+0.44%\nAlphabet Inc. (NASDAQ:\nGOOGL\n) is\none of the best forever stocks to buy, according to analysts\n. On June 5, Moody’s Ratings touted Alphabet Inc.’s (NASDAQ:GOOGL) move to raise $84.75 billion, affirming it as credit-positive. According to the ratings firm, the massive equity raise underscores Alphabet’s strong financial profile, which is capable of funding incremental investment through equity rather than adding debt. In addition, the move asserts commitment towards disciplined financial policies capable of ensuring a strong balance sheet. Moody’s expects the company’s capital expenditure to reach $185 billion this year, up from $91.5 billion last year. Alphabet plans to raise about $34.75 billion through an underwritten public offering of common equity and 6.25% mandatory convertible preferred securities. It’s also eyeing a $40 billion market equity issuance program and a $10 billion private placement with Berkshire Hathaway. The company is to use net proceeds from the offerings for general corporate purposes, including artificial intelligence infrastructure, and for global compute capacity expansion. Alphabet Inc. (NASDAQ:GOOGL) is a multinational technology conglomerate and the parent holding company of Google. It generates the bulk of its revenue through internet advertising, cloud computing, and consumer hardware, while also operating highly speculative, forward-looking ventures known as “Other Bets. While we acknowledge the potential of GOOGL as an investment, we believe certain AI stocks offer greater upside potential and carry less downside risk. If you're looking for an extremely undervalued AI stock that also stands to benefit significantly from Trump-era tariffs and the onshoring trend, see our free report on the\nbest short-term AI stock\n. READ NEXT:\n8 Most Profitable Crypto-Exposed Stocks to Buy Now\nand\n10 Best Robinhood Stocks Under $20 to Buy Now\n."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "哪家公司在新聞中有 847.5 億美元的融資案，且於 6 月 5 日獲穆迪評為信用正面？",
+        "Alphabet的目前營業利益率是多少？"
+      ],
+      "agentic_n_chunks": 2
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "unit_cases": {
+    "$84.75 billion": "847.5 億美元",
+    "84.75 billion 美元": "847.5 億美元",
+    "US$84.75 billion": "847.5 億美元",
+    "$185 billion": "1,850 億美元",
+    "$91.5 billion": "915 億美元",
+    "$34.75 billion": "347.5 億美元",
+    "$40 billion": "400 億美元",
+    "$10 billion": "100 億美元",
+    "$60,458 million (≈ $60.5 billion)": "604.58 億美元 (≈ 605 億美元)",
+    "revenue rose $304 million (+9%)": "revenue rose 3.04 億美元 (+9%)",
+    "add $1 to $3 to EPS": "add $1 to $3 to EPS",
+    "gross margin 16.8%": "gross margin 16.8%",
+    "600,000 GPUs": "600,000 GPUs",
+    "營收為 214.96 億美元": "營收為 214.96 億美元",
+    "$1.3 billion convertible note plus $1.4 billion": "13 億美元 convertible note plus 14 億美元"
+  },
+  "residual_billion_runs": [],
+  "run0_converted": "Alphabet（Google）最近宣布將進行大規模資本籌集，計畫募集約 **847.5 億美元** 的資金，並預計在 2026 年的資本支出將升至 **1,850 億美元**，較前一年915 億美元大幅增加【Reference 1: GOOGL_News_20260612_02.txt, chunk #0】。\n\n- 這筆資金來源包括 **約347.5 億美元** 的公開發行普通股與 6.25% 強制可轉換優先證券【Reference 1: GOOGL_News_20260612_02.txt, chunk #0】。  \n- 同時，Alphabet 正在規劃 **400 億美元** 的市場股權發行計畫，以及 **100 億美元** 的私募配售給 Berkshire Hathaway【Reference 1: GOOGL_News_20260612_02.txt, chunk #0】。  \n- 募得的淨收益將用於一般企業用途，特別是 **人工智慧基礎設施** 與 **全球運算容量擴張**【Reference 1: GOOGL_News_20260612_02.txt, chunk #0】。\n\n---"
+}

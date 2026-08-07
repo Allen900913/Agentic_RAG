@@ -1,0 +1,55 @@
+======================================================================
+[lex-10]  Q: Amazon 在 2025 年的現金資本支出（cash capital expenditures）是多少？
+gold_files: ['AMZN_10K_2025.html']
+--- 參考答案 reference ---
+Amazon 在 2025 年的現金資本支出約為 1,283.2 億美元（即 128,320 百萬美元），這是公司在當年「購置不動產與設備（扣除出售及激勵回收後）」項目所列示的現金流出金額。  
+
+此金額出現在 2025 年的現金流量表中，顯示為「Purchases of property and equipment, net of proceeds from sales and incentives」的負值 (128,320) 百萬美元，代表 Amazon 於 2025 年以現金購買固定資產、設備及相關資本支出，扣除因資產出售或激勵計畫取得的現金回收後的淨支出。
+--- 我方答案 answer ---
+Amazon spent about **$131.8 billion in cash capital expenditures in 2025** (shown as purchases of property and equipment of $(131,819) million)【AMZN_10K_2025.html, chunk #56】.
+
+---
+📚 引用來源（Generator 實際依據的 chunk）:
+  - AMZN_10K_2025.html #56 (rerank=0.719)
+  - AMZN_10K_2025.html #2 (rerank=0.713)
+
+======================================================================
+[lex-04]  Q: NVIDIA 是哪一年推出 CUDA 開發平台的？
+gold_files: ['NVDA_10K_2026.html']
+--- 參考答案 reference ---
+The excerpts do not specify the year NVIDIA introduced the CUDA development platform. They describe CUDA as a foundational part of NVIDIA’s software stack and note that more than 7.5 million developers use it, but they do not provide the launch date.
+--- 我方答案 answer ---
+NVIDIA launched its CUDA development platform in 2006【NVDA_10K_2026.html, chunk #20】.
+
+---
+📚 引用來源（Generator 實際依據的 chunk）:
+  - NVDA_10K_2026.html #25 (rerank=0.720)
+  - NVDA_10K_2026.html #20 (rerank=0.719)
+  - NVDA_10K_2026.html #21 (rerank=0.670)
+  - NVDA_10K_2026.html #26 (rerank=0.570)
+  - NVDA_10K_2026.html #28 (rerank=0.561)
+
+======================================================================
+[lex-05]  Q: NVIDIA 收購 Mellanox 是哪一年？
+gold_files: ['NVDA_10K_2026.html']
+--- 參考答案 reference ---
+NVIDIA 收購 Mellanox 的具體年份在所提供的文件摘錄中並未提及。
+--- 我方答案 answer ---
+NVIDIA acquired Mellanox in 2020【NVDA_10K_2026.html, chunk #21】. This acquisition expanded NVIDIA’s portfolio to include networking and enabled its platforms to scale to data‑center size【NVDA_10K_2026.html, chunk #21】.
+
+---
+📚 引用來源（Generator 實際依據的 chunk）:
+  - NVDA_10K_2026.html #21 (rerank=0.729)
+
+======================================================================
+[lex-15]  Q: Tesla 在 2026 年 1 月啟用的鋰精煉廠位於哪裡？
+gold_files: ['TSLA_10K_2025.html']
+--- 參考答案 reference ---
+The SEC filings do not disclose the site of the lithium‑refining plant that began operating in January 2026. The documents provide Tesla’s principal executive office address (1 Tesla Road, Austin, Texas 78725) and list its major manufacturing sites—Gigafactory Texas in Austin, Texas; Fremont Factory in Fremont, California; Gigafactory Nevada in Sparks, Nevada; Gigafactory Berlin‑Brandenburg in Grünheide, Germany; Gigafactory Shanghai and Megafactory Shanghai in Shanghai, China; Gigafactory New York in Buffalo, New York (leased); and Megafactory Lathrop in Lathrop, California (leased)—but none of these excerpts identify a lithium‑refining facility or state where it is located. Consequently, the location of the lithium refinery launched in January 2026 is not specified in the provided source material.
+--- 我方答案 answer ---
+Tesla’s in‑house lithium refinery that began operating in January 2026 is located in Texas, USA【TSLA_10K_2025.html, chunk #39】. This facility is part of Tesla’s effort to vertical‑integrate and de‑risk its raw‑material supply chain.
+
+---
+📚 引用來源（Generator 實際依據的 chunk）:
+  - TSLA_10K_2025.html #39 (rerank=0.719)
+

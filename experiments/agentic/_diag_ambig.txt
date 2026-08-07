@@ -1,0 +1,42 @@
+======================================================================
+[col-03] Q: 亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？
+--- reference ---
+Amazon is pouring new capital into its own artificial‑intelligence and machine‑learning capabilities—primarily through AWS—and the filing does not disclose a partnership with any external AI company.  
+
+The 2025 Form 10‑K says Amazon is “investing in AWS, which offers a broad set of on‑demand technology services, including … artificial intelligence and machine learning,” and that it “expects to continue making additional investments in our artificial intelligence initiatives.”  These investments are described as part of broader technology and infrastructure spending that supports new and existing product categories, improves the customer experience, and enhances process efficiencies.  The co
+--- 我方 answer ---
+Amazon has poured billions into artificial‑intelligence projects, most concretely by investing $1.3 billion in a new convertible note from the AI startup Anthropic and planning a further $1.4 billion investment in Q4 2025 [AMZN_10Q_202509.html, chunk #37]; the company is also expanding AI/ML capabilities across its AWS platform and related technology initiatives such as satellite broadband and autonomous‑vehicle services [AMZN_10K_2025.html, chunk #198].  
+
+- **Direct AI funding:** In Q2 2025 Amazon issued a $1.3 billion convertible note to Anthropic and announced an additional $1.4 billion commitment for later in the year, reflecting a targeted partnership with the Anthropic AI firm [AMZN_1
+
+======================================================================
+[mi-04] Q: Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？
+--- reference ---
+The excerpts do not provide a single, company‑wide revenue‑growth percentage for the most recent twelve‑month period; instead they disclose that iPhone revenue rose 22 % to $57.0 billion and services revenue climbed 16 % year‑over‑year, indicating that Apple’s overall top‑line is expanding at a double‑digit pace.  
+
+The debut of the redesigned “Siri AI” at the Worldwide Developers Conference is expected to reinforce that momentum.  By allowing the assistant to draw contextual information from users’ apps, retrieve content without opening separate services, and integrate with Apple Intelligence across devices, Siri AI should deepen user engagement, create new avenues for automation and third‑
+--- 我方 answer ---
+Apple’s total revenue rose roughly 6 % year‑over‑year in the most recent fiscal year (FY 2025 vs FY 2024) 【AAPL_10K_2025.html, chunk #155】—$416.2 billion versus $391.0 billion, a $25.1 billion increase【AAPL_10K_2025.html, chunk #0】.  
+
+**Why the new Siri AI matters for future growth**
+
+* **AI‑powered assistant:** At WWDC 2026 Apple unveiled “Siri AI,” an AI‑enhanced version of its voice assistant that runs on Google’s Gemini models and is integrated into Apple Intelligence 【AAPL_News_20260612_02.txt, chunk #0】.  
+* **Ecosystem lock‑in and services upside:** The upgrade is expected to let Siri pull context from apps, automate third‑party tasks and surface content, deepening user reliance on A
+
+======================================================================
+[mi-14] Q: Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？
+--- reference ---
+Tesla’s recent 10‑Q filing does not disclose any specific automotive‑gross‑margin number, so the documents do not show whether the margin has risen or fallen and we cannot describe a trend from the available excerpts.  
+
+What the market news does reveal is that Tesla’s stock has been caught in a broader sell‑off of the “Magnificent Seven” tech giants. Hedge‑fund data released on June 12 shows that investors dumped the seven largest U.S. technology names—including Tesla—just before SpaceX’s planned IPO, and the Roundhill Magnificent Seven ETF, which tracks those stocks, has fallen more than 2.4 % since June 5. Because Tesla is a component of that index, its share price has been pressured down
+--- 我方 answer ---
+Tesla 的汽車業務毛利率在最近一季出現小幅下滑，2026 年 6 月底的三個月期毛利率為 **16.9%**，低於 2025 年同季的 **17.2%**；而在前一季（2026 年 3 月底的三個月期）毛利率曾大幅上升至 **21.1%**，高於 2025 年同季的 **16.2%**【TSLA_10Q_202606.html, chunk #77】、【TSLA_10Q_202603.html, chunk #64】。在六個月累計上，2026 年上半年的汽車毛利率為 **18.7%**，亦高於去年同期的 **16.8%**，顯示短期內呈現先升後降的波動【TSLA_10Q_202606.html, chunk #77】。
+
+同時，根據 Reuters 報導，所有「Magnificent Seven」科技巨頭（包括 Tesla）在 SpaceX IPO 前夕出現拋售，相關 ETF 自 6 月初以來已下跌超過 **2.4%**【NVDA_News_20260612_01.txt, chunk #0】；另一篇 JPMorgan 註記亦指出，投資人因降低風險而賣出這些股票【NVDA_News_20260612_01.txt, chunk #1】。這表明 Tesla 的股價近期受到整體科技股大幅賣出的市場情緒拖累，股價表現可能呈現下行壓力。
+
+---
+📚 引用來源（Generator 實際依據的 chunk）:
+  - TSLA_10Q_202606.html #77 (rerank=0.731)
+  - TSLA_10Q_202603.html #64 (rerank=0.730)
+
+

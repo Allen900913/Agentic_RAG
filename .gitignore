@@ -26,9 +26,6 @@ hashes_edgar.json
 *.bak
 data/.seen_news_keys.json
 
-# === Generated Scratch ===
-experiments/
-
 # === IDE ===
 .vscode/
 .idea/

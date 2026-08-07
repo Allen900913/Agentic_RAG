@@ -1,0 +1,17 @@
+lex-01: n_subq=1  chunks=1  subq=['NVIDIA 目前的 Market Cap（市值）是多少？']
+lex-02: n_subq=1  chunks=1  subq=['NVIDIA 的 trailing P/E Ratio 是多少？']
+lex-03: n_subq=1  chunks=3  subq=['NVIDIA fiscal year 2026 的 Diluted EPS 是多少']
+lex-04: n_subq=1  chunks=5  subq=['NVIDIA 是哪一年推出 CUDA 開發平台的？']
+lex-05: n_subq=1  chunks=1  subq=['NVIDIA 收購 Mellanox 是哪一年？']
+lex-06: n_subq=1  chunks=1  subq=['Apple 目前的 Market Cap（市值）是多少？']
+lex-07: n_subq=1  chunks=2  subq=['Apple fiscal year 2025 的 Diluted EPS 是多少？']
+lex-08: n_subq=1  chunks=1  subq=['Microsoft 目前的 Free Cash Flow 是多少？']
+lex-09: n_subq=1  chunks=1  subq=['Amazon 目前的 Total Debt 是多少']
+lex-10: n_subq=1  chunks=2  subq=['Amazon 在 2025 年的現金資本支出是多少']
+lex-11: n_subq=1  chunks=2  subq=['Alphabet（Google）目前的員工人數是多少？']
+lex-12: n_subq=2  chunks=7  subq=['Google 完成收購 Wiz 的日期是什麼時候？', 'Google 收購 Wiz 的金額是多少？']
+lex-13: n_subq=1  chunks=1  subq=['Meta 目前的 Return on Equity（股東權益報酬率）是多少？']
+lex-14: n_subq=1  chunks=1  subq=['Meta fiscal year 2025 的 Diluted EPS 是多少？']
+lex-15: n_subq=1  chunks=1  subq=['Tesla 在 2026 年 1 月啟用的鋰精煉廠位於哪裡？']
+
+子查詢數分布(lexical 15題): {1: 14, 2: 1}

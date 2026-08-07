@@ -1,0 +1,297 @@
+{
+  "collection": "us_stock_rag_unstructured",
+  "payload_field": "document",
+  "reranker_model": "BAAI/bge-reranker-v2-m3",
+  "truncate_limit": 2048,
+  "soft_limit": 1200,
+  "overall": {
+    "n": 2367,
+    "mean": 426.1,
+    "p50": 253,
+    "p90": 1094,
+    "p95": 1487,
+    "p99": 2268,
+    "max": 4738,
+    "n_over_1200": 204,
+    "pct_over_1200": 8.62,
+    "n_over_2048_truncated": 38,
+    "pct_over_2048_truncated": 1.61
+  },
+  "by_chunk_type": {
+    "table": {
+      "n": 744,
+      "mean": 421.4,
+      "p50": 259,
+      "p90": 1101,
+      "p95": 1367,
+      "p99": 2039,
+      "max": 3448,
+      "n_over_1200": 65,
+      "pct_over_1200": 8.74,
+      "n_over_2048_truncated": 6,
+      "pct_over_2048_truncated": 0.81
+    },
+    "text": {
+      "n": 1623,
+      "mean": 428.2,
+      "p50": 253,
+      "p90": 1083,
+      "p95": 1515,
+      "p99": 2343,
+      "max": 4738,
+      "n_over_1200": 139,
+      "pct_over_1200": 8.56,
+      "n_over_2048_truncated": 32,
+      "pct_over_2048_truncated": 1.97
+    }
+  },
+  "by_doc_type": {
+    "10-K": {
+      "n": 1075,
+      "mean": 409.7,
+      "p50": 222,
+      "p90": 1101,
+      "p95": 1522,
+      "p99": 2230,
+      "max": 4482,
+      "n_over_1200": 92,
+      "pct_over_1200": 8.56,
+      "n_over_2048_truncated": 16,
+      "pct_over_2048_truncated": 1.49
+    },
+    "10-Q": {
+      "n": 1161,
+      "mean": 450.9,
+      "p50": 272,
+      "p90": 1145,
+      "p95": 1491,
+      "p99": 2375,
+      "max": 4738,
+      "n_over_1200": 110,
+      "pct_over_1200": 9.47,
+      "n_over_2048_truncated": 21,
+      "pct_over_2048_truncated": 1.81
+    },
+    "fundamentals": {
+      "n": 31,
+      "mean": 281.2,
+      "p50": 295,
+      "p90": 445,
+      "p95": 445,
+      "p99": 573,
+      "max": 573,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "income_statement": {
+      "n": 13,
+      "mean": 968.5,
+      "p50": 1022,
+      "p90": 1085,
+      "p95": 1085,
+      "p99": 1094,
+      "max": 1094,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "news": {
+      "n": 87,
+      "mean": 268.0,
+      "p50": 177,
+      "p90": 577,
+      "p95": 673,
+      "p99": 1579,
+      "max": 2101,
+      "n_over_1200": 2,
+      "pct_over_1200": 2.3,
+      "n_over_2048_truncated": 1,
+      "pct_over_2048_truncated": 1.15
+    }
+  },
+  "oversized_examples": [
+    {
+      "source": "META_10Q_202603.html",
+      "chunk_index": 152,
+      "chunk_type": "text",
+      "tokens": 4738
+    },
+    {
+      "source": "META_10K_2025.html",
+      "chunk_index": 100,
+      "chunk_type": "text",
+      "tokens": 4482
+    },
+    {
+      "source": "META_10Q_202509.html",
+      "chunk_index": 150,
+      "chunk_type": "text",
+      "tokens": 4331
+    },
+    {
+      "source": "AMZN_10K_2025.html",
+      "chunk_index": 79,
+      "chunk_type": "text",
+      "tokens": 3461
+    },
+    {
+      "source": "META_10Q_202509.html",
+      "chunk_index": 8,
+      "chunk_type": "table",
+      "tokens": 3448
+    },
+    {
+      "source": "META_10Q_202509.html",
+      "chunk_index": 115,
+      "chunk_type": "text",
+      "tokens": 3255
+    },
+    {
+      "source": "GOOGL_10K_2025.html",
+      "chunk_index": 159,
+      "chunk_type": "text",
+      "tokens": 3118
+    },
+    {
+      "source": "GOOGL_10K_2025.html",
+      "chunk_index": 166,
+      "chunk_type": "text",
+      "tokens": 3072
+    },
+    {
+      "source": "NVDA_10K_2026.html",
+      "chunk_index": 100,
+      "chunk_type": "text",
+      "tokens": 3030
+    },
+    {
+      "source": "AMZN_10Q_202509.html",
+      "chunk_index": 7,
+      "chunk_type": "table",
+      "tokens": 2932
+    },
+    {
+      "source": "META_10Q_202603.html",
+      "chunk_index": 118,
+      "chunk_type": "text",
+      "tokens": 2907
+    },
+    {
+      "source": "NVDA_10Q_202604.html",
+      "chunk_index": 56,
+      "chunk_type": "text",
+      "tokens": 2860
+    },
+    {
+      "source": "TSLA_10Q_202509.html",
+      "chunk_index": 40,
+      "chunk_type": "text",
+      "tokens": 2783
+    },
+    {
+      "source": "TSLA_10K_2025.html",
+      "chunk_index": 22,
+      "chunk_type": "table",
+      "tokens": 2614
+    },
+    {
+      "source": "TSLA_10K_2025.html",
+      "chunk_index": 81,
+      "chunk_type": "text",
+      "tokens": 2514
+    },
+    {
+      "source": "GOOGL_10Q_202603.html",
+      "chunk_index": 65,
+      "chunk_type": "text",
+      "tokens": 2514
+    },
+    {
+      "source": "META_10Q_202509.html",
+      "chunk_index": 113,
+      "chunk_type": "text",
+      "tokens": 2462
+    },
+    {
+      "source": "NVDA_10Q_202604.html",
+      "chunk_index": 59,
+      "chunk_type": "text",
+      "tokens": 2429
+    },
+    {
+      "source": "AMZN_10Q_202603.html",
+      "chunk_index": 7,
+      "chunk_type": "table",
+      "tokens": 2402
+    },
+    {
+      "source": "AAPL_10Q_202512.html",
+      "chunk_index": 26,
+      "chunk_type": "text",
+      "tokens": 2375
+    },
+    {
+      "source": "META_10Q_202603.html",
+      "chunk_index": 133,
+      "chunk_type": "text",
+      "tokens": 2343
+    },
+    {
+      "source": "NVDA_10K_2026.html",
+      "chunk_index": 94,
+      "chunk_type": "text",
+      "tokens": 2287
+    },
+    {
+      "source": "AAPL_10K_2025.html",
+      "chunk_index": 48,
+      "chunk_type": "text",
+      "tokens": 2281
+    },
+    {
+      "source": "MSFT_10Q_202512.html",
+      "chunk_index": 9,
+      "chunk_type": "table",
+      "tokens": 2278
+    },
+    {
+      "source": "AMZN_10Q_202509.html",
+      "chunk_index": 64,
+      "chunk_type": "text",
+      "tokens": 2268
+    },
+    {
+      "source": "NVDA_10K_2026.html",
+      "chunk_index": 93,
+      "chunk_type": "text",
+      "tokens": 2261
+    },
+    {
+      "source": "MSFT_10Q_202603.html",
+      "chunk_index": 9,
+      "chunk_type": "table",
+      "tokens": 2258
+    },
+    {
+      "source": "META_10K_2025.html",
+      "chunk_index": 68,
+      "chunk_type": "text",
+      "tokens": 2256
+    },
+    {
+      "source": "NVDA_10K_2026.html",
+      "chunk_index": 97,
+      "chunk_type": "text",
+      "tokens": 2230
+    },
+    {
+      "source": "AAPL_10K_2025.html",
+      "chunk_index": 57,
+      "chunk_type": "text",
+      "tokens": 2203
+    }
+  ]
+}

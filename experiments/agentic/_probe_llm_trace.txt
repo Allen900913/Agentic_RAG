@@ -1,0 +1,5 @@
+=== col-01 ===
+query: 為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？
+
+[LLM #1 OK]  model=openai/gpt-oss-120b 9.4s len=35 hint='為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？'
+[LLM #2 OK]  model=openai/gpt-oss-20b 12.2s len=97 hint='為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？'

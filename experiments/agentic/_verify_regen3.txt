@@ -1,0 +1,26 @@
+============================================================
+[col-03] lang=English
+gold_files: ['AMZN_10K_2025.html', 'AMZN_10Q_202509.html']
+  含 Anthropic: True
+  含 416/391/6%: False
+  含 17%(錯誤指標): False
+  殘留查無型: []
+--- ref ---
+Amazon has poured billions of dollars into artificial‑intelligence work, most notably by investing $1.3 billion in a convertible note from the AI start‑up Anthropic in the second quarter of 2025 and planning a further $1.4 billion investment in the fourth quarter of 2025, bringing its total equity‑style holding in Anthropic to roughly $14.8 billion of non‑voting preferred stock as of September 30 2025.  
+
+The company says that technology‑and‑infrastructure spending will keep rising as it adds staff and builds the compute, data‑center and software platforms needed for its AI and machine‑learnin
+
+============================================================
+[mi-04] lang=English
+gold_files: ['AAPL_10K_2025.html', 'AAPL_Fundamentals_20260612.txt', 'AAPL_IncomeStatement_20260612.txt', 'AAPL_News_20260508_01.txt', 'AAPL_News_20260519_01.txt', 'AAPL_News_20260612_01.txt', 'AAPL_News_20260612_02.txt', 'AAPL_News_20260612_03.txt', 'AAPL_News_20260612_04.txt', 'AAPL_News_20260612_05.txt']
+  含 Anthropic: False
+  含 416/391/6%: True
+  含 17%(錯誤指標): True
+  殘留查無型: []
+--- ref ---
+Apple 在過去 12 個月的總營收大約成長了 16 % 左右（根據最新的財務摘要，TTM 營收為 451.44 億美元，YoY 增長 0.166，即 16.6%），這是自 2025 財年以來最顯著的年度增幅，且單季營收亦顯示 17% 的環比提升（3 月季營收 111.2 億美元，較上年同季上升 17%）。
+
+在今年的全球開發者大會（WWDC）上，Apple 公布了全新升級的 Siri AI，這項功能已在兩年研發後以「Apple Intelligence」為基礎重新打造，並結合了 Google 的大型語言模型。新 Siri 能夠安全地從使用者的應用程式中抽取個人化情境，直接在對話中呈現相關內容，並支援更精準的資訊檢索與第三方應用自動化。Apple 亦將 Siri AI 與 Safari、Password、Messages 等核心軟體整合，讓 AI 功能遍佈整個生態系。
+
+分析師認為，這些 AI 亮點將為 Apple 帶來多重成長動能。首先，AI 整合提升了數位助理的實用性與使用黏著度，預計能進一步推動服務部門的營收，服務在 2025 財年已實現 16% 的 YoY 成長，毛利率高達 75% 以上，屬於高利潤的經常性收入來源。其次，透過更深入的個人化與自動化，Apple 能在其超過 25 億台活躍裝置的基礎上擴大付費服務的滲透率，長期看有望將服務收入年增率推向 14% 以上，並提升
+

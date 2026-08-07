@@ -1,0 +1,52 @@
+============================================================
+mh-07
+query: 新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？
+relevant: ["AMZN_News_*.txt", "AMZN_IncomeStatement_20260612.txt"]
+answerable: True
+ref keys: ['id', 'category', 'query', 'gold_files', 'gold_chunks_used', 'reference_lang', 'reference']
+--- current reference ---
+The company that announced a plan to invest more than €10 billion in Europe is Amazon.com, Inc. In its most recent fiscal year, Amazon reported total revenue of approximately **$637.96 billion**.  
+
+Amazon’s €10 billion European investment programme is intended to modernise its fulfil‑ment centres, deploy next‑generation robotics, create about 25,000 new jobs and expand ultra‑fast delivery services such as Amazon Now in cities like Manchester and
+============================================================
+mix-15
+query: Tesla 2026 年至今生產與交付了多少輛消費性車輛？
+relevant: ["TSLA_10Q_202603.html"]
+answerable: True
+ref keys: ['id', 'category', 'query', 'gold_files', 'gold_chunks_used', 'reference_lang', 'reference']
+--- current reference ---
+Tesla 2026 年第一季的財務摘要只披露了汽車銷售收入（2026 年第一季為 154.73 億美元），並未在所提供的 10‑Q 內容中列出當年迄今的消費性車輛生產或交付數量。因此，根據這些摘錄，無法得知 2026 年至今 Tesla 已生產與交付了多少輛車。
+============================================================
+mi-01
+query: NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？
+relevant: ["NVDA_Fundamentals_*.txt", "NVDA_IncomeStatement_*.txt", "NVDA_News_*.txt"]
+answerable: True
+ref keys: ['id', 'category', 'query', 'gold_files', 'gold_chunks_used', 'reference_lang', 'reference']
+--- current reference ---
+NVIDIA 的最新財報中並未在提供的資料中透露具體的營收成長率。  
+
+不過，與 IREN Limited 的最新 AI 雲端合作案清楚顯示出 NVIDIA 正在加速其資料中心布局，具體進展包括：
+
+1. **五兆瓦（5 GW）規模的基礎建設合作**：雙方簽署了為期五年的戰略夥伴關係，允許 IREN 在其全球資料中心管線中部署 NVIDIA‑對標的 DSX AI 工廠基礎設施，目標在德州 Sweetwater 兩兆瓦（2 GW）校園內先行部署。
+
+2. **潛在股權投資**：IREN 給予 NVIDIA 五年內以每股 70 美元購買最高 3,000 萬普通股的認購權，若全部行使，最高可帶來約 21 億美元的資金投入。
+
+3. **34 億美元 AI 雲端合約**：雙方簽訂了為期五年、價值 34 億美元的 AI 雲端合約，採用空冷版 Blackwell GPU，預計在 60 兆瓦的現有設施內開始部署。
+
+4. **GPU 與電力部署規模**：根據 IREN 的第三季說明，2026 年計畫
+============================================================
+mh-05
+query: 在 Alphabet、Microsoft、Amazon 這三家公司中，最近十二個月（TTM）淨利（net income）最高的是哪一家？該公司最近一年的營收年增率是多少？
+relevant: ["GOOGL_Fundamentals_20260612.txt"]
+answerable: True
+ref keys: ['id', 'category', 'query', 'gold_files', 'gold_chunks_used', 'reference_lang', 'reference']
+--- current reference ---
+Alphabet 在最近十二個月的淨利為 1602.1 億美元，營收年增率為 21.8%。由於目前僅有 Alphabet 的淨利與營收成長資料，無法直接比較 Microsoft 與 Amazon 的淨利大小。
+============================================================
+mh-04
+query: 在 Microsoft、Alphabet、Apple 這三家公司中，最近十二個月（TTM）營業利益率（operating margin）最高的是哪一家？該公司同期的總營收是多少？
+relevant: ["MSFT_Fundamentals_20260612.txt"]
+answerable: True
+ref keys: ['id', 'category', 'query', 'gold_files', 'gold_chunks_used', 'reference_lang', 'reference']
+--- current reference ---
+根據目前提供的資料，微軟在過去十二個月（TTM）的營業利益率為 46.33%，為已知最高，其同期總營收為 3,182.7 億美元（即 318.27 B 美元）。在本次摘錄中未出現 Alphabet 與 Apple 的營業利益率或營收數據，因而無法就這兩家公司與微軟進行直接比較。

@@ -1,0 +1,10 @@
+
+### v2_pipeline (本次)  (n=100)
+  footer(引用來源/📚): 100/100
+  生成 fallback(原始片段): 56/100  by_cat={'news': 3, 'multi_intent': 7, 'semantic': 9, 'mixed': 5, 'lexical': 7, 'colloquial': 15, 'multi_hop': 10}
+  fallback ids: ['news-10', 'news-11', 'news-12', 'mi-03', 'mi-08', 'mi-09', 'mi-10', 'mi-11', 'mi-12', 'mi-13', 'sem-04', 'sem-05', 'sem-06', 'sem-07', 'sem-08', 'sem-09', 'sem-10', 'sem-11', 'sem-12', 'mix-04', 'mix-05', 'mix-06', 'mix-07', 'mix-08', 'lex-09', 'lex-10', 'lex-11', 'lex-12', 'lex-13', 'lex-14', 'lex-15', 'col-01', 'col-02', 'col-03', 'col-04', 'col-05', 'col-06', 'col-07', 'col-08', 'col-09', 'col-10', 'col-11', 'col-12', 'col-13', 'col-14', 'col-15', 'mh-01', 'mh-02', 'mh-03', 'mh-04', 'mh-05', 'mh-06', 'mh-07', 'mh-08', 'mh-09', 'mh-10']
+
+### v2_snapshot (0728 基準)  (n=90)
+  footer(引用來源/📚): 90/90
+  生成 fallback(原始片段): 0/90  by_cat={}
+  fallback ids: []

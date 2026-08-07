@@ -1,0 +1,20 @@
+PASS  [lex-04] CUDA year=2006  hits=['2006', '2006']
+      ref: NVIDIA introduced the CUDA development platform in 2006.    The company’s 2026 Form 10‑K notes that in 2006 it “opened the parallel processing capabilities of our GPU to a broad range of compute‑intensive applications,” which is the launch of the foundational CUDA development pla
+
+PASS  [lex-05] Mellanox year=2020  hits=['2020', '2020', '2020']
+      ref: NVIDIA completed its acquisition of Mellanox in 2020.    The 2026 Form 10‑K notes that the purchase of Mellanox in 2020 broadened NVIDIA’s product portfolio to include networking technology, allowed its platforms to scale to data‑center size, and introduced a new class of process
+
+FAIL  [lex-15] Tesla lithium=Texas  hits=[]
+      ref: Tesla 在 2026 年 1 月啟用的鋰精煉廠位於美國德克薩斯州。根據公司 2025 年 10‑K 報告，這座內部鋰精煉廠位於德克薩斯州（其總部地址為德克薩斯州奧斯汀 78725），並於 2026 年 1 月開始營運。
+
+FAIL  [col-03] Amazon partner=Anthropic  hits=[]
+      WARN still-negative: ['does not']
+      ref: Amazon is dramatically increasing the money it spends on artificial‑intelligence research, development and the infrastructure needed to run those models, but the filing does not name any external AI firm that it has partnered with.    The 2025 Form 10‑K says that Amazon expects “
+
+PASS  [mi-04] Apple rev growth  hits=['6%']
+      ref: Apple 在過去一年裡的營收成長率約為 **17%**，即 2026 年第一季的總營收達到 **111.2 億美元**，較去年同期提升了 17%。    這一增長背後的主要驅動力包括 iPhone 營收的強勁表現（升至 570 億美元，年增 22%）以及服務部門的雙位數成長（服務營收年增 16%），兩者合計已佔公司總營收的近 80%。    在同一時期舉行的 WWDC 上，Apple 公布了全新升級的 **Siri AI**（亦稱 Siri AI / Apple Intelligence），其意義可從以下幾點說明：  1. **提升使用者黏著度與生態系
+
+PASS  [mi-14] Tesla GM numbers  hits=['18.7', '17.2', '18.7', '17.2']
+      ref: Tesla 的汽車業務毛利率正呈下降趨勢，近期從去年同期的 18.7% 降至 16.8%，而在過去六個月的總毛利率也從 17.2% 下降到 16.8%。同時，因為「Magnificent Seven」中的所有大型科技股自 6 月 5 日以來均下跌逾 2.4%，對沖基金在 SpaceX 首次公開發行前大幅拋售這些股票，市場對科技板塊的情緒轉為看空，這種全線跌勢也會對 Tesla 的股價產生壓力，使其短期內面臨進一步的下行風險。    具體來說，Tesla 在截至 2026 年 6 月 30 日的三個月內，總毛利率為 16.8%，較前一年同季的 18.7% 
+
+ALL contain fact: NO

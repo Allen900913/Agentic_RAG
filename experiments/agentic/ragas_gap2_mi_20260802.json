@@ -1,0 +1,238 @@
+{
+  "meta": {
+    "ragas_model": "openai/gpt-oss-120b",
+    "ragas_metrics": [
+      "context_recall",
+      "context_precision",
+      "nv_context_relevance",
+      "faithfulness",
+      "answer_relevancy",
+      "answer_correctness"
+    ],
+    "ground_truth": "reference_answers.json（缺則 rubric.must_include 合成）",
+    "from_results": [
+      "experiments/agentic/gj_v2_gap2_mi_20260802.json"
+    ]
+  },
+  "summary": {
+    "multi_intent": {
+      "n": 15,
+      "rubric": NaN,
+      "context_recall": 0.638,
+      "context_precision": 0.747,
+      "nv_context_relevance": 0.883,
+      "faithfulness": 0.713,
+      "answer_relevancy": 0.745,
+      "answer_correctness": 0.634,
+      "_corr_vs_selfmade": {}
+    },
+    "_overall": {
+      "n": 15,
+      "rubric": NaN,
+      "context_recall": 0.638,
+      "context_precision": 0.747,
+      "nv_context_relevance": 0.883,
+      "faithfulness": 0.713,
+      "answer_relevancy": 0.745,
+      "answer_correctness": 0.634,
+      "_corr_vs_selfmade": {}
+    }
+  },
+  "per_id": {
+    "mi-01": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.5,
+      "context_precision": 0.75,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.964,
+      "answer_relevancy": 0.804,
+      "answer_correctness": 0.594,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-02": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.286,
+      "context_precision": 0.833,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.571,
+      "answer_relevancy": 0.698,
+      "answer_correctness": 0.467,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-03": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.6,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.882,
+      "answer_relevancy": 0.857,
+      "answer_correctness": 0.619,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-04": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.75,
+      "context_precision": 0.667,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.48,
+      "answer_relevancy": 0.893,
+      "answer_correctness": 0.661,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-05": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.8,
+      "context_precision": 0.25,
+      "nv_context_relevance": 0.5,
+      "faithfulness": 0.739,
+      "answer_relevancy": 0.753,
+      "answer_correctness": 0.633,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-06": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.714,
+      "context_precision": 0.7,
+      "nv_context_relevance": 0.5,
+      "faithfulness": 0.667,
+      "answer_relevancy": 0.856,
+      "answer_correctness": 0.693,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-07": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.667,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.522,
+      "answer_relevancy": 0.776,
+      "answer_correctness": 0.768,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-08": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.5,
+      "context_precision": 0.5,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.938,
+      "answer_relevancy": 0.709,
+      "answer_correctness": 0.578,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-09": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.6,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.778,
+      "answer_relevancy": 0.828,
+      "answer_correctness": 0.936,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-10": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.75,
+      "context_precision": 0.756,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.88,
+      "answer_relevancy": 0.869,
+      "answer_correctness": 0.532,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-11": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.667,
+      "answer_relevancy": 0.803,
+      "answer_correctness": 0.778,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-12": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.308,
+      "answer_relevancy": 0.822,
+      "answer_correctness": 0.605,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-13": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.429,
+      "context_precision": 0.5,
+      "nv_context_relevance": 0.75,
+      "faithfulness": 0.833,
+      "answer_relevancy": 0.785,
+      "answer_correctness": 0.437,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-14": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.375,
+      "context_precision": 0.25,
+      "nv_context_relevance": 0.5,
+      "faithfulness": 0.818,
+      "answer_relevancy": 0.0,
+      "answer_correctness": 0.463,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    },
+    "mi-15": {
+      "category": "multi_intent",
+      "rubric": NaN,
+      "context_recall": 0.6,
+      "context_precision": 1.0,
+      "nv_context_relevance": 1.0,
+      "faithfulness": 0.65,
+      "answer_relevancy": 0.721,
+      "answer_correctness": 0.748,
+      "selfmade_faithfulness": NaN,
+      "selfmade_relevance": NaN,
+      "selfmade_ctx_recall": NaN
+    }
+  }
+}

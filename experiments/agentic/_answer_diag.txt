@@ -1,0 +1,13 @@
+總題數: 100
+含 footer(引用來源/📚) 的答案: 100/100
+疑似 error-fallback(原始資料傾印) 的答案: 0/100
+  error-fallback by category: {}
+
+=== 各類抽樣答案開頭 ===
+[news-01] len=1187 :: Apple 最近就 Siri 的人工智慧功能誤導消費者一事，達成了一項 2.5 億美元的和解協議，符合資格的 iPhone 買家每台裝置最高可獲得 95 美元的賠償 [AAPL_News_20260508_01.txt, chunk #2]
+[mi-01] len=2034 :: # NVIDIA 營收成長與 IREN AI 雲端合作案分析  ## 營收成長速度  NVIDIA 最新財報顯示其營收年成長率約為 85.2%（Revenue Growth YoY: 0.852），過去十二個月營收達 253.49B 美元 
+[sem-01] len=2732 :: NVIDIA 的核心技術護城河在於其「全端加速運算平台」策略——將 GPU 硬體、CUDA 軟體生態系統、資料中心級系統架構與垂直領域軟體堆疊深度整合，形成競爭對手難以複製的完整生態壁壘。  **1. CUDA 軟體平台與開發者生態系統**
+[mix-01] len=329 :: Microsoft Azure 最新一季的營收成長率為 **40%** [MSFT_10Q_202603.html, chunk #110] [MSFT_10Q_202603.html, chunk #106]。  此成長主要由於跨平台各項
+[lex-01] len=168 :: NVIDIA 目前的市值约为 4.96 万亿美元（$4,962.16B）[NVDA_Fundamentals_20260612.txt, chunk #0]。  --- 📚 引用來源（Generator 實際依據的 chunk）:   - 
+[col-01] len=1480 :: （子問題「為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？」的生成步驟發生錯誤，以下為檢索到的原始片段） [NVDA_10K_2026.html, chunk #20] …AI where systems of AI mode
+[mh-01] len=2236 :: （子問題「在 Amazon、Microsoft、Alphabet、Meta 這四家公司中，最近十二個月（TTM）總營收規模最大的是哪一家？該公司同期的毛利率又是多少？」的生成步驟發生錯誤，以下為檢索到的原始片段） [GOOGL_Fundam

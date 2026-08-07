@@ -1,0 +1,25 @@
+[CUDA-2006] "introduction of CUDA in 2006..." →
+    NVDA_10K_2026.html  #20
+
+[Mellanox-2020] "acquisition of Mellanox in 2020..." →
+    NVDA_10K_2026.html  #21
+
+[Tesla-lithium-Texas] "lithium refinery in Texas..." →
+    TSLA_10K_2025.html  #39
+
+[Anthropic] "convertible note from Anthropic..." →
+    AMZN_10K_2025.html  #75
+    AMZN_10Q_202509.html  #37
+
+[Apple-416161] "416,161..." →
+    AAPL_10K_2025.html  #0
+    AAPL_10K_2025.html  #8
+    AAPL_10K_2025.html  #9
+    AAPL_10K_2025.html  #35
+    AAPL_10K_2025.html  #42
+    AAPL_10K_2025.html  #64
+    AAPL_10K_2025.html  #155
+
+[Tesla-GM-table] "[TSLA 10-Q period 202606] Cost of Revenu..." →
+    TSLA_10Q_202606.html  #15
+

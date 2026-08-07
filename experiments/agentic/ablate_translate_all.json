@@ -1,0 +1,2236 @@
+[
+  {
+    "id": "news-01",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.7142857142857143,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260508_01.txt",
+        "AAPL_News_20260612_02.txt",
+        "AAPL_News_20260612_03.txt",
+        "AAPL_News_20260612_05.txt",
+        "AAPL_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.7142857142857143,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260508_01.txt",
+        "AAPL_News_20260612_02.txt",
+        "AAPL_News_20260612_03.txt",
+        "AAPL_News_20260612_05.txt",
+        "AAPL_News_20260519_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-02",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.5714285714285714,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260612_02.txt",
+        "AAPL_News_20260612_01.txt",
+        "AAPL_News_20260612_05.txt",
+        "AAPL_News_20260612_03.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.5714285714285714,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260612_02.txt",
+        "AAPL_News_20260612_01.txt",
+        "AAPL_News_20260612_05.txt",
+        "AAPL_News_20260612_03.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-03",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.42857142857142855,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260612_04.txt",
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_05.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.42857142857142855,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260612_04.txt",
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_05.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-04",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.3333333333333333,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260508_01.txt",
+        "NVDA_News_20260508_02.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.5,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260508_01.txt",
+        "NVDA_News_20260508_02.txt",
+        "NVDA_News_20260519_02.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-05",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.5,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260519_03.txt",
+        "NVDA_News_20260519_01.txt",
+        "NVDA_News_20260508_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.5,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260519_03.txt",
+        "NVDA_News_20260519_01.txt",
+        "NVDA_News_20260508_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-06",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.3333333333333333,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260519_01.txt",
+        "NVDA_News_20260519_02.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.3333333333333333,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260519_01.txt",
+        "NVDA_News_20260519_02.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-07",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.75,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_News_20260612_01.txt",
+        "MSFT_News_20260612_02.txt",
+        "MSFT_News_20260612_03.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.75,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_News_20260612_01.txt",
+        "MSFT_News_20260612_02.txt",
+        "MSFT_News_20260612_03.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-08",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_News_20260612_03.txt",
+        "MSFT_News_20260612_02.txt",
+        "MSFT_News_20260612_01.txt",
+        "MSFT_News_20260519_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_News_20260612_03.txt",
+        "MSFT_News_20260612_01.txt",
+        "MSFT_News_20260612_02.txt",
+        "MSFT_News_20260519_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-09",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.6666666666666666,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_News_20260612_02.txt",
+        "GOOGL_News_20260721_01.txt",
+        "GOOGL_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.6666666666666666,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_News_20260612_02.txt",
+        "GOOGL_News_20260721_01.txt",
+        "GOOGL_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-10",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-11",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-12",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "TSLA_News_20260721_01.txt",
+        "TSLA_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "TSLA_News_20260721_01.txt",
+        "TSLA_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-13",
+    "off": {
+      "pool_file_recall": 0.6666666666666666,
+      "file_recall": 0.16666666666666666,
+      "file_precision": 0.25,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260612_01.txt",
+        "GOOGL_News_20260721_01.txt",
+        "MSFT_News_20260612_03.txt",
+        "AAPL_News_20260519_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.6666666666666666,
+      "file_recall": 0.3333333333333333,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260612_01.txt",
+        "GOOGL_News_20260721_01.txt",
+        "MSFT_News_20260612_03.txt",
+        "NVDA_News_20260508_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-14",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.42857142857142855,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_04.txt",
+        "AAPL_News_20260612_05.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.42857142857142855,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_04.txt",
+        "AAPL_News_20260612_05.txt"
+      ]
+    }
+  },
+  {
+    "id": "news-15",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.5714285714285714,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260612_05.txt",
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_03.txt",
+        "AAPL_News_20260612_04.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.5714285714285714,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_05.txt",
+        "AAPL_News_20260612_03.txt",
+        "AAPL_News_20260612_04.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-01",
+    "off": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.25,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260508_01.txt",
+        "NVDA_News_20260508_02.txt",
+        "NVDA_News_20260519_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.25,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260508_01.txt",
+        "NVDA_News_20260508_02.txt",
+        "NVDA_News_20260519_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-02",
+    "off": {
+      "pool_file_recall": 0.6666666666666666,
+      "file_recall": 0.3333333333333333,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260519_03.txt",
+        "NVDA_News_20260519_01.txt",
+        "NVDA_News_20260508_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.6666666666666666,
+      "file_recall": 0.3333333333333333,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260519_03.txt",
+        "NVDA_News_20260519_01.txt",
+        "NVDA_News_20260508_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-03",
+    "off": {
+      "pool_file_recall": 0.7,
+      "file_recall": 0.3,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_04.txt",
+        "AAPL_News_20260612_05.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.7,
+      "file_recall": 0.3,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_05.txt",
+        "AAPL_News_20260612_04.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-04",
+    "off": {
+      "pool_file_recall": 0.5384615384615384,
+      "file_recall": 0.3076923076923077,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_03.txt",
+        "AAPL_News_20260612_02.txt",
+        "AAPL_News_20260612_04.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.5384615384615384,
+      "file_recall": 0.3076923076923077,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_02.txt",
+        "AAPL_News_20260612_03.txt",
+        "AAPL_News_20260612_04.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-05",
+    "off": {
+      "pool_file_recall": 0.4,
+      "file_recall": 0.3,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_News_20260612_01.txt",
+        "MSFT_News_20260612_03.txt",
+        "MSFT_News_20260612_02.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.4,
+      "file_recall": 0.3,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_News_20260612_01.txt",
+        "MSFT_News_20260612_03.txt",
+        "MSFT_News_20260612_02.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-06",
+    "off": {
+      "pool_file_recall": 0.5714285714285714,
+      "file_recall": 0.5714285714285714,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_News_20260519_01.txt",
+        "MSFT_News_20260612_01.txt",
+        "MSFT_News_20260612_03.txt",
+        "MSFT_News_20260612_02.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.5714285714285714,
+      "file_recall": 0.42857142857142855,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_News_20260519_01.txt",
+        "MSFT_News_20260612_01.txt",
+        "MSFT_News_20260612_03.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-07",
+    "off": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.5,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.5,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-08",
+    "off": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "AMZN_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "AMZN_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-09",
+    "off": {
+      "pool_file_recall": 0.6666666666666666,
+      "file_recall": 0.6666666666666666,
+      "file_precision": 0.6666666666666666,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_News_20260612_02.txt",
+        "GOOGL_News_20260721_01.txt",
+        "GOOGL_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.6666666666666666,
+      "file_recall": 0.6666666666666666,
+      "file_precision": 0.6666666666666666,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_News_20260612_02.txt",
+        "GOOGL_News_20260721_01.txt",
+        "GOOGL_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-10",
+    "off": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.5,
+      "file_precision": 0.6666666666666666,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_News_20260612_02.txt",
+        "GOOGL_News_20260612_01.txt",
+        "GOOGL_News_20260721_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.5,
+      "file_precision": 0.6666666666666666,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_News_20260612_02.txt",
+        "GOOGL_News_20260612_01.txt",
+        "GOOGL_News_20260721_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-11",
+    "off": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.5,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.5,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-12",
+    "off": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "META_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "META_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-13",
+    "off": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.5,
+      "file_precision": 0.5,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "TSLA_News_20260721_01.txt",
+        "TSLA_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.5,
+      "file_precision": 0.5,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "TSLA_News_20260721_01.txt",
+        "TSLA_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-14",
+    "off": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "TSLA_News_20260721_01.txt",
+        "TSLA_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "TSLA_News_20260721_01.txt",
+        "TSLA_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "mi-15",
+    "off": {
+      "pool_file_recall": 0.25,
+      "file_recall": 0.1875,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_News_20260612_01.txt",
+        "MSFT_News_20260612_03.txt",
+        "MSFT_News_20260612_02.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.25,
+      "file_recall": 0.1875,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_News_20260612_01.txt",
+        "MSFT_News_20260612_03.txt",
+        "MSFT_News_20260612_02.txt"
+      ]
+    }
+  },
+  {
+    "id": "sem-01",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_10Q_202510.html",
+        "NVDA_10Q_202604.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_10Q_202510.html",
+        "NVDA_Fundamentals_20260519.txt"
+      ]
+    }
+  },
+  {
+    "id": "sem-02",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_Fundamentals_20260612.txt",
+        "NVDA_Fundamentals_20260519.txt",
+        "NVDA_Fundamentals_20260508.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_10Q_202510.html",
+        "NVDA_10Q_202604.html",
+        "NVDA_Fundamentals_20260519.txt"
+      ]
+    }
+  },
+  {
+    "id": "sem-03",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_10K_2025.html",
+        "MSFT_News_20260612_03.txt",
+        "MSFT_10Q_202603.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_10K_2025.html",
+        "MSFT_News_20260612_03.txt",
+        "MSFT_Fundamentals_20260519.txt"
+      ]
+    }
+  },
+  {
+    "id": "sem-04",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_10K_2025.html",
+        "MSFT_10Q_202603.html",
+        "MSFT_10Q_202512.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_10K_2025.html",
+        "MSFT_Fundamentals_20260519.txt",
+        "MSFT_Fundamentals_20260612.txt"
+      ]
+    }
+  },
+  {
+    "id": "sem-05",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_10K_2025.html",
+        "AMZN_10Q_202603.html",
+        "AMZN_10Q_202509.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_10K_2025.html",
+        "AMZN_10Q_202603.html",
+        "AMZN_10Q_202509.html"
+      ]
+    }
+  },
+  {
+    "id": "sem-06",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 3,
+      "top_sources": [
+        "AMZN_10Q_202509.html",
+        "AMZN_10Q_202603.html",
+        "AMZN_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "AMZN_10Q_202509.html",
+        "AMZN_10K_2025.html",
+        "AMZN_10Q_202603.html"
+      ]
+    }
+  },
+  {
+    "id": "sem-07",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_10K_2025.html",
+        "GOOGL_Fundamentals_20260612.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_10K_2025.html",
+        "GOOGL_Fundamentals_20260612.txt"
+      ]
+    }
+  },
+  {
+    "id": "sem-08",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_10K_2025.html",
+        "GOOGL_10Q_202603.html",
+        "GOOGL_10Q_202606.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_10K_2025.html",
+        "GOOGL_10Q_202606.html"
+      ]
+    }
+  },
+  {
+    "id": "sem-09",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_10K_2025.html",
+        "META_10Q_202603.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "META_10Q_202603.html",
+        "META_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "sem-10",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_10K_2025.html",
+        "META_Fundamentals_20260612.txt",
+        "META_10Q_202509.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_10K_2025.html",
+        "META_Fundamentals_20260612.txt",
+        "META_10Q_202509.html"
+      ]
+    }
+  },
+  {
+    "id": "sem-11",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202603.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202603.html"
+      ]
+    }
+  },
+  {
+    "id": "sem-12",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "sem-13",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "TSLA_Fundamentals_20260612.txt",
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202603.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "TSLA_Fundamentals_20260612.txt",
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202603.html"
+      ]
+    }
+  },
+  {
+    "id": "sem-14",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "sem-15",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_10K_2025.html",
+        "AAPL_News_20260612_02.txt",
+        "AAPL_Fundamentals_20260519.txt",
+        "AAPL_Fundamentals_20260612.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_10K_2025.html",
+        "AAPL_News_20260612_02.txt",
+        "AAPL_10Q_202603.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-01",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_10Q_202603.html",
+        "MSFT_10Q_202512.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_10Q_202603.html",
+        "MSFT_10Q_202512.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-02",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_10Q_202603.html",
+        "MSFT_10K_2025.html",
+        "MSFT_10Q_202512.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "MSFT_10K_2025.html",
+        "MSFT_10Q_202603.html",
+        "MSFT_10Q_202512.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-03",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "MSFT_10Q_202512.html",
+        "MSFT_Fundamentals_20260508.txt",
+        "MSFT_Fundamentals_20260519.txt",
+        "MSFT_Fundamentals_20260612.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 4,
+      "top_sources": [
+        "MSFT_10Q_202512.html",
+        "MSFT_10K_2025.html",
+        "MSFT_10Q_202603.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-04",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "AMZN_10Q_202509.html",
+        "AMZN_10Q_202603.html",
+        "AMZN_Fundamentals_20260612.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "AMZN_10Q_202509.html",
+        "AMZN_10Q_202603.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-05",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_10Q_202603.html",
+        "AMZN_10K_2025.html",
+        "AMZN_10Q_202509.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_10Q_202603.html",
+        "AMZN_10Q_202509.html",
+        "AMZN_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-06",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_10Q_202603.html",
+        "GOOGL_10K_2025.html",
+        "GOOGL_10Q_202606.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_10Q_202603.html",
+        "GOOGL_10K_2025.html",
+        "GOOGL_10Q_202606.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-07",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "GOOGL_10Q_202606.html",
+        "GOOGL_10Q_202603.html",
+        "GOOGL_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "GOOGL_10Q_202606.html",
+        "GOOGL_10Q_202603.html",
+        "GOOGL_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-08",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 4,
+      "top_sources": [
+        "META_Fundamentals_20260612.txt",
+        "META_10K_2025.html",
+        "META_10Q_202603.html",
+        "META_10Q_202509.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "META_10K_2025.html",
+        "META_IncomeStatement_20260612.txt",
+        "META_Fundamentals_20260612.txt",
+        "META_10Q_202509.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-09",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 3,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_10Q_202603.html",
+        "AAPL_10Q_202512.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 4,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_10Q_202512.html",
+        "AAPL_10Q_202603.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-10",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.2,
+      "first_gold_rank": 3,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_04.txt",
+        "AAPL_10Q_202603.html",
+        "AAPL_10Q_202512.html",
+        "AAPL_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.2,
+      "first_gold_rank": 3,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_News_20260612_04.txt",
+        "AAPL_10Q_202603.html",
+        "AAPL_10Q_202512.html",
+        "AAPL_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-11",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 3,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_10Q_202510.html",
+        "NVDA_10Q_202604.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10Q_202604.html",
+        "NVDA_10Q_202510.html",
+        "NVDA_10K_2026.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-12",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "NVDA_10Q_202510.html",
+        "NVDA_10K_2026.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "NVDA_10Q_202510.html",
+        "NVDA_10K_2026.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-13",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10Q_202603.html",
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202606.html",
+        "TSLA_Fundamentals_20260612.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10Q_202603.html",
+        "TSLA_Fundamentals_20260612.txt",
+        "TSLA_10Q_202606.html",
+        "TSLA_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-14",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10Q_202603.html",
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202606.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202603.html",
+        "TSLA_10Q_202606.html"
+      ]
+    }
+  },
+  {
+    "id": "mix-15",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10Q_202603.html",
+        "TSLA_10Q_202606.html",
+        "TSLA_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10Q_202603.html",
+        "TSLA_10Q_202606.html",
+        "TSLA_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-01",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.75,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_Fundamentals_20260519.txt",
+        "NVDA_Fundamentals_20260508.txt",
+        "NVDA_Fundamentals_20260612.txt",
+        "NVDA_10K_2026.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_Fundamentals_20260519.txt",
+        "NVDA_Fundamentals_20260508.txt",
+        "NVDA_Fundamentals_20260612.txt"
+      ]
+    }
+  },
+  {
+    "id": "lex-02",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_Fundamentals_20260508.txt",
+        "NVDA_Fundamentals_20260519.txt",
+        "NVDA_Fundamentals_20260612.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_Fundamentals_20260508.txt",
+        "NVDA_Fundamentals_20260519.txt",
+        "NVDA_Fundamentals_20260612.txt"
+      ]
+    }
+  },
+  {
+    "id": "lex-03",
+    "off": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_10Q_202604.html",
+        "NVDA_10Q_202510.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_10Q_202604.html",
+        "NVDA_10Q_202510.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-04",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_10Q_202510.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_Fundamentals_20260519.txt"
+      ]
+    }
+  },
+  {
+    "id": "lex-05",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_10Q_202604.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10K_2026.html",
+        "NVDA_10Q_202604.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-06",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.75,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_Fundamentals_20260612.txt",
+        "AAPL_Fundamentals_20260519.txt",
+        "AAPL_Fundamentals_20260508.txt",
+        "AAPL_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.75,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_Fundamentals_20260508.txt",
+        "AAPL_Fundamentals_20260519.txt",
+        "AAPL_Fundamentals_20260612.txt",
+        "AAPL_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-07",
+    "off": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "AAPL_10K_2025.html",
+        "AAPL_10Q_202512.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "AAPL_10K_2025.html",
+        "AAPL_10Q_202512.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-08",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.6,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_Fundamentals_20260612.txt",
+        "MSFT_Fundamentals_20260508.txt",
+        "MSFT_Fundamentals_20260519.txt",
+        "MSFT_10K_2025.html",
+        "MSFT_10Q_202512.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.6,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_Fundamentals_20260612.txt",
+        "MSFT_Fundamentals_20260508.txt",
+        "MSFT_Fundamentals_20260519.txt",
+        "MSFT_10K_2025.html",
+        "MSFT_10Q_202512.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-09",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_Fundamentals_20260612.txt",
+        "AMZN_10K_2025.html",
+        "AMZN_10Q_202603.html",
+        "AMZN_10Q_202509.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_Fundamentals_20260612.txt",
+        "AMZN_10K_2025.html",
+        "AMZN_10Q_202603.html",
+        "AMZN_10Q_202509.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-10",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_10K_2025.html",
+        "AMZN_10Q_202509.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AMZN_10K_2025.html",
+        "AMZN_10Q_202509.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-11",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "GOOGL_10K_2025.html",
+        "GOOGL_Fundamentals_20260612.txt",
+        "GOOGL_10Q_202603.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "GOOGL_10K_2025.html",
+        "GOOGL_Fundamentals_20260612.txt",
+        "GOOGL_10Q_202606.html",
+        "GOOGL_10Q_202603.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-12",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_10Q_202603.html",
+        "GOOGL_10Q_202606.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_10Q_202603.html",
+        "GOOGL_10Q_202606.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-13",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_Fundamentals_20260612.txt",
+        "META_IncomeStatement_20260612.txt",
+        "META_10Q_202509.html",
+        "META_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_Fundamentals_20260612.txt",
+        "META_IncomeStatement_20260612.txt",
+        "META_10Q_202509.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-14",
+    "off": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "META_10Q_202509.html",
+        "META_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "META_10Q_202509.html",
+        "META_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "lex-15",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202603.html",
+        "TSLA_10Q_202606.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202603.html",
+        "TSLA_Fundamentals_20260612.txt",
+        "TSLA_10Q_202606.html"
+      ]
+    }
+  },
+  {
+    "id": "col-01",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10K_2026.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_10K_2026.html"
+      ]
+    }
+  },
+  {
+    "id": "col-02",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_10K_2025.html",
+        "MSFT_News_20260612_03.txt",
+        "MSFT_10Q_202603.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_10K_2025.html",
+        "MSFT_News_20260612_03.txt",
+        "MSFT_10Q_202512.html"
+      ]
+    }
+  },
+  {
+    "id": "col-03",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "AMZN_News_20260612_01.txt",
+        "AMZN_10K_2025.html",
+        "AMZN_10Q_202603.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "AMZN_News_20260612_01.txt",
+        "AMZN_10K_2025.html"
+      ]
+    }
+  },
+  {
+    "id": "col-04",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_10K_2025.html",
+        "GOOGL_News_20260612_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.5,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "GOOGL_10K_2025.html",
+        "GOOGL_News_20260612_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "col-05",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_10K_2025.html",
+        "META_10Q_202603.html",
+        "META_Fundamentals_20260612.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "META_10K_2025.html",
+        "META_10Q_202603.html",
+        "META_Fundamentals_20260612.txt"
+      ]
+    }
+  },
+  {
+    "id": "col-06",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202603.html",
+        "TSLA_News_20260721_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "TSLA_10K_2025.html",
+        "TSLA_10Q_202603.html",
+        "TSLA_News_20260721_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "col-07",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 5,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_10Q_202512.html",
+        "AAPL_10Q_202603.html",
+        "AAPL_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.0,
+      "file_precision": 0.0,
+      "first_gold_rank": null,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_10Q_202603.html",
+        "AAPL_10Q_202512.html",
+        "AAPL_Fundamentals_20260519.txt"
+      ]
+    }
+  },
+  {
+    "id": "col-08",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_Fundamentals_20260508.txt",
+        "NVDA_Fundamentals_20260519.txt",
+        "NVDA_Fundamentals_20260612.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 1.0,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_Fundamentals_20260519.txt",
+        "NVDA_Fundamentals_20260508.txt",
+        "NVDA_Fundamentals_20260612.txt"
+      ]
+    }
+  },
+  {
+    "id": "col-09",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.6,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_Fundamentals_20260519.txt",
+        "AAPL_Fundamentals_20260508.txt",
+        "AAPL_Fundamentals_20260612.txt",
+        "AAPL_10K_2025.html",
+        "AAPL_10Q_202512.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.6,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "AAPL_Fundamentals_20260612.txt",
+        "AAPL_Fundamentals_20260508.txt",
+        "AAPL_Fundamentals_20260519.txt",
+        "AAPL_10K_2025.html",
+        "AAPL_10Q_202512.html"
+      ]
+    }
+  },
+  {
+    "id": "col-10",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.6,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_Fundamentals_20260519.txt",
+        "MSFT_Fundamentals_20260508.txt",
+        "MSFT_Fundamentals_20260612.txt",
+        "MSFT_10K_2025.html",
+        "MSFT_10Q_202512.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.6,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "MSFT_Fundamentals_20260519.txt",
+        "MSFT_Fundamentals_20260612.txt",
+        "MSFT_Fundamentals_20260508.txt",
+        "MSFT_10K_2025.html",
+        "MSFT_10Q_202512.html"
+      ]
+    }
+  },
+  {
+    "id": "col-11",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 3,
+      "top_sources": [
+        "MSFT_10K_2025.html",
+        "MSFT_10Q_202512.html",
+        "MSFT_10Q_202603.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 3,
+      "top_sources": [
+        "MSFT_10K_2025.html",
+        "MSFT_10Q_202512.html",
+        "MSFT_10Q_202603.html"
+      ]
+    }
+  },
+  {
+    "id": "col-12",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 4,
+      "top_sources": [
+        "META_Fundamentals_20260612.txt",
+        "META_10K_2025.html",
+        "META_10Q_202509.html",
+        "META_10Q_202603.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.3333333333333333,
+      "first_gold_rank": 3,
+      "top_sources": [
+        "META_Fundamentals_20260612.txt",
+        "META_10Q_202509.html",
+        "META_10Q_202603.html"
+      ]
+    }
+  },
+  {
+    "id": "col-13",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "AAPL_News_20260519_01.txt",
+        "AAPL_10Q_202603.html",
+        "AAPL_10K_2025.html",
+        "AAPL_10Q_202512.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 1.0,
+      "file_precision": 0.25,
+      "first_gold_rank": 4,
+      "top_sources": [
+        "AAPL_10K_2025.html",
+        "AAPL_News_20260519_01.txt",
+        "AAPL_10Q_202603.html",
+        "AAPL_10Q_202512.html"
+      ]
+    }
+  },
+  {
+    "id": "col-14",
+    "off": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.5,
+      "file_precision": 0.75,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260508_02.txt",
+        "NVDA_News_20260508_01.txt",
+        "NVDA_10K_2026.html",
+        "NVDA_News_20260519_01.txt"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 0.5,
+      "file_recall": 0.5,
+      "file_precision": 0.75,
+      "first_gold_rank": 1,
+      "top_sources": [
+        "NVDA_News_20260508_02.txt",
+        "NVDA_News_20260508_01.txt",
+        "NVDA_10K_2026.html",
+        "NVDA_News_20260519_01.txt"
+      ]
+    }
+  },
+  {
+    "id": "col-15",
+    "off": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.5,
+      "file_precision": 0.25,
+      "first_gold_rank": 3,
+      "top_sources": [
+        "TSLA_News_20260721_01.txt",
+        "TSLA_10Q_202606.html",
+        "TSLA_News_20260612_01.txt",
+        "TSLA_10K_2025.html"
+      ]
+    },
+    "on": {
+      "pool_file_recall": 1.0,
+      "file_recall": 0.5,
+      "file_precision": 0.25,
+      "first_gold_rank": 2,
+      "top_sources": [
+        "TSLA_News_20260721_01.txt",
+        "TSLA_News_20260612_01.txt",
+        "TSLA_10Q_202606.html",
+        "TSLA_10K_2025.html"
+      ]
+    }
+  }
+]

@@ -1,0 +1,53 @@
+[incorrect|news] news-03 : System includes contradictory and unsupported facts such as a services gross margin of >48% (reference states 74.2%) and iPhone 17 revenue growth figures not mentioned in the refer
+[partial|news] news-08 : System answer correctly states that Microsoft is involved in AI security cooperation, but it cites a different partnership (OpenAI) and omits the specific Anthropic Project Glasswi
+[incorrect|news] news-09 : System misstates the scale of the equity raise and capex by using “億” (hundred‑million) units, e.g., 84.75 億美元 (≈$8.5 B) instead of $84.75 billion, so the reported amounts are off 
+[incorrect|news] news-12 : System adds a second news item (Tesla earnings call on July 20 2026 about mergers and new businesses) that is not present in the reference; this fact cannot be verified and contrad
+[incorrect|news] news-13 : System misstates key facts from the reference: it says Nvidia fell 1.33% (reference reports Nvidia rose 2.22% in the same session) and gives contradictory Tesla moves, while omitti
+[incorrect|multi_intent] mi-01 : System answer misstates key partnership figures: it claims a $210 million investment right and a 5 GW AI infrastructure deal, whereas the reference specifies up to $21 billion inve
+[incorrect|multi_intent] mi-02 : System states NVIDIA's current gross margin as 74.1%, but the reference indicates it is about 71.1%; this factual error makes the answer incorrect despite correct commentary on the
+[incorrect|multi_intent] mi-03 : System states Apple’s overall gross margin is ~47.9% (TTM) and 46.9% for 2025, contradicting the reference that analysts expect it to stay above 48%; it also characterizes market s
+[partial|multi_intent] mi-04 : System gives a specific 16.6% (and 12.8%) revenue growth figure, but the reference states no single company‑wide growth percentage is provided, only that growth is double‑digit; th
+[partial|multi_intent] mi-05 : AI section correctly states the seven self‑developed models and their strategic implications, but the revenue part omits the overall ~18.3% YoY growth figure and total revenue, pro
+[partial|multi_intent] mi-07 : Provides correct gross‑margin (≈50.6%) and accurate strategy details, but misstates the European investment amount as €10 億 (≈1 billion) instead of the correct >€10 billion (≈100 b
+[incorrect|multi_intent] mi-08 : System gives a 12% full‑year growth (and a 17% Q1 figure) which does not match the reference’s 16.6% trailing‑12‑month growth, and it incorrectly claims no information on the hedge
+[incorrect|multi_intent] mi-10 : System answer adds a false detail that all 15 of Alphabet’s half‑billion‑user products now use Gemini models, which is not supported by the reference and appears inaccurate, making
+[incorrect|multi_intent] mi-11 : System inflates Morgan Stanley's cited AI capital spend to $3800 億美元 (≈$380 billion) instead of the correct $380 億美元 (≈$38 billion), contradicting the reference.
+[incorrect|multi_intent] mi-12 : The system correctly states Meta's ~33% YoY revenue growth, but incorrectly claims no information exists about hedge‑fund selling of tech stocks before the SpaceX IPO and thus does
+[incorrect|multi_intent] mi-14 : The system claims Tesla's automotive margin improved year‑to‑date (rising from ~16.8% to 18.7%) whereas the reference states the margin is falling (from 18.7% to 16.8% quarter‑over
+[incorrect|multi_intent] mi-15 : System incorrectly claims the H200 chip is authorized for sale in China, contradicting the reference which says H200 (along with Blackwell and Rubin) remains banned, making the sta
+[partial|semantic] sem-06 : The answer correctly notes antitrust investigations affecting AWS, Prime and e‑commerce, but omits many specific regulatory risks highlighted in the reference (e.g., foreign‑invest
+[partial|semantic] sem-07 : System correctly notes Gemini AI is embedded in Search and other core products like Workspace and Enterprise, but omits many products (YouTube, Maps, Photos, Android, Chrome, Drive
+[partial|semantic] sem-12 : System answer correctly states the intense, growing competition from incumbents and new entrants and its impact on sales/pricing, but omits key aspects mentioned in the reference s
+[incorrect|semantic] sem-14 : The answer claims the 10‑K states Apple holds a "minority" market share in smartphones, PCs and tablets, but the reference explicitly says the filing provides no specific market‑sh
+[incorrect|semantic] sem-15 : System answer describes developer stickiness as driven by perceived revenue, talent retention and low market share, which contradicts the reference that attributes stickiness to ma
+[incorrect|mixed] mix-01 : System states Azure grew 40% in Q2 FY2026, but the reference shows the growth was in the third quarter of fiscal 2026 (ended 31 Mar 2026), so it provides a wrong fact about the qua
+[incorrect|mixed] mix-02 : System states Windows OEM revenue increased 2% while the reference says Windows OEM revenue fell 2%, contradicting the core fact about the segment’s decline
+[incorrect|mixed] mix-03 : The system states the operating income grew by $6.4 billion (≈20%), whereas the reference says it rose by $20.4 billion (≈22%); this discrepancy makes the core growth figure wrong 
+[incorrect|mixed] mix-05 : System adds that tech/infrastructure investment was a core driver of profit growth, which contradicts the reference that attributes the growth solely to revenue increase; this is a
+[incorrect|mixed] mix-06 : System gives the correct growth rate (≈82%) but reports the revenue figures and increase amount as $13.6 B to $24.8 B (≈$11 B increase), which is ten‑times smaller than the referen
+[incorrect|mixed] mix-10 : The system claims iPhone revenue growth was driven by Pro‑model iPhones, contradicting the reference which states the growth was driven by the new iPhone 17e and overall iPhone sal
+[incorrect|mixed] mix-14 : While the growth figures are correct, the answer adds extra primary drivers (higher ASP from sales mix/FX and FSD subscriptions) that are not supported by the reference and contrad
+[incorrect|lexical] lex-10 : System states cash capital expenditures of $131.8 billion, which contradicts the reference value of about $128.3 billion for 2025
+[partial|colloquial] col-02 : the answer correctly notes that AI is embedded via Microsoft 365 Copilot and AI‑enabled tools in Office, but it omits the core details about licensing OpenAI’s large‑language model
+[incorrect|colloquial] col-03 : The answer incorrectly states that Amazon invested $15 billion in OpenAI and partnered with OpenAI, whereas the reference shows Amazon’s AI investment was a $1.3 billion convertibl
+[incorrect|colloquial] col-07 : The system claims insufficient information, but the reference clearly states Apple does not admit it is not the smartphone market leader, so the system fails to provide the correct
+[partial|colloquial] col-11 : Core claim that Microsoft’s cloud services are growing very quickly is correct, but the reported growth rates for Microsoft 365 Commercial (18% vs. 17% in reference) and Microsoft 
+[incorrect|colloquial] col-12 : The system answer does not state the correct overall revenue growth of about 33% YoY and incorrectly claims the reference lacks a consolidated growth figure, contradicting the refe
+[incorrect|colloquial] col-13 : System reports Q2 2026 Greater China net sales as $20,497 billion, contradicting the reference figure of $204.97 billion (off by a factor of 10), thus stating a wrong fact about re
+[incorrect|colloquial] col-14 : System correctly names IREN Limited but adds a false detail that Nvidia’s investment rights vest only after IREN deploys 600,000 GPUs, which is not in the reference and contradicts
+[incorrect|colloquial] col-15 : System claims the report did not mention SpaceX’s IPO, contradicting the reference which states SpaceX is preparing a June 2026 IPO, and provides a net income figure (≈$1.1 B) not 
+[incorrect|multi_hop] mh-03 : The answer adds YoY growth figures for Meta and Alphabet that contradict the reference, which states those data are not listed; thus it contains wrong facts despite the correct cor
+[incorrect|multi_hop] mh-10 : System claims Meta's net income is not disclosed, contradicting the reference which states the net income is $60.46 billion
+
+--- counts by (verdict,category) ---
+('incorrect', 'colloquial') = 6
+('incorrect', 'lexical') = 1
+('incorrect', 'mixed') = 7
+('incorrect', 'multi_hop') = 2
+('incorrect', 'multi_intent') = 9
+('incorrect', 'news') = 4
+('incorrect', 'semantic') = 2
+('partial', 'colloquial') = 2
+('partial', 'multi_intent') = 3
+('partial', 'news') = 1
+('partial', 'semantic') = 3

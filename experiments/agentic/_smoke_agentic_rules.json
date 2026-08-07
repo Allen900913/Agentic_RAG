@@ -1,0 +1,90 @@
+{
+  "mix-06": {
+    "answer": "Google Cloud 在最新一季（截至2026年6月30日的三個月）收入比去年同期增長了 **111 億美元**【GOOGL_10Q_202606.html, chunk #47】。  \n\n- 2025 年同季（截至2025年6月30日）Google Cloud 收入為 **136.24 億美元**（13,624 百萬美元）【GOOGL_10Q_202606.html, chunk #47】。  \n- 2026 年同季（截至2026年6月30日）Google Cloud 收入為 **258.84 億美元**（25,884 百萬美元）【GOOGL_10Q_202606.html, chunk #47】。  \n- 公司在說明中指出，Google Cloud 收入較去年同期 **增加了 111 億美元**（對應三個月比較）【GOOGL_10Q_202606.html, chunk #47】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_10Q_202606.html #47 (rerank=0.727)\n  - GOOGL_10Q_202606.html #43 (rerank=0.713)",
+    "sub_queries": [
+      "Google Cloud 部門 FY2026 Q2 營收成長多少"
+    ],
+    "sources": [
+      "GOOGL_10Q_202606.html"
+    ]
+  },
+  "mi-11": {
+    "answer": "Meta 的毛利率約為 **81.9%（TTM）**，而市場在評估其 AI 投資時，普遍認為這將擴大公司的競爭護城河，但同時對未來巨額資本支出與可見性抱持謹慎態度，仍給予相對樂觀的目標價與評等。  \n\n**毛利率細節**  \n- 依最新的 TTM 財務資料，Meta 的毛利率為 0.81941，即 **81.941%**【META_Fundamentals_20260612.txt, chunk #0】。  \n\n**Morgan Stanley 對 AI 投資的評價與市場觀感**  \n- Morgan Stanley 分析師 Brian Nowak 表示，Meta 正在「**擴大 AI 相關的競爭護城河**」且「**大量 AI 支出**」將推動未來成長【META_News_20260612_01.txt, chunk #0】。  \n- 分析師指出，市場對 Meta 的投資情緒較其他巨型科技公司較為落後，主要因為 **2027‑2028 年預計 3800 億美元的資本支出** 可見度有限【META_News_20260612_01.txt, chunk #0】。  \n- Nowak 預測這些 AI 投資可在 2028 年為每股盈餘（EPS）增加 **1‑3 美元**，並認為 Meta 的 AI 搜尋工具若能吸引 10% 的每日查詢量，將可能產生 **超過 100 億美元的年營收**【META_News_20260612_01.txt, chunk #0】。  \n- 同時，Meta 已開始推出分層訂閱方案，以追求 **高毛利率的收入來源**，這也被視為提升未來利潤的正面因素【META_News_20260612_01.txt, chunk #0】。  \n- 基於上述因素，Morgan Stanley **重申 Meta 為「最佳永續持有股票」**，並給予 **775 美元的目標價**，顯示分析師對其 AI 投資持 **看好** 的態度【META_News_20260612_01.txt, chunk #0】。  \n\n**綜合市場看法**  \n- 高達 81.9% 的毛利率顯示 Meta 仍具備強勁的盈利能力。  \n- 市場認為 AI 投資將進一步鞏固其護城河，儘管巨額資本支出帶來可見度風險，分析師仍給予正面評價與較高目標價，反映出對 AI 成長潛力的整體樂觀情緒。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_Fundamentals_20260612.txt #0 (rerank=0.721)\n  - META_News_20260612_01.txt #0 (rerank=0.715)",
+    "sub_queries": [
+      "Meta 的最新毛利率是多少",
+      "Morgan Stanley 在新聞中對 Meta AI 護城河與資本支出的評價是什麼",
+      "市場如何綜合看待 Meta 的 AI 投資"
+    ],
+    "sources": [
+      "META_Fundamentals_20260612.txt",
+      "META_News_20260612_01.txt"
+    ]
+  },
+  "col-13": {
+    "answer": "Apple 在大中華區的銷售近期表現非常強勁，2026 年第一季與第二季的年比增長分別達到約 38% 與 28%【AAPL_10Q_202512.html, chunk #53】【AAPL_10Q_202603.html, chunk #65】。  \n\n- 2026 年第一季（截至 2025 年 12 月 27 日）大中華區淨銷售額為 **25,526 百萬美元**，較 2024 年同季的 **18,513 百萬美元** 增長 **38%**【AAPL_10Q_202512.html, chunk #53】。  \n- 2026 年第二季（截至 2026 年 3 月 28 日）大中華區淨銷售額為 **20,497 百萬美元**，較 2025 年同季的 **16,002 百萬美元** 增長 **28%**【AAPL_10Q_202603.html, chunk #65】。  \n\n此外，新聞稿亦指出「大中華區，這個大家都寫下的區域，成長了 28%」，再次確認了該區域的強勁增長【AAPL_News_20260519_01.txt, chunk #2】。  \n\n綜合以上資料，Apple 在大中華區的銷售最近持續大幅上升，呈現出顯著的增長勢頭。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_News_20260519_01.txt #2 (rerank=0.665)\n  - AAPL_10Q_202603.html #65 (rerank=0.660)\n  - AAPL_10Q_202512.html #53 (rerank=0.630)",
+    "sub_queries": [
+      "蘋果在大中華區最近賣得好不好？"
+    ],
+    "sources": [
+      "AAPL_10Q_202512.html",
+      "AAPL_10Q_202603.html",
+      "AAPL_News_20260519_01.txt"
+    ]
+  },
+  "news-09": {
+    "answer": "Alphabet 最近宣布將透過股權籌資約 **845 億美元**，並預計本年度的資本支出將升至 **1,850 億美元**【GOOGL_News_20260612_02.txt, chunk #0】。  \n\n- 這筆 **84.75 億美元** 的資本增資由 Moody’s 評級公司於 6 月 5 日確認，顯示 Alphabet 仍能以發行股票而非舉債的方式取得資金【GOOGL_News_20260612_02.txt, chunk #0】。  \n- 其中約 **34.75 億美元** 來自公開發行普通股及 6.25% 強制可轉換優先證券【GOOGL_News_20260612_02.txt, chunk #0】。  \n- 另外公司正規劃 **400 億美元** 的市場股權發行計畫，以及 **100 億美元** 的與 Berkshire Hathaway 合作的私募配售【GOOGL_News_20260612_02.txt, chunk #0】。  \n- 募得的淨收益將用於一般企業用途，重點包括人工智慧基礎設施與全球運算容量擴張【GOOGL_News_20260612_02.txt, chunk #0】。  \n- 同時，Moody’s 預測 Alphabet 本年度的資本支出將達 **1850 億美元**，較去年 **915 億美元** 大幅提升【GOOGL_News_20260612_02.txt, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_News_20260612_02.txt #0 (rerank=0.673)",
+    "sub_queries": [
+      "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？"
+    ],
+    "sources": [
+      "GOOGL_News_20260612_02.txt"
+    ]
+  },
+  "mi-14": {
+    "answer": "Tesla 的財報並未單獨列出汽車業務的毛利額或毛利率，因此只能以整體毛利率作為近季的參考；整體毛利率在 2026 Q1 上升、在 2026 Q2 下降，顯示短期內呈現波動而非持續改善【TSLA_10Q_202603.html, chunk #0】【TSLA_10Q_202606.html, chunk #0】。  \n\n**毛利率變化**  \n- 2026 Q1：毛利 $4,720 M ÷ 營收 $22,387 M = **21.1 %**【TSLA_10Q_202603.html, chunk #0】。  \n- 2025 Q1：毛利 $3,153 M ÷ 營收 $19,335 M = **16.3 %**【TSLA_10Q_202603.html, chunk #0】。  \n- 2026 Q2：毛利 $4,751 M ÷ 營收 $28,236 M = **16.8 %**【TSLA_10Q_202606.html, chunk #0】。  \n- 2025 Q2：毛利 $3,878 M ÷ 營收 $22,496 M = **17.2 %**【TSLA_10Q_202606.html, chunk #0】。  \n\n因此，2026 Q1 的整體毛利率較前一年提升約 4.8 個百分點，而 2026 Q2 則較 2025 Q2 下降約 0.4 個百分點，呈現「先升後降」的短期走勢。由於缺少汽車部門的成本細分，我們無法直接計算汽車毛利率的變化。\n\n**股價訊號與 Magnificent Seven 的跌勢**  \n提供的新聞稿僅提到 Tesla 股價當時下跌 **2.96 %**，但未提及其他「Magnificent Seven」科技股的同步走勢或其對 Tesla 股價的影響【TSLA_News_20260721_01.txt, chunk #0】。因此，根據現有資料，我們只能說：\n\n- Tesla 股價在報導時已下跌約 3%，顯示投資者對近期業績或市場情緒有一定的負面反應。  \n- 由於材料中沒有關於 Magnificent Seven 全部下跌的報導，無法具體說明這一宏觀市場事件對 Tesla 股價的額外影響。  \n\n**結論**  \nTesla 的整體毛利率在 2026 Q1 顯著改善、2026 Q2 稍有回落，顯示毛利率呈波動走勢；股價當時已下跌約 3%，但缺乏資料說明 Magnificent Seven 的同步跌勢如何進一步影響 Tesla 的股價表現。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_10Q_202606.html #0 (rerank=0.726)\n  - TSLA_10Q_202603.html #0 (rerank=0.725)\n  - TSLA_News_20260721_01.txt #0 (rerank=0.706)",
+    "sub_queries": [
+      "Tesla 汽車業務的毛利率近期變化趨勢是什麼？",
+      "在 Magnificent Seven 科技股全數下跌的新聞期間，Tesla 的股價表現如何？"
+    ],
+    "sources": [
+      "TSLA_10Q_202603.html",
+      "TSLA_10Q_202606.html",
+      "TSLA_News_20260721_01.txt"
+    ]
+  },
+  "mix-02": {
+    "answer": "In the latest quarter (the three months ended March 31 2026), Microsoft’s **More Personal Computing** segment posted revenue of **$13.192 billion**, a **1 % decline** (down $179 million) versus the same quarter a year earlier【MSFT_10Q_202603.html, chunk #104】.  \n\nThe drop was driven by several offsetting forces:  \n\n* **Windows and Devices revenue fell $103 million (‑2 %)**, with the Devices side weakening while **Windows OEM sales grew**, partially cushioning the decline【MSFT_10Q_202603.html, chunk #107】.  \n* **Gaming revenue slipped $380 million (‑7 %)** because of lower Xbox content, services, and a sharp 33 % fall in Xbox hardware sales【MSFT_10Q_202603.html, chunk #107】.  \n* At the same time, **Search advertising revenue rose $304 million (‑+9 %)**, providing a modest boost that helped offset the broader segment weakness【MSFT_10Q_202603.html, chunk #107】.  \n\nThus, the overall 1 % revenue contraction reflects a net effect of declines in Windows & Devices and Gaming that were partially neutralized by growth in Windows OEM and Search advertising.\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202603.html #104 (rerank=0.730)\n  - MSFT_10Q_202512.html #105 (rerank=0.720)\n  - MSFT_10Q_202603.html #103 (rerank=0.717)\n  - MSFT_10Q_202603.html #107 (rerank=0.717)",
+    "sub_queries": [
+      "Microsoft More Personal Computing 部門最新一季營收是多少？",
+      "Microsoft More Personal Computing 部門最新一季營收的正向與負向因素有哪些？"
+    ],
+    "sources": [
+      "MSFT_10Q_202512.html",
+      "MSFT_10Q_202603.html"
+    ]
+  },
+  "mi-12": {
+    "answer": "Meta 的近一年營收成長率約為 **33.1%（YoY）**【META_Fundamentals_20260612.txt, chunk #0】。  \n\n- 這個成長率來自公司最新的 TTM（截至 2026‑06‑12）財務概況，顯示營收較前一年提升了約三分之一。  \n\n- 另一方面，提供的材料中 **沒有** 任何關於「科技股在 SpaceX IPO 前遭避險基金拋售」的新聞報導或分析（如 META_News_20260612_01.txt 中的內容僅談及 Morgan Stanley 對 Meta 的評價，未提及 SpaceX 或相關拋售）【META_News_20260612_01.txt, chunk #0】。因此，根據目前的資料，無法說明此事件對 Meta 股價表現的具體背景意義。  \n\n如需進一步評估此類市場情緒對 Meta 股價的影響，需補充包含該報導的資訊來源。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_Fundamentals_20260612.txt #0 (rerank=0.722)\n  - META_News_20260612_01.txt #0 (rerank=0.578)\n  - META_10K_2025.html #26 (rerank=0.574)\n  - META_10K_2025.html #17 (rerank=0.572)\n  - META_10K_2025.html #139 (rerank=0.560)\n  - META_10Q_202509.html #5 (rerank=0.559)",
+    "sub_queries": [
+      "Meta 近一年營收成長率是多少？",
+      "科技股在 SpaceX IPO 前遭避險基金拋售的報導，對 Meta 股價表現的背景有何意義？"
+    ],
+    "sources": [
+      "META_10K_2025.html",
+      "META_10Q_202509.html",
+      "META_Fundamentals_20260612.txt",
+      "META_News_20260612_01.txt"
+    ]
+  },
+  "mh-10": {
+    "answer": "Meta Platforms, Inc. (NASDAQ: META) is the firm Morgan Stanley singled out for its AI “moat” and a sharply higher capital‑expenditure plan, and its most recent full‑year net income was **$60,458 million (≈ $60.5 billion) for FY 2025**【META_News_20260612_01.txt, chunk #0】【META_10K_2025.html, chunk #0】.\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_10K_2025.html #0 (rerank=0.731)\n  - META_News_20260612_01.txt #0 (rerank=0.705)",
+    "sub_queries": [
+      "哪家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河且大幅提高資本支出？",
+      "該公司 FY2025 的淨利（net income）是多少？"
+    ],
+    "sources": [
+      "META_10K_2025.html",
+      "META_News_20260612_01.txt"
+    ]
+  }
+}

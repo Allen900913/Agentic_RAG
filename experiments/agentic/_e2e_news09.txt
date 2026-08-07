@@ -1,0 +1,12 @@
+Alphabet is raising roughly 850 億美元 in new equity and expects to spend about 1,850 億美元 on capital projects this year【GOOGL_News_20260612_02.txt, chunk #0】.  
+
+- Moody’s reported that Alphabet is moving to raise **847.5 億美元** in total equity, a “massive equity raise” that underscores its strong balance‑sheet capacity【GOOGL_News_20260612_02.txt, chunk #0】.  
+- The company plans to raise **347.5 億美元** through an underwritten public offering of common stock and 6.25 % mandatory convertible preferred securities【GOOGL_News_20260612_02.txt, chunk #0】.  
+- In addition, Alphabet is eyeing a **400 億美元** market‑equity issuance program and a **100 億美元** private placement with Berkshire Hathaway【GOOGL_News_20260612_02.txt, chunk #0】.  
+- Moody’s expects Alphabet’s **capital expenditures to reach 1,850 億美元 this year**, up from **915 億美元** in the prior year【GOOGL_News_20260612_02.txt, chunk #0】.  
+
+These figures together illustrate Alphabet’s recent large‑scale fundraising effort and its planned surge in capital spending.
+
+---
+📚 引用來源（Generator 實際依據的 chunk）:
+  - GOOGL_News_20260612_02.txt #0 (rerank=0.673)

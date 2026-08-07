@@ -1,0 +1,116 @@
+{
+  "collection": "us_stock_rag_edgar_exp3",
+  "payload_field": "document",
+  "reranker_model": "BAAI/bge-reranker-v2-m3",
+  "truncate_limit": 2048,
+  "soft_limit": 1200,
+  "overall": {
+    "n": 3383,
+    "mean": 353.2,
+    "p50": 254,
+    "p90": 803,
+    "p95": 875,
+    "p99": 1123,
+    "max": 1290,
+    "n_over_1200": 5,
+    "pct_over_1200": 0.15,
+    "n_over_2048_truncated": 0,
+    "pct_over_2048_truncated": 0.0
+  },
+  "by_chunk_type": {
+    "table": {
+      "n": 63,
+      "mean": 811.3,
+      "p50": 763,
+      "p90": 1072,
+      "p95": 1187,
+      "p99": 1200,
+      "max": 1290,
+      "n_over_1200": 1,
+      "pct_over_1200": 1.59,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "text": {
+      "n": 3320,
+      "mean": 344.5,
+      "p50": 246,
+      "p90": 799,
+      "p95": 844,
+      "p99": 1116,
+      "max": 1208,
+      "n_over_1200": 4,
+      "pct_over_1200": 0.12,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    }
+  },
+  "by_doc_type": {
+    "10-K": {
+      "n": 1473,
+      "mean": 374.9,
+      "p50": 287,
+      "p90": 804,
+      "p95": 922,
+      "p99": 1131,
+      "max": 1290,
+      "n_over_1200": 3,
+      "pct_over_1200": 0.2,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "10-Q": {
+      "n": 1477,
+      "mean": 403.4,
+      "p50": 331,
+      "p90": 808,
+      "p95": 889,
+      "p99": 1125,
+      "max": 1207,
+      "n_over_1200": 2,
+      "pct_over_1200": 0.14,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "fundamentals": {
+      "n": 42,
+      "mean": 208.6,
+      "p50": 222,
+      "p90": 352,
+      "p95": 437,
+      "p99": 437,
+      "max": 437,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "income_statement": {
+      "n": 105,
+      "mean": 123.5,
+      "p50": 131,
+      "p90": 139,
+      "p95": 142,
+      "p99": 144,
+      "max": 150,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    },
+    "news": {
+      "n": 286,
+      "mean": 87.9,
+      "p50": 76,
+      "p90": 161,
+      "p95": 191,
+      "p99": 309,
+      "max": 421,
+      "n_over_1200": 0,
+      "pct_over_1200": 0.0,
+      "n_over_2048_truncated": 0,
+      "pct_over_2048_truncated": 0.0
+    }
+  },
+  "oversized_examples": []
+}

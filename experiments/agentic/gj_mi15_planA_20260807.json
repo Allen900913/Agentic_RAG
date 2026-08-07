@@ -1,0 +1,651 @@
+{
+  "meta": {
+    "producer": "run_agentic_on_evalset.py",
+    "module": "agentic_rag_v2",
+    "collection": "us_stock_rag_edgar_exp4",
+    "retrieval_model": "openai/gpt-oss-20b",
+    "checker_model": "openai/gpt-oss-120b",
+    "gen_model": "openai/gpt-oss-120b",
+    "validator": true,
+    "web_search": false,
+    "freshness_mode": "snapshot",
+    "eval_set": "eval\\eval_set.json"
+  },
+  "records": [
+    {
+      "id": "mi-01",
+      "category": "multi_intent",
+      "query": "NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？",
+      "answerable": true,
+      "answer": "NVIDIA 最新財報顯示營收同比成長約 **85 %**，而與 IREN 的最新 AI 雲端合作則顯示公司正大幅擴張資料中心容量與 GPU 部署，具體落實在 **5 GW 受保電力、480 MW AI Cloud 建置、150,000 顆 GPU 目標、以及 300 MW 液冷 Childress 專案** 等多項布局【NVDA_Fundamentals_20260612.txt, chunk #0】、【NVDA_10Q_202604.html, chunk #0】、【NVDA_News_20260508_01.txt, chunk #1】、【NVDA_News_20260508_01.txt, chunk #2】。\n\n**營收成長速度**  \n- 基於 TTM 數據，NVIDIA 的營收成長率 (YoY) 為 **0.852**，即約 **85.2 %**【NVDA_Fundamentals_20260612.txt, chunk #0】。  \n- 2026 年第一季營收為 **816.15 億美元（$81,615 million）**，較 2025 年第一季的 **440.62 億美元（$44,062 million）** 增長約 **85 %**，與上述 YoY 成長率相符【NVDA_10Q_202604.html, chunk #0】。\n\n**與 IREN 合作的具體資料中心進展**  \n\n1. **受保電力與基礎建設**  \n   - IREN 在本季將受保電力提升至 **5 GW**，為 AI 基礎設施提供關鍵供電上限【NVDA_News_20260508_01.txt, chunk #1】。  \n\n2. **AI Cloud 容量與 ARR 目標**  \n   - 2026 年目標建置 **480 MW** AI Cloud 容量，配備 **150,000 顆 GPU**，並預計在 2026 年底達成 **37 億美元（$3.7 billion）** 的 ARR（年度經常性收入）【NVDA_News_20260508_01.txt, chunk #1】。  \n   - 2027 年則規劃擴至 **1,210 MW**，其中 **730 MW** 已在建設中【NVDA_News_20260508_01.txt, chunk #1】。  \n\n3. **NVIDIA 合約與投資**  \n   - IREN 與 NVIDIA 簽訂 **34 億美元（$3.4 billion）**、為期五年的 AI Cloud 合約，針對 Air‑cooled Blackwell GPU 部署 **60 MW** 的容量【NVDA_News_20260508_01.txt, chunk #2】。  \n   - 同時，NVIDIA 允許最高 **21 億美元（$2.1 billion）** 的投資權利金，僅在 NVIDIA GPU 基礎設施部署至 **600,000 顆 GPU** 後全部生效【NVDA_News_20260508_01.txt, chunk #2】。  \n\n4. **液冷與空冷部署**  \n   - 在 Childress 站點，正在執行 **300 MW** 的液冷部署（Horizon 1‑4），預計 Q3 交付給 Microsoft，全年完成其餘階段【NVDA_News_20260508_01.txt, chunk #2】。  \n   - 另外，已在 Air‑cooled 形式下部署 **約 60 MW** 的 Blackwell GPU，支撐約 **50,000 顆** 空冷 GPU 的未合約容量【NVDA_News_20260508_01.txt, chunk #2】。  \n\n5. **地域擴張**  \n   - 透過收購 Nostrum Group，IREN 在西班牙新增 **490 MW** 受保電力，為歐洲 AI 資料中心布局奠定基礎【NVDA_News_20260508_01.txt, chunk #2】。  \n\n綜合上述，NVIDIA 不僅在財務上呈現高速營收成長，亦透過與 IREN 的深度合作，實質推動全球資料中心的電力供應、容量擴張、GPU 部署與地域佈局，鞏固其在 AI 雲端與資料中心市場的領先地位。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_News_20260508_01.txt #1 (rerank=0.725)\n  - NVDA_News_20260508_02.txt #0 (rerank=0.717)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.711)\n  - NVDA_10Q_202604.html #14 (rerank=0.643)\n  - NVDA_News_20260508_01.txt #2 (rerank=0.642)\n  - NVDA_10Q_202604.html #0 (rerank=0.606)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "NVDA_News_20260508_01.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_News_20260508_02.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "NVDA_News_20260508_01.txt",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[NVDA] IREN Q3 Earnings Call Highlights\nWritten by MarketBeat\nMay 7, 2026\nShare\nLink copied to clipboard. Key Points\nIREN is pivoting from Bitcoin mining to AI Cloud, increasing secured power to\n5 GW\n, raising contracted ARR to\n$3.1 billion\nand targeting\n$3.7 billion\nby end-2026, anchored by a\n$3.4 billion, five-year AI Cloud contract with NVIDIA\nthat vests as GPUs are deployed. Build-out targets call for\n480 MW\nand roughly\n150,000 GPUs\nin 2026, scaling to\n1,210 MW\nin 2027 with\n730 MW under construction\n, led by a\n300 MW\nliquid-cooled Childress project and ongoing Microsoft and NVIDIA deployments. Q3 shows AI Cloud revenue up to\n$33.6 million\nwhile Bitcoin revenue fell to\n$111.2 million\n; net loss was\n$247.8 million\n(including\n$140.4 million\nof non‑cash impairments), but the company holds\n$2.6 billion\ncash and expects GPU financing and prepayments to fund near‑term capex. MarketBeat previews the top five stocks to own by June 1st\n. GPU Prices Are Surging—3 Ways to Play the AI Chip Shortage\nIREN\nNASDAQ: IREN\nused its fiscal third-quarter earnings call to highlight a rapid expansion in AI data center capacity, a new long-term customer agreement with NVIDIA, and continued progress in shifting its business mix away from Bitcoin mining and toward AI Cloud services. Get\nIREN\nalerts:\nSign Up\nStrategic focus: converting secured power into “time to compute”\nCo-founder and co-CEO Daniel Roberts framed the company’s strategy around a core constraint in AI infrastructure: the ability to translate secured power into customer-ready compute on tight timelines. Roberts said that while digital demand can scale quickly, physical infrastructure—power, permitting, land, and data centers—takes years to build, creating scarcity that is “now defining where AI infrastructure gets built and who can build it.”\nMarketBeat Week in Review – 02/09 - 02/13\nRoberts said IREN increased secured power to\n5 gigawatts\nduring the quarter, added new sites in\nEurope and APAC\n, energized\nSweetwater One\non schedule, and began commissioning on\nHorizon One\nGPUs for\nMicrosoft\n. He added that all of IREN’s operational capacity is fully contracted, arguing the company is “racing to build supply fast enough” to meet demand. NVIDIA partnership and contracted revenue targets\nRoberts said IREN increased annual recurring revenue (ARR) under contract to\n$3.1 billion\nand reiterated a target of\n$3.7 billion of ARR exiting calendar 2026\n. He also announced a\n$3.4 billion, five-year AI Cloud contract with NVIDIA\n, describing it as the first step in what he called a broader strategic partnership. IREN Bounces Back: The Market Votes Yes as Big Banks Step In\nRoberts said IREN is working with NVIDIA to support deployment of up to\n5 GW\nof “NVIDIA HGX-aligned AI infrastructure” across IREN’s global platform, including DGX environments and the MGX AI factory reference architecture. He said NVIDIA’s\n$2.1 billion investment\nis structured so that its rights to invest vest only as NVIDIA GPU infrastructure is deployed across IREN campuses, and “only fully vest upon deployment of\n600,000 GPUs\n.”\nOn the Q&A, Chief Commercial Officer Kent Draper said IREN has\nnot disclosed the specific number of GPUs",
+        "[NVDA] Title    : IREN Shares Jump as Nvidia Deal Sharpens Bitcoin Miner’s AI Pivot\nSource   : CryptoProwl [full]\nURL      : https://www.cryptoprowl.com/releases/iren-shares-jump-as-nvidia-deal-sharpens-bitcoin-miners-ai-pivot-4421\nPublished: 2026-05-08T02:20:00Z\n\nIREN Shares Jump as Nvidia Deal Sharpens Bitcoin Miner’s AI Pivot\n$IREN\n$NVDA\n2 hours ago\nBy: CryptoProwl\nIREN Limited (NASDAQ:\n$IREN\n) shares jumped in after-hours trading on Thursday after the company announced a new Nvidia (NASDAQ:\n$NVDA\n) partnership that gives its AI infrastructure pivot a much larger public-market signal. The stock rose 27% to $72.28 after closing at $56.85, before pulling back to $69.45 at press time, still up more than 21%. The rally followed IREN’s disclosure of a five-gigawatt strategic partnership with Nvidia tied to the deployment of AI infrastructure across its global data center pipeline. Under the agreement, IREN issued Nvidia a five-year right to purchase up to 30 million ordinary shares at $70 per share. If fully exercised, the right would represent up to $2.1 billion of potential investment, subject to conditions including regulatory limits. The partnership is expected to focus on Nvidia-aligned DSX AI factory infrastructure, with future deployments centred around IREN’s two-gigawatt Sweetwater campus in Texas. IREN also announced a separate five-year, $3.4 billion AI Cloud contract with Nvidia for air-cooled Blackwell GPUs, with deployment expected within 60 megawatts of existing data centers at Childress and a targeted ramp beginning in early 2027. The update pushes IREN further away from the pure bitcoin-mining identity it carried when it operated as Iris Energy.",
+        "[NVDA] === NVDA Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : NVIDIA Corporation Sector : Technology Industry : Semiconductors Employees: 42,000\n\n--- Valuation Metrics --- Market Cap : $4962.16B Enterprise Value : $4917.50B P/E Ratio Trailing: 31.325687 P/E Ratio Forward : 16.097084 Price/Sales (TTM) : 19.575275 Price/Book : 25.386618 EV/EBITDA : 29.71\n\n--- Profitability --- Revenue (TTM) : $253.49B Gross Profit : $187.95B EBITDA : $165.51B Net Income : $159.61B Profit Margin : 0.62966 Operating Margin: 0.65596 Gross Margin : 0.74144995\n\n--- Growth --- Revenue Growth (YoY): 0.852 Earnings Growth : 2.145 EPS Trailing : 6.54 EPS Forward : 12.72715",
+        "[NVDA 10-Q period 202604] Item 1. Financial Statements (Unaudited)\n\nNVIDIA Corporation and Subsidiaries\n\nCondensed Consolidated Statements of Income\n\n(In millions, except per share data)\n\n(Unaudited)\n\n Three Months Ended\n\n Apr 26, 2026Apr 27, 2025\n\nRevenue$81,615 $44,062 \n\nCost of revenue20,458 17,394 \n\nGross profit61,157 26,668 \n\nOperating expenses  \n\nResearch and development6,321 3,989 \n\nSales, general and administrative1,300 1,041 \n\nTotal operating expenses7,621 5,030 \n\nOperating income53,536 21,638 \n\nInterest income540 515 \n\nInterest expense(102)(63)\n\nOther income (expense), net15,929 (180)\n\nTotal other income, net16,367 272 \n\nIncome before income tax69,903 21,910 \n\nIncome tax expense11,582 3,135 \n\nNet income$58,321 $18,775 \n\nNet income per share:\n\nBasic$2.40 $0.77 \n\nDiluted$2.39 $0.76 \n\nWeighted average shares used in per share computation:\n\nBasic24,286 24,441 \n\nDiluted24,391 24,611 \n\nSee accompanying Notes to Condensed Consolidated Financial Statements. 3\n\nNVIDIA Corporation and Subsidiaries\n\nCondensed Consolidated Statements of Comprehensive Income\n\n(In millions)\n\n(Unaudited)\n\n Three Months Ended\n\n Apr 26, 2026Apr 27, 2025\n\nNet income$58,321 $18,775 \n\nOther comprehensive income (loss), net of tax\n\nAvailable-for-sale securities:\n\nNet change in unrealized gain (loss)(78)139 \n\nCash flow hedges:\n\nNet change in unrealized gain37 19 \n\nOther comprehensive income (loss), net of tax(41)158 \n\nTotal comprehensive income$58,280 $18,933 \n\nSee accompanying Notes to Condensed Consolidated Financial Statements. 4\n\nNVIDIA Corporation and Subsidiaries\n\nCondensed Consolidated Balance Sheets\n\n(In millions)\n\n(Unaudited)\n\n Apr 26, 2026Jan 25, 2026\n\nAssets\n\nCurrent assets:  \n\nCash and cash equivalents$13,237 $10,605 \n\nMarketable debt securities37,098 39,065 \n\nMarketable equity securities 30,237 12,886 \n\nAccounts receivable, net40,710 38,466 \n\nInventories25,797 21,403 \n\nPrepaid expenses and other current assets3,916 3,180 \n\nTotal current assets150,995 125,605 \n\nProperty and equipment, net12,403 10,383 \n\nOperating lease assets4,258 2,867 \n\nGoodwill20,894 20,832 \n\nIntangible assets, net3,120 3,306 \n\nDeferred income tax assets11,707 13,258 \n\nNon-marketable securities43,364 22,251 \n\nOther assets12,733 8,301 \n\nTotal assets$259,474 $206,803 \n\nLiabilities and Shareholders’ Equity  \n\nCurrent liabilities:  \n\nAccounts payable$13,097 $9,812 \n\nAccrued and other current liabilities29,787 21,352 \n\nShort-term debt1,000 999 \n\nTotal current liabilities43,884 32,163 \n\nLong-term debt7,470 7,469 \n\nLong-term operating lease liabilities3,878 2,572 \n\nOther long-term liabilities8,768 7,306 \n\nTotal liabilities64,000 49,510 \n\nCommitments and contingencies\n\nShareholders’ equity:  \n\nPreferred stock— — \n\nCommon stock24 24 \n\nAdditional paid-in capital10,275 10,118 \n\nAccumulated other comprehensive income137 178 \n\nRetained earnings185,038 146,973 \n\nTotal shareholders’ equity195,474 157,293",
+        "[NVDA] $2.1 billion investment\nis structured so that its rights to invest vest only as NVIDIA GPU infrastructure is deployed across IREN campuses, and “only fully vest upon deployment of\n600,000 GPUs\n.”\nOn the Q&A, Chief Commercial Officer Kent Draper said IREN has\nnot disclosed the specific number of GPUs\nsupported by the 60 megawatts in the NVIDIA contract, but characterized it as “approximately\n60 MW of air-cooled Blackwells\n” and as a “managed services deployment.”\nBuild-out roadmap: 2026 and 2027 capacity plans\nRoberts detailed a 2026 plan targeting\n480 MW\nof AI Cloud capacity,\n150,000 GPUs\n, and\n$3.7 billion of ARR\nby year-end. For 2027, he said the company plans to scale to\n1,210 MW\n, with an additional\n730 MW under construction\nacross British Columbia and Texas, including Childress and the initial phase at Sweetwater One. At Childress, Roberts described the “largest and most complex” 2026 workstream as a\n300 MW Horizon 1-4\nliquid-cooled deployment, where\nNVIDIA GB300 NVL72 installations are underway\n. He said\nHorizon 1\nis scheduled for Microsoft handoff in\nQ3\n, with Horizons 2-4 on track for delivery by year-end, and noted “around\n3,000 workers\non-site.”\nAlongside liquid-cooled builds, Roberts said IREN is converting existing air-cooled capacity into AI Cloud deployments:\nPrince George:\nair-cooled GPUs delivered and “either operating or undergoing commissioning” across a\n50 MW\nsite\nMackenzie:\n80 MW\nof data center capacity prepared for GPU installations commencing in the\nsecond half of 2026\nChildress:\nretrofits underway across an initial\n50 MW\nahead of GPU deliveries in the\nsecond half\nof the year\nRoberts said the company has approximately\n$700 million of ARR\nassociated with the\n$3.4 billion\nNVIDIA contract, supporting Blackwell GPUs to be deployed across\n60 MW\nof air-cooled capacity at Childress. He also said the remaining uncontracted 2026 capacity represents “approximately\n50,000 air-cooled GPUs\n” scheduled for phased delivery through the second half of the year, and described demand as “robust.”\nFor 2027, Draper confirmed an analyst’s characterization that of the\n730 MW\nunder construction, about\n450 MW\nis expected from remaining Childress capacity and about\n280 MW\nfrom Sweetwater. Europe entry via Nostrum acquisition; APAC focus on Australia\nRoberts announced IREN’s entry into Europe through the acquisition of\nNostrum Group\n, which he said adds\n490 MW of secured power in Spain\n, a “gigawatt-scale development pipeline,” and a team of more than\n50 people\nacross development, engineering, construction, and operations. Roberts said Spain offers “supportive AI policy, abundant renewables, lower build costs, and strong connectivity into broader European demand.”",
+        "[NVDA 10-Q period 202604] ## Consolidated Statement of Income\n\n**NVIDIA CORP** (NVDA)\n\n**Three Months Ended** *(In millions, except shares and per share data)*\n\n|  | Apr 26, 2026 (Q1) | Apr 27, 2025 (Q1) |\n| --- | ---: | ---: |\n|     Revenue | $81,615 | $44,062 |\n| *    Data Center* | $75,246 | $39,112 |\n| *      Hyperscale* | $37,869 | $17,599 |\n| *      AI Clouds, Industrial, & Enterprise* | $37,377 | $21,513 |\n| *    Edge Computing* | $6,369 | $4,950 |\n|     Cost of revenue | $20,458 | $17,394 |\n| *    Inventory Purchase Obligations in Excess of Projections* | $300 | $3,000 |\n|   Gross profit | $61,157 | $26,668 |\n|       Research and development | $6,321 | $3,989 |\n|       Sales, general and administrative | $1,300 | $1,041 |\n|       Total operating expenses | $7,621 | $5,030 |\n|     Operating income | $53,536 | $21,638 |\n|     Interest income | $540 | $515 |\n|     Interest expense | $(102) | $(63) |\n|     Other income (expense), net | $15,929 | $(180) |\n|     Total other income, net | $16,367 | $272 |\n|   Income before income tax | $69,903 | $21,910 |\n|   Income tax expense | $11,582 | $3,135 |\n|   Net income | $58,321 | $18,775 |\n|     Basic (in dollars per share) | 2.40 | 0.77 |\n|     Diluted (in dollars per share) | 2.39 | 0.76 |\n|     Basic (in shares) | 24,286 | 24,441 |\n|     Diluted (in shares) | 24,391 | 24,611 |"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "NVIDIA 最新財報的營收成長率是多少",
+        "NVIDIA 與 IREN 最新的 AI 雲端合作案的新聞內容是什麼"
+      ],
+      "agentic_n_chunks": 6
+    },
+    {
+      "id": "mi-02",
+      "category": "multi_intent",
+      "query": "NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？",
+      "answerable": true,
+      "answer": "NVIDIA 目前的毛利率約為 **74.1%**（Gross Margin = 0.74144995）【NVDA_Fundamentals_20260612.txt, chunk #0】。\n\n- **毛利率說明**：在截至 2026‑06‑12 的最近十二個月（TTM）期間，NVIDIA 的營收為 **2,534.9 億美元（$253.49 billion）**，毛利為 **1,879.5 億美元（$187.95 billion）**，計算得出毛利率 74.1%【NVDA_Fundamentals_20260612.txt, chunk #0】。這表示公司每產生 1 美元營收，就有約 0.74 美元留在毛利，屬於半導體與 AI 晶片領域的高毛利結構。\n\n- **對未來營收的潛在影響**：  \n  1. Jensen Huang 在 2026‑05‑19 的訪談中指出，中國市場「最終會對高階美國 AI 晶片開放」【NVDA_News_20260519_03.txt, chunk #0】。  \n  2. 他補充說「市場會逐步開放」且中國政府仍在決定保護本土市場的程度【NVDA_News_20260519_03.txt, chunk #1】。  \n  3. 若中國最終允許銷售包括 H200 在內的高階 AI 晶片，將為 NVIDIA 目前已在全球創下 **2,534.9 億美元（$253.49 billion）** 營收的基礎上，新增一個龐大的需求來源，因為中國是全球最大的 AI 應用與算力需求市場之一。  \n  4. 目前尚未看到中國科技公司實際購買 H200 晶片的跡象，且 Blackwell 與即將推出的 Rubin 系列仍被禁售【NVDA_News_20260519_03.txt, chunk #1】。因此短期內對營收的直接貢獻仍有限，但長期而言，市場開放的預期為公司未來營收提供了顯著的增長潛力。\n\n**結論**：NVIDIA 目前保持約 74% 的高毛利率，顯示其 AI 晶片產品具備強勁的利潤空間；同時，黃仁勳對中國市場逐步開放的正面預期，若實現，將可能為公司未來營收帶來顯著的增長動能，儘管短期內仍需觀察實際銷售落實情況。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_News_20260519_03.txt #0 (rerank=0.728)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.722)\n  - NVDA_News_20260519_03.txt #1 (rerank=0.718)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "NVDA_News_20260519_03.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_News_20260519_03.txt",
+          "chunk_index": 1
+        }
+      ],
+      "contexts": [
+        "[NVDA] Title    : China market for Nvidia AI chips to open 'over time': Huang\nSource   : AFP [full]\nURL      : https://finance.yahoo.com/sectors/technology/articles/china-market-nvidia-ai-chips-030253929.html\nPublished: 2026-05-19T03:02:53Z\n\nChina market for Nvidia AI chips to open 'over time': Huang\nAFP\nTue, May 19, 2026 at 11:02 AM GMT+8\n2 min read\nNVDA\n-1.33%\nNvidia boss Jensen Huang expects China to eventually open its market to high-end US chips that can train and run artificial intelligence systems. But he did not discuss sales of the powerful H200 model with top officials in Beijing, the businessman told Bloomberg Television in an interview broadcast Monday. Huang travelled to the country last week with US President Donald Trump, who met Chinese President Xi Jinping. The superpowers are in a fierce race for AI supremacy, and the H200 chip had until recently been barred from sale in China by Washington over national security concerns. However, there is no sign that Chinese tech companies are buying them, as Beijing ramps up domestic chip development in a bid to challenge US dominance in the key sector. \"H200s are licensed to sell to China.",
+        "[NVDA] === NVDA Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : NVIDIA Corporation Sector : Technology Industry : Semiconductors Employees: 42,000\n\n--- Valuation Metrics --- Market Cap : $4962.16B Enterprise Value : $4917.50B P/E Ratio Trailing: 31.325687 P/E Ratio Forward : 16.097084 Price/Sales (TTM) : 19.575275 Price/Book : 25.386618 EV/EBITDA : 29.71\n\n--- Profitability --- Revenue (TTM) : $253.49B Gross Profit : $187.95B EBITDA : $165.51B Net Income : $159.61B Profit Margin : 0.62966 Operating Margin: 0.65596 Gross Margin : 0.74144995\n\n--- Growth --- Revenue Growth (YoY): 0.852 Earnings Growth : 2.145 EPS Trailing : 6.54 EPS Forward : 12.72715",
+        "[NVDA] But the Chinese government has to decide how much of their local market do they want to protect,\" Huang said. \"My sense is that over time the market will open,\" added Huang, CEO of Nvidia -- the world's most valuable company, due to huge demand for its AI hardware. Trump said in December he had reached an agreement with Xi to ease the restrictions on H200 chips, a move some US lawmakers have warned could help the Chinese military. Nvidia's most top-of-the-range offerings, the Blackwell and forthcoming Rubin series, remain banned for sale in China. Xi told a delegation of US business executives on Thursday that China would \"open wider\" to the world."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "NVIDIA 目前的毛利率是多少",
+        "黃仁勳最近談到在中國市場開放 AI 晶片銷售的新聞內容是什麼，且此舉對 NVIDIA 未來營收可能有何影響？"
+      ],
+      "agentic_n_chunks": 3
+    },
+    {
+      "id": "mi-03",
+      "category": "multi_intent",
+      "query": "Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？",
+      "answerable": true,
+      "answer": "Apple 目前的毛利率約為 **47.86%**，而 Evercore ISI 將目標價提升至 **$365** 並維持 **Outperform** 評等，使市場對 Apple 持正面看法。  \n\n- 依 Apple 的最新 TTM 基本面資料，毛利率為 **0.47862**（即 47.862%）【AAPL_Fundamentals_20260612.txt, chunk #0】。  \n- 2026 年第二季（截至 2026‑03‑28）Apple 的毛利額為 **547.81 億美元（$54,781 百萬）**，淨銷售額為 **1,111.84 億美元（$111,184 百萬）**，顯示毛利規模仍維持在數百億美元的高位【AAPL_10Q_202603.html, chunk #0】。  \n- Evercore ISI 在 2026‑05‑14 的報告中把 Apple 的目標股價從 **$330** 上調至 **$365**，同時給予 **Outperform** 評等【AAPL_News_20260612_05.txt, chunk #0】。  \n- 同篇新聞亦指出，Apple 被億萬富翁投資人 Ken Griffin 列為「最佳持股」之一，且因 AI 相關新功能（如 Siri AI、Apple Intelligence）以及 iPhone 17 的強勁銷售，市場對其未來成長抱持樂觀態度【AAPL_News_20260612_05.txt, chunk #0】。  \n\n綜合上述，Apple 以近 48% 的毛利率展現出穩健的盈利能力，加上分析師上調目標價與正面的投資者關注，市場普遍認為該公司仍具備強勁的成長動能與投資吸引力。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202603.html #0 (rerank=0.716)\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.709)\n  - AAPL_News_20260612_05.txt #0 (rerank=0.693)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_News_20260612_05.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[AAPL 10-Q period 202603] ## Consolidated Statement of Income\n\n**Apple Inc.** (AAPL)\n\n**Three and Six Months Ended** *(In millions, except shares in thousands and per share data)*\n\n|  | Mar 28, 2026 (Q2) | Mar 29, 2025 (Q2) | Mar 28, 2026 (YTD) | Mar 29, 2025 (YTD) |\n| --- | ---: | ---: | ---: | ---: |\n|         Net sales | $111,184 | $95,359 | $254,940 | $219,659 |\n| *        Products* | $80,208 | $68,714 | $193,951 | $166,674 |\n| *        Services* | $30,976 | $26,645 | $60,989 | $52,985 |\n|         Cost of sales | $56,403 | $50,492 | $130,928 | $116,517 |\n| *        Products* | $49,179 | $44,030 | $116,657 | $103,477 |\n| *        Services* | $7,224 | $6,462 | $14,271 | $13,040 |\n|       Gross margin | $54,781 | $44,867 | $124,012 | $103,142 |\n|           Research and development | $11,419 | $8,550 | $22,306 | $16,818 |\n|           Selling, general and administrative | $7,477 | $6,728 | $14,969 | $13,903 |\n|           Total operating expenses | $18,896 | $15,278 | $37,275 | $30,721 |\n|         Operating income | $35,885 | $29,589 | $86,737 | $72,421 |\n|         Other income/(expense), net | $(52) | $(279) | $98 | $(527) |\n|       Income before provision for income taxes | $35,833 | $29,310 | $86,835 | $71,894 |\n|       Provision for income taxes | $6,255 | $4,530 | $15,160 | $10,784 |\n|       Net income | $29,578 | $24,780 | $71,675 | $61,110 |\n|         Basic (in dollars per share) | 2.02 | 1.65 | 4.87 | 4.06 |\n|         Diluted (in dollars per share) | 2.01 | 1.65 | 4.85 | 4.05 |\n|         Basic (in shares) | 14,673,278 | 14,994,082 | 14,710,718 | 15,037,903 |\n|         Diluted (in shares) | 14,725,873 | 15,056,133 | 14,768,115 | 15,103,499 |",
+        "[AAPL] === AAPL Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Apple Inc. Sector : Technology Industry : Consumer Electronics Employees: 166,000\n\n--- Valuation Metrics --- Market Cap : $4342.02B Enterprise Value : $4358.23B P/E Ratio Trailing: 35.83394 P/E Ratio Forward : 30.810581 Price/Sales (TTM) : 9.618119 Price/Book : 40.720387 EV/EBITDA : 27.243\n\n--- Profitability --- Revenue (TTM) : $451.44B Gross Profit : $216.07B EBITDA : $159.98B Net Income : $122.58B Profit Margin : 0.27152002 Operating Margin: 0.32275 Gross Margin : 0.47862\n\n--- Growth --- Revenue Growth (YoY): 0.166 Earnings Growth : 0.218 EPS Trailing : 8.25 EPS Forward : 9.59508",
+        "[AAPL] Title    : Apple Inc. (AAPL) Is A Top Stock In Ken Griffin’s Portfolio\nSource   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/apple-inc-aapl-top-stock-173042378.html\nPublished: 2026-06-11T17:30:42Z\n\nApple Inc. (AAPL) Is A Top Stock In Ken Griffin’s Portfolio\nRamish Cheema\nFri, June 12, 2026 at 1:30 AM GMT+8\n2 min read\nAAPL\n+1.39%\nApple Inc. (NASDAQ:AAPL) is one of the\n13 Best Stocks to Invest In According to Billionaire Ken Griffin\n. Apple Inc. (NASDAQ:AAPL) is in the news lately due to its Worldwide Developers Conference. The event saw the firm take another stab at AI as it launched Siri AI. The software assistant will focus more on voice dictation and provide users with other features, such as answering questions. Apple Inc. (NASDAQ:AAPL) also announced that its AI platform, Apple Intelligence, will play a role in the Safari browser and the Password and Messages applications. Other announcements include visual upgrades to iOS and parental control features. Earlier, on May 14th, Evercore ISI discussed Apple Inc. (NASDAQ:AAPL)’s shares. The firm raised the share price target to $365 from $330 and kept an Outperform rating on the stock. As part of its coverage, Evercore ISI highlighted factors such as high premiums for the iPhone and a foldable phone. Giuseppe Costantino/Shutterstock.com\nRiverPark Large Growth Fund discussed Apple Inc. (NASDAQ:AAPL) in its Q4 2025 investor letter:\n“AAPL shares rose in 4Q25 following better-than-feared iPhone 17 sell-through trends and stronger Services momentum. The company reported that early adoption of its on-device AI features exceeded internal expectations, particularly in North America and Europe, where attach rates for Pro models remained elevated."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Apple 目前的毛利率是多少",
+        "Evercore ISI 最新調升的目標價與評等是什麼"
+      ],
+      "agentic_n_chunks": 3
+    },
+    {
+      "id": "mi-04",
+      "category": "multi_intent",
+      "query": "Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？",
+      "answerable": true,
+      "answer": "Apple 近一年（過去 12 個月）的營收成長率約為 **12.8%**，而根據最新的 TTM 基礎資料，年度（YoY）營收成長率則顯示 **16.6%**【AAPL_News_20260612_04.txt, chunk #1】【AAPL_Fundamentals_20260612.txt, chunk #0】。\n\n**Siri AI 對未來成長動能的意義**  \n- **AI 功能提升服務與硬體結合**：Apple 在 WWDC 上推出的 Siri AI 以 Google Gemini 模型為基礎，讓 Siri 能從使用者的 App 中抓取情境資訊，提升數位助理的實用性與使用者黏著度【AAPL_News_20260612_02.txt, chunk #0】。  \n- **加速 iPhone 銷售與服務收入**：分析師指出，AI 整合預計會讓 Siri 更好地與 iPhone 互動，並在過去四季內帶動 iPhone 成長 16%，顯示 AI 功能能進一步刺激硬體需求【AAPL_News_20260612_03.txt, chunk #0】。  \n- **擴展至 Safari、密碼與訊息等核心應用**：Apple 同時宣佈 Apple Intelligence（含 Siri AI）將在 Safari 瀏覽器、Password 與 Messages 應用中發揮作用，這意味著 AI 會滲透到更多服務領域，提升服務收入的貢獻比例【AAPL_News_20260612_05.txt, chunk #0】。  \n- **早期採用超出預期**：Evercore ISI 報告稱，Siri AI 的在設備端 AI 功能在北美與歐洲的早期採用率已超過內部預期，顯示市場對此功能的接受度高，可能帶動未來的用戶升級與服務訂閱增長【AAPL_News_20260612_05.txt, chunk #0】。  \n\n綜合來看，Siri AI 的推出不僅提升了 Apple 產品的差異化與使用者體驗，還有望進一步推動 iPhone 銷售與服務收入的雙重增長，為公司在 2026 年及之後的營收成長提供新的動能。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_News_20260612_02.txt #0 (rerank=0.710)\n  - AAPL_News_20260612_04.txt #1 (rerank=0.702)\n  - AAPL_News_20260519_01.txt #5 (rerank=0.701)\n  - AAPL_News_20260612_03.txt #0 (rerank=0.686)\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.673)\n  - AAPL_News_20260612_05.txt #0 (rerank=0.625)\n  - AAPL_News_20260612_01.txt #0 (rerank=0.604)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AAPL_News_20260612_02.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_News_20260612_04.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_News_20260519_01.txt",
+          "chunk_index": 5
+        },
+        {
+          "source": "AAPL_News_20260612_03.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_News_20260612_05.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_News_20260612_01.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[AAPL] Title    : How Apple rebuilt Siri with Google's AI\nSource   : Yahoo Finance [full]\nURL      : https://finance.yahoo.com/sectors/technology/article/how-apple-rebuilt-siri-with-googles-ai-184257746.html\nPublished: 2026-06-11T18:42:57Z\n\nHow Apple rebuilt Siri with Google's AI\nDaniel Howley\n·\nTechnology Editor\nFri, June 12, 2026 at 2:42 AM GMT+8\n4 min read\nAAPL\n+1.39%\nGOOGL\n+0.39%\nGOOG\n+0.92%\nAfter two years of delays, Apple's (\nAAPL\n) reinvented Siri, Siri AI,\nappears ready for primetime\n. The company unveiled the AI-powered version of its assistant at its Worldwide Developers Conference in Cupertino, Calif., on Monday, saying it will launch, albeit as a beta, later this year. The update is designed to transform Siri from a glorified kitchen timer to a\ndigital helper for the AI age\n. Apple said Siri AI will be able to pull context from your apps, allowing you to, say, ask it the name of a podcast your sister recommended via text and have it presented to you without opening any separate apps or services. The idea is for Siri AI to recognize what you want, when you want it, and surface it, whether it's content on your device or from the web. It's more or less what Apple promised when it showed off its AI-enhanced Siri and Apple Intelligence at WWDC 2024. And in early demos, Siri AI, which rides on Apple Intelligence, appears to deliver on Apple's initial vision for its reimagined Siri. And it's thanks, at least in part, to Google (\nGOOG\n,\nGOOGL\n). Siri gets Google brains\nIn January, Apple and Google signed an agreement for Apple to use the search giant's Gemini models to power its improved Siri. That gave Apple the high-powered AI models it needed to move Siri AI forward, after its own models fell short,\nBloomberg's Mark Gurman previously reported\n. During a question and answer session following Apple's WWDC keynote, senior vice president of software engineering Craig Federighi explained how Apple uses Google's models to give Siri AI its smarts. The software chief was sure to point out that Siri AI isn't just a rebranded version of Google's own Gemini assistant. Federighi explained how the Gemini assistant uses Google's Gemini models, including Gemini Flash-Lite, Gemini Flash, Gemini Pro, and its Gemini Image models. When it comes to grounding those models in world knowledge, he said, Gemini takes advantage of Google Search. Apple, Federighi said, uses none of those things. \"We use none of the models that Google deploys to their customers, nor do we use the infrastructure and means by which they employ models to their customers,\" he explained.",
+        "[AAPL] The company is successfully increasing prices on services, demonstrating pricing power within the ecosystem. Before making any decision, it helps to understand if the above\nfactors align with what has been driving AAPL stock\nso far, or has the market view changed? Relevant Articles\nPay Less, Gain More: DELL Tops Apple Stock\nThe Real Risk Inside Apple Stock\nThe Growth Question Hiding in Apple Stock\n5 Catalysts to Monitor Over In The Next 2 Quarters For AAPL Stock\nApple Stock Looks Strong. One Number Says Be Careful. Apple Stock And The Signal Hiding In The CEO’s Script\nHow Do The Fundamentals Look? Long-Term Profitability\n: About 29.1% operating cash flow margin and 31.8% operating margin for the last 3-year average. Strong Momentum\n: Currently in the top 10th percentile of stocks in terms of “trend strength” – our proprietary momentum metric. Revenue Growth\n: Apple saw revenue growth of 12.8% LTM and 5.6% last 3-year average, but this is not a growth story\nBelow is a quick comparison of AAPL fundamentals with S&P medians. AAPL\nS&P Median\nSector\nInformation Technology\n–\nIndustry\nTechnology Hardware, Storage & Peripherals\n–\nPS Ratio\n9.5\n3.2\nPE Ratio\n34.9\n23.8\nLTM* Revenue Growth\n12.8%\n7.4%\n3Y Average Annual Revenue Growth\n5.6%\n5.8%\nLTM* Operating Margin\n32.6%\n18.4%\n3Y Average Operating Margin\n31.8%\n18.3%\nLTM* Op Cash Flow Margin\n31.1%\n21.3%\n3Y Average Op Cash Flow Margin\n29.1%\n20.1%\nDE Ratio\n2.0%\n21.5%\n*LTM: Last Twelve Months\nThe Bear View And The Current Investment Debate\nThe current investment debate on AAPLis centered around:\nThe core disagreement of whether the high-margin Services growth engine is durable enough to overcome global regulators actively trying to dismantle its primary monetization method, the App Store. The prevailing sentiment is neutral.",
+        "[AAPL] TTM gross margin reached 47.9%, up from 46.2% in FY 2024 and 38.2% back in FY 2019, driven by the rising Services mix. Operating margin now sits at 32.6%, and the company throws off $129.2 billion in free cash flow on a TTM basis. That FCF easily covers the $7.7 billion in dividends and $37.0 billion in buybacks Apple executed in the first half of FY 2026. The balance sheet is fortress-grade. Apple holds $146.6 billion in cash and marketable securities against $82.7 billion in term debt. Net cash position is positive and growing. Valuation\nSource: Seeking Alpha\nApple trades at a premium to nearly every peer on this list, with the exception of\nSeagate Technology (STX)\n. On forward P/E, Apple sits at 33.5x versus\nSandisk (SNDK)\nat 24.2x,\nWestern Digital (WDC)\nat 29.7x, and\nDell Technologies (DELL)\nat just 22.2x. Price-to-cash-flow tells a similar story. Apple commands 30.7x, well above Dell’s 14.4x but cheaper than WDC and STX. The market is paying up for Apple’s Services mix, capital returns, and brand moat. Whether that’s justified is the central question. Growth\nSource: Seeking Alpha\nHere’s where the premium gets harder to defend. Apple’s 12.8% YoY revenue growth trails SNDK’s 82.8% surge, WDC’s 32.0%, and STX’s 28.9%. Forward revenue growth of 9.6% is the weakest in the group except WDC. Yet Apple’s three-year revenue CAGR of 5.4% beats WDC and SNDK, both of whom posted negative numbers over that stretch. The hardware peers are riding an AI-driven storage upcycle. Apple is the steadier compounder. Profitability\nSource: Seeking Alpha\nThis is Apple’s home turf. Apple’s 47.9% gross margin trails only SNDK’s 56.0%. EBITDA margin of 35.4% beats every peer except SNDK. Levered FCF margin of 22.4% leads the group. Return on common equity of 141.5% dwarfs everyone except STX, which benefits from a tiny equity base. Most striking: Apple generated $140.2 billion in cash from operations on a TTM basis. The next closest, Dell, did $11.2 billion. Continued…\nOur Opinion 7/10\nApple’s quarter was a genuine surprise to the upside, and the company’s cash generation remains in a league of its own. The dividend hike and fresh $100 billion buyback give investors a tangible return floor. But the stock isn’t cheap. At 33.5x forward earnings with sub-10% forward revenue growth, you’re paying a quality premium that leaves little room for an iPhone stumble or a tariff escalation. For long-term holders, Apple stays a core position.",
+        "[AAPL] Title    : AI Integration and iPhone Growth Assert Apple Inc. (AAPL) as One of the Best Forever Stocks to Buy\nSource   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/ai-integration-iphone-growth-assert-032616166.html\nPublished: 2026-06-12T03:26:16Z\n\nAI Integration and iPhone Growth Assert Apple Inc. (AAPL) as One of the Best Forever Stocks to Buy\nAbdul Rahman\nFri, June 12, 2026 at 11:26 AM GMT+8\n2 min read\nAAPL\n+1.39%\nGOOG\n+0.92%\nApple Inc. (NASDAQ:\nAAPL\n) is\none of the best forever stocks to buy, according to analysts\n. On June 6, Deep Asset Management’s Gene Munster reiterated that Apple Inc. (NASDAQ:AAPL) is on the cusp of edging higher. Munster expects the company’s sentiment to receive a significant boost from the Worldwide Developers Conference, terming it the most important conference in the company’s 43-year history. The tech giant is expected to showcase a redesigned Siri feature that has been in development for the past two years, further asserting its AI strategy. Enhanced AI integration is expected to enable the digital assistant to leverage personal context securely while improving information retrieval and third-party app automation. Munster expects Apple to position the Siri app to better compete against ChatGPT, Grok, and Gemini while featuring Search or Ask Prompt powered by Google. While Apple has come under pressure for what many believe are underwhelming AI offerings, its iPhone growth has surged to 16% over the past four quarters, affirming customer loyalty. The recent sales increase has come on the back of significant upgrades to the company’s core product. Apple Inc. (NASDAQ:AAPL) is a global technology company that designs, manufactures, and markets consumer electronics, software, and online services. Its primary goal is creating seamless, intuitive hardware and digital services designed for everyday work, communication, and entertainment. While we acknowledge the potential of AAPL as an investment, we believe certain AI stocks offer greater upside potential and carry less downside risk. If you're looking for an extremely undervalued AI stock that also stands to benefit significantly from Trump-era tariffs and the onshoring trend, see our free report on the\nbest short-term AI stock\n. READ NEXT:\n8 Most Profitable Crypto-Exposed Stocks to Buy Now\nand\n10 Best Robinhood Stocks Under $20 to Buy Now\n.",
+        "[AAPL] === AAPL Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Apple Inc. Sector : Technology Industry : Consumer Electronics Employees: 166,000\n\n--- Valuation Metrics --- Market Cap : $4342.02B Enterprise Value : $4358.23B P/E Ratio Trailing: 35.83394 P/E Ratio Forward : 30.810581 Price/Sales (TTM) : 9.618119 Price/Book : 40.720387 EV/EBITDA : 27.243\n\n--- Profitability --- Revenue (TTM) : $451.44B Gross Profit : $216.07B EBITDA : $159.98B Net Income : $122.58B Profit Margin : 0.27152002 Operating Margin: 0.32275 Gross Margin : 0.47862\n\n--- Growth --- Revenue Growth (YoY): 0.166 Earnings Growth : 0.218 EPS Trailing : 8.25 EPS Forward : 9.59508",
+        "[AAPL] Title    : Apple Inc. (AAPL) Is A Top Stock In Ken Griffin’s Portfolio\nSource   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/apple-inc-aapl-top-stock-173042378.html\nPublished: 2026-06-11T17:30:42Z\n\nApple Inc. (AAPL) Is A Top Stock In Ken Griffin’s Portfolio\nRamish Cheema\nFri, June 12, 2026 at 1:30 AM GMT+8\n2 min read\nAAPL\n+1.39%\nApple Inc. (NASDAQ:AAPL) is one of the\n13 Best Stocks to Invest In According to Billionaire Ken Griffin\n. Apple Inc. (NASDAQ:AAPL) is in the news lately due to its Worldwide Developers Conference. The event saw the firm take another stab at AI as it launched Siri AI. The software assistant will focus more on voice dictation and provide users with other features, such as answering questions. Apple Inc. (NASDAQ:AAPL) also announced that its AI platform, Apple Intelligence, will play a role in the Safari browser and the Password and Messages applications. Other announcements include visual upgrades to iOS and parental control features. Earlier, on May 14th, Evercore ISI discussed Apple Inc. (NASDAQ:AAPL)’s shares. The firm raised the share price target to $365 from $330 and kept an Outperform rating on the stock. As part of its coverage, Evercore ISI highlighted factors such as high premiums for the iPhone and a foldable phone. Giuseppe Costantino/Shutterstock.com\nRiverPark Large Growth Fund discussed Apple Inc. (NASDAQ:AAPL) in its Q4 2025 investor letter:\n“AAPL shares rose in 4Q25 following better-than-feared iPhone 17 sell-through trends and stronger Services momentum. The company reported that early adoption of its on-device AI features exceeded internal expectations, particularly in North America and Europe, where attach rates for Pro models remained elevated.",
+        "[AAPL] Title    : Siri upgrades show promise, but questions remain\nSource   : Yahoo Finance Video [full]\nURL      : https://finance.yahoo.com/video/siri-upgrades-show-promise-but-questions-remain-195225562.html\nPublished: 2026-06-11T19:52:25Z\n\nSiri upgrades show promise, but questions remain\nYahoo Finance Video\nand\nJosh Lipton\nFri, June 12, 2026 at 3:52 AM GMT+8\nGOOGL\n+0.39%\nAAPL\n+1.39%\nFresh off Apple's (\nAAPL\n) WWDC, Yahoo Finance Tech Editor Dan Howley joins Josh Lipton on Market Domination to break down the highlights and shortcomings of Apple's latest announcement, including a closer look at the company's upgraded Siri AI. Video Transcript\n00:00\nSpeaker A\nit's supposed to be less about like, you know, oh, look at what this, you know, AI can do and more of just doing it."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Apple 近一年的整體營收成長率是多少",
+        "WWDC 發表的 Siri AI 新功能的內容及其對 Apple 未來成長動能的意義是什麼"
+      ],
+      "agentic_n_chunks": 7
+    },
+    {
+      "id": "mi-05",
+      "category": "multi_intent",
+      "query": "Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？",
+      "answerable": true,
+      "answer": "Microsoft 2026 年度的營收持續以兩位數成長，最新一季（截至 2026 年 3 月 31 日）營收較去年同期增長 **18%**，而前九個月（截至 2026 年 3 月 31 日）則增長 **16%**【MSFT_10Q_202603.html, chunk #102】【MSFT_10Q_202603.html, chunk #109】。\n\n- **三個月營收**：2026 年第一季收入比 2025 年同季增加 **128 億美元（$12.8 billion）**，成長率 **18%**，主要受 Microsoft Cloud 的增長推動【MSFT_10Q_202603.html, chunk #102】。  \n- **九個月營收**：2026 年前九個月收入比去年同期增加 **145 億美元（$14.5 billion）**，成長率 **16%**，其中 Microsoft 365 商業產品與雲端服務貢獻 **106 億美元（$10.6 billion）**（增長 17%）【MSFT_10Q_202603.html, chunk #109】。  \n\n### AI 布局的策略訊息\n\n- 微軟在 2026 年的 Build 大會上宣布 **自行研發七個新 AI 模型**，強調「微調」與「成本最佳化」的方向，顯示公司正從依賴外部前沿實驗室（如 OpenAI）轉向內部自建模型的策略【MSFT_News_20260612_01.txt, chunk #0】。  \n- 為支援這些模型，微軟已將 **大量 GPU 計算資源** 分配給內部研發團隊，凸顯其在 AI 基礎設施上的大量投資【MSFT_News_20260612_01.txt, chunk #0】。  \n- 同時，微軟提出將 AI 代理人（AI agents）普及化，並開發自家版本的 **OpenClaw**，顯示公司希望在 AI 應用層面提供完整的端到端解決方案，進一步整合至 Azure、Microsoft 365 Copilot 以及其他雲端服務【MSFT_News_20260612_01.txt, chunk #0】。  \n\n**綜合解讀**：營收的兩位數增長與 AI 相關的雲端與生產力服務（如 Microsoft 365 Copilot）同步提升，說明微軟的 AI 投資已開始在收入層面顯現。自行打造多個 AI 模型並投入 GPU 計算資源，代表微軟正加速建立自有 AI 生態系，降低對外部模型的依賴，同時透過成本優化提升毛利率空間，為未來的 AI 服務營收奠定基礎。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_News_20260612_01.txt #0 (rerank=0.725)\n  - MSFT_10Q_202603.html #109 (rerank=0.719)\n  - MSFT_10Q_202603.html #102 (rerank=0.696)\n  - MSFT_Fundamentals_20260612.txt #1 (rerank=0.629)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "MSFT_News_20260612_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 109
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 102
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        }
+      ],
+      "contexts": [
+        "[MSFT] Title    : Here’s why Microsoft Corporation (MSFT) is one of the Best Forever Stock to Buy\nSource   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/why-microsoft-corporation-msft-one-032536838.html\nPublished: 2026-06-12T03:25:36Z\n\nHere’s why Microsoft Corporation (MSFT) is one of the Best Forever Stock to Buy\nAbdul Rahman\nFri, June 12, 2026 at 11:25 AM GMT+8\n2 min read\nMSFT\n-1.77%\nMicrosoft (NASDAQ:\nMSFT\n) is\none of the best forever stocks to buy, according to analysts\n. On June 4, TD Cowen reiterated its Buy rating on Microsoft (NASDAQ:MSFT) and set a $540 price target. The bullish stance is in response to the company asserting its AI strategy with seven new self-built models focused on fine-tuning and cost optimization. Photo by Microsoft 365 on Unsplash\nThe new self-built models signal a shift in the software giant’s approach to AI development as the company moves to reduce its reliance on frontier labs for AI capabilities. The tech giant has made significant advances as it seeks to position itself around AI models, AI stack layers, and do-it-yourself applications. As part of the new strategy, Microsoft has already allocated a significant graphics processing unit’s capacity to its internal research and development teams. The allocation underscores a new phase in the company’s ambitions for its AI portfolio. During the Build 2026 conference, the company was the center of attention, showcasing advancements in its AI platform. The company reiterated plans to help people deploy AI agents as it also builds its own version of OpenClaw. Microsoft Corporation (NASDAQ:MSFT) is a global technology giant that develops, licenses, and supports software, services, devices, and cloud solutions. It operates Microsoft Azure, a major cloud computing platform, and also develops productivity software, including the Microsoft 365 suite. While we acknowledge the potential of MSFT as an investment, we believe certain AI stocks offer greater upside potential and carry less downside risk. If you're looking for an extremely undervalued AI stock that also stands to benefit significantly from Trump-era tariffs and the onshoring trend, see our free report on the\nbest short-term AI stock\n. READ NEXT:\n8 Most Profitable Crypto-Exposed Stocks to Buy Now\nand\n10 Best Robinhood Stocks Under $20 to Buy Now\n.",
+        "[MSFT 10-Q period 202603] Nine Months Ended March 31, 2026 Compared with Nine Months Ended March 31, 2025\n\nProductivity and Business Processes\n\nRevenue increased $14.5 billion or 16%. •Microsoft 365 Commercial products and cloud services revenue increased $10.6 billion or 17%. Microsoft 365 Commercial cloud revenue grew 18% with growth in revenue per user driven by Microsoft 365 E5 and Microsoft 365 Copilot, and continued Microsoft 365 Commercial seat growth. Microsoft 365 Commercial products revenue grew 10% driven by an increase in Office 2024 transactional purchasing, as well as growth in the Windows Commercial on-premises components of Microsoft 365 suite sales. •Microsoft 365 Consumer products and cloud services revenue increased $1.4 billion or 27%. Microsoft 365 Consumer cloud revenue grew 29% driven by growth in revenue per user and continued growth in Microsoft 365 Consumer subscribers. •LinkedIn revenue increased $1.4 billion or 11% with growth across all lines of business. •Dynamics products and cloud services revenue increased $941 million or 17% driven by growth in Dynamics 365. Dynamics 365 revenue grew 20% with growth across all workloads. Operating income increased $11.2 billion or 22%. •Cost of revenue increased $1.6 billion or 10% driven by investments in AI infrastructure to support Microsoft 365 Copilot seat and usage growth. •Gross margin increased $12.8 billion or 18% driven by growth in Microsoft 365 Commercial cloud. Gross margin percentage increased driven by efficiency gains in Microsoft 365 Commercial cloud even with continued investments in AI infrastructure and growing AI product usage. •Operating expenses increased $1.6 billion or 8% driven by continued investments in research and development compute capacity, AI talent, and data to support product development that benefits the entire portfolio, as well as higher Copilot advertising expenses. Revenue, gross margin, and operating income included a favorable foreign currency impact of 2%, 3%, and 4%, respectively.",
+        "[MSFT 10-Q period 202603] These non-GAAP financial measures exclude net gains and losses from investments in OpenAI. Refer to the Non-GAAP Financial Measures section below for a reconciliation of our financial results reported in accordance with GAAP to non-GAAP financial results. Three Months Ended March 31, 2026 Compared with Three Months Ended March 31, 2025\n\nRevenue increased $12.8 billion or 18% driven by growth in Microsoft Cloud. Intelligent Cloud revenue increased driven by Azure. Productivity and Business Processes revenue increased driven by Microsoft 365 Commercial cloud. More Personal Computing revenue decreased with lower hardware sales across Devices and Gaming, offset in part by growth in Search advertising. Cost of revenue increased $4.9 billion or 22% driven by growth in Microsoft Cloud. Gross margin increased $7.9 billion or 16% with growth across each of our segments. •Gross margin percentage decreased driven by continued investments in AI infrastructure and growing AI product usage, offset in part by efficiency gains across the Microsoft Cloud. •Microsoft Cloud gross margin percentage decreased to 66% driven by continued investments in AI infrastructure and growing AI product usage, offset in part by efficiency gains in Azure and Microsoft 365 Commercial cloud. Operating expenses increased $1.5 billion or 9% primarily driven by continued investments in research and development compute capacity, AI talent, and data to support product development across the portfolio. Total company headcount declined year-over-year. Operating income increased $6.4 billion or 20% driven by growth in Productivity and Business Processes and Intelligent Cloud. Revenue, gross margin, and operating income included a favorable foreign currency impact of 3%, 3%, and 4%, respectively.",
+        "[MSFT] --\n\nBalance Sheet --\n\nTotal Cash : $78.23B\n\nTotal Debt : $125.43B\n\nDebt/Equity: 30.271\n\nCurrent Ratio: 1.283\n\n--- Dividends & Returns --- Dividend Yield : 0.93 Return on Equity: 0.34013999 Return on Assets: 0.14814 Free Cash Flow : $37.01B\n\n--- Business Summary --- Microsoft Corporation develops and supports software, services, devices, and solutions worldwide. The Productivity and Business Processes segment offers Microsoft 365 commercial, enterprise mobility + security, windows commercial, power BI, exchange, sharepoint, Microsoft teams, security and compliance, and copilot; Microsoft 365 commercial products, such as Windows commercial on-premises and office licensed services; Microsoft 365 consumer products and cloud services, including Microsoft 365 consumer subscriptions, office licensed on-premises, and other consumer services; LinkedIn; dynamics products and cloud services, such as dynamics 365, cloud-based applications, and on-premises ERP and CRM applications. Its Intelligent Cloud segment provides Server products and cloud services comprising Azure and other cloud services, GitHub, Nuance Healthcare, virtual desktop offerings, and other cloud services; server products, including SQL and windows server, visual studio and system center related client access licenses, and other on-premises offerings; enterprise and partner services, such as enterprise support and nuance professional services, industry solutions, Microsoft partner network, and learning experience. The Personal Computing segment provides windows and devices, such as Windows OEM licensing and devices and surface and PC accessories; gaming services and solutions, such as Xbox hardware, content, and services, first- and third-party content Xbox game pass, subscriptions, and cloud gaming, advertising, and other cloud services; search and news advertising services that includes Bing and Copilot, Microsoft News and Edge, and third-party affiliates. It sells its products through OEMs, distributors, and resellers; and online and retail stores."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Microsoft 的營收成長率是多少",
+        "Microsoft 自研七個 AI 模型的策略進展是什麼，並透露了什麼 AI 布局訊息"
+      ],
+      "agentic_n_chunks": 4
+    },
+    {
+      "id": "mi-06",
+      "category": "multi_intent",
+      "query": "Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？",
+      "answerable": true,
+      "answer": "Microsoft 目前的淨利率約為 39.34%（Profit Margin (TTM) 0.3934）【MSFT_Fundamentals_20260612.txt, chunk #0】。  \n\n- Microsoft 參與 Anthropic 的 Mythos 資安模型，屬於「Project Glasswing」計畫的一員，與 Amazon、Nvidia、Apple 等大型科技公司共同使用未公開的 Claude Mythos Preview 版來進行防禦性資安工作【MSFT_News_20260519_01.txt, chunk #0】。  \n- 透過此合作，Microsoft 可在符合負責任披露原則的前提下，將發現的威脅資訊、最佳實踐、工具或程式碼分享給其他合作夥伴、產業組織、監管機構、政府機關以及公開社群【MSFT_News_20260519_01.txt, chunk #1】。  \n- 美國國防部（Pentagon）亦正部署 Mythos 於政府系統，以偵測與修補軟體漏洞，顯示 Microsoft 的 AI 資安技術正被納入關鍵國防基礎建設【MSFT_News_20260519_01.txt, chunk #1】。  \n\n綜合以上，Microsoft 以高淨利率展現強勁獲利能力，同時透過與 Anthropic 的合作，將先進的生成式 AI 資安模型整合進自家與政府的防護體系，顯示其在 AI 資安領域的積極布局與跨產業協作策略。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.714)\n  - MSFT_News_20260519_01.txt #0 (rerank=0.653)\n  - MSFT_News_20260519_01.txt #1 (rerank=0.515)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_News_20260519_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_News_20260519_01.txt",
+          "chunk_index": 1
+        }
+      ],
+      "contexts": [
+        "[MSFT] === MSFT Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Microsoft Corporation Sector : Technology Industry : Software - Infrastructure Employees: 228,000\n\n--- Valuation Metrics --- Market Cap : $2899.62B Enterprise Value : $2946.82B P/E Ratio Trailing: 23.262217 P/E Ratio Forward : 20.176886 Price/Sales (TTM) : 9.110466 Price/Book : 6.9982247 EV/EBITDA : 15.976\n\n--- Profitability --- Revenue (TTM) : $318.27B Gross Profit : $217.41B EBITDA : $184.46B Net Income : $125.22B Profit Margin : 0.39341998 Operating Margin: 0.46326 Gross Margin : 0.68309\n\n--- Growth --- Revenue Growth (YoY): 0.183 Earnings Growth : 0.234 EPS Trailing : 16.78 EPS Forward : 19.3459",
+        "[MSFT] Title    : Anthropic to let partners share Mythos cybersecurity findings with others\nSource   : Reuters [full]\nURL      : https://finance.yahoo.com/sectors/technology/articles/anthropic-let-partners-share-mythos-222802181.html\nPublished: 2026-05-18T22:28:02Z\n\nAnthropic to let partners share Mythos cybersecurity findings with others\nJuby Babu\nTue, May 19, 2026 at 6:28 AM GMT+8\n2 min read\nANTH.PVT\nAMZN\n+0.27%\nMSFT\n+0.38%\nNVDA\n-1.33%\nAAPL\n-0.80%\nBy Juby Babu\nMay 18 (Reuters) - Anthropic said on Monday it is revising its earlier position to allow users of its Mythos cybersecurity model ‌to share information about cyber threats with others who may be exposed ‌to similar vulnerabilities. Mythos, announced on April 7, is being deployed as part of Anthropic's \"Project Glasswing,\" a controlled ​initiative under which select organizations, including major tech firms such as Amazon,\nMicrosoft\n,\nNvidia\nand\nApple\n, are permitted to use the unreleased Claude Mythos Preview model for defensive cybersecurity purposes. Mythos' capabilities to code at a high level have given it a potentially ‌unprecedented ability to identify cybersecurity ⁠vulnerabilities and devise ways to exploit them, according to experts. Last week, Anthropic began telling partners that they are generally permitted to disclose ⁠their involvement in Glasswing and, at their own discretion, share findings, best practices, tools or code developed through the program. \"We fully support our partners sharing findings with each ​other and ​companies outside of Glasswing to triage vulnerabilities,\" ​an Anthropic spokesperson said in a ‌statement. \"While there was never a specific Glasswing NDA, confidentiality protections were something partners asked for at the outset and were built into agreements partners signed.\"\nThe protections were included in agreements with participating companies under which the model is provided, after partners sought assurances before sharing sensitive findings and expressed concern about being targeted by ‌attackers. \"As the program has matured, we've adapted them ​to ensure key information can be shared broadly - ​including outside the program - for maximum ​defensive impact,\" the spokesperson added.",
+        "[MSFT] Anthropic said partners may share that ‌information with security teams at other companies, ​industry bodies, regulators and ​government agencies, open-source maintainers, the media or the public, subject to responsible-disclosure norms. The Pentagon is deploying Mythos to find and patch software vulnerabilities across ​the U.S. government even as ‌it races to complete a transition away from the AI company, the ​Defense Department's top technology official said last week. (Reporting by Juby Babu ​in Mexico City; Editing by Shailesh Kuber)\nTerms\nand\nPrivacy Policy\nPrivacy Dashboard\nMore Info"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Microsoft 目前的淨利率是多少",
+        "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼"
+      ],
+      "agentic_n_chunks": 3
+    },
+    {
+      "id": "mi-07",
+      "category": "multi_intent",
+      "query": "Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？",
+      "answerable": true,
+      "answer": "Amazon 的毛利率約為 50.6%（毛利率 0.50604）【AMZN_Fundamentals_20260612.txt, chunk #0】；同時，計畫投入超過 €100 億（10 billion） 於歐洲的擴張，顯示公司正透過升級履約中心、導入先進機器人、擴大「Amazon Now」超速配送服務，以及投資網路安全與軟體開發等高成長領域，以加速在歐洲的市場佔有率與長期營收增長【AMZN_News_20260612_01.txt, chunk #0】。  \n\n- **毛利率細節**：根據最新的 TTM 數據，Amazon 的毛利率為 0.50604，即 50.6%【AMZN_Fundamentals_20260612.txt, chunk #0】。  \n- **投資規模**：公司宣布將在歐洲投資「超過 €100 億（10 billion）」以擴大營運規模【AMZN_News_20260612_01.txt, chunk #0】。  \n- **成長策略要點**：  \n  1. **履約設施現代化**：部署新一代機器人（如 Proteus）與擴充 STARK 系統，提升倉儲自動化與效率【AMZN_News_20260612_01.txt, chunk #0】。  \n  2. **創造就業與人才培育**：計畫新增 25,000 個工作機會，並投入 10 億美元（$1 billion） 於員工教育與培訓（Career Choice）【AMZN_News_20260612_01.txt, chunk #0】。  \n  3. **加速配送服務**：在曼徹斯特與伯明翰推出「Amazon Now」超速配送，先行於倫敦測試後擴展至全歐洲【AMZN_News_20260612_01.txt, chunk #0】。  \n  4. **聚焦高成長領域**：投資重點包括網路安全與軟體開發，旨在提升技術競爭力與未來營收來源【AMZN_News_20260612_01.txt, chunk #0】。  \n\n綜合來看，Amazon 以 50.6% 的高毛利率為基礎，透過大規模資本支出與技術升級，採取「深化物流、擴張快速配送、培育人才、布局高成長科技」的多面向成長策略，以鞏固並擴大其在歐洲市場的競爭優勢。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AMZN_News_20260612_01.txt #0 (rerank=0.730)\n  - AMZN_Fundamentals_20260612.txt #0 (rerank=0.714)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AMZN_News_20260612_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[AMZN] Title    : Amazon.com, Inc. (AMZN) Plots €10B Investment To Bolster Growth in Europe\nSource   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/amazon-com-inc-amzn-plots-032530521.html\nPublished: 2026-06-12T03:25:30Z\n\nAmazon.com, Inc. (AMZN) Plots €10B Investment To Bolster Growth in Europe\nAbdul Rahman\nFri, June 12, 2026 at 11:25 AM GMT+8\n2 min read\nAMZN\n+1.47%\nAmazon.com, Inc. (NASDAQ:\nAMZN\n) is\none of the best forever stocks to buy, according to analysts\n. In June, Amazon.com Inc. (NASDAQ:AMZN) announced plans to invest more than €10 billion to expand and strengthen its operations in Europe. Photo by Anete Lusina on Pexels\nThe company plans to modernize its fulfillment facilities, which are at the center of its e-commerce empire. Part of the plan involves deploying next-generation robotics that can operate throughout the facilities and respond to conversational text prompts from employees. Even as the company modernizes its facilities with robots, it also plans to create 25,000 new jobs with the expansion drive. Amazon plans to deploy its autonomous Proteus robot in Europe in the first half of 2027. It also plans to expand its STARK robotic system that handles tote placement alongside employees. Plans are also underway to offer the Amazon Now ultra-fast delivery service in Manchester and Birmingham before the year's end, following its launch in London. The company has also committed $1 billion to employee education and training through the Career Choice program. The investment is to cover high-growth fields, including cybersecurity and software development.",
+        "[AMZN] === AMZN Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Amazon.com, Inc. Sector : Consumer Cyclical Industry : Internet Retail Employees: 1,575,000\n\n--- Valuation Metrics --- Market Cap : $2597.95B Enterprise Value : $2690.40B P/E Ratio Trailing: 31.652685 P/E Ratio Forward : 24.494015 Price/Sales (TTM) : 3.497622 Price/Book : 5.8771567 EV/EBITDA : 17.262\n\n--- Profitability --- Revenue (TTM) : $742.78B Gross Profit : $375.88B EBITDA : $155.86B Net Income : $90.80B Profit Margin : 0.12224 Operating Margin: 0.1314 Gross Margin : 0.50604\n\n--- Growth --- Revenue Growth (YoY): 0.166 Earnings Growth : 0.748 EPS Trailing : 7.63 EPS Forward : 9.85996"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Amazon 目前的毛利率是多少",
+        "Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明其成長策略"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "mi-08",
+      "category": "multi_intent",
+      "query": "Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？",
+      "answerable": true,
+      "answer": "Amazon 近一年（2025 財政年度）營收成長率約 **12%**，而以最近十二個月（TTM）計算的營收年增率則為 **16.6%**【AMZN_10K_2025.html, chunk #211】【AMZN_Fundamentals_20260612.txt, chunk #0】。\n\n- FY2025 合併營收從 6,379.59 億美元（$637,959 百萬）增至 7,169.24 億美元（$716,924 百萬），年增率 12%【AMZN_10K_2025.html, chunk #211】。  \n- TTM（截至 2026‑06‑12）營收年增率列為 0.166，即 16.6%【AMZN_Fundamentals_20260612.txt, chunk #0】。\n\n關於新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，資料顯示：\n\n- 在 SpaceX 上市前夕，對沖基金拋售了「Magnificent Seven」成員，包括 Amazon，且部分基金甚至建立了空頭部位【NVDA_News_20260612_01.txt, chunk #0】。  \n- 追蹤這些股票的 Roundhill Magnificent Seven ETF 自 6 月 5 日以來下跌超過 **2.4%**【NVDA_News_20260612_01.txt, chunk #0】。\n\n這透露出市場在重大事件（如 SpaceX IPO）前的 **風險規避與資金撤出** 行為，投資人對包括 Amazon 在內的巨型科技股持較為謹慎或偏空的短期觀感，認為可能面臨波動或需要重新配置投資組合。此情況顯示，即使 Amazon 近期營收持續成長，市場仍會因外部事件而暫時減少對其股價的支撐。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_News_20260612_01.txt #0 (rerank=0.729)\n  - AMZN_Fundamentals_20260612.txt #0 (rerank=0.700)\n  - AMZN_10Q_202603.html #12 (rerank=0.690)\n  - AMZN_10K_2025.html #211 (rerank=0.638)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "NVDA_News_20260612_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 12
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 211
+        }
+      ],
+      "contexts": [
+        "[NVDA] Title    : Hedge funds sold broader tech ahead of SpaceX IPO, JPMorgan data shows\nSource   : Reuters [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/hedge-funds-sold-broader-tech-105812649.html\nPublished: 2026-06-12T10:58:12Z\n\nHedge funds sold broader tech ahead of SpaceX IPO, JPMorgan data shows\nNell Mackenzie\nFri, June 12, 2026 at 6:58 PM GMT+8\n1 min read\nSPCX\n0.00%\nNVDA\n+2.22%\nAAPL\n+1.39%\nAMZN\n+1.47%\nGOOG\n+0.92%\nBy Nell Mackenzie\nLONDON, June 12 (Reuters) - Hedge funds sold out of the biggest U.S. tech stocks, and some even added ‌bearish positions, according to data from a JPMorgan note late ‌Thursday, just before SpaceX was set to go public on Friday. Shares in the \"Magnificent Seven\" -- ​a group that includes some of the biggest tech names on Wall Street, namely\nNvidia\n,\nApple\n, Amazon.com, Alphabet, Meta,\nTesla\n, and Microsoft, have all declined since last Friday. The Roundhill Magnificent Seven ETF, which tracks these ‌stocks closely, declined over 2.4% ⁠since June 5, with some analysts saying investors were clearing their decks in order to prepare for the ⁠debut of Elon Musk's Space X on Friday. SpaceX posted a net loss of $4.94 billion in 2025, but its landmark listing targets a valuation of $1.77 ​trillion ​in a record-setting IPO, which would ​make it the seventh-biggest publicly ‌traded U.S. company by market value.",
+        "[AMZN] === AMZN Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Amazon.com, Inc. Sector : Consumer Cyclical Industry : Internet Retail Employees: 1,575,000\n\n--- Valuation Metrics --- Market Cap : $2597.95B Enterprise Value : $2690.40B P/E Ratio Trailing: 31.652685 P/E Ratio Forward : 24.494015 Price/Sales (TTM) : 3.497622 Price/Book : 5.8771567 EV/EBITDA : 17.262\n\n--- Profitability --- Revenue (TTM) : $742.78B Gross Profit : $375.88B EBITDA : $155.86B Net Income : $90.80B Profit Margin : 0.12224 Operating Margin: 0.1314 Gross Margin : 0.50604\n\n--- Growth --- Revenue Growth (YoY): 0.166 Earnings Growth : 0.748 EPS Trailing : 7.63 EPS Forward : 9.85996",
+        "[AMZN 10-Q period 202603] Net sales include product and service sales. Product sales represent revenue from the sale of products and related shipping fees and digital media content where we record revenue gross. Service sales primarily represent third-party seller f\n\n|  | Three Months Ended March 31, |  |  |  |  |  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n|  | 2025 |  | 2026 |  |  |  |  |  |  |  |  |\n| Net Sales: |  |  |  |  |  |  |  |  |  |  |  |\n| North America | $ | 92,887 |  |  | $ | 104,143 |  |  |  |  |  |\n| International | 33,513 |  |  | 39,789 |  |  |  |  |  |  |  |\n| AWS | 29,267 |  |  | 37,587 |  |  |  |  |  |  |  |\n| Consolidated | $ | 155,667 |  |  | $ | 181,519 |  |  |  |  |  |\n| Year-over-year Percentage Growth: |  |  |  |  |  |  |  |  |  |  |  |\n| North America | 8 | % |  | 12 | % |  |  |  |  |  |  |\n| International | 5 |  |  | 19 |  |  |  |  |  |  |  |\n| AWS | 17 |  |  | 28 |  |  |  |  |  |  |  |\n| Consolidated | 9 |  |  | 17 |  |  |  |  |  |  |  |\n| Year-over-year Percentage Growth, excluding the effect of foreign exchange rates: |  |  |  |  |  |  |  |  |  |  |  |\n| North America | 8 | % |  | 12 | % |  |  |  |  |  |  |\n| International | 8 |  |  | 11 |  |  |  |  |  |  |  |\n| AWS | 17 |  |  | 28 |  |  |  |  |  |  |  |\n| Consolidated | 10 |  |  | 15 |  |  |  |  |  |  |  |\n| Net Sales Mix: |  |  |  |  |  |  |  |  |  |  |  |\n| North America | 60 | % |  | 57 | % |  |  |  |  |  |  |\n| International | 21 |  |  | 22 |  |  |  |  |  |  |  |\n| AWS | 19 |  |  | 21 |  |  |  |  |  |  |  |\n| Consolidated | 100 | % |  | 100 | % |  |  |  |  |  |  |",
+        "[AMZN 10-K period 2025] Further, we expect to continue making additional investments in our artificial intelligence initiatives. We expect some or all of these factors to continue to impact our results of operations into Q1 2026. Net Sales\n\nNet sales include product and service sales. Product sales represent revenue from the sale of products and related shipping fees and digital media content where we record revenue gross. Service sales primarily represent third-party seller fees, which includes commissions and any related fulfillment and shipping fees, AWS sales, advertising services, Amazon Prime membership fees, and certain digital media content subscriptions. Net sales information is as follows (in millions):\n\nYear Ended December 31,\n\n 20242025\n\nNet Sales:\n\nNorth America$387,497 $426,305 \n\nInternational142,906 161,894 \n\nAWS107,556 128,725 \n\nConsolidated$637,959 $716,924 \n\nYear-over-year Percentage Growth:\n\nNorth America10 %10 %\n\nInternational9 13 \n\nAWS19 20 \n\nConsolidated11 12 \n\nYear-over-year Percentage Growth, excluding the effect of foreign exchange rates:\n\nNorth America10 %10 %\n\nInternational10 10 \n\nAWS19 20 \n\nConsolidated11 12 \n\nNet Sales Mix:\n\nNorth America61 %59 %\n\nInternational22 23 \n\nAWS17 18 \n\nConsolidated100 %100 %\n\nSales increased 12% in 2025, compared to the prior year. Changes in foreign exchange rates increased net sales by $4.4 billion in 2025. For a discussion of the effect of foreign exchange rates on sales growth, see “Effect of Foreign Exchange Rates” below. North America sales increased 10% in 2025, compared to the prior year. The sales growth primarily reflects increased unit sales, including sales by third-party sellers, advertising sales, and subscription services. Increased unit sales were driven largely by our continued focus on price, selection, and convenience for our customers, including from our fast shipping offers. Changes in foreign exchange rates reduced North America net sales by $454 million in 2025. International sales increased 13% in 2025, compared to the prior year."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Amazon 近一年的營收成長率是多少",
+        "避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股的新聞內容是什麼"
+      ],
+      "agentic_n_chunks": 4
+    },
+    {
+      "id": "mi-09",
+      "category": "multi_intent",
+      "query": "Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？",
+      "answerable": true,
+      "answer": "Alphabet 目前的毛利率約為 **60.37%**【GOOGL_Fundamentals_20260612.txt, chunk #0】。  \n\n- 2026 年 6 月，Moody’s 報導 Alphabet 正在進行 **847.5 億美元（$84.75 billion）** 的股本增資，並計畫透過公開發行約 **347.5 億美元（$34.75 billion）** 的普通股與 6.25% 可轉換優先股，以及 **400 億美元（$40 billion）** 的市場股權發行與 **100 億美元（$10 billion）** 的私募，將資金用於「一般企業目的」與 **人工智慧基礎建設** 以及全球運算容量擴張【GOOGL_News_20260612_02.txt, chunk #0】。  \n- 同時，Moody’s 預估 Alphabet 本年度的資本支出將升至 **1,850 億美元（$185 billion）**，較去年 **915 億美元（$91.5 billion）** 大幅增加，主要用於 AI 基礎設施與算力擴張【GOOGL_News_20260612_02.txt, chunk #0】。  \n\n**AI 投資策略的訊號**  \n1. **資金來源偏好股權而非負債**：巨額股本增資顯示 Alphabet 希望以股權方式籌措資金，維持強健的資產負債表，避免因大量負債而限制未來的研發彈性。  \n2. **資本支出大幅提升**：資本支出從去年 915 億（91.5 billion） 增至 1,850 億（185 billion），幾乎翻倍，直接指向對 AI 計算基礎設施（資料中心、GPU 叢集等）的大規模投入。  \n3. **與高毛利率相結合**：60.37% 的毛利率提供了充裕的營運現金流，支撐這些高額資本支出，同時保證在 AI 相關產品與服務的營收貢獻提升時，仍能維持健康的利潤結構。  \n\n綜合來看，Alphabet 透過巨額股本增資與近乎翻倍的資本支出，明確傳遞出 **「加速 AI 基礎設施建置、以股權資金維持財務穩健」** 的投資策略，旨在鞏固其在人工智慧領域的競爭優勢。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_Fundamentals_20260612.txt #0 (rerank=0.724)\n  - GOOGL_News_20260612_02.txt #0 (rerank=0.722)\n  - GOOGL_News_20260721_01.txt #0 (rerank=0.504)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_News_20260612_02.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_News_20260721_01.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[GOOGL] === GOOGL Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Alphabet Inc. Sector : Communication Services Industry : Internet Content & Information Employees: 194,668\n\n--- Valuation Metrics --- Market Cap : $4362.98B Enterprise Value : $4303.78B P/E Ratio Trailing: 27.331549 P/E Ratio Forward : 24.706831 Price/Sales (TTM) : 10.3266325 Price/Book : 9.054259 EV/EBITDA : 26.679\n\n--- Profitability --- Revenue (TTM) : $422.50B Gross Profit : $255.05B EBITDA : $161.32B Net Income : $160.21B Profit Margin : 0.37919 Operating Margin: 0.36121 Gross Margin : 0.60368\n\n--- Growth --- Revenue Growth (YoY): 0.218 Earnings Growth : 0.82 EPS Trailing : 13.09 EPS Forward : 14.48061",
+        "[GOOGL] Title    : Is Alphabet Inc. (GOOGL) One of the Best Forever Stocks to Buy on $85B Capital Raise? Source   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/alphabet-inc-googl-one-best-032550927.html\nPublished: 2026-06-12T03:25:50Z\n\nIs Alphabet Inc. (GOOGL) One of the Best Forever Stocks to Buy on $85B Capital Raise? Abdul Rahman\nFri, June 12, 2026 at 11:25 AM GMT+8\n2 min read\nGOOG\n+0.92%\nBRK-B\n+0.44%\nAlphabet Inc. (NASDAQ:\nGOOGL\n) is\none of the best forever stocks to buy, according to analysts\n. On June 5, Moody’s Ratings touted Alphabet Inc.’s (NASDAQ:GOOGL) move to raise $84.75 billion, affirming it as credit-positive. According to the ratings firm, the massive equity raise underscores Alphabet’s strong financial profile, which is capable of funding incremental investment through equity rather than adding debt. In addition, the move asserts commitment towards disciplined financial policies capable of ensuring a strong balance sheet. Moody’s expects the company’s capital expenditure to reach $185 billion this year, up from $91.5 billion last year. Alphabet plans to raise about $34.75 billion through an underwritten public offering of common equity and 6.25% mandatory convertible preferred securities. It’s also eyeing a $40 billion market equity issuance program and a $10 billion private placement with Berkshire Hathaway. The company is to use net proceeds from the offerings for general corporate purposes, including artificial intelligence infrastructure, and for global compute capacity expansion. Alphabet Inc. (NASDAQ:GOOGL) is a multinational technology conglomerate and the parent holding company of Google. It generates the bulk of its revenue through internet advertising, cloud computing, and consumer hardware, while also operating highly speculative, forward-looking ventures known as “Other Bets. While we acknowledge the potential of GOOGL as an investment, we believe certain AI stocks offer greater upside potential and carry less downside risk. If you're looking for an extremely undervalued AI stock that also stands to benefit significantly from Trump-era tariffs and the onshoring trend, see our free report on the\nbest short-term AI stock\n. READ NEXT:\n8 Most Profitable Crypto-Exposed Stocks to Buy Now\nand\n10 Best Robinhood Stocks Under $20 to Buy Now\n.",
+        "[GOOGL] Title    : Earnings live: AMC stock soars 26% on 'superb' Q2, Domino's stock rises\nSource   : Yahoo Finance [full]\nURL      : https://finance.yahoo.com/markets/live/earnings-live-second-quarter-results-tesla-google-july-115324842.html\nPublished: 2026-07-20T11:53:24Z\n\nLIVE\nEarnings live: AMC stock soars 26% on 'superb' Q2, Domino's stock rises\nYahoo Finance\nUpdated\nMon, July 20, 2026 at 9:08 PM GMT+8\n1 min read\nIBM\n+0.16%\nGOOG\n+1.52%\n^GSPC\n-0.19%\nINTC\n+2.13%\nTSLA\n-2.96%\nA big quarter for AMC (\nAMC\n) showed the movie industry is finally regaining its footing after years of a stilted post-pandemic recovery. The results kick off a stacked week of earnings, with Big Tech companies Alphabet (\nGOOG\n,\nGOOGL\n) and Tesla (\nTSLA\n) highlighting the calendar. The pair, along with US chipmaker Intel (\nINTC\n), will offer a crucial update on artificial intelligence demand as investors remain torn about huge capex commitments for the AI build-out. IBM (\nIBM\n), meanwhile, will provide a fuller picture of its Q2 results after its stock plunged on pre-announced earnings. Rounding out the docket this week are reports from General Motors (\nGM\n), GE Vernova (\nGEV\n), AT&T (\nT\n), Lockheed Martin (\nLMT\n), and American Express (\nAXP\n). Overall, it's shaping up to be a\nstrong earnings season\nfor the S&P 500 (\n^GSPC\n). According to\nFactSet data\n, analysts estimate the year-over-year S&P 500 earnings growth rate for the second quarter will be 24.7% — above the five-year average of 16.4% and the 10-year average of 10.3%. If that holds, it will mark the second consecutive quarter of earnings growth above 20% for the index and the seventh straight quarter of double-digit growth."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Alphabet 目前的毛利率是多少",
+        "Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出新聞內容是什麼，並透露了其 AI 投資策略的訊息"
+      ],
+      "agentic_n_chunks": 3
+    },
+    {
+      "id": "mi-10",
+      "category": "multi_intent",
+      "query": "Alphabet 近一年的營收成長率是多少？加上新聞中 Navan 與 Google Gemini 的合作案例，反映出 Google 在 AI 生態系布局上的哪些進展？",
+      "answerable": true,
+      "answer": "Alphabet 近一年營收成長率為 **21.8%（YoY）**，因其財務概況中列示 Revenue Growth (YoY) 為 0.218【GOOGL_Fundamentals_20260612.txt, chunk #0】。\n\nNavan CEO 在 Yahoo Finance 影片中說明，Navan 與 Google **Gemini** 合作，利用 AI‑powered 的協作功能讓使用者在旅行預訂時能更快速、個人化地完成流程【GOOGL_News_20260612_01.txt, chunk #0】。此案例顯示 Google 正將 Gemini 應用於具體的垂直產業（如旅行預訂），以實際產品服務擴展其生成式 AI 能力，進一步豐富 AI 生態系的應用場景。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_Fundamentals_20260612.txt #0 (rerank=0.722)\n  - GOOGL_News_20260612_01.txt #0 (rerank=0.685)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_News_20260612_01.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[GOOGL] === GOOGL Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Alphabet Inc. Sector : Communication Services Industry : Internet Content & Information Employees: 194,668\n\n--- Valuation Metrics --- Market Cap : $4362.98B Enterprise Value : $4303.78B P/E Ratio Trailing: 27.331549 P/E Ratio Forward : 24.706831 Price/Sales (TTM) : 10.3266325 Price/Book : 9.054259 EV/EBITDA : 26.679\n\n--- Profitability --- Revenue (TTM) : $422.50B Gross Profit : $255.05B EBITDA : $161.32B Net Income : $160.21B Profit Margin : 0.37919 Operating Margin: 0.36121 Gross Margin : 0.60368\n\n--- Growth --- Revenue Growth (YoY): 0.218 Earnings Growth : 0.82 EPS Trailing : 13.09 EPS Forward : 14.48061",
+        "[GOOGL] Title    : How Navan gained market share and climbed back to its IPO price\nSource   : Yahoo Finance Video [full]\nURL      : https://finance.yahoo.com/video/how-navan-gained-market-share-and-climbed-back-to-its-ipo-price-151143581.html\nPublished: 2026-06-11T15:11:43Z\n\nHow Navan gained market share and climbed back to its IPO price\nYahoo Finance Video\nand\nBrian Sozzi\nThu, June 11, 2026 at 11:11 PM GMT+8\nGOOGL\n+0.39%\nYahoo Finance Executive Editor Brian Sozzi welcomes Navan (\nNAVN\n) CEO Ariel Cohen to discuss the company's earnings beat and increased full-year guidance. Cohen also details Navan's partnership with Google (\nGOOG\n,\nGOOGL\n) Gemini and how the AI-powered collaboration is helping users streamline and personalize the travel booking experience. Video Transcript\n00:00\nSpeaker A\nYou're just gaining market share from some of those slow-moving legacy platforms?"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Alphabet 近一年的營收成長率是多少",
+        "Navan 與 Google Gemini 的合作案例是什麼"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "mi-11",
+      "category": "multi_intent",
+      "query": "Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？",
+      "answerable": true,
+      "answer": "Meta 目前的毛利率為 **0.81941（約 81.94%）**，而市場普遍認為其 AI 投資將擴大競爭護城河並帶來長期收益，儘管投資者情緒相對落後【META_Fundamentals_20260612.txt, chunk #0】。\n\n**支撐細節**  \n- **毛利率**：Meta 的 TTM（截至 2026 年）毛利率為 0.81941，換算約為 81.94%【META_Fundamentals_20260612.txt, chunk #0】。  \n- **Morgan Stanley 的 AI 評價**：  \n  - 分析師 Brian Nowak 指出，市場低估了 Meta 於 2027‑2028 年預計 **3,800 億美元（$380 billion）** 的資本支出，這筆巨額投入將用於 AI 相關產品【META_News_20260612_01.txt, chunk #0】。  \n  - 預計此投資可在 2028 年為每股盈餘（EPS）額外貢獻 **1 至 3 美元**【META_News_20260612_01.txt, chunk #0】。  \n  - Meta 正在開發的多元搜尋工具若能吸引 **10 億** 用戶並將每日查詢的 10% 變現，將產生 **超過 100 億美元（$10 billion）** 的年度營收【META_News_20260612_01.txt, chunk #0】。  \n  - 公司已推出分層訂閱方案，以追求高毛利率的收入來源【META_News_20260612_01.txt, chunk #0】。  \n  - Morgan Stanley 為 Meta 設定 **$775** 的目標價，並將其列為「最佳永續持有」股票之一【META_News_20260612_01.txt, chunk #0】。  \n- **市場綜合觀感**：  \n  - 分析師認為 AI 支出將加強 Meta 的競爭護城河，但同時指出投資者情緒仍落後於其他巨型科技同業，因為對未來資本支出的可見度有限【META_News_20260612_01.txt, chunk #0】。  \n  - 雖然 Meta 被視為 AI 投資的長期正面因素，Morgan Stanley 仍認為其他 AI 股票可能提供更高的上行空間且風險較低，暗示市場對 Meta 的 AI 前景仍持謹慎樂觀的態度【META_News_20260612_01.txt, chunk #0】。  \n\n綜合而言，Meta 目前擁有極高的毛利率，且其大規模 AI 資本支出與新產品布局被視為提升未來營收與盈利的關鍵驅動力；然而，市場仍對其投資回報的可見度保持一定保留，導致股價表現相對滯後。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_Fundamentals_20260612.txt #0 (rerank=0.725)\n  - META_News_20260612_01.txt #0 (rerank=0.717)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "META_News_20260612_01.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[META] === META Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Meta Platforms, Inc. Sector : Communication Services Industry : Internet Content & Information Employees: 77,986\n\n--- Valuation Metrics --- Market Cap : $1442.92B Enterprise Value : $1448.50B P/E Ratio Trailing: 20.662668 P/E Ratio Forward : 15.718934 Price/Sales (TTM) : 6.7123923 Price/Book : 5.920344 EV/EBITDA : 13.252\n\n--- Profitability --- Revenue (TTM) : $214.96B Gross Profit : $176.14B EBITDA : $109.31B Net Income : $70.59B Profit Margin : 0.32837 Operating Margin: 0.40617 Gross Margin : 0.81941\n\n--- Growth --- Revenue Growth (YoY): 0.331 Earnings Growth : 0.624 EPS Trailing : 27.51 EPS Forward : 36.16212",
+        "[META] Title    : This is why Morgan Stanley Views Meta Platforms, Inc. (META) as one of the Best Forever Stocks to buy\nSource   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/why-morgan-stanley-views-meta-032559502.html\nPublished: 2026-06-12T03:25:59Z\n\nThis is why Morgan Stanley Views Meta Platforms, Inc. (META) as one of the Best Forever Stocks to buy\nAbdul Rahman\nFri, June 12, 2026 at 11:25 AM GMT+8\n2 min read\nMETA\n-0.45%\nMeta Platforms, Inc. (NASDAQ:\nMETA\n) is\none of the best forever stocks to buy according to analysts\n. On June 6, Morgan Stanley analyst Brian Nowak reiterated that Wall Street is overlooking Meta Platforms, Inc. (NASDAQ:META), expanding competitive moat amid massive artificial intelligence spending. According to Nowak, investor sentiment around Meta Platforms has lagged that of other mega-cap technology peers due to limited visibility into the company’s projected $380 billion capital expenditure for 2027 and 2028. The analyst expects the investments to result in products that could add $1 to $3 to the company’s 2028 earnings per share. Nowak expects Meta Platforms to benefit from the multibillion-dollar search opportunity integrated into Meta AI. Should the search tool retain 1 billion users and monetize just 10% of daily queries, it is expected to generate over $10 billion in annual revenue. The company has already begun rolling out tiered subscription packages to pursue high-margin revenue streams. Consequently, Nowak has reiterated that Meta is a top pick among mega caps and reiterated a $775 price target. Meta Platforms, Inc. (NASDAQ:META) is a multinational technology conglomerate that builds digital and physical tools to help people connect. The company operates the world’s largest social media ecosystem, advances artificial intelligence, and develops mixed-reality hardware and wearable devices. While we acknowledge the potential of META as an investment, we believe certain AI stocks offer greater upside potential and carry less downside risk. If you're looking for an extremely undervalued AI stock that also stands to benefit significantly from Trump-era tariffs and the onshoring trend, see our free report on the\nbest short-term AI stock\n. READ NEXT:\n8 Most Profitable Crypto-Exposed Stocks to Buy Now\nand\n10 Best Robinhood Stocks Under $20 to Buy Now\n."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Meta 目前的毛利率是多少",
+        "Morgan Stanley 在新聞中對 Meta 的 AI 護城河與資本支出有何評價"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "mi-12",
+      "category": "multi_intent",
+      "query": "Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？",
+      "answerable": true,
+      "answer": "Meta 近一年營收成長率約為 **33.1%（0.331）**【META_Fundamentals_20260612.txt, chunk #0】。  \n\n在 SpaceX IPO 前夕，對沖基金拋售了包括 Meta 在內的「Magnificent Seven」科技股，導致追蹤這些股票的 Roundhill Magnificent Seven ETF 自 6 月 5 日以來下跌逾 2.4%，而報導指出「這些股票自上週五以來皆已下跌」【NVDA_News_20260612_01.txt, chunk #0】。因此，儘管 Meta 近期營收以約 33% 的高速成長，但其股價在短期內受到整體科技板塊拋售的負面情緒壓制，形成一個與基本面強勁相對的市場氛圍。這意味著投資人需同時考量公司內部的營收動能與外部的市場情緒與資金流向。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_News_20260612_01.txt #0 (rerank=0.730)\n  - META_Fundamentals_20260612.txt #0 (rerank=0.722)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "NVDA_News_20260612_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[NVDA] Title    : Hedge funds sold broader tech ahead of SpaceX IPO, JPMorgan data shows\nSource   : Reuters [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/hedge-funds-sold-broader-tech-105812649.html\nPublished: 2026-06-12T10:58:12Z\n\nHedge funds sold broader tech ahead of SpaceX IPO, JPMorgan data shows\nNell Mackenzie\nFri, June 12, 2026 at 6:58 PM GMT+8\n1 min read\nSPCX\n0.00%\nNVDA\n+2.22%\nAAPL\n+1.39%\nAMZN\n+1.47%\nGOOG\n+0.92%\nBy Nell Mackenzie\nLONDON, June 12 (Reuters) - Hedge funds sold out of the biggest U.S. tech stocks, and some even added ‌bearish positions, according to data from a JPMorgan note late ‌Thursday, just before SpaceX was set to go public on Friday. Shares in the \"Magnificent Seven\" -- ​a group that includes some of the biggest tech names on Wall Street, namely\nNvidia\n,\nApple\n, Amazon.com, Alphabet, Meta,\nTesla\n, and Microsoft, have all declined since last Friday. The Roundhill Magnificent Seven ETF, which tracks these ‌stocks closely, declined over 2.4% ⁠since June 5, with some analysts saying investors were clearing their decks in order to prepare for the ⁠debut of Elon Musk's Space X on Friday. SpaceX posted a net loss of $4.94 billion in 2025, but its landmark listing targets a valuation of $1.77 ​trillion ​in a record-setting IPO, which would ​make it the seventh-biggest publicly ‌traded U.S. company by market value.",
+        "[META] === META Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Meta Platforms, Inc. Sector : Communication Services Industry : Internet Content & Information Employees: 77,986\n\n--- Valuation Metrics --- Market Cap : $1442.92B Enterprise Value : $1448.50B P/E Ratio Trailing: 20.662668 P/E Ratio Forward : 15.718934 Price/Sales (TTM) : 6.7123923 Price/Book : 5.920344 EV/EBITDA : 13.252\n\n--- Profitability --- Revenue (TTM) : $214.96B Gross Profit : $176.14B EBITDA : $109.31B Net Income : $70.59B Profit Margin : 0.32837 Operating Margin: 0.40617 Gross Margin : 0.81941\n\n--- Growth --- Revenue Growth (YoY): 0.331 Earnings Growth : 0.624 EPS Trailing : 27.51 EPS Forward : 36.16212"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Meta 近一年的營收成長率是多少？",
+        "科技股在 SpaceX IPO 前遭避險基金拋售的新聞內容是什麼，且此情況對 Meta 股價表現的背景有何意義？"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "mi-13",
+      "category": "multi_intent",
+      "query": "Tesla 目前的毛利率表現如何？加上新聞中 SpaceX 即將 IPO 讓 Tesla 關注度降溫的報導，這對 Tesla 目前的市場處境有何影響？",
+      "answerable": true,
+      "answer": "Tesla 的毛利率在最近的 TTM 為 **0.19065**（約 19.1%）【TSLA_Fundamentals_20260612.txt, chunk #0】。  \n\nSpaceX 即將於 2026 年 6 月 12 日在 Nasdaq 以 SPCX 代號上市的消息，使投資人注意力從 Tesla 轉移，導致對「Magnificent Seven」中的科技股出現拋售壓力，Tesla 股價亦在此期間出現下跌【NVDA_News_20260612_01.txt, chunk #0】。  \n\n因此，儘管 Tesla 仍維持約 19% 的毛利率，短期內因 SpaceX IPO 前的市場情緒轉移，Tesla 的市場處境受到一定的冷卻，投資者可能暫時減少對其股票的關注與買入力度。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_Fundamentals_20260612.txt #0 (rerank=0.722)\n  - NVDA_News_20260519_01.txt #2 (rerank=0.706)\n  - NVDA_News_20260612_01.txt #0 (rerank=0.664)\n  - TSLA_News_20260612_01.txt #0 (rerank=0.651)\n  - NVDA_News_20260508_01.txt #8 (rerank=0.612)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_News_20260519_01.txt",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_News_20260612_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "TSLA_News_20260612_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_News_20260508_01.txt",
+          "chunk_index": 8
+        }
+      ],
+      "contexts": [
+        "[TSLA] === TSLA Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Tesla, Inc. Sector : Consumer Cyclical Industry : Auto Manufacturers Employees: 134,785\n\n--- Valuation Metrics --- Market Cap : $1499.10B Enterprise Value : $1470.93B P/E Ratio Trailing: 369.5833 P/E Ratio Forward : 159.53555 Price/Sales (TTM) : 15.31582 Price/Book : 18.228525 EV/EBITDA : 132.588\n\n--- Profitability --- Revenue (TTM) : $97.88B Gross Profit : $18.66B EBITDA : $11.09B Net Income : $3.86B Profit Margin : 0.03946 Operating Margin: 0.04203 Gross Margin : 0.19065\n\n--- Growth --- Revenue Growth (YoY): 0.158 Earnings Growth : 0.083 EPS Trailing : 1.08 EPS Forward : 2.50195",
+        "[NVDA] Mon, May 18, 2026 at 2:52 PM UTC\nPras Subramanian\nSpaceX reportedly issues 5-for-1 stock split as IPO timeline accelerates\nSpaceX (\nSPAX.PVT\n) is barreling toward its\ninitial public offering\n, and it is trying to make its stock even more attractive with a stock split before it even debuts. Bloomberg\nreported over the weekend that SpaceX told its investors it will implement a 5-for-1 stock split, a move that would potentially reduce the price of the stock ahead of its IPO. SpaceX informed shareholders that the current fair market value per share has been adjusted to about $105.32 from $526.59 as a result of the split, per Bloomberg sources. The stock split will be processed this week and is expected to be officially completed by May 22, the sources said. News of the split comes as SpaceX is quickly headed toward the public markets. On Friday,\nReuters\nreported that SpaceX is planning to price its IPO as early as June 11, with the rocket company listing on the Nasdaq starting on June 12. Read more\n. Mon, May 18, 2026 at 2:30 PM UTC\nGrace O'Donnell\nHere's how Nvidia stock has historically performed after earnings\nYahoo Finance’s Jared Blikre reports:\nFor Nvidia (\nNVDA\n) investors, the first move after earnings has historically been only part of the story. Buying the stock just before quarterly results has produced modest short-term gains, but the longer-term picture has been much stronger. This chart shows the difference clearly. Since 2016, Nvidia’s post-earnings returns have been positive across every holding period studied. But the edge has been far more modest over the next day, week, or month than over a quarter or a year. The\nmedian\ngain has been only 0.3% after one day, 3.3% after one week, and 0.4% after one month. That rises to 11.1% over one quarter and 87.6% over one year.",
+        "[NVDA] Title    : Hedge funds sold broader tech ahead of SpaceX IPO, JPMorgan data shows\nSource   : Reuters [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/hedge-funds-sold-broader-tech-105812649.html\nPublished: 2026-06-12T10:58:12Z\n\nHedge funds sold broader tech ahead of SpaceX IPO, JPMorgan data shows\nNell Mackenzie\nFri, June 12, 2026 at 6:58 PM GMT+8\n1 min read\nSPCX\n0.00%\nNVDA\n+2.22%\nAAPL\n+1.39%\nAMZN\n+1.47%\nGOOG\n+0.92%\nBy Nell Mackenzie\nLONDON, June 12 (Reuters) - Hedge funds sold out of the biggest U.S. tech stocks, and some even added ‌bearish positions, according to data from a JPMorgan note late ‌Thursday, just before SpaceX was set to go public on Friday. Shares in the \"Magnificent Seven\" -- ​a group that includes some of the biggest tech names on Wall Street, namely\nNvidia\n,\nApple\n, Amazon.com, Alphabet, Meta,\nTesla\n, and Microsoft, have all declined since last Friday. The Roundhill Magnificent Seven ETF, which tracks these ‌stocks closely, declined over 2.4% ⁠since June 5, with some analysts saying investors were clearing their decks in order to prepare for the ⁠debut of Elon Musk's Space X on Friday. SpaceX posted a net loss of $4.94 billion in 2025, but its landmark listing targets a valuation of $1.77 ​trillion ​in a record-setting IPO, which would ​make it the seventh-biggest publicly ‌traded U.S. company by market value.",
+        "[TSLA] Title    : Why Elon Musk is the 'king of big ideas'\nSource   : Yahoo Finance Video [full]\nURL      : https://finance.yahoo.com/video/why-elon-musk-is-the-king-of-big-ideas-200023430.html\nPublished: 2026-06-11T20:00:23Z\n\nWhy Elon Musk is the 'king of big ideas'\nYahoo Finance Video\nand\nJosh Lipton\nFri, June 12, 2026 at 4:00 AM GMT+8\nTSLA\n+4.60%\nPYPL\n+1.33%\nSPCX\n0.00%\nElon Musk's SpaceX (\nSPAX.PVT\n) is on the launchpad, just one day away from its scheduled IPO. TrueCar Founder Scott Painter — an early Tesla (\nTSLA\n) advisor who sold Musk his Bel-Air mansion in 2020 — discusses his first-hand experiences witnessing Musk's leadership and vision as he seeks to expand his corporate empire. SpaceX is expected to go public on the Nasdaq this Friday, June 12, under the ticker SPCX, with the space operator aiming for an IPO price of $135 per share. Video Transcript\n00:00\nSpeaker A\nI've known Elon for almost 25 years.",
+        "[NVDA] Link copied to clipboard. Featured Articles and Offers\nThe Real SpaceX Play: 5 Chip Stocks Powering the IPO Before It Launches\nBy Bridget Bennett\n|\nMay 4, 2026\nSpaceX eyes a 1.75 trillion valuation - here's what to know\nFrom Brownstone Research\n(Ad)\nApple Talks Just Changed Everything for Intel\nBy Sam Quirke\n|\nMay 6, 2026\n3 Energy Stocks to Buy and 2 to Avoid as AI Power Demand Explodes\nBy Bridget Bennett\n|\nMay 4, 2026\nIntel (NASDAQ:INTC)  Shares Down 3.9%  Following Insider Selling\nBy MarketBeat\n|\nMay 4, 2026\n$30 stock to buy before Starlink goes public (WATCH NOW!)\nFrom Paradigm Press\n(Ad)\n5 Stocks to Buy in May Before the Next AI Surge Hits\nBy Thomas Hughes\n|\nMay 1, 2026\nRoblox Stock Slides to New Low as Safety Changes Weigh on Outlook\nBy Jennifer Ryan Woods\n|\nMay 3, 2026\nThe AI Boom Has a Serious Problem\nMarketBeat TV\n|\nFebruary 15, 2026\nWatch Video\nRelated Videos\nStock Market Analysis LIVE – High-Momentum Names & Key Catalysts\nMarketBeat TV\n|\nFebruary 9, 2026\nWatch Video\nStock Lists\nAll Stock Lists\n5G\nBiotech\nBlue Chip\nFAANG\nGold\nLarge Cap\nMarijuana\nMicro Cap\nOil\nREITs\nRussell 2000\nSmall Cap\nWarren Buffett\nInvesting Tools\nCalendars and Tools\nAnalyst Ratings\nCryptocurrency Screener\nCongressional Trading\nDividend Increases\nDividend Calculator\nDividend Calendar\nEarnings Announcements\nInsider Trades\nOptions Profit Calculator\nPenny Stocks\nPortfolio Monitoring\nShort Interest\nStock Comparisons\nStock Market Holidays\nStock Screener\nSearch Headlines\nGet 30 Days of\nMarketBeat All Access\nfor Free\nSign up for MarketBeat All Access to gain access to MarketBeat's full suite of research tools. Start Your 30-Day Trial\nMarketBeat All Access Features\nBest-in-Class Portfolio Monitoring\nGet personalized stock ideas."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Tesla 目前的毛利率是多少",
+        "SpaceX 即將 IPO 的新聞內容是什麼"
+      ],
+      "agentic_n_chunks": 5
+    },
+    {
+      "id": "mi-14",
+      "category": "multi_intent",
+      "query": "Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？",
+      "answerable": true,
+      "answer": "Tesla 汽車業務的毛利率在最近三個月稍微下降（從 17.2% 降至 16.9%），但在過去六個月則明顯上升（從 16.8% 提升至 18.7%），同時因為 Magnificent Seven 科技股整體下跌，Tesla 股價短期可能面臨拋售壓力。  \n\n**毛利率變化**  \n- 2026 年 6 月 30 日止三個月，Tesla 總汽車毛利率由 2025 年同季的 17.2% 下降至 16.9%【TSLA_10Q_202606.html, chunk #77】。  \n- 2026 年 6 月 30 日止六個月，Tesla 總汽車毛利率由 2025 年同期間的 16.8% 上升至 18.7%【TSLA_10Q_202606.html, chunk #77】。  \n- 同期內，汽車與服務及其他部門的毛利率亦呈現上升：三個月由 15.4% 提升至 16.4%，六個月由 14.9% 提升至 17.5%【TSLA_10Q_202606.html, chunk #77】。  \n\n**市場情緒與股價暗示**  \n- Reuters 報導指出，對於即將於 6 月 12 日上市的 SpaceX，對沖基金在 IPO 前拋售了包括 Tesla 在內的「Magnificent Seven」科技股，相關 ETF 自 6 月 5 日以來下跌逾 2.4%【NVDA_News_20260612_01.txt, chunk #0】。  \n- 由於 Tesla 同樣屬於該七大科技股組合，市場的整體拋售情緒可能導致 Tesla 股價在短期內承受下行壓力，儘管其汽車毛利率在六個月內呈現改善。  \n\n**綜合判斷**  \n- 短期內，Tesla 的股價表現可能受到整體科技股拋售的負面衝擊；但從基本面看，六個月的汽車毛利率提升顯示營運效率改善，若市場情緒回暖，該正向趨勢有望支撐股價。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_10Q_202606.html #77 (rerank=0.731)\n  - TSLA_10Q_202606.html #76 (rerank=0.730)\n  - NVDA_News_20260612_01.txt #0 (rerank=0.726)\n  - TSLA_Fundamentals_20260612.txt #0 (rerank=0.662)\n  - NVDA_News_20260612_01.txt #1 (rerank=0.603)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 77
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 76
+        },
+        {
+          "source": "NVDA_News_20260612_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_News_20260612_01.txt",
+          "chunk_index": 1
+        }
+      ],
+      "contexts": [
+        "[TSLA 10-Q period 202606] Gross margin energy generation and storage segment20.4 %30.3 %28.7 %29.6 %\n\nTotal gross profit$4,751 $3,878 $9,471 $7,031 \n\nTotal gross margin16.8 %17.2 %18.7 %16.8 %\n\nAutomotive & Services and Other Segment\n\nCost of automotive sales revenue increased $3.30 billion, or 24%, in the three months ended June 30, 2026 as compared to the three months ended June 30, 2025, due to the increase in deliveries year over year as discussed above. Cost of automotive sales revenue increased $4.45 billion, or 18%, in the six months ended June 30, 2026 as compared to the six months ended June 30, 2025, due to the increase in deliveries year over year as discussed above. Average cost per unit was relatively consistent due to unfavorable sales mix and a negative impact from the weakening of the United States dollar when compared to foreign currencies year over year, offset by favorable impacts related to warranty adjustments and tariffs. Cost of services and other revenue increased $1.05 billion, or 37%, in the three months ended June 30, 2026 as compared to the three months ended June 30, 2025. Cost of services and other revenue increased $1.92 billion, or 35%, in the six months ended June 30, 2026 as compared to the six months ended June 30, 2025. These increases were primarily due to increases in used vehicle sales volume, cost related to non-warranty maintenance services and collision revenue and cost of paid Supercharging sessions. Gross margin for total automotive decreased from 17.2% to 16.9% in the three months ended June 30, 2026 as compared to the three months ended June 30, 2025. Gross margin for total automotive increased from 16.8% to 18.7% in the six months ended June 30, 2026 as compared to the six months ended June 30, 2025. The fluctuations are primarily due to the changes in automotive sales revenue and cost of automotive sales revenue and a decrease in regulatory credits revenue, as discussed above. 32\n\n\nGross margin for total automotive & services and other segment increased from 15.4% to 16.4% in the three months ended June 30, 2026 as compared to the three months ended June 30, 2025. Gross margin for total automotive & services and other segment increased from 14.9% to 17.5% in the six months ended June 30, 2026 as compared to the six months ended June 30, 2025. The changes in gross margin were primarily due to the changes in automotive sales gross margin, as discussed above, as well as from an improvement in services and other gross margin. Energy Generation and Storage Segment\n\nCost of energy generation and storage revenue increased $556 million, or 29%, in the three months ended June 30, 2026 as compared to the three months ended June 30, 2025, primarily due to the deployment fluctuations as discussed above, as well as an increase in average cost per MWh primarily driven by sales mix and unfavorable warranty adjustments. Gross margin for energy generation and storage decreased from 30.3% to 20.4% in the three months ended June 30, 2026 as compared to the three months ended June 30, 2025. The decrease was primarily due to the changes in energy generation and storage revenue and cost of energy generation and storage revenue, as discussed above. Research and Development Expense\n\nThree Months Ended June 30,ChangeSix Months Ended June 30,Change\n\n(Dollars in millions)20262025$%20262025$%\n\nResearch and development$2,371 $1,589 $782 49 %$4,317 $2,998 $1,319 44 %",
+        "[TSLA 10-Q period 202606] Furthermore, we are impacted by the demand for credits by other automobile manufacturers. Services and other revenue increased $1.54 billion, or 50%, in the three months ended June 30, 2026 as compared to the three months ended June 30, 2025. Services and other revenue increased $2.64 billion, or 46%, in the six months ended June 30, 2026 as compared to the six months ended June 30, 2025. These increases were primarily due to increases in used vehicle sales volume and average selling price, non-warranty maintenance services and collision revenue and paid Supercharging sessions. Energy Generation and Storage Segment\n\nEnergy generation and storage revenue increased $350 million, or 13%, in the three months ended June 30, 2026 as compared to the three months ended June 30, 2025, primarily due to an increase in Megapack deployments, partially offset by a lower average selling price per Megapack unit and a decrease in Powerwall deployments. 31\n\n\nCost of Revenues and Gross Margin\n\nThree Months Ended June 30,ChangeSix Months Ended June 30,Change\n\n(Dollars in millions)20262025$%20262025$%\n\nCost of revenues\n\nAutomotive sales$16,866 $13,567 $3,299 24 %$29,482 $25,028 $4,454 18 %\n\nAutomotive leasing187 228 (41)(18)%383 467 (84)(18)%\n\nTotal automotive cost of revenues17,053 13,795 3,258 24 %29,865 25,495 4,370 17 %\n\nServices and other3,933 2,880 1,053 37 %7,332 5,417 1,915 35 %\n\nTotal automotive & services and other segment cost of revenues20,986 16,675 4,311 26 %37,197 30,912 6,285 20 %\n\nEnergy generation and storage segment2,499 1,943 556 29 %3,955 3,888 67 2 %\n\nTotal cost of revenues$23,485 $18,618 $4,867 26 %$41,152 $34,800 $6,352 18 %\n\nGross profit total automotive$3,463 $2,866 $6,885 $5,133 \n\nGross margin total automotive16.9 %17.2 %18.7 %16.8 %\n\nGross profit total automotive & services and other segment$4,111 $3,032 $7,879 $5,400 \n\nGross margin total automotive & services and other segment16.4 %15.4 %17.5 %14.9 %\n\nGross profit energy generation and storage segment$640 $846 $1,592 $1,631 \n\nGross margin energy generation and storage segment20.4 %30.3 %28.7 %29.6 %\n\nTotal gross profit$4,751 $3,878 $9,471 $7,031 \n\nTotal gross margin16.8 %17.2 %18.7 %16.8 %\n\nAutomotive & Services and Other Segment",
+        "[NVDA] Title    : Hedge funds sold broader tech ahead of SpaceX IPO, JPMorgan data shows\nSource   : Reuters [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/hedge-funds-sold-broader-tech-105812649.html\nPublished: 2026-06-12T10:58:12Z\n\nHedge funds sold broader tech ahead of SpaceX IPO, JPMorgan data shows\nNell Mackenzie\nFri, June 12, 2026 at 6:58 PM GMT+8\n1 min read\nSPCX\n0.00%\nNVDA\n+2.22%\nAAPL\n+1.39%\nAMZN\n+1.47%\nGOOG\n+0.92%\nBy Nell Mackenzie\nLONDON, June 12 (Reuters) - Hedge funds sold out of the biggest U.S. tech stocks, and some even added ‌bearish positions, according to data from a JPMorgan note late ‌Thursday, just before SpaceX was set to go public on Friday. Shares in the \"Magnificent Seven\" -- ​a group that includes some of the biggest tech names on Wall Street, namely\nNvidia\n,\nApple\n, Amazon.com, Alphabet, Meta,\nTesla\n, and Microsoft, have all declined since last Friday. The Roundhill Magnificent Seven ETF, which tracks these ‌stocks closely, declined over 2.4% ⁠since June 5, with some analysts saying investors were clearing their decks in order to prepare for the ⁠debut of Elon Musk's Space X on Friday. SpaceX posted a net loss of $4.94 billion in 2025, but its landmark listing targets a valuation of $1.77 ​trillion ​in a record-setting IPO, which would ​make it the seventh-biggest publicly ‌traded U.S. company by market value.",
+        "[TSLA] === TSLA Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Tesla, Inc. Sector : Consumer Cyclical Industry : Auto Manufacturers Employees: 134,785\n\n--- Valuation Metrics --- Market Cap : $1499.10B Enterprise Value : $1470.93B P/E Ratio Trailing: 369.5833 P/E Ratio Forward : 159.53555 Price/Sales (TTM) : 15.31582 Price/Book : 18.228525 EV/EBITDA : 132.588\n\n--- Profitability --- Revenue (TTM) : $97.88B Gross Profit : $18.66B EBITDA : $11.09B Net Income : $3.86B Profit Margin : 0.03946 Operating Margin: 0.04203 Gross Margin : 0.19065\n\n--- Growth --- Revenue Growth (YoY): 0.158 Earnings Growth : 0.083 EPS Trailing : 1.08 EPS Forward : 2.50195",
+        "[NVDA] Here is what the JPMorgan note said:\n• Magnificent Seven stocks saw market selling as investors decided to dial down their risk positions. • Some speculators jumped in to buy the dip. • In the U.S., software stocks were deeply sold late last week ‌while semi conductor makers garnered \"strong demand.\"\n• Meanwhile, ​financial firm themed ETFs were the most ​bought over the last ​week. • Seasonally, financial stocks do well at this time ‌of year\n• Hedge funds were mixed ​on financials, with ​some selling banks. • Hedge funds recently bought insurance company stocks but overall, the sector is \"heavily sold\" in the year so far, ​with traders having ‌far fewer wagers on these companies than in the past. • ​Funds favoured traditional asset managers over alternative asset managers."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Tesla 汽車業務的毛利率近期的變化趨勢是什麼",
+        "Magnificent Seven 科技股近期全數下跌的新聞報導內容是什麼"
+      ],
+      "agentic_n_chunks": 5
+    },
+    {
+      "id": "mi-15",
+      "category": "multi_intent",
+      "query": "NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？",
+      "answerable": true,
+      "answer": "NVIDIA 目前的淨利率（profit margin）為 **0.62966**，即約 **62.97%**（TTM 截至 2026‑06‑12）【NVDA_Fundamentals_20260612.txt, chunk #0】。\n\n- 黃仁勳在 2026‑05‑19 的訪談中指出，儘管 H200 晶片已取得對華授權，但中國企業尚未大量採購，且中國仍在加速自研晶片以挑戰美國主導地位【NVDA_News_20260519_03.txt, chunk #0】。  \n- 他同時認為「隨著時間推移」中國市場最終會對高階 AI 晶片開放，暗示未來有機會進一步滲透中國需求【NVDA_News_20260519_03.txt, chunk #1】。  \n- 目前仍被禁售的 Blackwell 與即將推出的 Rubin 系列，顯示 NVIDIA 最高階的產品仍受限於美國政策，競爭定位仍倚賴已獲授權的 H200 以及已在全球廣泛部署的 AI 硬體平台【NVDA_News_20260519_03.txt, chunk #1】。  \n\n**綜合解讀**：  \n1. **高淨利率**（62.97%）顯示 NVIDIA 以 AI 晶片為核心的營運仍具極高的獲利能力。  \n2. **中國市場的逐步開放** 可能為未來收入增長提供新動能，但短期內仍受限於政策與本土競爭者的快速發展。  \n3. **產品線受限**（Blackwell、Rubin 仍禁售）意味 NVIDIA 必須依賴已獲授權的 H200 以及現有產品維持其在全球 AI 晶片市場的領先地位，同時持續觀察中國政策變化以調整策略。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_News_20260519_03.txt #0 (rerank=0.714)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.700)\n  - NVDA_News_20260519_03.txt #1 (rerank=0.679)\n  - NVDA_News_20260519_03.txt #2 (rerank=0.589)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "NVDA_News_20260519_03.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_News_20260519_03.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_News_20260519_03.txt",
+          "chunk_index": 2
+        }
+      ],
+      "contexts": [
+        "[NVDA] Title    : China market for Nvidia AI chips to open 'over time': Huang\nSource   : AFP [full]\nURL      : https://finance.yahoo.com/sectors/technology/articles/china-market-nvidia-ai-chips-030253929.html\nPublished: 2026-05-19T03:02:53Z\n\nChina market for Nvidia AI chips to open 'over time': Huang\nAFP\nTue, May 19, 2026 at 11:02 AM GMT+8\n2 min read\nNVDA\n-1.33%\nNvidia boss Jensen Huang expects China to eventually open its market to high-end US chips that can train and run artificial intelligence systems. But he did not discuss sales of the powerful H200 model with top officials in Beijing, the businessman told Bloomberg Television in an interview broadcast Monday. Huang travelled to the country last week with US President Donald Trump, who met Chinese President Xi Jinping. The superpowers are in a fierce race for AI supremacy, and the H200 chip had until recently been barred from sale in China by Washington over national security concerns. However, there is no sign that Chinese tech companies are buying them, as Beijing ramps up domestic chip development in a bid to challenge US dominance in the key sector. \"H200s are licensed to sell to China.",
+        "[NVDA] === NVDA Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : NVIDIA Corporation Sector : Technology Industry : Semiconductors Employees: 42,000\n\n--- Valuation Metrics --- Market Cap : $4962.16B Enterprise Value : $4917.50B P/E Ratio Trailing: 31.325687 P/E Ratio Forward : 16.097084 Price/Sales (TTM) : 19.575275 Price/Book : 25.386618 EV/EBITDA : 29.71\n\n--- Profitability --- Revenue (TTM) : $253.49B Gross Profit : $187.95B EBITDA : $165.51B Net Income : $159.61B Profit Margin : 0.62966 Operating Margin: 0.65596 Gross Margin : 0.74144995\n\n--- Growth --- Revenue Growth (YoY): 0.852 Earnings Growth : 2.145 EPS Trailing : 6.54 EPS Forward : 12.72715",
+        "[NVDA] But the Chinese government has to decide how much of their local market do they want to protect,\" Huang said. \"My sense is that over time the market will open,\" added Huang, CEO of Nvidia -- the world's most valuable company, due to huge demand for its AI hardware. Trump said in December he had reached an agreement with Xi to ease the restrictions on H200 chips, a move some US lawmakers have warned could help the Chinese military. Nvidia's most top-of-the-range offerings, the Blackwell and forthcoming Rubin series, remain banned for sale in China. Xi told a delegation of US business executives on Thursday that China would \"open wider\" to the world.",
+        "[NVDA] \"American companies will enjoy even brighter prospects in China,\" Xi said, Chinese state media reported. Bloomberg Television asked Huang whether he spoke to Xi and Prime Minister Li Qiang about his chips. \"I didn't discuss directly with them about H200\" although \"President Trump had some conversations with the leaders\", he replied. kaf/abs\nTerms\nand\nPrivacy Policy\nPrivacy Dashboard\nMore Info"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "NVIDIA 目前的淨利率是多少",
+        "黃仁勳最近談到在中國市場開放 AI 晶片銷售的新聞內容是什麼"
+      ],
+      "agentic_n_chunks": 4
+    }
+  ]
+}

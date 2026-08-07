@@ -1,0 +1,114 @@
+{
+  "summary": {
+    "news": {
+      "n": 2,
+      "correctness_mean": null,
+      "n_with_rubric": 0,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.5,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 0,
+      "correctness_pass@0.6": null
+    },
+    "overall": {
+      "n": 2,
+      "correctness_mean": null,
+      "n_with_rubric": 0,
+      "context_recall_llm_mean": null,
+      "context_recall_overlap_mean": 0.5,
+      "wrongful_refusal_rate": 0.0,
+      "fatal_hallucination_count": 0,
+      "correctness_pass@0.6": null
+    }
+  },
+  "records": [
+    {
+      "id": "news-01",
+      "category": "news",
+      "query": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+      "answerable": true,
+      "answer": "Apple 最近因被指在 iPhone 上宣傳「增強版 Siri」功能卻未實際提供，遭到一項集體訴訟，並提出高達 2.5 億美元的和解方案，可能讓每位符合條件的 iPhone 用戶獲得最高 95 美元的賠償【AAPL_News_20260508_01.txt, chunk #2】。  \n\n- 這起訴訟由加州北區聯邦法院的原告代表美國消費者，指稱 Apple 誤導消費者購買 iPhone，因為所謂的「Enhanced Siri」功能在當時尚未存在【AAPL_News_20260508_01.txt, chunk #2】。  \n- Apple 已向法院提交 2.5 億美元的和解金提案，若法官批准，將成為 Apple 歷史上規模最大的和解之一【AAPL_News_20260508_01.txt, chunk #3】。  \n- Apple 發言人表示，此次和解是為了「解決與兩項額外功能相關的索賠」，並讓公司能專注於「提供最具創新性的產品與服務」【AAPL_News_20260508_01.txt, chunk #3】。  \n- 原告律師事務所 Clarkson Law Firm 稱此和解將為全國數千萬消費者提供「及時的救濟」【AAPL_News_20260508_01.txt, chunk #3】。",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AAPL_News_20260508_01.txt",
+          "chunk_index": 2
+        },
+        {
+          "source": "AAPL_News_20260508_01.txt",
+          "chunk_index": 3
+        },
+        {
+          "source": "AAPL_News_20260612_05.txt",
+          "chunk_index": 3
+        },
+        {
+          "source": "AAPL_News_20260612_03.txt",
+          "chunk_index": 3
+        },
+        {
+          "source": "AAPL_News_20260612_02.txt",
+          "chunk_index": 5
+        }
+      ],
+      "contexts": [
+        "[AAPL] Read Full Bio\n\nMary Cunningham\n\nUpdated on: May 7, 2026 / 5:21 PM EDT\n\n/ CBS News\n\nAdd CBS News on Google\n\niPhone owners could receive up to $95 under a proposed $250 million settlement resolving claims that Apple misled customers about Siri's artificial intelligence features, according to a recent court filing. The class-action lawsuit, filed in federal court in the Northern District of California on behalf of U.S. consumers, claims that Apple deceived customers by marketing \"Enhanced Siri features\" that did not yet exist, leading them to buy iPhones based on false advertising. The plaintiffs are seeking a $250 million settlement payment, according to a recent court filing.",
+        "[AAPL] If approved by a judge, it could rank among the largest settlements involving Apple. \"Apple has reached a settlement to resolve claims related to the availability of two additional features,\" an Apple spokesperson said in an email to CBS News. \"We resolved this matter to stay focused on doing what we do best, delivering the most innovative products and services to our users.\"\n\nClarkson Law Firm, a public interest law firm that filed the original lawsuit against Apple, said in a statement on Wednesday that the settlement would provide \"timely relief to tens of millions of consumers nationwide.\"\n\nHere's what to know about the recent settlement.",
+        "[AAPL] (NASDAQ:AAPL) is in the news lately due to its Worldwide Developers Conference. The event saw the firm take another stab at AI as it launched Siri AI. The software assistant will focus more on voice dictation and provide users with other features, such as answering questions. Apple Inc. (NASDAQ:AAPL) also announced that its AI platform, Apple Intelligence, will play a role in the Safari browser and the Password and Messages applications. Other announcements include visual upgrades to iOS and parental control features. Earlier, on May 14th, Evercore ISI discussed Apple Inc. (NASDAQ:AAPL)’s shares. The firm raised the share price target to $365 from $330 and kept an Outperform rating on the stock. As part of its coverage, Evercore ISI highlighted factors such as high premiums for the iPhone and a foldable phone.",
+        "[AAPL] Enhanced AI integration is expected to enable the digital assistant to leverage personal context securely while improving information retrieval and third-party app automation. Munster expects Apple to position the Siri app to better compete against ChatGPT, Grok, and Gemini while featuring Search or Ask Prompt powered by Google. While Apple has come under pressure for what many believe are underwhelming AI offerings, its iPhone growth has surged to 16% over the past four quarters, affirming customer loyalty. The recent sales increase has come on the back of significant upgrades to the company’s core product.",
+        "[AAPL] GOOG\n\n,\n\nGOOGL\n\n). Siri gets Google brains\n\nIn January, Apple and Google signed an agreement for Apple to use the search giant's Gemini models to power its improved Siri. That gave Apple the high-powered AI models it needed to move Siri AI forward, after its own models fell short,\n\nBloomberg's Mark Gurman previously reported\n\n. During a question and answer session following Apple's WWDC keynote, senior vice president of software engineering Craig Federighi explained how Apple uses Google's models to give Siri AI its smarts. The software chief was sure to point out that Siri AI isn't just a rebranded version of Google's own Gemini assistant. Federighi explained how the Gemini assistant uses Google's Gemini models, including Gemini Flash-Lite, Gemini Flash, Gemini Pro, and its Gemini Image models. When it comes to grounding those models in world knowledge, he said, Gemini takes advantage of Google Search. Apple, Federighi said, uses none of those things. \"We use none of the models that Google deploys to their customers, nor do we use the infrastructure and means by which they employ models to their customers,\" he explained."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.5714285714285714,
+      "actionable_feedback": "目前沒有顯著的 Retriever 或 LLM 問題，召回率已達 0.57，建議持續監控並在必要時微調檢索參數以保持高召回率。"
+    },
+    {
+      "id": "news-02",
+      "category": "news",
+      "query": "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？",
+      "answerable": true,
+      "answer": "Apple 在本次 WWDC 上推出了全新 **Siri AI**，它可以直接從 iPhone、iPad 等應用中提取上下文資訊，讓使用者只要說出需求（例如「我姐姐推薦的那個播客叫什麼？」）就能即時在螢幕上呈現結果，而不必額外開啟其他 App 或服務【AAPL_News_20260612_02.txt, chunk #3】。\n\n- **功能焦點**：Siri AI 以語音輸入為主，強化了語音辨識與即時回答問題的能力，同時加入了在 Safari、Password 和 Messages 等核心 App 中的 AI 功能，讓這些應用也能受益於 Apple Intelligence 平台【AAPL_News_20260612_05.txt, chunk #3】。  \n- **發布計畫**：Apple 表示 Siri AI 將於今年稍後以 Beta 版形式向使用者推出，屆時可在實際設備上體驗【AAPL_News_20260612_02.txt, chunk #1】。  \n- **技術來源**：為了加速 Siri AI 的智慧化，Apple 與 Google 簽署協議，採用了 Google 的 Gemini 系列模型（包括 Gemini Flash‑Lite、Gemini Flash、Gemini Pro 以及 Gemini Image）作為底層模型，但 Apple 明確指出不會使用 Google 為客戶部署的模型或基礎設施【AAPL_News_20260612_02.txt, chunk #5】。  \n\n總結來說，Apple 在 WWDC 上的 Siri 新消息包括：上下文感知的 AI 助手、深度整合核心 App、即將以 Beta 形式上線，以及採用 Google Gemini 模型作為技術基礎。",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AAPL_News_20260612_02.txt",
+          "chunk_index": 3
+        },
+        {
+          "source": "AAPL_News_20260612_05.txt",
+          "chunk_index": 3
+        },
+        {
+          "source": "AAPL_News_20260612_01.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_News_20260612_02.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_News_20260612_02.txt",
+          "chunk_index": 5
+        }
+      ],
+      "contexts": [
+        "[AAPL] digital helper for the AI age\n\n. Apple said Siri AI will be able to pull context from your apps, allowing you to, say, ask it the name of a podcast your sister recommended via text and have it presented to you without opening any separate apps or services. The idea is for Siri AI to recognize what you want, when you want it, and surface it, whether it's content on your device or from the web. It's more or less what Apple promised when it showed off its AI-enhanced Siri and Apple Intelligence at WWDC 2024. And in early demos, Siri AI, which rides on Apple Intelligence, appears to deliver on Apple's initial vision for its reimagined Siri.",
+        "[AAPL] (NASDAQ:AAPL) is in the news lately due to its Worldwide Developers Conference. The event saw the firm take another stab at AI as it launched Siri AI. The software assistant will focus more on voice dictation and provide users with other features, such as answering questions. Apple Inc. (NASDAQ:AAPL) also announced that its AI platform, Apple Intelligence, will play a role in the Safari browser and the Password and Messages applications. Other announcements include visual upgrades to iOS and parental control features. Earlier, on May 14th, Evercore ISI discussed Apple Inc. (NASDAQ:AAPL)’s shares. The firm raised the share price target to $365 from $330 and kept an Outperform rating on the stock. As part of its coverage, Evercore ISI highlighted factors such as high premiums for the iPhone and a foldable phone.",
+        "[AAPL] +1.39%\n\nFresh off Apple's (\n\nAAPL\n\n) WWDC, Yahoo Finance Tech Editor Dan Howley joins Josh Lipton on Market Domination to break down the highlights and shortcomings of Apple's latest announcement, including a closer look at the company's upgraded Siri AI. Video Transcript\n\n00:00\n\nSpeaker A\n\nit's supposed to be less about like, you know, oh, look at what this, you know, AI can do and more of just doing it.",
+        "[AAPL] GOOG\n\n+0.92%\n\nAfter two years of delays, Apple's (\n\nAAPL\n\n) reinvented Siri, Siri AI,\n\nappears ready for primetime\n\n. The company unveiled the AI-powered version of its assistant at its Worldwide Developers Conference in Cupertino, Calif., on Monday, saying it will launch, albeit as a beta, later this year.",
+        "[AAPL] GOOG\n\n,\n\nGOOGL\n\n). Siri gets Google brains\n\nIn January, Apple and Google signed an agreement for Apple to use the search giant's Gemini models to power its improved Siri. That gave Apple the high-powered AI models it needed to move Siri AI forward, after its own models fell short,\n\nBloomberg's Mark Gurman previously reported\n\n. During a question and answer session following Apple's WWDC keynote, senior vice president of software engineering Craig Federighi explained how Apple uses Google's models to give Siri AI its smarts. The software chief was sure to point out that Siri AI isn't just a rebranded version of Google's own Gemini assistant. Federighi explained how the Gemini assistant uses Google's Gemini models, including Gemini Flash-Lite, Gemini Flash, Gemini Pro, and its Gemini Image models. When it comes to grounding those models in world knowledge, he said, Gemini takes advantage of Google Search. Apple, Federighi said, uses none of those things. \"We use none of the models that Google deploys to their customers, nor do we use the infrastructure and means by which they employ models to their customers,\" he explained."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": false,
+      "context_recall_llm": null,
+      "context_recall_overlap": 0.42857142857142855,
+      "actionable_feedback": "Retriever 未能抓取足夠相關 Chunks，導致回答缺乏關鍵資訊。建議增大 top‑k 或調整檢索模型的召回閾值，並檢查索引是否包含最新 WWDC 相關文件。"
+    }
+  ]
+}

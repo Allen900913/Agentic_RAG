@@ -1,0 +1,29 @@
+=== col-01 ===
+query: 為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？
+
+[LLM #1 OK]  model=openai/gpt-oss-120b 9.5s len=35 hint='為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？'
+[LLM #2 OK]  model=openai/gpt-oss-20b 2.0s len=84 hint='為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？'
+[LLM #3 OK]  model=openai/gpt-oss-120b 3.6s len=180 hint='時間與資料邊界: snapshot 模式：『最近／最新』= KB 中最新可用資料；不要參照 wall'
+[LLM #4 OK]  model=openai/gpt-oss-120b 9.6s len=1684 hint='=== Reference Materials === [Reference 1: NVDA_10K'
+[LLM #5 OK]  model=openai/gpt-oss-120b 1.0s len=43 hint='原始問題:為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？  目前待辦清單: - id'
+[LLM #6 OK]  model=openai/gpt-oss-120b 7.0s len=1239 hint='=== Reference Materials === [Reference 1: NVDA_10K'
+[LLM #7 OK]  model=openai/gpt-oss-120b 11.1s len=58 hint='問題:為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？  答案: AI 之所以成為「必'
+[LLM #8 OK]  model=openai/gpt-oss-120b 16.0s len=1461 hint='=== Reference Materials === [Reference 1: NVDA_10K'
+
+=== 完成 ===  總 LLM 呼叫=8
+answer len=1665  機械fallback=False
+引用格式: 半形[.. chunk #N]=0  全形【=11  → ⚠ 有全形殘留
+answer TAIL 400: ...IA 的平台，形成強大的網路效應，使得其他公司在短期內難以重建同等規模的硬體、軟體與生態整合能力【NVDA_10K_2026.html, chunk #28】。  
+
+綜合以上因素——領先的硬體效能、全方位的軟體堆疊、龐大的開發者與合作夥伴生態、廣泛的產業滲透以及持續的大規模研發投入——使得 AI 研發與部署幾乎必須依賴 NVIDIA 的技術，其他競爭者難以在短時間內複製其完整的平台優勢。
+
+---
+📚 引用來源（Generator 實際依據的 chunk）:
+  - NVDA_10K_2026.html #20 (rerank=0.701)
+  - NVDA_10K_2026.html #28 (rerank=0.661)
+  - NVDA_10K_2026.html #22 (rerank=0.618)
+  - NVDA_10K_2026.html #21 (rerank=0.578)
+answer head 200: AI 幾乎都依賴 NVIDIA，因為它提供了從硬體（GPU、CPU、DPU）到完整軟體平台的全套端到端加速計算解決方案，且在效能、開發者生態與市場佔有率上具備明顯領先優勢【NVDA_10K_2026.html, chunk #20】。
+
+**技術領先與完整堆疊**  
+- NVIDIA 的 GPU 內建數萬個運算核心，專為深度學習模型的訓練與推論設計，並透過 CUDA 平台讓各類計算密集型應用能夠
