@@ -426,7 +426,7 @@ def main() -> None:
         total = client.count(collection_name=COLLECTION_NAME, exact=True).count
     except Exception as e:
         print(f"[ERROR] Cannot access collection '{COLLECTION_NAME}': {e}")
-        print("        Run: python data_update_unstructure.py --rebuild")
+        print("        Run: python data_update_edgar.py --rebuild")
         sys.exit(1)
     if total == 0:
         print(f"[ERROR] Collection '{COLLECTION_NAME}' is empty.")

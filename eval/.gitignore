@@ -9,6 +9,7 @@
 # ……但標準答案 / 測試輸入集必須追蹤
 !eval_set.json
 !eval_set_business.json
+!eval_set_agentic.json
 
 # 跑分 log（stdout dump）
 *_log.txt

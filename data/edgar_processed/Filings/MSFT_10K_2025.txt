@@ -1,0 +1,573 @@
+=== MSFT 10-K | accession=0000950170-25-100235 | fiscal_year=2025 fiscal_period=FY period_code=2025 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**MICROSOFT CORPORATION** (MSFT)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Jun 30, 2025 | Jun 30, 2024 | Jun 30, 2023 |
+| --- | ---: | ---: | ---: |
+|         Revenue | $281,724 | $245,122 | $211,915 |
+| *        Product* | $63,946 | $64,773 | $64,699 |
+| *        Service and Other* | $217,778 | $180,349 | $147,216 |
+|         Cost of revenue | $87,831 | $74,114 | $65,863 |
+| *        Product* | $13,501 | $15,272 | $17,804 |
+| *        Service and Other* | $74,330 | $58,842 | $48,059 |
+|       Gross margin | $193,893 | $171,008 | $146,052 |
+|       Research and development | $32,488 | $29,510 | $27,195 |
+|       Sales and marketing | $25,654 | $24,456 | $22,759 |
+|       General and administrative | $7,223 | $7,609 | $7,575 |
+|         Operating income | $128,528 | $109,433 | $88,523 |
+|         Other income (expense), net | $(4,901) | $(1,646) | $788 |
+|       Income before income taxes | $123,627 | $107,787 | $89,311 |
+|       Provision for income taxes | $21,795 | $19,651 | $16,950 |
+|       Net income | $101,832 | $88,136 | $72,361 |
+|         Basic | 13.70 | 11.86 | 9.72 |
+|         Diluted | 13.64 | 11.80 | 9.68 |
+|         Basic | 7,433 | 7,431 | 7,446 |
+|         Diluted | 7,465 | 7,469 | 7,472 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**MICROSOFT CORPORATION** (MSFT)
+
+**As of June 30, 2025 and June 30, 2024** *(In millions, except shares and per share data)*
+
+|  | Jun 30, 2025 | Jun 30, 2024 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $30,242 | $18,315 |
+|         Short-term investments | $64,323 | $57,228 |
+|         Total cash, cash equivalents, and short-term investments | $94,565 | $75,543 |
+|         Accounts receivable, net of allowance for doubtful accounts of $944 and $830 | $69,905 | $56,924 |
+|         Inventories | $938 | $1,246 |
+|         Other current assets | $25,723 | $26,021 |
+|       Total current assets | $191,131 | $159,734 |
+|       Property and equipment, net of accumulated depreciation of $93,653 and $76,421 | $204,966 | $135,591 |
+| *      Finance Lease* | $44,015 | $25,862 |
+|       Operating lease right-of-use assets | $24,823 | $18,961 |
+|       Equity and other investments | $15,405 | $14,600 |
+|       Goodwill | $119,509 | $119,220 |
+|       Intangible assets, net | $22,604 | $27,597 |
+|       Other long-term assets | $40,565 | $36,460 |
+|     Total assets | $619,003 | $512,163 |
+|         Accounts payable | $27,724 | $21,996 |
+|         Short-term debt |  | $6,693 |
+|         Current portion of long-term debt | $2,999 | $2,249 |
+|         Accrued compensation | $13,709 | $12,564 |
+|         Short-term income taxes | $7,211 | $5,017 |
+|         Short-term unearned revenue | $64,555 | $57,582 |
+|         Other current liabilities | $25,020 | $19,185 |
+|       Total current liabilities | $141,218 | $125,286 |
+|       Long-term debt | $40,152 | $42,688 |
+|       Long-term income taxes | $25,986 | $27,931 |
+|       Long-term unearned revenue | $2,710 | $2,602 |
+|       Deferred income taxes | $2,835 | $2,618 |
+|       Operating lease liabilities | $17,437 | $15,497 |
+|       Other long-term liabilities | $45,186 | $27,064 |
+|       Total liabilities | $275,524 | $243,686 |
+|       Commitments and contingencies |  |  |
+|       Common stock and paid-in capital - shares authorized 24,000; outstanding 7,434 and 7,434 | $109,095 | $100,923 |
+|       Retained earnings | $237,731 | $173,144 |
+|       Accumulated other comprehensive loss | $(3,347) | $(5,590) |
+|       Total stockholders’ equity | $343,479 | $268,477 |
+|     Total liabilities and stockholders’ equity | $619,003 | $512,163 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**MICROSOFT CORPORATION** (MSFT)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Jun 30, 2025 | Jun 30, 2024 | Jun 30, 2023 |
+| --- | ---: | ---: | ---: |
+|       Net income | $101,832 | $88,136 | $72,361 |
+|       Depreciation, amortization, and other | $34,153 | $22,287 | $13,861 |
+|       Stock-based compensation expense | $11,974 | $10,734 | $9,611 |
+|       Net recognized losses on investments and derivatives | $609 | $305 | $196 |
+|       Deferred income taxes | $(7,056) | $(4,738) | $(6,059) |
+|         Accounts receivable | $(10,581) | $(7,191) | $(4,087) |
+|         Inventories | $309 | $1,284 | $1,242 |
+|         Other current assets | $(3,044) | $(1,648) | $(1,991) |
+|         Other long-term assets | $(2,950) | $(6,817) | $(2,833) |
+|         Accounts payable | $569 | $3,545 | $(2,721) |
+|         Unearned revenue | $5,438 | $5,348 | $5,535 |
+|         Income taxes | $(38) | $1,687 | $(358) |
+|         Other current liabilities | $5,922 | $4,867 | $2,272 |
+|         Other long-term liabilities | $(975) | $749 | $553 |
+|     Net cash from operations | 136,162 | 118,548 | 87,582 |
+|       Proceeds from issuance (repayments) of debt, maturities of 90 days or less, net | $(5,746) | $5,250 |  |
+|       Proceeds from issuance of debt |  | $24,395 |  |
+|       Repayments of debt | $(3,216) | $(29,070) | $(2,750) |
+|       Common stock issued | $2,056 | $2,002 | $1,866 |
+|       Common stock repurchased | $(18,420) | $(17,254) | $(22,245) |
+|       Common stock cash dividends paid | $(24,082) | $(21,771) | $(19,800) |
+|       Other, net | $(2,291) | $(1,309) | $(1,006) |
+|     Net cash used in financing | $(51,699) | $(37,757) | $(43,935) |
+|       Additions to property and equipment | $(64,551) | $(44,477) | $(28,107) |
+|       Acquisition of companies, net of cash acquired and divestitures, and purchases of intangible and other assets | $(5,978) | $(69,132) | $(1,670) |
+|       Purchases of investments | $(29,775) | $(17,732) | $(37,651) |
+|       Maturities of investments | $16,079 | $24,775 | $33,510 |
+|       Sales of investments | $9,309 | $10,894 | $14,354 |
+|       Other, net | $2,317 | $(1,298) | $(3,116) |
+|     Net cash used in investing | $(72,599) | $(96,970) | $(22,680) |
+|     Effect of foreign exchange rates on cash and cash equivalents | $63 | $(210) | $(194) |
+|   Net change in cash and cash equivalents | $11,927 | $(16,389) | $20,773 |
+|   Cash and cash equivalents, end of period |  |  |  |
+|   Cash and cash equivalents, end of period |  |  |  |
+
+--- [TABLE extra #0] ---
+FORM
+
+| ☒ | ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #1] ---
+Commission File Number
+
+| Washington |  | 91-1144442 |
+| --- | --- | --- |
+| (STATE OF INCORPORATION) |  | (I.R.S. ID) |...
+
+--- [TABLE extra #2] ---
+www.microsoft.com/investor
+
+| Securities registered pursuant to Section 12(b) of the Act: |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| Title of each class |  | Trading Symbol |  | Name of exchange on which registered |
+| Common stock, $ 0.00000625 par value per share |  | MSFT |  | Nasdaq |
+| 3.125% Notes due 2028 |  | MSFT |  | Nasdaq |
+| 2.625% Notes due 2033 |  | MSFT |  | Nasdaq |
+| Securit...
+
+--- [TABLE extra #3] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large Accelerated Filer ☒ |  | Accelerated Filer ☐ |
+| --- | --- | --- |
+| Non-accelerated Filer ☐ |  | Smaller Reporting Company ☐ |
+|  |  | Emerging Growt...
+
+--- [TABLE extra #4] ---
+INDEX
+
+|  |  |  |  |  | Page |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| PART I |  |  |  |  |  |  |  |
+|  |  | Item 1. |  | Business |  | 3 |  |
+|  |  |  |  | Information about our Executive Officers |  | 14 |  |
+|  |  | Item 1A. |  | Risk Factors |  | 16 |  |
+|  |  | Item 1B. |  | Unresolved Staff Comments |  | 30 |  |
+|  |  | Item 1C. |  | Cybersecurity |  | 30 |  |
+|  |  | Item ...
+
+--- [TABLE extra #5] ---
+Our executive officers as of July 30, 2025 were as follows:
+
+| Name |  | Age |  |  | Position with the Company |  |
+| --- | --- | --- | --- | --- | --- | --- |
+| Satya Nadella |  |  | 57 |  |  | Chairman and Chief Executive Officer |
+| Judson B. Althoff |  |  | 52 |  |  | Executive Vice President and Chief Commercial Officer |
+| Amy L. Coleman |  |  | 53 |  |  | Executive Vice President and Chief ...
+
+--- [TABLE extra #6] ---
+The table below shows a summary of the square footage of our properties owned and leased domestically and internationally as of June 30, 2025:
+
+| (Square feet in millions) |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Location |  | Owned |  |  | Leased |  |  | Total |  |  |  |  |
+| U.S. |  |  | 34 |  |  |  | 23 |  |  |  | 57...
+
+--- [TABLE extra #7] ---
+Following are our monthly share repurchases for the fourth quarter of fiscal year 2025:
+
+| Period |  | Total Number of Shares Purchased |  |  | Average Price Paid Per Share |  |  | Total Number of Shares Purchased as Part of Publicly Announced Plans or Programs |  |  | Approximate Dollar Value of Shares That May Yet Be Purchased Under the Plans or Programs |  |  |  |  |  |
+| --- | --- | --- | --- ...
+
+--- [TABLE extra #8] ---
+Our commercial business primarily consists of Server products and cloud services, Microsoft 365 Commercial products and cloud services, the commercial portion of LinkedIn, Dynamics products and cloud services, and Enterprise and partner ser
+
+| Commercial remaining performance obligation |  | Commercial portion of revenue allocated to remaining performance obligations, which includes unearned reven...
+
+--- [TABLE extra #9] ---
+Metrics related to our Productivity and Business Processes and Intelligent Cloud segments assess the health of our core businesses within these segments. The metrics primarily reflect growth across our cloud services.
+
+| Microsoft 365 Commercial cloud revenue growth |  | Revenue from Microsoft 365 Commercial subscriptions, comprising Microsoft 365 Commercial, Enterprise Mobility + Security, the cl...
+
+--- [TABLE extra #10] ---
+Metrics related to our More Personal Computing segment assess the performance of our key consumer businesses.
+
+| Windows OEM and Devices revenue growth |  | Revenue from sales of Windows Pro and non-Pro licenses sold through the OEM channel and sales of first-party Devices, including Surface and PC accessories |
+| --- | --- | --- |
+| Xbox content and services revenue growth |  | Revenue from Xbox ...
+
+--- [TABLE extra #11] ---
+SEGMENT RESULTS OF OPERATIONS
+
+| (In millions, except percentages) |  | 2025 |  |  | 2024 |  |  | Percentage Change |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Productivity and Business Processes |  |  |  |  |  |  |  |  |  |  |  |  |
+| Revenue |  | $ | 120,810 |  |  | $ | 106,820 |  |  |  | 13% |  |
+| Cost of revenue |  |  | 22,422 |  |  |  | 19,...
+
+--- [TABLE extra #12] ---
+The components of other income (expense), net were as follows:
+
+| (In millions) |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Year Ended June 30, |  |  | 2025 |  |  |  | 2024 |  |
+| Interest and dividends income |  | $ | 2,647 |  |  | $ | 3,157 |  |
+| Interest expense |  |  | (2,385 | ) |  |  | (2,935 | ) |
+| Net recognized losses on investments |  |  | (349 |...
+
+--- [TABLE extra #13] ---
+The following table outlines the expected future recognition of unearned revenue as of June 30, 2025:
+
+| (In millions) |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| Three Months Ending |  |  |  |  |
+| September 30, 2025 |  | $ | 25,191 |  |
+| December 31, 2025 |  |  | 19,733 |  |
+| March 31, 2026 |  |  | 13,742 |  |
+| June 30, 2026 |  |  | 5,889 |  |
+| Thereafter |  |  | 2,710 |  |
+| Total |  | ...
+
+--- [TABLE extra #14] ---
+The following table summarizes the payments due by fiscal year for our outstanding contractual obligations as of June 30, 2025:
+
+| (In millions) |  | 2026 |  |  | Thereafter |  |  | Total |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Long-term debt: (a) |  |  |  |  |  |  |  |  |  |  |  |  |
+| Principal payments |  | $ | 3,000 |  |  | $ | 46,206 |  ...
+
+--- [TABLE extra #15] ---
+The Board of Directors, through its Audit Committee, consisting solely of independent directors of the Company, meets periodically with management, internal auditors, and our independent registered public accounting firm to ensure that each
+
+| Satya Nadella |
+| --- |
+| Chief Executive Officer |
+| Amy E. Hood |
+| Executive Vice President and Chief Financial Officer |
+| Alice L. Jolla |
+| Corporate ...
+
+--- [TABLE extra #16] ---
+The following table sets forth the potential loss in future earnings or fair values, including associated derivatives, resulting from hypothetical changes in relevant market rates or prices:
+
+| (In millions) |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Risk Categories |  | Hypothetical Change |  | June 30, 2025 |  |  | Impact |  |  |  |
+| Fo...
+
+--- [TABLE extra #17] ---
+COMPREHENSIVE INCOME STATEMENTS
+
+| (In millions) |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Year Ended June 30, |  | 2025 |  |  | 2024 |  |  | 2023 |  |  |  |  |
+| Net income |  | $ | 101,832 |  |  | $ | 88,136 |  |  | $ | 72,361 |  |
+| Other comprehensive income (loss), net of tax: |  |  |  |  |  |  |  |  |  |  |  |  |
+|...
+
+--- [TABLE extra #18] ---
+STOCKHOLDERS’ EQUITY STATEMENTS
+
+| (In millions, except per share amounts) |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Year Ended June 30, |  | 2025 |  |  | 2024 |  |  | 2023 |  |  |  |  |
+| Common stock and paid-in capital |  |  |  |  |  |  |  |  |  |  |  |  |
+| Balance, beginning of period |  | $ | 100,923 |  |  | $ | 93...
+
+--- [TABLE extra #19] ---
+The financial statements are set forth under Part II, Item 8 of this Form 10-K, as indexed below. Financial statement schedules have been omitted since they either are not required, not applicable, or the information is otherwise included.
+
+| Index to Financial Statements |  | Page |  |
+| --- | --- | --- | --- |
+| Income Statements |  | 50 |  |
+| Comprehensive Income Statements |  | 51 |  |
+| Bala...
+
+--- [TABLE extra #20] ---
+Exhibit Listing
+
+|  |  |  |  |  | Incorporated by Reference |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Exhibit Number |  | Exhibit Description |  | Filed Herewith |  | Form |  | Period Ending |  | Exhibit |  | Filing Date |  |
+| 3.1 |  | Amended and Restated Articles of Incorporation of Microsoft Corporation |  |  |  | 8-K |  |...
+
+--- [TABLE extra #21] ---
+Item 15
+
+|  |  |  |  |  | Incorporated by Reference |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Exhibit Number |  | Exhibit Description |  | Filed Herewith |  | Form |  | Period Ending |  | Exhibit |  | Filing Date |  |
+| 4.6 |  | Third Supplemental Indenture for 2.500% Notes due 2016, 4.000% Notes due 2021, and 5.300% Notes due...
+
+--- [TABLE extra #22] ---
+Item 15
+
+|  |  |  |  |  | Incorporated by Reference |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Exhibit Number |  | Exhibit Description |  | Filed Herewith |  | Form |  | Period Ending |  | Exhibit |  | Filing Date |  |
+| 4.11 |  | Eighth Supplemental Indenture for 1.625% Notes due 2018, 3.625% Notes due 2023, and 4.875% Notes d...
+
+--- [TABLE extra #23] ---
+Item 15
+
+|  |  |  |  |  | Incorporated by Reference |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Exhibit Number |  | Exhibit Description |  | Filed Herewith |  | Form |  | Period Ending |  | Exhibit |  | Filing Date |  |
+| 4.15 |  | Twelfth Supplemental Indenture for 1.850% Notes due 2020, 2.400% Notes due 2022, 2.875% Notes due ...
+
+--- [TABLE extra #24] ---
+Item 15
+
+|  |  |  |  |  | Incorporated by Reference |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Exhibit Number |  | Exhibit Description |  | Filed Herewith |  | Form |  | Period Ending |  | Exhibit |  | Filing Date |  |
+| 4.21 |  | First Supplemental Indenture, dated as of May 26, 2017, by and between Activision Blizzard, Inc. a...
+
+--- [TABLE extra #25] ---
+Item 15
+
+|  |  |  |  |  | Incorporated by Reference |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Exhibit Number |  | Exhibit Description |  | Filed Herewith |  | Form |  | Period Ending |  | Exhibit |  | Filing Date |  |
+| 10.8 |  | Form of Indemnification Agreement and Amended and Restated Directors’ Indemnification Trust Agreem...
+
+--- [TABLE extra #26] ---
+Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned; thereunto duly authorized, in the City of Redmond, State o
+
+| M ICROSOFT C ORPORATION |
+| --- |
+| /s/ A LICE L. J OLLA |
+| Alice L. Jolla |
+| Corporate Vice President and Chief Accounting Officer (Principal Accounting ...
+
+--- [TABLE extra #27] ---
+Pursuant to the requirements of the Securities Exchange Act of 1934, this report has been signed below by the following persons on behalf of Registrant and in the capacities indicated on July 30, 2025.
+
+| Signature |  | Title |
+| --- | --- | --- |
+| /s/ S ATYA N ADELLA |  | Chairman and Chief Executive Officer (Principal Executive Officer) |
+| Satya Nadella |  |  |
+| /s/ R EID G. H OFFMAN |  | Dir...
+
+[INFO] extra tables kept=28 (去重後，來自 unstructured)
+
+--- [ITEM] Item 5 (len=2685 chars) ---
+ITEM 5. MARKET FOR REGISTRANT’S COMMON EQUITY, RELATED STOCKHOLDER MATTERS, AND ISSUER PURCHASES OF EQUITY SECURITIES
+
+MARKET AND STOCKHOLDERS 
+
+Our common stock is traded on the NASDAQ Stock Market under the symbol MSFT. On July 24, 2025, there were 77,014 registered holders of record of our common stock.
+
+SHARE REPURCHASES AND DIVIDENDS
+
+Following are our monthly share repurchases for the fourth...
+
+--- [ITEM] Item 10 (len=1612 chars) ---
+ITEM 10. DIRECTORS, EXECUTIVE OFFICERS, AND CORPORATE GOVERNANCE
+
+A list of our executive officers and biographical information appears in Part I, Item 1 of this Form 10-K. Information about our directors may be found under the caption “Our Director Nominees” in our Proxy Statement for the Annual Meeting of Shareholders to be held December 5, 2025 (the “Proxy Statement”). Information about our Aud...
+
+--- [ITEM] Item 11 (len=316 chars) ---
+ITEM 11. EXECUTIVE COMPENSATION
+
+The information in the Proxy Statement set forth under the captions “Director Compensation,” “Named Executive Officer Compensation,” “Compensation Committee Report,” and, if required, “Compensation Committee Interlocks and Insider Participation,” is incorporated herein by reference....
+
+--- [ITEM] Item 12 (len=309 chars) ---
+ITEM 12. SECURITY OWNERSHIP OF CERTAIN BENEFICIAL OWNERS AND MANAGEMENT AND RELATED STOCKHOLDER MATTERS
+
+The information in the Proxy Statement set forth under the captions “Stock Ownership Information,” “Principal Shareholders,” and “Equity Compensation Plan Information” is incorporated herein by reference....
+
+--- [ITEM] Item 13 (len=265 chars) ---
+ITEM 13. CERTAIN RELATIONSHIPS AND RELATED TRANSACTIONS, AND DIRECTOR INDEPENDENCE
+
+The information set forth in the Proxy Statement under the captions “Director Independence” and “Certain Relationships and Related Transactions” is incorporated herein by reference....
+
+--- [ITEM] Item 15 (len=14834 chars) ---
+ITEM 15. EXHIBIT AND FINANCIAL STATEMENT SCHEDULES 
+
+(a)Financial Statements and Schedules 
+
+The financial statements are set forth under Part II, Item 8 of this Form 10-K, as indexed below. Financial statement schedules have been omitted since they either are not required, not applicable, or the information is otherwise included. 
+
+     Index to Financial Statements
+
+     Page
+
+     Income Statem...
+
+[RCTS] item=Item_15 原 chunk 1267 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_15 原 chunk 2041 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 16 (len=1856 chars) ---
+ITEM 16. FORM 10-K SUMMARY
+
+None.
+
+  100
+
+  SIGNATURES
+
+Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned; thereunto duly authorized, in the City of Redmond, State of Washington, on July 30, 2025. 
+
+     MICROSOFT CORPORATION
+
+     /s/ ALICE L. JOLLA
+
+     Alice L. Jol...
+
+--- [ITEM] Item 1 (len=48799 chars) ---
+ITEM 1. BUSINESS
+
+GENERAL
+
+Microsoft is a technology company committed to making digital technology and artificial intelligence (“AI”) available broadly and doing so responsibly. Our mission is to empower every person and every organization on the planet to achieve more. 
+
+We develop and support a broad portfolio of technology solutions for individuals and businesses, focusing on secure, trusted, ...
+
+--- [ITEM] Item 1A (len=68824 chars) ---
+ITEM 1A. RISK FACTORS
+
+Our operations and financial results are subject to various risks and uncertainties, including those described below, that could adversely affect our business, operations, financial condition, results of operations, liquidity, and the trading price of our common stock.
+
+STRATEGIC AND COMPETITIVE RISKS
+
+We face intense competition across all markets for our products and servi...
+
+[RCTS] item=Item_1A 原 chunk 1392 token > 1200 → 補切成 4 份
+
+--- [ITEM] Item 1B (len=272 chars) ---
+ITEM 1B. UNRESOLVED STAFF COMMENTS 
+
+We have received no written comments regarding our periodic or current reports from the staff of the Securities and Exchange Commission that were issued 180 days or more preceding the end of our fiscal year 2025 that remain unresolved....
+
+--- [ITEM] Item 1C (len=9205 chars) ---
+ITEM 1C. CYBERSECURITY 
+
+RISK MANAGEMENT AND STRATEGY
+
+Microsoft plays a central role in the world’s digital ecosystem. We have made it the top corporate priority to protect the computing environment used by our customers and employees and to support the resiliency of our cloud infrastructure and services, products, devices, and our internal corporate resources from determined adversaries. In resp...
+
+--- [ITEM] Item 2 (len=1450 chars) ---
+ITEM 2. PROPERTIES 
+
+Our corporate headquarters are located in Redmond, Washington. We have approximately 15 million square feet of space located in King County, Washington that is used for engineering, sales, marketing, and operations, among other general and administrative purposes. These facilities include approximately 12 million square feet of owned space situated on approximately 530 acres o...
+
+--- [ITEM] Item 3 (len=203 chars) ---
+ITEM 3. LEGAL PROCEEDINGS 
+
+Refer to Note 14 – Contingencies of the Notes to Financial Statements (Part II, Item 8 of this Form 10-K) for information regarding legal proceedings in which we are involved....
+
+--- [ITEM] Item 4 (len=60 chars) ---
+ITEM 4. MINE SAFETY DISCLOSURES 
+
+Not applicable.
+
+  PART II...
+
+--- [ITEM] Item 7 (len=49534 chars) ---
+ITEM 7. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+The following Management’s Discussion and Analysis of Financial Condition and Results of Operations (“MD&A”) is intended to help the reader understand the results of operations and financial condition of Microsoft Corporation. MD&A is provided as a supplement to, and should be read in conjunction with, o...
+
+--- [ITEM] Item 7A (len=2130 chars) ---
+ITEM 7A. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+RISKS 
+
+We are exposed to economic risk from foreign exchange rates, interest rates, credit risk, and equity prices. We use derivatives instruments to manage these risks, however, they may still impact our consolidated financial statements. 
+
+Foreign Currencies 
+
+Certain forecasted transactions, assets, and liabilities are expose...
+
+--- [ITEM] Item 8 (len=128086 chars) ---
+ITEM 8. FINANCIAL STATEMENTS AND SUPPLEMENTARY DATA
+
+INCOME STATEMENTS
+
+     (In millions, except per share amounts)
+
+     Year Ended June 30,
+
+     2025
+
+     2024
+
+     2023
+
+     Revenue:
+
+     Product
+
+     $
+
+     63,946
+
+     $
+
+     64,773
+
+     $
+
+     64,699
+
+     Service and other
+
+     217,778
+
+     180,349
+
+     147,216
+
+     Total revenue
+
+     281,724
+
+     245,122
+
+     211,915
+
+   ...
+
+[RCTS] item=Item_8 原 chunk 1957 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 2045 token > 1200 → 補切成 4 份
+
+[RCTS] item=Item_8 原 chunk 2322 token > 1200 → 補切成 4 份
+
+[RCTS] item=Item_8 原 chunk 1289 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 1280 token > 1200 → 補切成 2 份
+
+--- [ITEM] Item 9 (len=110 chars) ---
+ITEM 9. CHANGES IN AND DISAGREEMENTS WITH ACCOUNTANTS ON ACCOUNTING AND FINANCIAL DISCLOSURE 
+
+Not applicable....
+
+--- [ITEM] Item 9A (len=6687 chars) ---
+ITEM 9A. CONTROLS AND PROCEDURES 
+
+Under the supervision and with the participation of our management, including the Chief Executive Officer and Chief Financial Officer, we have evaluated the effectiveness of our disclosure controls and procedures as required by Exchange Act Rule 13a-15(b) as of the end of the period covered by this report. Based on that evaluation, the Chief Executive Officer and...
+
+--- [ITEM] Item 9B (len=362 chars) ---
+ITEM 9B. OTHER INFORMATION 
+
+Insider Trading Arrangements 
+
+None of our officers or directors, as defined in Rule 16a-1(f) of the Securities Exchange Act of 1934, adopted, modified, or terminated a “Rule 10b5-1 trading arrangement” or a “non-Rule 10b5-1 trading arrangement,” as defined in Item 408 of Regulation S-K, during the three months ended June 30, 2025....
+
+--- [ITEM] Item 9C (len=103 chars) ---
+ITEM 9C. DISCLOSURE REGARDING FOREIGN JURISDICTIONS THAT PREVENT INSPECTIONS
+
+Not applicable.
+
+PART III...

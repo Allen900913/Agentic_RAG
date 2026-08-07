@@ -1,0 +1,45 @@
+# source    : TSLA_News_20260721_01.txt
+# doc_type  : news
+# chunks    : 3
+
+==============================================================================
+[chunk 0] chunk_type=text  chars=1296
+==============================================================================
+Title    : Tesla earnings review: 2 key things to watch
+Source   : Yahoo Finance Video [full]
+URL      : https://finance.yahoo.com/video/tesla-earnings-review-2-key-things-to-watch-144735135.html
+Published: 2026-07-20T14:47:35Z
+
+Tesla earnings review: 2 key things to watch
+Yahoo Finance Video
+and
+Brian Sozzi
+Mon, July 20, 2026 at 10:47 PM GMT+8
+TSLA
+-2.96%
+SPCX
+-3.34%
+Tesla (
+TSLA
+) reports earnings this week. Yahoo Finance Executive Editor Brian Sozzi is joined by Yahoo Finance Markets & Data Editor Jared Blikre and Senior Reporter Ines Ferré to break down how the EV maker has performed and the two key issues investors will be watching in the company's latest earnings report. Video Transcript
+00:00
+Speaker A
+The next big thing for Elon is the merger, right? And, you know, we don't have any of it's not official, uh, but we know that uh there are intentions leading that way and it's been vocalized for a number of years. Um, I you know, it's interesting because Tesla's kind of taken a back seat with all the hype on SpaceX right now. And so I don't think it would take a lot to actually get a bullish surprise out of them. Um, they've just been kind of uh, I don't want to say they've been beaten down, but the stock really hasn't done a lot anything uh too exciting in a while here.
+
+==============================================================================
+[chunk 1] chunk_type=text  chars=242
+==============================================================================
+So, um, I give the potential for a surprise a decent shot. 01:00
+Speaker B
+And and as I lost in the sauce a little bit was was just a couple weeks ago that Tesla came out with better than expected deliveries. I mean that came out of the blue.
+
+==============================================================================
+[chunk 2] chunk_type=text  chars=380
+==============================================================================
+01:13
+Speaker C
+Yeah, that's right. But I think that what will be paid attention to in this call is Optimus and it is that self-driving. Those are the two key drivers for Tesla right now. I think that um the street just expects, okay, yes, it's an EV company, an EV maker, but it's really all about robo taxis and those robots. Terms
+and
+Privacy Policy
+Privacy Dashboard
+More Info

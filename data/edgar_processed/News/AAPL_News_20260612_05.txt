@@ -1,0 +1,45 @@
+# source    : AAPL_News_20260612_05.txt
+# doc_type  : news
+# chunks    : 3
+
+==============================================================================
+[chunk 0] chunk_type=text  chars=1755
+==============================================================================
+Title    : Apple Inc. (AAPL) Is A Top Stock In Ken Griffin’s Portfolio
+Source   : Insider Monkey [full]
+URL      : https://finance.yahoo.com/markets/stocks/articles/apple-inc-aapl-top-stock-173042378.html
+Published: 2026-06-11T17:30:42Z
+
+Apple Inc. (AAPL) Is A Top Stock In Ken Griffin’s Portfolio
+Ramish Cheema
+Fri, June 12, 2026 at 1:30 AM GMT+8
+2 min read
+AAPL
++1.39%
+Apple Inc. (NASDAQ:AAPL) is one of the
+13 Best Stocks to Invest In According to Billionaire Ken Griffin
+. Apple Inc. (NASDAQ:AAPL) is in the news lately due to its Worldwide Developers Conference. The event saw the firm take another stab at AI as it launched Siri AI. The software assistant will focus more on voice dictation and provide users with other features, such as answering questions. Apple Inc. (NASDAQ:AAPL) also announced that its AI platform, Apple Intelligence, will play a role in the Safari browser and the Password and Messages applications. Other announcements include visual upgrades to iOS and parental control features. Earlier, on May 14th, Evercore ISI discussed Apple Inc. (NASDAQ:AAPL)’s shares. The firm raised the share price target to $365 from $330 and kept an Outperform rating on the stock. As part of its coverage, Evercore ISI highlighted factors such as high premiums for the iPhone and a foldable phone. Giuseppe Costantino/Shutterstock.com
+RiverPark Large Growth Fund discussed Apple Inc. (NASDAQ:AAPL) in its Q4 2025 investor letter:
+“AAPL shares rose in 4Q25 following better-than-feared iPhone 17 sell-through trends and stronger Services momentum. The company reported that early adoption of its on-device AI features exceeded internal expectations, particularly in North America and Europe, where attach rates for Pro models remained elevated.
+
+==============================================================================
+[chunk 1] chunk_type=text  chars=1237
+==============================================================================
+Wearables also returned to growth, helped by new health features and improved battery life. While macro softness in China remained a headwind, investors responded positively to evidence of content and advertising revenue re-acceleration within the Services segment, which delivered double-digit growth. We continue to view Apple as one of the world’s most resilient and profitable businesses, supported by a massive installed base, ecosystem lock-in, and growing high-margin revenue streams. As Apple Intelligence features proliferate across devices, we expect multi-year upgrades, improved monetization, and expanded recurring revenue. With strong cash generation, ongoing share repurchases, and disciplined capital allocation, Apple remains a compelling long- term investment.”
+While we acknowledge the potential of AAPL as an investment, we believe certain AI stocks offer greater upside potential and carry less downside risk. If you're looking for an extremely undervalued AI stock that also stands to benefit significantly from Trump-era tariffs and the onshoring trend, see our free report on the
+best short-term AI stock
+. READ NEXT:
+33 Stocks That Should Double in 3 Years
+and
+Cathie Wood 2026 Portfolio: 10 Best Stocks to Buy
+.
+
+==============================================================================
+[chunk 2] chunk_type=text  chars=91
+==============================================================================
+Follow Insider Monkey on Google News
+. Terms
+and
+Privacy Policy
+Privacy Dashboard
+More Info

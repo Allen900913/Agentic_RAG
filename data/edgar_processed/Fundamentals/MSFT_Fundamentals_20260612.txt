@@ -1,0 +1,40 @@
+# source    : MSFT_Fundamentals_20260612.txt
+# doc_type  : fundamentals
+# chunks    : 3
+
+==============================================================================
+[chunk 0] chunk_type=text  chars=695
+==============================================================================
+=== MSFT Company Fundamentals === Generated: 2026-06-12
+
+--- Company Overview --- Name : Microsoft Corporation Sector : Technology Industry : Software - Infrastructure Employees: 228,000
+
+--- Valuation Metrics --- Market Cap : $2899.62B Enterprise Value : $2946.82B P/E Ratio Trailing: 23.262217 P/E Ratio Forward : 20.176886 Price/Sales (TTM) : 9.110466 Price/Book : 6.9982247 EV/EBITDA : 15.976
+
+--- Profitability --- Revenue (TTM) : $318.27B Gross Profit : $217.41B EBITDA : $184.46B Net Income : $125.22B Profit Margin : 0.39341998 Operating Margin: 0.46326 Gross Margin : 0.68309
+
+--- Growth --- Revenue Growth (YoY): 0.183 Earnings Growth : 0.234 EPS Trailing : 16.78 EPS Forward : 19.3459
+
+==============================================================================
+[chunk 1] chunk_type=text  chars=2042
+==============================================================================
+--
+
+Balance Sheet --
+
+Total Cash : $78.23B
+
+Total Debt : $125.43B
+
+Debt/Equity: 30.271
+
+Current Ratio: 1.283
+
+--- Dividends & Returns --- Dividend Yield : 0.93 Return on Equity: 0.34013999 Return on Assets: 0.14814 Free Cash Flow : $37.01B
+
+--- Business Summary --- Microsoft Corporation develops and supports software, services, devices, and solutions worldwide. The Productivity and Business Processes segment offers Microsoft 365 commercial, enterprise mobility + security, windows commercial, power BI, exchange, sharepoint, Microsoft teams, security and compliance, and copilot; Microsoft 365 commercial products, such as Windows commercial on-premises and office licensed services; Microsoft 365 consumer products and cloud services, including Microsoft 365 consumer subscriptions, office licensed on-premises, and other consumer services; LinkedIn; dynamics products and cloud services, such as dynamics 365, cloud-based applications, and on-premises ERP and CRM applications. Its Intelligent Cloud segment provides Server products and cloud services comprising Azure and other cloud services, GitHub, Nuance Healthcare, virtual desktop offerings, and other cloud services; server products, including SQL and windows server, visual studio and system center related client access licenses, and other on-premises offerings; enterprise and partner services, such as enterprise support and nuance professional services, industry solutions, Microsoft partner network, and learning experience. The Personal Computing segment provides windows and devices, such as Windows OEM licensing and devices and surface and PC accessories; gaming services and solutions, such as Xbox hardware, content, and services, first- and third-party content Xbox game pass, subscriptions, and cloud gaming, advertising, and other cloud services; search and news advertising services that includes Bing and Copilot, Microsoft News and Edge, and third-party affiliates. It sells its products through OEMs, distributors, and resellers; and online and retail stores.
+
+==============================================================================
+[chunk 2] chunk_type=text  chars=200
+==============================================================================
+The company has a strategic collaboration with Mayo Clinic, Inc. for the development of a frontier AI model for healthcare. The company was founded in 1975 and is headquartered in Redmond, Washington.

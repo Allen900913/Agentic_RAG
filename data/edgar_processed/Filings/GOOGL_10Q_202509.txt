@@ -1,0 +1,214 @@
+=== GOOGL 10-Q | accession=0001652044-25-000091 | fiscal_year=2025 fiscal_period=Q3 period_code=202509 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**Alphabet Inc.** (GOOG)
+
+**Three and Nine Months Ended** *(In millions, except shares and per share data)*
+
+|  | Sep 30, 2025 (Q3) | Sep 30, 2024 (Q3) | Sep 30, 2025 (YTD) | Sep 30, 2024 (YTD) |
+| --- | ---: | ---: | ---: | ---: |
+|   Revenues | $102,346 | $88,268 | $289,007 | $253,549 |
+|     Cost of revenues | $41,369 | $36,474 | $116,768 | $105,693 |
+|     Research and development | $15,151 | $12,447 | $42,515 | $36,210 |
+|     Sales and marketing | $7,205 | $7,227 | $20,478 | $20,445 |
+|     General and administrative | $7,393 | $3,599 | $16,141 | $9,783 |
+|       Total costs and expenses | $71,118 | $59,747 | $195,902 | $172,131 |
+|     Income from operations | 31,228 | 28,521 | 93,105 | 81,418 |
+|     Other income (expense), net | $12,759 | $3,185 | $26,604 | $6,154 |
+|   Income before income taxes | $43,987 | $31,706 | $119,709 | $87,572 |
+|   Provision for income taxes | $9,008 | $5,405 | $21,994 | $13,990 |
+|   Net income | $34,979 | $26,301 | $97,715 | $73,582 |
+|   Basic net income per share (in dollars per share) | 2.89 | 2.14 | 8.06 | 5.96 |
+| *    Class A Common Stock* | 2.89 | 2.14 | 8.06 | 5.96 |
+| *    Class B Common Stock* | 2.89 | 2.14 | 8.06 | 5.96 |
+| *    Class C Capital Stock* | 2.89 | 2.14 | 8.06 | 5.96 |
+|   Diluted net income per share (in dollars per share) | 2.87 | 2.12 | 7.99 | 5.90 |
+| *    Class A Common Stock* | 2.87 | 2.12 | 8.00 | 5.90 |
+| *    Class B Common Stock* | 2.87 | 2.12 | 7.99 | 5.90 |
+| *    Class C Capital Stock* | 2.86 | 2.12 | 7.98 | 5.89 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**Alphabet Inc.** (GOOG)
+
+**As of September 30, 2025 and December 31, 2024** *(In millions, except shares and per share data)*
+
+|  | Sep 30, 2025 | Dec 31, 2024 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $23,090 | $23,466 |
+|         Marketable securities | $75,406 | $72,191 |
+| *        Fair value adjustments recorded in net income* | $14,384 | $12,413 |
+|         Total cash, cash equivalents, and marketable securities | $98,496 | $95,657 |
+|         Accounts receivable, net | $57,148 | $52,340 |
+|         Other current assets | $18,303 | $15,714 |
+|         Total current assets | $173,947 | $163,711 |
+|     Non-marketable securities | $63,800 | $37,982 |
+|     Deferred income taxes | $10,331 | $17,180 |
+|     Property and equipment, net | $223,787 | $171,036 |
+|     Operating lease assets | $14,524 | $13,588 |
+|     Goodwill | $33,269 | $31,885 |
+|     Other non-current assets | $16,811 | $14,874 |
+|     Total assets | $536,469 | $450,256 |
+|         Accounts payable | $10,546 | $7,987 |
+|         Accrued compensation and benefits | $13,944 | $15,069 |
+|         Accrued expenses and other current liabilities | $59,437 | $51,228 |
+|         Accrued revenue share | $10,081 | $9,802 |
+|         Deferred revenue | $5,542 | $5,036 |
+|         Total current liabilities | $99,550 | $89,122 |
+|     Long-term debt | $21,607 | $10,883 |
+|     Income taxes payable, non-current | $10,072 | $8,782 |
+|     Operating lease liabilities | $12,106 | $11,691 |
+|     Other long-term liabilities | $6,267 | $4,694 |
+|       Total liabilities | $149,602 | $125,172 |
+|       Commitments and Contingencies (Note 10) |  |  |
+|       Preferred stock, $0.001 par value per share, 100 shares authorized; no shares issued and outstanding |  |  |
+|       Class A, Class B, and Class C stock and additional paid-in capital, $0.001 par value per share: 300,000 shares authorized (Class A 180,000, Class B 60,000, Class C 60,000); 12,211 (Class A 5,835, Class B 861, Class C 5,515) and 12,077 (Class A 5,818, Class B 842, Class C 5,417) shares issued and outstanding | $91,695 | $84,800 |
+|       Accumulated other comprehensive income (loss) | $(2,054) | $(4,800) |
+|       Retained earnings | $297,226 | $245,084 |
+|       Total stockholders’ equity | $386,867 | $325,084 |
+|     Total liabilities and stockholders’ equity | $536,469 | $450,256 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**Alphabet Inc.** (GOOG)
+
+**Nine Months Ended** *(In millions, except shares and per share data)*
+
+|  | Sep 30, 2025 (YTD) | Sep 30, 2024 (YTD) |
+| --- | ---: | ---: |
+|       Net income | $97,715 | $73,582 |
+|       Depreciation of property and equipment | $15,096 | $11,106 |
+|       Stock-based compensation expense | $17,882 | $16,975 |
+|       Deferred income taxes | $7,130 | $(3,809) |
+|       Loss (gain) on debt and equity securities, net | $(22,266) | $(2,738) |
+|       Other | $843 | $2,592 |
+|         Accounts receivable, net | $(3,582) | $(1,321) |
+|         Income taxes, net | $(3,292) | $(2,797) |
+|         Other assets | $(4,060) | $(2,334) |
+|         Accounts payable | $(771) | $(42) |
+|         Accrued expenses and other liabilities | $6,199 | $(6,366) |
+|         Accrued revenue share | $100 | $478 |
+|         Deferred revenue | $1,317 | $860 |
+|     Net cash provided by operating activities | $112,311 | $86,186 |
+|       Purchases of property and equipment | $(63,596) | $(38,259) |
+|       Purchases of marketable securities | $(60,834) | $(65,034) |
+|       Maturities and sales of marketable securities | $61,301 | $81,779 |
+|       Purchases of non-marketable securities | $(3,312) | $(3,234) |
+|       Maturities and sales of non-marketable securities | $1,196 | $732 |
+|       Acquisitions, net of cash acquired, and purchases of intangible assets | $(1,425) | $(2,840) |
+|       Other investing activities | $(1,845) | $(2,500) |
+|     Net cash used in investing activities | $(68,515) | $(29,356) |
+|       Net payments related to stock-based award activities | $(9,001) | $(9,141) |
+|       Repurchases of stock | $(40,210) | $(46,671) |
+|       Dividend payments | $(7,513) | $(4,921) |
+|       Proceeds from issuance of debt, net of costs | $38,002 | $8,694 |
+|       Repayments of debt | $(26,094) | $(8,951) |
+|       Proceeds from sale of interest in consolidated entities, net | $400 | $293 |
+|     Net cash used in financing activities | $(44,416) | $(60,697) |
+|     Effect of exchange rate changes on cash and cash equivalents | $244 | $(222) |
+|   Net increase (decrease) in cash and cash equivalents | $(376) | $(4,089) |
+|   Cash and cash equivalents at end of period |  |  |
+|   Cash and cash equivalents at end of period |  |  |
+
+--- [ITEM] Part I, Item 2 (len=52282 chars) ---
+ITEM 2.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+Please read the following discussion and analysis of our financial condition and results of operations together with "Note About Forward-Looking Statements" and our consolidated financial statements and related notes included under Item 1 of this Quarterly Report on Form 10-Q as well as our Annual Report ...
+
+[RCTS] item=Part_I_Item_2 原 chunk 1249 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_I_Item_2 原 chunk 1573 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_2 原 chunk 1230 token > 1200 → 補切成 2 份
+
+--- [ITEM] Part I, Item 1 (len=83213 chars) ---
+ITEM 1.FINANCIAL STATEMENTS
+
+Alphabet Inc.
+
+CONSOLIDATED BALANCE SHEETS
+
+(in millions, except par value per share amounts)
+
+As of December 31, 2024As ofSeptember 30, 2025
+
+(unaudited)
+
+Assets
+
+Current assets:
+
+Cash and cash equivalents$23,466 $23,090 
+
+Marketable securities72,191 75,406 
+
+Total cash, cash equivalents, and marketable securities95,657 98,496 
+
+Accounts receivable, net52,340 57,148 
+...
+
+[RCTS] item=Part_I_Item_1 原 chunk 1696 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1292 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 2053 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1672 token > 1200 → 補切成 3 份
+
+--- [ITEM] Part I, Item 3 (len=290 chars) ---
+ITEM 3.QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+For quantitative and qualitative disclosures about market risk, refer to Part II, Item 7A, "Quantitative and Qualitative Disclosures About Market Risk" in our Annual Report on Form 10-K for the year ended December 31, 2024....
+
+--- [ITEM] Part II, Item 1 (len=305 chars) ---
+ITEM 1.LEGAL PROCEEDINGS
+
+For a description of our material pending legal proceedings, see Note 10 “Commitments and Contingencies - Legal Matters” of the Notes to Consolidated Financial Statements included in Part I, Item 1 of this Quarterly Report on Form 10-Q, which is incorporated herein by reference....
+
+--- [ITEM] Part II, Item 1A (len=602 chars) ---
+ITEM 1A.RISK FACTORS                
+
+Our operations and financial results are subject to various risks and uncertainties, including but not limited to those described in Part I, Item 1A, "Risk Factors" in our Annual Report on Form 10-K for the year ended December 31, 2024, which could harm our business, reputation, financial condition, and operating results, and affect the trading price of our Cl...
+
+--- [ITEM] Part II, Item 2 (len=1443 chars) ---
+ITEM 2.UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
+
+Issuer Purchases of Equity Securities
+
+The following table presents information with respect to Alphabet's repurchases of Class A and Class C stock during the quarter ended September 30, 2025.
+
+PeriodTotal Number of Class A Shares Purchased 
+
+(in thousands) (1)
+
+Total Number of Class C Shares Purchased 
+
+(in thousands) (1)
+
+Averag...
+
+--- [ITEM] Part II, Item 5 (len=1693 chars) ---
+ITEM 5.OTHER INFORMATION 
+
+10b5-1 Trading Plans
+
+During the quarter ended September 30, 2025, the following Section 16 director adopted, modified, or terminated a “Rule 10b5-1 trading arrangement” (as defined in Item 408 of Regulation S-K of the Exchange Act).
+
+•Frances Arnold, a member of the Board of Directors of Alphabet, adopted a trading plan on August 21, 2025 (with the first trade under the...
+
+--- [ITEM] Part II, Item 6 (len=1770 chars) ---
+ITEM 6.EXHIBITS
+
+ExhibitNumber  DescriptionIncorporated by reference herein
+
+FormDate
+
+31.01*Certification of Chief Executive Officer pursuant to Exchange Act Rules 13a-14(a) and 15d-14(a), as adopted pursuant to Section 302 of the Sarbanes-Oxley Act of 2002
+
+31.02*Certification of Chief Financial Officer pursuant to Exchange Act Rules 13a-14(a) and 15d-14(a), as adopted pursuant to Section 302 of...
+
+[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過

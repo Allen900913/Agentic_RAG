@@ -83,6 +83,9 @@ checkpoint, in the same order as given. No markdown, no explanation.
 
 
 def _parse_json_list(raw: str, key: str, n: int) -> list[bool]:
+    # qwen3-32b（等推理模型）在 content 裡夾帶 <think>...</think> 推理過程，JSON 才接在後面；
+    # 不先剝掉會讓 json.loads 卡在第一個字元（"Expecting value: line 1 column 1"）。
+    raw = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL)
     raw = re.sub(r"^```(?:json)?|```$", "", raw.strip(), flags=re.MULTILINE).strip()
     parsed = json.loads(raw)
     vals = parsed.get(key, []) if isinstance(parsed, dict) else []
@@ -139,7 +142,8 @@ def evaluate(eval_set: dict, client, bge_m3, rerank_model, top_k: int,
              judge_model: str, query_model: str, limit: int | None = None,
              enable_rewrite: bool = False, category: str | None = None,
              rewrite_merge_top_n: int | None = None,
-             rewrite_fusion: bool = False) -> dict:
+             rewrite_fusion: bool = False,
+             translate_query_en: bool = False) -> dict:
     queries = eval_set["queries"]
     if category:
         queries = [q for q in queries if q["category"] == category]
@@ -172,6 +176,7 @@ def evaluate(eval_set: dict, client, bge_m3, rerank_model, top_k: int,
                 enable_rewrite=enable_rewrite,
                 rewrite_merge_top_n=rewrite_merge_top_n,
                 rewrite_fusion=rewrite_fusion,
+                translate_query_en=translate_query_en,
                 return_pool=True,
             )
 
@@ -337,6 +342,8 @@ def main() -> None:
                         help="Cap how many candidates each rewrite variant merges into the pool")
     parser.add_argument("--rewrite-fusion", action="store_true",
                         help="跨變體 RRF-fusion（RAG-Fusion）合併，取代 max-score 合併；與 --rewrite 併用")
+    parser.add_argument("--translate-query-en", action="store_true",
+                        help="rerank 對每個候選同時用原句與英譯各評一次分、取逐候選最高分（見 rag_query.retrieve 說明）")
     args = parser.parse_args()
 
     eval_path = Path(args.eval_set)
@@ -365,13 +372,15 @@ def main() -> None:
         print(f"[ERROR] Collection is empty.")
         sys.exit(1)
     print(f"[INFO] Collection size: {total} chunks")
-    print(f"[INFO] top_k={args.top_k}  judge_model={args.judge_model}  query_model={args.query_model}  rewrite={args.rewrite}\n")
+    print(f"[INFO] top_k={args.top_k}  judge_model={args.judge_model}  query_model={args.query_model}  "
+          f"rewrite={args.rewrite}  translate_query_en={args.translate_query_en}\n")
 
     report = evaluate(eval_set, client, bge_m3, rerank_model, args.top_k,
                        args.judge_model, args.query_model, limit=args.limit,
                        enable_rewrite=args.rewrite, category=args.category,
                        rewrite_merge_top_n=args.rewrite_merge_top_n,
-                       rewrite_fusion=args.rewrite_fusion)
+                       rewrite_fusion=args.rewrite_fusion,
+                       translate_query_en=args.translate_query_en)
 
     print_report(report)
 

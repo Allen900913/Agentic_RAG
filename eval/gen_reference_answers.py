@@ -61,14 +61,44 @@ NUMBERS — use the EXACT figures from the SOURCE EXCERPTS, never the approximat
 figure phrased inside the QUESTION itself (e.g. if the question says "850 多億美元" but the
 source says "$84.75 billion", write $84.75 billion — do NOT write $850 billion). Keep every
 monetary figure in the source's own unit VERBATIM: write "$84.75 billion", "$131,819 million",
-"$510 million" exactly as stated. Do NOT hand-convert "billion"/"million" into 億 yourself
-(that transliteration is error-prone — "$84.75 billion" is 847.5 億, not 84.75 億); a
-deterministic post-processor handles the 億 conversion. Just preserve the source's "$X
-billion / $Y million" and let it stand.
+"$510 million" exactly as stated.
+
+CRITICAL — NEVER write the Chinese money unit 「億」(or 「百萬」「兆」) ANYWHERE in your
+answer. Do NOT hand-convert "$X billion / $Y million" into 億 yourself: that transliteration
+is error-prone ("$84.75 billion" is 847.5 億 not 84.75 億; "$54.5 billion" is 545 億 not
+54.5 億) and a deterministic post-processor does the 億 conversion for you. Your job is ONLY
+to preserve the source's "$X billion / $Y million" token exactly as an English figure. If a
+「數字+億」 appears anywhere in your output, the answer is INVALID. (Non-monetary counts such
+as 「數百萬名使用者」 are fine; this rule is about money.)
 
 Write in {lang}, in fluent prose (not bullet points). Do not mention "the excerpts"
 or cite reference numbers; just state the facts as an authoritative answer.
 """
+
+
+# 偵測 LLM 是否違規把金額手轉成中文「億」：數字後（容忍空白/窄空格）緊接「億」。
+# 非金額計數（如「數百萬名使用者」，數前非阿拉伯數字）不會誤觸。
+import re as _re
+_YI_HANDCONV_RE = _re.compile(r"[0-9][0-9,\.]*[\s  ]*億")
+
+
+def gen_reference_clean(msgs: list, model: str, max_retries: int = 2) -> str:
+    """生成參考答案並強制金額用英文原文（$X billion）。LLM 若手轉成「億」就退回重寫，
+    讓確定性 post-processor（rq.convert_usd_units_to_yi）獨佔 億 換算，根治 billion→億
+    的 10x 音譯錯與巢狀雙寫（見 CHANGELOG_AGENTIC ⑩ / eval 稽核）。"""
+    txt = rq.call_llm(msgs, model, temperature=0.0)
+    for _ in range(max_retries):
+        if not _YI_HANDCONV_RE.search(txt or ""):
+            break
+        retry = msgs + [
+            {"role": "assistant", "content": txt},
+            {"role": "user", "content":
+             "你在金額用了中文「億」。請把整段重寫一次：所有『金額』一律改用來源的英文單位"
+             "原文（例如 $8.0 billion、$54.5 billion、$476 million），輸出中絕對不可再出現"
+             "「億」字（換算交給後處理）；其餘文字與事實維持不變。"},
+        ]
+        txt = rq.call_llm(retry, model, temperature=0.0)
+    return txt
 
 
 def detect_lang(text: str) -> str:
@@ -232,7 +262,10 @@ def main():
         msgs = [{"role": "system", "content": REFERENCE_SYSTEM.format(lang=lang)},
                 {"role": "user", "content": user}]
         # rq.call_llm 依 model 名稱路由：'gemini-' 開頭走 Google GenAI，其餘走 NVIDIA NIM。
-        reference = rq.call_llm(msgs, args.gen_model, temperature=0.0)
+        # gen_reference_clean 內含「億」違規偵測 + 重試護欄（強制金額留英文原文）。
+        reference = gen_reference_clean(msgs, args.gen_model)
+        if _YI_HANDCONV_RE.search(reference or ""):
+            print(f"[{i}/{len(queries)}] {qid} — ⚠ 重試後仍含手轉「億」，需人工檢查")
         # 確定性單位換算（與系統 synthesize 同一支 rq.convert_usd_units_to_yi）：reference prompt
         # 要 LLM 保留 "$X billion" verbatim，這裡把 billion/million→億 乘算正確並雙寫「億（$X billion）」，
         # 對齊系統答案格式 + 根治中文 reference 的 billion→億 音譯 10x 錯（見 CHANGELOG_AGENTIC ⑨）。

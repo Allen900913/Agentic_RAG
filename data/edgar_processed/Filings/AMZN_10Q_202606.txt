@@ -1,0 +1,393 @@
+=== AMZN 10-Q | accession=0001018724-26-000026 | fiscal_year=2026 fiscal_period=Q2 period_code=202606 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**AMAZON.COM, INC.** (AMZN)
+
+**Three and Six Months Ended** *(In millions, except shares and per share data)*
+
+|  | Jun 30, 2026 (Q2) | Jun 30, 2025 (Q2) | Jun 30, 2026 (YTD) | Jun 30, 2025 (YTD) |
+| --- | ---: | ---: | ---: | ---: |
+|       Net sales | $200,606 | $167,702 | $382,125 | $323,369 |
+| *        Net product sales* | $77,602 | $68,246 | $148,906 | $132,216 |
+| *        Net service sales* | $123,004 | $99,456 | $233,219 | $191,153 |
+|         Cost of sales | $95,778 | $80,809 | $183,241 | $157,785 |
+|         Fulfillment | $29,633 | $25,976 | $56,922 | $50,569 |
+|         Technology and infrastructure | $33,158 | $27,166 | $62,725 | $50,160 |
+|         Sales and marketing | $11,698 | $11,416 | $22,012 | $21,179 |
+|         General and administrative | $2,788 | $2,965 | $5,375 | $5,593 |
+|         Other operating expense (income), net | $90 | $199 | $537 | $507 |
+|           Total operating expenses | $173,145 | $148,531 | $330,812 | $285,793 |
+|         Operating income | $27,461 | $19,171 | $51,313 | $37,576 |
+|         Interest income | $1,295 | $1,085 | $2,430 | $2,151 |
+|         Interest expense | $(1,314) | $(516) | $(2,114) | $(1,057) |
+|         Other income (expense), net | $53,415 | $1,117 | $69,062 | $3,866 |
+|         Total non-operating income | $53,396 | $1,686 | $69,378 | $4,960 |
+|       Income before income taxes | $80,857 | $20,857 | $120,691 | $42,536 |
+|       Provision for income taxes | $(18,199) | $(2,678) | $(27,759) | $(7,231) |
+|       Equity-method investment activity, net of tax | $(11) | $(15) | $(30) | $(14) |
+|       Net income | $62,647 | $18,164 | $92,902 | $35,291 |
+|       Basic earnings per share (in usd per share) | 5.82 | 1.71 | 8.64 | 3.32 |
+|       Diluted earnings per share (in usd per share) | 5.75 | 1.68 | 8.53 | 3.27 |
+|         Basic (in shares) | 10,769 | 10,637 | 10,756 | 10,620 |
+|         Diluted (in shares) | 10,903 | 10,806 | 10,889 | 10,800 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**AMAZON.COM, INC.** (AMZN)
+
+**As of June 30, 2026 and December 31, 2025** *(In millions, except shares and per share data)*
+
+|  | Jun 30, 2026 | Dec 31, 2025 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $78,213 | $86,810 |
+|         Marketable securities | $44,775 | $36,219 |
+|         Inventories | $38,184 | $38,325 |
+|         Accounts receivable, net and other | $88,092 | $67,729 |
+| *        Customer receivables, net* | $49,200 | $40,400 |
+| *        Vendor receivables, net* | $21,700 | $15,900 |
+| *        Other receivables, net* | $9,800 | $4,500 |
+|         Total current assets | $249,264 | $229,083 |
+|     Property and equipment, net | $446,046 | $357,025 |
+|     Operating leases | $92,743 | $86,054 |
+|     Goodwill | $23,504 | $23,273 |
+|     Other assets | $284,132 | $122,607 |
+|     Total assets | $1,095,689 | $818,042 |
+|         Accounts payable | $147,440 | $121,909 |
+|         Accrued expenses and other | $73,406 | $75,520 |
+|         Unearned revenue | $20,428 | $20,576 |
+|       Total current liabilities | $241,274 | $218,005 |
+|       Long-term lease liabilities | $94,338 | $87,339 |
+|       Long-term debt | $128,894 | $65,648 |
+|       Other long-term liabilities | $79,563 | $35,985 |
+|       Commitments and contingencies (Note 4) |  |  |
+|       Preferred stock ($0.01 par value; 500 shares authorized; no shares issued or outstanding) |  |  |
+|       Common stock ($0.01 par value; 100,000 shares authorized; 11,246 and 11,298 shares issued; 10,731 and 10,783 shares outstanding) | $113 | $112 |
+|       Treasury stock, at cost | $(7,837) | $(7,837) |
+|       Additional paid-in capital | $149,619 | $140,024 |
+|       Accumulated other comprehensive income (loss) | $66,287 | $28,230 |
+|       Retained earnings | $343,438 | $250,536 |
+|       Total stockholders’ equity | $551,620 | $411,065 |
+|     Total liabilities and stockholders’ equity | $1,095,689 | $818,042 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**AMAZON.COM, INC.** (AMZN)
+
+**Three and Six Months Ended** *(In millions, except shares and per share data)*
+
+|  | Jun 30, 2026 (Q2) | Jun 30, 2025 (Q2) | Jun 30, 2026 (YTD) | Jun 30, 2025 (YTD) |
+| --- | ---: | ---: | ---: | ---: |
+|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, END OF PERIOD |  |  |  |  |
+|       Net income | $62,647 | $18,164 | $92,902 | $35,291 |
+|       Depreciation and amortization of property and equipment and capitalized content costs, operating lease assets, and other | $19,988 | $15,227 | $38,933 | $29,489 |
+|       Stock-based compensation | $6,038 | $6,534 | $10,070 | $10,223 |
+|       Non-operating expense (income), net | $(53,381) | $(1,258) | $(69,013) | $(4,075) |
+|       Deferred income taxes | $17,691 | $11 | $30,489 | $518 |
+|         Inventories | $(1,818) | $(4,054) | $(196) | $(5,276) |
+|         Accounts receivable, net and other | $(8,204) | $(1,125) | $(13,954) | $122 |
+|         Other assets | $(4,717) | $(2,971) | $(8,528) | $(6,373) |
+|         Accounts payable | $9,442 | $7,058 | $705 | $(1,985) |
+|         Accrued expenses and other | $(2,018) | $(4,952) | $(10,063) | $(9,013) |
+|         Unearned revenue | $(281) | $(119) | $74 | $609 |
+|     Net cash provided by (used in) operating activities | $45,387 | $32,515 | $71,419 | $49,530 |
+|       Purchases of property and equipment | $(54,208) | $(32,183) | $(98,411) | $(57,202) |
+|       Proceeds from property and equipment sales and incentives | $1,132 | $815 | $2,101 | $1,579 |
+|       Acquisitions, net of cash acquired, non-marketable investments, and other, net | $(24,359) | $(1,700) | $(39,767) | $(1,652) |
+|       Sales and maturities of marketable securities | $24,196 | $11,441 | $41,882 | $19,178 |
+|       Purchases of marketable securities | $(26,006) | $(17,797) | $(49,262) | $(31,130) |
+|     Net cash provided by (used in) investing activities | $(79,245) | $(39,424) | $(143,457) | $(69,227) |
+|       Proceeds from short-term debt, and other | $9,368 | $2,093 | $15,386 | $3,908 |
+|       Repayments of short-term debt, and other | $(9,573) | $(1,392) | $(15,682) | $(3,474) |
+|       Proceeds from long-term debt | $13,557 |  | $66,998 | $746 |
+|       Repayments of long-term debt | $(2,752) | $(2,751) | $(2,752) | $(2,751) |
+|       Principal repayments of finance leases | $(395) | $(411) | $(863) | $(821) |
+|       Principal repayments of financing obligations | $(59) | $(78) | $(174) | $(194) |
+|     Net cash provided by (used in) financing activities | $10,146 | $(2,539) | $62,913 | $(2,586) |
+|     Foreign currency effect on cash, cash equivalents, and restricted cash | $(53) | $1,008 | $(54) | $1,424 |
+|   Net increase (decrease) in cash, cash equivalents, and restricted cash | $(23,765) | $(8,440) | $(9,179) | $(20,859) |
+|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, END OF PERIOD |  |  |  |  |
+
+--- [TABLE extra #0] ---
+(Mark One)
+
+| ☒ | QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #1] ---
+For the quarterly period ended
+
+| ☐ | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #2] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware |  | 91-1646860 |
+| --- | --- | --- |
+| (State or other jurisdiction of incorporation or organization) |  | (I.R.S. Employer Identification No.) |...
+
+--- [TABLE extra #3] ---
+Securities registered pursuant to Section 12(b) of the Act:
+
+| Title of Each Class | Trading Symbol(s) | Name of Each Exchange on Which Registered |
+| --- | --- | --- |
+| Common Stock, par value $.01 per share | AMZN | The Nasdaq Stock Market LLC |
+| Floating Rate Notes due 2028 | — | The Nasdaq Stock Market LLC |
+| 2.800% Notes due 2028 | — | The Nasdaq Stock Market LLC |
+| 3.100% Notes due 2030 ...
+
+--- [TABLE extra #4] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large accelerated filer |  | ☒ | Accelerated filer |  | ☐ |
+| --- | --- | --- | --- | --- | --- |
+| Non-accelerated filer |  | ☐ | Smaller reporting company...
+
+--- [TABLE extra #5] ---
+INDEX
+
+|  |  | Page |
+| --- | --- | --- |
+| PART I. FINANCIAL INFORMATION |  |  |
+| Item 1. | Financial Statements | 3 |
+|  | Consolidated Statements of Cash Flows | 3 |
+|  | Consolidated Statements of Operations | 4 |
+|  | Consolidated Statements of Comprehensive Income | 5 |
+|  | Consolidated Balance Sheets | 6 |
+|  | Notes to Consolidated Financial Statements | 7 |
+| Item 2. | Management’s Disc...
+
+--- [TABLE extra #6] ---
+PART I. FINANCIAL INFORMATION
+
+| Item 1. | Financial Statements |
+| --- | --- |...
+
+--- [TABLE extra #7] ---
+(unaudited)
+
+|  | Three Months Ended June 30, |  | Six Months Ended June 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2025 |  | 2026 |  | 2025 |  | 2026 |  |  |  |  |  |  |  |  |
+| Net income | $ | 18,164 |  |  | $ | 62,647 |  |  | $ | 35,291 |  |  | $ | 92,902 |  |
+| Other comprehensive income (los...
+
+--- [TABLE extra #8] ---
+Table of Contents
+
+| Item 2. | Management’s Discussion and Analysis of Financial Condition and Results of Operations |
+| --- | --- |...
+
+--- [TABLE extra #9] ---
+Net sales include product and service sales. Product sales represent revenue from the sale of products and related shipping fees and digital media content where we record revenue gross. Service sales primarily represent third-party seller f
+
+|  | Three Months Ended June 30, |  | Six Months Ended June 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ...
+
+--- [TABLE extra #10] ---
+Operating income by segment is as follows (in millions):
+
+|  | Three Months Ended June 30, |  | Six Months Ended June 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2025 |  | 2026 |  | 2025 |  | 2026 |  |  |  |  |  |  |  |  |
+| Operating Income |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| North Am...
+
+--- [TABLE extra #11] ---
+Our financial focus is on long-term, sustainable growth in free cash flow. We provide a free cash flow measure because we believe it provides additional perspective on the impact of acquiring property and equipment with cash. Free cash flow
+
+|  | Twelve Months Ended June 30, |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2025 |  | 2026 |  |  |  |  |
+| Net cash provided ...
+
+--- [TABLE extra #12] ---
+Information regarding the effect of foreign exchange rates, versus the U.S. Dollar, on our net sales, operating expenses, and operating income is provided to show reported period operating results had the foreign exchange rates remained the
+
+|  | Three Months Ended June 30, |  | Six Months Ended June 30, |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |...
+
+--- [TABLE extra #13] ---
+Table of Contents
+
+| Item 3. | Quantitative and Qualitative Disclosures About Market Risk |
+| --- | --- |...
+
+--- [TABLE extra #14] ---
+Table of Contents
+
+| Item 4. | Controls and Procedures |
+| --- | --- |...
+
+--- [TABLE extra #15] ---
+PART II. OTHER INFORMATION
+
+| Item 1. | Legal Proceedings |
+| --- | --- |...
+
+--- [TABLE extra #16] ---
+See Item 1 of Part I, “Financial Statements — Note 4 — Commitments and Contingencies — Legal Proceedings.”
+
+| Item 1A. | Risk Factors |
+| --- | --- |...
+
+--- [TABLE extra #17] ---
+Table of Contents
+
+| Item 2. | Unregistered Sales of Equity Securities and Use of Proceeds |
+| --- | --- |...
+
+--- [TABLE extra #18] ---
+None.
+
+| Item 3. | Defaults Upon Senior Securities |
+| --- | --- |...
+
+--- [TABLE extra #19] ---
+None.
+
+| Item 4. | Mine Safety Disclosures |
+| --- | --- |...
+
+--- [TABLE extra #20] ---
+Not applicable.
+
+| Item 5. | Other Information |
+| --- | --- |...
+
+--- [TABLE extra #21] ---
+Table of Contents
+
+| Item 6. | Exhibits |
+| --- | --- |...
+
+--- [TABLE extra #22] ---
+This table lists
+
+| Exhibit Number |  | Description |
+| --- | --- | --- |
+| 3.1 |  | Amended and Restated Certificate of Incorporation of Amazon.com, Inc. (incorporated by reference to the Company’s Current Report on Form 8-K, filed May 27, 2022). |
+| 3.2 |  | Amended and Restated Bylaws of Amazon.com, Inc. (incorporated by reference to the Company’s Current Report on Form 8-K, filed May 3, 2024)....
+
+--- [TABLE extra #23] ---
+Pursuant to the requirements of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized.
+
+|  | AMAZON.COM, INC. (REGISTRANT) |  |
+| --- | --- | --- |
+|  | By: | /s/ Shelley L. Reynolds |
+|  |  | Shelley L. Reynolds |
+|  |  | Vice President, Worldwide Controller |
+|  |  | (Principal Accounting Officer) ...
+
+[INFO] extra tables kept=24 (去重後，來自 unstructured)
+
+[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
+
+--- [ITEM] Part I, Item 1 (len=75390 chars) ---
+Item 1.Financial Statements
+
+AMAZON.COM, INC.
+
+CONSOLIDATED STATEMENTS OF CASH FLOWS
+
+(in millions) 
+
+(unaudited)
+
+  Three Months EndedJune 30,Six Months EndedJune 30,Twelve Months EndedJune 30,
+
+202520262025202620252026
+
+CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, BEGINNING OF PERIOD$69,893 $104,692 $82,312 $90,106 $71,673 $61,453 
+
+OPERATING ACTIVITIES:
+
+Net income18,164 62,647 35,291 92,902 70...
+
+[RCTS] item=Part_I_Item_1 原 chunk 1287 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1982 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 2047 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1880 token > 1200 → 補切成 3 份
+
+--- [ITEM] Part I, Item 2 (len=41119 chars) ---
+Table of Contents
+
+Item 2.Management’s Discussion and Analysis of Financial Condition and Results of Operations
+
+Forward-Looking Statements
+
+This Quarterly Report on Form 10-Q includes forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995. All statements other than statements of historical fact, including statements regarding guidance, industry prosp...
+
+[RCTS] item=Part_I_Item_2 原 chunk 1267 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_2 原 chunk 1639 token > 1200 → 補切成 3 份
+
+--- [ITEM] Part I, Item 3 (len=5217 chars) ---
+Table of Contents
+
+Item 3.Quantitative and Qualitative Disclosures About Market Risk
+
+We are exposed to market risk for the effect of interest rate changes, foreign currency fluctuations, and changes in the market values of our investments. Information relating to quantitative and qualitative disclosures about market risk is set forth below and in Item 2 of Part I, “Management’s Discussion and Ana...
+
+--- [ITEM] Part II, Item 1 (len=132 chars) ---
+Item 1.Legal Proceedings
+
+See Item 1 of Part I, “Financial Statements — Note 4 — Commitments and Contingencies — Legal Proceedings.”...
+
+--- [ITEM] Part II, Item 1A (len=60964 chars) ---
+Item 1A.Risk Factors
+
+Please carefully consider the following discussion of significant factors, events, and uncertainties that make an investment in our securities risky. The events and consequences discussed in these risk factors could, in circumstances we may or may not be able to accurately predict, recognize, or control, have a material adverse effect on our business, growth, reputation, pros...
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1230 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1293 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1269 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1539 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1383 token > 1200 → 補切成 3 份
+
+--- [ITEM] Part II, Item 2 (len=92 chars) ---
+Table of Contents
+
+Item 2.Unregistered Sales of Equity Securities and Use of Proceeds
+
+None....
+
+--- [ITEM] Part II, Item 3 (len=45 chars) ---
+Item 3.Defaults Upon Senior Securities
+
+None....
+
+--- [ITEM] Part II, Item 4 (len=47 chars) ---
+Item 4.Mine Safety Disclosures
+
+Not applicable....
+
+--- [ITEM] Part II, Item 5 (len=1083 chars) ---
+Item 5.Other Information
+
+On May 4, 2026, Matthew S. Garman, CEO Amazon Web Services, adopted a trading plan intended to satisfy Rule 10b5-1(c) to sell up to 63,743 shares of Amazon.com, Inc. common stock over a period ending on May 28, 2027, subject to certain conditions.
+
+On May 4, 2026, Daniel P. Huttenlocher, a member of our Board of Directors, adopted a trading plan intended to satisfy Rule 1...
+
+--- [ITEM] Part II, Item 6 (len=3029 chars) ---
+Table of Contents
+
+Item 6.Exhibits
+
+ExhibitNumberDescription
+
+3.1Amended and Restated Certificate of Incorporation of Amazon.com, Inc. (incorporated by reference to the Company’s Current Report on Form 8-K, filed May 27, 2022).
+
+3.2Amended and Restated Bylaws of Amazon.com, Inc. (incorporated by reference to the Company’s Current Report on Form 8-K, filed May 3, 2024).
+
+4.1Officers’ Certificate of...

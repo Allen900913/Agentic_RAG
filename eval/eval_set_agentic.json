@@ -1,0 +1,90 @@
+{
+  "_meta": {
+    "description": "Agentic RAG 專用評估集（測 query decomposition + 跨公司具名歸屬 + 兩子句題）。eval_set.json 是為『檢索機制』設計、幾乎全是單一聚焦題（只有 sem-04 真跨公司）；本集補上需要拆解與平行檢索才答得好的題型。",
+    "usage": "python eval/eval_agentic.py --judge-votes 3",
+    "entry_types": {
+      "full": "自帶 query + rubric（本檔新題）",
+      "ref": "只有 {\"ref\": \"<id>\"}：從 eval_set.json 撈同 id 的整題（query + rubric）復用，避免重複維護"
+    },
+    "rubric_schema": "沿用 eval_set.json：must_include[{checkpoint, weight, is_critical}] / must_not_include[{checkpoint, is_critical}]"
+  },
+  "queries": [
+    {
+      "id": "agc-01",
+      "category": "agentic-compare",
+      "query": "比較 NVDA 與 TSLA 的毛利率表現與趨勢，哪一家的毛利結構比較健康？",
+      "relevant": [
+        "NVDA_10K_2026.html",
+        "NVDA_News_*.txt",
+        "TSLA_10K_2025.html",
+        "TSLA_News_*.txt"
+      ],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {
+            "checkpoint": "同時『具名』給出 NVDA 與 TSLA 各自的毛利率水準或方向（兩家都要點名，不可只答一家或用『這些公司』含糊帶過）",
+            "weight": 50,
+            "is_critical": true
+          },
+          {
+            "checkpoint": "指出 NVDA 毛利率偏高／受惠資料中心 GPU 與加速運算需求",
+            "weight": 25,
+            "is_critical": false
+          },
+          {
+            "checkpoint": "指出 TSLA 毛利率承受降價／成本／競爭壓力（方向性即可）",
+            "weight": 25,
+            "is_critical": false
+          }
+        ],
+        "must_not_include": [
+          {
+            "checkpoint": "把某一家的毛利率數字或趨勢張冠李戴到另一家",
+            "is_critical": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "agc-02",
+      "category": "agentic-compare",
+      "query": "META 和 MSFT 各自在 AI 上的策略與投入重點是什麼？兩家的路線有何不同？",
+      "relevant": [
+        "META_10K_2025.html",
+        "META_News_*.txt",
+        "MSFT_10K_2025.html",
+        "MSFT_News_*.txt"
+      ],
+      "answerable": true,
+      "rubric": {
+        "must_include": [
+          {
+            "checkpoint": "同時『具名』說明 META 與 MSFT 各自的 AI 策略重點（兩家都要點名並綁定其各自策略，不可只答一家或混淆歸屬）",
+            "weight": 50,
+            "is_critical": true
+          },
+          {
+            "checkpoint": "META 面：AI 基礎設施／資本支出投入、或把 AI 用於推薦與廣告、或自研模型",
+            "weight": 25,
+            "is_critical": false
+          },
+          {
+            "checkpoint": "MSFT 面：雲端（Azure）AI、與 OpenAI 合作、或 Copilot／把 AI 嵌入產品",
+            "weight": 25,
+            "is_critical": false
+          }
+        ],
+        "must_not_include": [
+          {
+            "checkpoint": "把 META 的策略誤植給 MSFT 或反之（歸屬錯誤）",
+            "is_critical": true
+          }
+        ]
+      }
+    },
+    { "ref": "sem-04" },
+    { "ref": "sem-24" },
+    { "ref": "col-10" }
+  ]
+}

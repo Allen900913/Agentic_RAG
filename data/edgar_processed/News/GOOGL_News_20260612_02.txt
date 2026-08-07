@@ -1,0 +1,39 @@
+# source    : GOOGL_News_20260612_02.txt
+# doc_type  : news
+# chunks    : 2
+
+==============================================================================
+[chunk 0] chunk_type=text  chars=2332
+==============================================================================
+Title    : Is Alphabet Inc. (GOOGL) One of the Best Forever Stocks to Buy on $85B Capital Raise? Source   : Insider Monkey [full]
+URL      : https://finance.yahoo.com/markets/stocks/articles/alphabet-inc-googl-one-best-032550927.html
+Published: 2026-06-12T03:25:50Z
+
+Is Alphabet Inc. (GOOGL) One of the Best Forever Stocks to Buy on $85B Capital Raise? Abdul Rahman
+Fri, June 12, 2026 at 11:25 AM GMT+8
+2 min read
+GOOG
++0.92%
+BRK-B
++0.44%
+Alphabet Inc. (NASDAQ:
+GOOGL
+) is
+one of the best forever stocks to buy, according to analysts
+. On June 5, Moody’s Ratings touted Alphabet Inc.’s (NASDAQ:GOOGL) move to raise $84.75 billion, affirming it as credit-positive. According to the ratings firm, the massive equity raise underscores Alphabet’s strong financial profile, which is capable of funding incremental investment through equity rather than adding debt. In addition, the move asserts commitment towards disciplined financial policies capable of ensuring a strong balance sheet. Moody’s expects the company’s capital expenditure to reach $185 billion this year, up from $91.5 billion last year. Alphabet plans to raise about $34.75 billion through an underwritten public offering of common equity and 6.25% mandatory convertible preferred securities. It’s also eyeing a $40 billion market equity issuance program and a $10 billion private placement with Berkshire Hathaway. The company is to use net proceeds from the offerings for general corporate purposes, including artificial intelligence infrastructure, and for global compute capacity expansion. Alphabet Inc. (NASDAQ:GOOGL) is a multinational technology conglomerate and the parent holding company of Google. It generates the bulk of its revenue through internet advertising, cloud computing, and consumer hardware, while also operating highly speculative, forward-looking ventures known as “Other Bets. While we acknowledge the potential of GOOGL as an investment, we believe certain AI stocks offer greater upside potential and carry less downside risk. If you're looking for an extremely undervalued AI stock that also stands to benefit significantly from Trump-era tariffs and the onshoring trend, see our free report on the
+best short-term AI stock
+. READ NEXT:
+8 Most Profitable Crypto-Exposed Stocks to Buy Now
+and
+10 Best Robinhood Stocks Under $20 to Buy Now
+.
+
+==============================================================================
+[chunk 1] chunk_type=text  chars=91
+==============================================================================
+Follow Insider Monkey on Google News
+. Terms
+and
+Privacy Policy
+Privacy Dashboard
+More Info

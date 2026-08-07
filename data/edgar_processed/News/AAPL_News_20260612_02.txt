@@ -1,0 +1,65 @@
+# source    : AAPL_News_20260612_02.txt
+# doc_type  : news
+# chunks    : 4
+
+==============================================================================
+[chunk 0] chunk_type=text  chars=2584
+==============================================================================
+Title    : How Apple rebuilt Siri with Google's AI
+Source   : Yahoo Finance [full]
+URL      : https://finance.yahoo.com/sectors/technology/article/how-apple-rebuilt-siri-with-googles-ai-184257746.html
+Published: 2026-06-11T18:42:57Z
+
+How Apple rebuilt Siri with Google's AI
+Daniel Howley
+·
+Technology Editor
+Fri, June 12, 2026 at 2:42 AM GMT+8
+4 min read
+AAPL
++1.39%
+GOOGL
++0.39%
+GOOG
++0.92%
+After two years of delays, Apple's (
+AAPL
+) reinvented Siri, Siri AI,
+appears ready for primetime
+. The company unveiled the AI-powered version of its assistant at its Worldwide Developers Conference in Cupertino, Calif., on Monday, saying it will launch, albeit as a beta, later this year. The update is designed to transform Siri from a glorified kitchen timer to a
+digital helper for the AI age
+. Apple said Siri AI will be able to pull context from your apps, allowing you to, say, ask it the name of a podcast your sister recommended via text and have it presented to you without opening any separate apps or services. The idea is for Siri AI to recognize what you want, when you want it, and surface it, whether it's content on your device or from the web. It's more or less what Apple promised when it showed off its AI-enhanced Siri and Apple Intelligence at WWDC 2024. And in early demos, Siri AI, which rides on Apple Intelligence, appears to deliver on Apple's initial vision for its reimagined Siri. And it's thanks, at least in part, to Google (
+GOOG
+,
+GOOGL
+). Siri gets Google brains
+In January, Apple and Google signed an agreement for Apple to use the search giant's Gemini models to power its improved Siri. That gave Apple the high-powered AI models it needed to move Siri AI forward, after its own models fell short,
+Bloomberg's Mark Gurman previously reported
+. During a question and answer session following Apple's WWDC keynote, senior vice president of software engineering Craig Federighi explained how Apple uses Google's models to give Siri AI its smarts. The software chief was sure to point out that Siri AI isn't just a rebranded version of Google's own Gemini assistant. Federighi explained how the Gemini assistant uses Google's Gemini models, including Gemini Flash-Lite, Gemini Flash, Gemini Pro, and its Gemini Image models. When it comes to grounding those models in world knowledge, he said, Gemini takes advantage of Google Search. Apple, Federighi said, uses none of those things. "We use none of the models that Google deploys to their customers, nor do we use the infrastructure and means by which they employ models to their customers," he explained.
+
+==============================================================================
+[chunk 1] chunk_type=text  chars=1432
+==============================================================================
+"When it comes to the knowledge base, we, of course, don't use Google Search or anything like that as the foundation of our system,” he added. According to Apple vice president of AI Amar Subramanya, the company built its new family of Apple Frontier Models (AFM) by training them on proprietary data and reinforcement learning and then refining them using "outputs from Google's Gemini Frontier models."
+Story Continues
+Nvidia's new role
+Apple has a number of ARM offerings, including those that run on-device and in its Private Cloud Compute, dedicated Apple servers that process AI requests without making the data visible to Apple or retaining it for any future use. The idea is to bring Apple's on-device privacy to the cloud. But Private Cloud Compute didn't have enough horsepower to run Apple's high-end ARM Cloud Pro model, which Subramanya said offers quality similar to Google's own Gemini frontier models. To address that, Apple again turned to Google and Nvidia (
+NVDA
+). The company said it worked with the two firms to extend its PCC infrastructure to run on Nvidia's chips in Google's Cloud. According to the iPhone maker, Apple is the only company that can deploy software on the Nvidia-powered Google servers, and Apple devices are able to communicate only with the servers using software that's been digitally signed by Apple. All of that is designed to make Siri AI a more capable assistant than its predecessor.
+
+==============================================================================
+[chunk 2] chunk_type=text  chars=136
+==============================================================================
+We'll find out if it all comes together as planned when Siri AI is available this fall. Email Daniel Howley at dhowley@yahoofinance.com.
+
+==============================================================================
+[chunk 3] chunk_type=text  chars=266
+==============================================================================
+Follow him on Twitter at
+@DanielHowley
+. For the latest earnings reports and analysis, earnings whispers and expectations, and company earnings news, click here
+Read the latest financial and business news from Yahoo Finance
+Terms
+and
+Privacy Policy
+Privacy Dashboard

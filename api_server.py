@@ -35,77 +35,27 @@ from sse_starlette.sse import EventSourceResponse
 
 import rag_query as rq
 
-# ── LLM 後端選擇 ────────────────────────────────────────────────────────────────
-# 預設 Gemini（沿用 rag_query.call_llm）；設 LLM_BACKEND=groq 改走 Groq（OpenAI 相容）。
-# 這同時影響 retrieve() 內部 parse_query_filters() 走的 rq.call_llm —— 比照
-# eval_generation_llm_judge.py 的 monkeypatch，把整個模組的 call_llm 換掉。
-LLM_BACKEND      = os.getenv("LLM_BACKEND", "groq").lower()
-GROQ_BASE_URL    = "https://api.groq.com/openai/v1"
-DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"
-NVIDIA_BASE_URL    = "https://integrate.api.nvidia.com/v1"
-DEFAULT_NVIDIA_MODEL = "meta/llama-3.3-70b-instruct"
+# ── LLM 後端 ────────────────────────────────────────────────────────────────
+# 2026-07-21 統一改走 NVIDIA NIM：rq.call_llm 本身已經是「'gemini-' 開頭走 Gemini，其餘走
+# NVIDIA」的路由（見 rag_query.py call_llm），這裡不需要再 monkeypatch、也不需要重複維護一份
+# Groq/NVIDIA 呼叫邏輯 —— 直接沿用 rq.call_llm 供 retrieve() 內部 filter/rewrite/translate 用，
+# stream_llm 只需跟它走一樣的路由規則。
+NVIDIA_BASE_URL = rq.NVIDIA_BASE_URL
 
 # retrieval_model 與 gen_model 是兩個獨立維度（對齊 CLI 的 --model / --gen-model，
 # 以及 CLAUDE.md「model_name 陷阱」）：
 #   - retrieval_model：retrieve() 內部 filter/rewrite/translate 用，必須跟 eval 的
-#     retrieval side（rq.DEFAULT_MODEL = llama-3.3-70b-versatile）一致，否則 web 路徑
-#     量到的檢索行為會與 eval 不符。
+#     retrieval side（rq.DEFAULT_MODEL）一致，否則 web 路徑量到的檢索行為會與 eval 不符。
 #   - gen_model：生成答案用，預設 rq.DEFAULT_GEN_MODEL（gpt-oss-120b，見 CHANGELOG 07-09）。
-# 兩者都經同一個 LLM_BACKEND（retrieval 走 monkeypatch 後的 rq.call_llm，gen 走 stream_llm）。
-if LLM_BACKEND == "groq":
-    DEFAULT_RETRIEVAL_MODEL = os.getenv("LLM_MODEL", rq.DEFAULT_MODEL)
-    DEFAULT_GEN_MODEL       = os.getenv("LLM_GEN_MODEL", rq.DEFAULT_GEN_MODEL)
-
-    def call_llm_groq(messages: list[dict], model_name: str, temperature: float = 0.0) -> str:
-        # temperature 預設 0：這個函式會被 monkeypatch 成 rq.call_llm，供 retrieve() 內部的
-        # filter/rewrite/translate 使用，檢索側必須確定性（見 CLAUDE.md 溫度分工）。
-        import openai
-
-        client = openai.OpenAI(api_key=os.getenv("GROQ_API_KEY"), base_url=GROQ_BASE_URL)
-        resp = client.chat.completions.create(
-            model=model_name, messages=messages, temperature=temperature,
-        )
-        return resp.choices[0].message.content
-
-    # 讓 retrieve() 內部的 query-filter LLM call 也走 Groq
-    rq.call_llm = call_llm_groq
-elif LLM_BACKEND == "nvidia":
-    DEFAULT_RETRIEVAL_MODEL = os.getenv("LLM_MODEL", DEFAULT_NVIDIA_MODEL)
-    DEFAULT_GEN_MODEL       = os.getenv("LLM_GEN_MODEL", DEFAULT_NVIDIA_MODEL)
-
-    def call_llm_nvidia(messages: list[dict], model_name: str, temperature: float = 0.0) -> str:
-        import openai
-
-        client = openai.OpenAI(api_key=os.getenv("NVIDIA_API_KEY"), base_url=NVIDIA_BASE_URL)
-        resp = client.chat.completions.create(
-            model=model_name, messages=messages, temperature=temperature,
-        )
-        return resp.choices[0].message.content
-
-    # 讓 retrieve() 內部的 query-filter LLM call 也走 NVIDIA NIM
-    rq.call_llm = call_llm_nvidia
-else:
-    DEFAULT_RETRIEVAL_MODEL = os.getenv("LLM_MODEL", rq.DEFAULT_MODEL)
-    DEFAULT_GEN_MODEL       = os.getenv("LLM_GEN_MODEL", rq.DEFAULT_GEN_MODEL)
+DEFAULT_RETRIEVAL_MODEL = os.getenv("LLM_MODEL", rq.DEFAULT_MODEL)
+DEFAULT_GEN_MODEL       = os.getenv("LLM_GEN_MODEL", rq.DEFAULT_GEN_MODEL)
 
 
-# ── 串流 LLM 生成（依後端切換）────────────────────────────────────────────────────
+# ── 串流 LLM 生成 ────────────────────────────────────────────────────────────
 def stream_llm(messages: list[dict], model_name: str):
-    """逐 chunk yield 文字片段。Gemini、Groq、NVIDIA NIM 三種後端都支援串流。"""
-    if LLM_BACKEND == "groq":
-        import openai
-
-        client = openai.OpenAI(api_key=os.getenv("GROQ_API_KEY"), base_url=GROQ_BASE_URL)
-        stream = client.chat.completions.create(
-            model=model_name, messages=messages, stream=True,
-        )
-        for chunk in stream:
-            delta = chunk.choices[0].delta.content
-            if delta:
-                yield delta
-        return
-
-    if LLM_BACKEND == "nvidia":
+    """逐 chunk yield 文字片段。跟 rq.call_llm 同一套路由規則：'gemini-' 開頭走 Gemini
+    串流，其餘走 NVIDIA NIM 串流。"""
+    if not model_name.startswith("gemini-"):
         import openai
 
         client = openai.OpenAI(api_key=os.getenv("NVIDIA_API_KEY"), base_url=NVIDIA_BASE_URL)
@@ -157,7 +107,8 @@ async def lifespan(app: FastAPI):
     collection = os.getenv("COLLECTION_NAME", rq.COLLECTION_NAME)
     rq.COLLECTION_NAME = collection
 
-    print(f"[INFO] LLM backend = {LLM_BACKEND}  "
+    _backend = "gemini" if DEFAULT_GEN_MODEL.startswith("gemini-") else "nvidia"
+    print(f"[INFO] LLM backend = {_backend}  "
           f"(retrieval={DEFAULT_RETRIEVAL_MODEL}, gen={DEFAULT_GEN_MODEL})")
     print(f"[INFO] Loading BGE-M3 (dense+sparse): {rq.EMBEDDING_MODEL}")
     app.state.bge_m3 = BGEM3FlagModel(rq.EMBEDDING_MODEL, use_fp16=True)
@@ -209,7 +160,7 @@ def health():
         "status": status,
         "collection": app.state.collection,
         "count": count,
-        "llm_backend": LLM_BACKEND,
+        "llm_backend": "gemini" if DEFAULT_GEN_MODEL.startswith("gemini-") else "nvidia",
         "retrieval_model": DEFAULT_RETRIEVAL_MODEL,
         "gen_model": DEFAULT_GEN_MODEL,
         # 舊欄位保留（前端 health 顯示）：對外仍以 gen_model 為「當前模型」。

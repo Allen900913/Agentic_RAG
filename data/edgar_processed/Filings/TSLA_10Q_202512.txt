@@ -1,0 +1,67 @@
+=== TSLA 10-K | accession=0001104659-26-053166 | fiscal_year=2025 fiscal_period=FY period_code=202512 ===
+
+--- [ITEM] Item 10 (len=24961 chars) ---
+ITEM 10.     DIRECTORS, EXECUTIVE
+OFFICERS AND CORPORATE GOVERNANCE
+
+Background and Qualifications
+
+The names of the members of Tesla’s Board
+of Directors (the “Board”), their respective ages, their positions with Tesla and other biographical information as of April 30,
+2026, are set forth below. Except for Messrs. Elon Musk and Kimbal Musk, who are brothers, there are no other family relationship...
+
+--- [ITEM] Item 11 (len=90522 chars) ---
+ITEM 11.     EXECUTIVE COMPENSATION
+
+Compensation Discussion and Analysis
+
+The following discussion and analysis of compensation
+arrangements of our named executive officers for 2025 should be read together with the compensation tables and related disclosures set
+forth below. This discussion contains forward-looking statements that are based on our current considerations, expectations and determin...
+
+--- [ITEM] Item 12 (len=11893 chars) ---
+ITEM 12.     SECURITY
+OWNERSHIP OF CERTAIN BENEFICIAL OWNERS AND MANAGEMENT AND RELATED STOCKHOLDER MATTERS
+
+Equity Compensation Plan Information
+
+The following table summarizes the number of securities
+underlying outstanding options, stock awards, warrants and rights granted to employees and directors, as well as the number of securities
+remaining available for future issuance, under Tesla’s equi...
+
+--- [ITEM] Item 13 (len=8643 chars) ---
+ITEM 13.     CERTAIN RELATIONSHIPS
+AND RELATED TRANSACTIONS AND DIRECTOR INDEPENDENCE
+
+Review of Related Person Transactions
+
+In accordance with the charter for the Audit Committee
+of the Board and our written Policies and Procedures with Respect to Related Person Transactions (“RPT Policy”), our Audit
+Committee reviews and approves any related person transactions.
+
+For purposes of these procedure...
+
+--- [ITEM] Item 14 (len=2196 chars) ---
+ITEM 14.     PRINCIPAL ACCOUNTANT
+FEES AND SERVICES
+
+Principal Accounting Fees and Services
+
+The following table presents fees billed for professional
+audit services and other services rendered to Tesla by PricewaterhouseCoopers LLP for the years ended December 31, 2024 and
+2025. The dollar amounts in the table and accompanying footnotes are in thousands.
+
+    2024
+
+    2025
+
+    Audit Fees (1)
+  ...
+
+--- [ITEM] Item 15 (len=13337 chars) ---
+ITEM 15. EXHIBITS AND FINANCIAL STATEMENT SCHEDULES
+
+1.Financial statements (see Index to Consolidated Financial Statements in Part II, Item 8 of the Original Form 10-K)
+
+2.All financial statement schedules have been omitted since the required information was not applicable or was not present in amounts
+sufficient to require submission of the schedules, or because the information required is inclu...

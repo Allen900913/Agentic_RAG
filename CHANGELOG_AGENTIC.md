@@ -193,3 +193,47 @@ agentic 節點結構**——純生成層讀法紀律 + 後處理。核心洞察�
 繞過 brain 測 ≠ 真實 graph／先排除工具環境毛病再懷疑系統／單次 LLM-judge 不能論因果、要確定性消融／
 別過度外推（file-level 無效 ≠ chunk-level 無效、edgar_exp4 無效 ≠ 全面無用）／prompt 是機率不是保證，
 grounding/citation 要靠 Python 強制不靠拜託模型。
+
+---
+
+# 附錄：知識庫（2026-08-07 由 `~/.claude` 跨 session memory 併入）
+
+> 原為隨環境搬遷、不隨 repo 走的工作記憶；環境遷移前落檔保存。只保留「**結論＋機制＋關鍵數字**」，過程細節在對話與 git 歷史。與上方 ①–⑩ 重疊處只補充、不複述。**判系統好壞前先讀 A1**——很多「低分」是量尺 bug，不是系統病。
+
+## A0 工作慣例
+- **回覆語言＝繁體中文**（使用者 2026-07-11「以後也是」）：對話全繁中；程式碼 docstring/comment 繁中、identifier/log 英文。⚠ 此為行為偏好，**真正該放的是 [`CLAUDE.md`](CLAUDE.md)**（會被自動載入，changelog 不會）——記在此僅為遷移保存，若要它持續生效請補進 CLAUDE.md。
+
+## A1 Eval 量尺與方法論（最大宗；不懂這層會把量尺 bug 當系統缺陷追）
+- **`answer_correctness` 是長度假象、對 retrieval 免疫**：factual-F1(0.75)＋語意(0.25)，主要由「系統答案 vs 固定 reference 的詳略對齊」決定。lex-07 答「$7.46」完全正確只拿 0.40（reference 塞 6 事實，F1 recall=1/6）。**別當 chunking/系統成敗閘門**，改用 recall/precision/faithfulness。修正：類別級「長度單調」在逐題級站不住（Pearson≈−0.10）——低分尾巴真因是①檢索失敗②false-negative gold。語言錯配假說也已 A/B 推翻（EN 0.475 vs ZH 0.494，沒升反微跌）。
+- **false-negative gold（五批，全 eval 側非系統）**：reference 誤寫「來源未揭露」但語料白紙黑字有，系統答對甚至比 gold 準，被打 recall=0。兩機制：(a) `eval_set.relevant`/gold_files 範圍太窄漏標 10-Q/10-K；(b) `gen_reference_answers.py` 檔內選錯 chunk 行/錯期別。修法全在 eval 側（補 relevant、`pin_chunks`、gen_reference 改英文譯句 dense＋`GOLD_TOP_K` 5→8）。特例：mi-04 是 FY vs TTM 真口徑歧義（非乾淨 false-negative），硬加 10-K 反雙降→已 revert。**鐵律：判系統幻覺前先 grep 語料驗事實在不在；「系統 vs gold 差 10x」先讀原文 billion/億 對一次（gold 也會犯單位錯，如 mi-11 誤寫 $380B→$38B）；反向也要驗（grep 抓不到 ≠ 語料沒有，數字常在 MD&A 敘述段）。**
+- **footer 毒害 faithfulness**：agentic 答案尾端「📚 引用來源…rerank=0.730」footer 是 metadata、context 裡不存在→RAGAS faithfulness 逐 claim 判 unsupported，短答案佔比高被砸最重（解釋 lexical 悖論：檢索近乎完美但 faith 全類最低）。已於 [`eval/eval_ragas_vs_rubric.py`](eval/eval_ragas_vs_rubric.py) `load_answers` 加 `strip_citation_footer()`。全 100 重跑 faith 0.763→**0.815**、lexical 0.672→**0.889**。
+- **RAGAS `context_precision` 對多 chunk 比較題判定器不穩**：同一份 rec=1.0/faith=1.0/corr=0.89 正確答案，precision 在 0/0.333/1.0 亂跳（re-roll 就變）。**比較題（multi_hop）別信 precision 欄**，非 gold/系統可修。
+- **gold 版本漂移**：`eval_set.json` 精確檔名鎖 10-Q 版本、新聞用 glob；語料刷新加了 202606 新季報但 gold 沒同步→撈到最新的系統被判 0、撈到舊的反得高分。修：6 題 gold 202603→202606；`_meta` 應宣告 collection＋snapshot cutoff。**改 `eval_set.json` 用 `open('wb')` 保 LF，別讓 CRLF 假爆 diff。**
+- **eval 改造三定案**：①答案風格＝白話結論先行＋精確數字，SYSTEM_PROMPT 與 reference register 必須一致（否則 correctness 因 register 落差崩）；②RAGAS 跑獨立 `.venv-ragas`（ragas 0.2.x 綁 langchain 0.3，會扯壞生產 `.venv` 的 langchain 1.x／SemanticChunker）；③multi_intent GT **不降級**（不改 news-only 粉飾、不加「含財報字就不觸發 news filter」guard）。
+- **eval 改版拆分（2026-07-29，90→100 題）**：multi_intent 收斂為嚴格「1 財務指標＋1 新聞事實」平行雙意圖（15 題）；新增 multi_hop 10 題（hop-2 key 待 hop-1 才成形）＝5 題比較→屬性(A)＋5 題新聞→實體→財務(B)。戰略：**multi_intent 本不該 agentic 贏（平行、單管線拆解即可），multi_hop 才是 plan→execute→replan 正當戰場**。
+
+## A2 檢索層決定（多在 `rag_query.py`，agentic 複用）
+- **`full_translate_en`（架構定案，2026-07-27）**：中文問中文答，但 dense/sparse 召回＋rerank 一律用英文譯句，消除 cross-lingual reranker 對「中文 query × 英文 chunk」評分平坦（news-08 正解 chunk 中文 rerank≈0 壓到 rank6，英文後 rank2 跨過門檻）。全 90 題 RAGAS 六項全升，precision/nv_relevance 漲最多(+0.059/+0.062)。agentic `_retrieve_chunks` 固定開；**生產 `rag_query.py` 預設仍 False，未套用（跟進與否未決）**。
+- **`translate_query_en`（舊 flag，只影響 rerank）**：`max(原句分,英譯分)` 重評、不動召回池，生產單次查詢常態預設 True（曾兩次誤植成 escalation-only，勿再犯）；agentic 主路徑已被 full_translate_en 取代。
+- **`period_basis` TTM 口徑消歧義（2026-07-30）**：Fundamentals.txt 已含預算好的 TTM 比率（毛利率/淨利率/成長率/P/E）＝**路由問題非算術**，不該讓 LLM 現算。每 chunk 加 `period_basis` payload（fundamentals→TTM、10-K/Q→fiscal_year）；`rag_query._detect_period_basis` 命中 TTM 詞→`period_basis=TTM` **單向**硬 filter（fiscal_year 有標籤但不硬路由，避免回歸；開雙向前先跑全量 eval）。[`migrate_add_period_basis.py`](migrate_add_period_basis.py)。SYSTEM_PROMPT Rule 10：財務數字必帶口徑標籤、相對詞多口徑→兩個都給並標。同日去重 0508/0519 舊快照。
+- **gap2 `mentioned_tickers`（2026-08-02）**：市場級新聞物理歸檔某一家但內文提及全七家，owner-ticker 硬 filter 把 gold 全排除（即使 rerank 全場最高）。news chunk 加 `mentioned_tickers` 陣列 payload、retrieve 改「陣列包含 X」；**只動 news，財報維持 owner ticker 單值**（財報提到對手 ≠ 報表是對方的）。multi_intent recall 0.593→0.638、faith +0.073、corr +0.061、**precision −0.135**（七公司 chunk 內生代價＋單跑噪音）。淨賺收下。
+- **col-07 否定框架檢索限制（已知限制，決定不修）**：query「非市佔龍頭」框架 vs 語料「minority market share」框架，BGE dense+sparse+reranker 跨不過否定/框架鴻溝，連正確英譯也跨不過（只有已知答案字面＝HyDE 才撈到 rank1）。不為單題上 HyDE（全管線改、有反傷）。gold 亦同源標錯已修（24/103/110）。
+- **EDGAR chunking Exp0→4**：管線越換越乾淨（edgartools Item 邊界＋RCTS 消 oversized/截斷），Faithfulness 單調升到 Exp4 新高；Answer Correctness 單調降是長度假象非真退步。生產＝Exp4（`us_stock_rag_edgar_exp4`）。
+
+## A3 Agentic 架構診斷主線（v2 價值＝確定性 planner 拆解；最 agentic 的自由迴圈是負資產）
+- **multi_intent 退步三階診斷（逐階自我推翻）**：① 檔案層級 probe：v2 檢索**不弱反大勝**（final8 覆蓋 28/38 gold 檔 vs 單管線 12/38，嚴格超集）→推翻「多源檢索弱」。② claim/chunk 層級 probe：真實 v2 只 16/75 gold chunk、**乾淨 decomposition（無 Agent A）拿 35/75**、單管線 25/75→**煙槍：漏水點在 Agent A(ReAct) 執行層亂改 query＋亂搜，非 planner 拆解、非 doc-type filter**。③ 修法＝v2 minus ReAct（executor 改 deterministic：plan→每子問題直接 retrieve→commit）＝**v2 現狀**。
+- **multi_intent recall 殘因（2026-08-06）**：真因兩機制——(A) **Grader 對雙來源擲硬幣**：毛利率/淨利率/成長率等可從 10-K/10-Q 現算的指標，池中 Fundamentals(TTM 寫死) 與 10-Q(可現算) 近似平手，Grader `relevant_ids` 一次只圈 1 個→擲硬幣，eval 那次圈中 10-Q（季度口徑 vs gold TTM）。**關鍵洞見：只有雙來源可計算指標會低 recall＝指標型別非題型**（單一來源 P/E/ROE/市值沒得挑錯故 recall 高）。(B) Plan 期間解讀分歧＋開放式子意圖答太薄。「gold 灌水」假設查證後**撤銷**（系統答太窄非 gold 太寬，動 gold＝gaming eval，違反不降級 GT，不做）。
+- **multihop 依賴解析（2026-08-03，新能力）**：Type B「識別再查」第二跳帶未解代名詞→`_is_dependent_hop`/`_resolve_hop_entity`/`_fill_dependent_hop`，`_node_execute` 分波延後＋實體回填、`_node_replan` 兩道 guard，**全程無 LLM 改寫**（確定性回填不幻覺）。10 題零拒答、實體解析 5/5 命中；100 題 multi_hop faith **0.904**/recall **0.892**/corr **0.710** 全類最紮實。Type A 比較題 6 子問題（3家×2指標）是必要非過度拆。不走 Gemini 的 Plan-and-Execute 重寫（YAGNI，eval 全 2-hop）。
+- **corrected verdict（2026-07-28，此語料下）**：結構化 txt＋長文 filing 混合＋中型模型下，動態編排自由度是負資產；生產維持單管線，agentic 真正舞台是多跳/開放 web/真路由工具。
+
+## A4 本 session 三個 commit（2026-08-06~07；正式變更記錄，補齊 changelog）
+- **`5fbad55` footer eval 修正**：見 A1 footer 條。faith 0.763→0.815。
+- **`784e4a2` ratio 財務錨源保底**：消 Grader 擲硬幣（A3-A）。`_is_ratio_intent`＋`_ensure_ratio_source_coverage`（doc_type 版 `rq._ensure_ticker_coverage`，只加不減、純確定性零 LLM）：ratio 意圖 commit 後缺該公司 Fundamentals 就從池補回。**用程式碼保底非改 Grader prompt/換大模型**（規則可 metadata 確定檢查，不交機率元件每次重推）。multi_intent recall 0.524→0.621(+0.098)、precision +0.024。已知限制：mi-14 分部題略離題（後由 Plan A 救回）。
+- **`5300b4c` Planner 比率期間中性**：修 Plan 把「目前毛利率」釘成「FY2026 Q2 毛利率」→帶季度 query 把 TTM/Fundamentals 整個濾出池、答錯口徑。【時間消歧】加「比率指標期間中性」例外（毛利率/淨利率/成長率等相對詞問且未點名某季→保持期間中性、不釘季度）。multi_intent precision 0.714→**0.934(+0.22)**、recall 持平、mi-13 口徑修回 TTM 19.1%（=gold）。
+- **probe（2026-08-07，唯讀，未改碼）：不擴白名單到估值比率（P/E/ROE）**：機制 B 在單一來源估值題**不端到端復現**——檢索半確有 ticker-dependent 傷害（Apple「FY2026 Q2 本益比」→Fundamentals 完全离池；NVDA 同 query 不离池，rank0），但規劃半 **Planner 對 P/E 自然保持期間中性、3/3 不釘季度**，觸發不成立。∴ margin/成長率 scoping 收窄在「有實測失效」邊界是對的，別為不存在的 bug 加規則；backstop regex 同樣不擴。
+
+## A5 未決 / 下一步
+- **router（複雜度分派，pending，measure-gated）**：簡單題→單次 RAG、複雜→agentic；保守偏 agentic（誤判複雜為簡單代價高）。ratio 路由屬**正交檢索提示、非第三分支**，應放共用檢索層讓兩 pipeline 都吃到。
+- 生產 `rag_query.py` 是否跟進 `full_translate_en=True` 未決（需先確認同樣 chunk-level rerank 平坦問題存在）。
+- FY 雙向硬 filter、「最新年度」as-of 錨定未動（要先跑全量 eval 防回歸）。
+- 工作樹尚有 19 行既存未提交改動（env top-k＋Planner 反注入 prompt），非本 session 作者，待處理。

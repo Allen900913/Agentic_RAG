@@ -1,0 +1,346 @@
+=== META 10-Q | accession=0001628280-26-028526 | fiscal_year=2026 fiscal_period=Q1 period_code=202603 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**Meta Platforms, Inc.** (META)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2026 (Q1) | Mar 31, 2025 (Q1) |
+| --- | ---: | ---: |
+|   Revenue | $56,311 | $42,314 |
+|       Cost of revenue | $10,218 | $7,572 |
+|       Research and development | $17,699 | $12,150 |
+|       Marketing and sales | $2,908 | $2,757 |
+|       General and administrative | $2,614 | $2,280 |
+|       Total costs and expenses | $33,439 | $24,759 |
+|     Income (loss) from operations | 22,872 | 17,555 |
+|     Interest and other income (expense), net | $(1,120) | $827 |
+|   Income before income taxes | $21,752 | $18,382 |
+|   Provision (benefit) for income taxes | $(5,021) | $1,738 |
+|   Net income | $26,773 | $16,644 |
+|     Basic (in dollars per share) | 10.57 | 6.59 |
+|     Diluted (in dollars per share) | 10.44 | 6.43 |
+|     Basic (in shares) | 2,534 | 2,527 |
+| *      Class A Common Stock* | 2,192 | 2,184 |
+| *      Class B Common Stock* | 342 | 343 |
+|     Diluted (in shares) | 2,564 | 2,590 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**Meta Platforms, Inc.** (META)
+
+**As of March 31, 2026 and December 31, 2025** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2026 | Dec 31, 2025 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $23,426 | $35,873 |
+| *        Money market funds - Reclassification, Other* | $(5,000) |  |
+|         Marketable securities | $57,754 | $45,719 |
+|         Accounts receivable, net | $17,470 | $19,769 |
+|         Prepaid expenses and other current assets | $11,115 | $7,361 |
+|       Total current assets | $109,765 | $108,722 |
+|       Non-marketable equity investments | $28,410 | $27,524 |
+|       Property and equipment, net | $194,776 | $176,400 |
+|       Operating lease right-of-use assets | $23,268 | $20,404 |
+|       Goodwill | $24,748 | $24,534 |
+|       Other assets | $14,283 | $8,437 |
+|     Total assets | $395,250 | $366,021 |
+|         Accounts payable | $13,326 | $8,894 |
+|         Operating lease liabilities, current | $2,414 | $2,213 |
+|         Accrued expenses and other current liabilities | $31,013 | $30,729 |
+|       Total current liabilities | $46,753 | $41,836 |
+|       Operating lease liabilities, non-current | $25,607 | $22,940 |
+|       Long-term debt | $58,748 | $58,744 |
+|       Long-term income taxes | $16,849 | $21,005 |
+|       Other liabilities | $3,612 | $4,253 |
+|       Total liabilities | $151,569 | $148,778 |
+|       Commitments and contingencies |  |  |
+|       Common stocks and additional paid-in capital | $99,337 | $95,793 |
+|       Accumulated other comprehensive income (loss) | $(303) | $271 |
+|       Retained earnings | $144,647 | $121,179 |
+|       Total stockholders' equity | $243,681 | $217,243 |
+|     Total liabilities and stockholders' equity | $395,250 | $366,021 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**Meta Platforms, Inc.** (META)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2026 (Q1) | Mar 31, 2025 (Q1) |
+| --- | ---: | ---: |
+|       Net income | $26,773 | $16,644 |
+|       Depreciation and amortization | $5,999 | $3,900 |
+|       Share-based compensation | $6,032 | $4,147 |
+|       Deferred income taxes | $123 | $(993) |
+|       Unrealized (gain) loss on equity investments | $1,075 | $(135) |
+|       Other | $(17) | $(96) |
+|         Accounts receivable | $2,128 | $2,804 |
+|         Prepaid expenses and other current assets | $(2,424) | $360 |
+|         Other assets | $(1,082) | $(52) |
+|         Accounts payable | $(937) | $(1,034) |
+|         Accrued expenses and other current liabilities | $(271) | $(2,231) |
+|         Other liabilities | $(5,173) | $712 |
+|     Net cash provided by operating activities | $32,226 | $24,026 |
+|       Purchases of property and equipment | $(18,997) | $(12,941) |
+|       Purchases of marketable securities | $(32,978) | $(11,763) |
+|       Sales and maturities of marketable securities | $19,176 | $4,784 |
+|       Purchases of non-marketable equity investments | $(544) | $(100) |
+|       Payments for held-for-sale assets | $(118) |  |
+|       Acquisitions of businesses and intangible assets | $(372) | $(1) |
+|       Other investing activities | $155 | $11 |
+|     Net cash used in investing activities | $(33,678) | $(20,010) |
+|       Taxes paid related to net share settlement of equity awards | $(4,423) | $(4,883) |
+|       Repurchases of Class A common stock |  | $(12,754) |
+|       Payments for dividends and dividend equivalents | $(1,346) | $(1,329) |
+|       Principal payments on finance leases | $(843) | $(751) |
+|       Other financing activities | $59 | $222 |
+|     Net cash used in financing activities | $(6,553) | $(19,495) |
+|     Effect of exchange rate changes on cash, cash equivalents, restricted cash, and restricted cash equivalents | $7 | $112 |
+|   Net decrease in cash, cash equivalents, restricted cash, and restricted cash equivalents | $(7,998) | $(15,367) |
+|     Total cash, cash equivalents, restricted cash, and restricted cash equivalents |  |  |
+|     Total cash, cash equivalents, restricted cash, and restricted cash equivalents |  |  |
+|       Cash and cash equivalents |  |  |
+| *      Money market funds - Reclassification, Other* |  |  |
+|       Restricted cash and restricted cash equivalents, included in prepaid expenses and other current assets |  |  |
+|       Restricted cash and restricted cash equivalents, included in other assets |  |  |
+|     Total cash, cash equivalents, restricted cash, and restricted cash equivalents |  |  |
+|     Cash paid for income taxes, net | $541 | $448 |
+|     Cash paid for interest, net of amounts capitalized | $284 | $352 |
+|       Property and equipment in accounts payable and accrued expenses and other current liabilities | $16,040 | $9,338 |
+|       Acquisition of businesses and intangible assets in accounts payable, accrued expenses and other current liabilities, and other liabilities | $2,169 | $159 |
+|       Repurchases of Class A common stock in accrued expenses and other current liabilities |  | $577 |
+
+--- [TABLE extra #0] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware | 20-1665019 |
+| --- | --- |
+| (State or other jurisdiction of incorporation or organization) | (I.R.S. Employer Identification Number) |...
+
+--- [TABLE extra #1] ---
+Securities registered pursuant to Section 12(b) of the Act:
+
+| Title of each class | Trading symbol(s) | Name of each exchange on which registered |
+| --- | --- | --- |
+| Class A Common Stock, $0.000006 par value | META | The Nasdaq Stock Market LLC |...
+
+--- [TABLE extra #2] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of "large accelerated filer," "accele
+
+| Large accelerated filer |  | ☒ | Accelerated filer |  | ☐ |
+| --- | --- | --- | --- | --- | --- |
+| Non-accelerated filer |  | ☐ | Smaller reporting company...
+
+--- [TABLE extra #3] ---
+Indicate the number of shares outstanding of each of the issuer's classes of Common Stock, as of the latest practicable date.
+
+| Class | Number of Shares Outstanding |  |  |  |
+| --- | --- | --- | --- | --- |
+| Class A Common Stock | $0.000006 par value | 2,196,045,588 |  | shares outstanding as of April 24, 2026 |
+| Class B Common Stock | $0.000006 par value | 342,377,716 |  | shares outstanding ...
+
+--- [TABLE extra #4] ---
+TABLE OF CONTENTS
+
+|  |  | Page |
+| --- | --- | --- |
+| Note About Forward-Looking Statements | 3 |  |
+| Limitations of Key Metrics and Other Data | 4 |  |
+| PART I—FINANCIAL INFORMATION | 6 |  |
+| Item 1. | Financial Statements (unaudited) | 6 |
+|  | Condensed Consolidated Balance Sheets— March 3 1 , 202 6 and December 31, 20 25 | 6 |
+|  | Condensed Consolidated Statements of Income—for the three...
+
+--- [TABLE extra #5] ---
+(Unaudited)
+
+|  | Three Months Ended March 31, 2026 |  | Three Months Ended March 31, 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
+
+--- [TABLE extra #6] ---
+(Unaudited)
+
+|  | Three Months Ended March 31, |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2026 |  | 2025 |  |  |  |  |
+| Reconciliation of cash, cash equivalents, restricted cash, and restricted cash equivalents to the condensed consolidated balance sheets |  |  |  |  |  |  |  |
+| Cash and cash equivalents | $ | 23,426 |  |  | $ | 28,750 |  |
+| Restricted cash and r...
+
+--- [TABLE extra #7] ---
+We report our financial results for our two reportable segments: Family of Apps (FoA) and Reality Labs (RL). FoA includes Facebook, Instagram, Messenger, WhatsApp, and other services. RL includes our virtual and augmented reality related co
+
+|  | Family of Apps |  | Reality Labs |  | Total |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | ---...
+
+--- [TABLE extra #8] ---
+790
+
+|  |  |  |  |  |  |  |  | Ad Revenue |  | Non-Ad Revenue |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
+
+--- [TABLE extra #9] ---
+3228
+
+| ARPP: | $11.20 | $11.89 | $12.29 | $14.25 | $12.36 | $13.65 | $14.46 | $16.56 | $15.66 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
+
+--- [TABLE extra #10] ---
+Item 6.Exhibits
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
+| 10.1+ |  | 2025 Equity Incentive Plan forms of award agreements. |  |  |  |  |  |  |  |  |  | X |
+| 10.2+ |  | 2025 E...
+
+[INFO] extra tables kept=11 (去重後，來自 unstructured)
+
+[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
+
+--- [ITEM] Part I, Item 3 (len=421 chars) ---
+Table of Contents
+
+Item 3.Quantitative and Qualitative Disclosures About Market Risk
+
+There have been no material changes to our market risk exposures during the three months ended March 31, 2026. For quantitative and qualitative disclosures about market risk, refer to Part II, Item 7A, Quantitative and Qualitative Disclosures About Market Risk, from our Annual Report on Form 10-K for the year end...
+
+--- [ITEM] Part II, Item 1 (len=41165 chars) ---
+Item 1.Legal Proceedings
+
+As a multinational company with a complex and evolving business, we are, and expect to continue to be, subject to numerous claims, litigation, regulatory, tax, and government inquiries and investigations, and other legal proceedings in jurisdictions around the world. Although we believe many of these matters are without merit and are vigorously defending them, we may not ...
+
+[RCTS] item=Part_II_Item_1 原 chunk 2160 token > 1200 → 補切成 6 份
+
+[RCTS] item=Part_II_Item_1 原 chunk 1323 token > 1200 → 補切成 3 份
+
+--- [ITEM] Part II, Item 1A (len=197797 chars) ---
+Table of Contents
+
+Item 1A. Risk Factors 
+
+Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Quarterly Report on Form 10-Q, including our condensed consolidated financial statements and related notes. The ris...
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1353 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1836 token > 1200 → 補切成 5 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1468 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 2244 token > 1200 → 補切成 5 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1223 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1526 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1571 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1488 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1532 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 2168 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 2372 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1253 token > 1200 → 補切成 2 份
+
+--- [ITEM] Part II, Item 2 (len=259 chars) ---
+Table of Contents
+
+Item 2.Unregistered Sales of Equity Securities and Use of Proceeds 
+
+a) Sales of Unregistered Securities 
+
+None.
+
+c) Issuer Purchases of Equity Securities
+
+There was no share repurchase activity during the three months ended March 31, 2026....
+
+--- [ITEM] Part II, Item 5 (len=2190 chars) ---
+Item 5.Other Information
+
+Rule 10b5-1 Trading Plans
+
+During the quarter ended March 31, 2026, the officers and directors listed below adopted, modified, or terminated trading plans intended to satisfy the affirmative defense conditions of Rule 10b5-1(c) under the Securities Exchange Act of 1934, as amended. References to "net shares received" below refer to net shares received by an officer after ...
+
+--- [ITEM] Part II, Item 6 (len=2581 chars) ---
+Table of Contents
+
+Item 6.Exhibits 
+
+ExhibitNumberIncorporated by ReferenceFiledHerewith
+
+Exhibit DescriptionFormFile No.ExhibitFiling Date
+
+10.1+
+
+2025 Equity Incentive Plan forms of award agreements.
+
+X
+
+10.2+
+
+2025 Equity Incentive Plan forms of award agreements.
+
+X
+
+10.3+
+
+Amended and Restated Bonus Plan, effective January 1, 2026.
+
+10-K 
+
+001-35551
+
+10.4January 29, 2026
+
+31.1Certification of ...
+
+--- [ITEM] Part I, Item 1 (len=75238 chars) ---
+Item 1.Financial Statements
+
+META PLATFORMS, INC.
+
+CONDENSED CONSOLIDATED BALANCE SHEETS
+
+(In millions, except number of shares and par value)
+
+(Unaudited)
+
+March 31, 2026December 31, 2025
+
+Assets
+
+Current assets:
+
+Cash and cash equivalents$23,426 $35,873 
+
+Marketable securities57,754 45,719 
+
+Accounts receivable, net17,470 19,769 
+
+Prepaid expenses and other current assets11,115 7,361 
+
+Total cur...
+
+[RCTS] item=Part_I_Item_1 原 chunk 2768 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 2237 token > 1200 → 補切成 5 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1255 token > 1200 → 補切成 3 份
+
+--- [ITEM] Part I, Item 2 (len=47165 chars) ---
+Table of Contents
+
+Item 2.Management's Discussion and Analysis of Financial Condition and Results of Operations
+
+You should read the following discussion of our financial condition and results of operations in conjunction with our condensed consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q and with our audited consolidated financial st...
+
+[RCTS] item=Part_I_Item_2 原 chunk 1321 token > 1200 → 補切成 2 份

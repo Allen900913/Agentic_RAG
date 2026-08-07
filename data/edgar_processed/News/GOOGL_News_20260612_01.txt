@@ -1,0 +1,67 @@
+# source    : GOOGL_News_20260612_01.txt
+# doc_type  : news
+# chunks    : 4
+
+==============================================================================
+[chunk 0] chunk_type=text  chars=875
+==============================================================================
+Title    : How Navan gained market share and climbed back to its IPO price
+Source   : Yahoo Finance Video [full]
+URL      : https://finance.yahoo.com/video/how-navan-gained-market-share-and-climbed-back-to-its-ipo-price-151143581.html
+Published: 2026-06-11T15:11:43Z
+
+How Navan gained market share and climbed back to its IPO price
+Yahoo Finance Video
+and
+Brian Sozzi
+Thu, June 11, 2026 at 11:11 PM GMT+8
+GOOGL
++0.39%
+Yahoo Finance Executive Editor Brian Sozzi welcomes Navan (
+NAVN
+) CEO Ariel Cohen to discuss the company's earnings beat and increased full-year guidance. Cohen also details Navan's partnership with Google (
+GOOG
+,
+GOOGL
+) Gemini and how the AI-powered collaboration is helping users streamline and personalize the travel booking experience. Video Transcript
+00:00
+Speaker A
+You're just gaining market share from some of those slow-moving legacy platforms?
+
+==============================================================================
+[chunk 1] chunk_type=text  chars=1584
+==============================================================================
+00:03
+Speaker B
+We are actually doing two things. We are gaining market share from them, and a lot. Like uh, Michael, my our president mentioned it yesterday. Uh, our customers are loding to us, their customers are loding to us and that's amazing. The other side we are the first ones to serve the unmanaged market. People that has never managed travel, people that are going outside and just booking by themselves. Uh, we are the first ones to serve that and this is growing extremely fast. 00:27
+Speaker B
+our PLG motion more than doubled itself uh last quarters. So we are growing in both sides. Enterprises coming from the old school kind of uh solutions and
+00:36
+Speaker A
+Which I told you I I hate those platforms. Like they're awful. 00:38
+Speaker B
+It's uh it's it's it's really representing the past. 00:41
+Speaker A
+You mentioned on the earnings call, I think it was halfway down, about integrating with Google Gemini. 00:46
+Speaker B
+Yeah. I think what people really need to understand about AI, it does something really special. It can connect you to capabilities. I can book a flight, but then it takes all of the knowledge, marry them together and then you can deliver it. So an AI agent is something that you can deliver again and again and again in a lot of different contexts. So there is an app, there is edge, which is our like flagship for end user experience. But then we said, why won't we deliver it anywhere? Inside Gemini, and we'll announce many more like that. Uh, some would be more traditional systems, some would be the new systems. Uh, so it's amazing.
+
+==============================================================================
+[chunk 2] chunk_type=text  chars=275
+==============================================================================
+You as a user can use whatever you want. 01:24
+Speaker A
+So I can just book my whole trip for via Gemini? 01:26
+Speaker B
+Yeah, if you guys are using Gemini Enterprise and obviously use Navan, you can actually book the entire trip through Gemini. 01:31
+Speaker A
+That's wild.
+
+==============================================================================
+[chunk 3] chunk_type=text  chars=52
+==============================================================================
+Terms
+and
+Privacy Policy
+Privacy Dashboard
+More Info

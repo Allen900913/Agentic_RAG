@@ -1,0 +1,354 @@
+# source    : NVDA_News_20260508_01.txt
+# doc_type  : news
+# chunks    : 11
+
+==============================================================================
+[chunk 0] chunk_type=text  chars=250
+==============================================================================
+Title    : IREN Q3 Earnings Call Highlights
+Source   : MarketBeat [full]
+URL      : https://www.marketbeat.com/instant-alerts/iren-q3-earnings-call-highlights-2026-05-07/?utm_source=yahoofinance&utm_medium=yahoofinance
+Published: 2026-05-08T04:06:45Z
+
+==============================================================================
+[chunk 1] chunk_type=text  chars=3181
+==============================================================================
+IREN Q3 Earnings Call Highlights
+Written by MarketBeat
+May 7, 2026
+Share
+Link copied to clipboard. Key Points
+IREN is pivoting from Bitcoin mining to AI Cloud, increasing secured power to
+5 GW
+, raising contracted ARR to
+$3.1 billion
+and targeting
+$3.7 billion
+by end-2026, anchored by a
+$3.4 billion, five-year AI Cloud contract with NVIDIA
+that vests as GPUs are deployed. Build-out targets call for
+480 MW
+and roughly
+150,000 GPUs
+in 2026, scaling to
+1,210 MW
+in 2027 with
+730 MW under construction
+, led by a
+300 MW
+liquid-cooled Childress project and ongoing Microsoft and NVIDIA deployments. Q3 shows AI Cloud revenue up to
+$33.6 million
+while Bitcoin revenue fell to
+$111.2 million
+; net loss was
+$247.8 million
+(including
+$140.4 million
+of non‑cash impairments), but the company holds
+$2.6 billion
+cash and expects GPU financing and prepayments to fund near‑term capex. MarketBeat previews the top five stocks to own by June 1st
+. GPU Prices Are Surging—3 Ways to Play the AI Chip Shortage
+IREN
+NASDAQ: IREN
+used its fiscal third-quarter earnings call to highlight a rapid expansion in AI data center capacity, a new long-term customer agreement with NVIDIA, and continued progress in shifting its business mix away from Bitcoin mining and toward AI Cloud services. Get
+IREN
+alerts:
+Sign Up
+Strategic focus: converting secured power into “time to compute”
+Co-founder and co-CEO Daniel Roberts framed the company’s strategy around a core constraint in AI infrastructure: the ability to translate secured power into customer-ready compute on tight timelines. Roberts said that while digital demand can scale quickly, physical infrastructure—power, permitting, land, and data centers—takes years to build, creating scarcity that is “now defining where AI infrastructure gets built and who can build it.”
+MarketBeat Week in Review – 02/09 - 02/13
+Roberts said IREN increased secured power to
+5 gigawatts
+during the quarter, added new sites in
+Europe and APAC
+, energized
+Sweetwater One
+on schedule, and began commissioning on
+Horizon One
+GPUs for
+Microsoft
+. He added that all of IREN’s operational capacity is fully contracted, arguing the company is “racing to build supply fast enough” to meet demand. NVIDIA partnership and contracted revenue targets
+Roberts said IREN increased annual recurring revenue (ARR) under contract to
+$3.1 billion
+and reiterated a target of
+$3.7 billion of ARR exiting calendar 2026
+. He also announced a
+$3.4 billion, five-year AI Cloud contract with NVIDIA
+, describing it as the first step in what he called a broader strategic partnership. IREN Bounces Back: The Market Votes Yes as Big Banks Step In
+Roberts said IREN is working with NVIDIA to support deployment of up to
+5 GW
+of “NVIDIA HGX-aligned AI infrastructure” across IREN’s global platform, including DGX environments and the MGX AI factory reference architecture. He said NVIDIA’s
+$2.1 billion investment
+is structured so that its rights to invest vest only as NVIDIA GPU infrastructure is deployed across IREN campuses, and “only fully vest upon deployment of
+600,000 GPUs
+.”
+On the Q&A, Chief Commercial Officer Kent Draper said IREN has
+not disclosed the specific number of GPUs
+
+==============================================================================
+[chunk 2] chunk_type=text  chars=2707
+==============================================================================
+$2.1 billion investment
+is structured so that its rights to invest vest only as NVIDIA GPU infrastructure is deployed across IREN campuses, and “only fully vest upon deployment of
+600,000 GPUs
+.”
+On the Q&A, Chief Commercial Officer Kent Draper said IREN has
+not disclosed the specific number of GPUs
+supported by the 60 megawatts in the NVIDIA contract, but characterized it as “approximately
+60 MW of air-cooled Blackwells
+” and as a “managed services deployment.”
+Build-out roadmap: 2026 and 2027 capacity plans
+Roberts detailed a 2026 plan targeting
+480 MW
+of AI Cloud capacity,
+150,000 GPUs
+, and
+$3.7 billion of ARR
+by year-end. For 2027, he said the company plans to scale to
+1,210 MW
+, with an additional
+730 MW under construction
+across British Columbia and Texas, including Childress and the initial phase at Sweetwater One. At Childress, Roberts described the “largest and most complex” 2026 workstream as a
+300 MW Horizon 1-4
+liquid-cooled deployment, where
+NVIDIA GB300 NVL72 installations are underway
+. He said
+Horizon 1
+is scheduled for Microsoft handoff in
+Q3
+, with Horizons 2-4 on track for delivery by year-end, and noted “around
+3,000 workers
+on-site.”
+Alongside liquid-cooled builds, Roberts said IREN is converting existing air-cooled capacity into AI Cloud deployments:
+Prince George:
+air-cooled GPUs delivered and “either operating or undergoing commissioning” across a
+50 MW
+site
+Mackenzie:
+80 MW
+of data center capacity prepared for GPU installations commencing in the
+second half of 2026
+Childress:
+retrofits underway across an initial
+50 MW
+ahead of GPU deliveries in the
+second half
+of the year
+Roberts said the company has approximately
+$700 million of ARR
+associated with the
+$3.4 billion
+NVIDIA contract, supporting Blackwell GPUs to be deployed across
+60 MW
+of air-cooled capacity at Childress. He also said the remaining uncontracted 2026 capacity represents “approximately
+50,000 air-cooled GPUs
+” scheduled for phased delivery through the second half of the year, and described demand as “robust.”
+For 2027, Draper confirmed an analyst’s characterization that of the
+730 MW
+under construction, about
+450 MW
+is expected from remaining Childress capacity and about
+280 MW
+from Sweetwater. Europe entry via Nostrum acquisition; APAC focus on Australia
+Roberts announced IREN’s entry into Europe through the acquisition of
+Nostrum Group
+, which he said adds
+490 MW of secured power in Spain
+, a “gigawatt-scale development pipeline,” and a team of more than
+50 people
+across development, engineering, construction, and operations. Roberts said Spain offers “supportive AI policy, abundant renewables, lower build costs, and strong connectivity into broader European demand.”
+
+==============================================================================
+[chunk 3] chunk_type=text  chars=3113
+==============================================================================
+490 MW of secured power in Spain
+, a “gigawatt-scale development pipeline,” and a team of more than
+50 people
+across development, engineering, construction, and operations. Roberts said Spain offers “supportive AI policy, abundant renewables, lower build costs, and strong connectivity into broader European demand.”
+In response to a question about moving the Spanish power position toward delivered compute, Draper said the sites are secured and the next steps are “final design permitting,” which he said is already well advanced at a number of sites, followed by construction. Draper added that IREN is already seeing “direct requests” for European capacity from existing and new customers. On APAC, Roberts said Australia shares market similarities with Texas, including the structure of the power market, land availability, transmission, fiber connectivity, and renewables. He said Texas has been “an easier place to do business,” but that IREN has continued incubating Australian projects and sees Australia as a “fantastic frontier” given demand constraints in APAC. Financial results reflect transition from Bitcoin mining to AI Cloud
+CFO Anthony Lewis said revenue for the March quarter was
+$144.8 million
+, down from
+$184.7 million
+in the prior quarter. He said Bitcoin mining revenue fell to
+$111.2 million
+from
+$167.4 million
+, driven by a lower average Bitcoin price and ongoing decommissioning of mining hardware ahead of GPU installations. Lewis said AI Cloud services revenue increased to
+$33.6 million
+from
+$17.3 million
+in the prior quarter. He added that cost of revenues decreased by
+$25.9 million
+, primarily due to lower electricity costs from reduced Bitcoin mining capacity. Net loss was
+$247.8 million
+, which Lewis said was impacted by
+$140.4 million of non-cash impairments
+primarily related to decommissioning mining hardware, plus
+$23.7 million
+of unrealized losses related to capped calls associated with convertible notes. Lewis said IREN expects additional non-cash impairments as it continues transitioning remaining Bitcoin mining operations toward AI Cloud. Adjusted EBITDA was
+$59.5 million
+versus
+$75.3 million
+in the prior quarter. On liquidity, Lewis said IREN had
+$2.6 billion in cash and cash equivalents
+as of April 30. He said the company expects that cash, operating cash flows, GPU financing, and additional financing initiatives to support near-term capex, including delivery of the Microsoft contract and deployment of air-cooled capacity at Mackenzie and Childress. Lewis reiterated that about
+95%
+of Microsoft GPU-related capex is expected to be funded through prepayments and GPU financing. During Q&A, Roberts said the company financed 95% of Microsoft-related GPU capex at an average interest rate of “about
+3%
+” through prepayments and GPU financing, and argued that capital remains available “as long as you sign good contracts” and demonstrate execution. About IREN
+NASDAQ: IREN
+IREN Limited, formerly known as Iris Energy Limited, owns and operates bitcoin mining data centers. The company was incorporated in 2018 and is headquartered in Sydney, Australia.
+
+==============================================================================
+[chunk 4] chunk_type=text  chars=229
+==============================================================================
+Read More
+Five stocks we like better than IREN
+This instant news alert was generated by narrative science technology and financial data from MarketBeat in order to provide readers with the fastest reporting and unbiased coverage.
+
+==============================================================================
+[chunk 5] chunk_type=text  chars=81
+==============================================================================
+Please send any questions or comments about this story to contact@marketbeat.com.
+
+==============================================================================
+[chunk 6] chunk_type=text  chars=855
+==============================================================================
+Should You Invest $1,000 in IREN Right Now? Before you consider IREN, you'll want to hear this. MarketBeat keeps track of Wall Street's top-rated and best performing research analysts and the stocks they recommend to their clients on a daily basis. MarketBeat has identified the
+five stocks
+that top analysts are quietly whispering to their clients to buy now before the broader market catches on... and IREN wasn't on the list. While IREN currently has a Moderate Buy rating among analysts, top-rated analysts believe these five stocks are better buys. View The Five Stocks Here
+The Next 7 Blockbuster Stocks for Growth Investors
+Wondering what the next stocks will be that hit it big, with solid fundamentals? Click the link to see which stocks MarketBeat analysts could become the next blockbuster growth stocks. Get This Free Report
+Like this article?
+
+==============================================================================
+[chunk 7] chunk_type=text  chars=26
+==============================================================================
+Share it with a colleague.
+
+==============================================================================
+[chunk 8] chunk_type=text  chars=1729
+==============================================================================
+Link copied to clipboard. Featured Articles and Offers
+The Real SpaceX Play: 5 Chip Stocks Powering the IPO Before It Launches
+By Bridget Bennett
+|
+May 4, 2026
+SpaceX eyes a 1.75 trillion valuation - here's what to know
+From Brownstone Research
+(Ad)
+Apple Talks Just Changed Everything for Intel
+By Sam Quirke
+|
+May 6, 2026
+3 Energy Stocks to Buy and 2 to Avoid as AI Power Demand Explodes
+By Bridget Bennett
+|
+May 4, 2026
+Intel (NASDAQ:INTC)  Shares Down 3.9%  Following Insider Selling
+By MarketBeat
+|
+May 4, 2026
+$30 stock to buy before Starlink goes public (WATCH NOW!)
+From Paradigm Press
+(Ad)
+5 Stocks to Buy in May Before the Next AI Surge Hits
+By Thomas Hughes
+|
+May 1, 2026
+Roblox Stock Slides to New Low as Safety Changes Weigh on Outlook
+By Jennifer Ryan Woods
+|
+May 3, 2026
+The AI Boom Has a Serious Problem
+MarketBeat TV
+|
+February 15, 2026
+Watch Video
+Related Videos
+Stock Market Analysis LIVE – High-Momentum Names & Key Catalysts
+MarketBeat TV
+|
+February 9, 2026
+Watch Video
+Stock Lists
+All Stock Lists
+5G
+Biotech
+Blue Chip
+FAANG
+Gold
+Large Cap
+Marijuana
+Micro Cap
+Oil
+REITs
+Russell 2000
+Small Cap
+Warren Buffett
+Investing Tools
+Calendars and Tools
+Analyst Ratings
+Cryptocurrency Screener
+Congressional Trading
+Dividend Increases
+Dividend Calculator
+Dividend Calendar
+Earnings Announcements
+Insider Trades
+Options Profit Calculator
+Penny Stocks
+Portfolio Monitoring
+Short Interest
+Stock Comparisons
+Stock Market Holidays
+Stock Screener
+Search Headlines
+Get 30 Days of
+MarketBeat All Access
+for Free
+Sign up for MarketBeat All Access to gain access to MarketBeat's full suite of research tools. Start Your 30-Day Trial
+MarketBeat All Access Features
+Best-in-Class Portfolio Monitoring
+Get personalized stock ideas.
+
+==============================================================================
+[chunk 9] chunk_type=text  chars=391
+==============================================================================
+Compare portfolio to indices. Check stock news, ratings, SEC filings, and more. Stock Ideas and Recommendations
+See daily stock ideas from top analysts. Receive short-term trading ideas from MarketBeat. Identify trending stocks on social media. Advanced Stock Screeners and Research Tools
+Use our seven stock screeners to find suitable stocks. Stay informed with MarketBeat's real-time news.
+
+==============================================================================
+[chunk 10] chunk_type=text  chars=1028
+==============================================================================
+Export data to Excel for personal analysis. Sign in to your
+free
+account to enjoy these benefits
+In-depth profiles and analysis for 20,000 public companies. Real-time analyst ratings, insider transactions, earnings data, and more. Our daily ratings and market update email newsletter. Sign in to your
+free
+account to enjoy all that MarketBeat has to offer. Sign In
+Create Account
+Your Email Address:
+Email Address Required
+Your Password:
+Password Required
+Log In
+Email Me a Login Link
+or
+Sign in with Facebook
+Sign in with Google
+Forgot your password? Your Email Address:
+Please enter your email address. Please enter a valid email address
+Choose a Password:
+Please enter your password. Your password must be at least 8 characters long and contain at least 1 number, 1 letter, and 1 special character. Create My Account (Free)
+or
+Sign in with Facebook
+Sign in with Google
+By creating a free account, you agree to our
+terms of service. This site is protected by reCAPTCHA and the Google
+Privacy Policy
+and
+Terms of Service
+apply.

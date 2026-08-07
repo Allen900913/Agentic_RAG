@@ -4,6 +4,7 @@
 
 # === Virtual Environment ===
 .venv/
+.venv-ragas/
 venv/
 env/
 __pycache__/
@@ -21,8 +22,12 @@ qdrant_db/
 # === Hash State (Incremental Update) ===
 hashes.json
 hashes_unstructure.json
+hashes_edgar.json
 *.bak
 data/.seen_news_keys.json
+
+# === Generated Scratch ===
+experiments/
 
 # === IDE ===
 .vscode/
@@ -43,6 +48,7 @@ Thumbs.db
 logs/
 
 # === Local Notes / Course Handout ===
+.claude/
 data copy/
 project.md
 fetch_data.py

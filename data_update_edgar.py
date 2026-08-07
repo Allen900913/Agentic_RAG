@@ -13,7 +13,7 @@ Exp 1 範圍（刻意窄）：只換「filing 內容從哪裡抽取」，不動 
     NVDA 10-K 數字與 SEC 原文一致（Revenue $215,938M FY2026 等）。這解決「複雜 HTML 財報表格
     被 unstructured 誤判成 text」的問題（三表不再經過 unstructured 表格偵測）。
   - News / Fundamentals / IncomeStatement 的 .txt 檔案不是 SEC filing，edgartools 不適用，
-    沿用 data_update_unstructure.py 現有的 partition_and_clean + build_chunk_records，
+    沿用 unstructured_components.py 現有的 partition_and_clean + build_chunk_records，
     確保新 collection 對這些 doc_type 的內容與舊 collection 完全一致（公平比較的前提）。
 
 ──────────────────────────────────────────────────────────────────────────────
@@ -43,7 +43,7 @@ Payload 新增欄位（供 Exp 6 Neighbor Expansion 不必重新 ingest）：
     "income_statement"/"balance_sheet"/"cash_flow_statement"
   - item_chunk_index：同一個 item_id 內的序號（0-based），供之後查詢「同 Item 前/後一個
     chunk」；不額外存 previous_chunk_id/next_chunk_id——用 source+item_id+item_chunk_index±1
-    做 payload filter 就能查到鄰居，不需要预先算好存死的指標（Exp 6 真的需要時再視效能決定
+    做 payload filter 就能查到鄰居，不需要預先算好存死的指標（Exp 6 真的需要時再視效能決定
     要不要加）。
 
 檔名慣例（**必須**維持現有 eval_set.json 的 ground truth glob 能吃得下）：
@@ -52,23 +52,46 @@ Payload 新增欄位（供 Exp 6 Neighbor Expansion 不必重新 ingest）：
   年份/期碼一律從 edgartools 的 XBRL entity_info（document_period_end_date /
   fiscal_year）算出，不是憑空編造——已用 AAPL/NVDA 驗證與現有 data/raw/*.html 檔名一致。
 
+──────────────────────────────────────────────────────────────────────────────
+2026-08-07：.txt 加 MD5 增量快取（hashes_edgar.json）
+  News/Fundamentals/IncomeStatement 的 .txt 在 ingest 前先算 MD5，與上次寫入同一個
+  collection 時的值相同就整檔跳過（連 partition/chunk/embed 都省）。**SEC filing 不做**：
+  filing 申報後同一 accession 內容不再變動，且內容要 API 抓回來才存在、事前算不了 hash，
+  加快取省不到 API 呼叫只省 embed。filing 維持原本「delete by source + 重新 upsert」。
+  詳見 _load_hashes 上方註解（含快取失準的逃生口 --force-txt）。
+
+2026-08-07：keep-latest 主動清除過期快照（修不變量破口）
+  原本被判 [SKIP stale] 的 Fundamentals/IncomeStatement 只是「不再 ingest」，但它先前
+  增量 run 寫進去的 chunk 沒人刪（delete-by-source 只對正在 ingest 的檔案執行）→ 增量
+  模式會累積多份快照，正是 keep-latest 想避免的版本漂移。現在判 stale 時一併
+  _delete_by_source。設計意圖：**靜態財報（10-K/10-Q）允許多期並存**供查歷史財務表現；
+  **動態估值快照（Fundamentals）保證庫裡只有最新一份**供回答「目前估值」。
+
+2026-08-07：ingest 入口單一化
+  data_update_unstructure.py 改名 unstructured_components.py 並剝除 CLI/Qdrant 寫入/
+  hash 增量，降級為純處理組件；本檔成為唯一 ingest 執行入口。
+
 Usage:
   .venv/Scripts/python.exe data_update_edgar.py                 # 抓 7 家公司最新 10-K + 最近 2 份 10-Q
   .venv/Scripts/python.exe data_update_edgar.py --rebuild        # 全量重建新 collection
   .venv/Scripts/python.exe data_update_edgar.py --tickers NVDA   # 只跑單一公司（開發/驗證用）
+  .venv/Scripts/python.exe data_update_edgar.py --force-txt      # 忽略 MD5 快取，.txt 全部重跑
 """
 
 import argparse
+import hashlib
+import json
 import os
 import re
 from pathlib import Path
+from typing import Optional
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# ── 沿用 data_update_unstructure.py 現有邏輯（DRY，避免兩份 chunking/embedding 邏輯漂移）──
-from data_update_unstructure import (
+# ── 沿用 unstructured_components.py 現有邏輯（DRY，避免兩份 chunking/embedding 邏輯漂移）──
+from unstructured_components import (
     BGEM3DenseEmbeddings,
     build_chunk_records,
     build_metadata_header,
@@ -85,6 +108,18 @@ from rag_query import infer_source_type, make_qdrant_client
 # ── Config ───────────────────────────────────────────────────────────────────────
 RAW_DIR         = Path("data/raw")            # News/Fundamentals/IncomeStatement .txt 仍從這裡讀
 PROCESSED_DIR   = Path("data/edgar_processed")  # 人眼驗證用：Item 結構 + 財報三表 markdown 傾印
+HASHES_FILE     = Path("hashes_edgar.json")   # .txt 的 MD5 增量快取（見 _load_hashes 註解）
+
+# data/raw 的分類子目錄（2026-08-07 語料重整）：Filings / Fundamentals / News，外加
+# _archive_stale（刻意封存的過期快照，不 ingest）。掃描必須遞迴——重整後 data/raw 根目錄
+# 已經沒有任何檔案，沿用非遞迴的 iterdir() 會一個 .txt 都掃不到（靜默 ingest 0 筆）。
+RAW_EXCLUDE_DIRS = {"_archive_stale"}
+
+# data/edgar_processed 的傾印輸出鏡像 data/raw 的三分類，方便逐類人眼對照。
+CATEGORY_FILINGS      = "Filings"
+CATEGORY_FUNDAMENTALS = "Fundamentals"
+CATEGORY_NEWS         = "News"
+CATEGORY_OTHER        = "Other"
 COLLECTION_NAME = os.getenv("EDGAR_COLLECTION_NAME", "us_stock_rag_edgar_exp1")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
 DENSE_VECTOR_NAME  = "dense"
@@ -141,6 +176,84 @@ TABLE_DEDUP_NUMBER_OVERLAP = 0.5
 _NUMBER_RE = re.compile(r"\d[\d,]{3,}")
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# .txt 的 MD5 增量快取（2026-08-07）
+# ══════════════════════════════════════════════════════════════════════════════
+# 只對 News/Fundamentals/IncomeStatement 的 .txt 做，**刻意不含 SEC filing**：
+# filing 一經申報，同一 accession number 的內容在 SEC 端就不會再變（要改只能發 10-K/A
+# 修正案，那是另一份 accession，本腳本 amendments=False 也不會抓），沒有「內容變了要重跑」
+# 的情境；而且 filing 內容是 edgartools 呼叫 API 抓回來之後才存在，事前算不了 hash，
+# 加快取只能省 embed、省不到 API 呼叫本身，划不來。.txt 則是本地檔案，讀檔前就能算。
+#
+# 快取以 collection 為第一層 key：不同 collection（exp3/exp4/實驗用）各自記帳，避免
+# 「A collection 已 ingest 過」的 hash 讓 B collection 誤跳過而少資料。
+# 已知限制：快取只反映「檔案內容有沒有變」，不驗證 Qdrant 裡的 point 是否真的還在。
+# 若有人手動刪過 collection 的點，hash 會誤判為「未變」而跳過 → 用 --force-txt 或
+# --rebuild 重來（--rebuild 會重建 collection，故該 collection 的快取一併作廢）。
+
+def _category_for(doc_type: str) -> str:
+    """doc_type（來自 infer_source_type，單一真相來源）→ data/raw 的三分類目錄名。
+    Fundamentals 與 IncomeStatement 歸同一類，與 data/raw/Fundamentals/ 的實際擺法一致
+    （兩者都是 yfinance 拉下來的數字快照，只是切面不同）。"""
+    dt = (doc_type or "").lower()
+    if dt in ("10-k", "10-q"):
+        return CATEGORY_FILINGS
+    if dt in ("fundamentals", "income_statement"):
+        return CATEGORY_FUNDAMENTALS
+    if dt == "news":
+        return CATEGORY_NEWS
+    return CATEGORY_OTHER
+
+
+def _dump_to(doc_type: str, filename: str, text: str) -> Path:
+    """把人眼驗證用的傾印寫進 data/edgar_processed/<分類>/，鏡像 data/raw 的結構。"""
+    out_dir = PROCESSED_DIR / _category_for(doc_type)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / filename
+    path.write_text(text, encoding="utf-8")
+    return path
+
+
+def _render_chunk_dump(source: str, doc_type: str, records: list[dict]) -> str:
+    """.txt 來源沒有 filing 的 Item 結構可傾印，改傾印「實際寫進 Qdrant 的 chunk」。
+    這比傾印清理後全文更有驗證價值：切壞（過碎/過大/切斷數字）一眼就看得出來。"""
+    lines = [f"# source    : {source}",
+             f"# doc_type  : {doc_type}",
+             f"# chunks    : {len(records)}", ""]
+    for i, r in enumerate(records):
+        text = r.get("text", "")
+        lines += ["=" * 78,
+                  f"[chunk {i}] chunk_type={r.get('chunk_type', 'text')}  chars={len(text)}",
+                  "=" * 78, text, ""]
+    return "\n".join(lines)
+
+
+def _compute_md5(path: Path) -> str:
+    h = hashlib.md5()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(8192), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def _load_hashes() -> dict:
+    if not HASHES_FILE.exists():
+        return {}
+    try:
+        with open(HASHES_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except (json.JSONDecodeError, OSError) as e:
+        # 快取壞掉不該讓 ingest 失敗——最壞情況只是這次全部重跑一遍。
+        print(f"[WARN] {HASHES_FILE} 讀取失敗（{e}），本次視為無快取、全部重新 ingest")
+        return {}
+
+
+def _save_hashes(data: dict) -> None:
+    with open(HASHES_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+
 def _number_set(text: str) -> set:
     return set(_NUMBER_RE.findall(text))
 
@@ -156,7 +269,7 @@ def _sanitize_item_id(item_name: str) -> str:
 
 
 def _filing_meta_from_xbrl(entity_info: dict, ticker: str, accession_no: str) -> dict:
-    """對映到與 data_update_unstructure.extract_filing_metadata() 相同的欄位語意：
+    """對映到與 unstructured_components.extract_filing_metadata() 相同的欄位語意：
     filing_type / fiscal_year / fiscal_period / report_label_year / report_period_code，
     但資料來源是 edgartools 的 XBRL entity_info（比舊版手動解析 ix:nonnumeric 更可靠），
     另外疊加 accession_number。"""
@@ -198,7 +311,7 @@ def _extract_extra_tables(filing, core_stmt_mds: list[str]) -> list[dict]:
     """混合 unstructured 的表格偵測：從整份 filing 原始 HTML 抓出 edgartools 三大表
     以外的表格（分部營收、股東權益變動表、稅率調節、負債到期表…），沿用舊
     unstructured 管線抓表格的邏輯（table_element_to_text + caption 策略，與
-    data_update_unstructure.build_chunk_records 對 Table element 的處理完全一致），
+    unstructured_components.build_chunk_records 對 Table element 的處理完全一致），
     但排除與 income_statement/balance_sheet/cash_flow_statement 數字高度重疊的
     重複表格（MD&A 常見直接複製一份損益表小節）。
 
@@ -390,8 +503,23 @@ def _fetch_filing_records(ticker: str, form: str, filing, semantic_chunker,
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Qdrant collection setup（與 data_update_unstructure.py 相同 schema，獨立 collection 名）
+# Qdrant collection setup（本檔是唯一實作；schema 沿襲舊 unstructured 管線：
+# dense+sparse 雙向量 + source/doc_type 兩個 keyword payload index）
 # ══════════════════════════════════════════════════════════════════════════════
+
+def _delete_by_source(client, collection_name: str, source: str) -> None:
+    """刪掉某個 source 檔案在 collection 裡的所有 point。
+    兩種用途：① 重寫前的冪等清除 ② 清掉已被 keep-latest 判為過期的舊快照。
+    source 不存在時 Qdrant 視為 no-op，不必先查存在與否。"""
+    from qdrant_client import models
+    client.delete(
+        collection_name=collection_name,
+        points_selector=models.FilterSelector(
+            filter=models.Filter(must=[models.FieldCondition(
+                key="source", match=models.MatchValue(value=source))])
+        ),
+    )
+
 
 def ensure_collection(client, collection_name: str, recreate: bool = False) -> None:
     from qdrant_client import models
@@ -421,6 +549,11 @@ def ensure_collection(client, collection_name: str, recreate: bool = False) -> N
         # period_basis 索引：TTM 口徑題對 period_basis 做硬 filter（rag_query._detect_period_basis）。
         client.create_payload_index(collection_name=collection_name, field_name="period_basis",
                                      field_schema=models.PayloadSchemaType.KEYWORD)
+        # mentioned_tickers 索引（Gap 2）：news 硬 filter 改用「內文提及公司陣列包含 X」取代 owner
+        # ticker，讓市場級新聞對被提及的其他公司可見（見 rag_query 的 _is_news_q 改寫）。KEYWORD
+        # 索引對陣列欄位即「包含即命中」。
+        client.create_payload_index(collection_name=collection_name, field_name="mentioned_tickers",
+                                     field_schema=models.PayloadSchemaType.KEYWORD)
         print(f"[INFO] Created collection '{collection_name}' (dense={DENSE_DIM}D cosine, sparse=BGE-M3 lexical)")
 
 
@@ -441,9 +574,9 @@ def _period_basis_for(doc_type: str) -> Optional[str]:
 
 def upsert_records(client, collection_name: str, bge_m3, source: str, filing_meta: dict,
                     records: list[dict], doc_type: str) -> int:
-    """把 records 編碼成 dense+sparse 並 upsert，回傳 chunk 數。與
-    data_update_unstructure.py 的 upsert 邏輯一致（前綴 metadata header、
-    deterministic UUID），額外疊加 item_id / item_chunk_index / accession_number。"""
+    """把 records 編碼成 dense+sparse 並 upsert，回傳 chunk 數。沿襲舊 unstructured
+    管線的寫入約定（前綴 metadata header、deterministic UUID），額外疊加
+    item_id / item_chunk_index / accession_number。本檔是唯一的 upsert 實作。"""
     from qdrant_client import models
 
     if not records:
@@ -478,6 +611,19 @@ def upsert_records(client, collection_name: str, bge_m3, source: str, filing_met
             payload["period_basis"] = _basis   # 供 rag_query TTM 硬 filter 路由（見 _period_basis_for）
         payload.update(filing_meta)
 
+        if doc_type == "news":
+            # Gap 2：news chunk 標記內文實際提及的所有公司（mentioned_tickers 陣列），供 rag_query
+            # 對 news 用「陣列包含 X」硬篩取代 owner ticker——市場級新聞（Magnificent Seven 全跌等）
+            # 才不會對內文提到的其他公司隱形。deterministic 別名偵測（複用 rag_query._find_all_ticker_aliases）
+            # ∪ owner ticker；與一次性 migrate_add_mentioned_tickers.py 同邏輯（未來重建語料自帶）。
+            import rag_query as _rq
+            _doc = payload["document"]
+            _mentioned = set(_rq._find_all_ticker_aliases(_doc.lower(), _doc))
+            _owner = str(payload.get("ticker") or "").upper()
+            if _owner:
+                _mentioned.add(_owner)
+            payload["mentioned_tickers"] = sorted(_mentioned)
+
         points.append(models.PointStruct(
             id=deterministic_uuid(chunk_id_str),
             vector={
@@ -502,6 +648,9 @@ def main() -> None:
     parser.add_argument("--collection", default=COLLECTION_NAME)
     parser.add_argument("--skip-txt", action="store_true",
                         help="跳過 News/Fundamentals/IncomeStatement .txt（開發時只驗證 filing 部分用）")
+    parser.add_argument("--force-txt", action="store_true",
+                        help=f"忽略 {HASHES_FILE} 的 MD5 快取，強制重新 ingest 所有 .txt"
+                             "（快取與 Qdrant 實際內容不同步時的逃生口）")
     parser.add_argument("--rcts-fallback", action="store_true",
                         help="Exp 3：SemanticChunker 輸出的 chunk 若 reranker token 數超過 "
                              f"{RCTS_THRESHOLD} 時，改用 RCTS（{RCTS_CHUNK_SIZE}/{RCTS_CHUNK_OVERLAP}，"
@@ -562,6 +711,7 @@ def main() -> None:
 
     total_chunks = 0
     total_filings = 0
+    txt_skipped_unchanged = 0
 
     # ── 10-K + 10-Q（edgartools）──────────────────────────────────────────────
     for ticker in args.tickers:
@@ -595,13 +745,10 @@ def main() -> None:
             n_text  = sum(1 for r in records if r["chunk_type"] == "text")
             print(f"    -> source={source} | {len(records)} chunks ({n_table} table + {n_text} text)")
 
-            (PROCESSED_DIR / (Path(source).stem + ".txt")).write_text(dump_text, encoding="utf-8")
+            _dump_to(doc_type, Path(source).stem + ".txt", dump_text)
 
             if not args.rebuild:
-                from qdrant_client import models
-                client.delete(collection_name=args.collection, points_selector=models.FilterSelector(
-                    filter=models.Filter(must=[models.FieldCondition(
-                        key="source", match=models.MatchValue(value=source))])))
+                _delete_by_source(client, args.collection, source)
 
             n = upsert_records(client, args.collection, bge_m3, source, filing_meta, records, doc_type)
             total_chunks += n
@@ -613,11 +760,24 @@ def main() -> None:
     # （這兩種是 key:value 純文字，本來就沒有 HTML 表格可偵測，維持原行為）。
     if not args.skip_txt:
         print("\n[INFO] Ingesting News/Fundamentals/IncomeStatement .txt ...")
+        # --rebuild 會重建 collection，舊快取對這個 collection 全部作廢，從空的開始記。
+        all_hashes = _load_hashes()
+        txt_hashes: dict = {} if args.rebuild else dict(all_hashes.get(args.collection, {}))
+        if args.force_txt:
+            print(f"[INFO] --force-txt：忽略 {HASHES_FILE} 快取，所有 .txt 一律重新 ingest")
+        elif txt_hashes:
+            print(f"[INFO] MD5 快取：{HASHES_FILE}（{args.collection} 已記錄 {len(txt_hashes)} 個 .txt）")
+        # 遞迴掃描：語料已按 Filings/Fundamentals/News 分目錄擺放，根目錄不再有檔案。
+        # _archive_stale/ 是刻意封存的過期快照，整個目錄排除（不只靠 keep-latest 擋）。
         txt_files = sorted(
-            f for f in RAW_DIR.iterdir()
-            if f.suffix.lower() in {".txt", ".md"}
+            f for f in RAW_DIR.rglob("*")
+            if f.is_file()
+            and f.suffix.lower() in {".txt", ".md"}
+            and not (RAW_EXCLUDE_DIRS & set(f.relative_to(RAW_DIR).parts))
             and any(f.stem.startswith(t + "_") for t in args.tickers)
         )
+        print(f"[INFO] 掃到 {len(txt_files)} 個 .txt/.md"
+              f"（已排除 {'/'.join(sorted(RAW_EXCLUDE_DIRS))}）")
         # 去重守門（Item 2，2026-07-30）：Fundamentals / IncomeStatement 只保留每個 ticker 最新一份
         # 快照（如 0508/0519/0612 → 只留 0612），避免舊快照與最新版在檢索時互相競爭、放大版本漂移。
         # News 不去重——多篇不同日期新聞是正當時間序列。
@@ -643,8 +803,26 @@ def main() -> None:
                 key = (mt.group(1) if mt else "", doc_type)
                 st = _txt_stamp(filepath)
                 if st and st != _latest_stamp.get(key):
-                    print(f"  [SKIP stale] {filepath.name} (keep {_latest_stamp.get(key)})")
+                    # 不能只是「跳過」：舊快照可能在**先前的增量 run** 已經寫進 collection，
+                    # 而 delete-by-source 只對「這次要 ingest 的檔案」執行，被跳過的檔案沒人清
+                    # → 增量模式下會累積多份 Fundamentals/IncomeStatement 快照，正是
+                    # keep-latest 要避免的版本漂移（靜態財報 10-K/10-Q 允許多期並存查歷史；
+                    # 動態估值快照則必須「庫裡永遠只有最新一份」）。這裡主動清掉殘留。
+                    # --rebuild 不需要做：collection 剛重建，本來就是空的。
+                    if not args.rebuild:
+                        _delete_by_source(client, args.collection, filepath.name)
+                    txt_hashes.pop(str(filepath), None)   # 一併撤銷快取，重新變成最新時會重跑
+                    print(f"  [SKIP stale] {filepath.name} (keep {_latest_stamp.get(key)}；已清除殘留 chunk)")
                     continue
+
+            # MD5 增量：內容與上次寫入這個 collection 時相同就整檔跳過，連 partition/
+            # chunk/embed 都不做（最貴的是 embed）。放在 keep-latest 之後——被判 stale 的
+            # 檔案本來就不該 ingest，不必為它算 hash。
+            file_md5 = _compute_md5(filepath)
+            if not args.force_txt and txt_hashes.get(str(filepath)) == file_md5:
+                print(f"  [SKIP unchanged] {filepath.name}")
+                txt_skipped_unchanged += 1
+                continue
 
             if doc_type == "news":
                 text = filepath.read_text(encoding="utf-8", errors="replace").strip()
@@ -666,24 +844,33 @@ def main() -> None:
                 r["item_id"] = "n/a"
                 r["item_chunk_index"] = i
 
+            # 傾印到 data/edgar_processed/<分類>/，與 filing 一樣可人眼驗證（先前只有
+            # filing 有傾印，News/Fundamentals 切成什麼樣完全看不到）。
+            _dump_to(doc_type, filepath.stem + ".txt",
+                     _render_chunk_dump(filepath.name, doc_type, chunk_records))
+
             m_ticker = re.match(r"^([A-Z]+)_", filepath.stem)
             filing_meta = {"ticker": m_ticker.group(1) if m_ticker else ""}
 
             if not args.rebuild:
-                from qdrant_client import models
-                client.delete(collection_name=args.collection, points_selector=models.FilterSelector(
-                    filter=models.Filter(must=[models.FieldCondition(
-                        key="source", match=models.MatchValue(value=filepath.name))])))
+                _delete_by_source(client, args.collection, filepath.name)
 
             n = upsert_records(client, args.collection, bge_m3, filepath.name, filing_meta,
                               chunk_records, doc_type)
             total_chunks += n
             print(f"  [{filepath.name}] {n} chunks")
 
+            # 寫入成功才記 hash——中途丟例外時不會留下「已處理」的假紀錄。
+            txt_hashes[str(filepath)] = file_md5
+
+        all_hashes[args.collection] = txt_hashes
+        _save_hashes(all_hashes)
+
     total_in_db = client.count(collection_name=args.collection, exact=True).count
     print(f"\n{'─'*60}")
     print(f"[DONE] Filings processed : {total_filings}")
     print(f"[DONE] Chunks this run   : {total_chunks}")
+    print(f"[DONE] .txt skipped (MD5): {txt_skipped_unchanged}")
     print(f"[DONE] Total in Qdrant   : {total_in_db}")
     print(f"[DONE] Collection        : {args.collection}")
     print(f"[DONE] Validation dumps  : {PROCESSED_DIR}/")

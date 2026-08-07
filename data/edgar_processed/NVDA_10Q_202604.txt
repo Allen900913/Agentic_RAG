@@ -1,0 +1,313 @@
+=== NVDA 10-Q | accession=0001045810-26-000052 | fiscal_year=2027 fiscal_period=Q1 period_code=202604 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**NVIDIA CORP** (NVDA)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Apr 26, 2026 (Q1) | Apr 27, 2025 (Q1) |
+| --- | ---: | ---: |
+|     Revenue | $81,615 | $44,062 |
+| *    Data Center* | $75,246 | $39,112 |
+| *      Hyperscale* | $37,869 | $17,599 |
+| *      AI Clouds, Industrial, & Enterprise* | $37,377 | $21,513 |
+| *    Edge Computing* | $6,369 | $4,950 |
+|     Cost of revenue | $20,458 | $17,394 |
+| *    Inventory Purchase Obligations in Excess of Projections* | $300 | $3,000 |
+|   Gross profit | $61,157 | $26,668 |
+|       Research and development | $6,321 | $3,989 |
+|       Sales, general and administrative | $1,300 | $1,041 |
+|       Total operating expenses | $7,621 | $5,030 |
+|     Operating income | $53,536 | $21,638 |
+|     Interest income | $540 | $515 |
+|     Interest expense | $(102) | $(63) |
+|     Other income (expense), net | $15,929 | $(180) |
+|     Total other income, net | $16,367 | $272 |
+|   Income before income tax | $69,903 | $21,910 |
+|   Income tax expense | $11,582 | $3,135 |
+|   Net income | $58,321 | $18,775 |
+|     Basic (in dollars per share) | 2.40 | 0.77 |
+|     Diluted (in dollars per share) | 2.39 | 0.76 |
+|     Basic (in shares) | 24,286 | 24,441 |
+|     Diluted (in shares) | 24,391 | 24,611 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**NVIDIA CORP** (NVDA)
+
+**As of April 26, 2026 and January 25, 2026** *(In millions, except shares and per share data)*
+
+|  | Apr 26, 2026 | Jan 25, 2026 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $13,237 | $10,605 |
+|         Marketable debt securities | $37,098 | $39,065 |
+|         Marketable equity securities | $30,237 | $12,886 |
+|         Accounts receivable, net | $40,710 | $38,466 |
+|         Inventories | $25,797 | $21,403 |
+|         Prepaid expenses and other current assets | $3,916 | $3,180 |
+|       Total current assets | $150,995 | $125,605 |
+|       Property and equipment, net | $12,403 | $10,383 |
+|       Operating lease assets | $4,258 | $2,867 |
+|       Goodwill | $20,894 | $20,832 |
+|       Intangible assets, net | $3,120 | $3,306 |
+|       Deferred income tax assets | $11,707 | $13,258 |
+|       Non-marketable securities | $43,364 | $22,251 |
+|       Other assets | $12,733 | $8,301 |
+|     Total assets | $259,474 | $206,803 |
+|         Accounts payable | $13,097 | $9,812 |
+|         Accrued and other current liabilities | $29,787 | $21,352 |
+|         Short-term debt | $1,000 | $999 |
+|       Total current liabilities | $43,884 | $32,163 |
+|       Long-term debt | $7,470 | $7,469 |
+|       Long-term operating lease liabilities | $3,878 | $2,572 |
+|       Other long-term liabilities | $8,768 | $7,306 |
+|       Total liabilities | $64,000 | $49,510 |
+|       Commitments and contingencies |  |  |
+|       Preferred stock |  |  |
+|       Common stock | $24 | $24 |
+|       Additional paid-in capital | $10,275 | $10,118 |
+|       Accumulated other comprehensive income | $137 | $178 |
+|       Retained earnings | $185,038 | $146,973 |
+|       Total shareholders’ equity | $195,474 | $157,293 |
+|     Total liabilities and shareholders’ equity | $259,474 | $206,803 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**NVIDIA CORP** (NVDA)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Apr 26, 2026 (Q1) | Apr 27, 2025 (Q1) |
+| --- | ---: | ---: |
+|       Net income | $58,321 | $18,775 |
+|       Stock-based compensation expense | $1,928 | $1,474 |
+|       Deferred income taxes | $1,584 | $(2,177) |
+|       Depreciation and amortization | $997 | $611 |
+|       (Gains) losses from equity securities, net | $(15,936) | $175 |
+|       Other | $(94) | $(98) |
+|         Accounts receivable | $(2,243) | $933 |
+|         Inventories | $(4,420) | $(1,258) |
+|         Prepaid expenses and other assets | $(983) | $560 |
+|         Accounts payable | $2,210 | $941 |
+|         Accrued and other current liabilities | $7,763 | $7,128 |
+|         Other long-term liabilities | $1,217 | $350 |
+|     Net cash provided by operating activities | $50,344 | $27,414 |
+|       Proceeds from maturities of marketable debt securities | $1,946 | $3,122 |
+|       Proceeds from sales of non-marketable securities | $26 |  |
+|       Proceeds from sales of marketable debt securities | $25 | $467 |
+|       Purchases of non-marketable securities | $(18,582) | $(649) |
+|       Purchases of marketable debt and equity securities | $(8,000) | $(6,546) |
+|       Purchases related to property and equipment and intangible assets | $(1,757) | $(1,227) |
+|       Acquisitions, net of cash acquired | $(87) | $(383) |
+|     Net cash used in investing activities | $(26,429) | $(5,216) |
+|       Proceeds related to employee stock plans | $515 | $370 |
+|       Payments related to repurchases of common stock | $(19,312) | $(14,095) |
+|       Payments related to employee stock plan taxes | $(2,129) | $(1,532) |
+|       Dividends paid | $(243) | $(244) |
+|       Principal payments on property and equipment and intangible assets | $(33) | $(52) |
+|       Other | $(81) |  |
+|     Net cash used in financing activities | $(21,283) | $(15,553) |
+|   Change in cash and cash equivalents | $2,632 | $6,645 |
+|   Cash and cash equivalents at end of period |  |  |
+|   Cash and cash equivalents at end of period |  |  |
+
+--- [TABLE extra #0] ---
+FORM
+
+| ☒ | QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #1] ---
+For the quarterly period ended
+
+| ☐ | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #2] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware | 94-3177549 |
+| --- | --- |
+| (State or other jurisdiction of | (I.R.S. Employer |
+| incorporation or organization) | Identification No.) |
+| 2788 San Tomas Expressway , Santa Clara , California | 95051 |
+| (Address of principal executive offices) | (Zip Code) |...
+
+--- [TABLE extra #3] ---
+Securities registered pursuant to Section 12(b) of the Act:
+
+| Title of each class | Trading Symbol(s) | Name of each exchange on which registered |
+| --- | --- | --- |
+| Common Stock, $0.001 par value per share | NVDA | The Nasdaq Global Select Market |...
+
+--- [TABLE extra #4] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large accelerated filer | ☒ | Accelerated filer | ☐ | Non-accelerated filer | ☐ | Smaller reporting company | ☐ | Emerging growth company | ☐ |
+| --- | --- ...
+
+--- [TABLE extra #5] ---
+(Unaudited)
+
+|  | Common Stock Outstanding |  | Additional Paid-in Capital |  | Accumulated Other Comprehensive Income |  | Retained Earnings |  | Total Shareholders’ Equity |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Shares |  | Amount |  |  |  |  |  |  |  ...
+
+--- [TABLE extra #6] ---
+Revenue by Reportable Segments
+
+|  | Three Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Apr 26, 2026 |  | Apr 27, 2025 |  | $ Change |  | % Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | ($ in millions) |  |  |...
+
+--- [TABLE extra #7] ---
+Operating Income by Reportable Segments
+
+|  | Three Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Apr 26, 2026 |  | Apr 27, 2025 |  | $ Change |  | % Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | ($ in millions...
+
+--- [TABLE extra #8] ---
+Our aggregate debt maturities as of April 26, 2026, by year payable, were as follows:
+
+|  |  | Apr 26, 2026 |  |  |
+| --- | --- | --- | --- | --- |
+|  |  | (In millions) |  |  |
+| Due in one year |  | $ | 1,000 |  |
+| Due in one to five years |  | 2,750 |  |  |
+| Due in five to ten years |  | 1,250 |  |  |
+| Due in greater than ten years |  | 3,500 |  |  |
+| Unamortized debt discount and issuance ...
+
+--- [TABLE extra #9] ---
+Item 6. Exhibits
+
+|  |  |  |  | Incorporated by Reference |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Exhibit No. |  | Exhibit Description |  | Schedule/Form |  | Exhibit |  | Filing Date |
+| 10.1+ |  | Variable Compensation Plan - Fiscal Year 2027 |  | 8-K |  | 10.1 |  | 3/6/2026 |
+| 31.1* |  | Certification of Chief Executive Officer as required by Rule 13a-14(a) of t...
+
+--- [TABLE extra #10] ---
+Date: May 20, 2026
+
+|  | NVIDIA Corporation |  |
+| --- | --- | --- |
+| By: | /s/ Colette M. Kress |  |
+|  | Colette M. Kress |  |
+|  | Executive Vice President and Chief Financial Officer (Duly Authorized Officer and Principal Financial Officer) |  |...
+
+[INFO] extra tables kept=11 (去重後，來自 unstructured)
+
+--- [ITEM] Part I, Item 1 (len=48091 chars) ---
+Item 1. Financial Statements (Unaudited)
+
+NVIDIA Corporation and Subsidiaries
+
+Condensed Consolidated Statements of Income
+
+(In millions, except per share data)
+
+(Unaudited)
+
+ Three Months Ended
+
+ Apr 26, 2026Apr 27, 2025
+
+Revenue$81,615 $44,062 
+
+Cost of revenue20,458 17,394 
+
+Gross profit61,157 26,668 
+
+Operating expenses  
+
+Research and development6,321 3,989 
+
+Sales, general and administrative...
+
+--- [ITEM] Part I, Item 2 (len=28905 chars) ---
+Item 2. Management's Discussion and Analysis of Financial Condition and Results of Operations
+
+Forward-Looking Statements
+
+This Quarterly Report on Form 10-Q contains forward-looking statements within the meaning of Section 27A of the Securities Act of 1933, as amended, and Section 21E of the Securities Exchange Act of 1934, as amended, which are subject to the “safe harbor” created by those secti...
+
+--- [ITEM] Part I, Item 3 (len=1837 chars) ---
+Item 3. Quantitative and Qualitative Disclosures About Market Risk
+
+Investment and Interest Rate Risk
+
+Financial market risks related to investment and interest rate risk are described in Part II, Item 7A, “Quantitative and Qualitative Disclosures About Market Risk” in our Annual Report on Form 10-K for the fiscal year ended January 25, 2026. Our marketable equity securities consist of publicly-he...
+
+--- [ITEM] Part I, Item 4 (len=2332 chars) ---
+Item 4. Controls and Procedures
+
+Controls and Procedures
+
+Disclosure Controls and Procedures
+
+Based on their evaluation as of April 26, 2026, our management, including our Chief Executive Officer and Chief Financial Officer, has concluded that our disclosure controls and procedures (as defined in Rule 13a-15(e) under the Exchange Act) were effective to provide reasonable assurance that the informa...
+
+--- [ITEM] Part II, Item 1 (len=217 chars) ---
+Item 1. Legal Proceedings
+
+Refer to Part I, Item 1, Note 10 of the Notes to the Condensed Consolidated Financial Statements for a discussion of significant developments in our legal proceedings since January 25, 2026....
+
+--- [ITEM] Part II, Item 1A (len=43097 chars) ---
+Item 1A. Risk Factors
+
+Other than the risk factors listed below, there have been no material changes from the risk factors previously described under Item 1A of our Annual Report on Form 10-K for the fiscal year ended January 25, 2026.
+
+Purchasing or owning NVIDIA common stock involves investment risks including, but not limited to, the risks described in Item 1A of our Annual Report on Form 10-K ...
+
+--- [ITEM] Part II, Item 2 (len=3269 chars) ---
+Item 2. Unregistered Sales of Equity Securities and Use of Proceeds
+
+Issuer Purchases of Equity Securities
+
+We repurchased 108 million shares of our common stock for $20.2 billion during the first quarter of fiscal year 2027. As of April 26, 2026, we were authorized, subject to certain specifications, to repurchase up to $38.5 billion of our common stock.
+
+On May 18, 2026, our Board of Directors a...
+
+--- [ITEM] Part II, Item 5 (len=825 chars) ---
+Item 5. Other Information
+
+The following members of our Board of Directors and/or officers adopted, modified, or terminated a trading arrangement that is intended to satisfy the affirmative defense conditions of Rule 10b5-1(c), or a Rule 10b5-1 Trading Arrangement:
+
+NameTitle of Director or OfficerActionDateTotal Shares of Common Stock to be SoldExpiration Date
+
+Tench Coxe
+
+Director
+
+Adoption
+
+3/1...
+
+--- [ITEM] Part II, Item 6 (len=2689 chars) ---
+Item 6. Exhibits
+
+Incorporated by Reference
+
+Exhibit No. Exhibit Description
+
+Schedule/FormExhibitFiling Date
+
+10.1+Variable Compensation Plan - Fiscal Year 2027
+
+8-K
+
+10.1
+
+3/6/2026
+
+31.1*Certification of Chief Executive Officer as required by Rule 13a-14(a) of the Securities Exchange Act of 1934
+
+31.2*Certification of Chief Financial Officer as required by Rule 13a-14(a) of the Securities Exchan...

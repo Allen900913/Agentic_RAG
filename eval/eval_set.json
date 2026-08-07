@@ -357,7 +357,17 @@
       "relevant": [
         "MSFT_10K_2025.html"
       ],
-      "answerable": true
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 142
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 49
+        }
+      ]
     },
     {
       "id": "sem-05",
@@ -922,10 +932,21 @@
       "query": "亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？",
       "relevant": [
         "AMZN_10K_2025.html",
-        "AMZN_10Q_202509.html"
+        "AMZN_10Q_202509.html",
+        "AMZN_10Q_202603.html"
       ],
       "answerable": true,
-      "maps_to": "sem-05"
+      "maps_to": "sem-05",
+      "pin_chunks": [
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 39
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 36
+        }
+      ]
     },
     {
       "id": "col-04",
@@ -1009,15 +1030,27 @@
       "pin_chunks": [
         {
           "source": "MSFT_10Q_202603.html",
-          "chunk_index": 102
-        },
-        {
-          "source": "MSFT_10Q_202603.html",
           "chunk_index": 110
         },
         {
           "source": "MSFT_10Q_202603.html",
-          "chunk_index": 46
+          "chunk_index": 105
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 109
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 102
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 101
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 9
         }
       ]
     },
@@ -1168,10 +1201,10 @@
     {
       "id": "mh-09",
       "category": "multi_hop",
-      "query": "新聞中宣布自研七個 AI 模型、並加入 Anthropic 主導的 Mythos 資安計畫的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？",
+      "query": "新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？",
       "relevant": [
-        "MSFT_News_*.txt",
-        "MSFT_Fundamentals_20260612.txt"
+        "GOOGL_News_20260612_02.txt",
+        "GOOGL_Fundamentals_20260612.txt"
       ],
       "answerable": true
     },

@@ -1,0 +1,197 @@
+# source    : NVDA_IncomeStatement_20260612.txt
+# doc_type  : income_statement
+# chunks    : 8
+
+==============================================================================
+[chunk 0] chunk_type=text  chars=386
+==============================================================================
+=== NVDA Annual Income Statement ===
+
+--- Fiscal Year: 2026 ---
+
+Tax Effect Of Unusual Items: $0.00
+
+Tax Rate For Calcs: $0.15
+
+Normalized EBITDA: $144.55B
+
+Net Income From Continuing Operation Net Minority Interest: $120.07B
+
+Reconciled Depreciation: $2.84B
+
+Reconciled Cost Of Revenue: $62.48B
+
+EBITDA: $144.55B
+
+EBIT: $141.71B
+
+Net Interest Income: $2.04B
+
+Interest Expense: $259.00M
+
+==============================================================================
+[chunk 1] chunk_type=text  chars=379
+==============================================================================
+Interest Income: $2.30B
+
+Normalized Income: $120.07B
+
+Net Income From Continuing And Discontinued Operation: $120.07B
+
+Total Expenses: $85.55B
+
+Total Operating Income As Reported: $130.39B
+
+Diluted Average Shares: $24.51B
+
+Basic Average Shares: $24.36B
+
+Diluted EPS: $4.90
+
+Basic EPS: $4.93
+
+Diluted NI Availto Com Stockholders: $120.07B
+
+Net Income Common Stockholders: $120.07B
+
+==============================================================================
+[chunk 2] chunk_type=text  chars=377
+==============================================================================
+Net Income: $120.07B
+
+Net Income Including Noncontrolling Interests: $120.07B
+
+Net Income Continuous Operations: $120.07B
+
+Tax Provision: $21.38B
+
+Pretax Income: $141.45B
+
+Other Income Expense: $9.02B
+
+Other Non Operating Income Expenses: $9.02B
+
+Net Non Operating Interest Income Expense: $2.04B
+
+Interest Expense Non Operating: $259.00M
+
+Interest Income Non Operating: $2.30B
+
+==============================================================================
+[chunk 3] chunk_type=text  chars=383
+==============================================================================
+Operating Income: $130.39B
+
+Operating Expense: $23.08B
+
+Research And Development: $18.50B
+
+Selling General And Administration: $4.58B
+
+Gross Profit: $153.46B
+
+Cost Of Revenue: $62.48B
+
+Total Revenue: $215.94B
+
+Operating Revenue: $215.94B
+
+--- Fiscal Year: 2025 ---
+
+Tax Effect Of Unusual Items: $0.00
+
+Tax Rate For Calcs: $0.13
+
+Normalized EBITDA: $86.14B
+
+Total Unusual Items: $0.00
+
+==============================================================================
+[chunk 4] chunk_type=text  chars=390
+==============================================================================
+Total Unusual Items Excluding Goodwill: $0.00
+
+Net Income From Continuing Operation Net Minority Interest: $72.88B
+
+Reconciled Depreciation: $1.86B
+
+Reconciled Cost Of Revenue: $32.64B
+
+EBITDA: $86.14B
+
+EBIT: $84.27B
+
+Net Interest Income: $1.54B
+
+Interest Expense: $247.00M
+
+Interest Income: $1.79B
+
+Normalized Income: $72.88B
+
+Net Income From Continuing And Discontinued Operation: $72.88B
+
+==============================================================================
+[chunk 5] chunk_type=text  chars=377
+==============================================================================
+Total Expenses: $49.04B
+
+Total Operating Income As Reported: $81.45B
+
+Diluted Average Shares: $24.80B
+
+Basic Average Shares: $24.55B
+
+Diluted EPS: $2.94
+
+Basic EPS: $2.97
+
+Diluted NI Availto Com Stockholders: $72.88B
+
+Net Income Common Stockholders: $72.88B
+
+Net Income: $72.88B
+
+Net Income Including Noncontrolling Interests: $72.88B
+
+Net Income Continuous Operations: $72.88B
+
+==============================================================================
+[chunk 6] chunk_type=text  chars=385
+==============================================================================
+Tax Provision: $11.15B
+
+Pretax Income: $84.03B
+
+Other Income Expense: $1.03B
+
+Other Non Operating Income Expenses: $1.03B
+
+Special Income Charges: $0.00
+
+Restructuring And Mergern Acquisition: $0.00
+
+Net Non Operating Interest Income Expense: $1.54B
+
+Interest Expense Non Operating: $247.00M
+
+Interest Income Non Operating: $1.79B
+
+Operating Income: $81.45B
+
+Operating Expense: $16.41B
+
+==============================================================================
+[chunk 7] chunk_type=text  chars=180
+==============================================================================
+Research And Development: $12.91B
+
+Selling General And Administration: $3.49B
+
+Gross Profit: $97.86B
+
+Cost Of Revenue: $32.64B
+
+Total Revenue: $130.50B
+
+Operating Revenue: $130.50B

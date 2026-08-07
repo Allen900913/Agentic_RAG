@@ -1,0 +1,243 @@
+=== TSLA 10-Q | accession=0001628280-25-045968 | fiscal_year=2025 fiscal_period=Q3 period_code=202509 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**Tesla, Inc.** (TSLA)
+
+**Three and Nine Months Ended** *(In millions, except shares and per share data)*
+
+|  | Sep 30, 2025 (Q3) | Sep 30, 2024 (Q3) | Sep 30, 2025 (YTD) | Sep 30, 2024 (YTD) |
+| --- | ---: | ---: | ---: | ---: |
+|           Revenues | $28,095 | $25,182 | $69,926 | $71,983 |
+| *          Automotive Revenues* | $21,205 | $20,016 | $51,833 | $57,272 |
+| *          Energy generation and storage* | 3,415 | 2,376 | 8,934 | 7,025 |
+| *          Services and other* | $3,475 | $2,790 | $9,159 | $7,686 |
+|           Total cost of revenues | $23,041 | $20,185 | $57,841 | $58,712 |
+| *          Automotive Revenues* | $17,590 | $15,990 | $43,085 | $46,363 |
+| *          Energy generation and storage* | 2,342 | 1,651 | 6,230 | 5,157 |
+| *          Services and other* | $3,109 | $2,544 | $8,526 | $7,192 |
+|         Gross profit | $5,054 | $4,997 | $12,085 | $13,271 |
+|           Research and development | $1,630 | $1,039 | $4,628 | $3,264 |
+|           Selling, general and administrative | $1,562 | $1,186 | $4,179 | $3,837 |
+|           Restructuring and other | $238 | $55 | $332 | $677 |
+|         Total operating expenses | $3,430 | $2,280 | $9,139 | $7,778 |
+|         Income from operations | 1,624 | 2,717 | 2,946 | 5,493 |
+|         Interest income | $439 | $429 | $1,231 | $1,127 |
+|         Interest expense | $(76) | $(92) | $(253) | $(254) |
+|         Other income (expense), net | $(28) | $(263) | $173 | $100 |
+|         Income before income taxes | $1,959 | $2,791 | $4,097 | $6,466 |
+|         Provision for (benefit from) income taxes | $570 | $602 | $1,098 | $1,456 |
+|       Net income | $1,389 | $2,189 | $2,999 | $5,010 |
+|       Net income attributable to noncontrolling interests and redeemable noncontrolling interests in subsidiaries | $16 | $16 | $45 | $47 |
+|       Net income attributable to common stockholders | $1,373 | $2,173 | $2,954 | $4,963 |
+|         Basic (in dollars per share) | 0.43 | 0.68 | 0.92 | 1.57 |
+|         Diluted (in dollars per share) | 0.39 | 0.62 | 0.84 | 1.43 |
+|         Basic (in shares) | 3,227 | 3,198 | 3,223 | 3,192 |
+|         Diluted (in shares) | 3,526 | 3,497 | 3,523 | 3,489 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**Tesla, Inc.** (TSLA)
+
+**As of September 30, 2025 and December 31, 2024** *(In millions, except shares and per share data)*
+
+|  | Sep 30, 2025 | Dec 31, 2024 |
+| --- | ---: | ---: |
+|           Cash and cash equivalents | $18,289 | $16,139 |
+|           Short-term investments | $23,358 | $20,424 |
+|           Accounts receivable, net | $4,703 | $4,418 |
+|           Inventory | $12,276 | $12,017 |
+|           Prepaid expenses and other current assets | $6,027 | $5,362 |
+|             Total current assets | $64,653 | $58,360 |
+|         Operating lease vehicles, net | $5,019 | $5,581 |
+| *          Operating lease vehicles, net* | $5,019 | $5,581 |
+|         Solar energy systems, net | $4,673 | $4,924 |
+| *          Solar energy systems, net* | $4,673 | $4,924 |
+|         Property, plant and equipment, net | $39,407 | $35,836 |
+|         Operating lease right-of-use assets | $5,783 | $5,160 |
+|         Digital assets | $1,315 | $1,076 |
+|         Intangible assets, net | $131 | $150 |
+|         Goodwill | $257 | $244 |
+|         Deferred tax assets | $6,637 | $6,524 |
+|         Other non-current assets | $5,860 | $4,215 |
+|         Total assets | $133,735 | $122,070 |
+|           Accounts payable | $12,819 | $12,474 |
+|           Accrued liabilities and other | $12,791 | $10,723 |
+|           Deferred revenue | $3,756 | $3,168 |
+|           Current portion of debt and finance leases | $1,924 | $2,456 |
+|             Total current liabilities | $31,290 | $28,821 |
+|         Debt and finance leases, net of current portion | $5,778 | $5,757 |
+|         Deferred revenue, net of current portion | $3,746 | $3,317 |
+|         Other long-term liabilities | $12,205 | $10,495 |
+|         Total liabilities | $53,019 | $48,390 |
+|         Commitments and contingencies (Note 10) |  |  |
+|         Redeemable noncontrolling interests in subsidiaries | $59 | $63 |
+|             Preferred stock; $0.001 par value; 100 shares authorized; no shares issued and outstanding |  |  |
+|             Common stock; $0.001 par value; 6,000 shares authorized; 3,324 and 3,216 shares issued and outstanding as of September 30, 2025 and December 31, 2024, respectively | $3 | $3 |
+|             Additional paid-in capital | $41,597 | $38,371 |
+|             Accumulated other comprehensive income (loss) | $207 | $(670) |
+|             Retained earnings | $38,163 | $35,209 |
+|           Total stockholders’ equity | $79,970 | $72,913 |
+|         Noncontrolling interests in subsidiaries | $687 | $704 |
+|       Total liabilities and equity | $133,735 | $122,070 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**Tesla, Inc.** (TSLA)
+
+**Nine Months Ended** *(In millions, except shares and per share data)*
+
+|  | Sep 30, 2025 (YTD) | Sep 30, 2024 (YTD) |
+| --- | ---: | ---: |
+|       Net income | $2,999 | $5,010 |
+|       Depreciation, amortization and impairment | $4,505 | $3,872 |
+|       Stock-based compensation | $1,871 | $1,420 |
+| *        Performance Based Restricted Stock Units And Stock Options* | $185 |  |
+|       Inventory and purchase commitments write-downs | $313 | $247 |
+| *        Cost of revenues* | $275 | $114 |
+|       Foreign currency transaction net unrealized loss | $160 | $197 |
+|       Deferred income taxes | $234 | $471 |
+|       Non-cash interest and other operating activities | $235 | $83 |
+|       Digital assets gain, net | $(239) | $(242) |
+|         Accounts receivable | $(306) | $144 |
+|         Inventory | $(416) | $(1,107) |
+|         Operating lease vehicles | $54 | $(82) |
+|         Prepaid expenses and other assets | $(2,280) | $(2,639) |
+|         Accounts payable, accrued and other liabilities | $2,979 | $2,504 |
+|         Deferred revenue | $825 | $231 |
+|     Net cash provided by operating activities | $10,934 | $10,109 |
+|       Purchases of property and equipment excluding finance leases, net of sales | $(6,134) | $(8,562) |
+|       Purchases of investments | $(24,902) | $(20,797) |
+|       Proceeds from maturities of investments | $22,086 | $17,975 |
+|       Proceeds from sales of investments |  | $200 |
+|     Net cash used in investing activities | $(8,950) | $(11,184) |
+|       Proceeds from issuances of debt | $4,232 | $4,360 |
+|       Repayments of debt | $(4,798) | $(1,783) |
+|       Proceeds from exercises of stock options and other stock issuances | $1,040 | $788 |
+|       Principal payments on finance leases | $(85) | $(291) |
+|       Proceeds received from directors in shareholder settlement | $277 |  |
+|       Payment of legal fees associated with shareholder settlement | $(176) |  |
+|       Debt issuance costs | $(5) | $(6) |
+|       Distributions paid to noncontrolling interests in subsidiaries | $(56) | $(76) |
+|       Payments for buy-outs of noncontrolling interests in subsidiaries |  | $(124) |
+|     Net cash provided by financing activities | $429 | $2,868 |
+|     Effect of exchange rate changes on cash and cash equivalents and restricted cash | $134 | $(8) |
+|   Net increase in cash and cash equivalents and restricted cash | $2,547 | $1,785 |
+|   Cash and cash equivalents and restricted cash, end of period |  |  |
+|   Cash and cash equivalents and restricted cash, end of period |  |  |
+|     Acquisitions of property and equipment included in liabilities | $1,631 | $2,727 |
+|     Leased assets obtained in exchange for finance lease liabilities |  | $32 |
+|     Leased assets obtained in exchange for operating lease liabilities | $1,171 | $1,232 |
+
+--- [ITEM] Part I, Item 3 (len=1645 chars) ---
+Table of Contents
+
+ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+Foreign Currency Risk
+
+We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). ...
+
+--- [ITEM] Part II, Item 1 (len=237 chars) ---
+ITEM 1. LEGAL PROCEEDINGS
+
+For a description of our material pending legal proceedings, please see Note 10, Commitments and Contingencies, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q....
+
+--- [ITEM] Part II, Item 1A (len=608 chars) ---
+ITEM 1A. RISK FACTORS
+
+Our operations and financial results are subject to various risks and uncertainties, including the factors discussed in Part I, Item 1A, Risk Factors in our Annual Report on Form 10-K for the year ended December 31, 2024, and Part II, Item 1A, Risk Factors in our Quarterly Reports on Form 10-Q for the quarters ended March 31, 2025 and June 30, 2025, which could adversely aff...
+
+--- [ITEM] Part II, Item 2 (len=74 chars) ---
+ITEM 2. UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
+
+None....
+
+--- [ITEM] Part II, Item 3 (len=46 chars) ---
+ITEM 3. DEFAULTS UPON SENIOR SECURITIES
+
+None....
+
+--- [ITEM] Part II, Item 4 (len=48 chars) ---
+ITEM 4. MINE SAFETY DISCLOSURES
+
+Not applicable....
+
+--- [ITEM] Part II, Item 5 (len=302 chars) ---
+ITEM 5. OTHER INFORMATION
+
+None of the Company’s directors or officers adopted, modified or terminated a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended September 30, 2025, as such terms are defined under Item 408(a) of Regulation S-K....
+
+--- [ITEM] Part II, Item 6 (len=1679 chars) ---
+Table of Contents
+
+ITEM 6. EXHIBITS
+
+See Index to Exhibits at the end of this Quarterly Report on Form 10-Q for the information required by this Item.
+
+INDEX TO EXHIBITS
+
+ExhibitNumber Incorporated by ReferenceFiledHerewith
+
+Exhibit DescriptionFormFile No.ExhibitFiling Date
+
+10.1**2025 CEO Interim Restricted Stock Agreement, dated August 3, 2025
+
+8-K000-3475610.1August 4, 2025
+
+10.2*Form of Indemn...
+
+--- [ITEM] Part I, Item 1 (len=73804 chars) ---
+ITEM 1. FINANCIAL STATEMENTS
+
+Tesla, Inc.
+
+Consolidated Balance Sheets
+
+(in millions, except per share data)
+
+(unaudited)
+
+September 30,2025December 31,2024
+
+Assets
+
+Current assets
+
+Cash and cash equivalents$18,289 $16,139 
+
+Short-term investments23,358 20,424 
+
+Accounts receivable, net4,703 4,418 
+
+Inventory12,276 12,017 
+
+Prepaid expenses and other current assets6,027 5,362 
+
+Total current asset...
+
+[RCTS] item=Part_I_Item_1 原 chunk 1881 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1607 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 2630 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1489 token > 1200 → 補切成 2 份
+
+[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
+
+--- [ITEM] Part I, Item 2 (len=38517 chars) ---
+Table of Contents
+
+ITEM 2. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+The following discussion and analysis should be read in conjunction with the consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q.
+
+Overview
+
+Our mission is to accelerate the world’s transition to sustainable energy. We design...
+
+[RCTS] item=Part_I_Item_2 原 chunk 3091 token > 1200 → 補切成 6 份

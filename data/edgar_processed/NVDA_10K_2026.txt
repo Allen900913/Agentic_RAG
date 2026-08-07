@@ -1,0 +1,418 @@
+=== NVDA 10-K | accession=0001045810-26-000021 | fiscal_year=2026 fiscal_period=FY period_code=2026 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**NVIDIA CORP** (NVDA)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Jan 25, 2026 | Jan 26, 2025 | Jan 28, 2024 |
+| --- | ---: | ---: | ---: |
+|     Revenue | $215,938 | $130,497 | $60,922 |
+| *    Data Center* | $193,737 | $115,186 | $47,525 |
+| *      Compute* | $162,361 | $102,196 | $38,950 |
+| *      Networking* | $31,376 | $12,990 | $8,575 |
+| *    Gaming* | $16,042 | $11,350 | $10,447 |
+| *    Professional Visualization* | $3,191 | $1,878 | $1,553 |
+| *    Automotive* | $2,349 | $1,694 | $1,091 |
+| *    OEM and Other* | $619 | $389 | $306 |
+|     Cost of revenue | $62,475 | $32,639 | $16,621 |
+| *    Inventory purchase obligations in excess of projections* | $3,200 | $2,000 |  |
+|   Gross profit | $153,463 | $97,858 | $44,301 |
+|       Research and development | $18,497 | $12,914 | $8,675 |
+|       Sales, general and administrative | $4,579 | $3,491 | $2,654 |
+|       Total operating expenses | $23,076 | $16,405 | $11,329 |
+|   Operating income | $130,387 | $81,453 | $32,972 |
+|     Interest income | $2,300 | $1,786 | $866 |
+|     Interest expense | $(259) | $(247) | $(257) |
+|     Other income, net | $9,022 | $1,034 | $237 |
+|   Total other income, net | $11,063 | $2,573 | $846 |
+|   Income before income tax | $141,450 | $84,026 | $33,818 |
+|   Income tax expense | $21,383 | $11,146 | $4,058 |
+|   Net income | $120,067 | $72,880 | $29,760 |
+|     Basic (in USD per share) | 4.93 | 2.97 | 1.21 |
+|     Diluted (in USD per share) | 4.90 | 2.94 | 1.19 |
+|     Basic (in shares) | 24,359 | 24,555 | 24,690 |
+|     Diluted (in shares) | 24,514 | 24,804 | 24,940 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**NVIDIA CORP** (NVDA)
+
+**As of January 25, 2026 and January 26, 2025** *(In millions, except shares and per share data)*
+
+|  | Jan 25, 2026 | Jan 26, 2025 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $10,605 | $8,589 |
+|         Marketable securities | $51,951 | $34,621 |
+| *        Marketable Securities* | $51,951 |  |
+|         Accounts receivable, net | $38,466 | $23,065 |
+|         Inventories | $21,403 | $10,080 |
+|         Prepaid expenses and other current assets | $3,180 | $3,771 |
+|       Total current assets | $125,605 | $80,126 |
+|       Property and equipment, net | $10,383 | $6,283 |
+|       Operating lease assets | $2,867 | $1,793 |
+|       Goodwill | $20,832 | $5,188 |
+|       Intangible assets, net | $3,306 | $807 |
+|       Deferred income tax assets | $13,258 | $10,979 |
+|       Non-marketable equity securities | $22,251 | $3,387 |
+|       Other assets | $8,301 | $3,038 |
+|     Total assets | $206,803 | $111,601 |
+|         Accounts payable | $9,812 | $6,310 |
+|         Accrued and other current liabilities | $21,352 | $11,737 |
+|         Short-term debt | $999 |  |
+|       Total current liabilities | $32,163 | $18,047 |
+|       Long-term debt | $7,469 | $8,463 |
+|       Long-term operating lease liabilities | $2,572 | $1,519 |
+|       Other long-term liabilities | $7,306 | $4,245 |
+|       Total liabilities | $49,510 | $32,274 |
+|       Commitments and contingencies - see Note 12 |  |  |
+|       Preferred stock, $0.001 par value; 2 shares authorized; none issued |  |  |
+|       Common stock, $0.001 par value; 80,000 shares authorized; 24,304 shares issued and outstanding as of January 25, 2026; 24,477 shares issued and outstanding as of January 26, 2025 | $24 | $24 |
+|       Additional paid-in capital | $10,118 | $11,237 |
+|       Accumulated other comprehensive income | $178 | $28 |
+|       Retained earnings | $146,973 | $68,038 |
+|       Total shareholders' equity | $157,293 | $79,327 |
+|     Total liabilities and shareholders' equity | $206,803 | $111,601 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**NVIDIA CORP** (NVDA)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Jan 25, 2026 | Jan 26, 2025 | Jan 28, 2024 |
+| --- | ---: | ---: | ---: |
+|       Net income | $120,067 | $72,880 | $29,760 |
+|       Stock-based compensation expense | $6,386 | $4,737 | $3,549 |
+|       Depreciation and amortization | $2,843 | $1,864 | $1,508 |
+|       Gains on non-marketable equity securities and publicly-held equity securities, net | $(8,918) | $(1,030) | $(238) |
+|       Deferred income taxes | $(1,424) | $(4,477) | $(2,489) |
+|       Other | $(287) | $(502) | $(278) |
+|         Accounts receivable | $(15,399) | $(13,063) | $(6,172) |
+|         Inventories | $(11,324) | $(4,781) | $(98) |
+|         Prepaid expenses and other assets | $577 | $(395) | $(1,522) |
+|         Accounts payable | $3,096 | $3,357 | $1,531 |
+|         Accrued and other current liabilities | $5,257 | $4,278 | $2,025 |
+|         Other long-term liabilities | $1,844 | $1,221 | $514 |
+|     Net cash provided by operating activities | $102,718 | $64,089 | $28,090 |
+|       Proceeds from sales of marketable securities | $15,157 | $495 | $50 |
+|       Proceeds from maturities of marketable securities | $11,226 | $11,195 | $9,732 |
+|       Proceeds from sales of non-marketable equity securities | $84 | $171 | $1 |
+|       Purchases of marketable securities | $(40,616) | $(26,575) | $(18,211) |
+|       Purchases of non-marketable equity securities | $(17,502) | $(1,486) | $(862) |
+|       Groq, Inc. | $(13,000) |  |  |
+|       Purchases related to property and equipment and intangible assets | $(6,042) | $(3,236) | $(1,069) |
+|       Acquisitions, net of cash acquired | $(1,535) | $(1,007) | $(83) |
+|       Other |  | $22 | $(124) |
+|     Net cash used in investing activities | $(52,228) | $(20,421) | $(10,566) |
+|       Proceeds related to employee stock plans | $644 | $490 | $403 |
+|       Payments related to repurchases of common stock | $(40,086) | $(33,706) | $(9,533) |
+|       Payments related to employee stock plan taxes | $(7,948) | $(6,930) | $(2,783) |
+|       Dividends paid | $(974) | $(834) | $(395) |
+|       Principal payments on property and equipment and intangible assets | $(101) | $(129) | $(74) |
+|       Repayment of debt |  | $(1,250) | $(1,250) |
+|       Other | $(9) |  | $(1) |
+|     Net cash used in financing activities | $(48,474) | $(42,359) | $(13,633) |
+|   Change in cash and cash equivalents | $2,016 | $1,309 | $3,891 |
+|   Cash and cash equivalents at end of period |  |  |  |
+|   Cash and cash equivalents at end of period |  |  |  |
+|     Cash paid for income taxes, net | $20,288 | $15,118 | $6,549 |
+
+--- [TABLE extra #0] ---
+FORM
+
+| ☒ | ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #1] ---
+For the fiscal year ended
+
+| ☐ | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #2] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware | 94-3177549 |
+| --- | --- |
+| (State or other jurisdiction of | (I.R.S. Employer |
+| incorporation or organization) | Identification No.) |
+| 2788 San Tomas Expressway , Santa Clara , California | 95051 |
+| (Address of principal executive offices) | (Zip Code) |...
+
+--- [TABLE extra #3] ---
+Securities registered pursuant to Section 12(b) of the Act:
+
+| Title of each class | Trading Symbol(s) | Name of each exchange on which registered |
+| --- | --- | --- |
+| Common Stock, $0.001 par value per share | NVDA | The Nasdaq Global Select Market |...
+
+--- [TABLE extra #4] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer," “accele
+
+| Large accelerated filer | ☒ | Accelerated filer | ☐ | Non-accelerated filer | ☐ | Smaller reporting company | ☐ | Emerging growth company | ☐ |
+| --- | --- ...
+
+--- [TABLE extra #5] ---
+Table of Contents
+
+|  |  | Page |
+| --- | --- | --- |
+|  | Part I |  |
+| Item 1. | Business | 4 |
+| Item 1A. | Risk Factors | 12 |
+| Item 1B. | Unresolved Staff Comments | 32 |
+| Item 1C | Cybersecurity | 32 |
+| Item 2. | Properties | 33 |
+| Item 3. | Legal Proceedings | 33 |
+| Item 4. | Mine Safety Disclosures | 33 |
+|  | Part II |  |
+| Item 5. | Market for Registrant’s Common Equity, Related Sto...
+
+--- [TABLE extra #6] ---
+The following sets forth certain information regarding our executive officers, their ages, and positions as of February 20, 2026:
+
+| Name |  | Age |  | Position |
+| --- | --- | --- | --- | --- |
+| Jen-Hsun Huang |  | 63 |  | President and Chief Executive Officer |
+| Colette M. Kress |  | 58 |  | Executive Vice President and Chief Financial Officer |
+| Ajay K. Puri |  | 71 |  | Executive Vice Presi...
+
+--- [TABLE extra #7] ---
+Source: FactSet financial data and analytics.
+
+|  | 1/31/2021 |  | 1/30/2022 |  | 1/29/2023 |  | 1/28/2024 |  | 1/26/2025 |  | 1/25/2026 |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| NVIDIA Corporation | $ | 100.00 |  |  | $ | 175.98 |  |  | $ | 157.05 |  |  |...
+
+--- [TABLE extra #8] ---
+Revenue by Reportable Segments
+
+|  | Year Ended |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Jan 25, 2026 |  | Jan 26, 2025 |  | $ Change |  | % Change |  |  |  |  |  |  |  |
+|  | ($ in millions) |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Compute & Networking | $ | 193,479 |  |  | $ | 116,193 |  |  | $ | 7...
+
+--- [TABLE extra #9] ---
+Operating Income by Reportable Segments
+
+|  | Year Ended |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Jan 25, 2026 |  | Jan 26, 2025 |  | $ Change |  | % Change |  |  |  |  |  |  |  |
+|  | ($ in millions) |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Compute & Networking | $ | 130,141 |  |  | $ | 82,875 |  | ...
+
+--- [TABLE extra #10] ---
+Our aggregate debt maturities as of January 25, 2026, by year payable, are as follows:
+
+|  |  | Jan 25, 2026 |  |  |
+| --- | --- | --- | --- | --- |
+|  |  | (In millions) |  |  |
+| Due in one year |  | $ | 1,000 |  |
+| Due in one to five years |  | 2,750 |  |  |
+| Due in five to ten years |  | 1,250 |  |  |
+| Due in greater than ten years |  | 3,500 |  |  |
+| Unamortized debt discount and issuance...
+
+--- [TABLE extra #11] ---
+Item 15. Exhibits and Financial Statement Schedules
+
+|  |  |  |  | Page |
+| --- | --- | --- | --- | --- |
+| (a) | 1. |  | Financial Statements |  |
+|  |  |  | Report of Independent Registered Public Accounting Firm (PCAOB ID: 238 ) | 49 |
+|  |  |  | Consolidated Statements of Income for the years ended January 2 5 , 202 6 , January 2 6 , 202 5 , and January 2 8 , 202 4 | 51 |
+|  |  |  | Consolidat...
+
+--- [TABLE extra #12] ---
+Consolidated Statements of Shareholders' Equity
+
+|  | Common Stock Outstanding |  | Additional Paid-in |  | Accumulated Other Comprehensive |  | Retained |  | Total Shareholders' |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Shares |  | Amount |  | Capital |  ...
+
+--- [TABLE extra #13] ---
+Exhibit Index
+
+|  |  |  |  | Incorporated by Reference |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Exhibit No. |  | Exhibit Description |  | Schedule/Form |  |  |  | Exhibit |  | Filing Date |
+| 3.1 |  | Restated Certificate of Incorporation |  | 10-K |  |  |  | 3.1 |  | 3/18/2022 |
+| 3.2 |  | Amendment to Restated Certificate of Incorporation of NVIDI...
+
+--- [TABLE extra #14] ---
+This table presents
+
+| 10.10+ |  | Amended and Restated 2007 Equity Incentive Plan - Global Performance-Based Restricted Stock Unit Grant Notice and Performance-Based Restricted Stock Unit Agreement (2024) |  | 10-Q |  |  |  | 10.3 |  | 5/29/2024 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 10.11+ |  | Amended and Restated 2007 Equity Incentive Plan – Global Restricted S...
+
+--- [TABLE extra #15] ---
+Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized, on February 25, 2026.
+
+| NVIDIA Corporation |  |
+| --- | --- |
+| By: | /s/ Jen-Hsun Huang |
+|  | Jen-Hsun Huang |
+|  | President and Chief Executive Officer |...
+
+[INFO] extra tables kept=16 (去重後，來自 unstructured)
+
+[MERGE] 'Item 14' 內容 18137 字元 > 門檻 3000，判定為 edgartools 邊界誤判（財報附註溢出），併回 Item 8
+
+[MERGE] 'Item 15' 內容 105394 字元 > 門檻 25000，判定為 edgartools 邊界誤判（財報附註溢出），併回 Item 8
+
+--- [ITEM] Item 1 (len=48222 chars) ---
+Item 1. Business
+
+Our Company
+
+NVIDIA pioneered accelerated computing to help solve the most challenging computational problems. NVIDIA is now a data center scale AI infrastructure company reshaping all industries.
+
+Our technology stack includes the foundational NVIDIA CUDA development platform that runs on all NVIDIA GPUs, as well as hundreds of domain-specific software libraries, frameworks, alg...
+
+--- [ITEM] Item 1A (len=114773 chars) ---
+Item 1A. Risk Factors
+
+The following risk factors should be considered in addition to the other information in this Annual Report on Form 10-K. The following risks could harm our business, financial condition, results of operations or reputation, which could cause our stock price to decline. Additional risks, trends and uncertainties not presently known to us or that we currently believe are immat...
+
+--- [ITEM] Item 1B (len=41 chars) ---
+Item 1B. Unresolved Staff Comments
+
+None....
+
+--- [ITEM] Item 16 (len=4022 chars) ---
+Item 16. Form 10-K Summary
+
+Not Applicable.
+
+83
+
+                                                                                                                                                                                                                                                                                                                                                               ...
+
+--- [ITEM] Item 1C (len=3957 chars) ---
+Item 1C. Cybersecurity
+
+Risk management and strategy
+
+We have in place certain infrastructure, systems, policies, and procedures that are designed to proactively prevent or reduce the impact of, and reactively address circumstances that arise when, events such as a cybersecurity incident occur. These include processes for assessing, identifying, and managing material risks from cybersecurity threa...
+
+--- [ITEM] Item 2 (len=925 chars) ---
+Table of Contents
+
+Item 2. Properties
+
+Our headquarters is in Santa Clara, California. We own and lease approximately 3 million square feet of office and building space for our corporate headquarters. In addition, we lease data center space in Santa Clara, California. We also own and lease facilities for data centers, research and development, and/or sales and administrative purposes throughout th...
+
+--- [ITEM] Item 3 (len=197 chars) ---
+Item 3. Legal Proceedings
+
+Please see Note 12 of the Notes to the Consolidated Financial Statements in Part IV, Item 15 of this Annual Report on Form 10-K for a discussion of our legal proceedings....
+
+--- [ITEM] Item 4 (len=57 chars) ---
+Item 4. Mine Safety Disclosures
+
+Not applicable.
+
+Part II...
+
+--- [ITEM] Item 5 (len=5220 chars) ---
+Item 5. Market for Registrant's Common Equity, Related Stockholder Matters and Issuer Purchases of Equity Securities
+
+Our common stock is traded on the Nasdaq Global Select Market under the symbol NVDA. Public trading of our common stock began on January 22, 1999. Prior to that, there was no public market for our common stock. As of February 20, 2026, we had approximately 1,226 registered sharehol...
+
+--- [ITEM] Item 7 (len=34156 chars) ---
+Table of Contents
+
+Item 7. Management's Discussion and Analysis of Financial Condition and Results of Operations
+
+The following discussion and analysis of our financial condition and results of operations should be read in conjunction with “Item 1A. Risk Factors,” our Consolidated Financial Statements and related Notes thereto, as well as other cautionary statements and risks described elsewhere i...
+
+--- [ITEM] Item 7A (len=4247 chars) ---
+Item 7A. Quantitative and Qualitative Disclosures about Market Risk
+
+Investment and Interest Rate Risk
+
+We are exposed to interest rate risk related to our fixed-rate investment portfolio and outstanding debt. The investment portfolio is managed consistent with our overall liquidity strategy in support of both working capital needs and growth of our businesses.
+
+According to our sensitivity analys...
+
+--- [ITEM] Item 8 (len=123742 chars) ---
+Item 8. Financial Statements and Supplementary Data
+
+The information required by this Item is set forth in our Consolidated Financial Statements and Notes thereto included in this Annual Report on Form 10-K.
+
+Item 14. Principal Accountant Fees and Services
+
+Information regarding accounting fees and services required by this item will be contained in our 2026 Proxy Statement under the caption “Fees...
+
+--- [ITEM] Item 9 (len=99 chars) ---
+Item 9. Changes in and Disagreements with Accountants on Accounting and Financial Disclosure
+
+None....
+
+--- [ITEM] Item 9A (len=3417 chars) ---
+Item 9A. Controls and Procedures
+
+Controls and Procedures
+
+Disclosure Controls and Procedures
+
+Based on their evaluation as of January 25, 2026, our management, including our Chief Executive Officer and Chief Financial Officer, has concluded that our disclosure controls and procedures (as defined in Rule 13a-15(e) under the Exchange Act) were effective to provide reasonable assurance that the info...
+
+--- [ITEM] Item 9B (len=729 chars) ---
+Item 9B. Other Information
+
+The following members of our Board of Directors and/or officers adopted, modified or terminated a trading arrangement that is intended to satisfy the affirmative defense conditions of Rule 10b5-1(c), or a Rule 10b5-1 Trading Arrangement:
+
+NameTitle of Director or OfficerActionDateTotal Shares of Common Stock to be SoldExpiration Date
+
+John O. Dabiri 
+
+Director
+
+Adoption...
+
+--- [ITEM] Item 9C (len=429 chars) ---
+Item 9C. Disclosure Regarding Foreign Jurisdictions that Prevent Inspections
+
+Not Applicable.
+
+Part III
+
+Certain information required by Part III is omitted from this report because we will file with the SEC a definitive proxy statement pursuant to Regulation 14A, or the 2026 Proxy Statement, no later than 120 days after the end of fiscal year 2026, and certain information included therein is inco...
+
+--- [ITEM] Item 10 (len=2560 chars) ---
+Item 10. Directors, Executive Officers and Corporate Governance
+
+Identification of Directors
+
+Information regarding directors required by this item will be contained in our 2026 Proxy Statement under the caption “Proposal 1 — Election of Directors,” and is hereby incorporated by reference.
+
+Identification of Executive Officers
+
+Reference is made to the information regarding executive officers appe...
+
+--- [ITEM] Item 11 (len=360 chars) ---
+Item 11. Executive Compensation
+
+Information regarding our executive compensation required by this item will be contained in our 2026 Proxy Statement under the captions “Executive Compensation,” “Compensation Committee Interlocks and Insider Participation,” “Director Compensation,” and “Compensation Committee Report,” and is hereby incorporated by reference....
+
+--- [ITEM] Item 12 (len=640 chars) ---
+Item 12. Security Ownership of Certain Beneficial Owners and Management and Related Stockholder Matters
+
+Ownership of NVIDIA Securities
+
+Information regarding ownership of NVIDIA securities required by this item will be contained in our 2026 Proxy Statement under the caption “Security Ownership of Certain Beneficial Owners and Management,” and is hereby incorporated by reference.
+
+Equity Compensat...
+
+--- [ITEM] Item 13 (len=455 chars) ---
+Item 13. Certain Relationships and Related Transactions, and Director Independence
+
+Information regarding related transactions and director independence required by this item will be contained in our 2026 Proxy Statement under the captions “Review of Transactions with Related Persons” and “Information About the Board of Directors and Corporate Governance — Independence of the Members of the Board ...

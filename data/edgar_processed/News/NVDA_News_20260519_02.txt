@@ -1,0 +1,124 @@
+# source    : NVDA_News_20260519_02.txt
+# doc_type  : news
+# chunks    : 2
+
+==============================================================================
+[chunk 0] chunk_type=text  chars=1027
+==============================================================================
+Title    : Earnings live updates: Nvidia and Walmart, 2 important bellwethers for the US economy, report results this week
+Source   : Yahoo Finance [full]
+URL      : https://finance.yahoo.com/markets/live/earnings-live-updates-nvidia-and-walmart-2-important-bellwethers-for-the-us-economy-report-results-this-week-115413665.html
+Published: 2026-05-18T11:54:13Z
+
+LIVE
+Earnings live updates: Nvidia and Walmart, 2 important bellwethers for the US economy, report results this week
+Grace O'Donnell
+·
+Editor, Special Projects
+Mon, May 18, 2026 at 7:54 PM GMT+8
+1 min read
+NVDA
+-1.33%
+WMT
++1.44%
+AMD
+-0.73%
+^GSPC
+-0.07%
+TGT
++1.53%
+Investors will get highly anticipated quarterly results from Nvidia (
+NVDA
+) on Wednesday in what’s expected to be the
+marquee earnings event
+of the week. Nvidia’s report serves as a barometer of artificial intelligence trade and comes as the AI chipmaker faces increasing competition from rivals such as Cerebras (
+CBRS
+) and AMD (
+AMD
+), as well as its customers Amazon (
+AMZN
+) and Google (
+GOOG
+).
+
+==============================================================================
+[chunk 1] chunk_type=text  chars=1880
+==============================================================================
+So far this earnings season, S&P 500 companies have impressed market watchers by printing profits, even amid ongoing risks from the Iran war, and the index is on track for
+double-digit earnings growth. Reports from semiconductor companies so far underscore that the artificial intelligence boom remains a key market driver. Also reporting this week are a handful of retail companies, including The Home Depot (
+HD
+), TJX Companies (
+TJX
+), Lowe’s Companies (
+LOW
+), Target Corporation (
+TGT
+), and Walmart (
+WMT
+), which will provide insights on the state of the US consumer. LIVE
+1 update
+Mon, May 18, 2026 at 11:54 AM UTC
+Grace O'Donnell
+Nvidia, Walmart earnings on deck this week
+Although fewer companies are reporting earnings this week than in recent weeks, the days ahead will bring some of the most highly anticipated reports this quarter. Nvidia (
+NVDA
+) will be in focus on Wednesday for the artificial intelligence trade, while Walmart (
+WMT
+) and Target (
+TGT
+) on Wednesday and Thursday will give investors a good look at consumer spending. Reports from home improvement retailers Lowe’s (
+LOW
+) and Home Depot (
+HD
+) will also provide insight into the housing market and spending on major purchases. Here’s a look at the earnings calendar for the week:
+Monday:
+Baidu (
+BIDU
+), Trip.com Group (
+TCOM
+), Ryanair Holdings (
+RYAAY
+)
+Tuesday:
+The Home Depot, Keysight Technologies (
+KEYS
+), CAVA Group (
+CAVA
+)
+Wednesday:
+Nvidia, Analog Devices (
+ADI
+), The TJX Companies (
+TJX
+), Lowe’s Companies, Intuit (
+INTU
+), Target Corporation, Williams-Sonoma (
+WSM
+)
+Thursday:
+Walmart, Deere & Company (
+DE
+), NetEase (
+NTES
+), Ross Stores (
+ROST
+), Workday (
+WDAY
+), Zoom Communications (
+ZM
+), Ralph Lauren (
+RL
+), Deckers Outdoor Corporation (
+DECK
+), BJ’s Wholesale Club Holdings (
+BJ
+)
+Friday:
+Booz Allen Hamilton (
+BAH
+)
+Terms
+and
+Privacy Policy
+Privacy Dashboard
+More Info

@@ -1,0 +1,66 @@
+# source    : GOOGL_News_20260721_01.txt
+# doc_type  : news
+# chunks    : 2
+
+==============================================================================
+[chunk 0] chunk_type=text  chars=1674
+==============================================================================
+Title    : Earnings live: AMC stock soars 26% on 'superb' Q2, Domino's stock rises
+Source   : Yahoo Finance [full]
+URL      : https://finance.yahoo.com/markets/live/earnings-live-second-quarter-results-tesla-google-july-115324842.html
+Published: 2026-07-20T11:53:24Z
+
+LIVE
+Earnings live: AMC stock soars 26% on 'superb' Q2, Domino's stock rises
+Yahoo Finance
+Updated
+Mon, July 20, 2026 at 9:08 PM GMT+8
+1 min read
+IBM
++0.16%
+GOOG
++1.52%
+^GSPC
+-0.19%
+INTC
++2.13%
+TSLA
+-2.96%
+A big quarter for AMC (
+AMC
+) showed the movie industry is finally regaining its footing after years of a stilted post-pandemic recovery. The results kick off a stacked week of earnings, with Big Tech companies Alphabet (
+GOOG
+,
+GOOGL
+) and Tesla (
+TSLA
+) highlighting the calendar. The pair, along with US chipmaker Intel (
+INTC
+), will offer a crucial update on artificial intelligence demand as investors remain torn about huge capex commitments for the AI build-out. IBM (
+IBM
+), meanwhile, will provide a fuller picture of its Q2 results after its stock plunged on pre-announced earnings. Rounding out the docket this week are reports from General Motors (
+GM
+), GE Vernova (
+GEV
+), AT&T (
+T
+), Lockheed Martin (
+LMT
+), and American Express (
+AXP
+). Overall, it's shaping up to be a
+strong earnings season
+for the S&P 500 (
+^GSPC
+). According to
+FactSet data
+, analysts estimate the year-over-year S&P 500 earnings growth rate for the second quarter will be 24.7% — above the five-year average of 16.4% and the 10-year average of 10.3%. If that holds, it will mark the second consecutive quarter of earnings growth above 20% for the index and the seventh straight quarter of double-digit growth.
+
+==============================================================================
+[chunk 1] chunk_type=text  chars=52
+==============================================================================
+Terms
+and
+Privacy Policy
+Privacy Dashboard
+More Info
