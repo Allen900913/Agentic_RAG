@@ -260,6 +260,11 @@ def main():
     ap.add_argument("--top-k", type=int, default=GOLD_TOP_K)
     ap.add_argument("--gen-model", default=GEN_MODEL)
     ap.add_argument("--ids", nargs="*", default=None, help="只跑指定 query id（測試用）")
+    ap.add_argument("--force", action="store_true",
+                    help="無視快取強制重生成（配 --ids 用）。用途：切塊方式變了但 query 與 "
+                         "gold_files 都沒變時，快取條件 ①②③ 都攔不到（③ 只在舊檔已有 "
+                         "collection 欄位時才判得出來）。⚠ 不帶 --ids 就是全量重生成，"
+                         "會覆蓋掉 reference_answers.json 裡的人工校正。")
     ap.add_argument("--match-lang-from", nargs="*", default=None,
                     help="結果檔清單：逐題把參考答案語言對齊該題系統答案語言（消跨語言失真）")
     args = ap.parse_args()
@@ -307,13 +312,28 @@ def main():
         #      `MSFT_10K_*.html` 從 2025 版變 2026 版），題目一個字沒改，但參考答案是照
         #      舊 filing 寫的。只驗 query 會讓這種漂移完全無聲通過，正是 memory
         #      `eval-gold-version-drift-bug` 記載的病（該次「最新一季」題假性腰斬）。
-        if cached and cached.get("reference"):
+        #   ③ collection 相同（2026-08-08 加）——①② 都是**檔案層級**的比較，對「同一份
+        #      檔案、切塊方式變了」完全無感。期間章節硬邊界（`_split_by_period_section`）
+        #      正是這種改動：gold_files 一個字沒變，但 fetch_gold_chunks 撈到的 chunk 邊界
+        #      與內容都不同了。少了這條，換 collection 重生成 gold 時受影響的題會被靜默
+        #      skip、沿用舊切塊寫出來的答案——與 ② 修的是同一類病，只是換一個層級發生。
+        if cached and cached.get("reference") and not args.force:
             same_q = cached.get("query", "").strip() == q["query"].strip()
-            same_gold = list(cached.get("gold_files") or []) == list(gold_files)
-            if same_q and same_gold:
+            # 比對必須**順序不敏感**：expand_relevant 現在回 sorted()，但舊快取裡存的是
+            # 更早版本寫下的未排序值（來源是 Qdrant scroll 的任意順序）。用 list== 比會把
+            # 「同一組檔案、順序不同」誤判成語料換版 → 白白重生成一題 gold。
+            # 2026-08-08 實測踩到：mh-09 的 gold 集合完全相同（GOOGL News + Fundamentals），
+            # 只因順序相反就被重寫，參考答案從 356 字變成 290 字。
+            same_gold = sorted(cached.get("gold_files") or []) == sorted(gold_files)
+            # 舊檔沒有 collection 欄位（本次之前生成的）→ 視為相同，不強迫全量重跑
+            _cached_col = cached.get("collection")
+            same_col = (_cached_col is None) or (_cached_col == col)
+            if same_q and same_gold and same_col:
                 print(f"[{i}/{len(queries)}] {qid} — cached, skip")
                 continue
-            why = "query changed" if not same_q else "gold_files changed（語料換版）"
+            why = ("query changed" if not same_q else
+                   "gold_files changed（語料換版）" if not same_gold else
+                   f"collection changed（{_cached_col} → {col}，切塊可能已變）")
             print(f"[{i}/{len(queries)}] {qid} — cache STALE（{why}），regenerating")
             if not same_gold:
                 _was, _now = set(cached.get("gold_files") or []), set(gold_files)
@@ -383,6 +403,7 @@ def main():
             "category": q["category"],
             "query": q["query"],
             "gold_files": gold_files,
+            "collection": col,   # 供快取條件 ③ 判定：換 collection＝切塊可能已變，要重生成
             "gold_chunks_used": [{"source": c["source"], "chunk_index": c["chunk_index"]} for c in top],
             "reference_lang": lang,
             "reference": reference.strip(),

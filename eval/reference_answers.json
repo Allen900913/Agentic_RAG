@@ -1482,44 +1482,45 @@
     "category": "semantic",
     "query": "Microsoft 如何把 Copilot 整合進 Microsoft 365 的產品策略？",
     "gold_files": [
-      "MSFT_10K_2025.html"
+      "MSFT_10K_2026.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 57
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 143
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 52
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 54
       },
       {
-        "source": "MSFT_10K_2025.html",
+        "source": "MSFT_10K_2026.html",
         "chunk_index": 12
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 142
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 140
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 72
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 51
       },
       {
-        "source": "MSFT_10K_2025.html",
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 141
+      },
+      {
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 69
+      },
+      {
+        "source": "MSFT_10K_2026.html",
         "chunk_index": 138
-      },
-      {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 214
-      },
-      {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 125
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Microsoft 透過把 Copilot 內嵌於 Microsoft 365 整體平台，將它定位為 AI‑驅動的生產力與商務核心，並以此推動 Microsoft 365 商業版的成長與差異化。\n\n在產品策略上，Copilot 被納入「Microsoft 365 Commercial」的雲端服務組合，與 Office、Windows、Enterprise Mobility + Security、Power BI（每位使用者版）、Exchange、SharePoint、Microsoft Teams、Microsoft 365 Security and Compliance 共同構成「AI‑powered business and productivity solutions platform」。因此，Copilot 直接計入 Microsoft 365 Commercial 雲端收入，該項收入在 FY 2025 較前一年成長 14%，其中雲端收入增幅為 15%。Copilot 亦以「Microsoft 365 Commercial seat」的形式計算付費使用者，成為衡量商業版訂閱成長的指標之一。\n\n此外，Copilot 也延伸至硬體產品，例如搭載 Copilot 功能的 Surface Copilot+ PC，讓使用者在裝置層面即能體驗 AI 助手，進一步加強軟硬體整合的產品路線圖。行銷層面上，Microsoft 以過往將 Office 365 從傳統本地軟體轉型為雲端服務的經驗，將 Copilot 作為提升使用者生產力與差異化競爭的關鍵推手，並在安全策略中遵循「Secure by Design」與「Secure by Default」原則，確保 AI 功能在設計與預設上即具備安全防護。\n\n總結來說，Microsoft 把 Copilot 融入 Microsoft 365 的方式是：將其作為 AI 助手嵌入所有核心生產力應用與服務，納入商業版雲端收入與座位指標，並透過硬體產品與安全設計同步推動，形成以 AI 為核心的整體產品策略。"
+    "reference": "Microsoft 透過將 Copilot 內嵌於 Microsoft 365 的訂閱服務，將 AI 功能直接轉化為每位使用者的收入提升與產品差異化，成為推動 Microsoft 365 商業版與消費者版成長的核心策略。\n\n在 2026 財年，Microsoft 365 Commercial 雲端收入因 Copilot 與 Microsoft 365 E5 帶動的每位使用者收入提升而成長 17%，同時商業版座位數以 6% 增長，主要受中小企業與前線工作者方案的帶動。Copilot 的使用量與座位擴張亦促使成本項目上升 26 億美元（$2.6 billion）（12%），這筆支出主要用於建置支援 Copilot 座位與使用量的 AI 基礎設施。儘管投入 AI 基礎設施，Microsoft 365 Commercial 雲端的毛利仍因收入增長而提升 166 億美元（$16.6 billion）（17%），毛利率略有上升，顯示 AI 投資已開始產生正向回報。\n\nCopilot 被明確列入 Microsoft 365 Commercial 訂閱收入的組成要素，與 Enterprise Mobility + Security、Windows 商業版雲端、Power BI、Exchange、SharePoint、Teams、Security & Compliance 等服務共同計算。此策略不僅提升了每位使用者的平均收入，也使 Microsoft 365 的整體產品組合更具 AI 驅動的競爭力。\n\n此外，Microsoft 與 OpenAI 的長期合作（自 2019 年起，於 2025 年與 2026 年再度延伸）賦予 Microsoft 取得 OpenAI 的模型與基礎設施智慧財產權，為 Copilot 在 Microsoft 365 中的深度整合提供技術與授權基礎，確保 AI 功能能持續以負責任的方式廣泛應用於企業與個人使用者。\n\n總結來說，Microsoft 以 Copilot 為 AI 核心，透過提升每位使用者收入、擴大商業版座位、投入 AI 基礎設施與利用 OpenAI 的技術授權，將 Copilot 完全嵌入 Microsoft 365 產品線，成為驅動雲端訂閱成長與毛利提升的關鍵策略。"
   },
   {
     "id": "sem-05",
@@ -2012,6 +2013,7 @@
     "gold_files": [
       "MSFT_10Q_202603.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
         "source": "MSFT_10Q_202603.html",
@@ -2023,15 +2025,7 @@
       },
       {
         "source": "MSFT_10Q_202603.html",
-        "chunk_index": 107
-      },
-      {
-        "source": "MSFT_10Q_202603.html",
-        "chunk_index": 98
-      },
-      {
-        "source": "MSFT_10Q_202603.html",
-        "chunk_index": 102
+        "chunk_index": 103
       },
       {
         "source": "MSFT_10Q_202603.html",
@@ -2039,15 +2033,23 @@
       },
       {
         "source": "MSFT_10Q_202603.html",
-        "chunk_index": 103
+        "chunk_index": 115
       },
       {
         "source": "MSFT_10Q_202603.html",
-        "chunk_index": 9
+        "chunk_index": 111
+      },
+      {
+        "source": "MSFT_10Q_202603.html",
+        "chunk_index": 97
+      },
+      {
+        "source": "MSFT_10Q_202603.html",
+        "chunk_index": 107
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Microsoft Azure 在最新一季（截至 2026 年 3 月 31 日的三個月）營收成長率為 **40%**。  \n\n此成長率來自於「Azure 及其他雲端服務」的營收在本季較去年同期提升 40%，顯示平台服務需求持續擴大，且所有工作負載皆呈現增長。此數據屬於 Microsoft 智慧雲端（Intelligent Cloud）部門的核心指標，與該部門整體營收及雲端服務的強勁表現相呼應。"
+    "reference": "Microsoft Azure 在最新一季的營收成長率為 40%。根據微軟 2026 財年第三季（截至 2026 年 3 月 31 日）的財報，Azure 及其他雲端服務的營收較前一年同季增長了 40%，此成長主要受平台上各類工作負載需求持續提升所驅動。"
   },
   {
     "id": "mix-02",
@@ -2056,6 +2058,7 @@
     "gold_files": [
       "MSFT_10Q_202603.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
         "source": "MSFT_10Q_202603.html",
@@ -2071,27 +2074,27 @@
       },
       {
         "source": "MSFT_10Q_202603.html",
-        "chunk_index": 111
-      },
-      {
-        "source": "MSFT_10Q_202603.html",
-        "chunk_index": 103
-      },
-      {
-        "source": "MSFT_10Q_202603.html",
-        "chunk_index": 98
-      },
-      {
-        "source": "MSFT_10Q_202603.html",
         "chunk_index": 107
       },
       {
         "source": "MSFT_10Q_202603.html",
-        "chunk_index": 102
+        "chunk_index": 116
+      },
+      {
+        "source": "MSFT_10Q_202603.html",
+        "chunk_index": 112
+      },
+      {
+        "source": "MSFT_10Q_202603.html",
+        "chunk_index": 97
+      },
+      {
+        "source": "MSFT_10Q_202603.html",
+        "chunk_index": 103
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Microsoft More Personal Computing 部門在最新一季（截至 2026 年 3 月 31 日的財季）營收略微下降，下降約 1.79 億美元（$179 百萬），或約 1%。  \n\n此季的營收變化是因為幾項相互抵銷的因素所致：  \n* 搜尋廣告收入成長 10 億美元（$1.0 十億），增幅約 10%，為營收提供正向推力。  \n* Windows OEM 與 Devices 營收整體下降 1.03 億美元（$103 百萬），跌幅約 2%，其中 Windows OEM 因 OEM 夾帶庫存而成長 8%，但 Devices 銷售下滑抵消了此增幅。  \n* Xbox 硬體與內容服務收入大幅下滑，合計減少約 3.8 億美元（$380 百萬），跌幅約 7%，其中硬體收入下降 31%，內容與服務收入下降 3%（受前一年強勁第一方內容表現的基數影響），僅有 Xbox Game Pass 的成長稍有緩衝。  \n\n因此，搜尋廣告的增長被 Windows/Devices 及 Gaming（Xbox）收入的下滑所抵消，導致 More Personal Computing 營收最終僅呈現小幅下降。"
+    "reference": "Microsoft More Personal Computing 部門在最新一季（截至 2026 年 3 月 31 日的三個月）營收下降了 1.79 億美元（$179 million），跌幅 1%。營收下降的主要原因是 Windows & Devices 版塊減少 1.03 億美元（$103 million）（下降 2%，因設備銷售下滑抵消了 Windows OEM 2% 的成長），以及 Gaming 版塊下降 3.8 億美元（$380 million）（下降 7%），其中 Xbox 硬體銷量下跌 33% 且 Xbox 內容與服務收入下降 5%。這些負面因素被 Search 廣告收入的增長所抵消，Search 廣告收入增加了 3.04 億美元（$304 million），成長 9%。因此，雖然硬體與遊戲相關的收入持續下滑，但來自搜尋廣告的增長以及 Windows OEM 的小幅提升在一定程度上緩和了整體營收的跌幅。"
   },
   {
     "id": "mix-03",
@@ -2100,6 +2103,7 @@
     "gold_files": [
       "MSFT_10Q_202603.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
         "source": "MSFT_10Q_202603.html",
@@ -2115,15 +2119,7 @@
       },
       {
         "source": "MSFT_10Q_202603.html",
-        "chunk_index": 102
-      },
-      {
-        "source": "MSFT_10Q_202603.html",
         "chunk_index": 107
-      },
-      {
-        "source": "MSFT_10Q_202603.html",
-        "chunk_index": 98
       },
       {
         "source": "MSFT_10Q_202603.html",
@@ -2131,11 +2127,19 @@
       },
       {
         "source": "MSFT_10Q_202603.html",
-        "chunk_index": 109
+        "chunk_index": 97
+      },
+      {
+        "source": "MSFT_10Q_202603.html",
+        "chunk_index": 106
+      },
+      {
+        "source": "MSFT_10Q_202603.html",
+        "chunk_index": 116
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Microsoft 在最新一季的整體營業利益成長了 64 億美元（$6.4 billion），增幅為 20%，主要由「生產力與商務流程」(Productivity and Business Processes) 以及「智慧雲端」(Intelligent Cloud) 兩大部門的成長所帶動。\n\n根據 FY2026 第三季（截至 2026 年 3 月 31 日的三個月，與 2025 年同期比較）財報，營業利益較上年同季提升 64 億美元（$6.4 billion）或 20%。同期營收增加 128 億美元（$12.8 billion）或 18%、毛利增加 79 億美元（$7.9 billion）或 16%，而營業費用僅增加 15 億美元（$1.5 billion）或 9%，因此營業利益增幅高於營收增幅。營收、毛利與營業利益分別含 3%、3%、4% 的有利匯率影響。\n\n（註：同一份 10-Q 另有「九個月累計」口徑，營業利益增加 204 億美元（$20.4 billion）或 22%，不是單季數字。）"
+    "reference": "Microsoft 在最新一季的整體營業利益成長了 64 億美元（$6.4 billion），增幅約 20%。此成長主要來自「生產力與商務流程」(Productivity and Business Processes) 以及「智慧雲端」(Intelligent Cloud) 兩大部門的貢獻。根據財報，營業利益較去年同期增加 64 億美元（$6.4 billion） 或 20%，其中生產力與商務流程與智慧雲端的營收與毛利均有顯著提升，帶動了整體營業利益的上升。"
   },
   {
     "id": "mix-04",
@@ -3173,44 +3177,45 @@
     "category": "colloquial",
     "query": "微軟是怎麼把 AI 塞進 Office 那些軟體裡的？",
     "gold_files": [
-      "MSFT_10K_2025.html"
+      "MSFT_10K_2026.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
-        "source": "MSFT_10K_2025.html",
+        "source": "MSFT_10K_2026.html",
         "chunk_index": 48
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 139
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 138
       },
       {
-        "source": "MSFT_10K_2025.html",
+        "source": "MSFT_10K_2026.html",
         "chunk_index": 49
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 83
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 52
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 99
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 135
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 136
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 53
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 59
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 141
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 54
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 56
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Microsoft 把 AI 融入 Office 的方式，是透過與 OpenAI 的長期策略夥伴關係，將生成式 AI 模型與 Azure OpenAI 服務直接嵌入 Office 應用程式，並在雲端、應用層與安全層面加入 AI 功能，以重新定義生產力與協作流程。\n\n微軟自 2019 年起與 OpenAI 建立長期戰略合作，微軟不僅是 OpenAI 的主要投資者，還與其簽訂了互惠的營收分成安排，取得 OpenAI 知識產權（包括模型與基礎建設）的使用權，並將 OpenAI API 限定於 Azure 平台，透過 Azure OpenAI 服務提供給微軟的產品。微軟同時擁有對 OpenAI 未來容量需求的優先購買權，確保在需求增長時能即時取得算力。\n\n在此基礎上，微軟將生成式 AI 能力「注入」到其消費者與商業產品中，特別是 Office 系列的文字處理、試算表、簡報與協作工具。這些 AI 功能屬於微軟「AI‑驅動」的產品，旨在提升安全、合規、身分驗證、管理與隱私等多層面的使用體驗，同時讓使用者在文件撰寫、資料分析、簡報製作等工作中得到即時的智慧建議與自動化支援。\n\n微軟在其「重新發明生產力與商務流程」的三大研發願景之一，明確指出要「幫助組織與個人更安全、更有效率地工作與協作」。為此，微軟在整個技術堆疊上佈局 AI，從雲端的 Azure 計算與機器學習服務，到應用層的 Office 軟體，都以 AI 為核心，提供「智能雲」與「智能邊緣」平台，讓 AI 能在設備、應用與雲端同步運作，最終提升使用者的工作與生活生產力。"
+    "reference": "微軟是透過與 OpenAI 的長期戰略夥伴關係，取得 OpenAI 的模型與基礎建設使用權，將這些人工智慧模型直接嵌入 Microsoft 365（即 Office）雲端服務與本機應用，從而在 Office 各套軟體中提供 AI 驅動的功能。微軟於 2019 年首次與 OpenAI 建立合作，並在 2025 年 10 月與 2026 年 4 月再次延長此合作，持續以投資者身分取得 OpenAI 的智慧財產權，並依收入分潤方式獲得模型使用權。公司在 10‑K 中說明，這些權利讓微軟能將 AI 融入產品，並在「生產力與商務流程」領域推出 AI‑驅動的功能，促成 Microsoft 365 商業雲收入成長。為支撐這些功能，微軟同時在雲端基礎設施上持續投入 AI 計算資源與 AI 人才，並將 AI 基礎設施與 Azure 服務相結合，使 Office 應用能即時存取雲端 AI 服務，提供如自動文字建議、內容生成、資料分析等智慧功能，同時確保安全與合規。整體而言，微軟透過取得 OpenAI 的模型、在 Azure 上部署 AI 計算資源，以及在 Microsoft 365 產品線中嵌入 AI 功能，將人工智慧深度整合進 Office 各軟體。"
   },
   {
     "id": "col-04",
@@ -3984,8 +3989,8 @@
     "category": "multi_hop",
     "query": "新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？",
     "gold_files": [
-      "GOOGL_News_20260612_02.txt",
-      "GOOGL_Fundamentals_20260612.txt"
+      "GOOGL_Fundamentals_20260612.txt",
+      "GOOGL_News_20260612_02.txt"
     ],
     "gold_chunks_used": [
       {
@@ -4052,44 +4057,45 @@
     "category": "semantic",
     "query": "Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？",
     "gold_files": [
-      "MSFT_10K_2025.html"
+      "MSFT_10K_2026.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 142
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 54
       },
       {
-        "source": "MSFT_10K_2025.html",
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 143
+      },
+      {
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 52
+      },
+      {
+        "source": "MSFT_10K_2026.html",
         "chunk_index": 49
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 57
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 141
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 53
-      },
-      {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 139
-      },
-      {
-        "source": "MSFT_10K_2025.html",
+        "source": "MSFT_10K_2026.html",
         "chunk_index": 12
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 48
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 138
       },
       {
-        "source": "MSFT_10K_2025.html",
-        "chunk_index": 138
+        "source": "MSFT_10K_2026.html",
+        "chunk_index": 48
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Microsoft 透過 Windows 作為作業系統與硬體平台，將使用者與企業導向 Microsoft 365、Azure 以及內建 Copilot 的雲端服務，從而提升雲端營收與 Copilot 相關服務的使用率；在 2025 財政年度，Windows OEM 與 Devices 營收雖僅成長 3%，但其在 Microsoft 365 Commercial 雲端收入中所佔的「Windows Commercial」部份被納入整體雲端指標，該指標的收入增長率達 15%，而整體 Microsoft Cloud 營收則提升 23%至 1,689 億美元（$168.9 billion）。\n\n具體而言，Microsoft 10‑K 中說明，Microsoft 365 Commercial 雲端收入包括「Microsoft 365 Commercial、Enterprise Mobility + Security、Windows Commercial 的雲端部分、Power BI、Exchange、SharePoint、Microsoft Teams、Microsoft 365 Security and Compliance 以及 Microsoft 365 Copilot」等項目，顯示 Windows 的商業版雲端功能直接貢獻於雲端收入成長。Windows 作業系統與 Surface Copilot+ PC 等裝置被設計為讓使用者能即時連結至 Windows 及整合的 Microsoft 服務，這些裝置不僅推動 PC 出貨（Windows OEM 與 Devices 營收上升 3%），也成為使用 Azure OpenAI 服務與 Copilot 功能的入口，因為 OpenAI API 僅在 Azure 上提供，且 Microsoft 持有其模型與基礎建設的使用權。\n\n此外，Microsoft 亦將 Windows OEM 與 Devices 合併為單一收入成長指標，以「將 PC 市場驅動的業務收入聚合」的方式，讓管理層能更清楚觀測 Windows 生態系對雲端服務的帶動效應。透過 Windows 平台的安全、整合與多租戶特性，Microsoft 能在資料中心規模經濟、資源利用率與多租戶維護成本上取得優勢，進一步降低雲端服務的使用門檻，促使更多 Windows 使用者採用 Azure、Microsoft 365 以及 Copilot 等 AI 驅動的雲端產品。總結來說，Windows 透過其作業系統、裝置（含 Copilot+ PC）以及在 Microsoft 365 Commercial 雲端收入中的組成部分，成為推動 Microsoft Cloud 營收與 Copilot 服務參與度的關鍵引擎。"
+    "reference": "Microsoft 透過 Windows 作為入口與平台，結合雲端服務與 Copilot 功能，成功提升了雲端與 AI 相關服務的使用率與營收。  \n\nWindows 內建的雲端元件（包括 Windows Commercial 的雲端部分）與 Microsoft 365 產品緊密整合，使得企業與個人使用者在 Windows 裝置上即可直接存取 Microsoft 365 Cloud、Azure 以及 Copilot 等服務。這種整合在 2026 財年帶動了 Microsoft 365 Commercial Cloud 收入成長 17%，其中 Microsoft 365 Copilot 與 Windows Commercial 的雲端組件是主要驅動因素；同時 Microsoft 365 Commercial 座位數亦因中小企業與前線工作者的需求而增長 6%。  \n\n為了支援 Copilot 席位與使用量的擴大，成本方面因 AI 基礎建設投資而上升 12%，即營收成本增加 26 億美元（$2.6 billion）；然而毛利仍因 Microsoft 365 Commercial Cloud 的成長而提升 166 億美元（$16.6 billion），毛利率略有上升。  \n\n在裝置層面，Microsoft 以 Surface（含 Copilot+ PC）等硬體作為 Windows 生態的延伸，設計讓使用者能透過 Windows 連結至雲端與 AI 服務，進一步刺激了雲端服務的參與度。這些裝置的成長受整體 PC 出貨量、產品路線圖以及新類別擴展的影響，亦間接推動了雲端服務的使用。  \n\n此外，Microsoft 以多雲與混合雲的規模經濟（資料中心的成本效益、資源聚合與多租戶模式）提升了 Azure 及其他雲端服務的可用性與成本效益，使得在 Windows 平台上使用的客戶更容易採用 Azure、GitHub Cloud 以及 AI 消費型服務，進一步提升了整體雲端參與度。  \n\n綜合而言，Windows 作為入口平台，透過內建雲端元件、與 Copilot 的深度整合、以及以 Surface 等裝置作為使用門戶，成功拉動了雲端服務與 AI 產品的使用與收入增長。"
   },
   {
     "id": "col-03",
@@ -4097,17 +4103,18 @@
     "query": "亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？",
     "gold_files": [
       "AMZN_10K_2025.html",
-      "AMZN_10Q_202509.html",
-      "AMZN_10Q_202603.html"
+      "AMZN_10Q_202603.html",
+      "AMZN_10Q_202606.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
-      {
-        "source": "AMZN_10Q_202509.html",
-        "chunk_index": 36
-      },
       {
         "source": "AMZN_10Q_202603.html",
         "chunk_index": 39
+      },
+      {
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 42
       },
       {
         "source": "AMZN_10Q_202603.html",
@@ -4122,20 +4129,20 @@
         "chunk_index": 198
       },
       {
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 81
+      },
+      {
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 47
+      },
+      {
         "source": "AMZN_10K_2025.html",
         "chunk_index": 106
-      },
-      {
-        "source": "AMZN_10K_2025.html",
-        "chunk_index": 215
-      },
-      {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 78
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "亞馬遜近期在人工智慧領域的主要投入是與 Anthropic 合作，已投入數十億美元的資金。從 2023 年第三季到 2025 年第四季，亞馬遜以可轉換公司債的形式向 Anthropic 投資了 **80 億美元（$8.0 billion）**，這些債券後於 2025 年第一季和 2026 年第一季部分轉換為非投票優先股。至 2025 年底，非投票優先股的帳面金額約為 **148 億美元（$14.8 billion）**，而至 2026 年第一季則增至約 **320 億美元（$32.0 billion）**。此外，2026 年三月以後，亞馬遜又追加了 **50 億美元（$5.0 billion）** 投資於 Anthropic 的非投票優先股，並與其簽訂了一項融資安排，提供最高 **200 億美元（$20.0 billion）** 的授信額度，該授信在發生流動性事件（如首次公開發行或直接上市）後 30 個月內到期。這些投資與亞馬遜在 AWS 雲端服務中使用自家晶片的商業安排同時進行，顯示亞馬遜正透過大量資金與 Anthropic 建立深度合作，以加速其人工智慧技術的研發與應用。"
+    "reference": "亞馬遜近期在人工智慧領域大幅投入資金，先後與兩家 AI 公司建立深度合作與投資關係。  \n\n首先，亞馬遜自 2023 年第三季至 2025 年第四季，透過可轉換公司債向 Anthropic 投入 **80 億美元（$8.0 billion）**，這些債券列為可供出售資產並以公允價值列示。之後在 2026 年第一季，亞馬遜又將 **50 億美元（$5.0 billion）** 轉為 Anthropic 的非投票優先股，並與 Anthropic 簽訂一項最高不超過 **200 億美元（$20.0 billion）** 的融資安排，該安排於 Anthropic 發生首次公開發行或其他流動性事件後 30 個月到期。  \n\n同時，亞馬遜於 2026 年第一季與 OpenAI 簽訂商業合作協議，主要提供 AWS 雲端服務與 AWS 晶片，並就 OpenAI 模型的服務使用達成共同合作。亞馬遜亦投資 **150 億美元（$15.0 billion）** 購買 OpenAI 的 C 系列優先股，並簽署一份承諾書，承諾再以 **350 億美元（$35.0 billion）** 的總價額購買額外的 C 系列優先股（稱為 Commitment Shares）。在 2026 年第二季，亞馬遜已使用其中 **137 億美元（$13.7 billion）** 完成投資，至 2026 年六月底，亞馬遜在合併資產負債表上列示的 OpenAI C 系列優先股投資金額為 **287 億美元（$28.7 billion）**。  \n\n總結來說，亞馬遜在 AI 方面的資金支出包括對 Anthropic 的總計約 **130 億美元（$13.0 billion）**（80 億美元（$8.0 billion） 債券 + 50 億美元（$5.0 billion） 優先股）以及對 OpenAI 的已投資 **287 億美元（$28.7 billion）**，並透過 AWS 雲端與晶片服務與兩家公司建立長期合作關係。"
   },
   {
     "id": "col-11",
@@ -4144,6 +4151,7 @@
     "gold_files": [
       "MSFT_10Q_202603.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
         "source": "MSFT_10Q_202603.html",
@@ -4171,15 +4179,15 @@
       },
       {
         "source": "MSFT_10Q_202603.html",
-        "chunk_index": 98
+        "chunk_index": 97
       },
       {
         "source": "MSFT_10Q_202603.html",
-        "chunk_index": 8
+        "chunk_index": 103
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "微軟的雲端服務近期成長相當迅速，2026 財政年度第三季的 Microsoft Cloud 營收較去年同期上升 29%，達到 545 億美元（$54.5 billion）。此增幅同時反映在各主要雲端子項目上：Azure 及其他雲端服務的營收成長 40%，Microsoft 365 Commercial 雲端營收成長 19%，而 Microsoft 365 Consumer 雲端營收則成長 33%。整體而言，雲端業務的收入與使用者規模皆呈現兩位數的年增率，顯示其成長速度相當快。"
+    "reference": "微軟的雲端服務近期成長非常快速，年增率大約在 30% 左右。根據最新的財報，Microsoft Cloud 營收較去年同期增長 29%，達到 545 億美元（$54.5 billion）；Intelligent Cloud 營收則增加 79 億美元（$7.9 billion），成長 30%。其中，Azure 及其他雲端服務的營收更是以 40% 的幅度成長，顯示平台上所有工作負載的需求均在持續擴大。這些數據共同說明微軟的雲端業務正以接近三成的速度快速擴張。"
   },
   {
     "id": "mix-08",
