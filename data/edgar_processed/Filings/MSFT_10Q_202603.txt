@@ -310,9 +310,9 @@ Note About Forward-Looking Statements
 
 This report includes estimates, projections, statements relating to our business plans, objectives, and expected operating results that are “forward-looking statements” within the meaning of the Private Securities Litigation Reform Act of 1995, Section 27A of the Se...
 
-[RCTS] item=Part_I_Item_2 原 chunk 1521 token > 1200 → 補切成 2 份
+[PERIOD] item=Part_I_Item_2 依期間章節標題切成 13 段：(標題前) | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025 | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025 | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025 | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025 | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025 | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025
 
-[RCTS] item=Part_I_Item_2 原 chunk 1466 token > 1200 → 補切成 3 份
+[RCTS] item=Part_I_Item_2 原 chunk 1672 token > 1200 → 補切成 4 份
 
 --- [ITEM] Part II, Item 2 (len=1738 chars) ---
 ITEM 2. UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS

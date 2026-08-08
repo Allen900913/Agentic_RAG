@@ -109,6 +109,11 @@ from rag_query import infer_source_type, make_qdrant_client
 RAW_DIR         = Path("data/raw")            # News/Fundamentals/IncomeStatement .txt 仍從這裡讀
 PROCESSED_DIR   = Path("data/edgar_processed")  # 人眼驗證用：Item 結構 + 財報三表 markdown 傾印
 HASHES_FILE     = Path("hashes_edgar.json")   # .txt 的 MD5 增量快取（見 _load_hashes 註解）
+# SEC filing 的離線來源（2026-08-08 抓取／處理分離）。由 fetch_data.py 產生：
+#   SEC_LOCAL_DIR  — edgartools 本機儲存，{...}/filings/{YYYYMMDD}/{accession}.nc 完整申報檔
+#   SEC_MANIFEST   — 取件清單，本檔**只處理清單上列的 filing**，不自己去 SEC 查有什麼新的
+SEC_LOCAL_DIR   = RAW_DIR / "sec_local"
+SEC_MANIFEST    = RAW_DIR / "sec_manifest.json"
 
 # data/raw 的分類子目錄（2026-08-07 語料重整）：Filings / Fundamentals / News，外加
 # _archive_stale（刻意封存的過期快照，不 ingest）。掃描必須遞迴——重整後 data/raw 根目錄
@@ -127,7 +132,10 @@ SPARSE_VECTOR_NAME = "sparse"
 DENSE_DIM       = 1024
 
 TICKERS = ["NVDA", "MSFT", "AAPL", "AMZN", "GOOGL", "META", "TSLA"]
-N_RECENT_10Q = 2   # 與現有 data/raw/*.html 覆蓋範圍對齊（每家公司 1 份 10-K + 最近 2 份 10-Q）
+# 每家公司 1 份 10-K + 最近 N 份 10-Q。2026-08-08 抓取／處理分離後，**這個數字由抓取層
+# 決定**（fetch_data.py 的 --quarters），本檔只照 sec_manifest.json 取件。保留常數僅供
+# 文件與 _extract_extra_tables 之類的判讀參考，不再控制本檔行為。
+N_RECENT_10Q = 2
 
 SEC_FORM_10K = "10-K"
 SEC_FORM_10Q = "10-Q"
@@ -266,6 +274,157 @@ def _sanitize_item_id(item_name: str) -> str:
     """'Item 1A' -> 'Item_1A'；'Part I, Item 2' -> 'Part_I_Item_2'。"""
     s = item_name.replace(",", "").replace(".", "")
     return re.sub(r"\s+", "_", s.strip())
+
+
+# ── 期間章節邊界（2026-08-08 加）─────────────────────────────────────────────────
+# 病灶：10-Q 的 MD&A 把「單季比較」與「累計比較」寫成兩個相鄰章節，各自只在**章節標題**
+# 標了期間，內文的每一句（「Microsoft 365 Commercial cloud revenue grew 19%」）都不重述。
+# SemanticChunker 依語意切塊時，標題會被切到別的 chunk 去，於是內文 chunk 讀不出自己
+# 屬於哪一期——生成器不是讀錯，是資訊根本不在 context 裡。
+#
+# 實測曝險（exp4 全庫，剝掉我們自己注入的 metadata 前綴後）：109 個含變動陳述的 filing
+# text chunk 裡有 15 個（14%）讀不出期間，其中 9 個集中在 MSFT 10-Q（24 個裡佔 38%）。
+# 集中的原因是這個 "X Compared with Y" 章節標題結構**只有 MSFT 在用**（全 12 份 10-Q
+# 掃過：MSFT 24 處，其餘 6 家 0 處）；別家把期間寫在句子裡，所以切塊切不掉。
+# 已知案例：col-11（19%/33%/12%/22% 單季 與 18%/29%/20% 九個月被當成互斥數值並陳）、
+# mix-03（九個月的 +$20.4B 與單季的 +$2.7B 混用）。
+#
+# 修法是把這個標題當**硬邊界**：先依它切段再各自送進 SemanticChunker（同一個 chunk 不會
+# 橫跨兩個期間——實測 MSFT #104 開頭是九個月數字、標題卻出現在它中段，只貼標不切段會標錯），
+# 再把期間標籤前綴進每個 chunk 的文字（與既有 build_metadata_header 同一個機制）。
+_PERIOD_SECTION_RE = re.compile(
+    r"((?:Three|Six|Nine|Twelve)\s+Months\s+Ended\s+[A-Z][a-z]+\.?\s+\d{1,2},\s*\d{4}\s+"
+    r"Compared\s+[Ww]ith\s+(?:Three|Six|Nine|Twelve)\s+Months\s+Ended\s+[A-Z][a-z]+\.?\s+\d{1,2},\s*\d{4})")
+
+
+def _compact_period_label(header: str) -> str:
+    """'Three Months Ended March 31, 2026 Compared with Three Months Ended March 31, 2025'
+    -> 'Three Months Ended March 31, 2026 vs March 31, 2025'。前綴會出現在每個 chunk 上，
+    左右兩側跨度相同時砍掉重複的 'X Months Ended' 以免灌爆 embedding 文字。"""
+    h = re.sub(r"\s+", " ", header).strip()
+    m = re.match(r"((Three|Six|Nine|Twelve) Months Ended .+?) Compared [Ww]ith "
+                 r"\2 Months Ended (.+)", h)
+    return f"{m.group(1)} vs {m.group(3)}" if m else h
+
+
+def _split_by_period_section(item_text: str) -> list[tuple[Optional[str], str]]:
+    """依期間章節標題把 Item 內文硬切成 [(期間標籤 or None, 段落文字), ...]。
+    標題本身留在段落開頭（它是真實來源文字，人眼傾印時要看得到）。沒有任何標題時
+    回傳單一 [(None, item_text)]，行為與加這層之前完全相同。"""
+    parts = _PERIOD_SECTION_RE.split(item_text)
+    if len(parts) == 1:
+        return [(None, item_text)]
+    out: list[tuple[Optional[str], str]] = []
+    if parts[0].strip():
+        out.append((None, parts[0]))
+    # split 帶一個 capture group → [前言, 標題1, 內文1, 標題2, 內文2, ...]
+    for i in range(1, len(parts), 2):
+        body = parts[i + 1] if i + 1 < len(parts) else ""
+        out.append((_compact_period_label(parts[i]), parts[i] + body))
+    return out
+
+
+def _period_prefix(record: dict) -> str:
+    """chunk 文字的期間前綴；沒有期間章節歸屬就回空字串（維持舊行為）。"""
+    label = record.get("period_context")
+    return f"[{label}] " if label else ""
+
+
+# ── 離線取件（2026-08-08 抓取／處理分離）────────────────────────────────────────
+# 在此之前本檔自己呼叫 `company.get_filings()` 去 SEC 查「現在最新的是哪幾份」，於是
+# **每次重新切塊都會重抓、而且可能悄悄換到不同版本的文件**——這讓 chunking 實驗不可重現
+# （改了切塊規則跑出來的差異，分不清是規則造成還是換版造成）。而且 fetch_data.py 本來就
+# 已經抓過同一批 filing 了，等於抓兩次。
+#
+# 現在改成：fetch_data.py 抓 + 落地 + 寫 manifest；本檔只照 manifest 取件、零網路。
+#
+# ⚠ **guard 必須自己寫，不能依賴 edgartools**：`Filing.sgml()` 在本機找不到檔案時會
+# 靜默 fallback 去下載（實地讀過原始碼確認）。少了下面的 guard，manifest 或 .nc 缺一份
+# 就會無聲地變回線上抓取，而且結果看起來完全正常。
+def _enable_local_storage() -> None:
+    import edgar
+    if not SEC_LOCAL_DIR.exists():
+        raise RuntimeError(
+            f"SEC 本機儲存不存在：{SEC_LOCAL_DIR}\n"
+            f"處理層不自己抓 SEC。請先跑：python fetch_data.py --tickers <...> --skip-news --skip-fundamentals")
+    edgar.set_local_storage_path(SEC_LOCAL_DIR)
+    edgar.use_local_storage(True)
+    _install_offline_html_patch()
+    print(f"[INFO] SEC local storage: {SEC_LOCAL_DIR.resolve()}（處理層不連網）")
+
+
+def _install_offline_html_patch() -> None:
+    """堵住 edgartools 最後一個網路呼叫。
+
+    `Filing.html()` 對「開頭是 `<?xml ...?>` 的文件」會**丟掉已經從本機讀到的 HTML、
+    重新 download 一次 primary document**（edgar/_filings.py 的 `html.startswith("<?xml")`
+    分支）。而 SEC 的 inline-XBRL 財報全都是這個開頭，所以本機儲存對 10-K/10-Q 幾乎沒
+    生效——這也是舊管線每次重新切塊都在重抓的原因之一，只是它從來沒吵過。
+
+    繞過是安全的，已實測比對：`sgml.html()` 與下載版**內容 MD5 完全相同**（MSFT 10-Q、
+    NVDA 10-K 各驗一份，只差一個結尾換行）。這裡刻意讓「sgml 給不出 HTML」直接報錯，
+    而不是回頭抓——寧可停下來也不要靜默連網。"""
+    from edgar._filings import Filing, is_probably_html
+
+    if getattr(Filing, "_offline_html_patched", False):
+        return
+
+    def _offline_html(self):
+        html = self.sgml().html()
+        if not html:
+            raise RuntimeError(
+                f"本機申報檔取不出 HTML：accession={self.accession_no}。"
+                f"處理層不回頭抓 SEC——請重跑 fetch_data.py 補齊該份 .nc。")
+        if isinstance(html, bytes):
+            html = html.decode("utf-8", errors="replace")
+        if html.endswith("</PDF>"):
+            return None
+        if is_probably_html(html):
+            return html
+        return f"<html><body><div>{html.replace('<PAGE>', '')}</div></body></html>"
+
+    Filing.html = _offline_html
+    Filing._offline_html_patched = True
+
+
+def _load_sec_manifest() -> list[dict]:
+    if not SEC_MANIFEST.exists():
+        raise RuntimeError(
+            f"取件清單不存在：{SEC_MANIFEST}\n"
+            f"處理層只處理 manifest 上列的 filing。請先跑 fetch_data.py 產生它。")
+    entries = json.loads(SEC_MANIFEST.read_text(encoding="utf-8"))
+    if not entries:
+        raise RuntimeError(f"{SEC_MANIFEST} 是空的，沒有任何 filing 可處理。")
+    return entries
+
+
+def _filings_from_manifest(ticker: str, allow_fetch: bool = False) -> list[tuple[str, "object"]]:
+    """照 manifest 重建這家公司的 Filing 物件清單，回傳 [(form, filing), ...]。
+
+    每一份都先確認本機 .nc 存在；缺檔就中止（除非 --allow-fetch）——寧可吵著停下來，
+    也不要靜默地變成線上抓取。"""
+    import edgar
+    from edgar.storage import local_filing_path
+
+    rows = [e for e in _load_sec_manifest() if e["ticker"] == ticker]
+    if not rows:
+        raise RuntimeError(f"manifest 裡沒有 {ticker} 的任何 filing。先跑 fetch_data.py --tickers {ticker}")
+
+    out = []
+    for e in sorted(rows, key=lambda r: (r["form"], r["period_tag"])):
+        nc = Path(local_filing_path(e["filing_date"], e["accession_no"]))
+        if not nc.exists():
+            msg = (f"{ticker} {e['form']} {e['period_tag']} 的完整申報檔不在本機：{nc}\n"
+                   f"       accession={e['accession_no']}  filing_date={e['filing_date']}")
+            if not allow_fetch:
+                raise RuntimeError(
+                    msg + "\n處理層拒絕回頭抓 SEC。請重跑 fetch_data.py 補齊，"
+                          "或明知後果時加 --allow-fetch。")
+            print(f"  [WARN] {msg}\n         --allow-fetch 已開，將線上抓取（結果可能與 manifest 記載的版本不同）")
+        filing = edgar.Filing(cik=e["cik"], company=e["company"], form=e["form"],
+                              filing_date=e["filing_date"], accession_no=e["accession_no"])
+        out.append((e["form"], filing))
+    return out
 
 
 def _filing_meta_from_xbrl(entity_info: dict, ticker: str, accession_no: str) -> dict:
@@ -481,23 +640,37 @@ def _fetch_filing_records(ticker: str, form: str, filing, semantic_chunker,
         # 先收集這個 Item 最終要落地的所有文字片段（可能因 RCTS fallback 而比
         # SemanticChunker 原始輸出更多），最後統一 enumerate，讓 item_chunk_index
         # 維持連續（Neighbor Expansion 依賴這個序號查前後 chunk）。
-        final_texts: list[str] = []
-        for doc in semantic_chunker.create_documents([item_text]):
-            content = doc.page_content.strip()
-            if len(content) <= 20:
-                continue
-            if rcts_splitter is not None and token_len_fn is not None \
-                    and token_len_fn(content) > rcts_threshold:
-                sub_texts = [t.strip() for t in rcts_splitter.split_text(content) if t.strip()]
-                dump_lines.append(f"[RCTS] item={item_id} 原 chunk {token_len_fn(content)} "
-                                   f"token > {rcts_threshold} → 補切成 {len(sub_texts)} 份\n")
-                final_texts.extend(sub_texts)
-            else:
-                final_texts.append(content)
+        # (文字, 期間標籤) 成對收集。期間章節是 Item 之下的第二層硬邊界（見
+        # _split_by_period_section）：先切段再各自語意切塊，同一個 chunk 就不會橫跨
+        # 單季與累計兩個期間。沒有期間標題的 filing 只會得到單一段，行為不變。
+        final_texts: list[tuple[str, Optional[str]]] = []
+        sections = _split_by_period_section(item_text)
+        if len(sections) > 1:
+            dump_lines.append(
+                f"[PERIOD] item={item_id} 依期間章節標題切成 {len(sections)} 段："
+                + " | ".join(lbl or "(標題前)" for lbl, _ in sections) + "\n")
+        for period_label, section_text in sections:
+            for doc in semantic_chunker.create_documents([section_text]):
+                content = doc.page_content.strip()
+                if len(content) <= 20:
+                    continue
+                if rcts_splitter is not None and token_len_fn is not None \
+                        and token_len_fn(content) > rcts_threshold:
+                    sub_texts = [t.strip() for t in rcts_splitter.split_text(content) if t.strip()]
+                    dump_lines.append(f"[RCTS] item={item_id} 原 chunk {token_len_fn(content)} "
+                                       f"token > {rcts_threshold} → 補切成 {len(sub_texts)} 份\n")
+                    final_texts.extend((t, period_label) for t in sub_texts)
+                else:
+                    final_texts.append((content, period_label))
 
-        for idx, content in enumerate(final_texts):
-            records.append({"text": content, "chunk_type": "text",
-                             "item_id": item_id, "item_chunk_index": idx})
+        # item_chunk_index 跨期間章節連續編號：Neighbor Expansion 靠 ±1 查鄰居，
+        # 若每段各自從 0 起算會有重號、查到錯的鄰居。
+        for idx, (content, period_label) in enumerate(final_texts):
+            rec = {"text": content, "chunk_type": "text",
+                   "item_id": item_id, "item_chunk_index": idx}
+            if period_label:
+                rec["period_context"] = period_label
+            records.append(rec)
 
     return filing_meta, records, "\n".join(dump_lines)
 
@@ -583,7 +756,10 @@ def upsert_records(client, collection_name: str, bge_m3, source: str, filing_met
         return 0
 
     meta_header = build_metadata_header(filing_meta)
-    chunk_texts = [meta_header + r["text"] for r in records]
+    # 期間前綴接在申報層 metadata 之後：'[MSFT 10-Q period 202603] [Three Months Ended
+    # March 31, 2026 vs March 31, 2025] <原文>'。跟 metadata header 同一個動機——把只存在
+    # 章節標題裡、chunk 內文不重述的期間資訊帶進**被 embed 的文字**，檢索與生成才看得到。
+    chunk_texts = [meta_header + _period_prefix(r) + r["text"] for r in records]
     encoded = bge_m3.encode(chunk_texts, batch_size=8,
                             return_dense=True, return_sparse=True, return_colbert_vecs=False)
     dense_vecs  = encoded["dense_vecs"]
@@ -602,10 +778,14 @@ def upsert_records(client, collection_name: str, bge_m3, source: str, filing_met
             "chunk_index":      i,
             "chunk_type":       record["chunk_type"],
             "doc_type":         doc_type,
-            "document":         meta_header + record["text"],
+            "document":         meta_header + _period_prefix(record) + record["text"],
             "item_id":          record.get("item_id", "n/a"),
             "item_chunk_index": record.get("item_chunk_index", 0),
         }
+        if record.get("period_context"):
+            # 也存成獨立欄位（不只前綴進文字）：供日後期間硬 filter / 診斷用，
+            # 且能直接查「這個 chunk 到底歸屬哪一期」而不必再解析 document 前綴。
+            payload["period_context"] = record["period_context"]
         _basis = _period_basis_for(doc_type)
         if _basis:
             payload["period_basis"] = _basis   # 供 rag_query TTM 硬 filter 路由（見 _period_basis_for）
@@ -651,6 +831,9 @@ def main() -> None:
     parser.add_argument("--force-txt", action="store_true",
                         help=f"忽略 {HASHES_FILE} 的 MD5 快取，強制重新 ingest 所有 .txt"
                              "（快取與 Qdrant 實際內容不同步時的逃生口）")
+    parser.add_argument("--allow-fetch", action="store_true",
+                        help="本機缺 .nc 時允許線上抓取（預設拒絕並中止）。⚠ 開了就可能拿到與 "
+                             "sec_manifest.json 記載不同版本的文件，chunking 實驗的可重現性會斷掉。")
     parser.add_argument("--rcts-fallback", action="store_true",
                         help="Exp 3：SemanticChunker 輸出的 chunk 若 reranker token 數超過 "
                              f"{RCTS_THRESHOLD} 時，改用 RCTS（{RCTS_CHUNK_SIZE}/{RCTS_CHUNK_OVERLAP}，"
@@ -666,6 +849,7 @@ def main() -> None:
     if not sec_identity:
         raise RuntimeError("SEC_IDENTITY 未設定（.env），edgartools 需要合法聯絡資訊才能呼叫 SEC EDGAR。")
     edgar.set_identity(sec_identity)
+    _enable_local_storage()
 
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -713,27 +897,14 @@ def main() -> None:
     total_filings = 0
     txt_skipped_unchanged = 0
 
-    # ── 10-K + 10-Q（edgartools）──────────────────────────────────────────────
+    # ── 10-K + 10-Q（照 manifest 離線取件）─────────────────────────────────────
+    # 「抓哪幾份」由 fetch_data.py 決定並寫進 manifest（含 amendments=False 的排除邏輯，
+    # TSLA 2026-04-30 那份 10-K/A 就是在抓取層被擋掉的）。本檔不再自己查 SEC，因此
+    # 重新切塊永遠針對同一批文件，chunking 實驗的差異可以歸因到規則本身。
     for ticker in args.tickers:
         print(f"\n[TICKER] {ticker}")
-        company = edgar.Company(ticker)
-
-        # amendments=False：排除 10-K/A、10-Q/A 修正案。TSLA 曾在 2026-04-30 提交過一份
-        # 10-K/A，若不排除，get_filings(form="10-K") 會把它當成「最新一份 10-K」選中——
-        # 修正案常缺完整 XBRL（income/balance/cash flow 三表全部抽取失敗），且
-        # entity_info["document_type"] 回傳 "10-K/A" 不等於 "10-K"，會讓
-        # _filing_meta_from_xbrl() 的 is_10k 判斷失準，誤標成 10-Q 檔名。
-        jobs = [(SEC_FORM_10K, company.get_filings(form=SEC_FORM_10K, amendments=False).head(1))]
-        q_filings = company.get_filings(form=SEC_FORM_10Q, amendments=False).head(N_RECENT_10Q)
-        for i in range(len(q_filings)):
-            jobs.append((SEC_FORM_10Q, q_filings[i:i+1]))
-
-        for form, filing_slice in jobs:
-            if len(filing_slice) == 0:
-                print(f"  [WARN] No {form} filing found for {ticker}")
-                continue
-            filing = filing_slice[0]
-            print(f"  [FETCH] {form} | accession={filing.accession_no} | filed={filing.filing_date}")
+        for form, filing in _filings_from_manifest(ticker, allow_fetch=args.allow_fetch):
+            print(f"  [LOCAL] {form} | accession={filing.accession_no} | filed={filing.filing_date}")
 
             filing_meta, records, dump_text = _fetch_filing_records(
                 ticker, form, filing, semantic_chunker,
