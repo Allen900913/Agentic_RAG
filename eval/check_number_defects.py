@@ -87,29 +87,53 @@ def source_types_of(value: float, contexts: list[str], sources: list[str]) -> li
     return sorted(hits)
 
 
-def anchored_pct(text: str, anchor: str, window: int = 60):
-    """把百分比**接地到主張**：anchor 命中後 window 字元內的第一個百分比。
+def anchored_pcts(text: str, anchor: str, window: int = 60) -> list[tuple[float, str]]:
+    """把百分比**接地到主張**：收集 anchor 任一次命中的 **±window 字元**內所有百分比。
 
-    **先往後找,找不到才往前找**（不對稱是刻意的）：中英文的財務句主流是
-    「<主體><指標>成長 N%」,數值在描述之後,所以往後找優先;但中文也寫得出
-    「**16.6% 的年度（YoY）成長**」把數值放在前面（實測 mi-04 兩個 run 就是這樣寫,
-    純往後找會全部退化成 N/A）。往前找容易撈到**上一個主張**的數值,所以只當退路,
-    而且窗口砍半。
-    多處命中時回傳第一處——同一個主張在答案裡重複陳述時數值應一致,不一致本身就是缺陷
-    （由 agentic 的一致性 validator 負責,不是這裡）。
-    回傳 (值, 證據片段) 或 None（＝anchor 未命中,**無法比對,不算 FAIL**）。
+    **為什麼是「集合」而不是「挑一個」**（2026-08-10 第三次改法,前兩次都被實測推翻）：
+    「該主張的數值是哪一個」用方向或距離都猜不出來,因為兩種寫法都合法且都真實出現過——
+      · 值在 anchor 後：「整體營業利益成長 **20%**」
+      · 值在 anchor 前：「**16.6%（YoY）**」（mi-04 的 head run 就這樣寫）
+    實測三種挑值規則沒有一種能同時過三條主張：
+      | 挑值規則 | mix-03 判別力 | col-11 護欄 | mi-04 護欄 |
+      |---|---|---|---|
+      | 先往後、後往前（前版） | 保留 | PASS | **head 誤報 FAIL**（往後撈到 LTM 12.8%）|
+      | 取最近(雙向)、首次命中 | 保留 | **2 個 run 誤報**（撈到 Azure 40%）| PASS |
+      | 取最近(雙向)、全域最近 | 保留 | **1 個 run 誤報** | PASS |
+    所以放棄挑值,改問**集合成員關係**（正解在不在、禁止值在不在）,與措辭方向無關。
+    實測 ±40 與 ±60 對三條主張結果完全相同＝對窗口不敏感。
+
+    ⚠ **判別力由 `forbid_pct` 承擔,不是 `expect_pct`**：只問「正解在不在附近」時,答案把
+    正解與干擾值並陳也會 PASS。所以 `known_defect` **必須**填 forbid（診斷清楚的缺陷必然
+    知道錯值),`regression_guard` 可只填 expect（它的工作是「值不見了就叫」)。由
+    `_validate_claims` 強制。
+    ⚠ **forbid 只在「錯值不會與正解正當並存」時可用**：col-11 的 Azure 40% 與 Microsoft
+    Cloud 29% 正當並存於鄰近,把 40 填成 forbid 會誤報兩個正確的 run。
+    回傳 [(值, 證據片段)…]；空 list ＝ anchor 未命中或附近無百分比＝**無法比對,不算 FAIL**。
     """
+    out: list[tuple[float, str]] = []
+    seen: set[float] = set()
     for mo in re.finditer(anchor, text):
-        seg = text[mo.end():mo.end() + window]
-        p = PCT.search(seg)
-        if p:
-            return float(p.group(1)), re.sub(r"\s+", " ", seg[:p.end()])
-    for mo in re.finditer(anchor, text):
-        seg = text[max(0, mo.start() - window // 2):mo.start()]
-        hits = PCT.findall(seg)
-        if hits:                                   # 取最靠近 anchor 的那一個
-            return float(hits[-1]), "(往前) " + re.sub(r"\s+", " ", seg[-60:])
-    return None
+        lo = max(0, mo.start() - window)
+        seg = text[lo:mo.end() + window]
+        for m in PCT.finditer(seg):
+            v = float(m.group(1))
+            if v in seen:
+                continue
+            seen.add(v)
+            out.append((v, re.sub(r"\s+", " ", seg[max(0, m.start() - 40):m.end()])))
+    return out
+
+
+def _validate_claims(claims: list[dict]) -> None:
+    """啟動就檢查主張檔自洽——量尺自己失去判別力時要吵,不要安靜地全部 PASS。"""
+    for c in claims:
+        if c.get("status") == "known_defect" and c.get("forbid_pct") is None \
+                and not c.get("forbid_text"):
+            raise SystemExit(
+                f"number_claims.json: {c['id']} 是 known_defect 但沒有 forbid_pct／"
+                f"forbid_text。只問『正解在不在 anchor 附近』的話,答案把正解與干擾值"
+                f"並陳也會 PASS ＝ 這條主張沒有判別力（見 anchored_pcts docstring）。")
 
 
 def load_results(path: Path) -> dict:
@@ -131,9 +155,10 @@ def main() -> None:
 
     # ══ ※ 主指標：接地主張斷言（零 LLM、三態）═══════════════════════════════════
     print("=" * 92)
-    print("※ 接地主張斷言（主指標）——anchor 命中後的第一個百分比 vs 人工驗證過的正解")
+    print("※ 接地主張斷言（主指標）——anchor ±window 內的百分比集合 vs 人工驗證過的正解")
     claims = json.loads(Path(args.claims).read_text(encoding="utf-8")) \
         if Path(args.claims).exists() else []
+    _validate_claims(claims)
     tally = {n: {"PASS": 0, "FAIL": 0, "N/A": 0} for n, _ in runs}
     for c in claims:
         print(f"  [{c['status']:16s}] {c['id']:8s} {c['claim']}"
@@ -146,7 +171,7 @@ def main() -> None:
                 print(f"      {name[:28]:30s} N/A  該題不在結果檔裡")
                 continue
             body = answer_body(rec.get("answer") or "")
-            got = anchored_pct(body, c["anchor"], c.get("window", 60))
+            got = anchored_pcts(body, c["anchor"], c.get("window", 60))
             # `expect_text`／`forbid_text`：**金額**字串的獨立判準,可在 anchor 未命中時接手。
             # 為什麼加：mix-03 修好後答案寫「營業利益較去年同期增加 64 億美元，增幅約 20%」,
             # 完全沒用「整體/合併」字樣 → anchor 未命中 → 只有 anchor 的話會退化成 N/A,
@@ -157,20 +182,23 @@ def main() -> None:
                 txt_ok = bool(re.search(c["expect_text"], body))
             if c.get("forbid_text"):
                 txt_bad = bool(re.search(c["forbid_text"], body))
-            if got is None and txt_ok is None:
+            if not got and txt_ok is None:
                 # ⚠ 不能算 PASS：答案改寫措辭或拒答時會靜默變成通過
                 tally[name]["N/A"] += 1
-                print(f"      {name[:28]:30s} N/A  anchor {c['anchor']!r} 未命中（無法比對）")
+                print(f"      {name[:28]:30s} N/A  anchor {c['anchor']!r} 附近沒有百分比（無法比對）")
                 continue
             checks, ev = [], ""
-            if got is not None:
-                v, ev = got
-                checks.append(abs(v - c["expect_pct"]) <= args.tolerance)
+            if got:
+                vals = [v for v, _ in got]
+                hit_e = [(v, s) for v, s in got if abs(v - c["expect_pct"]) <= args.tolerance]
+                checks.append(bool(hit_e))
                 if c.get("forbid_pct") is not None:
-                    checks.append(abs(v - c["forbid_pct"]) > args.tolerance)
-                ev = f"讀到 {v:g}%  …{ev[:60]}"
+                    checks.append(not any(abs(v - c["forbid_pct"]) <= args.tolerance for v in vals))
+                # 證據優先印正解那一筆(證明它真的接地到 anchor);沒有正解就印第一筆錯值
+                v, seg = hit_e[0] if hit_e else got[0]
+                ev = (f"anchor 附近={['%g%%' % x for x in vals]} → 取 {v:g}%  …{seg[-60:]}")
             else:
-                ev = f"anchor 未命中，改用金額判準"
+                ev = "anchor 附近沒有百分比，改用金額判準"
             if txt_ok is not None:
                 checks.append(txt_ok)
                 ev += f"  expect_text={'ok' if txt_ok else 'MISS'}"

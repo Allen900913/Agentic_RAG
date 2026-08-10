@@ -96,7 +96,15 @@ python data_update_edgar.py --tickers MSFT --skip-txt --rcts-fallback --collecti
 | **mix-03 斷言**（`number_claims.json`） | 三個 run 全 **FAIL**（讀到 24%） | **PASS**（答「增加 64 億美元，增幅約 20%」） |
 
 剩下的 92 個短 chunk 都是**本來就該短**的 Item（`Item 1B. Unresolved Staff Comments None.`／`ITEM 6.[Reserved]`），沒有鄰居可併也不該丟。
-⚠ **是否升為生產 collection 未定案**——`us_stock_rag_edgar_exp4` 仍是表頭寫的生產值。
+
+**完整 100 題驗收（2026-08-10，`gj_head_full100_20260810`，共用 replay fixture）**：
+
+| | period（兩個 run） | head |
+|---|---|---|
+| 接地主張斷言 | 2 PASS / 1 FAIL、1 PASS / 1 FAIL / 1 N/A | **3 PASS / 0 FAIL** |
+| 頭條百分比候選（篩選用，非閘門） | 6／4 | **1** |
+
+⚠ **是否升為生產 collection 未定案**——`us_stock_rag_edgar_exp4` 仍是表頭寫的生產值。**還缺的是 RAGAS 沒退步的確認**（+18% 散文 chunk 會改變候選池組成），而 exp4 vs head 的對照要用同樣剝除規則的結果檔。
 
 **病灶與期間那層同形、低一層，但後果更嚴重**：讀不出期間是「資訊缺失」，冒充總計是「產生一個看起來有憑有據的錯數字」。
 
@@ -188,16 +196,20 @@ python data_update_edgar.py --tickers MSFT --skip-txt --rcts-fallback --collecti
 
 **目前最大的未動槓桿**：`_check_sufficiency` 的 `relevant_ids` 只留下 **49.3%** 的候選（18/58 題最後只剩 1 個 chunk，全 100 題中位數 3 個），而 `context_recall ↔ correctness` 相關 0.53 是六指標最強、`precision ↔ correctness` 只有 0.14。等於每題用一次 LLM 判斷丟掉一半證據，換一個跟答對與否幾乎無關的指標。
 
-### 數字缺陷指標的兩次失效（2026-08-10，**拿它當閘門前必讀**）
+### 數字缺陷指標的四次失效（2026-08-10，**拿它當閘門前必讀**）
 
-`check_number_defects.py` 原本用「答案的第一個百分比 vs gold 的第一個百分比」。兩種修法都被實測推翻：
+`check_number_defects.py` 原本用「答案的第一個百分比 vs gold 的第一個百分比」。**四種比法被實測推翻，一天內兩輪**：
 
 | 比法 | mix-03（確診答錯：答 24%，合併實為 20%） | 副作用 |
 |---|---|---|
-| 比**第一個** | 抓到 ✅ | col-11／mi-04／mi-08 **誤報**——它們頭條挑了 Azure 40%／LTM 12.8%，內容其實對 |
+| 比**第一個** | 抓到 ✅ | col-11／mi-04／mi-08 **誤報**——頭條挑了 Azure 40%／LTM 12.8%，內容其實對 |
 | 比**任一個** | **漏抓 ❌** | 答案的 21%（Productivity 分部）落在 gold 20% 的 ±1pt 內 |
+| 接地後**先往後找、後往前找** | 抓到 ✅ | mi-04 **誤報**：head 寫「**16.6%（YoY）**，若以 LTM 計算則為 **12.8%**」→ 值在 anchor **前**，往後撈到別的主張 |
+| 接地後**取最近（雙向）** | 抓到 ✅ | col-11 **誤報 1~2 個 run**：「Azure 40%，整體 Microsoft Cloud 則 29%」→ 最近的是 40% |
 
-→ 答案裡有 4~8 個百分比、容差 ±1pt，**任何值幾乎都能湊到**，「值有沒有出現」不帶資訊。現行做法是**把數字接地到主張**（`anchored_pct`），實測 mix-03 FAIL／col-11 PASS／mi-04 PASS，與人工獨立判讀 **3/3 一致**，且 mix-03 在三個 run 全 FAIL（**穩定＝真缺陷**，對比頭條指標有 8/30 題會自己變）。
+→ 兩層教訓。**第一層：不接地不行**——答案裡有 4~8 個百分比、容差 ±1pt，任何值幾乎都能湊到。**第二層：接地後「挑哪一個值」也猜不出來**——值在 anchor 前或後都是合法中文寫法，方向與距離都會在某個 run 上誤報。現行做法是問**集合成員關係**（`anchored_pcts`：anchor ±N 內的百分比集合，正解在不在／禁止值在不在），與措辭方向無關，實測 ±40／±60／±80 三個窗口結果相同。
+> ⚠ **判別力由 `forbid_pct` 承擔，不是 `expect_pct`**：只問「正解在附近嗎」時，答案把正解與干擾值並陳也會 PASS。所以 `known_defect` 必須填 forbid（`_validate_claims` 啟動時強制），`regression_guard` 可以只填 expect。
+> ⚠ **forbid 只在「錯值不會與正解正當並存」時可用**：col-11 的 Azure 40% 與 Cloud 29% 正當並存於鄰近，把 40 填成 forbid 會誤報兩個正確的 run。
 
 > ⚠ **兩個記帳坑，都害過事**：
 > ① **「某個 run 沒給百分比」被算成衝突** → 兩檔並列得到 10、單檔卻是 6／4／5。當時據此把閘門門檻設成「衝突 8 → ≤5」，**門檻與被比較的數字不可比，等於這道閘門沒有判定力**。現在分成獨立的「無法比對」桶，且**每個 run 各自算**。
@@ -232,7 +244,7 @@ python data_update_edgar.py --tickers MSFT --skip-txt --rcts-fallback --collecti
 | [`eval/gen_reference_answers.py`](eval/gen_reference_answers.py) | 從 `relevant` 黃金來源檔生成完整參考答案 → `eval/reference_answers.json`（RAGAS 的 ground truth）。dense 選 chunk 用**英文譯句**（2026-08-01 修：中文 query 跨語言 dense 會漏事實 chunk→ false-negative gold），`GOLD_TOP_K=8`。**快取三條件**：`query`、`gold_files`（**順序不敏感**——舊快取存的是未排序值，用 `list==` 比會把「同組檔案不同順序」誤判成換版，2026-08-08 實測害 mh-09 被白白重寫）、`collection` 都相同才 skip。①② 是檔案層級比較，對「同一份檔案、切塊變了」無感，故 2026-08-08 加 ③；但 ③ 只在快取項**已有** `collection` 欄位時判得出來，**既有 `reference_answers.json` 沒有這欄，第一次換 collection 時 ③ 攔不到**——要用新增的 `--force`（配 `--ids`）定向強制重生成。⚠ `--force` 不帶 `--ids` 就是全量重生成，會洗掉 24 處人工校正。**語言**：`--match-lang-from` > 既有 `reference_lang` > English——忘帶參數不會再無聲變英文。手轉「億」勸不動時由 `repair_yi_against_source()` 拿來源確定性修正 | 專案 `.venv`，`rq.call_llm` |
 | [`eval/run_agentic_on_evalset.py`](eval/run_agentic_on_evalset.py) | 把 agentic 模組（`--module`，預設 `agentic_rag_v2`）跑在 eval_set → generation_judge schema 結果檔（含 `contexts`，供 RAGAS）。`--freshness-mode` 預設 `snapshot` | 專案 `.venv`，NVIDIA |
 | [`eval/eval_generation_llm_judge.py`](eval/eval_generation_llm_judge.py) | **單管線**（rag_query）版：真實 retrieve+generate + 3 維判定（Correctness/Refusal/Context Recall）→ 同 generation_judge schema | 專案 `.venv`，NVIDIA（`--gen-model` 指定 NVIDIA 名） |
-| [`eval/check_number_defects.py`](eval/check_number_defects.py) ＋ [`eval/number_claims.json`](eval/number_claims.json) | **確定性數字缺陷檢查（零 LLM、零噪音）＝「數字答錯」類改動的主要驗收指標**。**主指標＝接地主張斷言**（2026-08-10 改）：`number_claims.json` 逐條寫「anchor＋正解＋禁止值」，用 `anchored_pct`（anchor 命中後 N 字元內的第一個百分比，先往後找、找不到才往前找）判 **PASS／FAIL／N/A 三態**。⚠ **N/A 不能併進 PASS**，否則改寫措辭或拒答會靜默通過。輔助：① 頭條百分比**候選**（篩新缺陷用，**不是閘門**）② 候選值的來源類型 ③ 跨 run 穩定性。2026-08-10 基準（3 條主張）：mix-03 三個 run 全 **FAIL**（穩定＝真缺陷）、col-11／mi-04 全 PASS。詳見下方「數字缺陷指標的兩次失效」 | 生產 `.venv`（只讀結果檔） |
+| [`eval/check_number_defects.py`](eval/check_number_defects.py) ＋ [`eval/number_claims.json`](eval/number_claims.json) | **確定性數字缺陷檢查（零 LLM、零噪音）＝「數字答錯」類改動的主要驗收指標**。**主指標＝接地主張斷言**（2026-08-10 改）：`number_claims.json` 逐條寫「anchor＋正解＋禁止值」，用 `anchored_pcts`（anchor **±N 字元內的百分比集合**，問正解在不在／禁止值在不在，**不挑值、不猜方向**）判 **PASS／FAIL／N/A 三態**。判別力由 `forbid_pct` 承擔，故 `known_defect` 必須填（`_validate_claims` 啟動時強制）。⚠ **N/A 不能併進 PASS**，否則改寫措辭或拒答會靜默通過。輔助：① 頭條百分比**候選**（篩新缺陷用，**不是閘門**）② 候選值的來源類型 ③ 跨 run 穩定性。2026-08-10 基準（3 條主張）：mix-03 三個 run 全 **FAIL**（穩定＝真缺陷）、col-11／mi-04 全 PASS。詳見下方「數字缺陷指標的兩次失效」 | 生產 `.venv`（只讀結果檔） |
 | [`eval/verify_segment_split.py`](eval/verify_segment_split.py) | 驗收 ingest 的期間／通用小標兩層硬邊界（見「通用小標邊界」）。零網路、零 embedding、不碰 Qdrant → **可在別的實驗正在跑的時候執行**。四判準：該切的切到／不該動的 0 段／表格未被切開／目標句歸屬正確 | 生產 `.venv` |
 | [`eval/migrate_fundamentals_pct.py`](eval/migrate_fundamentals_pct.py) | 一次性遷移（2026-08-09 已執行）：把既有 `data/raw/Fundamentals/*.txt` 的比率欄位從小數改寫成百分比（`Revenue Growth (YoY): 0.166` → `16.60%`），**並同步修 gold**——實測 19 題的 `reference_answers.json` 內文直接引用了小數字面值，只改語料會讓 `context_recall` 假性下降（同 memory `eval-gold-version-drift-bug` 的坑）。只改寫法不改數值，所以 gold 語意不受影響。未來抓取由 [`fetch_data.py`](fetch_data.py)`::_pct` 直接寫成百分比。⚠ `Dividend Yield` 只加 `%` 不乘 100（yfinance 已回百分點）；`Debt/Equity`(79.548)、`Current Ratio`、P/E、Price/Sales、Price/Book、EV/EBITDA、EPS 刻意不動——它們不是百分比 | 生產 `.venv`（純字串處理） |
 | [`eval/eval_ragas_vs_rubric.py`](eval/eval_ragas_vs_rubric.py) | 讀結果檔 + `reference_answers.json` → RAGAS 六指標（context_recall/precision、nv_context_relevance、faithfulness、answer_relevancy、answer_correctness）。`--from-results` 可指任一結果檔、`--output` 自訂、`--ids` 只評指定題（改少數題 reference 時免整份重跑）| **獨立 `.venv-ragas`**（`ragas==0.2.15` 需 `langchain<0.4`，會弄壞生產 `.venv`）；NVIDIA |

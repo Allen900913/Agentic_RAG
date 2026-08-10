@@ -12,7 +12,7 @@
     "why": "24% 是 Intelligent Cloud 分部（13,753-11,095=+2,658=+24%）；合併是 38,398-32,000=+6,398=+20%。系統會答 24% 是因為 MSFT_10Q_202603 #111 開頭就是那句、卻沒有分部標籤 → 讀起來像合併總計。",
     "verified": "2026-08-09 用 MSFT 10-Q 合併損益表逐欄驗算；正解那句在 #104，語料裡有但沒被檢索到",
     "fixed_by": "ingest 通用小標硬邊界（_split_by_subheading）＋重建 us_stock_rag_edgar_head",
-    "fix_verified": "2026-08-10：us_stock_rag_edgar_period 三個 run 全 FAIL（讀到 24%）→ us_stock_rag_edgar_head PASS（答『增加 64 億美元，增幅約 20%』）。檢索端 context #0 帶期間標籤且無 [section:]＝合併層，#1 才是 [section: Productivity...]"
+    "fix_verified": "2026-08-10：us_stock_rag_edgar_period 三個 run 全 FAIL（讀到 24%）→ us_stock_rag_edgar_head PASS（答『增加 64 億美元，增幅約 20%』）。檢索端 context #0 帶期間標籤且無 [section:]＝合併層，#1 才是 [section: Productivity...]。head 完整 100 題（gj_head_full100_20260810）三條主張 3/3 PASS，且四種比法版本下 period FAIL／head PASS 的判別方向都一致（不是量尺造成的）"
   },
   {
     "id": "col-11",
