@@ -774,7 +774,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "NVIDIA 目前的毛利率約為 74.1%。根據最新的公司基本面資料，2026 年截至目前的營收為 2,534.9 億美元（$253.49 billion），毛利為 1,879.5 億美元（$187.95 billion），計算得出的毛利率為 0.74144995（即 74.1%），顯示公司在 AI 晶片與圖形處理器的銷售上仍保有相當高的利潤空間。\n\n在近期接受 Bloomberg 采訪時，執行長黃仁勳指出，中國市場「將會逐步開放」高階美國 AI 晶片的銷售，尤其是已取得授權可向中國出售的 H200 晶片。雖然目前最頂級的 Blackwell 與即將推出的 Rubin 系列仍被禁，但若未來中國政府放寬限制，NVIDIA 有望在中國獲得額外的晶片訂單。這種市場開放將為公司帶來新的收入來源，提升營收增長的潛在動能，尤其在全球 AI 需求持續高漲的情況下，新增的中國銷售有可能在保持現有高毛利率的同時，為未來營收增添正面貢獻。"
+    "reference": "NVIDIA 目前的毛利率約為 74.1%。根據最新的公司基本面資料，2026 年截至目前的營收為 2,534.9 億美元（$253.49 billion），毛利為 1,879.5 億美元（$187.95 billion），計算得出的毛利率為 74.14%（即 74.1%），顯示公司在 AI 晶片與圖形處理器的銷售上仍保有相當高的利潤空間。\n\n在近期接受 Bloomberg 采訪時，執行長黃仁勳指出，中國市場「將會逐步開放」高階美國 AI 晶片的銷售，尤其是已取得授權可向中國出售的 H200 晶片。雖然目前最頂級的 Blackwell 與即將推出的 Rubin 系列仍被禁，但若未來中國政府放寬限制，NVIDIA 有望在中國獲得額外的晶片訂單。這種市場開放將為公司帶來新的收入來源，提升營收增長的潛在動能，尤其在全球 AI 需求持續高漲的情況下，新增的中國銷售有可能在保持現有高毛利率的同時，為未來營收增添正面貢獻。"
   },
   {
     "id": "mi-03",
@@ -825,7 +825,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Apple 目前的毛利率約為 47.9%（TTM 毛利率 0.47862），較 FY 2024 的 46.2% 以及 2019 年的 38.2% 均有明顯提升，顯示服務業務比重上升正持續推高整體利潤率。\n\n在新聞中，Evercore ISI 於 5 月 14 日將 Apple 的目標股價由原先的 $330 上調至 $365，並維持「Outperform」評等。此調升反映分析師對 Apple 高價 iPhone、即將推出的可摺疊機型以及服務收入持續高成長的正面預期。\n\n綜合市場觀點，投資者普遍將 Apple 視為高品質、現金流充沛且低負債的優質公司，服務業務的高毛利（服務毛利 74.2%）與持續的毛利率提升支撐其溢價估值；同時，因美國司法部訴訟與歐盟 DMA 可能改變 App Store 收費模式，市場情緒被調整為中性，形成「高毛利與監管風險」的兩面拉鋸。Evercore ISI 的目標價上調與 Outperform 評等進一步強化了市場對 Apple 長期獲利能力的信心，儘管短期仍需關注監管因素對毛利率的潛在衝擊。"
+    "reference": "Apple 目前的毛利率約為 47.9%（TTM 毛利率 47.86%），較 FY 2024 的 46.2% 以及 2019 年的 38.2% 均有明顯提升，顯示服務業務比重上升正持續推高整體利潤率。\n\n在新聞中，Evercore ISI 於 5 月 14 日將 Apple 的目標股價由原先的 $330 上調至 $365，並維持「Outperform」評等。此調升反映分析師對 Apple 高價 iPhone、即將推出的可摺疊機型以及服務收入持續高成長的正面預期。\n\n綜合市場觀點，投資者普遍將 Apple 視為高品質、現金流充沛且低負債的優質公司，服務業務的高毛利（服務毛利 74.2%）與持續的毛利率提升支撐其溢價估值；同時，因美國司法部訴訟與歐盟 DMA 可能改變 App Store 收費模式，市場情緒被調整為中性，形成「高毛利與監管風險」的兩面拉鋸。Evercore ISI 的目標價上調與 Outperform 評等進一步強化了市場對 Apple 長期獲利能力的信心，儘管短期仍需關注監管因素對毛利率的潛在衝擊。"
   },
   {
     "id": "mi-04",
@@ -877,7 +877,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Apple 近一年（TTM）的整體營收成長率約為 **16.6%**（公司基本面揭示的 Revenue Growth YoY = 0.166），即過去十二個月的營收較前一年同期成長約 16.6%。\n\n在今年的 WWDC 上，Apple 公布了全新升級的 Siri AI，此舉對未來成長動能的意義在於：\n\n1. **提升服務與生態系統的黏著度**：新 Siri 能夠安全地取得使用者在各 App 中的個人情境，並即時回應查詢或自動化第三方應用，讓語音助理不再只是簡單的指令執行器，而成為跨設備、跨服務的「數位幫手」，進一步刺激服務收入的雙位數成長。\n\n2. **加速 AI 競爭力與品牌形象**：分析師認為 Siri AI 的推出將提升 Apple 在生成式 AI 市場的能見度，並因結合 Google 的 AI 技術而具備差異化優勢，提升市場對 Apple AI 路線圖的信心。\n\n3. **創造長期營收來源**：隨著 AI 功能在 iPhone、Mac、Wearables 及服務上持續擴散，預期帶來多年度的功能升級與新訂閱服務，支撐公司在硬體銷售放緩時的營收韌性。\n\n綜合來看，Apple 目前已展現約 16.6% 的營收年增率（TTM），而 Siri AI 的推出則有望透過提升使用者體驗、擴大服務收入以及強化 AI 形象，為公司未來成長提供新動能。",
+    "reference": "Apple 近一年（TTM）的整體營收成長率約為 **16.6%**（公司基本面揭示的 Revenue Growth YoY = 16.60%），即過去十二個月的營收較前一年同期成長約 16.6%。\n\n在今年的 WWDC 上，Apple 公布了全新升級的 Siri AI，此舉對未來成長動能的意義在於：\n\n1. **提升服務與生態系統的黏著度**：新 Siri 能夠安全地取得使用者在各 App 中的個人情境，並即時回應查詢或自動化第三方應用，讓語音助理不再只是簡單的指令執行器，而成為跨設備、跨服務的「數位幫手」，進一步刺激服務收入的雙位數成長。\n\n2. **加速 AI 競爭力與品牌形象**：分析師認為 Siri AI 的推出將提升 Apple 在生成式 AI 市場的能見度，並因結合 Google 的 AI 技術而具備差異化優勢，提升市場對 Apple AI 路線圖的信心。\n\n3. **創造長期營收來源**：隨著 AI 功能在 iPhone、Mac、Wearables 及服務上持續擴散，預期帶來多年度的功能升級與新訂閱服務，支撐公司在硬體銷售放緩時的營收韌性。\n\n綜合來看，Apple 目前已展現約 16.6% 的營收年增率（TTM），而 Siri AI 的推出則有望透過提升使用者體驗、擴大服務收入以及強化 AI 形象，為公司未來成長提供新動能。",
     "_gold_fix_note": "17%(quarterly)→16.6%(Fundamentals YoY) convention-align 20260805"
   },
   {
@@ -926,7 +926,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Microsoft 近期的營收年增長率為 **0.183**（即約 18.3%），顯示公司營收持續以兩位數的速度成長。  \n\n在此成長基礎上，新聞指出 Microsoft 正在自行開發七個全新 AI 模型，這些模型聚焦於微調（fine‑tuning）與成本最佳化，意在降低對外部前沿實驗室（frontier labs）的依賴。公司已將大量圖形處理單元（GPU）資源配置給內部研發團隊，並在 Build 2026 大會上展示了 AI 平台的最新進展，突顯其在 AI 模型、AI 堆疊層級以及自助式（DIY）應用方面的佈局。此舉傳遞出 Microsoft 正從單純使用外部大模型，轉向打造自有模型生態，以加強技術主導權、提升成本效益，並在 AI 基礎設施上形成更完整的端到端解決方案。"
+    "reference": "Microsoft 近期的營收年增長率為 **18.30%**（即約 18.3%），顯示公司營收持續以兩位數的速度成長。  \n\n在此成長基礎上，新聞指出 Microsoft 正在自行開發七個全新 AI 模型，這些模型聚焦於微調（fine‑tuning）與成本最佳化，意在降低對外部前沿實驗室（frontier labs）的依賴。公司已將大量圖形處理單元（GPU）資源配置給內部研發團隊，並在 Build 2026 大會上展示了 AI 平台的最新進展，突顯其在 AI 模型、AI 堆疊層級以及自助式（DIY）應用方面的佈局。此舉傳遞出 Microsoft 正從單純使用外部大模型，轉向打造自有模型生態，以加強技術主導權、提升成本效益，並在 AI 基礎設施上形成更完整的端到端解決方案。"
   },
   {
     "id": "mi-06",
@@ -974,7 +974,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Microsoft 目前的淨利率約為 0.39341998（即約 39.34%）。  \n\n根據最新財務資料，Microsoft 於最近一期的營收 3,182.7 億美元（$318.27 billion） 中獲得淨利 1,252.2 億美元（$125.22 billion），計算出的淨利率為 0.39341998，顯示公司在營運上具備相當高的獲利能力。  \n\n同時，新聞指出 Microsoft 已成為 Anthropic 「Project Glasswing」計畫的選定合作夥伴，使用尚未公開的 Claude Mythos Preview 模型來加強防禦性資安工作。Mythos 具備高階程式碼生成與漏洞偵測能力，Microsoft 可透過此模型快速識別資安弱點並研發修補方案，且在計畫允許下，Microsoft 亦可將發現的威脅資訊、最佳實務、工具或程式碼分享給其他合作夥伴、產業組織、監管機構或政府單位。美國國防部亦正部署 Mythos 於政府系統，以找出並修補軟體漏洞。  \n\n這些動作顯示 Microsoft 正在以下幾個層面布局 AI 資安領域：\n\n1. **與前沿 AI 公司合作**：透過與 Anthropic 的合作，直接取得最先進的 AI 資安模型，提升自家安全產品的偵測與防禦效能。  \n2. **資安資訊共享機制**：在 Glasswing 計畫下，Microsoft 能將威脅情報與修補方法分享給產業夥伴與政府，形成跨組織的資安防護網。  \n3. **將 AI 整合至安全服務**：Mythos 的高階程式碼分析能力可被嵌入 Microsoft 365、Azure 及其他安全與合規服務，增強整體資安防護層級。  \n\n綜合來看，Microsoft 以其高淨利率支撐財務實力，同時透過參與 Anthropic Mythos 計畫，積極將先進 AI 技術嵌入資安防護，展現在 AI 資安領域的前瞻布局與合作策略。"
+    "reference": "Microsoft 目前的淨利率約為 39.34%（即約 39.34%）。  \n\n根據最新財務資料，Microsoft 於最近一期的營收 3,182.7 億美元（$318.27 billion） 中獲得淨利 1,252.2 億美元（$125.22 billion），計算出的淨利率為 39.34%，顯示公司在營運上具備相當高的獲利能力。  \n\n同時，新聞指出 Microsoft 已成為 Anthropic 「Project Glasswing」計畫的選定合作夥伴，使用尚未公開的 Claude Mythos Preview 模型來加強防禦性資安工作。Mythos 具備高階程式碼生成與漏洞偵測能力，Microsoft 可透過此模型快速識別資安弱點並研發修補方案，且在計畫允許下，Microsoft 亦可將發現的威脅資訊、最佳實務、工具或程式碼分享給其他合作夥伴、產業組織、監管機構或政府單位。美國國防部亦正部署 Mythos 於政府系統，以找出並修補軟體漏洞。  \n\n這些動作顯示 Microsoft 正在以下幾個層面布局 AI 資安領域：\n\n1. **與前沿 AI 公司合作**：透過與 Anthropic 的合作，直接取得最先進的 AI 資安模型，提升自家安全產品的偵測與防禦效能。  \n2. **資安資訊共享機制**：在 Glasswing 計畫下，Microsoft 能將威脅情報與修補方法分享給產業夥伴與政府，形成跨組織的資安防護網。  \n3. **將 AI 整合至安全服務**：Mythos 的高階程式碼分析能力可被嵌入 Microsoft 365、Azure 及其他安全與合規服務，增強整體資安防護層級。  \n\n綜合來看，Microsoft 以其高淨利率支撐財務實力，同時透過參與 Anthropic Mythos 計畫，積極將先進 AI 技術嵌入資安防護，展現在 AI 資安領域的前瞻布局與合作策略。"
   },
   {
     "id": "mi-07",
@@ -1011,7 +1011,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Amazon 目前的毛利率約為 50.6%。根據最新財務資料，Amazon 2026 年的營收為 7,427.8 億美元（$742.78 billion），毛利為 3,758.8 億美元（$375.88 billion），計算得出的毛利率為 0.50604，即 50.6%。\n\n在毛利率保持在五成左右的同時，Amazon 於 2026 年 6 月宣布將在歐洲投入超過 100 億歐元的資本支出。此投資計畫包括升級履行中心、部署可接受文字指令的下一代機器人、在 2027 年上半年導入自主式 Proteus 機器人、擴大 STARK 機器人系統、以及在曼徹斯特與伯明翰推出「Amazon Now」超快速配送服務，並創造 25,000 個新工作機會。這一系列舉措顯示 Amazon 正以加強物流基礎建設與自動化為核心，提升歐洲市場的配送速度與服務品質，從而擴大在該區域的市場佔有率並多元化收入來源。換言之，Amazon 正透過大規模資本投入與技術升級，將成長重心向歐洲物流與即時配送服務延伸，以鞏固其全球電商與雲端生態系的競爭優勢。"
+    "reference": "Amazon 目前的毛利率約為 50.6%。根據最新財務資料，Amazon 2026 年的營收為 7,427.8 億美元（$742.78 billion），毛利為 3,758.8 億美元（$375.88 billion），計算得出的毛利率為 50.60%，即 50.6%。\n\n在毛利率保持在五成左右的同時，Amazon 於 2026 年 6 月宣布將在歐洲投入超過 100 億歐元的資本支出。此投資計畫包括升級履行中心、部署可接受文字指令的下一代機器人、在 2027 年上半年導入自主式 Proteus 機器人、擴大 STARK 機器人系統、以及在曼徹斯特與伯明翰推出「Amazon Now」超快速配送服務，並創造 25,000 個新工作機會。這一系列舉措顯示 Amazon 正以加強物流基礎建設與自動化為核心，提升歐洲市場的配送速度與服務品質，從而擴大在該區域的市場佔有率並多元化收入來源。換言之，Amazon 正透過大規模資本投入與技術升級，將成長重心向歐洲物流與即時配送服務延伸，以鞏固其全球電商與雲端生態系的競爭優勢。"
   },
   {
     "id": "mi-08",
@@ -1062,7 +1062,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Amazon 在過去一年（TTM）的營收成長率為 **0.166**（即約 16.6%）。這一數字來自公司最新的財務概況，顯示其營收較前一年同期成長了 16.6%。\n\n同時，根據路透社報導，對沖基金在 SpaceX IPO 前拋售了包括 Amazon 在內的「Magnificent Seven」大型科技股，且追蹤這些股票的 Roundhill Magnificent Seven ETF 自 6 月 5 日以來已下跌超過 2.4%。此舉表明投資人正主動減少對這些高估值科技公司的敞口，對 Amazon 也採取了較為謹慎甚至偏空的態度。儘管 Amazon 仍保持兩位數的營收成長，市場卻因即將到來的 SpaceX 上市而顯示出清倉與風險規避的情緒，暗示投資者認為 Amazon 近期的股價可能已被高估，或至少在短期內缺乏進一步上漲的動能。"
+    "reference": "Amazon 在過去一年（TTM）的營收成長率為 **16.60%**（即約 16.6%）。這一數字來自公司最新的財務概況，顯示其營收較前一年同期成長了 16.6%。\n\n同時，根據路透社報導，對沖基金在 SpaceX IPO 前拋售了包括 Amazon 在內的「Magnificent Seven」大型科技股，且追蹤這些股票的 Roundhill Magnificent Seven ETF 自 6 月 5 日以來已下跌超過 2.4%。此舉表明投資人正主動減少對這些高估值科技公司的敞口，對 Amazon 也採取了較為謹慎甚至偏空的態度。儘管 Amazon 仍保持兩位數的營收成長，市場卻因即將到來的 SpaceX 上市而顯示出清倉與風險規避的情緒，暗示投資者認為 Amazon 近期的股價可能已被高估，或至少在短期內缺乏進一步上漲的動能。"
   },
   {
     "id": "mi-09",
@@ -1157,7 +1157,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Alphabet 近一年營收成長率為 21.8%（來源列示為 0.218 的年度成長率）。  \n\n這個成長率背後，新聞中 Navan 與 Google Gemini 的合作顯示 Google 正在加速 AI 生態系的佈局。Navan 透過與 Gemini Enterprise 的整合，讓使用者在旅行預訂時能以 AI 代理人完成全程訂票，實現行程的即時個人化與自動化，說明 Google 已將生成式 AI 從純粹的搜尋與廣告延伸至垂直產業應用。Google Cloud 旗下的 AI 方案（包括 AI 基礎建設、Vertex AI 平台與 Gemini Enterprise）正被外部 SaaS 夥伴直接使用，顯示 Google 正以平台化方式向企業與消費者提供可重複部署的 AI 代理功能。再加上 Google Services 仍涵蓋廣告、Android、YouTube 等核心產品，AI 能力可在這些服務間互相串接，形成跨產品的智慧體驗。整體而言，Navan 與 Gemini 的合作不僅證明 Google 已在「未管理」的旅遊市場取得先機，也突顯其透過雲端 AI 服務與企業合作夥伴，打造可在多種情境下重複使用的 AI 生態系，進一步鞏固其在人工智慧領域的領先地位。"
+    "reference": "Alphabet 近一年營收成長率為 21.8%（來源列示為 21.80% 的年度成長率）。  \n\n這個成長率背後，新聞中 Navan 與 Google Gemini 的合作顯示 Google 正在加速 AI 生態系的佈局。Navan 透過與 Gemini Enterprise 的整合，讓使用者在旅行預訂時能以 AI 代理人完成全程訂票，實現行程的即時個人化與自動化，說明 Google 已將生成式 AI 從純粹的搜尋與廣告延伸至垂直產業應用。Google Cloud 旗下的 AI 方案（包括 AI 基礎建設、Vertex AI 平台與 Gemini Enterprise）正被外部 SaaS 夥伴直接使用，顯示 Google 正以平台化方式向企業與消費者提供可重複部署的 AI 代理功能。再加上 Google Services 仍涵蓋廣告、Android、YouTube 等核心產品，AI 能力可在這些服務間互相串接，形成跨產品的智慧體驗。整體而言，Navan 與 Gemini 的合作不僅證明 Google 已在「未管理」的旅遊市場取得先機，也突顯其透過雲端 AI 服務與企業合作夥伴，打造可在多種情境下重複使用的 AI 生態系，進一步鞏固其在人工智慧領域的領先地位。"
   },
   {
     "id": "mi-11",
@@ -1241,7 +1241,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Meta 近一年的營收成長率為 **33.1 %**（Revenue Growth YoY = 0.331）。  \n\n根據路透社報導，對沖基金在 SpaceX 即將上市前拋售了包括 Meta 在內的「Magnificent Seven」大型科技股，導致追蹤這些股票的 Roundhill Magnificent Seven ETF 自 6 月 5 日以來下跌逾 2.4%，且相關科技股自上週五以來皆呈現跌勢。這表示市場情緒在 SpaceX IPO 前出現了顯著的風險偏好收縮，投資人正以拋售方式「清倉」以備未來波動。  \n\n因此，儘管 Meta 本身的營收以 33.1 % 的高速成長支撐其基本面，但其股價在短期內仍受到整體科技板塊被拋售的負面衝擊，股價表現可能被區域性賣壓掩蓋，或出現波動。投資者在評估 Meta 股價走勢時，需要同時考量公司強勁的營收增長與當前因 SpaceX IPO 前避險基金拋售所帶來的市場情緒壓力。"
+    "reference": "Meta 近一年的營收成長率為 **33.1 %**（Revenue Growth YoY = 33.10%）。  \n\n根據路透社報導，對沖基金在 SpaceX 即將上市前拋售了包括 Meta 在內的「Magnificent Seven」大型科技股，導致追蹤這些股票的 Roundhill Magnificent Seven ETF 自 6 月 5 日以來下跌逾 2.4%，且相關科技股自上週五以來皆呈現跌勢。這表示市場情緒在 SpaceX IPO 前出現了顯著的風險偏好收縮，投資人正以拋售方式「清倉」以備未來波動。  \n\n因此，儘管 Meta 本身的營收以 33.1 % 的高速成長支撐其基本面，但其股價在短期內仍受到整體科技板塊被拋售的負面衝擊，股價表現可能被區域性賣壓掩蓋，或出現波動。投資者在評估 Meta 股價走勢時，需要同時考量公司強勁的營收增長與當前因 SpaceX IPO 前避險基金拋售所帶來的市場情緒壓力。"
   },
   {
     "id": "mi-13",
@@ -1287,7 +1287,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Tesla 目前的毛利率約為 19.1%。根據最新的公司基本面資料，Tesla 的營收為 978.8 億美元（$97.88 billion），毛利為 186.6 億美元（$18.66 billion），計算得出的毛利率為 0.19065，即 19.065%。  \n\n新聞指出 SpaceX 即將於本週在納斯達克以每股 135 美元的價格上市，市場焦點因此轉向太空事業，Tesla 的股價近期表現平淡，未出現顯著波動。分析師認為，因為 SpaceX 的 IPO 把投資者的注意力從 Tesla 移開，Tesla 目前在市場上的關注度下降，使得其股價缺乏明顯的上漲動能；同時，若投資者重新聚焦於 Tesla，尤其是其交付量好於預期或自動駕駛與機器人計畫的進展，仍有可能帶來意外的正面驚喜。總體而言，儘管 SpaceX 的上市暫時分散了市場注意力，Tesla 仍以約 19% 的毛利率維持穩健的盈利能力，投資者需關注公司核心業務的表現以及未來可能的市場情緒回升。"
+    "reference": "Tesla 目前的毛利率約為 19.1%。根據最新的公司基本面資料，Tesla 的營收為 978.8 億美元（$97.88 billion），毛利為 186.6 億美元（$18.66 billion），計算得出的毛利率為 19.06%，即 19.065%。  \n\n新聞指出 SpaceX 即將於本週在納斯達克以每股 135 美元的價格上市，市場焦點因此轉向太空事業，Tesla 的股價近期表現平淡，未出現顯著波動。分析師認為，因為 SpaceX 的 IPO 把投資者的注意力從 Tesla 移開，Tesla 目前在市場上的關注度下降，使得其股價缺乏明顯的上漲動能；同時，若投資者重新聚焦於 Tesla，尤其是其交付量好於預期或自動駕駛與機器人計畫的進展，仍有可能帶來意外的正面驚喜。總體而言，儘管 SpaceX 的上市暫時分散了市場注意力，Tesla 仍以約 19% 的毛利率維持穩健的盈利能力，投資者需關注公司核心業務的表現以及未來可能的市場情緒回升。"
   },
   {
     "id": "mi-14",
@@ -1387,7 +1387,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "NVIDIA 目前的淨利率為 **0.62966**（即約 62.97%），顯示公司在最近的財務期間能將約六成的營收轉化為淨利。\n\n根據黃仁勳在接受 Bloomberg 訪問時的說法，儘管美國仍對最高階的 Blackwell 與即將推出的 Rubin 系列保持禁售，H200 晶片已取得對中國的授權，且他預期「隨著時間推移」中國市場最終會對高階美國 AI 晶片開放。此訊息透露出幾個對輝達 AI 晶片競爭定位的關鍵意涵：\n\n1. **市場潛在擴大**：中國是全球最大的半導體需求市場之一，若未來能逐步銷售 H200 甚至更高階產品，輝達的可服務客戶基礎將顯著擴大，進一步鞏固其在 AI 基礎設施領域的領先地位。\n\n2. **競爭環境仍然激烈**：即使中國市場有望開放，輝達仍面臨來自 Cerebras、AMD 以及雲端巨頭 Amazon 與 Google 自研 AI 晶片的加劇競爭。這些對手正推出不同架構或自家晶片，爭奪同一客戶群。\n\n3. **政策與供應鏈風險**：美國對 H200 的限制仍未完全解除，且最高階的 Blackwell 與 Rubin 仍被禁售，顯示政策風險仍存。若美國或中國的出口管制政策出現變動，可能影響輝達在中國的銷售節奏。\n\n綜合來看，輝達目前以約 63% 的高淨利率展現強勁獲利能力；黃仁勳的表態暗示未來中國市場有望逐步開放，這將為其 AI 晶片提供新的成長動能，提升在全球 AI 晶片競爭中的領先優勢，但同時也必須持續應對來自其他晶片廠商與政策限制的挑戰。"
+    "reference": "NVIDIA 目前的淨利率為 **62.97%**（即約 62.97%），顯示公司在最近的財務期間能將約六成的營收轉化為淨利。\n\n根據黃仁勳在接受 Bloomberg 訪問時的說法，儘管美國仍對最高階的 Blackwell 與即將推出的 Rubin 系列保持禁售，H200 晶片已取得對中國的授權，且他預期「隨著時間推移」中國市場最終會對高階美國 AI 晶片開放。此訊息透露出幾個對輝達 AI 晶片競爭定位的關鍵意涵：\n\n1. **市場潛在擴大**：中國是全球最大的半導體需求市場之一，若未來能逐步銷售 H200 甚至更高階產品，輝達的可服務客戶基礎將顯著擴大，進一步鞏固其在 AI 基礎設施領域的領先地位。\n\n2. **競爭環境仍然激烈**：即使中國市場有望開放，輝達仍面臨來自 Cerebras、AMD 以及雲端巨頭 Amazon 與 Google 自研 AI 晶片的加劇競爭。這些對手正推出不同架構或自家晶片，爭奪同一客戶群。\n\n3. **政策與供應鏈風險**：美國對 H200 的限制仍未完全解除，且最高階的 Blackwell 與 Rubin 仍被禁售，顯示政策風險仍存。若美國或中國的出口管制政策出現變動，可能影響輝達在中國的銷售節奏。\n\n綜合來看，輝達目前以約 63% 的高淨利率展現強勁獲利能力；黃仁勳的表態暗示未來中國市場有望逐步開放，這將為其 AI 晶片提供新的成長動能，提升在全球 AI 晶片競爭中的領先優勢，但同時也必須持續應對來自其他晶片廠商與政策限制的挑戰。"
   },
   {
     "id": "sem-01",
@@ -2146,88 +2146,90 @@
     "category": "mixed",
     "query": "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？",
     "gold_files": [
-      "AMZN_10Q_202603.html"
+      "AMZN_10Q_202606.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 75
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 79
       },
       {
-        "source": "AMZN_10Q_202603.html",
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 87
+      },
+      {
+        "source": "AMZN_10Q_202606.html",
         "chunk_index": 12
       },
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 74
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 64
       },
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 83
-      },
-      {
-        "source": "AMZN_10Q_202603.html",
+        "source": "AMZN_10Q_202606.html",
         "chunk_index": 13
       },
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 60
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 63
       },
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 61
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 83
       },
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 79
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 0
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "在最新一季（2026 年第一季），Amazon 的國際業務佔整體營收約 **22 %**。\n\n根據 10‑Q 報告，2026 年第一季國際部門的淨銷售額為 **397.89 億美元（$39,789 million）**，而合併（全部）淨銷售額為 **1,815.19 億美元（$181,519 million）**。計算得出國際部門佔比約為 39,789 ÷ 181,519 ≈ 21.9%，與報告中列示的「Net Sales Mix」國際部門佔 **22 %** 相符。"
+    "reference": "Amazon 國際業務在最新一季（2026 年第二季）佔整體營收約 21%。  \n\n根據 2026 年 6 月 30 日止三個月的財務資料，國際部門的淨銷售額為 **421.97 億美元（$42,197 百萬）**，而公司合併的淨銷售額為 **2,006.06 億美元（$200,606 百萬）**。將國際銷售額除以合併銷售額得到的比例約為 **0.210（即 21%）**，與公司公布的「Net sales mix」中國際部門佔比 21% 相符。"
   },
   {
     "id": "mix-05",
     "category": "mixed",
     "query": "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？",
     "gold_files": [
-      "AMZN_10Q_202603.html"
+      "AMZN_10Q_202606.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 75
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 83
       },
       {
-        "source": "AMZN_10Q_202603.html",
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 63
+      },
+      {
+        "source": "AMZN_10Q_202606.html",
         "chunk_index": 13
       },
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 12
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 78
       },
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 74
-      },
-      {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 60
-      },
-      {
-        "source": "AMZN_10Q_202603.html",
+        "source": "AMZN_10Q_202606.html",
         "chunk_index": 79
       },
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 61
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 64
       },
       {
-        "source": "AMZN_10Q_202603.html",
-        "chunk_index": 76
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 82
+      },
+      {
+        "source": "AMZN_10Q_202606.html",
+        "chunk_index": 81
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Amazon AWS 部門在最新一季（2026 年第一季）營業利益的成長，主要是受到 AWS 營收大幅提升的驅動，營收成長 28%（從 292.67 億美元（$29,267 百萬）增至 375.87 億美元（$37,587 百萬）），使營業利益從 115.47 億美元（$11,547 百萬）提升至 141.61 億美元（$14,161 百萬），增加了 26.14 億美元（$2,614 百萬）。\n\n具體來說，AWS 的淨銷售額在本季較去年同期增長 28%，顯示客戶對雲端運算服務的使用量持續上升，尤其是包括人工智慧、資料分析與其他高價值雲端解決方案的需求。營收的顯著擴張直接推高了營業收入，儘管「技術與基礎設施」成本佔銷售比例略有上升（從 14.8% 提升至 16.3%），但仍未抵消營收增長帶來的效益，因而形成營業利益的顯著提升。"
+    "reference": "Amazon AWS 部門在最新一季（2026 年第二季）營業利益大幅成長，主要是因為 AWS 服務銷售額顯著提升，帶動營收與營業利益同步上升。\n\n在 2026 年第二季，AWS 的營業利益從 2025 年同季的 **101.6 億美元（$10,160 百萬）** 增至 **166.21 億美元（$16,621 百萬）**，增幅約 **64%**（增加 64.61 億美元（$6,461 百萬））。同期 AWS 的淨銷售額也從 **308.73 億美元（$30,873 百萬）** 成長至 **422.32 億美元（$42,232 百萬）**，年增率 **37%**（增加 113.59 億美元（$11,359 百萬）），顯示雲端服務需求強勁。依 10-Q 說明，AWS 營業利益的成長「主要來自銷售增加，部分被技術基礎設施支出所抵銷」，而該支出主要來自為支持 AWS 業務成長而增加的投資。因此，AWS 營業利益的主要驅動因素是 **銷售增加**，技術基礎設施投資則構成部分抵銷。"
   },
   {
     "id": "mix-06",
@@ -2322,44 +2324,45 @@
     "category": "mixed",
     "query": "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？",
     "gold_files": [
-      "AAPL_10Q_202603.html"
+      "AAPL_10Q_202606.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 9
-      },
-      {
-        "source": "AAPL_10Q_202603.html",
+        "source": "AAPL_10Q_202606.html",
         "chunk_index": 65
       },
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 67
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 20
       },
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 19
-      },
-      {
-        "source": "AAPL_10Q_202603.html",
+        "source": "AAPL_10Q_202606.html",
         "chunk_index": 66
       },
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 57
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 26
       },
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 25
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 58
       },
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 14
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 37
+      },
+      {
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 10
+      },
+      {
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 15
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Apple 大中華區在最新一季（截至 2026 年 3 月 28 日的三個月）營收較去年同期成長 **28 %**。  \n\n此成長主要來自 iPhone 銷售的提升，尤其是 Pro 系列機型的需求上升，使得 iPhone 在大中華區的營收佔比高於其他區域；同時服務（Services）收入的增長亦貢獻了區域營收的提升。這兩項產品線的強勁表現是推動大中華區營收大幅上揚的主要動力。"
+    "reference": "Apple 大中華區在最新一季（截至 2026 年 6 月 27 日的第三季）營收較去年同季成長 **22%**，從 **153.69 億美元（$15,369 million）** 提升至 **188.16 億美元（$18,816 million）**。\n\n依 10-Q 說明，此成長主要受以下因素驅動：  \n* **iPhone 淨銷售提升為主要原因**（原文：primarily due to higher net sales of iPhone），且在大中華區 iPhone 營收佔淨銷售的比重較去年同期略為提高；  \n* **美元走弱帶來有利的匯率影響**（原文：the weaker U.S. dollar had a favorable year-over-year impact on Greater China net sales）。  \n\n綜合來說，iPhone 銷售是本季大中華區營收成長的核心動力，匯率為次要的順風因素。"
   },
   {
     "id": "mix-10",
@@ -3037,7 +3040,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Meta 目前的股東權益報酬率為 **0.32930002**。根據最新的公司基本面資料，在「Dividends & Returns」項目中直接列示 Return on Equity 為 0.32930002。"
+    "reference": "Meta 目前的股東權益報酬率為 **32.93%**。根據最新的公司基本面資料，在「Dividends & Returns」項目中直接列示 Return on Equity 為 32.93%。"
   },
   {
     "id": "lex-14",
@@ -3431,88 +3434,90 @@
     "category": "colloquial",
     "query": "Meta 最近這一季賺（營收）成長多少？",
     "gold_files": [
-      "META_10Q_202603.html"
+      "META_10Q_202606.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 164
-      },
-      {
-        "source": "META_10Q_202603.html",
+        "source": "META_10Q_202606.html",
         "chunk_index": 0
       },
       {
-        "source": "META_10Q_202603.html",
+        "source": "META_10Q_202606.html",
         "chunk_index": 2
       },
       {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 227
+        "source": "META_10Q_202606.html",
+        "chunk_index": 148
       },
       {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 161
-      },
-      {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 162
-      },
-      {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 220
-      },
-      {
-        "source": "META_10Q_202603.html",
+        "source": "META_10Q_202606.html",
         "chunk_index": 11
+      },
+      {
+        "source": "META_10Q_202606.html",
+        "chunk_index": 149
+      },
+      {
+        "source": "META_10Q_202606.html",
+        "chunk_index": 217
+      },
+      {
+        "source": "META_10Q_202606.html",
+        "chunk_index": 1
+      },
+      {
+        "source": "META_10Q_202606.html",
+        "chunk_index": 218
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Meta 在最近一季（2026 年第一季）營收為 563.11 億美元，較去年同季的 423.14 億美元增加了 139.97 億美元，約成長 33%。這顯示 Meta 的營收較前一年同季提升了超過三成。"
+    "reference": "Meta 在最近一季（2026 年第二季）的營收較去年同期成長約 28%。具體而言，2026 年第二季的營收為 608.01 億美元（$60,801 百萬），較 2025 年第二季的 475.16 億美元（$47,516 百萬）增加了 132.85 億美元（$13,285 百萬），年增率約為 28%。"
   },
   {
     "id": "col-13",
     "category": "colloquial",
     "query": "蘋果在大中華區最近賣得好不好？",
     "gold_files": [
-      "AAPL_10Q_202603.html"
+      "AAPL_10Q_202606.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 9
-      },
-      {
-        "source": "AAPL_10Q_202603.html",
+        "source": "AAPL_10Q_202606.html",
         "chunk_index": 65
       },
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 19
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 20
       },
       {
-        "source": "AAPL_10Q_202603.html",
+        "source": "AAPL_10Q_202606.html",
         "chunk_index": 66
       },
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 67
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 26
       },
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 25
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 58
       },
       {
-        "source": "AAPL_10Q_202603.html",
-        "chunk_index": 57
-      },
-      {
-        "source": "AAPL_10Q_202603.html",
+        "source": "AAPL_10Q_202606.html",
         "chunk_index": 10
+      },
+      {
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 37
+      },
+      {
+        "source": "AAPL_10Q_202606.html",
+        "chunk_index": 39
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "蘋果在大中華區的銷售表現相當強勁，2026 年第二季（截至 2026 年 3 月 28 日的三個月）淨銷售額為 **204.97 億美元（$20,497 百萬）**，較 2025 年同季的 **160.02 億美元（$16,002 百萬）** 成長 **28%**；而 2026 年上半年度（截至 2026 年 3 月 28 日的六個月）淨銷售額為 **460.23 億美元（$46,023 百萬）**，較 2025 年上半年度的 **345.15 億美元（$34,515 百萬）** 成長 **33%**。這顯示蘋果在大中華區的產品與服務需求持續上升，銷售增長顯著。"
+    "reference": "蘋果在大中華區的銷售表現相當強勁，2026 年第三季的淨銷售額較去年同期大幅上升。  \n\n根據 2026 年 6 月 27 日結束的三個月期間，Greater China（大中華區）淨銷售額為 **188.16 億美元（$18,816 million）**，較 2025 年同季的 **153.69 億美元（$15,369 million）** 增長 **22%**。在同一年度的前九個月，該區域的淨銷售額達 **648.39 億美元（$64,839 million）**，較 2025 年的 **498.84 億美元（$49,884 million）** 提升 **30%**。此外，Greater China 的營業收入亦從去年同期的 **58.22 億美元（$5,822 million）** 增至 **74.06 億美元（$7,406 million）**，顯示利潤也同步改善。  \n\n整體而言，蘋果在大中華區的銷售額與營運表現皆呈顯著成長，說明近期的市場需求相當旺盛。"
   },
   {
     "id": "col-14",
@@ -3654,7 +3659,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "在 Amazon、Microsoft、Alphabet、Meta 四家公司中，最近十二個月（TTM）總營收規模最大的公司是 Amazon，營收為 **7,427.8 億美元（$742.78 billion）**，其同期的毛利率為 **50.604 %**（Gross Margin = 0.50604）。\n\nAmazon 的財務概況顯示，2026 年 6 月 12 日更新的公司基本資料中，Revenue (TTM) 為 7,427.8 億美元（$742.78 billion），Gross Profit 為 3,758.8 億美元（$375.88 billion），計算得出的 Gross Margin 為 0.50604，即 50.604%。相較之下，Microsoft 的營收為 3,182.7 億美元（$318.27 billion）（毛利率 68.309%），Alphabet 為 4,225 億美元（$422.50 billion）（毛利率 60.368%），Meta 為 2,149.6 億美元（$214.96 billion）（毛利率 81.941%），均低於 Amazon 的營收規模。"
+    "reference": "在 Amazon、Microsoft、Alphabet、Meta 四家公司中，最近十二個月（TTM）總營收規模最大的公司是 Amazon，營收為 **7,427.8 億美元（$742.78 billion）**，其同期的毛利率為 **50.604 %**（Gross Margin = 50.60%）。\n\nAmazon 的財務概況顯示，2026 年 6 月 12 日更新的公司基本資料中，Revenue (TTM) 為 7,427.8 億美元（$742.78 billion），Gross Profit 為 3,758.8 億美元（$375.88 billion），計算得出的 Gross Margin 為 50.60%，即 50.604%。相較之下，Microsoft 的營收為 3,182.7 億美元（$318.27 billion）（毛利率 68.309%），Alphabet 為 4,225 億美元（$422.50 billion）（毛利率 60.368%），Meta 為 2,149.6 億美元（$214.96 billion）（毛利率 81.941%），均低於 Amazon 的營收規模。"
   },
   {
     "id": "mh-02",
@@ -3700,7 +3705,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Meta Platforms, Inc. 在最近十二個月（TTM）的毛利率最高，為 0.81941（即 81.941%），其同期的總營收為 **2,149.6 億美元（$214.96 billion）**。\n\n根據提供的財務資料，NVIDIA Corporation 的毛利率為 0.74144995（74.144995%），TTM 營收為 2,534.9 億美元（$253.49 billion）；Microsoft Corporation 的毛利率為 0.68309（68.309%），TTM 營收為 3,182.7 億美元（$318.27 billion）。相較之下，Meta 的毛利率最高，且其營收金額如上所述。"
+    "reference": "Meta Platforms, Inc. 在最近十二個月（TTM）的毛利率最高，為 81.94%（即 81.941%），其同期的總營收為 **2,149.6 億美元（$214.96 billion）**。\n\n根據提供的財務資料，NVIDIA Corporation 的毛利率為 74.14%（74.144995%），TTM 營收為 2,534.9 億美元（$253.49 billion）；Microsoft Corporation 的毛利率為 68.31%（68.309%），TTM 營收為 3,182.7 億美元（$318.27 billion）。相較之下，Meta 的毛利率最高，且其營收金額如上所述。"
   },
   {
     "id": "mh-03",
@@ -3746,7 +3751,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "在 NVIDIA、Meta 與 Alphabet 三家公司中，最近一年營收年增率最高的是 NVIDIA，該公司在過去十二個月（TTM）的淨利為 1,596.1 億美元（$159.61 billion）。  \n\n根據最新財務資料，NVIDIA 的營收年增率為 0.852，遠高於 Meta 的 0.331 以及 Alphabet 的 0.218。NVIDIA 的 TTM 營收為 2,534.9 億美元（$253.49 billion），淨利則達 1,596.1 億美元（$159.61 billion），顯示其在收入成長與獲利表現上均領先於其他兩家公司。"
+    "reference": "在 NVIDIA、Meta 與 Alphabet 三家公司中，最近一年營收年增率最高的是 NVIDIA，該公司在過去十二個月（TTM）的淨利為 1,596.1 億美元（$159.61 billion）。  \n\n根據最新財務資料，NVIDIA 的營收年增率為 85.20%，遠高於 Meta 的 33.10% 以及 Alphabet 的 21.80%。NVIDIA 的 TTM 營收為 2,534.9 億美元（$253.49 billion），淨利則達 1,596.1 億美元（$159.61 billion），顯示其在收入成長與獲利表現上均領先於其他兩家公司。"
   },
   {
     "id": "mh-04",
@@ -3792,7 +3797,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "在 Microsoft、Alphabet、Apple 這三家公司中，最近十二個月（TTM）營業利益率最高的是 Microsoft，該公司同期的總營收為 3,182.7 億美元（$318.27 billion）。\n\nMicrosoft 的營業利益率為 0.46326（即 46.326%），而其 TTM 營收為 3,182.7 億美元（$318.27 billion）。相較之下，Alphabet 的營業利益率為 0.36121（36.121%），營收 4,225 億美元（$422.50 billion）；Apple 的營業利益率為 0.32275（32.275%），營收 4,514.4 億美元（$451.44 billion）。由此可見，Microsoft 以最高的營業利益率領先，且其營收為 3,182.7 億美元（$318.27 billion）。"
+    "reference": "在 Microsoft、Alphabet、Apple 這三家公司中，最近十二個月（TTM）營業利益率最高的是 Microsoft，該公司同期的總營收為 3,182.7 億美元（$318.27 billion）。\n\nMicrosoft 的營業利益率為 46.33%（即 46.326%），而其 TTM 營收為 3,182.7 億美元（$318.27 billion）。相較之下，Alphabet 的營業利益率為 36.12%（36.121%），營收 4,225 億美元（$422.50 billion）；Apple 的營業利益率為 32.27%（32.275%），營收 4,514.4 億美元（$451.44 billion）。由此可見，Microsoft 以最高的營業利益率領先，且其營收為 3,182.7 億美元（$318.27 billion）。"
   },
   {
     "id": "mh-05",
@@ -3838,7 +3843,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Alphabet 公司的最近十二個月（TTM）淨利最高，為 **1,602.1 億美元（$160.21 billion）**。該公司最近一年的營收年增率為 **0.218**（即約 21.8%）。  \n\n根據提供的財務摘要，Alphabet（Google）在 TTM 期間的淨利為 1,602.1 億美元（$160.21 billion），遠高於 Microsoft 的 1,252.2 億美元（$125.22 billion） 以及 Amazon 的 908 億美元（$90.80 billion）。其營收成長率（Revenue Growth YoY）在同一期間顯示為 0.218，代表營收較前一年增長約 21.8%。"
+    "reference": "Alphabet 公司的最近十二個月（TTM）淨利最高，為 **1,602.1 億美元（$160.21 billion）**。該公司最近一年的營收年增率為 **21.80%**（即約 21.8%）。  \n\n根據提供的財務摘要，Alphabet（Google）在 TTM 期間的淨利為 1,602.1 億美元（$160.21 billion），遠高於 Microsoft 的 1,252.2 億美元（$125.22 billion） 以及 Amazon 的 908 億美元（$90.80 billion）。其營收成長率（Revenue Growth YoY）在同一期間顯示為 21.80%，代表營收較前一年增長約 21.8%。"
   },
   {
     "id": "mh-06",
@@ -3982,7 +3987,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "新聞中提到的「850 多億美元」籌資計畫以及大幅提升資本支出的是 Alphabet Inc.（谷歌母公司）。根據最新的公司基本面資料，Alphabet 近期一年的營收年增率為 0.218，約等於 21.8%。這顯示其營收較前一年成長了約二成多。"
+    "reference": "新聞中提到的「850 多億美元」籌資計畫以及大幅提升資本支出的是 Alphabet Inc.（谷歌母公司）。根據最新的公司基本面資料，Alphabet 近期一年的營收年增率為 21.80%，約等於 21.8%。這顯示其營收較前一年成長了約二成多。"
   },
   {
     "id": "mh-09",
@@ -4003,7 +4008,7 @@
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "在新聞中，於 6 月 5 日獲穆迪（Moody's Ratings）將其 847.5 億美元（$84.75 billion）融資案評為「信用正面（credit-positive）」的公司是 **Alphabet Inc.（Google，NASDAQ: GOOGL）**；該公司目前的營業利益率（Operating Margin）約為 **36.1%（0.36121）**。\n\n穆迪指出，這筆大規模募資凸顯了 Alphabet 強健的財務體質，足以支應額外的投資需求。依公司最新的基本面資料，Alphabet 的 TTM 營收為 4,225 億美元（$422.50 billion）、營業利益率為 0.36121（約 36.1%），淨利率（Profit Margin）為 37.9%，顯示其核心業務維持高獲利能力。",
+    "reference": "在新聞中，於 6 月 5 日獲穆迪（Moody's Ratings）將其 847.5 億美元（$84.75 billion）融資案評為「信用正面（credit-positive）」的公司是 **Alphabet Inc.（Google，NASDAQ: GOOGL）**；該公司目前的營業利益率（Operating Margin）約為 **36.1%（36.12%）**。\n\n穆迪指出，這筆大規模募資凸顯了 Alphabet 強健的財務體質，足以支應額外的投資需求。依公司最新的基本面資料，Alphabet 的 TTM 營收為 4,225 億美元（$422.50 billion）、營業利益率為 36.12%（約 36.1%），淨利率（Profit Margin）為 37.9%，顯示其核心業務維持高獲利能力。",
     "_gold_fix_note": "rewrote fabricated hook→grounded Alphabet/Moody cross-doc multihop 20260805"
   },
   {
@@ -4194,44 +4199,45 @@
     "category": "mixed",
     "query": "Meta 最新一季總營收成長多少？主要驅動因素是什麼？",
     "gold_files": [
-      "META_10Q_202603.html"
+      "META_10Q_202606.html"
     ],
+    "collection": "us_stock_rag_edgar_period",
     "gold_chunks_used": [
       {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 164
+        "source": "META_10Q_202606.html",
+        "chunk_index": 215
       },
       {
-        "source": "META_10Q_202603.html",
+        "source": "META_10Q_202606.html",
+        "chunk_index": 148
+      },
+      {
+        "source": "META_10Q_202606.html",
         "chunk_index": 0
       },
       {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 227
+        "source": "META_10Q_202606.html",
+        "chunk_index": 11
       },
       {
-        "source": "META_10Q_202603.html",
+        "source": "META_10Q_202606.html",
         "chunk_index": 2
       },
       {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 226
+        "source": "META_10Q_202606.html",
+        "chunk_index": 217
       },
       {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 216
+        "source": "META_10Q_202606.html",
+        "chunk_index": 205
       },
       {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 161
-      },
-      {
-        "source": "META_10Q_202603.html",
-        "chunk_index": 162
+        "source": "META_10Q_202606.html",
+        "chunk_index": 149
       }
     ],
     "reference_lang": "Traditional Chinese",
-    "reference": "Meta 最新一季的總營收較去年同期增加了 139.97 億美元（$13,997 百萬），從 423.14 億美元（$42,314 百萬）提升至 563.11 億美元（$56,311 百萬），約成長 33%。此成長的主要動力來自廣告收入的強勁上升。廣告收入在本季增加了 136.3 億美元（$13,630 百萬），亦是 33% 的成長，主要原因是投放的廣告曝光量較去年同期提升了 19%，且每則廣告的平均價格上升了 12%。其中，亞洲‑太平洋地區的廣告曝光增幅最為顯著，受益於使用者數量與使用率的提升以及廣告展示頻率的增加。其他收入亦從 5.1 億美元（$510 百萬）增至 8.85 億美元（$885 百萬），但規模較小，對總營收的貢獻相對有限。"
+    "reference": "Meta 在最新一季（截至 2026 年 6 月 30 日的三個月）總營收較去年同期成長 28%，即增加了 132.85 億美元（$13,285 百萬）。此成長幾乎全部來自廣告收入的提升，廣告收入從 465.63 億美元（$46,563 百萬）升至 593.63 億美元（$59,363 百萬），增幅約 27%。依 10-Q 說明，廣告收入成長來自兩項因素：**投放的廣告曝光數（ad impressions）較去年同期增加 14%**，以及**每則廣告平均價格（average price per ad）上升 12%**。曝光數在所有地區都成長，其中亞太地區最顯著，來自用戶數、參與度與廣告投放頻率的提升。因此，廣告曝光數與廣告單價同時上升是本季營收成長的主要驅動因素。"
   },
   {
     "id": "col-10",
