@@ -53,3 +53,6 @@ HW3.md
 # SEC 本機申報檔鏡像（279 MB .nc，處理層的離線來源）
 # 不入版控：體積大且可由 fetch_data.py 依 sec_manifest.json 重新取得
 data/raw/sec_local/
+
+# 遷移腳本的備份快照（migrate_*.py 產生）：git 歷史本身就有遷移前內容，不需要再存一份
+*.bak_pct
