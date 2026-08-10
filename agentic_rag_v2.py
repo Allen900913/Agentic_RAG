@@ -64,6 +64,7 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
+import llm_replay as _replay
 import rag_query as rq
 
 from langgraph.graph import StateGraph, START, END
@@ -896,6 +897,14 @@ _PLANNER_PROMPT = f"""你是美股情報 RAG 的規劃器。把使用者問題�
 
 def _plan_subqueries(query: str, freshness_mode: str) -> list[str]:
     """Planner 節點的核心：把問題拆成原子子問題。拆解失敗(解不出 JSON) → 退回單一問題,不讓規劃器失手就整個 run 掛。"""
+    # 重放快取（見 llm_replay）：未設 RAG_REPLAY_CACHE 時完全 no-op。key 刻意不含
+    # system_prompt——它內嵌隨 collection 變動的 KB Coverage Snapshot，納入 key 會讓
+    # 跨 collection A/B 全部 miss，正好毀掉這個快取唯一的用途。
+    _rk = f"{freshness_mode}|{query}"
+    _hit = _replay.get("plan", _rk)
+    if _hit is not _replay.MISS:
+        _trace(f"plan(replay): {len(_hit)} sub-queries → {_hit}")
+        return list(_hit)
     system_prompt = _PLANNER_PROMPT + "\n\n" + _build_temporal_contract(freshness_mode)
     messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": query}]
     with _quiet():
@@ -906,6 +915,7 @@ def _plan_subqueries(query: str, freshness_mode: str) -> list[str]:
         subs = [query.strip()]
     subs = subs[:MAX_SUBQUERIES]
     _trace(f"plan: {len(subs)} sub-queries → {subs}")
+    _replay.put("plan", _rk, subs)
     return subs
 
 
@@ -946,6 +956,14 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
         return {"sufficient": False, "missing": "尚未檢索到任何候選片段", "new_query": subquery, "relevant_ids": []}
     top = pool[:POOL_RETURN_K]
     shown_ids = {_chunk_id(c) for c in top}
+    # 重放快取：key = 子問題 + 這次實際看到的候選 id（順序敏感）。候選變了就是合法 miss
+    # ——那正是被測改動造成的差異，不該用舊決策蓋掉。temporal_scope 不入 key（同 plan 的
+    # 理由：它隨 collection 變，納入會讓跨 collection A/B 全部 miss）。
+    _rk = subquery + " || " + " ".join(_chunk_id(c) for c in top)
+    _hit = _replay.get("check", _rk)
+    if _hit is not _replay.MISS:
+        _trace(f"check(replay)[{subquery[:24]!r}] sufficient={_hit.get('sufficient')}")
+        return dict(_hit)
     ctx = "\n".join(
         f"[{i}] rerank={c['rerank_score']:.3f} | id={_chunk_id(c)}\n    {_snippet(c['content'], subquery)}"
         for i, c in enumerate(top, start=1)
@@ -970,7 +988,9 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
                     if isinstance(raw_ids, list) else [])
     _trace(f"check[{subquery[:24]!r}] sufficient={sufficient} missing={missing[:50]!r} "
            f"new_query={new_query[:50]!r} relevant_ids={len(relevant_ids)}/{len(shown_ids)}")
-    return {"sufficient": sufficient, "missing": missing, "new_query": new_query, "relevant_ids": relevant_ids}
+    out = {"sufficient": sufficient, "missing": missing, "new_query": new_query, "relevant_ids": relevant_ids}
+    _replay.put("check", _rk, out)
+    return out
 
 
 def _retrieve_chunks(query: str) -> list[dict]:
@@ -1287,6 +1307,96 @@ def _ground_period_from_source(claims: list[dict], chunks: list[dict]) -> None:
             c["period_grounded"] = True
 
 
+AUTHORITATIVE_TYPES = ("10-K", "10-Q", "income_statement", "fundamentals")
+
+
+def _ground_source_type(claims: list[dict], chunks: list[dict]) -> None:
+    """**零 LLM**：拿每筆宣稱的數字回 chunk 定位,記下它出現在哪些來源類型（`src_types`）。
+
+    為什麼需要：實測 mi-04 的 contexts 裡同時有新聞的「revenue growth of 12.8% LTM」與
+    Fundamentals 的「Revenue Growth (YoY): 0.166」,**兩個都在 context 裡**,答案挑了新聞那個
+    （gold 是 16.6%）。mix-09 更直接——同一個 chunk 裡新聞寫「Greater China grew 28%」、
+    10-Q 寫 22%,答案挑了 28%。所以病不在檢索,在「同一個指標有多個來源時沒有優先順序」。
+
+    定位方式與 `_ground_period_from_source` 同一路（字串比對＝封閉邏輯,不問 LLM）。除了
+    百分比的三種寫法,額外比對**小數表示**：Fundamentals 把比率寫成 `0.166` 而不是 `16.6%`,
+    這正是它輸給新聞「12.8%」的原因之一（新聞那個看起來更像答案）。
+    """
+    if not chunks:
+        return
+    typed = [(rq.infer_source_type(ch.get("source") or ""), ch.get("content") or "")
+             for ch in chunks]
+    for c in claims:
+        v = c.get("value")
+        if not isinstance(v, (int, float)):
+            continue
+        if c.get("unit") == "percent":
+            pats = [f"{v:g}%", f"{v:g} percent", f"{v:g} percentage points"]
+            # 小數表示（0.166 = 16.6%）**只在 Fundamentals 比對**。2026-08-09 全庫實測：
+            #   fundamentals     12/22 chunk 有 `0.xx` 比率、`NN%` 0 個  ← 只有它寫小數
+            #   income_statement  0/59 有 `0.xx`
+            #   10-K / 10-Q      87 / 106 處 `0.xx`,但全是**債券票面利率**（"0.875% Notes"）
+            #                    與**每股金額**（"2.40 | 0.77"），不是比率
+            #   news             20 處,全是**股價漲跌**（"GOOG +0.92%"）
+            # 所以在財報／新聞裡比對 `0.22` 會配到完全無關的東西 → 把只在新聞出現的宣稱
+            # 誤標成「權威來源也有」→ R3 該抓的反而不抓。範圍限定在 fundamentals 才安全。
+            dec = f"{v / 100:g}"
+            hits = {t for t, body in typed
+                    if any(pt in body for pt in pats)
+                    or (t == "fundamentals" and dec in body)}
+        elif c.get("unit") == "USD_M":
+            # 百萬美元：原文可能寫 16,621 / 16621 / $16.62 billion,只比前兩種（確定性高）
+            pats = [f"{v:,.0f}", f"{v:.0f}"]
+            hits = {t for t, body in typed if any(pt in body for pt in pats)}
+        else:
+            continue
+        if hits:
+            c["src_types"] = sorted(hits)
+
+
+def find_authority_conflicts(claims: list[dict], chunks: list[dict]) -> list[str]:
+    """R3 **財報優先**（零 LLM）：同一格出現互斥數值,且其中一個只在新聞裡、另一個在財報／
+    Fundamentals 裡 → 判新聞那個為錯。
+
+    為什麼是「逐個宣稱」而不是壓低新聞的檢索排名（2026-08-09 量過才這樣設計）：
+    **37/100 題需要新聞**——16 題（news 全部 ＋ col-14）的 gold 只靠新聞（訴訟和解、WWDC
+    發表、分析師目標價、合作案,財報裡根本沒有）,另 21 題是新聞＋財務的複合題（multi_intent
+    全 15 題 ＋ col-15 ＋ multi_hop 5 題,其中 5 題還靠新聞認出第一跳的主體）。任何壓低新聞
+    排名的做法都會重演 memory `multi-intent-hard-filter-bug` 的鏡像災難。
+    這條規則對那 37 題**完全不觸發**,因為財報裡沒有可比的數值 → 不構成同格衝突。
+
+    只在「同一格、互斥值、來源類型分屬新聞 vs 權威」時才發話,其餘一律沉默。
+    """
+    _ground_source_type(claims, chunks)
+    problems: list[str] = []
+    buckets: dict[tuple, list[dict]] = {}
+    for c in claims:
+        if not c.get("metric") or not c.get("src_types"):
+            continue
+        # period 刻意**不入 key**：新聞幾乎不標精確期間（「LTM」「近一年」），把期間納入
+        # 比對會讓新聞那筆永遠落到別的桶、R3 永遠不觸發。代價是可能拿不同期間的值互比，
+        # 由 metric+entity+scope+kind+unit 五項全等來控制誤報。
+        buckets.setdefault((c["metric"], c.get("entity"), c.get("scope"),
+                            c.get("kind"), c.get("unit")), []).append(c)
+    for key, group in buckets.items():
+        news_only = [g for g in group if g["src_types"] == ["news"]]
+        authoritative = [g for g in group
+                         if any(t in AUTHORITATIVE_TYPES for t in g["src_types"])]
+        if not news_only or not authoritative:
+            continue
+        for n in news_only:
+            for a in authoritative:
+                hi = max(abs(n["value"]), abs(a["value"]))
+                if hi > 0 and abs(n["value"] - a["value"]) / hi > 0.02:
+                    metric, entity = key[0], key[1]
+                    problems.append(
+                        f"「{entity or '（未指明主體）'}」的 {metric} 用了新聞的數值 "
+                        f"{n['value']:g}（{n['quote']}）,但財報／Fundamentals 給的是 "
+                        f"{a['value']:g}（{a['quote']}）——同一指標以財報為準,請改用後者。")
+                    break
+    return problems
+
+
 def find_claim_conflicts(claims: list[dict]) -> list[str]:
     """對結構化宣稱跑確定性規則。**這裡完全不呼叫 LLM**——判斷是邏輯,交給程式。
 
@@ -1401,6 +1511,9 @@ def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], mode
         _trace("consistency: 宣稱抽取失敗 → 跳過一致性檢查")
         return answer
     found = find_claim_conflicts(claims)
+    # R3 財報優先（零 LLM,見 find_authority_conflicts）：同格衝突且一邊只在新聞裡時,
+    # 判新聞那個為錯。與 R1/R2 併入同一份 issues,共用既有的重生成路徑。
+    found = found + find_authority_conflicts(claims, chunks)
     if not found:
         return answer
     issues = "\n".join(f"- {p}" for p in found)
