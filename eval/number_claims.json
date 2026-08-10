@@ -1,0 +1,37 @@
+[
+  {
+    "id": "mix-03",
+    "claim": "MSFT 最新一季『整體/合併』營業利益成長率",
+    "anchor": "整體|合併|consolidated",
+    "window": 60,
+    "expect_pct": 20.0,
+    "forbid_pct": 24.0,
+    "expect_text": "6\\.4 billion|64\\s*億美元",
+    "forbid_text": "2\\.7 billion|27\\s*億美元",
+    "status": "known_defect",
+    "why": "24% 是 Intelligent Cloud 分部（13,753-11,095=+2,658=+24%）；合併是 38,398-32,000=+6,398=+20%。系統會答 24% 是因為 MSFT_10Q_202603 #111 開頭就是那句、卻沒有分部標籤 → 讀起來像合併總計。",
+    "verified": "2026-08-09 用 MSFT 10-Q 合併損益表逐欄驗算；正解那句在 #104，語料裡有但沒被檢索到",
+    "fixed_by": "ingest 通用小標硬邊界（_split_by_subheading）＋重建 us_stock_rag_edgar_head",
+    "fix_verified": "2026-08-10：us_stock_rag_edgar_period 三個 run 全 FAIL（讀到 24%）→ us_stock_rag_edgar_head PASS（答『增加 64 億美元，增幅約 20%』）。檢索端 context #0 帶期間標籤且無 [section:]＝合併層，#1 才是 [section: Productivity...]"
+  },
+  {
+    "id": "col-11",
+    "claim": "MSFT 最新一季 Microsoft Cloud 營收成長率",
+    "anchor": "Microsoft Cloud|整體雲端",
+    "window": 60,
+    "expect_pct": 29.0,
+    "status": "regression_guard",
+    "why": "答案頭條挑 Azure 的 40%，被舊的『比第一個百分比』誤判成衝突。實際上答案的 Microsoft Cloud 29% 與 gold 一致 → 不是缺陷。登錄為回歸護欄，防止日後真的答錯。",
+    "verified": "2026-08-09 逐字比對答案與 gold：兩邊都是 Cloud 29% / Azure 40%"
+  },
+  {
+    "id": "mi-04",
+    "claim": "AAPL 營收 YoY 成長率（非 LTM）",
+    "anchor": "YoY|年比年",
+    "window": 60,
+    "expect_pct": 16.6,
+    "status": "regression_guard",
+    "why": "答案同時給 LTM 12.8% 與 YoY 16.6% 並正確標注口徑，頭條是 12.8% 所以被舊比法誤判。登錄為護欄：關鍵是 YoY 這個口徑要對。",
+    "verified": "2026-08-10 逐字讀三個 run 的答案，皆同時給出兩個口徑且標注正確"
+  }
+]
