@@ -314,6 +314,8 @@ Consolidated Statements of Comprehensive Income
 
 Consolidated S...
 
+[MIN-MERGE] item=Item_8 section=None 74 → 56 個 chunk（< 200 字元併進鄰居）
+
 [RCTS] item=Item_8 原 chunk 2177 token > 1200 → 補切成 4 份
 
 [RCTS] item=Item_8 原 chunk 1544 token > 1200 → 補切成 3 份
@@ -342,12 +344,16 @@ Evaluation of Disclosure Controls and Procedures
 
 Our management, with the participation of our chief executive officer (CEO) and chief financial officer (CFO), has evaluated the effectiveness of our disclosure controls and procedures (as defined in Rules 13a- 15(e) and 15d- 15(e) under the Securities Exchange Act of 1934, as amended (Exchange Act)), as of the end ...
 
+[SECTION] item=Item_9A period=None 依小標切成 2 段：Evaluation of Disclosure Controls and Procedures | Changes in Internal Control
+
 --- [ITEM] Item 9B (len=1884 chars) ---
 Item 9B.Other Information
 
 Rule 10b5-1 Trading Plans
 
 During the quarter ended December 31, 2025, the officers and directors listed below adopted, modified, or terminated trading plans intended to satisfy the affirmative defense conditions of Rule 10b5-1(c) under the Securities Exchange Act of 1934, as amended. References to "net shares received" below refer to net shares received by an officer af...
+
+[MIN-MERGE] item=Item_9B section=None 2 → 1 個 chunk（< 200 字元併進鄰居）
 
 --- [ITEM] Item 9C (len=102 chars) ---
 Item 9C.Disclosure Regarding Foreign Jurisdictions that Prevent Inspections
@@ -362,6 +368,8 @@ Item 10.Directors, Executive Officers and Corporate Governance
 The information required by this item is incorporated by reference to our Proxy Statement for the 2026 Annual Meeting of Stockholders to be filed with the SEC within 120 days of the fiscal year ended December 31, 2025.
 
 Our board of directors has adopted codes of conduct applicable to all officers, directors, and employees, which are ...
+
+[MIN-MERGE] item=Item_10 section=None 2 → 1 個 chunk（< 200 字元併進鄰居）
 
 --- [ITEM] Item 11 (len=250 chars) ---
 Item 11.Executive Compensation
@@ -387,7 +395,11 @@ Our mission is to build the future of human connection and the technology that m
 
 Our products enable people to connect and share through mobile devices, personal computers, virtual reality (VR) headsets, and AI glasses. We are innovating in artificial intelligence (AI) technologies to build transformative experiences and capabilities across our Family...
 
-[RCTS] item=Item_1 原 chunk 1783 token > 1200 → 補切成 3 份
+[SECTION] item=Item_1 period=None 依小標切成 16 段：Overview | Family of Apps Products | Reality Labs Products | Revenue and Investments | Competition | Technology | Sales and Operations | Marketing | Intellectual Property | Government Regulation | Human Capital | Employee Learning and Development | The Pulse of Our Workforce | Compensation, Benefits, Health, and Well-being | Corporate Information | Available Information
+
+[MIN-MERGE] item=Item_1 section=Corporate Information 2 → 1 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Item_1 section=Available Information 2 → 1 個 chunk（< 200 字元併進鄰居）
 
 --- [ITEM] Item 15 (len=7005 chars) ---
 Item 15. Exhibit and Financial Statement Schedules
@@ -436,13 +448,17 @@ Item 1A. Risk Factors
 
 Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Annual Report on Form 10-K, including our consolidated financial statements and related notes. The risks and uncerta...
 
+[SECTION] item=Item_1A period=None 依小標切成 4 段：(小標前=章節層) | Summary Risk Factors | Risks Related to Our Product Offerings | Risks Related to Our Product Offerings
+
+[MIN-MERGE] item=Item_1A section=Risks Related to Our Product Offerings 73 → 67 個 chunk（< 200 字元併進鄰居）
+
 [RCTS] item=Item_1A 原 chunk 1836 token > 1200 → 補切成 5 份
 
 [RCTS] item=Item_1A 原 chunk 1458 token > 1200 → 補切成 4 份
 
 [RCTS] item=Item_1A 原 chunk 2244 token > 1200 → 補切成 5 份
 
-[RCTS] item=Item_1A 原 chunk 1223 token > 1200 → 補切成 2 份
+[RCTS] item=Item_1A 原 chunk 1270 token > 1200 → 補切成 2 份
 
 [RCTS] item=Item_1A 原 chunk 1353 token > 1200 → 補切成 3 份
 
@@ -478,7 +494,11 @@ Item 3.Legal Proceedings
 
 As a multinational company with a complex and evolving business, we are, and expect to continue to be, subject to numerous claims, litigation, regulatory, tax, and government inquiries and investigations, and other legal proceedings in jurisdictions around the world. Although we believe many of these matters are without merit and are vigorously defending them, we may not ...
 
-[RCTS] item=Item_3 原 chunk 2122 token > 1200 → 補切成 6 份
+[SECTION] item=Item_3 period=None 依小標切成 6 段：(小標前=章節層) | Privacy and Related Matters | Competition | Securities and Other Actions | Youth-Related Actions | Other Actions
+
+[MIN-MERGE] item=Item_3 section=Privacy and Related Matters 9 → 6 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Item_3 section=Other Actions 7 → 4 個 chunk（< 200 字元併進鄰居）
 
 --- [ITEM] Item 4 (len=56 chars) ---
 Item 4.Mine Safety Disclosures
@@ -498,6 +518,10 @@ Holders of Record
 
 As of December 31, 2025, ther...
 
+[SECTION] item=Item_5 period=None 依小標切成 5 段：Market Information for Common Stock | Holders of Record | Dividend Policy | Recent Sale of Unregistered Securities | Stock Performance Graph
+
+[MIN-MERGE] item=Item_5 section=Holders of Record 2 → 1 個 chunk（< 200 字元併進鄰居）
+
 --- [ITEM] Item 7 (len=60341 chars) ---
 Table of Contents
 
@@ -505,9 +529,13 @@ Item 7.Management's Discussion and Analysis of Financial Condition and Results o
 
 You should read the following discussion of our financial condition and results of operations in conjunction with our consolidated financial statements and the related notes included in Part II, Item 8, "Financial Statements and Supplementary Data" of this Annual Report on Form 10-K. In...
 
-[RCTS] item=Item_7 原 chunk 1262 token > 1200 → 補切成 2 份
+[SECTION] item=Item_7 period=None 依小標切成 41 段：(小標前=章節層) | Consolidated and Segment Results | Family of Apps Metrics | Developments in Advertising | Other Business and Macroeconomic Conditions | Investment Philosophy | Non-Ad Revenue | Trends in Our Family Metrics | Critical Accounting Estimates | Loss Contingencies | Income Taxes | Valuation of Non-marketable Equity Investments | Change in Accounting Estimate | Family of Apps (FoA) | Reality Labs (RL) | Cost of Revenue and Operating Expenses | Results of Operations | Revenue | Family of Apps | Advertising | Other revenue | Reality Labs | Revenue Seasonality | Foreign Exchange Impact on Revenue | Segment profitability | Family of Apps | Reality Labs | NM    - not meaningful | Liquidity and Capital Resources | Cash Provided by Operating Activities | Cash Used in Investing Activities | Cash Used in Financing Activities | Free Cash Flow | Material Cash Requirements | Leases and Contractual Commitments | Long-term Debt | Share Repurchase | Dividend | Taxes | Loss Contingencies | Recently Issued Accounting Pronouncements
 
-[RCTS] item=Item_7 原 chunk 1589 token > 1200 → 補切成 3 份
+[MIN-MERGE] item=Item_7 section=Change in Accounting Estimate 2 → 1 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Results of Operations 2 → 1 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Long-term Debt 2 → 1 個 chunk（< 200 字元併進鄰居）
 
 --- [ITEM] Item 7A (len=5949 chars) ---
 Item 7A.Quantitative and Qualitative Disclosures About Market Risk
@@ -517,3 +545,5 @@ We are exposed to market risks, including changes to foreign currency exchange r
 Foreign Currency Exchange Risk
 
 We have foreign currency risks related to our revenue and operating expenses denominated in currencies other than the U.S. dollar, the majority of which is in Euro. According...
+
+[SECTION] item=Item_7A period=None 依小標切成 3 段：Foreign Currency Exchange Risk | Interest Rate Sensitivity | Equity Price Risk

@@ -286,15 +286,24 @@ def _sanitize_item_id(item_name: str) -> str:
 # text chunk 裡有 15 個（14%）讀不出期間，其中 9 個集中在 MSFT 10-Q（24 個裡佔 38%）。
 # 集中的原因是這個 "X Compared with Y" 章節標題結構**只有 MSFT 在用**（全 12 份 10-Q
 # 掃過：MSFT 24 處，其餘 6 家 0 處）；別家把期間寫在句子裡，所以切塊切不掉。
-# 已知案例：col-11（19%/33%/12%/22% 單季 與 18%/29%/20% 九個月被當成互斥數值並陳）、
-# mix-03（九個月的 +$20.4B 與單季的 +$2.7B 混用）。
+# 已知案例：col-11（19%/33%/12%/22% 單季 與 18%/29%/20% 九個月被當成互斥數值並陳）。
+# ⚠ 原本這裡也列了 mix-03,2026-08-09 查清後移除：它的病不是期間而是**分部**
+#   （報了 Intelligent Cloud 的 +$2.7B/24% 當成全公司總計）,修在下面的分部小標邊界。
 #
 # 修法是把這個標題當**硬邊界**：先依它切段再各自送進 SemanticChunker（同一個 chunk 不會
 # 橫跨兩個期間——實測 MSFT #104 開頭是九個月數字、標題卻出現在它中段，只貼標不切段會標錯），
 # 再把期間標籤前綴進每個 chunk 的文字（與既有 build_metadata_header 同一個機制）。
+# 兩種標題寫法（2026-08-09 補第二種）：10-Q 用 "X Months Ended <date> Compared with …"，
+# 10-K 用 "Fiscal Year 2026 Compared with Fiscal Year 2025"。補第二種的動機不是期間標籤本身
+# （10-K 整份就是一個財年，`report_period_code` 已經夠了），而是**它是分部小標那層的開關**：
+# 分部切段只在有期間標籤的章節內生效，不補這條，MSFT 10-K 的分部小標就永遠切不到
+# （曝險 5 個 chunk 裡的 MSFT_10K_2026 #144 就是這個情況）。
+# ⚠ **大小寫敏感是必要的**：MSFT 10-K 同一份裡還有一句句中小寫的
+#   "… fiscal year 2026 compared with fiscal year 2025 included:"，加 re.I 會從句子中間切開。
 _PERIOD_SECTION_RE = re.compile(
-    r"((?:Three|Six|Nine|Twelve)\s+Months\s+Ended\s+[A-Z][a-z]+\.?\s+\d{1,2},\s*\d{4}\s+"
-    r"Compared\s+[Ww]ith\s+(?:Three|Six|Nine|Twelve)\s+Months\s+Ended\s+[A-Z][a-z]+\.?\s+\d{1,2},\s*\d{4})")
+    r"((?:(?:Three|Six|Nine|Twelve)\s+Months\s+Ended\s+[A-Z][a-z]+\.?\s+\d{1,2},\s*\d{4}\s+"
+    r"Compared\s+[Ww]ith\s+(?:Three|Six|Nine|Twelve)\s+Months\s+Ended\s+[A-Z][a-z]+\.?\s+\d{1,2},\s*\d{4})"
+    r"|(?:Fiscal\s+Year\s+\d{4}\s+Compared\s+[Ww]ith\s+Fiscal\s+Year\s+\d{4}))")
 
 
 def _compact_period_label(header: str) -> str:
@@ -304,7 +313,118 @@ def _compact_period_label(header: str) -> str:
     h = re.sub(r"\s+", " ", header).strip()
     m = re.match(r"((Three|Six|Nine|Twelve) Months Ended .+?) Compared [Ww]ith "
                  r"\2 Months Ended (.+)", h)
-    return f"{m.group(1)} vs {m.group(3)}" if m else h
+    if m:
+        return f"{m.group(1)} vs {m.group(3)}"
+    # 10-K 的財年寫法同樣砍掉重複的 'Fiscal Year'：'Fiscal Year 2026 vs 2025'
+    m = re.match(r"(Fiscal Year \d{4}) Compared [Ww]ith Fiscal Year (\d{4})", h)
+    return f"{m.group(1)} vs {m.group(2)}" if m else h
+
+
+_TAB_NUM_ROW = re.compile(r"^[\d,.\$%\(\)\-\s]+$")
+_TAB_THOUSAND = re.compile(r"\b\d{1,3},\d{3}\b")
+
+
+def _tab_line_kind(line: str, table_nums: set) -> str:
+    """把 item 純文字的一行分成三類（給 _strip_tabular_blocks 用）。
+
+    'tab' 確定是表格行、'neu' 中性（空行/短標籤,可被表格區夾住但不主動觸發）、
+    'txt' 敘述句（一律保留）。判「tab」只認兩種硬證據：整行只有數字與符號,
+    或該行的千分位數字**全部**已出現在某個 table chunk 裡。
+    """
+    t = line.strip()
+    if not t:
+        return "neu"
+    if _TAB_NUM_ROW.match(t):
+        return "tab"
+    nums = set(_TAB_THOUSAND.findall(t))
+    if nums and nums <= table_nums:
+        return "tab"
+    if len(t) <= 60 and not t.endswith((".", ";", "!", "?")) and len(t.split()) <= 7:
+        return "neu"
+    return "txt"
+
+
+def _strip_tabular_blocks(item_text: str, table_texts: list[str],
+                          min_tab_lines: int = 6) -> tuple[str, int, int]:
+    """把**已經被 table chunk 收錄**的表格區段從散文中移除。回傳 (新文字, 區段數, 字元數)。
+
+    ⛔ **2026-08-09 起預設關閉**（`--strip-dup-tables` 才啟用）。理由不是「它有害」,而是
+    「**量不出好處,卻帶著一個無界的下行風險**」。100 題 RAGAS 單一變數對照（`period` vs
+    `dedup`,同一批 21 份 filing、同一份修好的 gold）：recall +0.0176、correctness +0.0153
+    是正的,faithfulness -0.0195、nv_context_relevance -0.0175 是負的,沒有明確勝方。而當初
+    立案的核心指標 `context_precision` 量到 -0.0205——**這個數字不可解讀**：同一份結果檔
+    重評兩次,precision 的 judge 噪音就有 0.0459（見 memory `ragas-judge-noise-floor`）。
+    對上下面「已知缺口」那條「表格沒被 unstructured 抓成 table chunk 就真的刪掉資訊」,
+    風險是不可逆的,收益是量不到的 → 預設關閉、程式保留。
+    要重新立案,得先拿**確定性指標**（top-k 內重複對數、變動陳述存活數）驗收,別靠 RAGAS。
+
+    病灶：表格走兩條路——edgartools 的 item 純文字接口把表格**壓平成文字**留在散文裡,
+    Exp4 又額外用 unstructured 抓一份結構化的存成 table chunk。「額外」是關鍵：原本壓平
+    那份從來沒被扣掉,於是同一張表同時存在兩處。實測 MSFT 10-Q 有 10/17 個 table chunk
+    的數字在散文裡完整重現。
+
+    代價是實打實的：100 題 × top-8 檢索,**33 題（33%）的候選池裡出現同一張表的兩個版本**,
+    共 150 對。最糟的「Meta FY2025 Diluted EPS」top-8 裡有 6 個位置被同一份損益表佔掉
+    （4 個 table chunk ＋ 2 個壓平版）。這是 context_precision 的直接損耗。
+    附帶病灶：壓平表格的欄位標頭/列標籤（Revenue、Gross margin、Percentage、Change）
+    在純文字裡與章節標題無法區分,是「按標題切塊」方案失準的主因（MSFT Item 2 的 171 個
+    標題候選,移除後降到 121）。
+
+    安全性由「變動陳述數量不變」把關（`increased/decreased $X billion`、`or Y%` 這類句子）。
+    2026-08-08 對完整重建後的 collection 逐 source 比對（`us_stock_rag_edgar_period` vs
+    `us_stock_rag_edgar_dedup`,21 份 filing 的 filing text chunk）：
+    **變動陳述 426→426、`or N%` 252→252,每一份都逐一相同,零損失**。
+    效果最大的 MSFT_10Q_202512 砍掉 22% 字元（234738→182603）、9 個 chunk,97 條變動陳述
+    一條沒少——刪掉的確實只有壓平表格。
+    ⚠ **效果差異的真因是 edgartools 的壓平風格不同,不是 MD&A 文體**（2026-08-08 查清,
+    先前寫「MSFT 純數字行多」是不完整的歸因）。同一張 12 列 x 3 欄的表:
+      MSFT 一個儲存格一行  -> '     81,273' / '     $' / '     69,632' …約 100 個 tab 行
+      META 一整列一行      -> 'Revenue$200,966\xa0$164,501\xa0$134,902\xa0' …只有 12 個
+    所以 min_tab_lines=6 對 MSFT 幾乎必中,對 META 只擋得住最大的表:實測 META Item 8 損益表
+    一帶 13 個區段只刪掉 3 個（其餘是 1~5 個 tab 行的小表,全部低於門檻）。
+    量化落差:META_10K 掉 8 段/5364 字元（-1.5%）vs MSFT_10Q 掉 65 段/41654 字元（-22%）。
+    → 要提升覆蓋率,門檻該改成「數 cell 不數 line」,不是把 6 調小。
+
+    ⚠ **第二個缺口:`_TAB_THOUSAND` 要求千分位逗號,看不見 <1000 的數值**。
+    'Diluted$23.49\xa0$23.86\xa0$14.87\xa0' 匹配不到任何數字 -> 規則 2 的 `if nums` 不成立
+    -> 判成 neu;而區段尾端回縮到最後一個 tab 行,EPS 那幾列剛好落在區段外而留在散文裡。
+    評測題「Meta FY2025 Diluted EPS」問的就是這一列,也是殘留重複對最多的一題。
+
+    ⚠ **殘留的重複對不全是 pipeline 造成的**:實測 AMZN Part_I_Item_1（財務報表）與
+    Part_I_Item_2（MD&A）共享 7 個數字——SEC 申報書本身就會在兩處重述同一批分部數字。
+    移除那個等於刪真內容。所以「殘留 68 對」高估了可修復的部分。
+    ⚠ 移除文字會改變 SemanticChunker 的邊界位置,chunk 數**不是單調遞減**
+    （實測 TSLA_10Q_202606 是 67→68）。要驗證正確性看變動陳述數,不要看 chunk 數。
+
+    ⚠ **已知缺口**：`_tab_line_kind` 的第一條規則（整行只有數字與符號）不檢查這張表是否
+    真的被收成 table chunk。所以一張 unstructured 沒抓到的純數字表格,只要夠大也會被刪,
+    那份資訊就真的消失。目前擋這件事的只有上面的整體量測,不是逐表對帳。
+    """
+    table_nums: set = set()
+    for t in table_texts:
+        table_nums |= set(_TAB_THOUSAND.findall(t))
+    if not table_nums:
+        return item_text, 0, 0
+    lines = item_text.split("\n")
+    kinds = [_tab_line_kind(l, table_nums) for l in lines]
+    keep = [True] * len(lines)
+    i = nblk = nchar = 0
+    while i < len(lines):
+        if kinds[i] != "tab":
+            i += 1
+            continue
+        j = i
+        while j < len(lines) and kinds[j] in ("tab", "neu"):
+            j += 1
+        # 區段尾端回縮到最後一個 tab 行,避免把後面的章節標題一起吃掉
+        end = max(k for k in range(i, j) if kinds[k] == "tab") + 1
+        if sum(1 for k in range(i, end) if kinds[k] == "tab") >= min_tab_lines:
+            for k in range(i, end):
+                keep[k] = False
+                nchar += len(lines[k])
+            nblk += 1
+        i = end
+    return "\n".join(l for l, k in zip(lines, keep) if k), nblk, nchar
 
 
 def _split_by_period_section(item_text: str) -> list[tuple[Optional[str], str]]:
@@ -324,10 +444,222 @@ def _split_by_period_section(item_text: str) -> list[tuple[Optional[str], str]]:
     return out
 
 
+# ── 分部小標邊界（2026-08-09 加，期間章節之下的第三層）───────────────────────────
+# 病灶與期間那層**同形、低一層**：MSFT 的 MD&A 在每個期間章節裡再依分部寫小節，分部名
+# 只出現在獨立成行的小標上，內文每句都不重述。SemanticChunker 併掉小標後，續段 chunk
+# 就**主動把自己冒充成合併總計**——這比「讀不出期間」更嚴重：讀不出期間至少是資訊缺失，
+# 冒充總計會直接產生一個看起來有憑有據的錯數字。
+#
+# 確診案例 mix-03（2026-08-09 端到端查清）：
+#   問「Microsoft 最新一季整體營業利益成長多少」→ 系統答 +$2.7B / 24%。
+#   那句原文在 chunk #111,開頭就是 "Operating income increased $2.7 billion or 24%.",
+#   帶了期間標籤卻沒有分部標籤。用合併損益表驗算:合併單季 38,398-32,000=+6,398(+20%),
+#   而 Intelligent Cloud 分部 13,753-11,095=+2,658(+24%)——#111 是 Intelligent Cloud。
+#   正解那句其實**在語料裡**（#104 "Operating income increased $6.4 billion or 20%"）,
+#   只是沒被檢索到:#111 開頭就是那個句型,字面與語意都比「數字埋在段中」的 #104 更像答案。
+#   → 貼上分部標籤同時修兩邊:生成端不再讀成總計,檢索端 #111 對「全公司」問題的相似度下降。
+#
+# 曝險（us_stock_rag_edgar_period 全庫）：32 個含 "X increased $Y or Z%" 的 filing text
+# chunk 裡有 5 個（16%）不含任何分部名稱＝讀起來像合併總計,全部在 MSFT（10Q 4 個、10K 1 個）。
+#
+# **刻意不用硬編碼分部名單**（見 memory `llm-vs-python-task-split`:硬編碼詞表＝在用字串
+# 比對做感知,詞表外的寫法會靜默漏抓）。改用兩個結構訊號＋自我佐證:
+#   ① 獨立成行的短標題（無數字、不以句號結尾、字數少、字首大寫）
+#   ② **下一個非空行是一句變動陳述**——這是分部小標與「壓平表格的列標籤」的分野。
+#      少了 ② 會把表格列標籤（'Revenue'、'Total'、'Percentage'、'Three Months Ended'）
+#      全當標題,照那樣切會把散文切碎（2026-08-09 實測第一版就是這樣）。
+#   ③ 該字串在同一份 filing 內以獨立行出現 ≥2 次（真小標會在單季段與累計段各出現一次）。
+# 離線驗證（21 份 10-K/10-Q 的真實 SEC 原文,零網路,`eval/verify_segment_split.py`,可重跑）：
+#   受影響：MSFT 兩份 10-Q（各 2 個期間章節）＋ MSFT 10-K Item 7（1 個）＝ 5 個章節,
+#           每個都切成「合併層 + 3 分部」,分部名恰好是 Productivity and Business Processes
+#           / Intelligent Cloud / More Personal Computing,零誤報。
+#   未受影響：其餘 18 份 filing 全部 0 段（逐字不變）。
+#   目標句 'Operating income increased $2.7 billion or 24%' 正確落進 Intelligent Cloud 段。
+#   表格未被切開：切段前後每個分部名在該章節的出現次數完全相同（分部名同時是 SEGMENT
+#   RESULTS 表的列標籤,靠「按行號切、不按字串切」保住,見下方函式的 ⚠）。
+# → 曝險的 5 個 chunk（MSFT 10-Q 4 個、10-K 1 個）全部涵蓋。
+#
+# ⚠ **只在「有期間標籤」的章節內生效**（`period_label` 為 None 的整份 Item 不套用）。
+#   這不是為了省事,是實測出來的必要收斂:把同一個偵測器套到沒有期間章節的 Item 上,
+#   GOOGL/META/TSLA 會抓到真分部（Google Search & other、Family of Apps、Reality Labs、
+#   Automotive & Services and Other Segment——這部分確實有價值）,但**同時產生真誤報**:
+#     META 'NM — not meaningful'（表格圖例）、META 'Other Actions'（出現在 Part I Item 1
+#     法律訴訟,吃掉 16~58k 字元）、TSLA 'Cash Flows from Operating Activities'（是真標題
+#     但不是分部）、GOOGL 'Other Bets' 因為後面沒有下一個小標而吞掉 20k 字元的 Item 尾巴。
+#   而曝險量測顯示受害 chunk **5/5 全在 MSFT**,MSFT 又正是唯一有期間章節的公司,所以收到
+#   期間章節內即可覆蓋已知病例。要擴大適用範圍是獨立的下一步,需要先解掉上面四類誤報。
+#   ⚠ 別被「先前探針顯示其餘 6 家零誤報」誤導——那個探針**跳過了沒有期間章節的檔案**,
+#     等於根本沒測到那些情境（2026-08-09 差點據此把範圍開太大）。
+_HEAD_MAX_CHARS = 60
+_HEAD_MAX_WORDS = 6
+
+# **導航殘渣**：SEC 申報檔的頁面家具,每頁重複一次。它形狀完全像標題（短、字首大寫、
+# 無數字、不以標點結尾）,而「下一行是散文」也擋不住它（它後面就是該頁的正文）,所以
+# 只能列清單。**列清單在這裡是正當的**,判準見 memory `llm-vs-python-task-split`:
+# 這是**格式定義的封閉集合**（每份 SEC 申報檔都用這幾個字,不會有新寫法),與分部名／
+# 指標名那種開放集合不同——同 VALID_*_ITEMS 的理由。
+# ⚠ 2026-08-09 原本想用「同檔重複次數 >= 3 判為殘渣」取代清單,**實測推翻**:
+#   Table of Contents 在 GOOGL 出現 20 次、META 5 次、TSLA 只有 1 次（連自己都不穩定）,
+#   而真標題 Intelligent Cloud 7 次、More Personal Computing 8 次、
+#   Energy Generation and Storage 8 次——完全重疊。照那個門檻做會把 F 的修復砸掉。
+_HEAD_FURNITURE = {"table of contents", "page", "index", "index to consolidated "
+                   "financial statements", "form 10-k", "form 10-q",
+                   # 簽名頁：同樣是格式定義的封閉集合。列進來是為了不讓簽名區塊的
+                   # 內容被貼上 [section: SIGNATURES]（無害但無意義的標籤）。
+                   "signatures", "signature", "power of attorney"}
+
+# 標籤最短長度。實測抓到 'X'（11 次,來自封面／展覽表的勾選欄）與 'N/A'——單字母／縮寫
+# 通過了「短、字首大寫、無數字、不以標點結尾」全部條件,只能用長度擋。4 是實測分界：
+# 真標題最短是 'Xbox'(4)、'Risks'(5)、'Taxes'(5)。
+_HEAD_MIN_CHARS = 4
+
+# **下一個非空行必須像散文**——這是真標題與「壓平表格的列標籤」的分野,取代原本
+# 「下一行是變動陳述」那個過窄的條件（見上方 ② 的演進說明）。
+# 少了它會把 Total(31 次)／Revenue(11)／Amount／Period／Fair Value／Numerator／
+# Denominator／Assets／Equity 全當標題,而這些是**開放集合,列不完**,只能用結構判。
+def _next_line_is_prose(line: str) -> bool:
+    s = line.strip()
+    if not s:
+        return False
+    words = [w for w in re.split(r"\s+", s) if re.search(r"[A-Za-z]", w)]
+    return len(words) >= 8 or (bool(words) and s[-1] in ".?!")
+
+
+def _looks_like_heading(line: str) -> bool:
+    """條件①：獨立成行的短標題（無數字、不以標點結尾、字數少、字首大寫）。"""
+    s = line.strip()
+    if not s or not (_HEAD_MIN_CHARS <= len(s) <= _HEAD_MAX_CHARS):
+        return False
+    # '/' 是簽名行的起首（'/S/    SUNDAR PICHAI'）,其餘是項目符號與表格框線
+    if s[0] in "•-–*|/":
+        return False
+    if re.search(r"\d", s) or s[-1] in ".,:;":
+        return False
+    if s.lower() in _HEAD_FURNITURE:
+        return False
+    words = [w for w in re.split(r"\s+", s) if re.search(r"[A-Za-z]", w)]
+    if not words or len(words) > _HEAD_MAX_WORDS:
+        return False
+    # 允許 and / of / & 之類的小寫虛詞（'Productivity and Business Processes'）
+    return sum(1 for w in words if w[0].isupper()) >= max(1, len(words) - 2)
+
+
+def _standalone_line_counts(texts) -> "Counter":
+    """整份 filing 的「獨立行 → 出現次數」。2026-08-09 通用化後不再是切段條件（見
+    _split_by_subheading 的演進說明）,保留給診斷／驗收腳本統計用。"""
+    from collections import Counter
+    return Counter(l.strip() for t in texts for l in t.split("\n") if l.strip())
+
+
+def _split_by_subheading(section_text: str) -> list[tuple[Optional[str], str]]:
+    """把一段文字依**通用小標**再切成 [(小標 or None, 段落文字), ...]。
+    第一個小標之前的部分標籤為 None（那是章節層敘述,例如合併總計,不貼標才是對的）。
+    抓不到任何小標時回傳單一 [(None, section_text)],行為與加這層之前完全相同。
+
+    **2026-08-09 由「分部小標」通用化而來**,並在通用化時**刪掉兩個條件**:
+      舊 ②「下一行是變動陳述」→ 換成 `_next_line_is_prose`（保住它防表格列標籤的作用,
+         但不再限定必須是變動陳述）。
+      舊 ③「同檔以獨立行出現 >= 2 次」→ **刪除**。它是為了「專門找分部」而設,對通用
+         標題是過度收斂;而重複次數本身已被證明無法當判準（見 _HEAD_FURNITURE 的 ⚠）。
+    通用化的依據（2026-08-09 實測,只用條件① 掃 21 份申報檔原文）:散文型 Item 上抓到的
+    是真標題——META Item 7 抓 50 個（Ad Revenue／Non-Ad Revenue／Investment Philosophy…,
+    區間中位數 789 字元）、TSLA Item 1 抓 56 個、GOOGL Item 7 抓 62 個（Google Cloud／
+    Other Bets／Cost of Revenues…）。原先記錄的四類「誤報」有三類其實是**真標題**,只是
+    對「分部」偵測器而言算誤報（TSLA 'Cash Flows from Operating Activities'、
+    GOOGL 'Other Bets'）——通用化後它們是正確的標籤。剩下兩類各有對策:
+      表格列標籤 → `_next_line_is_prose`;導航殘渣 → `_HEAD_FURNITURE`。
+    表格為主體的 Item（Item 8／15 等）**整層不套用**,見 _TABLE_DOMINATED_ITEMS。
+
+    ⚠ **必須用行號判定,不能用字串比對**:同一個標題（尤其分部名）在同一章節裡還會作為
+    表格的列標籤出現（SEGMENT RESULTS 表）。用字串比對會連表格那次一起切,把表格切成
+    兩半。`_next_line_is_prose` 讓表格那次不會被認成標題（後面接的是儲存格不是句子）,
+    所以只要記住「是第幾行」就不會誤切。"""
+    lines = section_text.split("\n")
+    nonempty = [i for i, l in enumerate(lines) if l.strip()]
+    order = {i: k for k, i in enumerate(nonempty)}
+    head_idx: dict[int, str] = {}
+    for i in nonempty:
+        if not _looks_like_heading(lines[i]):
+            continue
+        k = order[i]
+        nxt = lines[nonempty[k + 1]] if k + 1 < len(nonempty) else ""
+        if _next_line_is_prose(nxt):
+            head_idx[i] = lines[i].strip()
+    if not head_idx:
+        return [(None, section_text)]
+    out: list[tuple[Optional[str], str]] = []
+    label: Optional[str] = None
+    buf: list[str] = []
+    for i, line in enumerate(lines):
+        if i in head_idx:
+            if "\n".join(buf).strip():
+                out.append((label, "\n".join(buf)))
+            label, buf = head_idx[i], [line]
+        else:
+            buf.append(line)
+    if "\n".join(buf).strip():
+        out.append((label, "\n".join(buf)))
+    # 開頭無標籤的短區段併進下一段。實測 80 個,幾乎都是 Item 的標題行本身
+    # （'ITEM 1. BUSINESS'、16~26 字元）——它本來就是下一段的抬頭,獨立成段只會製造一個
+    # 十幾字元的 chunk,等於這層自己生產它要消滅的碎片。
+    # ⚠ **有標籤的短區段刻意保留**（實測 81 個）:它短但自帶 scope,前綴 [section: X] 已經
+    #   把指涉補上,與 mix-08 那種沒有 scope 的孤兒句性質不同。往前併反而會讓它被貼上
+    #   前一段的標籤＝貼錯標,比短更糟。中段無標籤的短區段實測 0 個,不需處理。
+    if len(out) > 1 and out[0][0] is None and len(out[0][1].strip()) < _MIN_SECTION_CHARS:
+        out[1] = (out[1][0], out[0][1] + "\n" + out[1][1])
+        out.pop(0)
+    return out
+
+
+_MIN_SECTION_CHARS = 200
+
+# SEC 表格結構上以財報表格／清單為主體的 Item——通用標題層**整層不套用**。
+# 依據（2026-08-09 實測）:TSLA 10-K Item 15（展覽表）只用條件① 會抓到 27 個候選、
+# 區間中位數 **10 字元**,等於把表格切成碎片;Item 8（財報附註）抓到 150 個,混雜
+# 'Page'／'/s/ PricewaterhouseCoopers LLP' 這類非標題。這些 Item 的表格本來就走
+# chunk_type=table 另一條路,散文殘渣不需要標題層。
+# 這是**格式定義的封閉集合**（SEC 表格結構固定）,列清單正當,同 VALID_*_ITEMS 的理由。
+_TABLE_DOMINATED_ITEMS = {"Item 6", "Item 8", "Item 15", "Part I, Item 1"}
+
+# 語意切塊的**下界**護欄。此前只有上界（RCTS_THRESHOLD=1200 token 補切）而沒有下界,
+# 是不對稱的漏洞:2026-08-09 實測 us_stock_rag_edgar_period 的 2955 個 filing 散文
+# chunk 裡,剝掉自注入前綴後 328 個 (11%) 不到 200 字元,極端尾巴是純頁碼（'63'、'18'）
+# 與失去指涉對象的孤兒句。後者確實進了生成端 context——mix-08 撈到
+# 'The increases were almost entirely driven by advertising revenue.'（65 字元,
+# 「The increases」指什麼、增加多少全被切掉了）。
+# ⚠ 不刪 bare-digit 獨立行:MSFT 10-K 有 502 個,遠多於頁數 → 多數是壓平表格的儲存格,
+#   刪掉會毀損表格數字。改由合併吸收（併進鄰居後數字仍在,只是不再自成一個 chunk）。
+_MIN_CHUNK_CHARS = 200
+
+
+def _merge_small_chunks(chunks: list[str], min_chars: int = _MIN_CHUNK_CHARS) -> list[str]:
+    """把過短的 chunk 併進鄰居。**呼叫端必須逐「硬邊界內」呼叫**（同一個期間／小標
+    章節）,合併才不會跨越邊界把兩個期間或兩個分部黏在一起。
+    往前併優先（保住上文指涉:'The increases…' 要接在講 increases 的那句後面）;
+    首塊沒有前一個,往後併。整段只有一個 chunk 時原樣返回——那可能是真的很短的 Item
+    （'ITEM 9. … Not applicable.'）,沒有鄰居可併也不該丟。"""
+    if not chunks:
+        return chunks
+    out: list[str] = []
+    for c in chunks:
+        if out and len(c) < min_chars:
+            out[-1] = out[-1] + "\n\n" + c
+        else:
+            out.append(c)
+    if len(out) > 1 and len(out[0]) < min_chars:
+        out[1] = out[0] + "\n\n" + out[1]
+        out.pop(0)
+    return out
+
+
 def _period_prefix(record: dict) -> str:
-    """chunk 文字的期間前綴；沒有期間章節歸屬就回空字串（維持舊行為）。"""
-    label = record.get("period_context")
-    return f"[{label}] " if label else ""
+    """chunk 文字的期間／小標前綴；兩者都沒有就回空字串（維持舊行為）。"""
+    out = ""
+    if record.get("period_context"):
+        out += f"[{record['period_context']}] "
+    if record.get("heading_context"):
+        out += f"[section: {record['heading_context']}] "
+    return out
 
 
 # ── 離線取件（2026-08-08 抓取／處理分離）────────────────────────────────────────
@@ -552,7 +884,8 @@ def _build_news_records(text: str, semantic_chunker, rcts_splitter, token_len_fn
 
 def _fetch_filing_records(ticker: str, form: str, filing, semantic_chunker,
                           rcts_splitter=None, token_len_fn=None,
-                          rcts_threshold: int = RCTS_THRESHOLD) -> tuple[dict, list[dict], str]:
+                          rcts_threshold: int = RCTS_THRESHOLD,
+                          strip_dup_tables: bool = False) -> tuple[dict, list[dict], str]:
     """回傳 (filing_meta, chunk_records, validation_dump_text)。
     chunk_records: [{"text", "chunk_type", "item_id", "item_chunk_index"}, ...]
 
@@ -633,6 +966,23 @@ def _fetch_filing_records(ticker: str, form: str, filing, semantic_chunker,
                 item_texts["Item 8"] = item_texts["Item 8"] + "\n\n" + text
                 del item_texts[admin_item]
 
+    # 移除已被 table chunk 收錄的壓平表格（見 _strip_tabular_blocks）。必須在期間切段與
+    # SemanticChunker 之前做：一旦切成 chunk 就分不出哪一段是表格複本了。
+    # 預設關閉（2026-08-09）：效益量不出來、風險不可逆,理由見 _strip_tabular_blocks docstring。
+    _tbl_texts = [r["text"] for r in records if r["chunk_type"] == "table"] if strip_dup_tables else []
+    if _tbl_texts:
+        _tb_blk = _tb_chr = 0
+        for _iname in list(item_texts):
+            _new, _b, _c = _strip_tabular_blocks(item_texts[_iname], _tbl_texts)
+            if _b:
+                item_texts[_iname] = _new
+                _tb_blk += _b
+                _tb_chr += _c
+                dump_lines.append(f"[DEDUP-TABLE] item='{_iname}' 移除 {_b} 個已被 table chunk "
+                                  f"收錄的表格區段（{_c} 字元）\n")
+        if _tb_blk:
+            print(f"  [DEDUP-TABLE] {form}: 從散文移除 {_tb_blk} 個表格區段（{_tb_chr} 字元）")
+
     for item_name, item_text in item_texts.items():
         item_id = _sanitize_item_id(item_name)
         dump_lines.append(f"--- [ITEM] {item_name} (len={len(item_text)} chars) ---\n"
@@ -640,36 +990,59 @@ def _fetch_filing_records(ticker: str, form: str, filing, semantic_chunker,
         # 先收集這個 Item 最終要落地的所有文字片段（可能因 RCTS fallback 而比
         # SemanticChunker 原始輸出更多），最後統一 enumerate，讓 item_chunk_index
         # 維持連續（Neighbor Expansion 依賴這個序號查前後 chunk）。
-        # (文字, 期間標籤) 成對收集。期間章節是 Item 之下的第二層硬邊界（見
-        # _split_by_period_section）：先切段再各自語意切塊，同一個 chunk 就不會橫跨
-        # 單季與累計兩個期間。沒有期間標題的 filing 只會得到單一段，行為不變。
-        final_texts: list[tuple[str, Optional[str]]] = []
+        # (文字, 期間標籤, 小標) 三元組收集。切塊的層級結構是 Item → 期間章節 → 通用小標
+        # → SemanticChunker → RCTS 上界補切 → min-size 下界合併。
+        # 前三層都是**硬邊界**（規則、確定性、有唯一正確答案）,只決定「哪裡不准切」;
+        # 「40k 字的敘述該在哪裡斷」沒有唯一正確答案,才交給 SemanticChunker。
+        # 兩層都抓不到標題的 filing 只會得到單一段,行為與加這些層之前完全相同。
+        final_texts: list[tuple[str, Optional[str], Optional[str]]] = []
         sections = _split_by_period_section(item_text)
         if len(sections) > 1:
             dump_lines.append(
                 f"[PERIOD] item={item_id} 依期間章節標題切成 {len(sections)} 段："
                 + " | ".join(lbl or "(標題前)" for lbl, _ in sections) + "\n")
+        # 表格／清單為主體的 Item 不套通用標題層（見 _TABLE_DOMINATED_ITEMS）。
+        use_heading = item_name not in _TABLE_DOMINATED_ITEMS
         for period_label, section_text in sections:
-            for doc in semantic_chunker.create_documents([section_text]):
-                content = doc.page_content.strip()
-                if len(content) <= 20:
-                    continue
-                if rcts_splitter is not None and token_len_fn is not None \
-                        and token_len_fn(content) > rcts_threshold:
-                    sub_texts = [t.strip() for t in rcts_splitter.split_text(content) if t.strip()]
-                    dump_lines.append(f"[RCTS] item={item_id} 原 chunk {token_len_fn(content)} "
-                                       f"token > {rcts_threshold} → 補切成 {len(sub_texts)} 份\n")
-                    final_texts.extend((t, period_label) for t in sub_texts)
-                else:
-                    final_texts.append((content, period_label))
+            # 期間章節之下再依通用小標切（第三層硬邊界，見 _split_by_subheading）。
+            subsecs = (_split_by_subheading(section_text)
+                       if use_heading else [(None, section_text)])
+            if len(subsecs) > 1:
+                dump_lines.append(
+                    f"[SECTION] item={item_id} period={period_label} 依小標切成 "
+                    f"{len(subsecs)} 段：" + " | ".join(s or "(小標前=章節層)" for s, _ in subsecs) + "\n")
+            for head_label, sub_text in subsecs:
+                # min-size 合併必須**逐硬邊界章節**做（在這個迴圈內），否則會把兩個期間
+                # 或兩個小標的內容黏成一個 chunk——那正是這幾層要防的事。
+                raw = [d.page_content.strip()
+                       for d in semantic_chunker.create_documents([sub_text])]
+                raw = [c for c in raw if len(c) > 20]
+                merged = _merge_small_chunks(raw)
+                if len(merged) < len(raw):
+                    dump_lines.append(
+                        f"[MIN-MERGE] item={item_id} section={head_label} "
+                        f"{len(raw)} → {len(merged)} 個 chunk（< {_MIN_CHUNK_CHARS} 字元併進鄰居）\n")
+                for content in merged:
+                    # 上界檢查放在合併之後：合併可能把 chunk 推過 RCTS 門檻，順序反了
+                    # 就會漏掉那次補切、讓 chunk 在 rerank 階段被截斷。
+                    if rcts_splitter is not None and token_len_fn is not None \
+                            and token_len_fn(content) > rcts_threshold:
+                        sub_texts = [t.strip() for t in rcts_splitter.split_text(content) if t.strip()]
+                        dump_lines.append(f"[RCTS] item={item_id} 原 chunk {token_len_fn(content)} "
+                                           f"token > {rcts_threshold} → 補切成 {len(sub_texts)} 份\n")
+                        final_texts.extend((t, period_label, head_label) for t in sub_texts)
+                    else:
+                        final_texts.append((content, period_label, head_label))
 
-        # item_chunk_index 跨期間章節連續編號：Neighbor Expansion 靠 ±1 查鄰居，
+        # item_chunk_index 跨期間／小標章節連續編號：Neighbor Expansion 靠 ±1 查鄰居，
         # 若每段各自從 0 起算會有重號、查到錯的鄰居。
-        for idx, (content, period_label) in enumerate(final_texts):
+        for idx, (content, period_label, head_label) in enumerate(final_texts):
             rec = {"text": content, "chunk_type": "text",
                    "item_id": item_id, "item_chunk_index": idx}
             if period_label:
                 rec["period_context"] = period_label
+            if head_label:
+                rec["heading_context"] = head_label
             records.append(rec)
 
     return filing_meta, records, "\n".join(dump_lines)
@@ -786,6 +1159,10 @@ def upsert_records(client, collection_name: str, bge_m3, source: str, filing_met
             # 也存成獨立欄位（不只前綴進文字）：供日後期間硬 filter / 診斷用，
             # 且能直接查「這個 chunk 到底歸屬哪一期」而不必再解析 document 前綴。
             payload["period_context"] = record["period_context"]
+        if record.get("heading_context"):
+            # 同上理由。額外用途：一致性 validator 的 scope 判定（分部 vs 合併）可以直接
+            # 讀這個欄位，不必再靠 LLM 從文字猜——mix-03 就是猜錯 scope 造成的。
+            payload["heading_context"] = record["heading_context"]
         _basis = _period_basis_for(doc_type)
         if _basis:
             payload["period_basis"] = _basis   # 供 rag_query TTM 硬 filter 路由（見 _period_basis_for）
@@ -828,6 +1205,11 @@ def main() -> None:
     parser.add_argument("--collection", default=COLLECTION_NAME)
     parser.add_argument("--skip-txt", action="store_true",
                         help="跳過 News/Fundamentals/IncomeStatement .txt（開發時只驗證 filing 部分用）")
+    parser.add_argument("--skip-filings", action="store_true",
+                        help="跳過 10-K/10-Q，只處理 .txt。用於「只改了 .txt 內容」的增量重建"
+                             "（如 eval/migrate_fundamentals_pct.py 之後）——SEC filing 不走 MD5 快取、"
+                             "每次都會全部重切（21 份約 1 小時），且表格抽取有跑次間變異，"
+                             "沒必要時重跑只會引入無關差異。")
     parser.add_argument("--force-txt", action="store_true",
                         help=f"忽略 {HASHES_FILE} 的 MD5 快取，強制重新 ingest 所有 .txt"
                              "（快取與 Qdrant 實際內容不同步時的逃生口）")
@@ -839,6 +1221,11 @@ def main() -> None:
                              f"{RCTS_THRESHOLD} 時，改用 RCTS（{RCTS_CHUNK_SIZE}/{RCTS_CHUNK_OVERLAP}，"
                              "length_function=reranker tokenizer）補切。不加此旗標則行為與 Exp 1/2 "
                              "完全一致（純 SemanticChunker，無 size cap）。")
+    parser.add_argument("--strip-dup-tables", action="store_true",
+                        help="把已被 table chunk 收錄的壓平表格從散文移除（_strip_tabular_blocks）。"
+                             "⚠ 預設關閉：100 題 RAGAS 對照無明確勝方，而 context_precision 的差異"
+                             "落在 judge 噪音（0.046）內量不出來；反之若某張表 unstructured 沒抓成 "
+                             "table chunk，這層會把它從散文刪掉、資訊真的消失。")
     args = parser.parse_args()
 
     import edgar
@@ -889,6 +1276,7 @@ def main() -> None:
     prose_rcts_splitter = rcts_splitter if args.rcts_fallback else None
     prose_token_len_fn  = token_len_fn if args.rcts_fallback else None
     print(f"[INFO] RCTS fallback (財報散文/Item) : {'ON' if args.rcts_fallback else 'OFF（純 SemanticChunker）'}")
+    print(f"[INFO] 壓平表格去重 (--strip-dup-tables) : {'ON' if args.strip_dup_tables else 'OFF（預設）'}")
 
     client = make_qdrant_client()
     ensure_collection(client, args.collection, recreate=args.rebuild)
@@ -901,14 +1289,15 @@ def main() -> None:
     # 「抓哪幾份」由 fetch_data.py 決定並寫進 manifest（含 amendments=False 的排除邏輯，
     # TSLA 2026-04-30 那份 10-K/A 就是在抓取層被擋掉的）。本檔不再自己查 SEC，因此
     # 重新切塊永遠針對同一批文件，chunking 實驗的差異可以歸因到規則本身。
-    for ticker in args.tickers:
+    for ticker in (() if args.skip_filings else args.tickers):
         print(f"\n[TICKER] {ticker}")
         for form, filing in _filings_from_manifest(ticker, allow_fetch=args.allow_fetch):
             print(f"  [LOCAL] {form} | accession={filing.accession_no} | filed={filing.filing_date}")
 
             filing_meta, records, dump_text = _fetch_filing_records(
                 ticker, form, filing, semantic_chunker,
-                rcts_splitter=prose_rcts_splitter, token_len_fn=prose_token_len_fn)
+                rcts_splitter=prose_rcts_splitter, token_len_fn=prose_token_len_fn,
+                strip_dup_tables=args.strip_dup_tables)
             source = _build_filename(filing_meta, ticker)
             doc_type = infer_source_type(source)
 

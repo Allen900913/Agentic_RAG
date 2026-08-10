@@ -279,13 +279,15 @@ March 31,
 
  ...
 
+[MIN-MERGE] item=Part_I_Item_1 section=None 25 → 20 個 chunk（< 200 字元併進鄰居）
+
 [RCTS] item=Part_I_Item_1 原 chunk 2211 token > 1200 → 補切成 3 份
 
 [RCTS] item=Part_I_Item_1 原 chunk 2513 token > 1200 → 補切成 4 份
 
 [RCTS] item=Part_I_Item_1 原 chunk 1635 token > 1200 → 補切成 3 份
 
-[RCTS] item=Part_I_Item_1 原 chunk 1503 token > 1200 → 補切成 2 份
+[RCTS] item=Part_I_Item_1 原 chunk 1522 token > 1200 → 補切成 3 份
 
 --- [ITEM] Part II, Item 1 (len=201 chars) ---
 ITEM 1. LEGAL PROCEEDINGS
@@ -301,7 +303,13 @@ STRATEGIC AND COMPETITIVE RISKS
 
 We face intense competition across all markets for our products and servi...
 
+[SECTION] item=Part_II_Item_1A period=None 依小標切成 7 段：(小標前=章節層) | STRATEGIC AND COMPETITIVE RISKS | Business model competition | OPERATIONAL RISKS | LEGAL, REGULATORY, AND LITIGATION RISKS | INTELLECTUAL PROPERTY RISKS | GENERAL RISKS
+
+[MIN-MERGE] item=Part_II_Item_1A section=Business model competition 19 → 17 個 chunk（< 200 字元併進鄰居）
+
 [RCTS] item=Part_II_Item_1A 原 chunk 1701 token > 1200 → 補切成 4 份
+
+[MIN-MERGE] item=Part_II_Item_1A section=LEGAL, REGULATORY, AND LITIGATION RISKS 10 → 9 個 chunk（< 200 字元併進鄰居）
 
 --- [ITEM] Part I, Item 2 (len=61409 chars) ---
 ITEM 2. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
@@ -312,7 +320,29 @@ This report includes estimates, projections, statements relating to our business
 
 [PERIOD] item=Part_I_Item_2 依期間章節標題切成 13 段：(標題前) | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025 | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025 | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025 | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025 | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025 | Three Months Ended March 31, 2026 vs March 31, 2025 | Nine Months Ended March 31, 2026 vs March 31, 2025
 
-[RCTS] item=Part_I_Item_2 原 chunk 1672 token > 1200 → 補切成 4 份
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 11 段：Note About Forward-Looking Statements | OVERVIEW | Industry Trends and Opportunities | Economic Conditions, Challenges, and Risks | Seasonality | Reportable Segments | Metrics | Commercial | LinkedIn revenue growth | More Personal Computing | SUMMARY RESULTS OF OPERATIONS
+
+[MIN-MERGE] item=Part_I_Item_2 section=Metrics 2 → 1 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=SUMMARY RESULTS OF OPERATIONS 2 → 1 個 chunk（< 200 字元併進鄰居）
+
+[SECTION] item=Part_I_Item_2 period=Three Months Ended March 31, 2026 vs March 31, 2025 依小標切成 3 段：Productivity and Business Processes | Intelligent Cloud | More Personal Computing
+
+[MIN-MERGE] item=Part_I_Item_2 section=Productivity and Business Processes 2 → 1 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Intelligent Cloud 3 → 2 個 chunk（< 200 字元併進鄰居）
+
+[SECTION] item=Part_I_Item_2 period=Nine Months Ended March 31, 2026 vs March 31, 2025 依小標切成 3 段：Productivity and Business Processes | Intelligent Cloud | More Personal Computing
+
+[SECTION] item=Part_I_Item_2 period=Nine Months Ended March 31, 2026 vs March 31, 2025 依小標切成 2 段：(小標前=章節層) | OTHER INCOME (EXPENSE), NET
+
+[SECTION] item=Part_I_Item_2 period=Nine Months Ended March 31, 2026 vs March 31, 2025 依小標切成 21 段：(小標前=章節層) | Effective Tax Rate | Uncertain Tax Positions | NON-GAAP FINANCIAL MEASURES | LIQUIDITY AND CAPITAL RESOURCES | Cash, Cash Equivalents, and Investments | Valuation | Cash Flows | Debt Proceeds | Unearned Revenue | Share Repurchases | Dividends | Other Planned Uses of Capital | RECENT ACCOUNTING GUIDANCE | CRITICAL ACCOUNTING ESTIMATES | Revenue Recognition | Impairment of Investment Securities | Goodwill | Research and Development Costs | Legal and Other Contingencies | Income Taxes
+
+[MIN-MERGE] item=Part_I_Item_2 section=Unearned Revenue 2 → 1 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Research and Development Costs 2 → 1 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Income Taxes 2 → 1 個 chunk（< 200 字元併進鄰居）
 
 --- [ITEM] Part II, Item 2 (len=1738 chars) ---
 ITEM 2. UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
@@ -359,6 +389,10 @@ We are exposed to economic risk from foreign exchange rates, interest rates, cre
 Foreign Currencies
 
 Certain forecasted transactions, assets, and liabilities are exposed to...
+
+[SECTION] item=Part_I_Item_3 period=None 依小標切成 7 段：RISKS | Foreign Currencies | Interest Rate | Credit | Equity | SENSITIVITY ANALYSIS | Interest rate
+
+[MIN-MERGE] item=Part_I_Item_3 section=Foreign Currencies 2 → 1 個 chunk（< 200 字元併進鄰居）
 
 --- [ITEM] Part II, Item 5 (len=1534 chars) ---
 ITEM 5. OTHER INFORMATION
@@ -407,3 +441,5 @@ Ending
      10.3*
 
      Microsoft Corporation Executiv...
+
+[SECTION] item=Part_II_Item_6 period=None 依小標切成 2 段：(小標前=章節層) | Alice L. Jolla

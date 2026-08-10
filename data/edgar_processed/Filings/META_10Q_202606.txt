@@ -208,12 +208,26 @@ Item 1.Legal Proceedings
 
 As a multinational company with a complex and evolving business, we are, and expect to continue to be, subject to numerous claims, litigation, regulatory, tax, and government inquiries and investigations, and other legal proceedings in jurisdictions around the world. Although we believe many of these matters are without merit and are vigorously defending them, we may not ...
 
+[SECTION] item=Part_II_Item_1 period=None 依小標切成 6 段：(小標前=章節層) | Privacy and Related Matters | Competition | Securities and Other Actions | Youth-Related Actions | Other Actions
+
+[MIN-MERGE] item=Part_II_Item_1 section=None 3 → 2 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Part_II_Item_1 section=Privacy and Related Matters 8 → 5 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Part_II_Item_1 section=Securities and Other Actions 4 → 3 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Part_II_Item_1 section=Other Actions 7 → 4 個 chunk（< 200 字元併進鄰居）
+
 --- [ITEM] Part II, Item 1A (len=198836 chars) ---
 Table of Contents
 
 Item 1A. Risk Factors 
 
 Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Quarterly Report on Form 10-Q, including our condensed consolidated financial statements and related notes. The ris...
+
+[SECTION] item=Part_II_Item_1A period=None 依小標切成 4 段：(小標前=章節層) | Summary Risk Factors | Risks Related to Our Product Offerings | Risks Related to Our Product Offerings
+
+[MIN-MERGE] item=Part_II_Item_1A section=Risks Related to Our Product Offerings 75 → 68 個 chunk（< 200 字元併進鄰居）
 
 [RCTS] item=Part_II_Item_1A 原 chunk 1353 token > 1200 → 補切成 2 份
 
@@ -223,15 +237,15 @@ Certain factors may have a material adverse effect on our business, financial co
 
 [RCTS] item=Part_II_Item_1A 原 chunk 2244 token > 1200 → 補切成 5 份
 
-[RCTS] item=Part_II_Item_1A 原 chunk 1223 token > 1200 → 補切成 2 份
+[RCTS] item=Part_II_Item_1A 原 chunk 1270 token > 1200 → 補切成 2 份
 
 [RCTS] item=Part_II_Item_1A 原 chunk 1486 token > 1200 → 補切成 2 份
 
 [RCTS] item=Part_II_Item_1A 原 chunk 1488 token > 1200 → 補切成 3 份
 
-[RCTS] item=Part_II_Item_1A 原 chunk 2219 token > 1200 → 補切成 4 份
+[RCTS] item=Part_II_Item_1A 原 chunk 2247 token > 1200 → 補切成 4 份
 
-[RCTS] item=Part_II_Item_1A 原 chunk 2372 token > 1200 → 補切成 4 份
+[RCTS] item=Part_II_Item_1A 原 chunk 1901 token > 1200 → 補切成 4 份
 
 [RCTS] item=Part_II_Item_1A 原 chunk 1253 token > 1200 → 補切成 2 份
 
@@ -247,6 +261,8 @@ None.
 c) Issuer Purchases of Equity Securities
 
 There was no share repurchase activity during the three months ended June 30, 2026....
+
+[SECTION] item=Part_II_Item_2 period=None 依小標切成 2 段：a) Sales of Unregistered Securities | c) Issuer Purchases of Equity Securities
 
 --- [ITEM] Part II, Item 5 (len=1825 chars) ---
 Item 5.Other Information
@@ -297,11 +313,13 @@ Prepaid expenses and other current assets13,463 7,361 
 
 Total curr...
 
+[MIN-MERGE] item=Part_I_Item_1 section=None 46 → 38 個 chunk（< 200 字元併進鄰居）
+
 [RCTS] item=Part_I_Item_1 原 chunk 1858 token > 1200 → 補切成 3 份
 
 [RCTS] item=Part_I_Item_1 原 chunk 1250 token > 1200 → 補切成 2 份
 
-[RCTS] item=Part_I_Item_1 原 chunk 2110 token > 1200 → 補切成 4 份
+[RCTS] item=Part_I_Item_1 原 chunk 2150 token > 1200 → 補切成 5 份
 
 [RCTS] item=Part_I_Item_1 原 chunk 1499 token > 1200 → 補切成 3 份
 
@@ -312,6 +330,12 @@ Item 2.Management's Discussion and Analysis of Financial Condition and Results o
 
 You should read the following discussion of our financial condition and results of operations in conjunction with our condensed consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q and with our audited consolidated financial st...
 
-[RCTS] item=Part_I_Item_2 原 chunk 1323 token > 1200 → 補切成 2 份
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 40 段：(小標前=章節層) | Executive Overview of Second Quarter Results | Consolidated and Segment Results | Family of AppsReality LabsTotal | Family of Apps Metrics | Developments in Advertising | Other Business and Macroeconomic Conditions | Investment Philosophy | Non-Ad Revenue | Trends in Our Family Metrics | Family of Apps (FoA) | Reality Labs (RL) | Cost of Revenue and Operating Expenses | Results of Operations | Revenue | Family of Apps | Advertising | Other revenue | Reality Labs | Foreign Exchange Impact on Revenue | Cost of revenue | Research and development | Marketing and sales | General and administrative | Segment profitability | Family of Apps | Reality Labs | NM — not meaningful | Liquidity and Capital Resources | Cash Provided by Operating Activities | Cash Used in Investing Activities | Cash Provided by Financing Activities | Material Cash Requirements | Leases and Contractual Commitments | Long-term Debt | Share Repurchase | Dividend | Taxes | Loss Contingencies | Critical Accounting Estimates
 
-[RCTS] item=Part_I_Item_2 原 chunk 1299 token > 1200 → 補切成 2 份
+[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps Metrics 2 → 1 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps (FoA) 3 → 2 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Research and development 2 → 1 個 chunk（< 200 字元併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Long-term Debt 2 → 1 個 chunk（< 200 字元併進鄰居）

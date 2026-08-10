@@ -3,7 +3,7 @@
 # chunks    : 4
 
 ==============================================================================
-[chunk 0] chunk_type=text  chars=677
+[chunk 0] chunk_type=text  chars=673
 ==============================================================================
 === AAPL Company Fundamentals === Generated: 2026-06-12
 
@@ -11,12 +11,12 @@
 
 --- Valuation Metrics --- Market Cap : $4342.02B Enterprise Value : $4358.23B P/E Ratio Trailing: 35.83394 P/E Ratio Forward : 30.810581 Price/Sales (TTM) : 9.618119 Price/Book : 40.720387 EV/EBITDA : 27.243
 
---- Profitability --- Revenue (TTM) : $451.44B Gross Profit : $216.07B EBITDA : $159.98B Net Income : $122.58B Profit Margin : 0.27152002 Operating Margin: 0.32275 Gross Margin : 0.47862
+--- Profitability --- Revenue (TTM) : $451.44B Gross Profit : $216.07B EBITDA : $159.98B Net Income : $122.58B Profit Margin : 27.15% Operating Margin: 32.27% Gross Margin : 47.86%
 
---- Growth --- Revenue Growth (YoY): 0.166 Earnings Growth : 0.218 EPS Trailing : 8.25 EPS Forward : 9.59508
+--- Growth --- Revenue Growth (YoY): 16.60% Earnings Growth : 21.80% EPS Trailing : 8.25 EPS Forward : 9.59508
 
 ==============================================================================
-[chunk 1] chunk_type=text  chars=389
+[chunk 1] chunk_type=text  chars=387
 ==============================================================================
 --
 
@@ -30,7 +30,7 @@ Debt/Equity: 79.548
 
 Current Ratio: 1.07
 
---- Dividends & Returns --- Dividend Yield : 0.37 Return on Equity: 1.4147099 Return on Assets: 0.26229 Free Cash Flow : $101.09B
+--- Dividends & Returns --- Dividend Yield : 0.37% Return on Equity: 141.47% Return on Assets: 26.23% Free Cash Flow : $101.09B
 
 --- Business Summary --- Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide.
 
