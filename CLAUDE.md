@@ -12,7 +12,7 @@
 | [`rag_query.py`](rag_query.py) | CLI 查詢入口（`python rag_query.py -q "..."`）。核心 `retrieve()`（hybrid+rerank，支援 `full_translate_en` 檢索中間層全英文）、`call_llm()`、`build_user_prompt()` 也被其他腳本 `import rag_query as rq` 共用。**近重複抑制** `_suppress_near_duplicates`（2026-08-09 加，env `RAG_SUPPRESS_NEAR_DUP=1` 才開，**預設關閉**）在截斷 top_k 前丟掉「同來源且數字集合是子集」的低分候選。`COLLECTION_NAME` 在此定義，**可用 env `RAG_COLLECTION` 覆蓋**（2026-08-08 加）——gold 生成／eval／agentic 全都 import 這個常數，跑 collection A/B 時設 env 即可，不必改碼（改碼跑完忘了改回來是實際風險） | NVIDIA NIM `gpt-oss-120b`；`gemini-*` 走 Gemini |
 | [`api_server.py`](api_server.py) | FastAPI 後端，包住 `rag_query.py`（`/chat` SSE 串流） | 沿用 `rq.call_llm` |
 | [`app.py`](app.py) | Streamlit 聊天前端，串接 `api_server.py` 的 SSE | — |
-| [`llm_replay.py`](llm_replay.py) | **檢索前 LLM 中間產物的重放快取**（2026-08-09 加）。接三個點：`_plan_subqueries`／`translate_query_to_english`／`_check_sufficiency`。**未設 env `RAG_REPLAY_CACHE` 時完全 no-op**，生產路徑不受影響；設了就讓 eval 的 A/B 兩臂共用同一份 plan／英譯／圈選決策。**一個 block 一個 cache 檔＝隨機區塊設計**（A/B 共用 plan、跨重複次數重抽），零改碼。`RAG_REPLAY_MODE` 支援 per-kind（`strict:plan,translate_en`，2026-08-10 加）——跨 collection A/B 用 bare `strict` 會被 `check` 的合法 miss 誤炸。存在理由與 block 紀律見下方「量測噪音與重放快取」 | — |
+| [`llm_replay.py`](llm_replay.py) | **檢索前 LLM 中間產物的重放快取**（2026-08-09 加）。接三個點：`_plan_subqueries`／`translate_query_to_english`／`_check_sufficiency`。**未設 env `RAG_REPLAY_CACHE` 時完全 no-op**，生產路徑不受影響；設了就讓 eval 的 A/B 兩臂共用同一份 plan／英譯／圈選決策。存在理由見下方「量測噪音與重放快取」 | — |
 
 ## Agentic（LangGraph 多節點版，生產級 agentic 入口）
 | 檔案 | 用途 | 模型分層 |
@@ -170,11 +170,7 @@ python data_update_edgar.py --tickers MSFT --skip-txt --rcts-fallback --collecti
 
 **跑 A/B 的正確做法**：設 `RAG_REPLAY_CACHE=eval/replay_cache.json`（見 [`llm_replay.py`](llm_replay.py)），兩臂共用同一份 plan／英譯／Grader 決策，差異才只剩你改的那一項。**同一份 fixture 內別再重生成**——它跟 `reference_answers.json` 一樣，不需要唯一正確，只需要固定且對所有組態一視同仁。
 
-**多 block（隨機區塊設計，2026-08-10 釐清）**：單一 fixture＝**K=1 個 block**，結論條件於那一次 plan 抽樣，**沒有自由度**分辨「B 真的較好」與「B 在這個 plan 下剛好較好」。要多 block **不需要改碼**——`RAG_REPLAY_CACHE` 是路徑，一個 block 一個檔（`replay_b1.json`／`replay_b2.json`…），block 內兩臂共用、跨 block 重抽 plan。紀律：**同 block 內必須先後跑**（並行會兩臂都 miss 各自寫入＝等於沒 block）。
-- **成本**：2K 次 × 3~4 小時。便宜版＝block 2/3 **只重跑 block 1 裡兩臂 verdict 不同的題**（沒動的題對差異貢獻 0）。
-- **blocking 是必要條件不是充分條件**：擋得住 plan／英譯；**擋不住** Grader（`check` 的 key 含實際候選 id → 跨 collection 必然 miss，而那是**正確**的：候選變了就是被測改動造成的差異，不該用舊決策蓋掉）、生成層 `GEN_TEMPERATURE=0.3`、RAGAS judge。殘餘就是「同組態兩次跑 6 vs 4 個衝突」那個底線。
-- **plan fixture 帶先跑那臂的條件**：plan 的 system prompt 內嵌隨 collection 變動的 KB Coverage Snapshot，而 key 刻意不含 prompt。對 `period` vs `head`（同批 filing、只有切塊不同 → coverage 相同）是非議題；若 A/B 是「加了新文件的 collection」就有方向不明的偏誤，要用第三次中性 pass 生 fixture。
-- `RAG_REPLAY_MODE=strict` 讓 cache miss 直接報錯，但**跨 collection A/B 不能用 bare strict**（`check` 的合法 miss 會誤炸）→ 用 per-kind：`RAG_REPLAY_MODE=strict:plan,translate_en`。拼錯 kind 名會**啟動就報錯**而非靜默失效。
+**但共用一份 fixture 只是 K=1 個 block**：結論條件於那一次 plan 抽樣，分不出「B 真的較好」與「B 在這個 plan 下剛好較好」。要多 block **不需改碼**——`RAG_REPLAY_CACHE` 是路徑，一個 block 一個檔，block 內兩臂共用、跨 block 重抽（同 block 內**必須先後跑**，並行＝兩臂都 miss＝等於沒 block）。⚠ **blocking 是必要條件不是充分條件**：擋不住 Grader（跨 collection 必然 miss，而那是對的）、生成層 `GEN_TEMPERATURE=0.3`、RAGAS judge，所以「已經 blocked」≠「差異可解讀」。旗標語法與其餘細節見 [`llm_replay.py`](llm_replay.py) docstring。
 
 **指標的可追空間**（把 `reference_answers.json` 原文當答案餵回去評分，n=100，判讀護欄會自動印）：
 

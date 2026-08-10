@@ -32,6 +32,12 @@
 下剛好較好」。⚠ 擋得住的只有 plan／英譯；Grader 跨 collection 必然 miss（見 `check` 的
 key），生成層 `GEN_TEMPERATURE=0.3` 與 RAGAS judge 也擋不住 → blocking 是必要條件不是
 充分條件，block 內仍有殘餘噪音。
+  · **成本**：2K 次跑 × 3~4 小時。便宜版＝block 2/3 **只重跑 block 1 裡兩臂結果不同的題**
+    （其餘題兩臂一致,對差異貢獻 0）。
+  · **fixture 帶先跑那臂的條件**：承上「key 不含 system prompt」,共用的 plan 嚴格說是
+    「先跑那臂 coverage 下的 plan」。對「同批文件、只改切塊」的 A/B（如 period vs head,
+    coverage 相同）是非議題;若 A/B 是「加了新文件的 collection」就有方向不明的偏誤,
+    那時要用第三次中性 pass 生 fixture。
 
 用法：
     RAG_REPLAY_CACHE=eval/replay_cache.json python eval/run_agentic_on_evalset.py ...
