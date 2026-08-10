@@ -376,6 +376,144 @@ Microsoft 365 消費者雲端 29% / 33%      Dynamics 365  20% / 22%
 
 **限制**：`_ground_period_from_source` 只處理百分比（金額寫法太多，誤配風險高過收益）；且依賴 chunk 帶標籤，對 `us_stock_rag_edgar_exp4` 這層等於不存在。擋不掉「查了但查錯」（evidence 抄了原文某個真實標題，但不是該數字所在段落）。
 
+### A5.5 2026-08-09 量測基礎建設：先讓實驗可被相信，再談優化
+
+這一節不是功能改動，是**把「為什麼指標優化不動」查到底**的結果。結論是：**量測的解析度比改動的效果粗一個數量級，而且量測路徑自己也在抖。**
+
+#### (1) 三層噪音，全部大於訊號
+
+| 層 | 實測 | 量法 |
+|---|---|---|
+| RAGAS judge | `context_precision` 均值移動 **0.046**（兩次獨立樣本 0.0459 / 0.0452 複現）；`context_recall` 0.002 / 0.013 | 同一份結果檔重評兩次 |
+| Plan 節點 | **12/25 題（48%）子問題不同** | 同輸入、`temperature=0` 連呼叫兩次 |
+| query 英譯 → 檢索 | **47/100 題 top-8 不同**（重複對 149 vs 151） | 同組態完整重跑兩次 |
+
+`temperature=0` 不等於確定性——`gpt-oss-120b` 是 MoE，溫度只固定取樣、不固定專家路由。
+
+**MDE（95%, n=100）**：recall 0.029 / precision 0.036 / faithfulness 0.028 / correctness 0.019 → 換算成「要幾題從 0 修到 0.5」是 **4~7 題**。而 ingest 層的改動（期間邊界 11 個 chunk、影響 2 題）**在原理上就量不出來**。這不是運氣，是設計問題。
+
+#### (2) `llm_replay.py`：檢索前 LLM 中間產物的重放快取
+
+接三個點：`_plan_subqueries`、`translate_query_to_english`、`_check_sufficiency`。未設 `RAG_REPLAY_CACHE` 時**完全 no-op，生產路徑不受影響**。
+
+**key 的兩個相反設計，各有理由**：
+- plan / translate 的 key **不含 system prompt** —— planner 的 prompt 內嵌隨 collection 變動的 KB Coverage Snapshot，納入 key 會讓跨 collection A/B 全部 miss，正好毀掉唯一用途。副作用：改 planner prompt 時快取不會自動失效，要手動刪檔。
+- checker 的 key **含這次看到的候選 id** —— 候選變了是**合法 miss**，那正是被測改動造成的差異，用舊決策蓋掉會把訊號洗掉。
+
+**它買到什麼、買不到什麼**：買到 A/B 兩臂共用同一份 plan；**買不到生產端穩定**（MoE 路由不確定不打算解）。代價是固定下來的是「某一次抽樣」不是「正確答案」——跟 `reference_answers.json` 同一種東西，**定版後別再重生成**。
+
+fixture：`eval/replay_cache.json`（plan 100 / translate_en 181 / check 206）。
+
+#### (3) 判讀護欄：讓分數無法被誤讀
+
+`eval_ragas_vs_rubric.py` 每次跑完在 OVERALL 底下印出每個指標的**噪音門檻**與 **gold 上限**。gold 上限來自把 `reference_answers.json` 原文當成系統答案餵回去評分（n=100）：
+
+| metric | 系統 | gold 當答案 | 判讀 |
+|---|---|---|---|
+| answer_correctness | 0.651 | **0.989**（85/100 滿分） | 唯一有空間的指標，距上限 0.338 |
+| faithfulness | 0.820 | **0.656**（61/100 輸給系統） | **負空間**，停止追 |
+| answer_relevancy | 0.823 | 0.842 | 幾乎無空間 |
+| context_precision | 0.867 | 0.822 | 噪音 0.046，量不出來 |
+| nv_context_relevance | 0.968 | 0.965 | 已飽和 |
+
+faithfulness 是負空間的原因：gold 依 `gold_files` 生成，與 agentic 實際撈到的 contexts 不同源。**繼續往上推等於要求系統答得比標準答案還保守。**
+
+**推翻的舊結論**：`recall==1.0` 的 44 題，系統 correctness 0.724、gold 0.983 —— 證據全到位仍差 0.26，**瓶頸在生成層不在檢索層**。（先前我用 0.724 論證「correctness 有天花板」是錯的，gold 拿得到 0.989。）
+
+#### (4) 剝 inline 引用標記：留下，但理由不是分數
+
+`strip_citation_footer` 現在同時剝句末 `【檔名, chunk #N】`（佔答案本文 **25.0% 字元**）。**實測分數反而變差**：judge 重評 28 題 correctness **-0.041**；而零 LLM 的確定性測試顯示相似度分量只變 **+0.0011**（cosine 0.9105→0.9148），**「檔名雜訊稀釋 embedding」的假說證偽**。殘差來自 0.75 權重的 statement F1，未查清。
+
+保留是方法論選擇（引用是 metadata、reference 一個都沒有，剝掉才 like-for-like）；照「分數變低就退回」做就是在 gaming 量尺。⚠ **這使 2026-08-09 之後的數字與之前的結果檔不可比。**
+
+#### (5) 兩個 ingest/檢索層改動改成預設關閉
+
+| 改動 | 量測 | 處置 |
+|---|---|---|
+| `_strip_tabular_blocks`（壓平表格去重） | 六指標無明確勝方；核心指標 precision 的差落在噪音內 | `--strip-dup-tables`，**預設關閉** |
+| `_suppress_near_duplicates`（檢索層近重複抑制） | top-8 重複對 149→139（噪音區間 149~151，訊號約噪音 5 倍，**有效但很小**）；而最終 contexts 的重複本來就只有 18 對 / 11 題，**Grader 已清掉 88%** | `RAG_SUPPRESS_NEAR_DUP=1`，**預設關閉** |
+
+#### (6) 尚未動的最大槓桿：Grader 保留率
+
+`_check_sufficiency` 的 `relevant_ids` 只留下 **49.3%** 的候選（58 題單一子問題、池固定 5 → 143/290），**18/58 題最後只剩 1 個 chunk**，全 100 題最終 chunk 數中位數 = **3**。而 `context_recall ↔ correctness` 相關 **0.53**（六指標最強），`precision ↔ correctness` 只有 0.14。
+
+**這條管線每一題都在用一次 LLM 判斷丟掉一半證據，換來一個跟答對與否幾乎無關的 precision。** 這是唯一每題都作用、因此唯一有機會超過 MDE 的系統性改動。正確的消融是**把確定性去重放在 Grader 之前**（讓 5 個席位裝 5 份不同證據），而不是單純放寬保留率。
+
+#### 方法論教訓（當天犯了三次同一個錯）
+
+| 我的機制假設 | 推翻它的確定性證據 |
+|---|---|
+| 「移除冗餘剝奪 chunk 自足性」（precision -0.0205） | judge 噪音 0.046，兩次複現 |
+| 「correctness 有天花板」（perfect recall 只有 0.724） | gold 當答案拿 0.989 |
+| 「inline 標記稀釋 embedding」 | 確定性 cosine 差 +0.0043 → 影響 +0.0011 |
+
+共同模式：**先看到數字，再編一個合理的機制，然後沒去驗那個機制。** 定為紀律——**任何機制宣稱都要先有一個能證偽它的確定性測試**（零 LLM、可重跑、無抽樣變異）。另外：「確定性指標」不會自動變確定，只要量測路徑上還有一次 LLM 呼叫，它就跟 RAGAS 一樣髒。
+
+### A5.6 mix-03 端到端定案：不是 gold 錯，也不是期間，是**分部小標脫落**（2026-08-09）
+
+追「頭條百分比與 gold 衝突」的 8 題時，mix-03（「MSFT 最新一季**整體**營業利益成長多少」→ 系統答 +$2.7B / 24%，gold $6.4B / 20%）被我先判成「gold 錯」。**算一次減法就推翻了**：
+
+| | 單季 | 九個月 |
+|---|---|---|
+| 合併 operating income 2026 / 2025 | 38,398 / 32,000 → **+6,398（+20%）** | 114,634 / 94,205 → +20,429（+22%） |
+| Intelligent Cloud 分部 | 13,753 / 11,095 → **+2,658（+24%）** | — |
+
+gold 對，系統錯。系統那句在 `MSFT_10Q_202603 #111`，**開頭就是** `Operating income increased $2.7 billion or 24%.`，帶了期間標籤卻沒有分部標籤 → 讀起來就是全公司總計。正解那句**在語料裡**（`#104`）只是沒被撈到：#111 開頭就是那個句型，字面與語意都比「數字埋在段中」的 #104 更像答案。
+
+**這是 A5 期間問題的第三層**，後果更嚴重：讀不出期間是資訊缺失，冒充總計是**產生一個看起來有憑有據的錯數字**，而 faithfulness 結構上抓不到（數字確實在來源裡）。
+
+**兩個歸因錯誤都出在只看表面樣態**：① 當初把 mix-03 歸成期間問題（只看到「兩個 operating income 並存」）② 我這次先判 gold 錯（只看到「九個月是 22%、gold 寫 20%」的印象）。→ 併入 A5.5 的紀律：**有確定性答案可算的時候，先算。**
+
+**修法**（`_split_by_segment_section`，ingest 第三層硬邊界）：偵測器刻意不用硬編碼分部名單，用三個條件——獨立成行的短標題 ＋ **下一個非空行是變動陳述** ＋ 該字串在同一份 filing 出現 ≥2 次。第二個條件是關鍵：少了它會把壓平表格的列標籤（`Revenue`／`Total`／`Percentage`）全當標題，把散文切碎。並且**必須按行號切、不能按字串切**（分部名同時是 SEGMENT RESULTS 表的列標籤）。
+
+**適用範圍收斂到「有期間標籤的章節」**，這是實測逼出來的：套到沒有期間章節的 Item 上會抓到真分部（GOOGL/META/TSLA 的），但同時誤報 META `NM — not meaningful`、META `Other Actions`（法律訴訟，吃 16~58k 字元）、TSLA `Cash Flows from Operating Activities`、GOOGL `Other Bets` 吞掉 20k 字元 Item 尾巴。⚠ 第一版探針顯示「其餘 6 家零誤報」是假象——它**跳過了沒有期間章節的檔案**。
+
+順帶把 `_PERIOD_SECTION_RE` 加上 10-K 的 `Fiscal Year 2026 Compared with Fiscal Year 2025`（動機是它是分部層的開關，不是期間標籤本身）；**大小寫敏感是必要的**，MSFT 10-K 有一句句中小寫的同構文字。
+
+**驗收**：`eval/verify_segment_split.py`（零網路、零 embedding、可與其他實驗併行）。受影響 = MSFT 10-Q ×2（各 2 章節）＋ MSFT 10-K Item 7 ×1；其餘 18 份 filing **0 段**；表格對帳 0 筆不符；目標句落進 Intelligent Cloud。曝險 5/5 全涵蓋。
+
+**未決**：R2 本來該抓到這個答案（它自己說總計 +$2.7B 卻列出單一部門 +$3.6B，算術上不可能），沒抓到是因為 `len(seg_changes) >= 2` 這道門——那輪只列了一個部門。放寬到 ≥1 之前要先量誤報率：「總計 < 某部門」在**另一部門衰退**時是合法的。
+
+### A5.7 分部小標 → **通用小標**，並補上切塊的下界護欄（2026-08-09 同日下午）
+
+起因是使用者的一個設計質疑：「既然知道有規則可以切分，那就不需要語意切割了不是嗎？語意切割還會切出不好的 chunk。」量完後**對了一半，而錯的那一半正是 A5.6 修的東西**。
+
+**① 「規則可以取代語意切割」不成立。** 規則邊界覆蓋率＝ 84/2955 個 filing 散文 chunk ＝ **2.8%，全部是 MSFT**（`X Compared with Y` 期間標題只有 MSFT 在寫）。而 276 個散文 Item 平均被切成 10.7 塊，最大的 `META_10Q Part_II_Item_1A` 105 塊。規則決定「哪裡不准切」，切塊器決定「裡面哪裡切」，前者取代不了後者。
+
+**② 「語意切割會切出不好的 chunk」是真的，但量級遠小於第一眼。** 我第一次量得到「10.1% 低於 200 字元」是**讀錯的**（沒剝掉自注入前綴、也把合法的短 Item 算進去）。分類後真正退化的約 1~2%；更決定性的是**掃 1000 個 retrieved context 只有 3 個（0.30%）**，且是同一個 chunk——`mix-08` 撈到 `The increases were almost entirely driven by advertising revenue.`（65 字元，「The increases」指什麼全被切掉）。真實但稀有，不是指標壓在 0.65 的原因。
+
+**③ 「語意切割會少掉資訊」——這點要更正。** col-11／mix-03 **不是語意切割造成的**：RCTS 在 1200 token 一樣會把獨立成行的小標與 5000 字的段落本體分開。管用的修法是正交的一層（硬邊界＋標籤前綴進 embed 文字），與裡面用哪個切塊器無關。
+
+**改動**：`_split_by_segment_section` → `_split_by_subheading`（通用化，刪掉舊條件 ③ 與「只在有期間章節內生效」的 gate），payload `segment_context` → `heading_context`，前綴 `[segment: X]` → `[section: X]`（`Cash Flows from Operating Activities` 不是分部，叫它 segment 就是貼錯標）；新增 `_merge_small_chunks` 補上此前缺的**下界**護欄（上界 `RCTS_THRESHOLD` 一直都有）。
+
+**量測救掉的兩個錯誤設計**：
+1. 想用「同檔重複次數 ≥3 判為頁面殘渣」取代黑名單——實測 `Table of Contents` 在 GOOGL 20 次／TSLA 1 次（連自己都不穩），而真標題 `Intelligent Cloud` 7 次、`More Personal Computing` 8 次，**完全重疊**。照那樣做會把 A5.6 的修復砸掉。
+2. 想刪掉 bare-digit 獨立行（頁碼）——MSFT 10-K 有 **502** 個，遠多於頁數，多數是壓平表格的儲存格，刪掉會毀損表格數字。改由合併吸收。
+
+**這層自己會製造碎片**：1210 段裡 161 段（13.3%）不到 200 字元。拆開＝ 80 個「開頭無標籤」（Item 標題行，已併進下一段）＋ 81 個「有標籤」（**刻意保留**，往前併會被貼上前一段的標籤＝貼錯標）＋ 0 個中段無標籤。
+
+**驗收**（`eval/verify_segment_split.py`，零網路零 embedding）：21 份 filing 全部有切段（2~13 段/份）、405 種標籤、帶標籤散文字元 **2.8% → 53.0%**、表格型 Item 被切段 0 次、表格對帳 0 筆不符、目標句仍落在 `Intelligent Cloud`。
+**刻意不用 RAGAS 驗收**：改動會動到幾乎每個散文 chunk 的邊界，但能否提升分數遠在 MDE（4~7 題）之下，跑分只會給噪音。
+
+### A5.8 端到端驗收：`us_stock_rag_edgar_head` 重建 + mix-03 修好（2026-08-10）
+
+重建 4221 points（`--rcts-fallback` ON，零網路）。**三個確定性指標，全部可重跑**：
+
+| | period（基準） | head |
+|---|---|---|
+| 帶 `heading_context` 的散文 chunk | 0 | **2154 / 3477＝61.9%**，七家全覆蓋 |
+| 退化 chunk（剝前綴後 <200 字元） | **328（11.1%）** | **92（2.6%）** |
+| mix-03 斷言 | 三個 run 全 **FAIL**（讀到 24%） | **PASS**（「增加 64 億美元，增幅約 20%」＝gold） |
+
+**mix-08 的孤兒句也直接修掉**：65 字元的 `The increases were almost entirely driven by advertising revenue.`（「The increases」指什麼全被切掉）→ 併進 255 字元的 chunk，開頭是 `Family of Apps FoA revenue in the three and six months ended June 30, 2026 incre…`，主體與期間都補回來了。
+
+**檢索端也可見**：mix-03 的 context `#0` 帶期間標籤且**無** `[section:]`＝合併層，`#1` 才是 `[section: Productivity and Business Processes]`。原本病灶就是續段 chunk 沒有分部標籤而冒充總計。
+
+**同時修好量尺**（見 `eval/check_number_defects.py` 開頭）：舊的「比第一個百分比」對 col-11／mi-04／mi-08 誤報，而「比任一個百分比」會**漏抓** mix-03（它的 21% 落在 gold 20% 的 ±1pt 內）。現行做法是 `eval/number_claims.json` 逐條斷言＋`anchored_pct`，三態 PASS／FAIL／N/A。**判別力已驗證**：同一份斷言在舊 collection 三次全 FAIL、新 collection PASS。
+> ⚠ N/A 這一態是必要的：mix-03 修好後答案不再用「整體/合併」字樣，anchor 未命中 → 若把 N/A 併進 PASS 就會靜默通過。改用**金額**判準（`expect_text` `6.4 billion|64 億美元` / `forbid_text` `2.7 billion|27 億美元`）接手——金額在單題內幾乎不撞，百分比會。
+
+**未升生產**：`us_stock_rag_edgar_exp4` 仍是生產值。要升之前該先跑 100 題確認沒有整體退步（+18% 散文 chunk 會改變候選池組成）。
+
 ## A6 未決 / 下一步
 - **router（複雜度分派，pending，measure-gated）**：簡單題→單次 RAG、複雜→agentic；保守偏 agentic（誤判複雜為簡單代價高）。ratio 路由屬**正交檢索提示、非第三分支**，應放共用檢索層讓兩 pipeline 都吃到。
 - 生產 `rag_query.py` 是否跟進 `full_translate_en=True` 未決（需先確認同樣 chunk-level rerank 平坦問題存在）。
