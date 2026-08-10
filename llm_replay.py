@@ -25,9 +25,18 @@
 換 collection 不只換檢索池,是換掉規劃器的輸入）。**副作用**：真的改了 planner prompt 時
 快取不會自動失效,要手動刪檔重生成。
 
+**一個 block 一個檔＝隨機區塊設計**：`RAG_REPLAY_CACHE` 是路徑，所以「A/B 共用 plan、
+但跨重複次數重抽 plan」不需要改碼——block 1 兩臂共用 `replay_b1.json`、block 2 換
+`replay_b2.json`。同一 block 內**必須先後跑**（並行會兩臂都 miss 各自寫入＝等於沒 block）。
+單一 block（K=1）的結論條件於那一次抽樣，沒有自由度分辨「B 真的較好」與「B 在這個 plan
+下剛好較好」。⚠ 擋得住的只有 plan／英譯；Grader 跨 collection 必然 miss（見 `check` 的
+key），生成層 `GEN_TEMPERATURE=0.3` 與 RAGAS judge 也擋不住 → blocking 是必要條件不是
+充分條件，block 內仍有殘餘噪音。
+
 用法：
     RAG_REPLAY_CACHE=eval/replay_cache.json python eval/run_agentic_on_evalset.py ...
-    RAG_REPLAY_MODE=strict   # 額外要求：cache miss 直接報錯（確認 fixture 覆蓋完整）
+    RAG_REPLAY_MODE=strict                    # 所有 kind 的 cache miss 都直接報錯
+    RAG_REPLAY_MODE=strict:plan,translate_en  # 只對這些 kind 嚴格（跨 collection A/B 用這個）
 未設 `RAG_REPLAY_CACHE` 時整個模組是 no-op，生產路徑完全不受影響。
 """
 from __future__ import annotations
@@ -54,8 +63,41 @@ def enabled() -> bool:
     return bool(os.getenv("RAG_REPLAY_CACHE", ""))
 
 
-def _strict() -> bool:
-    return os.getenv("RAG_REPLAY_MODE", "").lower() == "strict"
+# 所有呼叫端註冊的 kind＝我們自己的碼定義的**封閉集合**，所以列清單正當（同 VALID_*_ITEMS
+# 的理由）。新增接點時要一起加進來——沒加會在 strict 名單裡被判成拼錯而報錯，那是刻意的。
+_KNOWN_KINDS = {"plan", "translate_en", "check"}
+
+
+def _strict_kinds() -> Optional[set[str]]:
+    """回傳 None＝非 strict；`{"*"}`＝全部 kind 嚴格；其餘＝只對指名的 kind 嚴格。
+
+    **為什麼要 per-kind**：bare `strict` 在跨 collection A/B 下一定炸，而且是誤炸。`check`
+    的 key 含「這次實際看到的候選 chunk id」，換 collection（切塊變了→id 變了）必然 miss，
+    而那是**正確行為**：候選變了就是被測改動造成的差異，不該用舊決策蓋掉。所以想用 strict
+    確認 fixture 覆蓋完整時，只能對「該被固定住」的中間產物嚴格：`strict:plan,translate_en`。
+    """
+    raw = os.getenv("RAG_REPLAY_MODE", "").strip().lower()
+    if not raw.startswith("strict"):
+        return None
+    _, _, kinds = raw.partition(":")
+    named = {k.strip() for k in kinds.split(",") if k.strip()}
+    if not named:
+        return {"*"}
+    # 拼錯的 kind 名（strict:plna）會讓整個 strict 靜默失效＝整輪實驗在無防護下跑完、事後
+    # 分不出來。這正是本專案反覆踩的那類坑，所以寧可啟動就炸。
+    unknown = named - _KNOWN_KINDS
+    if unknown:
+        raise RuntimeError(
+            f"RAG_REPLAY_MODE 指名了未知的 kind: {sorted(unknown)}；"
+            f"可用的是 {sorted(_KNOWN_KINDS)}。（拼錯若不報錯,strict 會靜默失效）")
+    return named
+
+
+def _is_strict(kind: str) -> bool:
+    ks = _strict_kinds()
+    if ks is None:
+        return False
+    return "*" in ks or kind.lower() in ks
 
 
 def _load() -> dict:
@@ -84,9 +126,12 @@ def get(kind: str, key: str) -> Any:
             _STATS["hit"] += 1
             return c[key]
     _STATS["miss"] += 1
-    if _strict():
-        raise RuntimeError(f"replay cache miss（strict 模式）: kind={kind} key={key!r}。"
-                           f"fixture 不完整,先在非 strict 模式跑一次補齊。")
+    if _is_strict(kind):
+        raise RuntimeError(
+            f"replay cache miss（strict 模式）: kind={kind} key={key!r}。"
+            f"fixture 不完整,先在非 strict 模式跑一次補齊。"
+            f"（若這是跨 collection A/B,kind=check 的 miss 是合法的——改用 "
+            f"RAG_REPLAY_MODE=strict:plan,translate_en）")
     return _MISS
 
 
