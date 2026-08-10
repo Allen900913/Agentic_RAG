@@ -12,7 +12,8 @@ answer/contexts」，評分交給 RAGAS（standalone、在 .venv-ragas 跑），
 
 公平性保證：
   - 同題：讀 eval/eval_set.json 的 90 題（非 agentic 專屬題庫）。
-  - 同底座：--collection 預設 us_stock_rag_edgar_exp4（Exp4 最佳 chunking），agentic 與單次
+  - 同底座：--collection 預設 us_stock_rag_edgar_period（Exp4 chunking ＋ 期間章節硬邊界，
+    2026-08-09 起取代 exp4：期間標籤是修「口徑挑錯」的必要材料），agentic 與單次
     版共用同一個 Qdrant collection + 同一個 reranker，唯一差別是「編排」（decomposition）。
   - 同測量：輸出 schema 對齊 generation_judge.json，交給同一個 eval_ragas_vs_rubric.py。
   - contexts = run_agentic 回傳的 collected（全 run 各子問題撈到的 chunk 聯集，正是衡量
@@ -52,7 +53,7 @@ load_dotenv(override=True)
 import rag_query as rq
 
 EVAL_SET = Path("eval/eval_set.json")
-DEFAULT_COLLECTION = "us_stock_rag_edgar_exp4"
+DEFAULT_COLLECTION = "us_stock_rag_edgar_period"
 DEFAULT_OUTPUT = Path("experiments/agentic/generation_judge.json")
 
 
@@ -125,7 +126,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--module", default="agentic_rag_v2", help="要跑的 agentic 模組")
     ap.add_argument("--collection", default=DEFAULT_COLLECTION,
-                    help="Qdrant collection（預設 Exp4 最佳 chunking，與單次版對照必須同一個）")
+                    help="Qdrant collection（預設 us_stock_rag_edgar_period，與單次版對照必須同一個）")
     ap.add_argument("--eval-set", default=str(EVAL_SET))
     ap.add_argument("--output", default=str(DEFAULT_OUTPUT))
     ap.add_argument("--limit", type=int, default=None, help="只跑前 N 題（smoke test）")
@@ -143,8 +144,8 @@ def main() -> None:
     ap.add_argument("--recursion-limit", type=int, default=100)
     args = ap.parse_args()
 
-    # 先把 collection 指到 Exp4（agentic 內部 rq.retrieve 讀 rq.COLLECTION_NAME）——
-    # 必須在跑任何檢索前設定，否則會撈到預設生產 collection、和 Exp4 對照不成立。
+    # 先把 collection 指到指定值（agentic 內部 rq.retrieve 讀 rq.COLLECTION_NAME）——
+    # 必須在跑任何檢索前設定，否則會撈到預設生產 collection、對照不成立。
     rq.COLLECTION_NAME = args.collection
 
     # 只 import agentic 模組（它會 monkeypatch rq.call_llm 成 NVIDIA 路由）；不碰 ej。
