@@ -1,3 +1,15 @@
+> ⚠ **已過時的歷史文件（2026-07-11），封存供對照，不要當現況讀。**
+> 檔名原為 `architeture.md`（拼字錯誤），2026-08-11 文件重整時移到這裡。
+>
+> 它描述的是**還沒有 agentic 管線、還在用 rubric + judge 評測**的世代，至少三處已與實況不符：
+> ① CAP-union / VARIANT_CAP 已被 RRF 取代 ② `translate_en` 的「待驗證」狀態已定案（改走
+> `full_translate_en`，見 [`../AGENTIC.md`](../AGENTIC.md)）③ 評測已從 rubric+judge 換成 RAGAS
+> 六指標（見 [`../EVAL.md`](../EVAL.md)）。
+>
+> **現況請看**：[`../../CLAUDE.md`](../../CLAUDE.md)（架構與全域規則）、[`../../README.md`](../../README.md)（設計決策說明）。
+
+---
+
 # RAG 架構總覽
 
 本文件說明 `rag_query.py` 檢索/生成 pipeline 與 `eval/` 評測系統的架構決策——每個階段「用什麼」以及「為什麼」。細節佐證與實驗數據見 `CHANGELOG.md`；本文件只整理成型的結論與其背後的推理，不重複記錄失敗實驗的過程（那是 CHANGELOG 的工作）。

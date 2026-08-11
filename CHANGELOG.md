@@ -7,42 +7,9 @@
 
 ---
 
-## 已試無效總表（改動前先查這裡，避免重踩）
-
-| 項目 | 死因 | 復活條件 | 日期 |
-|---|---|---|---|
-| RRF-fusion（跨 query-variant 排名融合） | pool 是妥協排名，候選集更雜訊化 | 無（機制型） | 07-06 |
-| chunking 切細救 rerank 分數 | 孤立段落無上下文，cross-encoder 評分反更低 | 換對上下文無關的評分方式 | 07-07 |
-| dense+sparse 一起翻英文 | dense 翻譯本身有害，sem-11 退步 | 已拆開測試（見下條），仍死 | 07-08 |
-| `sparse_translate_en`（只翻 sparse） | 救不回任何 RECALL checkpoint，還傷 sem-11 | 無 | 07-08 |
-| Rule 10 prompt（策略題強制含財務數字） | 注意力層級問題，指令命令不動埋沒的訊號 | 已被句級抽取證偽同因 | 07-14 |
-| section-aware chunking（拆稀釋型大 chunk） | retrieval 層有改善但 end-to-end 無可靠增益 | 若多題受益證據出現，全量重估 | 07-14 |
-| 檢索後句級抽取（contextual compression） | 目標句已搬到最前面，生成仍 2/3 不引用——病灶是模型主動略過，非訊號埋沒 | 無（決定性診斷） | 07-14 |
-| `bge-reranker-base`（小 reranker 換速度） | position embedding 上限 512 token，長 chunk 中後段看不到 | 換支援長 context 的小 reranker | 07-13/14 |
-| ONNX Runtime fp32 | 無加速（1.05x） | 無 | 07-13 |
-| ONNX int8 動態量化 | 2.18x 加速但 correlation 掉到 0.858，排序改變 | QAT/校準式靜態量化+完整驗證 | 07-13 |
-| 級聯精排（base 篩 top-10 → v2-m3 精排） | lexical 翻車，critical chunk 被踢出 | 保守篩選收益不值得，或換模型 | 07-13 |
-| `max_length=512`（reranker 截斷） | sem-11 退步，關鍵句在段尾被截斷 | chunk 長度上限大幅壓低 | 07-13 |
-| col-08 投入新召回機制（HyDE 等） | dense rank 落差(25/106)超出射程，成本不值得 | eval set 擴大、同類失敗多題重現 | 07-12 |
-| RAGAS ground_truth 用 rubric 清單合成 | 篇幅錯配，F1 精確率崩塌，分數假性極低(~0.31) | 已解決——改用完整黃金參考答案 | 07-15 |
-| GGUF/fp8（reranker 量化，僅分析未跑） | 加速靠量化（同 int8 風險）+ 整合成本高；fp8 純 CPU 無加速 | CPU 再榨速度且願付驗證成本時 | 07-13 |
-| few-shot 修 `parse_query_filters` | 範例共現模式被模仿成新錯誤，8b few-shot 80.0% < 8b zero-shot 85.0% | 換避開該共現的範例組合 | 07-15 |
-| `z-ai/glm-5.2` 當 agentic GEN_MODEL | NVIDIA NIM 上單發 127~217s，跑 eval 不可行 | 該模型端上加速 | 08-01 |
-| `deepseek-ai/deepseek-v4-pro` 當 agentic GEN_MODEL | 品質/中文最佳但 per-model 429 硬牆，100 題必團滅（實測 34 題 22 fallback） | 該模型放寬單模型限速 | 08-01 |
-
-**復活成功案例**：`rerank_multi_query`（07-07 判死，變體仍中文）在「英文變體+glossary」新前提下（07-08）復活，現已併入生產雙 query 精排機制。
-
----
-
-## 已知問題 / 已接受的極限（不要再嘗試系統側修法）
-
-- **sem-08**（AMZN AWS 策略方向）——三種系統側修法皆因同一真因失敗：生成模型判定「獲利數字」與「策略方向」問法無關而主動略過，非訊號埋沒。復活條件：僅剩調整 rubric 或維持現狀。
-- **col-08**（Tesla 口語版）——dense rank 25/106，落差超出 rewrite 射程，不再投入新召回機制。
-- **col-04**（Azure 口語版）——關鍵內容在 top-5，但生成被口語框架帶偏、選擇誠實拒答。非 bug，觀察中。
-- **col-05**（AWS 口語版，sem-08 鏡像）——RECALL 層問題 + rewrite 變體品質不穩定。
-- **ckpt_R = 0.7307**（chunk recall, n=20）——約 27% checkpoint 在候選池階段沒被撈到，多非 critical，暫不優先處理。
-
----
+> **已試無效總表**搬到 [`docs/EVAL.md`](docs/EVAL.md)（改動前先查那裡，避免重踩）。
+> **已知問題／已接受的極限**搬到 [`BACKLOG.md`](BACKLOG.md)。
+> 本檔只放日期式變更記錄。
 
 ## 2026-08-08
 
