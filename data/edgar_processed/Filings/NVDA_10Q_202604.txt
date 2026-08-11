@@ -232,7 +232,7 @@ Research and development6,321 3,989 
 
 Sales, general and administrative...
 
-[MIN-MERGE] item=Part_I_Item_1 section=None 19 → 18 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_1 section=None 19 → 18 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Part_I_Item_1 原 chunk 1960 token > 1200 → 補切成 3 份
 
@@ -247,11 +247,11 @@ This Quarterly Report on Form 10-Q contains forward-looking statements within th
 
 [SECTION] item=Part_I_Item_2 period=None 依小標切成 12 段：Forward-Looking Statements | Our Company and Our Businesses | Recent Developments, Future Objectives and Challenges | Critical Accounting Policies and Estimates | Results of Operations | Concentration of Revenue | Gross Profit and Gross Margin | Income Taxes | Liquidity | Capital Return to Shareholders | Outstanding Indebtedness and Commercial Paper Program | Material Cash Requirements and Other Obligations
 
-[MIN-MERGE] item=Part_I_Item_2 section=Income Taxes 3 → 2 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Income Taxes 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_I_Item_2 section=Liquidity 3 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Liquidity 3 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_I_Item_2 section=Outstanding Indebtedness and Commercial Paper Program 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Outstanding Indebtedness and Commercial Paper Program 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part I, Item 3 (len=1837 chars) ---
 Item 3. Quantitative and Qualitative Disclosures About Market Risk
@@ -298,7 +298,7 @@ On May 18, 2026, our Board of Directors a...
 
 [SECTION] item=Part_II_Item_2 period=None 依小標切成 2 段：Issuer Purchases of Equity Securities | Employee Equity Incentive Program Share Withholding
 
-[MIN-MERGE] item=Part_II_Item_2 section=Issuer Purchases of Equity Securities 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_II_Item_2 section=Issuer Purchases of Equity Securities 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 5 (len=825 chars) ---
 Item 5. Other Information
@@ -315,7 +315,7 @@ Adoption
 
 3/1...
 
-[MIN-MERGE] item=Part_II_Item_5 section=None 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_II_Item_5 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 6 (len=2689 chars) ---
 Item 6. Exhibits

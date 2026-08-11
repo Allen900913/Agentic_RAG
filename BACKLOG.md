@@ -69,6 +69,8 @@
 
 **與 collection 無關**（period 自己也會拒答），真因是 **Plan 節點把「收購金額」這個財報事實譯成新聞查詢** → 檢索被限制在 News chunk → 財報裡的 $29.5B 撈不到。`只撈到 News` 與拒答 **4/4 完全相關**，是乾淨的預測指標。
 
+⚠ **2026-08-12 擴充樣本後仍成立，相關性升到 6/6**（新增 `gj_ground2_claims4_r1~r3` 三個 PASS ＋ `gj_ground2_full100_20260812` 一個拒答）。跨 collection 命中率：ground2 **3/4**、period **2/3** ＝ 統計上沒有差別，**兩邊都被 plan 變異主導**。最病態的那次 plan 有三個子問題而且**全部是新聞導向**（「相關新聞內容」／「新聞細節與金額」／「在知識庫新聞中搜尋」）→ 候選池 10 個 chunk 全是 News → 拒答。 ⚠ 這也說明**掛了 replay fixture 也擋不住它**：replan 產生的新 query 不在快取裡（該次 run `hit=449 miss=63`），會重新問 LLM。所以 mix-07 不能當 collection A/B 的判準，只能當 planner 改動的判準。
+
 **已登錄成斷言**（2026-08-11）：`kind: require_text`，`expect_text: 29\.5\s*billion|295\s*億`。舊的 `anchored_pcts` 判不出這個缺陷（拒答的答案裡沒有百分比 → N/A 而不是 FAIL）。四個封存檔實測 **2 PASS / 2 FAIL**＝雙向都有判別力。
 
 **卡點**：這是 plan 抽樣變異（4 個 run 有 2 種行為），修法可能要在 planner prompt 加「財報事實不要譯成新聞查詢」的約束，但那類 prompt 改動的效果在現有量尺下量不出來（同 `docs/EVAL.md` MDE）。**現在至少有零噪音的進度指標**：拒答比例從 2/4 降下來才算有動。

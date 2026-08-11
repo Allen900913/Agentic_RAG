@@ -204,10 +204,9 @@ INDEX
 | --- | --- | --- | --- | --- | ---...
 
 --- [TABLE extra #10] ---
-This table details
+Stockholders' equity changes for the six months ended June 30, 2025.
 
-| Six Months Ended June 30, 2025 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive (Loss) Income |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| --- | --- | --- | --- | --- ...
+| Six Months Ended June 30, 2025 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive (Loss) Income |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  ...
 
 --- [TABLE extra #11] ---
 Revenues
@@ -297,9 +296,9 @@ Exhibit DescriptionFormFile No.ExhibitFiling Date
 
 [SECTION] item=Part_II_Item_6 period=None 依小標切成 2 段：(小標前=章節層) | Exhibit DescriptionFormFile No.ExhibitFiling Date
 
-[MIN-MERGE] item=Part_II_Item_6 section=None 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_II_Item_6 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_II_Item_6 section=Exhibit DescriptionFormFile No.ExhibitFiling Date 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_II_Item_6 section=Exhibit DescriptionFormFile No.ExhibitFiling Date 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part I, Item 1 (len=75030 chars) ---
 ITEM 1. FINANCIAL STATEMENTS
@@ -330,7 +329,7 @@ Prepaid expenses and other current assets7,395 7,615 
 
 Total current assets68,7...
 
-[MIN-MERGE] item=Part_I_Item_1 section=None 30 → 29 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_1 section=None 30 → 29 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Part_I_Item_1 原 chunk 1299 token > 1200 → 補切成 2 份
 
@@ -353,4 +352,4 @@ We are focused on bringing artificial intelligence into the real world, through 
 
 [SECTION] item=Part_I_Item_2 period=None 依小標切成 24 段：(小標前=章節層) | Overview | Automotive and AI Enabled Products—Production | Infrastructure | Cash Flow and Capital Expenditure Trends | Critical Accounting Policies and Estimates | Recent Accounting Pronouncements | Revenues | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Cost of Revenues and Gross Margin | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Research and Development Expense | Selling, General and Administrative Expense | Interest Income | Other Income, Net | Provision for Income Taxes | Liquidity and Capital Resources | Material Cash Requirements | Sources and Conditions of Liquidity | Cash Flows from Operating Activities | Cash Flows from Investing Activities | Cash Flows from Financing Activities
 
-[MIN-MERGE] item=Part_I_Item_2 section=Automotive and AI Enabled Products—Production 5 → 4 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Automotive and AI Enabled Products—Production 5 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

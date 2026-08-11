@@ -250,36 +250,36 @@ INDEX TO EXHIBITS(1)
 | 3.1 |  | Certificate of Formation of the Registrant |  | 10-Q |  | 001-34756 |  | 3.1 |  | July 24, 2024 |  |  |...
 
 --- [TABLE extra #15] ---
-This table lists amendments and waivers to the Registrant's Investor's Rights Agreements, incorporated by reference from past SEC filings between 2011 and 2015.
+Exhibit data for investor's rights agreements and securities.
 
 | Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  | Exhibit Description |  | Form |  | File No. |  | Exhibit | ...
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
+| 4.7 |  | Waiver to Fifth Amended and Restated Investor’s Rights Agreeme...
 
 --- [TABLE extra #16] ---
-This table lists
+Exhibit data for various filings and agreements.
 
 | Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
-| 10.1** |  | Form of Indemnification Agreement between the Registrant and its directors and officers. |  | 8-K |  | 3...
+| 10.1** |  | Form of Indemnification Agreement between the Registrant and its directo...
 
 --- [TABLE extra #17] ---
-This table presents
+Exhibit index for various SEC filings, covering multiple years.
 
 | Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
-| 10.16** |  | 2025 CEO Interim Restricted Stock Agreement, dated August 3, 2025 |  | 8-K |  | 001-34756 |  | 10.1 ...
+| 10.16** |  | 2025 CEO Interim Restricted Stock Agreement, dated Augus...
 
 --- [TABLE extra #18] ---
-100
+XBRL taxonomy extension documents for current filing.
 
 | Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
-| 101.SCH |  | Inline XBRL Taxonomy Extension Schema Document |  | — |  | — |  | — |  | — |  | X |
-| 101.CAL |  | Inline XBRL Taxon...
+| 101.SCH |  | Inline XBRL Taxonomy Extension Schema Document |  | — |  | — |  | ...
 
 --- [TABLE extra #19] ---
 Pursuant to the requirements of Section 13 or 15(d) the Securities Exchange Act of 1934, the registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized.
@@ -338,21 +338,21 @@ We are focused on bringing artificial intelligence (“AI”) into the real worl
 
 [SECTION] item=Item_1 period=None 依小標切成 41 段：Overview | Segment Information | Automotive | Energy Storage Products | Energy Generation Offerings | Self-Driving Development and Artificial Intelligence | Vehicle Control and Infotainment Software | Battery and Powertrain | Energy Storage Products | Energy Generation Systems | Infrastructure | Automotive | Energy Generation and Storage | Sales and Marketing | Direct Sales | Used Vehicle Sales | Public Charging | In-App Upgrades | Energy Generation and Storage | Service | Energy Generation and Storage | Purchase Financing and Leases | Insurance | Energy Generation and Storage | Manufacturing | Supply Chain | Governmental Programs, Incentives and Regulations | Automotive Regulatory Credits | Energy Storage System Incentives and Policies | Energy Generation System Incentives and Policies | Vehicle Safety and Testing | Automobile Manufacturer and Dealer Regulation | Battery Safety and Testing | Solar Energy—General | Solar Energy—Net Metering | Automotive | Energy Storage Systems | Energy Generation Systems | Intellectual Property | Human Capital Resources | Available Information
 
-[MIN-MERGE] item=Item_1 section=Segment Information 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Segment Information 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Energy Generation Offerings 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Energy Generation Offerings 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Infrastructure 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Infrastructure 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Direct Sales 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Direct Sales 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Energy Generation and Storage 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Energy Generation and Storage 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Solar Energy—General 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Solar Energy—General 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Energy Storage Systems 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Energy Storage Systems 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Human Capital Resources 4 → 3 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Human Capital Resources 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 1A (len=83678 chars) ---
 ITEM 1A. RISK FACTORS 
@@ -361,7 +361,7 @@ You should carefully consider the risks described below together with the other 
 
 [SECTION] item=Item_1A period=None 依小標切成 2 段：(小標前=章節層) | Risks Related to Our Operations
 
-[MIN-MERGE] item=Item_1A section=Risks Related to Our Operations 32 → 29 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=Risks Related to Our Operations 32 → 29 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Item_1A 原 chunk 1786 token > 1200 → 補切成 3 份
 
@@ -404,7 +404,7 @@ Our common stock has traded on The NASDAQ Global Select Market under the symbol 
 
 [SECTION] item=Item_5 period=None 依小標切成 4 段：Market Information | Holders | Dividend Policy | Stock Performance Graph
 
-[MIN-MERGE] item=Item_5 section=Stock Performance Graph 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_5 section=Stock Performance Graph 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 7 (len=55405 chars) ---
 ITEM 7. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS 
@@ -413,13 +413,13 @@ The following discussion and analysis should be read in conjunction with the con
 
 [SECTION] item=Item_7 period=None 依小標切成 20 段：(小標前=章節層) | Automotive and AI Enabled Products—Production | Cash Flow and Capital Expenditure Trends | Critical Accounting Policies and Estimates | Automotive Sales | Inventory Valuation | Warranties | Stock-Based Compensation | Income Taxes | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Liquidity and Capital Resources | Material Cash Requirements | Sources and Conditions of Liquidity | Cash Flows from Operating Activities | Cash Flows from Investing Activities | Cash Flows from Financing Activities | Recent Accounting Pronouncements
 
-[MIN-MERGE] item=Item_7 section=None 4 → 3 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=None 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Automotive and AI Enabled Products—Production 5 → 4 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Automotive and AI Enabled Products—Production 5 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Critical Accounting Policies and Estimates 3 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Critical Accounting Policies and Estimates 3 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Inventory Valuation 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Inventory Valuation 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 8 (len=171280 chars) ---
 ITEM 8. FINANCIAL STATEMENTS AND SUPPLEMENTARY DATA
@@ -450,7 +450,7 @@ Consolidated Statements of Redeemable Noncontrolling Interests and Equity
 
 Consolidated...
 
-[MIN-MERGE] item=Item_8 section=None 76 → 65 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_8 section=None 76 → 65 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Item_8 原 chunk 1555 token > 1200 → 補切成 4 份
 

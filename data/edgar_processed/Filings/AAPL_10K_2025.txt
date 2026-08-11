@@ -262,7 +262,7 @@ iPhone® is the Company’s line of smartphones based on its iOS operating syste
 
 [SECTION] item=Item_1 period=None 依小標切成 16 段：Company Background | Wearables, Home and Accessories | Advertising | AppleCare | Cloud Services | Digital Content | Payment Services | Segments | Markets and Distribution | Competition | Supply of Components | Research and Development | Intellectual Property | Business Seasonality and Product Introductions | Human Capital | Available Information
 
-[MIN-MERGE] item=Item_1 section=Wearables, Home and Accessories 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Wearables, Home and Accessories 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 7A (len=3034 chars) ---
 Item 7A.    Quantitative and Qualitative Disclosures About Market Risk
@@ -275,7 +275,7 @@ The Company is primarily exposed to fluctuations in U.S. interest rates and thei
 
 [SECTION] item=Item_7A period=None 依小標切成 4 段：(小標前=章節層) | Interest Rate Risk | Term debt | Foreign Exchange Rate Risk
 
-[MIN-MERGE] item=Item_7A section=Foreign Exchange Rate Risk 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7A section=Foreign Exchange Rate Risk 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 8 (len=60874 chars) ---
 Item 8.    Financial Statements and Supplementary Data
@@ -292,7 +292,7 @@ Consolidated Statements of Comprehensive Income for the years ended September 27
 
 Consolidated Balance Sheets as of Se...
 
-[MIN-MERGE] item=Item_8 section=None 27 → 25 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_8 section=None 27 → 25 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Item_8 原 chunk 2429 token > 1200 → 補切成 4 份
 
@@ -316,7 +316,7 @@ Based on an evaluation under the supervision and with the participation of the C
 
 [SECTION] item=Item_9A period=None 依小標切成 2 段：Evaluation of Disclosure Controls and Procedures | Inherent Limitations over Internal Controls
 
-[MIN-MERGE] item=Item_9A section=Inherent Limitations over Internal Controls 3 → 2 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_9A section=Inherent Limitations over Internal Controls 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 9B (len=575 chars) ---
 Item 9B.    Other Information
@@ -361,7 +361,7 @@ Consolidated Statements of Operations for the years ended September 27, 2025, Se
 
 Consolidated Statements of Comprehensive Income for the years ended September 27, 2025, September 28...
 
-[MIN-MERGE] item=Item_15 section=None 8 → 7 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_15 section=None 8 → 7 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Item_15 原 chunk 1873 token > 1200 → 補切成 3 份
 
@@ -388,9 +388,9 @@ Senior Vice President,Chief Financi...
 
 [SECTION] item=Item_16 period=None 依小標切成 5 段：(小標前=章節層) | NameTitleDate | TIMOTHY D. COOK | KEVAN PAREKH | ANDREA JUNG
 
-[MIN-MERGE] item=Item_16 section=None 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_16 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_16 section=ANDREA JUNG 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_16 section=ANDREA JUNG 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 1A (len=68163 chars) ---
 Item 1A.    Risk Factors
@@ -401,11 +401,11 @@ The following summarizes factors that could have a material adverse effect on th
 
 [RCTS] item=Item_1A 原 chunk 1480 token > 1200 → 補切成 3 份
 
-[MIN-MERGE] item=Item_1A section=Business Risks 13 → 12 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=Business Risks 13 → 12 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1A section=Legal and Regulatory Compliance Risks 10 → 9 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=Legal and Regulatory Compliance Risks 10 → 9 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1A section=Financial Risks 6 → 5 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=Financial Risks 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 1B (len=44 chars) ---
 Item 1B.    Unresolved Staff Comments
@@ -422,7 +422,7 @@ Item 2.    Properties
 
 The Company’s headquarters is located in Cupertino, California. As of September 27, 2025, the Company owned or leased facilities and land for corporate functions, R&D, data centers, retail and other purposes at locations throughout the U.S. and in various places outside the U.S. The Company believes its existing facilities and equipment, which are used by all reportable segm...
 
-[MIN-MERGE] item=Item_2 section=None 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_2 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 3 (len=5409 chars) ---
 Item 3.    Legal Proceedings
@@ -433,14 +433,14 @@ On March 25, 2024, the Commission announced that it had opened a formal noncompl
 
 [SECTION] item=Item_3 period=None 依小標切成 4 段：Digital Markets Act Investigations | Department of Justice Lawsuit | Epic Games | Other Legal Proceedings
 
-[MIN-MERGE] item=Item_3 section=Department of Justice Lawsuit 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_3 section=Department of Justice Lawsuit 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_3 section=Epic Games 3 → 2 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_3 section=Epic Games 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 4 (len=2979 chars) ---
 Item 4.    Mine Safety DisclosuresNot applicable.Apple Inc. | 2025 Form 10-K | 18PART IIItem 5.    Market for Registrant’s Common Equity, Related Stockholder Matters and Issuer Purchases of Equity SecuritiesThe Company’s common stock is traded on The Nasdaq Stock Market LLC under the symbol AAPL.HoldersAs of October 17, 2025, there were 22,429 shareholders of record.Purchases of Equity Securities ...
 
-[MIN-MERGE] item=Item_4 section=None 3 → 2 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_4 section=None 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 5 (len=2648 chars) ---
 Item 5.    Market for Registrant’s Common Equity, Related Stockholder Matters and Issuer Purchases of Equity Securities
@@ -457,7 +457,7 @@ Share repurchase activity during the th...
 
 [SECTION] item=Item_5 period=None 依小標切成 3 段：(小標前=章節層) | Holders | Company Stock Performance
 
-[MIN-MERGE] item=Item_5 section=Holders 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_5 section=Holders 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 6 (len=55 chars) ---
 Item 6.    [Reserved]
@@ -469,24 +469,24 @@ Item 7.    Management’s Discussion and Analysis of Financial Condition and
 
 The following discussion should be read in conjunction with the consolidated financial statements and accompanying notes included in Part II, Item 8 of this Form 10-K. This Item generally discusses 2025 and 2024 items and year-to-year comparisons between 2025 and 2024. Discussions of 2023 items and ye...
 
-[SECTION] item=Item_7 period=None 依小標切成 34 段：(小標前=章節層) | Product, Service and Software Announcements | Fiscal Period | Macroeconomic Conditions | Tariffs and Other Measures | Segment Operating Performance | Americas | Europe | Greater China | Japan | Rest of Asia Pacific | Products and Services Performance | Wearables, Home and Accessories | Services | Gross Margin | Products Gross Margin | Services Gross Margin | Operating Expenses | Research and Development | Selling, General and Administrative | Provision for Income Taxes | Liquidity and Capital Resources | Debt | Leases | Manufacturing Purchase Obligations | Other Purchase Obligations | Deemed Repatriation Tax Payable | Capital Return Program | Internal-Use Software | Disaggregation of Income Statement Expenses | Income Taxes | Critical Accounting Estimates | Uncertain Tax Positions | Legal and Other Contingencies
+[GROUND] item=Item_7 period=None 34 → 25 段（無幅度數字的段併回帶表格的前一段）
 
-[MIN-MERGE] item=Item_7 section=Macroeconomic Conditions 2 → 1 個 chunk（< 200 字元併進鄰居）
+[SECTION] item=Item_7 period=None 依小標切成 25 段：(小標前=章節層) | Product, Service and Software Announcements | Fiscal Period | Macroeconomic Conditions | Tariffs and Other Measures | Segment Operating Performance | Products and Services Performance | Gross Margin | Operating Expenses | Research and Development | Selling, General and Administrative | Provision for Income Taxes | Liquidity and Capital Resources | Debt | Leases | Manufacturing Purchase Obligations | Other Purchase Obligations | Deemed Repatriation Tax Payable | Capital Return Program | Internal-Use Software | Disaggregation of Income Statement Expenses | Income Taxes | Critical Accounting Estimates | Uncertain Tax Positions | Legal and Other Contingencies
 
-[MIN-MERGE] item=Item_7 section=Americas 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Macroeconomic Conditions 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Rest of Asia Pacific 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Segment Operating Performance 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Services 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Products and Services Performance 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Selling, General and Administrative 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Selling, General and Administrative 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Deemed Repatriation Tax Payable 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Deemed Repatriation Tax Payable 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Capital Return Program 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Capital Return Program 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Internal-Use Software 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Internal-Use Software 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Uncertain Tax Positions 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Uncertain Tax Positions 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Legal and Other Contingencies 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Legal and Other Contingencies 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

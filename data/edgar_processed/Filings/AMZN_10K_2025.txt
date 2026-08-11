@@ -492,7 +492,7 @@ Consolidated Balance Sheets
 
 Consolidate...
 
-[MIN-MERGE] item=Item_8 section=None 58 → 49 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_8 section=None 58 → 49 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Item_8 原 chunk 2146 token > 1200 → 補切成 3 份
 
@@ -513,13 +513,13 @@ This Annual Report on Form 10-K and the documents incorporated herein by referen
 
 [SECTION] item=Item_1 period=None 依小標切成 13 段：(小標前=章節層) | General | Consumers | Sellers | Developers and Enterprises | Content Creators | Advertisers | Competition | Intellectual Property | Seasonality | Human Capital | Available Information | Executive Officers and Directors
 
-[MIN-MERGE] item=Item_1 section=General 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=General 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Sellers 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Sellers 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Competition 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Competition 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Intellectual Property 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Intellectual Property 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 1A (len=60660 chars) ---
 Item 1A.Risk Factors
@@ -528,15 +528,15 @@ Please carefully consider the following discussion of significant factors, event
 
 [SECTION] item=Item_1A period=None 依小標切成 7 段：(小標前=章節層) | We Face Intense Competition | We Have Foreign Exchange Risk | Operating Risks | We Face Significant Inventory Risk | We Are Subject to Payments-Related Risks | Legal and Regulatory Risks
 
-[MIN-MERGE] item=Item_1A section=We Have Foreign Exchange Risk 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=We Have Foreign Exchange Risk 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1A section=Operating Risks 8 → 7 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=Operating Risks 8 → 7 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Item_1A 原 chunk 1245 token > 1200 → 補切成 2 份
 
 [RCTS] item=Item_1A 原 chunk 1503 token > 1200 → 補切成 3 份
 
-[MIN-MERGE] item=Item_1A section=Legal and Regulatory Risks 6 → 5 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=Legal and Regulatory Risks 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 1B (len=40 chars) ---
 Item 1B.Unresolved Staff Comments
@@ -595,7 +595,7 @@ We carried out an evaluation required by the Securities Exchange Act of 1934 (th
 
 [SECTION] item=Item_9A period=None 依小標切成 4 段：Evaluation of Disclosure Controls and Procedures | Limitations on Controls | The Board of Directors and Shareholders | Basis for Opinion
 
-[MIN-MERGE] item=Item_9A section=Limitations on Controls 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_9A section=Limitations on Controls 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 9B (len=1986 chars) ---
 Table of Contents
@@ -663,7 +663,7 @@ Consolidated Statements of Cash Flows for each of the three years ended December
 
 Consolidated Statements of Operations for each of the three years ended Dece...
 
-[MIN-MERGE] item=Item_15 section=None 6 → 5 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_15 section=None 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 16 (len=1518 chars) ---
 Item 16.Form 10-K Summary
@@ -686,9 +686,9 @@ Pursuant to the requi...
 
 [SECTION] item=Item_16 period=None 依小標切成 2 段：(小標前=章節層) | President and Chief Executive Officer
 
-[MIN-MERGE] item=Item_16 section=None 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_16 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_16 section=President and Chief Executive Officer 4 → 3 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_16 section=President and Chief Executive Officer 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 7 (len=46296 chars) ---
 Table of Contents
@@ -701,8 +701,8 @@ This Annual Report on Form 10-K includes forward-looking statements within the m
 
 [SECTION] item=Item_7 period=None 依小標切成 25 段：Forward-Looking Statements | Overview | Critical Accounting Estimates | Inventories | Income Taxes | Liquidity and Capital Resources | Results of Operations | Overview | Net Sales | Operating Expenses | Cost of Sales | Fulfillment | Technology and Infrastructure | Sales and Marketing | General and Administrative | Other Operating Expense (Income), Net | Operating Income | Interest Income and Expense | Other Income (Expense), Net | Income Taxes | Equity-Method Investment Activity, Net of Tax | Non-GAAP Financial Measures | Free Cash Flow | Effect of Foreign Exchange Rates | Guidance
 
-[MIN-MERGE] item=Item_7 section=Inventories 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Inventories 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Liquidity and Capital Resources 6 → 5 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Liquidity and Capital Resources 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Results of Operations 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Results of Operations 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

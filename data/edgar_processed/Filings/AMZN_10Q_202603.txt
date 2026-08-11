@@ -269,12 +269,12 @@ Table of Contents
 | --- | --- |...
 
 --- [TABLE extra #22] ---
-This table lists
+Exhibit index for Amazon.com, Inc.'s SEC filing, listing various certificates and financial statements.
 
 | Exhibit Number |  | Description |
 | --- | --- | --- |
 | 3.1 |  | Amended and Restated Certificate of Incorporation of Amazon.com, Inc. (incorporated by reference to the Company’s Current Report on Form 8-K, filed May 27, 2022). |
-| 3.2 |  | Amended and Restated Bylaws of Amazon.com, Inc. (incorporated by reference to the Company’s Current Report on Form 8-K, filed May 3, 2024)....
+| 3.2 |  | Amended and Restated Bylaws of Amazon.com, Inc. (inc...
 
 --- [TABLE extra #23] ---
 Pursuant to the requirements of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized.
@@ -313,7 +313,7 @@ Net income17,127 30,255 65,944 90,798 
 
 Adjustments to reconcile net income to net cash...
 
-[MIN-MERGE] item=Part_I_Item_1 section=None 26 → 23 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_1 section=None 26 → 23 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Part_I_Item_1 原 chunk 3654 token > 1200 → 補切成 6 份
 
@@ -330,13 +330,13 @@ This Quarterly Report on Form 10-Q includes forward-looking statements within th
 
 [SECTION] item=Part_I_Item_2 period=None 依小標切成 23 段：Forward-Looking Statements | Critical Accounting Estimates | Inventories | Income Taxes | Liquidity and Capital Resources | Results of Operations | Overview | Net Sales | Operating Expenses | Cost of Sales | Fulfillment | Technology and Infrastructure | Sales and Marketing | General and Administrative | Other Operating Expense (Income), Net | Operating Income | Interest Income and Expense | Other Income (Expense), Net | Income Taxes | Non-GAAP Financial Measures | Free Cash Flow | Effect of Foreign Exchange Rates | Guidance
 
-[MIN-MERGE] item=Part_I_Item_2 section=Critical Accounting Estimates 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Critical Accounting Estimates 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_I_Item_2 section=Inventories 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Inventories 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_I_Item_2 section=Liquidity and Capital Resources 6 → 5 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Liquidity and Capital Resources 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_I_Item_2 section=Results of Operations 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Results of Operations 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part I, Item 3 (len=5148 chars) ---
 Table of Contents
@@ -347,7 +347,7 @@ We are exposed to market risk for the effect of interest rate changes, foreign c
 
 [SECTION] item=Part_I_Item_3 period=None 依小標切成 4 段：(小標前=章節層) | Interest Rate Risk | Foreign Exchange Risk | Equity Investment Risk
 
-[MIN-MERGE] item=Part_I_Item_3 section=Equity Investment Risk 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_3 section=Equity Investment Risk 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 1 (len=132 chars) ---
 Item 1.Legal Proceedings
@@ -361,9 +361,9 @@ Please carefully consider the following discussion of significant factors, event
 
 [SECTION] item=Part_II_Item_1A period=None 依小標切成 7 段：(小標前=章節層) | We Face Intense Competition | We Have Foreign Exchange Risk | Operating Risks | We Face Significant Inventory Risk | We Are Subject to Payments-Related Risks | Legal and Regulatory Risks
 
-[MIN-MERGE] item=Part_II_Item_1A section=We Have Foreign Exchange Risk 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_II_Item_1A section=We Have Foreign Exchange Risk 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_II_Item_1A section=Operating Risks 8 → 7 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_II_Item_1A section=Operating Risks 8 → 7 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Part_II_Item_1A 原 chunk 1243 token > 1200 → 補切成 2 份
 
@@ -406,4 +406,4 @@ ExhibitNumberDescription
 
 4.1Officers’ Certificate of...
 
-[MIN-MERGE] item=Part_II_Item_6 section=ExhibitNumberDescription 4 → 3 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_II_Item_6 section=ExhibitNumberDescription 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

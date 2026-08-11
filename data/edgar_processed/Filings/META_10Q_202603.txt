@@ -179,13 +179,11 @@ We report our financial results for our two reportable segments: Family of Apps 
 | --- | --- | --- | --- | --- | ---...
 
 --- [TABLE extra #8] ---
-790
-
 |  |  |  |  |  |  |  |  | Ad Revenue |  | Non-Ad Revenue |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
 
 --- [TABLE extra #9] ---
-3228
+Average Revenue Per Person (ARPP). Our Family of Apps (FoA) revenue represents the substantial majority of our total revenue. We define ARPP as our FoA revenue during a given quarter, divided by the average of the number of DAP at the begin
 
 | ARPP: | $11.20 | $11.89 | $12.29 | $14.25 | $12.36 | $13.65 | $14.46 | $16.56 | $15.66 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
@@ -217,9 +215,9 @@ As a multinational company with a complex and evolving business, we are, and exp
 
 [SECTION] item=Part_II_Item_1 period=None 依小標切成 6 段：(小標前=章節層) | Privacy and Related Matters | Competition | Securities and Other Actions | Youth-Related Actions | Other Actions
 
-[MIN-MERGE] item=Part_II_Item_1 section=Privacy and Related Matters 9 → 6 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_II_Item_1 section=Privacy and Related Matters 9 → 6 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_II_Item_1 section=Other Actions 7 → 4 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_II_Item_1 section=Other Actions 7 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 1A (len=197797 chars) ---
 Table of Contents
@@ -230,7 +228,7 @@ Certain factors may have a material adverse effect on our business, financial co
 
 [SECTION] item=Part_II_Item_1A period=None 依小標切成 4 段：(小標前=章節層) | Summary Risk Factors | Risks Related to Our Product Offerings | Risks Related to Our Product Offerings
 
-[MIN-MERGE] item=Part_II_Item_1A section=Risks Related to Our Product Offerings 75 → 68 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_II_Item_1A section=Risks Related to Our Product Offerings 75 → 67 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Part_II_Item_1A 原 chunk 1353 token > 1200 → 補切成 2 份
 
@@ -336,7 +334,7 @@ Prepaid expenses and other current assets11,115 7,361 
 
 Total cur...
 
-[MIN-MERGE] item=Part_I_Item_1 section=None 42 → 32 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_1 section=None 42 → 32 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Part_I_Item_1 原 chunk 2768 token > 1200 → 補切成 4 份
 
@@ -351,12 +349,14 @@ Item 2.Management's Discussion and Analysis of Financial Condition and Results o
 
 You should read the following discussion of our financial condition and results of operations in conjunction with our condensed consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q and with our audited consolidated financial st...
 
-[SECTION] item=Part_I_Item_2 period=None 依小標切成 37 段：(小標前=章節層) | Executive Overview of First Quarter Results | Consolidated and Segment Results | Family of AppsReality LabsTotal | Family of Apps Metrics | Developments in Advertising | Other Business and Macroeconomic Conditions | Investment Philosophy | Non-Ad Revenue | Trends in Our Family Metrics | Family of Apps (FoA) | Reality Labs (RL) | Cost of Revenue and Operating Expenses | Results of Operations | Revenue | Family of Apps | Advertising | Other revenue | Reality Labs | Foreign Exchange Impact on Revenue | Segment profitability | Family of Apps | Reality Labs | NM — not meaningful | NM — not meaningful | Liquidity and Capital Resources | Cash Provided by Operating Activities | Cash Used in Investing Activities | Cash Used in Financing Activities | Material Cash Requirements | Leases and Contractual Commitments | Long-term Debt | Share Repurchase | Dividend | Taxes | Loss Contingencies | Critical Accounting Estimates
+[GROUND] item=Part_I_Item_2 period=None 37 → 36 段（無幅度數字的段併回帶表格的前一段）
 
-[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps Metrics 2 → 1 個 chunk（< 200 字元併進鄰居）
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 36 段：(小標前=章節層) | Executive Overview of First Quarter Results | Consolidated and Segment Results | Family of AppsReality LabsTotal | Family of Apps Metrics | Developments in Advertising | Other Business and Macroeconomic Conditions | Investment Philosophy | Non-Ad Revenue | Trends in Our Family Metrics | Family of Apps (FoA) | Reality Labs (RL) | Cost of Revenue and Operating Expenses | Results of Operations | Revenue | Family of Apps | Advertising | Other revenue | Reality Labs | Foreign Exchange Impact on Revenue | Segment profitability | Family of Apps | Reality Labs | NM — not meaningful | NM — not meaningful | Liquidity and Capital Resources | Cash Provided by Operating Activities | Cash Used in Investing Activities | Cash Used in Financing Activities | Leases and Contractual Commitments | Long-term Debt | Share Repurchase | Dividend | Taxes | Loss Contingencies | Critical Accounting Estimates
 
-[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps (FoA) 3 → 2 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps Metrics 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps (FoA) 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_I_Item_2 section=Long-term Debt 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Long-term Debt 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

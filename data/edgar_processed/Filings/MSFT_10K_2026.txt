@@ -414,7 +414,7 @@ The financial statements are set forth under Part II, Item 8 of this Form 10-K, 
 
      Income Statem...
 
-[MIN-MERGE] item=Item_15 section=None 3 → 2 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_15 section=None 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Item_15 原 chunk 1316 token > 1200 → 補切成 2 份
 
@@ -450,11 +450,11 @@ We develop and support a broad portfolio of technology solutions for individuals
 
 [SECTION] item=Item_1 period=None 依小標切成 29 段：GENERAL | What We Offer | The Ambitions That Drive Us | Our Future Opportunity | Commitment to Sustainability | OPERATING SEGMENTS | Productivity and Business Processes | LinkedIn | Dynamics Products and Cloud Services | Competition | Intelligent Cloud | Server Products and Cloud Services | Enterprise and Partner Services | Competition | More Personal Computing | Windows and Devices | XBOX | Search Advertising | Competition | HUMAN CAPITAL RESOURCES | OPERATIONS | Product and Service Development | Intellectual Property | DISTRIBUTION, SALES, AND MARKETING | LICENSING OPTIONS | GOVERNMENT REGULATION | INFORMATION ABOUT OUR EXECUTIVE OFFICERS | Vice Chair and President | AVAILABLE INFORMATION
 
-[MIN-MERGE] item=Item_1 section=Commitment to Sustainability 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Commitment to Sustainability 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Search Advertising 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Search Advertising 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Vice Chair and President 6 → 5 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Vice Chair and President 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 1A (len=81066 chars) ---
 ITEM 1A. RISK FACTORS
@@ -463,13 +463,13 @@ Our operations and financial results are subject to various risks and uncertaint
 
 [SECTION] item=Item_1A period=None 依小標切成 7 段：(小標前=章節層) | STRATEGIC AND COMPETITIVE RISKS | Business model competition | OPERATIONAL RISKS | LEGAL, REGULATORY, AND LITIGATION RISKS | INTELLECTUAL PROPERTY RISKS | GENERAL RISKS
 
-[MIN-MERGE] item=Item_1A section=None 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1A section=Business model competition 20 → 18 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=Business model competition 20 → 18 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1A section=LEGAL, REGULATORY, AND LITIGATION RISKS 10 → 9 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=LEGAL, REGULATORY, AND LITIGATION RISKS 10 → 9 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1A section=GENERAL RISKS 8 → 7 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=GENERAL RISKS 8 → 7 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 1B (len=272 chars) ---
 ITEM 1B. UNRESOLVED STAFF COMMENTS 
@@ -485,7 +485,7 @@ Microsoft plays a central role in the world’s digital ecosystem. We have made 
 
 [SECTION] item=Item_1C period=None 依小標切成 2 段：RISK MANAGEMENT AND STRATEGY | GOVERNANCE
 
-[MIN-MERGE] item=Item_1C section=GOVERNANCE 3 → 2 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1C section=GOVERNANCE 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 2 (len=1315 chars) ---
 ITEM 2. PROPERTIES 
@@ -515,21 +515,21 @@ The following Management’s Discussion and Analysis of Financial Condition and 
 
 [SECTION] item=Item_7 period=None 依小標切成 11 段：(小標前=章節層) | OVERVIEW | Industry Trends and Opportunities | Economic Conditions, Challenges, and Risks | Seasonality | Reportable Segments | Metrics | Commercial | LinkedIn revenue growth | More Personal Computing | SUMMARY RESULTS OF OPERATIONS
 
-[MIN-MERGE] item=Item_7 section=Reportable Segments 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Reportable Segments 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Metrics 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Metrics 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=SUMMARY RESULTS OF OPERATIONS 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=SUMMARY RESULTS OF OPERATIONS 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [SECTION] item=Item_7 period=Fiscal Year 2026 vs 2025 依小標切成 3 段：Productivity and Business Processes | Intelligent Cloud | More Personal Computing
 
 [SECTION] item=Item_7 period=Fiscal Year 2026 vs 2025 依小標切成 22 段：(小標前=章節層) | Effective Tax Rate | Uncertain Tax Positions | NON-GAAP FINANCIAL MEASURES | LIQUIDITY AND CAPITAL RESOURCES | Cash, Cash Equivalents, and Investments | Valuation | Cash Flows | Debt Proceeds | Unearned Revenue | Contractual Obligations | Share Repurchases | Dividends | Other Planned Uses of Capital | RECENT ACCOUNTING GUIDANCE | CRITICAL ACCOUNTING ESTIMATES | Revenue Recognition | Measurement and Impairment of Investment Securities | Goodwill | Research and Development Costs | Legal and Other Contingencies | Income Taxes
 
-[MIN-MERGE] item=Item_7 section=Uncertain Tax Positions 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Uncertain Tax Positions 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Unearned Revenue 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Unearned Revenue 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Research and Development Costs 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Research and Development Costs 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 7A (len=2129 chars) ---
 ITEM 7A. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
@@ -544,7 +544,7 @@ Certain forecasted transactions, assets, and liabilities are expose...
 
 [SECTION] item=Item_7A period=None 依小標切成 7 段：RISKS | Foreign Currencies | Interest Rate | Credit | Equity | SENSITIVITY ANALYSIS | Interest rate
 
-[MIN-MERGE] item=Item_7A section=Foreign Currencies 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7A section=Foreign Currencies 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 8 (len=131116 chars) ---
 ITEM 8. FINANCIAL STATEMENTS AND SUPPLEMENTARY DATA 
@@ -595,7 +595,7 @@ INCOME STATEMENTS
 
   ...
 
-[MIN-MERGE] item=Item_8 section=None 46 → 40 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_8 section=None 46 → 40 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Item_8 原 chunk 1968 token > 1200 → 補切成 3 份
 

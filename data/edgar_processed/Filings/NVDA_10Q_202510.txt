@@ -235,7 +235,7 @@ Gross profit41,849 26,156 102,370 69,135 
 
 Operati...
 
-[MIN-MERGE] item=Part_I_Item_1 section=None 22 → 20 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_1 section=None 22 → 20 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Part_I_Item_1 原 chunk 2512 token > 1200 → 補切成 4 份
 
@@ -252,9 +252,9 @@ This Quarterly Report on Form 10-Q contains forward-looking statements within th
 
 [SECTION] item=Part_I_Item_2 period=None 依小標切成 13 段：Forward-Looking Statements | Our Company and Our Businesses | Recent Developments, Future Objectives and Challenges | Critical Accounting Policies and Estimates | Results of Operations | Concentration of Revenue | Gross Profit and Gross Margin | Income Taxes | Liquidity | Capital Return to Shareholders | Outstanding Indebtedness and Commercial Paper Program | Material Cash Requirements and Other Obligations | Climate Change
 
-[MIN-MERGE] item=Part_I_Item_2 section=Liquidity 3 → 2 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Liquidity 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_I_Item_2 section=Outstanding Indebtedness and Commercial Paper Program 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Part_I_Item_2 section=Outstanding Indebtedness and Commercial Paper Program 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part I, Item 3 (len=1789 chars) ---
 Item 3. Quantitative and Qualitative Disclosures about Market Risk

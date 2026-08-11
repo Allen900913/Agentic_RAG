@@ -246,11 +246,11 @@ Exhibit Index
 | 3.2 |  | Amendment to Restated Certificate of Incorporation of NVIDI...
 
 --- [TABLE extra #14] ---
-This table details
+Exhibit index for various SEC filings and reports.
 
 | 10.10+ |  | Amended and Restated 2007 Equity Incentive Plan - Global Performance-Based Restricted Stock Unit Grant Notice and Performance-Based Restricted Stock Unit Agreement (2024) |  | 10-Q |  |  |  | 10.3 |  | 5/29/2024 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 10.11+ |  | Amended and Restated 2007 Equity Incentive Plan – Global Restricted St...
+| 10.11+ |  | Amended and Restated 2007 Equity Incen...
 
 --- [TABLE extra #15] ---
 Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized, on February 25, 2026.
@@ -278,20 +278,20 @@ Our technology stack includes the foundational NVIDIA CUDA development platform 
 
 [SECTION] item=Item_1 period=None 依小標切成 17 段：Our Company | Our Businesses | Our Markets | Data Center | Gaming | Professional Visualization | Automotive | Business Strategies | Sales and Marketing | Seasonality | Manufacturing | Competition | Patents and Proprietary Rights | Government Regulations | Human Capital Management | Information About Our Executive Officers | Available Information
 
-[MIN-MERGE] item=Item_1 section=Our Markets 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Our Markets 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Government Regulations 6 → 5 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Government Regulations 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Information About Our Executive Officers 7 → 6 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Information About Our Executive Officers 7 → 6 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Available Information 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1 section=Available Information 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 1A (len=114773 chars) ---
 Item 1A. Risk Factors
 
 The following risk factors should be considered in addition to the other information in this Annual Report on Form 10-K. The following risks could harm our business, financial condition, results of operations or reputation, which could cause our stock price to decline. Additional risks, trends and uncertainties not presently known to us or that we currently believe are immat...
 
-[MIN-MERGE] item=Item_1A section=None 54 → 52 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1A section=None 54 → 52 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Item_1A 原 chunk 1358 token > 1200 → 補切成 2 份
 
@@ -328,7 +328,7 @@ We have in place certain infrastructure, systems, policies, and procedures that 
 
 [SECTION] item=Item_1C period=None 依小標切成 2 段：(小標前=章節層) | Governance
 
-[MIN-MERGE] item=Item_1C section=None 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_1C section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 2 (len=925 chars) ---
 Table of Contents
@@ -365,9 +365,9 @@ The following discussion and analysis of our financial condition and results of 
 
 [SECTION] item=Item_7 period=None 依小標切成 17 段：(小標前=章節層) | Our Company and Our Businesses | Recent Developments, Future Objectives and Challenges | Critical Accounting Estimates | Inventories | Income Taxes | Non-Marketable Equity Securities | Revenue Allowances | Contracts with Multiple Performance Obligations | Results of Operations | Concentration of Revenue | Gross Profit and Gross Margin | Income Taxes | Liquidity | Capital Return to Shareholders | Outstanding Indebtedness and Commercial Paper Program | Material Cash Requirements and Other Obligations
 
-[MIN-MERGE] item=Item_7 section=None 2 → 1 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_7 section=Recent Developments, Future Objectives and Challenges 6 → 5 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_7 section=Recent Developments, Future Objectives and Challenges 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 7A (len=4247 chars) ---
 Item 7A. Quantitative and Qualitative Disclosures about Market Risk
@@ -389,7 +389,7 @@ Item 14. Principal Accountant Fees and Services
 
 Information regarding accounting fees and services required by this item will be contained in our 2026 Proxy Statement under the caption “Fees...
 
-[MIN-MERGE] item=Item_8 section=None 47 → 43 個 chunk（< 200 字元併進鄰居）
+[MIN-MERGE] item=Item_8 section=None 47 → 43 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Item_8 原 chunk 1421 token > 1200 → 補切成 2 份
 
