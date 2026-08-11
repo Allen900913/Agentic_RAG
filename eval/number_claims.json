@@ -1,14 +1,11 @@
 [
   {
     "id": "mix-03",
-    "claim": "MSFT 最新一季『整體/合併』營業利益成長率",
-    "anchor": "整體|合併|consolidated",
-    "window": 60,
-    "expect_pct": 20.0,
-    "forbid_pct": 24.0,
-    "expect_text": "6\\.4 billion|64\\s*億美元",
-    "forbid_text": "2\\.7 billion|27\\s*億美元",
+    "kind": "require_text",
+    "claim": "MSFT 最新一季『整體/合併』營業利益成長額（$6.4B）必須出現在答案裡",
+    "expect_text": "6\\.4 billion|64\\s*億",
     "status": "known_defect",
+    "metric_design": "⚠ **2026-08-12 從 `anchored_pct` 改成 `require_text`，因為 `forbid_pct: 24` 與 `forbid_text: 27 億` 兩個都不安全**。ground2 r3 實證：答案先給正確的合併總計「整體增加 64 億美元、成長 20%」，再逐部門分解「Intelligent Cloud 由 110.95 億增至 137.53 億，增幅 27 億（24%）」——**每個數字都對且標註正確**，卻因為 forbid 命中 27 億／24% 被判 FAIL。這正是本檔 col-11 那條警告的實例：「forbid 只在錯值不會與正解正當並存時可用」，而**正確的分部分解必然包含分部的值**，所以 mix-03 結構上不能用 forbid。 判別力改由「合併總計的**金額**在不在」承擔：真缺陷的形態是把分部數字**當成**合併總計（r2：「整體營業利益增加 36 億美元、成長 21%」＝ Productivity 的數字），那種答案不會提到 64 億 → MISS → FAIL。 ⚠ **殘留的判別力缺口**：「金額對但百分比錯」（例如「整體 64 億、成長 24%」）會誤判成 PASS。10 個 run（4 封存 ＋ ground 3 ＋ ground2 3）裡零次出現，且那種答案會被 ① 頭條百分比候選抓成待判讀項，故接受此缺口。改回 anchored_pct 前請先確認 forbid 的並存問題已解。",
     "why": "24% 是 Intelligent Cloud 分部（13,753-11,095=+2,658=+24%）；合併是 38,398-32,000=+6,398=+20%。系統會答 24% 是因為 MSFT_10Q_202603 #111 開頭就是那句、卻沒有分部標籤 → 讀起來像合併總計。",
     "verified": "2026-08-09 用 MSFT 10-Q 合併損益表逐欄驗算；正解那句在 #104，語料裡有但沒被檢索到",
     "fixed_by": "ingest 通用小標硬邊界（_split_by_subheading）＋重建 us_stock_rag_edgar_head",
