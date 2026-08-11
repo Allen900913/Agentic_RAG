@@ -31,6 +31,13 @@ IRS 編號）不值得花 LLM call，本來就不該有 caption。把「宇宙�
 閘門會讓規則**正確地不作用**被讀成失敗——同 `eval/verify_segment_split.py` 判準⑤ 與
 memory `subheading-split-detaches-magnitudes` 的教訓。
 
+⚠ **`footer_caption` 也不當閘門，但要盯著**：`_find_caption` 會撿到頁尾
+（`Apple Inc. | 2025 Form 10-K | 54`）當 caption。它跟純編號同一類垃圾，只是有字母所以
+`_is_meaningful_caption` 放行。**2026-08-11 全庫實測 4/165，且全部集中在 AAPL 10-K 的
+Exhibit Index 區**（附錄清單，對任何查詢都沒貢獻）→ 修它零收益，列為已接受的極限。
+但數字印出來當基準：**超過 4 或出現在 `notes_table` 以外的 item 就要回頭查**，因為同一個
+機制若撿到真財務表格上就是實害（embedding 吃到頁碼而不是描述）。
+
 用法：
     .venv/Scripts/python.exe eval/verify_table_captions.py --collection us_stock_rag_edgar_ground
     .venv/Scripts/python.exe eval/verify_table_captions.py -c A -c B   # 併排比較新舊
@@ -48,17 +55,27 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 # chunk 文字開頭的 `[期間] `／`[section: 小標] ` 前綴（見 data_update_edgar._period_prefix）
 _PREFIX = re.compile(r"^(?:\[[^\]]{0,120}\]\s*)+")
-# 表格列：整行只有 -|: 空白，或含 | 且以 | 開頭／有兩個以上 |
+# 表格列：整行只有 -|: 空白，或以 | 開頭
 _SEP_ROW = re.compile(r"^[\s|:\-]*$")
 # 舊 Gemini 截斷殘骸的指紋（`This table` / `This table details` / `This table presents`）
 _STUB = re.compile(r"^this table(\s+(details|presents|shows|summarizes))?\s*$", re.I)
+# 頁尾被當成 caption 的指紋：`Apple Inc. | 2025 Form 10-K | 54`
+_FOOTER = re.compile(r"Form\s+10-[KQ]\s*\|\s*\d+\s*$")
 
 
 def _looks_like_table_row(line: str) -> bool:
+    """⚠ 判準刻意**只認「以 | 開頭」**，不認「含兩個以上 |」。
+
+    後者是第一版寫法，會把**頁尾誤判成表格列**——這個語料的頁尾長成
+    `Apple Inc. | 2025 Form 10-K | 54`（用 ` | ` 當分隔），含兩個 `|` 但不是表格列。
+    後果是那 4 個 chunk 被歸進 `no_caption` → 又因為列數夠大被算進 `missing_on_big`
+    → 閘門吐出「最可能是 Groq 429 靜默降級」這個**完全錯誤的病因**。
+    `html_table_to_markdown` 產出的表格列一律以 `|` 開頭,所以收緊是安全的。
+    """
     t = line.strip()
     if not t or _SEP_ROW.match(t):
         return True
-    return t.startswith("|") or t.count("|") >= 2
+    return t.startswith("|")
 
 
 def split_caption(text: str) -> tuple[str, str]:
@@ -84,6 +101,8 @@ def classify(caption: str) -> str:
         return "numeric_caption"      # 頁碼、純數字 → 硬缺陷
     if _STUB.match(caption.strip().rstrip(".:")):
         return "stub_caption"         # 舊截斷殘骸 → 硬缺陷
+    if _FOOTER.search(caption):
+        return "footer_caption"       # 頁尾 → 沒用但**不當硬缺陷**，見 main() 的說明
     return "ok"
 
 
@@ -129,15 +148,16 @@ def main() -> None:
 
         print("=" * 92)
         print(f"{coll}：{len(rows)} 個 table chunk")
-        for k in ("ok", "no_caption", "numeric_caption", "stub_caption"):
-            print(f"  {k:18s} {tally[k]:5d}")
+        for k in ("ok", "no_caption", "numeric_caption", "stub_caption", "footer_caption"):
+            print(f"  {k:18s} {tally[k]:5d}"
+                  + ("   （頁尾當 caption；非閘門，基準 4，見下）" if k == "footer_caption" else ""))
         print(f"  {'missing_on_big':18s} {len(missing_big):5d}   "
               f"（no_caption 且列數 >= {TABLE_SUMMARY_MIN_ROWS}）")
         if caps:
             caps.sort()
             print(f"  caption 長度: 中位 {caps[len(caps)//2]} / 最短 {caps[0]} / 最長 {caps[-1]} 字元")
 
-        for kind in ("numeric_caption", "stub_caption"):
+        for kind in ("numeric_caption", "stub_caption", "footer_caption"):
             for r in [x for x in rows if x["kind"] == kind][:args.show]:
                 print(f"    [{kind}] {r['source']}#{r['idx']}  caption={r['cap']!r}")
         for r in missing_big[:args.show]:
