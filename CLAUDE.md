@@ -23,7 +23,7 @@
 ## Ingest／Migration（要重建語料或改 payload 時才看）
 | 檔案 | 用途 |
 |---|---|
-| [`data_update_edgar.py`](data_update_edgar.py) | **唯一 ingest 執行入口，且 2026-08-08 起零網路**（見下方「抓取／處理分離」）：讀本機 `.nc` → chunk → 寫入獨立 EDGAR collection（`--collection`，生產為 `us_stock_rag_edgar_exp4`；chunking 世代演進見 memory `edgar-chunking-pipeline-experiments`）。四種 doc_type 都由本檔處理：10-K/10-Q 從 `data/raw/sec_local/` 讀本機申報檔，News/Fundamentals/IncomeStatement 的 `.txt` 借用 `unstructured_components` 的組件。**增量策略三軌**：① `.txt` MD5 快取（`hashes_edgar.json`，per-collection 記帳，未變則跳過 embed；`--force-txt` 繞過）② SEC filing 不快取（申報後內容不變），維持 delete-by-source 重寫 ③ Fundamentals/IncomeStatement keep-latest：只 ingest 最新快照，且**主動刪除過期快照的殘留 chunk**（保證庫裡只有一份；靜態財報 10-K/10-Q 則允許多期並存供查歷史）。<br>**期間章節硬邊界**（2026-08-08 加，`_split_by_period_section`）：散文切塊在 Item 之下多一層邊界——依 `X Months Ended <date> Compared with Y Months Ended <date>` 標題先切段再各自送 SemanticChunker，並把期間標籤前綴進被 embed 的文字（`[MSFT 10-Q period 202603] [Three Months Ended March 31, 2026 vs March 31, 2025] …`）＋存成 payload `period_context`。詳見下方「期間章節邊界」小節<br>**通用小標硬邊界**（2026-08-09 加，`_split_by_subheading`）：期間章節**之下**再多一層——散文 Item 依獨立成行的小標切段，標籤前綴進被 embed 的文字（`… [section: Intelligent Cloud] …`）＋存成 payload `heading_context`。前身是只認分部的 `_split_by_segment_section`（mix-03 確診），同日通用化。詳見下方「通用小標邊界」小節<br>**min-size 下界護欄**（2026-08-09 加，`_merge_small_chunks`）：此前只有上界（`RCTS_THRESHOLD`）沒有下界。過短 chunk 併進**同一硬邊界內**的鄰居 |
+| [`data_update_edgar.py`](data_update_edgar.py) | **唯一 ingest 執行入口，且 2026-08-08 起零網路**（見下方「抓取／處理分離」）：讀本機 `.nc` → chunk → 寫入獨立 EDGAR collection（`--collection`，生產為 `us_stock_rag_edgar_exp4`；chunking 世代演進見 memory `edgar-chunking-pipeline-experiments`）。四種 doc_type 都由本檔處理：10-K/10-Q 從 `data/raw/sec_local/` 讀本機申報檔，News/Fundamentals/IncomeStatement 的 `.txt` 借用 `unstructured_components` 的組件。**增量策略三軌**：① `.txt` MD5 快取（`hashes_edgar.json`，per-collection 記帳，未變則跳過 embed；`--force-txt` 繞過）② SEC filing 不快取（申報後內容不變），維持 delete-by-source 重寫 ③ Fundamentals/IncomeStatement keep-latest：只 ingest 最新快照，且**主動刪除過期快照的殘留 chunk**（保證庫裡只有一份；靜態財報 10-K/10-Q 則允許多期並存供查歷史）。<br>**期間章節硬邊界**（2026-08-08 加，`_split_by_period_section`）：散文切塊在 Item 之下多一層邊界——依 `X Months Ended <date> Compared with Y Months Ended <date>` 標題先切段再各自送 SemanticChunker，並把期間標籤前綴進被 embed 的文字（`[MSFT 10-Q period 202603] [Three Months Ended March 31, 2026 vs March 31, 2025] …`）＋存成 payload `period_context`。詳見下方「期間章節邊界」小節<br>**通用小標硬邊界**（2026-08-09 加，`_split_by_subheading`）：期間章節**之下**再多一層——散文 Item 依獨立成行的小標切段，標籤前綴進被 embed 的文字（`… [section: Intelligent Cloud] …`）＋存成 payload `heading_context`。前身是只認分部的 `_split_by_segment_section`（mix-03 確診），同日通用化。詳見下方「通用小標邊界」小節<br>**幅度接地**（2026-08-11 加，`_merge_unquantified_sections`）：**通用小標層自己製造的反向缺陷的解**——MD&A 裡「說了漲跌卻不帶自己的幅度」的短段（`_is_orphan_explainer`）併回帶表格的前一段。實測 head 有 22.6% 的 MD&A 漲跌陳述 chunk 完全沒有數字（period 是 0%），28 筆全是 AAPL；mix-09 是實例。只套 MD&A item、只併短段。詳見下方「幅度接地」小節<br>**min-size 下界護欄**（2026-08-09 加，`_merge_small_chunks`）：此前只有上界（`RCTS_THRESHOLD`）沒有下界。過短 chunk 併進**同一硬邊界內**的鄰居 |
 | [`unstructured_components.py`](unstructured_components.py) | **函式庫，非執行入口**（前身 `data_update_unstructure.py`，2026-08-07 剝除 CLI/Qdrant 寫入/hash）。提供 unstructured 解析與 chunking 組件：`partition_and_clean`、`build_chunk_records`、表格處理（`table_element_to_text`／`_find_caption`／`_llm_summarize_table`）、`extract_filing_metadata`、`BGEM3DenseEmbeddings`。只被 `data_update_edgar.py` import |
 | [`fetch_data.py`](fetch_data.py) | **唯一對外抓取入口**（2026-08-08 起）。三類來源：yfinance 新聞 → `data/raw/News/`、yfinance 基本面 → `data/raw/Fundamentals/`、**edgartools SEC filing** → `data/raw/Filings/*.html`（人眼用）＋ `data/raw/sec_local/`（機器用 `.nc`）＋ `data/raw/sec_manifest.json`（取件清單）。`--skip-news` / `--skip-sec` / `--skip-fundamentals` 可分別跳過 |
 | [`data_update.py`](data_update.py) | 最舊的 ingest 管線（MD5 增量＋`hashes.json`），已被 EDGAR 版取代，保留對照 |
@@ -129,7 +129,7 @@ python data_update_edgar.py --tickers MSFT --skip-txt --rcts-fallback --collecti
 | 這 40k 字的敘述**該在哪裡斷** | **沒有** | SemanticChunker |
 | 標籤要不要傳進 chunk 文字 | 有 | 規則（前綴注入） |
 
-規則決定「哪裡**不准**切」，切塊器決定「裡面**哪裡**切」，**前者取代不了後者**。切塊層級：Item → 期間章節 → 通用小標 → SemanticChunker → RCTS 上界 → min-size 下界。
+規則決定「哪裡**不准**切」，切塊器決定「裡面**哪裡**切」，**前者取代不了後者**。切塊層級：Item → 期間章節 → 通用小標 → **幅度接地**（把不自足的解釋段併回它的表格）→ SemanticChunker → RCTS 上界 → min-size 下界。
 
 **偵測器刻意不用硬編碼指標／分部名單**（見 memory `llm-vs-python-task-split`）。條件：① 獨立成行的短標題（4~60 字元、無數字、不以標點結尾、字數 ≤6、字首大寫、不在導航殘渣清單）② **下一個非空行像散文**（≥8 詞或以句號結尾）。
 - **② 是關鍵**：少了它會把壓平表格的列標籤（`Total` 31 次／`Revenue` 11／`Amount`／`Numerator`／`Denominator`／`Assets`）全當標題。這些是**開放集合、列不完**，只能用結構判。
@@ -143,6 +143,28 @@ python data_update_edgar.py --tickers MSFT --skip-txt --rcts-fallback --collecti
 > ⚠ **殘留已知限制**：簽名頁的人名（`TIMOTHY D. COOK`）仍可能被當標題。判定為外觀噪音不追——那些 chunk 不帶任何財務主張，加人名偵測器的成本高於收益。
 
 **驗收用 [`eval/verify_segment_split.py`](eval/verify_segment_split.py)**（零網路、零 embedding、可在別的實驗跑的時候執行）。2026-08-09 通用化後基準：21 份 filing 全部有切段（2~13 段/份）、抓到 **405 種**標籤（`Income Taxes` 19／`Google Cloud` 10／`More Personal Computing` 9／`Other Bets` 7…）、帶標籤散文字元 **53.0%**、表格型 Item 被切段 **0** 次、表格對帳 **0** 筆不符、目標句落在 `Intelligent Cloud`。
+
+### 幅度接地（2026-08-11 加，`_merge_unquantified_sections`）
+> ⚠ 同樣是 ingest 期改動，**需重建才生效**。這層修的是**上一層自己製造的反向缺陷**——所以它不是獨立的新功能，而是通用小標層的必要配套。
+
+**病灶**：AAPL 的 MD&A 把每個地區/產品線寫成「粗體小標 ＋ 一句話」，幅度**全部只在上方那張表裡**。小標層在 `Greater China` 切開之後，那段只剩 451 字元、**一個數字都沒有**。
+
+| （MD&A item、含「營收/利潤 + increased/decreased」的散文 chunk） | period | head |
+|---|---|---|
+| 含漲跌陳述的散文 chunk | 76 | 124 |
+| 中位長度 | 2000 字元 | **616 字元** |
+| **整段無任何幅度數字** | **0（0.0%）** | **28（22.6%）** |
+
+28 筆**全是 AAPL**（該公司 31 個裡 90.3%），其餘六家 0。**已知受害案例 mix-09**：head 讀不到 22%，退回引用新聞的 28%（那是三月季，期間也錯）。
+
+**判準＝自足性，不是長度**：`_is_orphan_explainer` 三條件同時成立才併——① 短（`_ORPHAN_MAX_CHARS=1200`）② 有漲跌陳述 ③ 段內無任何幅度數字。併回**前一段**（帶著那張表的母節），標籤取前一段的。
+- **MSFT 一段都不會被動到**，所以 mix-03 的修復不受影響：`Operating income increased $2.7 billion or 24%` 段內就有數字＝自足。這不是巧合——判準問的正是「MSFT 把幅度寫在句子裡、AAPL 只寫在表裡」這個差異。
+- **前一段本身沒有數字時不併**：那代表兩段沒有「表格→解釋」的關係。實測 MSFT `Interest and dividends income increased primarily due to…` 是章節首段，無處可接，**保留原狀才對**。
+- **只套 MD&A item**（`_MDNA_ITEMS`）：實測 28 筆全落在 MD&A，別的 item（如 Risk Factors）「沒有數字的散文」是常態。同 `_TABLE_DOMINATED_ITEMS` 的理由。
+> ⚠ **① 那個長度上界不能省，少了它會誤抓一整類長篇質性敘述**：不設限時殘留 14 段全是這種——MSFT `Economic Conditions, Challenges, and Risks`（3212 字元）、GOOGL `Understanding Alphabet's Financial Results`（6362）、AMZN `Overview`（8229）、TSLA `Automotive and AI Enabled Products—Production`（7809）。它們的 "increased" 是泛論而非「某科目成長多少」，併進表格段只會製造稀釋型大 chunk（＝ sem-08 的病）。
+> ⚠ **閘門要問「還能接地卻沒接」，不是「宇宙中沒有孤兒句」**：第一版寫成後者，`verify_segment_split.py` 直接 exit 1，而殘留的全是上面那類長敘述和無處可接的首段。量尺過鈍會把「規則正確地不作用」讀成失敗。
+
+**驗收**：[`eval/verify_segment_split.py`](eval/verify_segment_split.py) 判準⑤（零網路、零 embedding）。2026-08-11 基準：孤兒解釋段 **46 → 可接地卻沒接 0**（AAPL 31→0、GOOGL 7→0、MSFT 5→0、META 3→0），且 mix-09 的 `18,816`／`15,369`／`22%` 與 Greater China 那句落在同一段（`Segment Operating Performance`，2251 字元）、mix-03 目標句仍在 `Intelligent Cloud`。
 
 ### 期間接地（2026-08-08 加，`agentic_rag_v2.py` 的消費端）
 > ⚠ **依賴 chunk 帶期間標籤前綴**，只有重建過的 collection（如 `us_stock_rag_edgar_period`）才生效；對 `us_stock_rag_edgar_exp4` 這層等於不存在（`_chunk_period` 找不到標籤就直接 return，行為退回舊版）。
@@ -195,6 +217,7 @@ python data_update_edgar.py --tickers MSFT --skip-txt --rcts-fallback --collecti
 > ⚠ **不要拿落在噪音裡的數字反推機制**——機制聽起來越合理越危險。2026-08-09 一天內提出三個機制假設、三個都被自己的確定性測試推翻（詳見 [`CHANGELOG_AGENTIC.md`](CHANGELOG_AGENTIC.md) A5.5）。
 
 **目前最大的未動槓桿**：`_check_sufficiency` 的 `relevant_ids` 只留下 **49.3%** 的候選（18/58 題最後只剩 1 個 chunk，全 100 題中位數 3 個），而 `context_recall ↔ correctness` 相關 0.53 是六指標最強、`precision ↔ correctness` 只有 0.14。等於每題用一次 LLM 判斷丟掉一半證據，換一個跟答對與否幾乎無關的指標。
+> ⚠ **但「單純放寬候選數」已經量過，是零效果**——2026-08-05 的 `gj_widen_pool12_full100`：證據字元 +32%（6285→8305）、correctness **0.626→0.625**、precision **−0.053**、nv_relevance −0.028。多出來的席位裝的是冗餘。**要動的是「同樣 5 個席位裝 5 份不同證據」（Grader 前確定性去重），不是席位數。** 這條 null result 當時沒進 changelog，導致 2026-08-11 又提了同一個實驗跑到 40% 才被抓到——**提檢索層實驗前先 `ls experiments/`**，詳見 [`CHANGELOG_AGENTIC.md`](CHANGELOG_AGENTIC.md) (6) 的 08-11 補記。
 
 ### 數字缺陷指標的四次失效（2026-08-10，**拿它當閘門前必讀**）
 

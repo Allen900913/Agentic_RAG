@@ -632,6 +632,97 @@ _TABLE_DOMINATED_ITEMS = {"Item 6", "Item 8", "Item 15", "Part I, Item 1"}
 #   刪掉會毀損表格數字。改由合併吸收（併進鄰居後數字仍在,只是不再自成一個 chunk）。
 _MIN_CHUNK_CHARS = 200
 
+# ══════════════════════════════════════════════════════════════════════════════
+# 幅度接地（2026-08-11）：小標層自己製造的反向缺陷
+#
+# 通用小標層修的是「續段冒充合併總計」（mix-03）。但它同時**把幅度數字與解釋散文切開**：
+# AAPL 的 MD&A 每個分部/地區寫成「粗體小標 ＋ 一句話」，幅度全部只在上方那張表裡——
+#
+#   Segment Operating Performance
+#   The following table shows net sales by reportable segment …
+#   | Americas 45,781 41,198 11% | … | Greater China 18,816 15,369 22% | …
+#   Greater China
+#   Greater China net sales increased during the third quarter … primarily due to iPhone.
+#
+# 切開後 `Greater China` 那段只有 451 字元、**一個數字都沒有**。實測（MD&A item、含
+# 「營收/利潤 + increased/decreased」的散文 chunk）：
+#
+#                              period      head
+#   含漲跌陳述的散文 chunk         76         124
+#   中位長度                    2000 字元    616 字元
+#   **整段無任何幅度數字**       0 (0.0%)   28 (22.6%)   ← 28 筆全是 AAPL（31 個裡 90.3%）
+#
+# 後果是 mix-09：head 讀不到 22%，退回引用新聞的 28%（那是三月季，期間也錯）。
+#
+# 修法＝**自足性判準**：一個小標段若「說了漲跌卻不帶自己的幅度」，它不自足，併回前一段
+# （也就是帶著那張表的 `Segment Operating Performance`），標籤取前一段的。這與 min-size
+# 下界是同一個概念的延伸——那層問「夠不夠長」，這層問「帶不帶得走自己的數字」。
+#
+# ⚠ **MSFT 不會被這條規則動到**，所以 mix-03 的修復不受影響：那句
+# `Operating income increased $2.7 billion or 24%` 段內就有數字＝自足。這不是巧合，
+# 是兩家寫法不同（MSFT 幅度寫在句子裡、AAPL 只寫在表裡），而判準問的正是這件事。
+# ⚠ 只套用在 MD&A item：實測 28 筆全落在 MD&A，而在別的 item（例如 Risk Factors）
+#   「沒有數字的散文」是常態、前一段也不是它的表格，併過去只會貼錯標。
+#   同 _TABLE_DOMINATED_ITEMS 的理由——格式定義的封閉集合，列清單正當。
+# ══════════════════════════════════════════════════════════════════════════════
+
+_MDNA_ITEMS = {"Item 7", "Part I, Item 2"}
+
+# 「漲跌陳述」與「幅度數字」的偵測。刻意只認結構（動詞 + 數字寫法），不列指標/分部名單
+# （見 memory `llm-vs-python-task-split`：硬編碼詞表＝在用字串比對做感知）。
+_CHANGE_STMT_RE = re.compile(
+    r"\b(increased|decreased|grew|declined|rose|fell)\b", re.I)
+_MAGNITUDE_RE = re.compile(r"\d+(?:\.\d+)?\s*%|\$\s*[\d,]+|\b\d{1,3},\d{3}\b")
+
+# 併完的段上限。沒有上限的話，一整串都不帶數字的小標會累積成稀釋型大 chunk——那正是
+# sem-08（AWS 獲利句被埋在 5170 字元 chunk）的病。段內之後還會走 SemanticChunker，
+# 所以這裡只要防「段本身失控」。
+_MAX_MERGE_SECTION_CHARS = 8000
+
+# 「解釋段」的長度上界。⚠ 少了這個上界會誤抓一整類**長篇質性敘述**：實測不設限時
+# 殘留 14 段全是這種——MSFT `Economic Conditions, Challenges, and Risks`（3212 字元）、
+# GOOGL `Understanding Alphabet's Financial Results`（6362）、META `Other Business and
+# Macroeconomic Conditions`（2448）、AMZN `Overview`（8229）、TSLA `Automotive and AI
+# Enabled Products—Production`（7809）。它們的 "increased" 是泛論（「市場競爭加劇」）而
+# 不是「某個科目成長多少」，段內也自帶足夠上下文，併進表格段只會製造稀釋型大 chunk。
+# 病灶那一類實測是 187~913 字元的單句解釋（AAPL 各地區/產品線），1200 完整覆蓋。
+_ORPHAN_MAX_CHARS = 1200
+
+
+def _is_orphan_explainer(text: str) -> bool:
+    """這段是不是「被切離幅度表格的單句解釋」？三個條件同時成立：
+    ① 夠短（長篇敘述自帶上下文，見 _ORPHAN_MAX_CHARS） ② 有漲跌陳述
+    ③ 段內找不到任何幅度數字。"""
+    body = text.strip()
+    if len(body) > _ORPHAN_MAX_CHARS:
+        return False
+    if not _CHANGE_STMT_RE.search(body):
+        return False
+    return not _MAGNITUDE_RE.search(body)
+
+
+def _merge_unquantified_sections(
+        subsecs: list[tuple[Optional[str], str]]) -> list[tuple[Optional[str], str]]:
+    """把「說了漲跌卻不帶幅度」的小標段併回前一段（前一段必須本身帶幅度數字）。
+
+    回傳與輸入同型的 [(小標, 文字), ...]，標籤取**前一段**的——那是它結構上的母節
+    （`Segment Operating Performance` 之下才有 `Americas`／`Greater China`），所以不是
+    貼錯標而是貼回正確的層級。前一段不帶數字時**不併**：那代表兩段沒有「表格→解釋」
+    的關係，硬併只會把不相關的內容黏起來。
+    """
+    if len(subsecs) < 2:
+        return subsecs
+    out: list[tuple[Optional[str], str]] = [subsecs[0]]
+    for label, body in subsecs[1:]:
+        prev_label, prev_body = out[-1]
+        if (_is_orphan_explainer(body)
+                and _MAGNITUDE_RE.search(prev_body)
+                and len(prev_body) + len(body) <= _MAX_MERGE_SECTION_CHARS):
+            out[-1] = (prev_label, prev_body + "\n" + body)
+        else:
+            out.append((label, body))
+    return out
+
 
 def _merge_small_chunks(chunks: list[str], min_chars: int = _MIN_CHUNK_CHARS) -> list[str]:
     """把過短的 chunk 併進鄰居。**呼叫端必須逐「硬邊界內」呼叫**（同一個期間／小標
@@ -1009,6 +1100,16 @@ def _fetch_filing_records(ticker: str, form: str, filing, semantic_chunker,
             # 期間章節之下再依通用小標切（第三層硬邊界，見 _split_by_subheading）。
             subsecs = (_split_by_subheading(section_text)
                        if use_heading else [(None, section_text)])
+            # 幅度接地：MD&A 裡「說了漲跌卻不帶幅度」的段併回帶表格的前一段
+            # （見 _merge_unquantified_sections；這層是小標層自己製造的缺陷的解）。
+            if use_heading and item_name in _MDNA_ITEMS and len(subsecs) > 1:
+                grounded = _merge_unquantified_sections(subsecs)
+                if len(grounded) < len(subsecs):
+                    dump_lines.append(
+                        f"[GROUND] item={item_id} period={period_label} "
+                        f"{len(subsecs)} → {len(grounded)} 段"
+                        f"（無幅度數字的段併回帶表格的前一段）\n")
+                subsecs = grounded
             if len(subsecs) > 1:
                 dump_lines.append(
                     f"[SECTION] item={item_id} period={period_label} 依小標切成 "

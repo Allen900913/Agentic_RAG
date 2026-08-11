@@ -56,6 +56,8 @@ def main() -> None:
     labelled_chars = total_chars = 0
     per_filing: dict[str, int] = {}
     label_pool: Counter[str] = Counter()
+    orphan_before: Counter[str] = Counter()   # ⑤ 併之前「說了漲跌卻不帶幅度」的段數
+    orphan_after: Counter[str] = Counter()    # ⑤ 併之後（必須是 0）
     for tk in args.tickers:
         for form, filing in du._filings_from_manifest(tk):
             obj = filing.obj()
@@ -79,6 +81,22 @@ def main() -> None:
                 for plabel, sect in du._split_by_period_section(item_text):
                     subs = (du._split_by_subheading(sect) if use_heading
                             else [(None, sect)])
+                    # ⑤ 幅度接地（鏡射生產程式的 gate，見 _merge_unquantified_sections）
+                    raw_subs = subs
+                    if use_heading and item_name in du._MDNA_ITEMS and len(subs) > 1:
+                        subs = du._merge_unquantified_sections(subs)
+                    if item_name in du._MDNA_ITEMS:
+                        orphan_before[tk] += sum(
+                            1 for _, b in raw_subs if du._is_orphan_explainer(b))
+                        # 閘門問的是「**還能接地卻沒接**的段」，不是「宇宙中沒有孤兒句」：
+                        # 前一段本身沒有數字時無處可接，硬併只會貼錯標（實測 MSFT
+                        # `Interest and dividends income increased…` 就是章節首段）。
+                        for i, (_, b) in enumerate(subs):
+                            if du._is_orphan_explainer(b) and i > 0 \
+                                    and du._MAGNITUDE_RE.search(subs[i - 1][1]):
+                                orphan_after[tk] += 1
+                                print(f"  [!!] {tag} {item_name}: 可接地卻沒接 "
+                                      f"({len(b)} 字元) {b.strip()[:70]!r}")
                     total_chars += len(sect)
                     labelled_chars += sum(len(b) for s, b in subs if s or plabel)
                     if len(subs) > 1:
@@ -113,9 +131,17 @@ def main() -> None:
     print(f"抓到的小標共 {len(label_pool)} 種，出現最多的 15 種：")
     for lbl, n in label_pool.most_common(15):
         print(f"    {n:3d}  {lbl}")
+    print("\n── 判準⑤ 幅度接地：MD&A 裡「短句解釋段卻不帶幅度」的段 ──")
+    for tk in sorted(set(orphan_before) | set(orphan_after),
+                     key=lambda t: -orphan_before[t]):
+        print(f"    {tk:6} 併之前 {orphan_before[tk]:3} → 併之後仍可接地卻沒接 "
+              f"{orphan_after[tk]:3}")
+    n_orphan = sum(orphan_after.values())
+    print(f"    合計 {sum(orphan_before.values())} → {n_orphan}")
     print(f"\n判準②：表格型 Item 被切段次數 = {n_table_item_split}（必須是 0）")
     print(f"判準③：[!!] 共 {n_bad} 筆（必須是 0）")
-    if n_bad or n_table_item_split:
+    print(f"判準⑤：併之後仍不自足的段 = {n_orphan}（必須是 0）")
+    if n_bad or n_table_item_split or n_orphan:
         raise SystemExit(1)
 
 
