@@ -126,4 +126,5 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 | [`eval/audit_gold_numbers.py`](eval/audit_gold_numbers.py) | **gold 自洽性稽核（零 LLM、零網路）＝跑任何評測前的前置閘門**。⚠ 不查 filing 類的數字（大乾草堆裡「值有沒有出現」不帶資訊） | 生產 `.venv` |
 | [`eval/verify_segment_split.py`](eval/verify_segment_split.py) | 驗收 ingest 的三層硬邊界（期間／小標／幅度接地）。零網路、零 embedding、不碰 Qdrant → **可在別的實驗跑的時候執行** | 生產 `.venv` |
 | [`eval/verify_table_captions.py`](eval/verify_table_captions.py) | 驗收表格 caption 品質（零 LLM、只讀 Qdrant）。**重建後必跑**：`missing_on_big` 是 Groq 429 靜默降級的唯一出口，`numeric/stub` 是 caption 選錯來源。⚠ `no_caption` 本身不是缺陷（小表不值得花 LLM call） | 生產 `.venv` |
+| [`eval/verify_chunk_grounding.py`](eval/verify_chunk_grounding.py) | 驗收 **chunk 層**的幅度接地（零 LLM、只讀 Qdrant ＋ reranker tokenizer）。**重建後必跑**——`verify_segment_split.py` 判準⑤ 量的是 section 層，SemanticChunker 之後的邊界它看不到（2026-08-12 就是這個盲點讓「mix-09 已修好」的宣稱被推翻）。閘門只有 `groundable_not_grounded`；`unreachable`／`blocked_by_cap` 是規則正確地不作用 | 生產 `.venv` |
 | [`eval/migrate_fundamentals_pct.py`](eval/migrate_fundamentals_pct.py) | 一次性遷移（2026-08-09 已執行）：Fundamentals 比率欄位小數 → 百分比，**並同步修 gold** | 生產 `.venv` |

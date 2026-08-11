@@ -724,20 +724,50 @@ def _merge_unquantified_sections(
     return out
 
 
-def _merge_small_chunks(chunks: list[str], min_chars: int = _MIN_CHUNK_CHARS) -> list[str]:
-    """把過短的 chunk 併進鄰居。**呼叫端必須逐「硬邊界內」呼叫**（同一個期間／小標
-    章節）,合併才不會跨越邊界把兩個期間或兩個分部黏在一起。
+def _merge_small_chunks(chunks: list[str], min_chars: int = _MIN_CHUNK_CHARS,
+                        token_len_fn=None, max_tokens: Optional[int] = None) -> list[str]:
+    """把過短**或不自足**的 chunk 併進鄰居。**呼叫端必須逐「硬邊界內」呼叫**（同一個
+    期間／小標章節）,合併才不會跨越邊界把兩個期間或兩個分部黏在一起。
     往前併優先（保住上文指涉:'The increases…' 要接在講 increases 的那句後面）;
     首塊沒有前一個,往後併。整段只有一個 chunk 時原樣返回——那可能是真的很短的 Item
-    （'ITEM 9. … Not applicable.'）,沒有鄰居可併也不該丟。"""
+    （'ITEM 9. … Not applicable.'）,沒有鄰居可併也不該丟。
+
+    兩個合併判準：
+      1. `len(c) < min_chars` —— 原有的**長度**下界（頁碼、失去指涉對象的孤兒句）。
+      2. **不自足**（`_is_orphan_explainer`：有漲跌陳述、段內無任何幅度數字、不超過
+         `_ORPHAN_MAX_CHARS`）**且前一個 chunk 帶幅度數字** —— 2026-08-12 加。前一個不帶
+         數字時不併：那代表兩者沒有「表格→解釋」的關係,硬併只會把不相關的內容黏起來。
+
+    ⚠ **為什麼判準 2 必須下在這一層**（2026-08-12 實測推翻了前一版修法）：
+    `_merge_unquantified_sections` 把同樣的自足性判準下在 **section 層**,但 SemanticChunker
+    會把併好的 section **再切開**——AAPL `Segment Operating Performance` 的 2251 字元 section
+    被切成 1030 + 593,幅度表格留在前半、`Greater China net sales increased …` 落在後半,
+    **等於沒修**（實測 ground collection 裡沒有任何一個 chunk 同時含那句話與 18,816）。
+    本函式跑在 SemanticChunker 之後（呼叫端），是切塊流程**最後一個還會改變邊界的步驟**,
+    下游沒有東西能再切開它。memory `subheading-split-detaches-magnitudes` 當初就寫了
+    「判準要問自足性、`_merge_small_chunks` 的 200 字元下界擋不住這個缺陷」——那句話指的
+    就是這裡,前一版卻做成了新的 section 層。
+    chunk 層孤兒率實測：period 4.1%（8/197）／head 20.3%（61/300）／
+    ground（只有 section 層修法）7.7%（21/274）。
+
+    ⚠ **判準 2 帶 RCTS 上限**：呼叫端的 RCTS 上界檢查在本函式**之後**執行,合併若把 chunk
+    推過 token 門檻就會被 RCTS 再切開、合併白做（而且切點不受控,可能又把數字與解釋分開）。
+    所以給了 `token_len_fn`/`max_tokens` 時,會超過門檻的合併**不做**——那是規則正確地
+    不作用,不是失敗,驗收要用「還能接地卻沒接」而不是「宇宙中沒有孤兒」（同判準⑤）。
+    """
     if not chunks:
         return chunks
     out: list[str] = []
     for c in chunks:
         if out and len(c) < min_chars:
             out[-1] = out[-1] + "\n\n" + c
-        else:
-            out.append(c)
+            continue
+        if out and _is_orphan_explainer(c) and _MAGNITUDE_RE.search(out[-1]):
+            cand = out[-1] + "\n\n" + c
+            if token_len_fn is None or max_tokens is None or token_len_fn(cand) <= max_tokens:
+                out[-1] = cand
+                continue
+        out.append(c)
     if len(out) > 1 and len(out[0]) < min_chars:
         out[1] = out[0] + "\n\n" + out[1]
         out.pop(0)
@@ -1120,11 +1150,15 @@ def _fetch_filing_records(ticker: str, form: str, filing, semantic_chunker,
                 raw = [d.page_content.strip()
                        for d in semantic_chunker.create_documents([sub_text])]
                 raw = [c for c in raw if len(c) > 20]
-                merged = _merge_small_chunks(raw)
+                # token_len_fn/rcts_threshold 一起傳進去：不自足合併不可以把 chunk 推過
+                # RCTS 門檻，否則下面那段補切會把剛剛併好的又切開（見函式 docstring）。
+                merged = _merge_small_chunks(raw, token_len_fn=token_len_fn,
+                                             max_tokens=rcts_threshold)
                 if len(merged) < len(raw):
                     dump_lines.append(
                         f"[MIN-MERGE] item={item_id} section={head_label} "
-                        f"{len(raw)} → {len(merged)} 個 chunk（< {_MIN_CHUNK_CHARS} 字元併進鄰居）\n")
+                        f"{len(raw)} → {len(merged)} 個 chunk"
+                        f"（< {_MIN_CHUNK_CHARS} 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）\n")
                 for content in merged:
                     # 上界檢查放在合併之後：合併可能把 chunk 推過 RCTS 門檻，順序反了
                     # 就會漏掉那次補切、讓 chunk 在 rerank 階段被截斷。
