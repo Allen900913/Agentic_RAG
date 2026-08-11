@@ -10,10 +10,9 @@
 
 ## 立即可做（不需重建、不燒額度）
 
-- **把 mix-09 登錄成 `number_claims.json` 斷言**。它已端到端確診（head 讀不到 22%、退回引用新聞的 28%），修法也已進碼（幅度接地），但**還沒有斷言守著**。⚠ `known_defect` 必須填 `forbid_pct`（28），否則量尺沒有判別力。
-- **mix-07 登錄成斷言或已知限制**：Plan 把混合題整個譯成新聞查詢 → 只撈到 News chunk → 拒答。**已證實與 collection 無關**（period 自己的 replay2 同樣拒答）。卡點：這是 plan 抽樣變異，斷言可能不穩定，要先量三個 run。
 - **mi-05 人工三判**：gold 的 18.3% 不在那個 run 撈到的 contexts 裡。卡點：要先確認是檢索缺口還是 gold 標錯。
 - **`fetch_data.py` 尚未納入版控**。真實風險：它是唯一對外抓取入口且含 `_pct`，未來重抓會**靜默還原**小數→百分比的遷移。
+- **mix-07 換一種斷言型別**（答案必須含 `29.5 billion|295 億`），現行 `anchored_pcts` 對拒答只會給 N/A、判不出 FAIL。詳見下方〈已知缺陷：mix-07〉。
 - **`eval/replay_cache.json` 有未提交的新增項**（+25 translate_en、+141 check，0 筆覆寫）。要決定納不納版控。
 
 ---
@@ -32,7 +31,7 @@
 
 ## 未定案的決策
 
-- **`us_stock_rag_edgar_head` 是否升生產**：mix-03 確定修好（三個 run FAIL → PASS），但同 fixture 對照下 correctness **−0.032**、context_recall **−0.039**（皆略超 MDE）。**非 AAPL 的 42 題退步目前沒有已證實的解釋**——「證據量變少」的機制已被 2026-08-05 的 pool 實驗推翻。卡點：等幅度接地重建後重新比。
+- **`us_stock_rag_edgar_head` 是否升生產**：mix-03 方向確定變好（period 4 個 run 是 **3 FAIL / 1 PASS**，head 2/2 PASS——原本記成「三個 run 全 FAIL」是漏數了同樣是 period 且答對的 full100），但同 fixture 對照下 correctness **−0.032**、context_recall **−0.039**（皆略超 MDE）。**非 AAPL 的 42 題退步目前沒有已證實的解釋**——「證據量變少」的機制已被 2026-08-05 的 pool 實驗推翻。卡點：等幅度接地重建後重新比。
 - **一致性 validator 的重寫路徑**：偵測 4/4 精準，但重寫實測 **2 好 1 壞**（col-11 修掉矛盾卻把總營收誤標成雲端營收，且三層驗證全過）。選項：改成**只偵測不重寫**（把矛盾標記給使用者看）以拿掉那個 1 壞。
 - **router（複雜度分派）**：簡單題→單發、複雜→agentic；保守偏 agentic（誤判複雜為簡單代價高）。ratio 路由屬**正交檢索提示、非第三分支**，應放共用檢索層讓兩條管線都吃到。卡點：measure-gated，目前量尺分不出。
 - 生產 `rag_query.py` 是否跟進 `full_translate_en=True`。卡點：要先確認同樣的 chunk-level rerank 平坦問題在單發管線也存在。
