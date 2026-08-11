@@ -101,6 +101,7 @@ from unstructured_components import (
     _find_caption,
     _count_table_rows,
     _llm_summarize_table,
+    _table_context,
     TABLE_SUMMARY_MIN_ROWS,
 )
 from rag_query import infer_source_type, make_qdrant_client
@@ -849,7 +850,8 @@ def _extract_extra_tables(filing, core_stmt_mds: list[str]) -> list[dict]:
 
         caption = _find_caption(elements, i)
         if not caption and _count_table_rows(body) >= TABLE_SUMMARY_MIN_ROWS:
-            caption = _llm_summarize_table(body)
+            caption = _llm_summarize_table(
+                body, context=_table_context(elements, i), item_id="notes_table")
         text = f"{caption}\n\n{body}" if caption else body
         records.append({"text": text, "chunk_type": "table",
                          "item_id": "notes_table", "item_chunk_index": len(records)})
