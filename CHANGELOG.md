@@ -11,6 +11,51 @@
 > **已知問題／已接受的極限**搬到 [`BACKLOG.md`](BACKLOG.md)。
 > 本檔只放日期式變更記錄。
 
+## 2026-08-12
+
+### 幅度接地判準下移到 `_merge_small_chunks`（section 層修法被實測推翻）
+**背景**：2026-08-11 的幅度接地（`_merge_unquantified_sections`）下在 **section 層**。重建 `us_stock_rag_edgar_ground` 後 `verify_segment_split.py` 判準⑤ 全綠（46→0），但 **mix-09 只有 1/3 PASS，還輸給完全沒有小標層的 `period`（2/3）**。
+
+**真因**：section 層併好之後，**SemanticChunker 會再切開**。AAPL `Segment Operating Performance` 的 2251 字元 section 被切成 1030 + 593——幅度表格留在前半、`Greater China net sales increased …` 落在後半。實測 `ground` 裡**沒有任何 chunk 同時含那句話與 `18,816`**（`period` 的 #65 有，因為它沒有小標層、整段是一個 3112 字元 chunk）。
+
+**修法**：判準下移到 [`_merge_small_chunks`](data_update_edgar.py)，它跑在 SemanticChunker 之後，是**最後一個會改變邊界的步驟**。並傳入 `token_len_fn`/`max_tokens`——呼叫端的 RCTS 補切在它之後，合併若推過門檻就會被切回去。
+⚠ **section 層那一層保留，兩者互補不重複**：`head` 的 Greater China 孤兒自成一個 section，同硬邊界內沒有前一塊可併；section 層先把它併進母節，chunk 層才有東西可併。
+
+**確定性單元測試 6/6**（用 `ground` 實際的 #60/#61）：正案例合併且解釋＋數字同在／只用長度判準時不合併／前一塊無數字時不併（＋加上數字後會併的對照）／超過 RCTS 門檻時不併（＋門檻放寬後會併的對照）。⚠ 第一版測試③ 是**我自己寫壞的**——前一塊只給 65 字元，觸發了既有的「首塊過短往後併」，與新判準無關；改用語料裡真實的 482 字元無數字 chunk 才是有效測試。
+
+**新增 [`eval/verify_chunk_grounding.py`](eval/verify_chunk_grounding.py)**：chunk 層閘門，三態 `groundable_not_grounded`（唯一閘門）／`unreachable`／`blocked_by_cap`。含與 `data_update_edgar.py` 的**常數一致性斷言**（讀原始碼文字、不 import，避免 >120s 相依）——常數兩份會漂移，漂移的話閘門會安靜地量錯並回報全綠。
+
+**`us_stock_rag_edgar_ground2` 驗收（21/21、4174 chunks、零 429／零 error）**：
+
+| 閘門 | `ground` | `ground2` |
+|---|---|---|
+| `verify_chunk_grounding` 漏接數 | 3（FAIL） | **0（PASS）** |
+| chunk 層孤兒率 | 8.0%（22/274） | **6.3%（17/270）**，殘餘全是 `unreachable` |
+| mix-09 機制（解釋＋數字同 chunk） | 沒有 | **#60（2315 字元）有** |
+| `verify_table_captions` 硬缺陷 | 0 | **0** |
+| `verify_segment_split` ②③⑤ | 0/0/46→0 | **0/0/46→0** |
+| rerank >2048 token 的 chunk | 2 | **2（未惡化）** |
+
+**四條斷言（每條 3 run，與封存基準對照）**：
+
+| 主張 | `period` (3) | `head` (1) | `ground` (3) | **`ground2` (3)** |
+|---|---|---|---|---|
+| mix-09 | 2/3 | 0/1 | 1/3 | **3/3** |
+| mix-07 | 2/3 | 0/1 | 3/3 | **3/3** |
+| mix-03 | 1/3 | 1/1 | 2/3 | **2/3** |
+| mi-05 | 0/3 | 0/1 | 1/3 | **1/3** |
+
+**mix-09 全勝，且贏過原本最好的 `period`**。殘餘兩個 FAIL 都不在本次改動的層：mix-03 剩下那個是生成層挑錯運算元（拿 Productivity 的 36 億當合併總計），mi-05 是檢索層撈錯 chunk。
+
+**兩個必須記住的教訓**：
+1. **修法要下在「最後一個會改變邊界」的層**，否則下游會把它切回去。
+2. **驗收閘門要與缺陷同層**。判準⑤ 量 section 層（刻意不跑 SemanticChunker 才能便宜地隨手跑），所以它**結構上看不到** chunk 層——它全綠的同時缺陷還在。「規則生效」與「缺陷消失」是兩個判準。
+
+### mix-03 改用 `require_text`：`forbid` 對它結構上不安全
+ground2 r3 的答案**每個數字都對**（先給合併總計 64 億／20%，再逐部門分解 Intelligent Cloud 27 億／24%），卻因 `forbid_text` 命中 27 億被判 FAIL。**正確的分部分解必然包含分部的值**，所以 `forbid_pct: 24` 與 `forbid_text: 27 億` 兩個都不安全，不是換值就好（同 col-11 教訓）。改由「合併總計的**金額**在不在」承擔判別力。跨 10 個 run 逐格比對：**只有那一格從 FAIL 翻成 PASS，其餘 9 格不變**。
+
+---
+
 ## 2026-08-11
 
 ### 數字缺陷量尺加兩個斷言型別：`require_text`／`require_chunk`

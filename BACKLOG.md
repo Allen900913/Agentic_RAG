@@ -15,21 +15,10 @@
 
 ---
 
-## 待重建才驗得到（ingest 期改動已進碼，2026-08-11）
-
-三個改動都已提交、**尚未重建**，建議一次到位（新 collection 名稱建議 `us_stock_rag_edgar_ground`）：
-
-1. 幅度接地（`_merge_unquantified_sections`）— 零網路驗收已過（AAPL 孤兒段 31→0）
-2. 表格 caption 五修（Groq 70B、給前後文、頁碼不再擋 LLM、壓分隔符、429 退避）
-3. 通用小標層（08-09 已進碼，`exp4` 也還沒套用）
-
-重建後的驗收順序（**先確定性、後聚合**）：`verify_segment_split.py` 判準⑤ → caption 分類探針 → `check_number_defects.py` 斷言 → 最後才 RAGAS（當「沒崩壞」的粗閘門，±0.05）。
-
----
-
 ## 未定案的決策
 
-- **`us_stock_rag_edgar_head` 是否升生產**：mix-03 方向確定變好（period 4 個 run 是 **3 FAIL / 1 PASS**，head 2/2 PASS——原本記成「三個 run 全 FAIL」是漏數了同樣是 period 且答對的 full100），但同 fixture 對照下 correctness **−0.032**、context_recall **−0.039**（皆略超 MDE）。**非 AAPL 的 42 題退步目前沒有已證實的解釋**——「證據量變少」的機制已被 2026-08-05 的 pool 實驗推翻。卡點：等幅度接地重建後重新比。
+- **`us_stock_rag_edgar_ground2` 是否升生產**（2026-08-12 重建完成，四個 ingest 修法全部生效：期間章節／通用小標／幅度接地（chunk 層）／表格 caption）。確定性閘門全綠、四條斷言 9/12（`period` 5/12、`head` 1/4、`ground` 7/12）。**卡點：等全量 100 題 ＋ RAGAS 的 ±0.05「沒崩壞」對照**（`gj_ground2_full100_20260812`，掛共用 replay fixture 與 `gj_v2_period_replay1` 可比）。順帶要決定 `exp4`／`head`／`period`／`ground` 這幾個舊 collection 留哪些。
+- ~~`us_stock_rag_edgar_head` 是否升生產~~ → 已被 `ground2` 取代。當初卡在「非 AAPL 的 42 題 correctness −0.032／recall −0.039 沒有已證實的解釋」，等新的全量對照出來再看這個差距還在不在。
 - **一致性 validator 的重寫路徑**：偵測 4/4 精準，但重寫實測 **2 好 1 壞**（col-11 修掉矛盾卻把總營收誤標成雲端營收，且三層驗證全過）。選項：改成**只偵測不重寫**（把矛盾標記給使用者看）以拿掉那個 1 壞。
 - **router（複雜度分派）**：簡單題→單發、複雜→agentic；保守偏 agentic（誤判複雜為簡單代價高）。ratio 路由屬**正交檢索提示、非第三分支**，應放共用檢索層讓兩條管線都吃到。卡點：measure-gated，目前量尺分不出。
 - 生產 `rag_query.py` 是否跟進 `full_translate_en=True`。卡點：要先確認同樣的 chunk-level rerank 平坦問題在單發管線也存在。
@@ -98,6 +87,8 @@
 | 各 run 答案 | 16%／16-17%／17%／18%（全部改用 10-K/10-Q 的財期數字） |
 
 **不是抽樣變異**（四個 run 同一個結果），是檢索層對「營收成長率」這個 query 穩定挑錯 chunk——而 `Revenue Growth (YoY)` 這個字面就在 #0 裡，sparse/BM25 理應命中。可能與 #1 長三倍有關（rerank 對長 chunk 的偏好），**未驗證，不要當結論**。
+
+⚠ **2026-08-12 更正「4/4 穩定」這個說法**：`ground`／`ground2` 各 3 run 裡都各有 1 次 PASS（撈到 #0）。所以它**不是純檢索層的固定行為，部分取決於 Plan 產生的子問題**。原本寫「不是抽樣變異」是在 4 個 run 的樣本下的推論，樣本擴大到 10 個 run 就被推翻了——結論是「大多數情況撈錯（8/10）」而不是「永遠撈錯」。
 
 **為什麼不能用答案層斷言**（量尺陷阱，記錄下來避免下次踩）：
 - `forbid_pct` 不能填 16/17——那些是**合法的財期數字**（10-Q 的季度/累計成長），只是口徑與 gold 的 TTM 不同（同 memory `period-basis-ttm-disambiguation`）。
