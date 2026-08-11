@@ -51,6 +51,24 @@
 1. **修法要下在「最後一個會改變邊界」的層**，否則下游會把它切回去。
 2. **驗收閘門要與缺陷同層**。判準⑤ 量 section 層（刻意不跑 SemanticChunker 才能便宜地隨手跑），所以它**結構上看不到** chunk 層——它全綠的同時缺陷還在。「規則生效」與「缺陷消失」是兩個判準。
 
+### 全量 100 題 ＋ RAGAS：「沒崩壞」閘門過關，並解開了 head-vs-period 的懸案
+`gj_ground2_full100_20260812`（掛共用 replay fixture，與 `gj_v2_period_replay1` **plan 相同 92/100**——未 blocked 時實測只有 34/100）。六個整體指標**全部落在噪音內**（recall −0.027 vs 門檻 0.029、correctness −0.018 vs 0.019、precision +0.023 vs 0.046），±0.05 粗閘門 PASS。
+
+**但分類別有一個真訊號**：semantic 的 recall −0.190、correctness −0.110（n=15 的類別門檻約 ±0.075）。三臂對照證明**它不是幅度接地造成的，是通用小標層**：
+
+| | `period`（無小標層） | `head`（有小標層） | `ground2`（小標層＋chunk 層接地） |
+|---|---|---|---|
+| semantic recall | 0.687 | **0.509** | 0.497 |
+| semantic correctness | 0.680 | **0.554** | 0.570 |
+| 整體 recall | 0.770 | 0.731 | **0.743** |
+| 整體 correctness | 0.662 | 0.630 | **0.644** |
+
+`head` 早就是 −0.178／−0.126；`ground2` 與 `head` 的差距（recall −0.012、correctness **+0.016**）遠在類別噪音內。**而 `ground2` 在每一項整體指標上都優於 `head`**——幅度接地把小標層的代價回收了約三分之一。
+
+**這解開了 BACKLOG 的懸案**「head 的 correctness −0.032／recall −0.039，非 AAPL 的 42 題退步沒有已證實的解釋」：**semantic 15 題就貢獻了整體 recall 缺口的 ~68%、correctness 缺口的 ~59%**。機制是**小標層把 chunk 切小 → 每個撈到的 chunk 帶的證據變少**：semantic 的證據量 −31.6%（全類最大），chunk 數卻幾乎沒變（58→56）。
+
+**下一個槓桿（未做）**：`use_heading = item_name not in _TABLE_DOMINATED_ITEMS` ＝ **小標層套在所有散文 item 上**，但它的用途（mix-03 分部/合併混淆）只存在於 MD&A。實測 semantic 撈到的 52 個 filing chunk 有 **43 個（83%）來自非 MD&A**（Item 1 Business 25、Item 1A 7、Part II Item 1A 6），其中 `Item_1` 中位長度僅 1320 字元。把 `use_heading` 收窄到 `_MDNA_ITEMS` 應可同時保住 mix-03 與 semantic——見 `BACKLOG.md`。
+
 ### mix-03 改用 `require_text`：`forbid` 對它結構上不安全
 ground2 r3 的答案**每個數字都對**（先給合併總計 64 億／20%，再逐部門分解 Intelligent Cloud 27 億／24%），卻因 `forbid_text` 命中 27 億被判 FAIL。**正確的分部分解必然包含分部的值**，所以 `forbid_pct: 24` 與 `forbid_text: 27 億` 兩個都不安全，不是換值就好（同 col-11 教訓）。改由「合併總計的**金額**在不在」承擔判別力。跨 10 個 run 逐格比對：**只有那一格從 FAIL 翻成 PASS，其餘 9 格不變**。
 

@@ -15,10 +15,22 @@
 
 ---
 
+## 立即該做（有證據、只缺一次重建）
+
+- **把 `use_heading` 收窄到 `_MDNA_ITEMS`**（目前是 `item_name not in _TABLE_DOMINATED_ITEMS` ＝ 所有散文 item）。
+  **證據**：通用小標層的用途是修 mix-03（分部數字冒充合併總計），那個混淆**只存在於 MD&A**；但它套在 Item 1／1A 上把敘事切碎。三臂 RAGAS 顯示 semantic recall `period` 0.687 → `head` 0.509 → `ground2` 0.497，而 **semantic 撈到的 52 個 filing chunk 有 43 個（83%）來自非 MD&A**（Item 1 Business 25、Item 1A 7、Part II Item 1A 6），`Item_1` 中位長度僅 1320 字元；semantic 證據量 −31.6% 而 chunk 數幾乎不變。
+  **預期**：保住 mix-03（在 Part I, Item 2）與幅度接地（已 gate 在 `_MDNA_ITEMS`），同時把 Item 1／1A 的 chunk 還原成大塊。
+  **卡點**：要一次重建 ＋ 走完驗收鏈（4 題×3 run 確認 mix-03／mix-09 不退，全量 100 ＋ RAGAS 看 semantic 是否回到 0.6 以上）。
+
+---
+
 ## 未定案的決策
 
-- **`us_stock_rag_edgar_ground2` 是否升生產**（2026-08-12 重建完成，四個 ingest 修法全部生效：期間章節／通用小標／幅度接地（chunk 層）／表格 caption）。確定性閘門全綠、四條斷言 9/12（`period` 5/12、`head` 1/4、`ground` 7/12）。**卡點：等全量 100 題 ＋ RAGAS 的 ±0.05「沒崩壞」對照**（`gj_ground2_full100_20260812`，掛共用 replay fixture 與 `gj_v2_period_replay1` 可比）。順帶要決定 `exp4`／`head`／`period`／`ground` 這幾個舊 collection 留哪些。
-- ~~`us_stock_rag_edgar_head` 是否升生產~~ → 已被 `ground2` 取代。當初卡在「非 AAPL 的 42 題 correctness −0.032／recall −0.039 沒有已證實的解釋」，等新的全量對照出來再看這個差距還在不在。
+- **`us_stock_rag_edgar_ground2` 是否升生產**（2026-08-12 重建，四個 ingest 修法全部生效：期間章節／通用小標／幅度接地（chunk 層）／表格 caption）。
+  **已知**：確定性閘門全綠；同 fixture blocked 對照下 **mix-03 與 mix-09 各從 FAIL 變 PASS、零回歸、兩個護欄零誤報**；六個整體 RAGAS 指標全在噪音內；**每一項整體指標都優於 `head`**。
+  **代價**：semantic recall −0.190／correctness −0.110（繼承自小標層，非本次改動）。
+  **卡點兩個**：①上面那條 `use_heading` 收窄做完再比，才知道這個代價是不是可以不付；②**所有對照都是對 `period`／`head`，`exp4`（CLAUDE.md 記載的生產 collection）從未進入任何一次對照**，而且它連 Fundamentals 的百分比遷移都沒套。要嘛補一個 exp4 臂，要嘛先確認 period/head/ground 這條線已取代 exp4。
+- ~~`us_stock_rag_edgar_head` 是否升生產~~ → 被 `ground2` 取代（每一項整體指標都更好）。當初的懸案「非 AAPL 的 42 題退步沒有已證實的解釋」**已解**：semantic 15 題貢獻整體 recall 缺口 ~68%、correctness 缺口 ~59%，機制是小標層把 chunk 切小→每個 chunk 帶的證據變少。
 - **一致性 validator 的重寫路徑**：偵測 4/4 精準，但重寫實測 **2 好 1 壞**（col-11 修掉矛盾卻把總營收誤標成雲端營收，且三層驗證全過）。選項：改成**只偵測不重寫**（把矛盾標記給使用者看）以拿掉那個 1 壞。
 - **router（複雜度分派）**：簡單題→單發、複雜→agentic；保守偏 agentic（誤判複雜為簡單代價高）。ratio 路由屬**正交檢索提示、非第三分支**，應放共用檢索層讓兩條管線都吃到。卡點：measure-gated，目前量尺分不出。
 - 生產 `rag_query.py` 是否跟進 `full_translate_en=True`。卡點：要先確認同樣的 chunk-level rerank 平坦問題在單發管線也存在。
