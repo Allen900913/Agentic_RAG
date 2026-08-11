@@ -29,6 +29,32 @@
     "fix_verified": "尚未（需重建）。零網路預驗已過：接地後 18,816／15,369／22% 與 Greater China 那句落在同一段（Segment Operating Performance，2251 字元）。⚠ 但本題**跨 run 本來就不穩定**（period 三個 run：22%／28%／22%），所以驗收要跑多個 run 看穩定性，單一 run PASS 不算修好。"
   },
   {
+    "id": "mi-05",
+    "kind": "require_chunk",
+    "claim": "MSFT 營收成長率（TTM 口徑）——Fundamentals #0 必須進候選池",
+    "require_chunks": [
+      { "source": "MSFT_Fundamentals_20260612.txt", "chunk_index": 0 }
+    ],
+    "status": "known_defect",
+    "why": "gold 沒錯、語料有、檔案也撈到了——撈到的是同一個檔的錯 chunk。`Revenue Growth (YoY): 18.30%` 在 #0（698 字元），四個 run 全部撈到 #1（Balance Sheet：Total Cash／Total Debt／Debt-Equity／Current Ratio，2045 字元）。4/4 完全一致＝不是抽樣變異，是檢索層對「營收成長率」這個 query 穩定挑錯 chunk。`Revenue Growth (YoY)` 這個字面就在 #0 裡，sparse/BM25 理應命中；懷疑與 #1 長三倍（rerank 對長 chunk 的偏好）有關，**未驗證，不是結論**。",
+    "verified": "2026-08-11 直接 scroll Qdrant 三個 collection（exp4／head／period）確認：Fundamentals 都是 3 個 chunk、#0 是 Company Overview 含 Revenue Growth (YoY)、#1 是 Balance Sheet、#2 是 Mayo Clinic 合作段。⚠ exp4 的 #0 寫成小數 `0.183`，head／period 是 `18.30%`——`migrate_fundamentals_pct.py` 只套用到後兩者。",
+    "metric_design": "⚠ **刻意不用 `anchored_pct`**——答案層在這題必然選錯判準：（a）`forbid_pct: 16/17` 不行，那些是**合法的財期數字**（10-Q 的季度／累計成長），只是口徑與 gold 的 TTM 不同（見 memory `period-basis-ttm-disambiguation`）；（b）`expect_pct: 18.3` 也不行，head 答的「約 18%（增加 501 億美元）」是 FY2026 10-K 的**財年**數字，數值恰好接近但是不同的量，±1pt 容差下會 PASS ＝ **用對的分數獎勵錯的理由**。真正的判別訊號是「撈到 #0 還是 #1」，所以斷言下在檢索層，與答案措辭無關。 ⚠ 本 kind 綁 chunk_index ＝ 綁切塊結果；Fundamentals 走獨立 doc_type 路徑，不受 2026-08-11 那三個 filing 側 ingest 修法影響（已用上面三個 collection 交叉確認索引穩定）。若日後改 Fundamentals 切塊，這條要重新對號。",
+    "fixed_by": null,
+    "fix_verified": "尚未修。2026-08-11 在三個封存結果檔上驗判別力：3/3 FAIL，訊息皆為「同檔撈到 #[1] ← 撈錯 chunk」。"
+  },
+  {
+    "id": "mix-07",
+    "kind": "require_text",
+    "claim": "GOOGL 收購 Wiz 的金額（$29.5B）必須出現在答案裡",
+    "expect_text": "29\\.5\\s*billion|295\\s*億",
+    "status": "known_defect",
+    "why": "真因是 **Plan 節點把「收購金額」這個財報事實譯成新聞查詢** → 檢索被限制在 News chunk → 財報裡的 $29.5B 撈不到 → 拒答。與 collection 無關（period 自己也會拒答）。`只撈到 News` 與拒答 4/4 完全相關，是乾淨的預測指標。這是 plan 抽樣變異：四個 run 有 2 種行為（2 答對／2 拒答）。",
+    "verified": "2026-08-11 逐字讀四個封存檔的答案本文。答對的兩個都寫成「總金額 295 億美元（$29.5 billion）」並引用 GOOGL_10Q chunk #77／#94；拒答的兩個本文零數字。",
+    "metric_design": "⚠ **刻意不用 `anchored_pct`**：拒答的答案裡沒有任何百分比，`anchored_pcts` 只會回 N/A（＝無法比對）而不是 FAIL，**判不出這個缺陷**。改問存在性——該說的值缺席就是 FAIL。 ⚠ **不填 forbid**：這個缺陷的形態是「什麼都沒說」，沒有需要禁止的錯值；判別力來自必要條件缺席，實測在四個封存檔上得到 **2 PASS／2 FAIL** ＝ 雙向都有判別力（`_validate_claims` 對 require_text 因此不強制 forbid）。 ⚠ 不用 anchor：`Wiz` 在拒答文本裡也會出現（「關於 Wiz 的收購金額…沒有資料」），錨了反而讓判準繞路；金額字面本身已足夠獨特。",
+    "fixed_by": null,
+    "fix_verified": "尚未修。卡點：修法要在 planner prompt 加「財報事實不要譯成新聞查詢」的約束，但那類 prompt 改動的效果在現有量尺下量不出來（見 docs/EVAL.md MDE）。本條先當**回歸/進度指標**：拒答比例從 2/4 降下來才算有動。"
+  },
+  {
     "id": "col-11",
     "claim": "MSFT 最新一季 Microsoft Cloud 營收成長率",
     "anchor": "Microsoft Cloud|整體雲端",

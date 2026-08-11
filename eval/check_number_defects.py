@@ -25,6 +25,26 @@
 **三態，缺一不可**：PASS ／ FAIL ／ **anchor 未命中＝無法比對**。第三態不能併進 PASS——
 否則答案改寫措辭或拒答時會**靜默變成通過**。
 
+## 三種主張型別（`kind`，預設 `anchored_pct`）
+
+一個缺陷該用哪種型別，判準是「**這個缺陷的判別訊號長在哪一層**」。用錯層別的代價實測過兩次
+（見 `BACKLOG.md` 的 mi-05／mix-07 兩節）：mi-05 若用 `anchored_pct`，`expect_pct: 18.3` 會
+在 ±1pt 容差下把「答 18% 但理由是錯的財年數字」判成 PASS ＝ **用對的分數獎勵錯的理由**。
+
+| kind | 斷言什麼 | 判別力來自 | 為誰而加 |
+|---|---|---|---|
+| `anchored_pct` | anchor ±window 內的百分比集合 | `forbid_pct`／`forbid_text`（錯值在不在） | mix-03、mix-09、col-11、mi-04 |
+| `require_text` | 答案本文必須匹配 `expect_text` | **必要條件缺席**（拒答／答錯數字都會 MISS） | mix-07（Plan 譯成新聞查詢→拒答） |
+| `require_chunk` | 檢索池的 `sources` 必須含指定 `source`+`chunk_index` | 同上；**且與答案措辭完全無關** | mi-05（同檔撈到錯 chunk，4/4 穩定） |
+
+⚠ **`require_text`／`require_chunk` 的 `known_defect` 不強制 forbid**（`anchored_pct` 強制）。
+理由是 `_validate_claims` 那條規則的前提是「正解與干擾值**並陳**也會 PASS」——存在性斷言沒有
+並陳問題，缺席就是 FAIL，判別力已經是雙向的。實測 mix-07 在四個封存檔上得到 2 PASS／2 FAIL。
+
+⚠ **`require_chunk` 綁 `chunk_index`＝綁切塊結果**。只要那個 doc_type 的切塊規則改了，索引就
+可能重編號，這條主張會變成問錯問題。所以 FAIL 訊息**必須區分**「同檔撈到別的 index」（真缺陷）
+與「該檔完全沒被撈到」（可能是重編號或檢索全歪），不要只印一句 FAIL。
+
 ## 輔助指標（篩選用，不當閘門）
 
   ① 頭條百分比**候選**：⚠ 實測 6 個旗標裡有 3 個不是錯（col-11／mi-04／mi-08）。這一節只
@@ -125,15 +145,148 @@ def anchored_pcts(text: str, anchor: str, window: int = 60) -> list[tuple[float,
     return out
 
 
+def _eval_anchored_pct(c: dict, rec: dict, tol: float) -> tuple[str, str]:
+    """kind=anchored_pct：anchor ±window 內的百分比集合 vs 正解／禁止值。回傳 (verdict, 證據)。"""
+    body = answer_body(rec.get("answer") or "")
+    got = anchored_pcts(body, c["anchor"], c.get("window", 60))
+    # `expect_text`／`forbid_text`：**金額**字串的獨立判準,可在 anchor 未命中時接手。
+    # 為什麼加：mix-03 修好後答案寫「營業利益較去年同期增加 64 億美元，增幅約 20%」,
+    # 完全沒用「整體/合併」字樣 → anchor 未命中 → 只有 anchor 的話會退化成 N/A,
+    # 給不出「修好了」的判定。金額（64 億／$6.4 billion vs 27 億／$2.7 billion）在
+    # 單一題目內幾乎不會撞,而百分比會（見本檔開頭的 ±1pt 巧合問題）。
+    txt_ok = bool(re.search(c["expect_text"], body)) if c.get("expect_text") else None
+    txt_bad = bool(re.search(c["forbid_text"], body)) if c.get("forbid_text") else None
+    if not got and txt_ok is None:
+        # ⚠ 不能算 PASS：答案改寫措辭或拒答時會靜默變成通過
+        return "N/A", f"anchor {c['anchor']!r} 附近沒有百分比（無法比對）"
+    checks: list[bool] = []
+    if got:
+        vals = [v for v, _ in got]
+        hit_e = [(v, s) for v, s in got if abs(v - c["expect_pct"]) <= tol]
+        checks.append(bool(hit_e))
+        if c.get("forbid_pct") is not None:
+            checks.append(not any(abs(v - c["forbid_pct"]) <= tol for v in vals))
+        # 證據優先印正解那一筆(證明它真的接地到 anchor);沒有正解就印第一筆錯值
+        v, seg = hit_e[0] if hit_e else got[0]
+        ev = f"anchor 附近={['%g%%' % x for x in vals]} → 取 {v:g}%  …{seg[-60:]}"
+    else:
+        ev = "anchor 附近沒有百分比，改用金額判準"
+    if txt_ok is not None:
+        checks.append(txt_ok)
+        ev += f"  expect_text={'ok' if txt_ok else 'MISS'}"
+    if txt_bad is not None:
+        checks.append(not txt_bad)
+        ev += f"  forbid_text={'HIT' if txt_bad else 'ok'}"
+    return ("PASS" if all(checks) else "FAIL"), ev
+
+
+def _eval_require_text(c: dict, rec: dict, tol: float) -> tuple[str, str]:
+    """kind=require_text：答案本文必須匹配 `expect_text`。
+
+    為 mix-07 而加：那題的缺陷是 **Plan 把財報事實譯成新聞查詢 → 檢索限制在 News → 拒答**。
+    拒答的答案裡沒有任何百分比,`anchored_pcts` 只會回 N/A（＝無法比對）而不是 FAIL,
+    所以它**判不出這個缺陷**。這裡改問「該說的那個值有沒有說」——缺席就是 FAIL。
+
+    N/A 只保留給「答案整個是空的」（run 出錯）。**拒答不是 N/A,是 FAIL**——
+    這正是舊 `is_refusal` 欄位漏掉的那件事（四個封存檔全部回報 False,其中兩個明顯是拒答）。
+    """
+    body = answer_body(rec.get("answer") or "")
+    if not body.strip():
+        return "N/A", "答案是空的（run 出錯，無法比對）"
+    ok = bool(re.search(c["expect_text"], body))
+    checks = [ok]
+    ev = f"expect_text={'ok' if ok else 'MISS'}"
+    if c.get("forbid_text"):
+        bad = bool(re.search(c["forbid_text"], body))
+        checks.append(not bad)
+        ev += f"  forbid_text={'HIT' if bad else 'ok'}"
+    if not ok:
+        ev += f"  ｜答案開頭：{re.sub(r'[\s　]+', ' ', body)[:52]}"
+    return ("PASS" if all(checks) else "FAIL"), ev
+
+
+def _eval_require_chunk(c: dict, rec: dict, tol: float) -> tuple[str, str]:
+    """kind=require_chunk：檢索池（`sources`）必須含指定的 source+chunk_index。
+
+    為 mi-05 而加。那題三判完成後確定 **gold 沒錯、語料有、檔案也撈到了——撈到的是同一個檔
+    的錯 chunk**（`MSFT_Fundamentals_20260612.txt` #1 Balance Sheet,而 `Revenue Growth (YoY):
+    18.30%` 在 #0）,4/4 run 完全一致。答案層斷言在這題**必然選錯判準**：
+      · `forbid_pct: 16/17` 不行——那些是合法的財期數字,只是口徑與 gold 的 TTM 不同
+      · `expect_pct: 18.3` 也不行——某個 run 答「約 18%」是 FY2026 10-K 的財年數字,
+        **數值恰好接近但是不同的量**,±1pt 容差下會 PASS ＝ 用對的分數獎勵錯的理由
+    真正的判別訊號是「撈到的是 #0 還是 #1」,所以斷言下在檢索層,**與答案措辭完全無關**。
+
+    三態：`sources` 缺席／空 → N/A（那一輪沒記錄,不是檢索品質的證據）;其餘 PASS/FAIL。
+    """
+    srcs = [s for s in (rec.get("sources") or []) if isinstance(s, dict)]
+    if not srcs:
+        return "N/A", "這一輪沒有記錄 sources（無法比對）"
+    got = {(s.get("source"), s.get("chunk_index")) for s in srcs}
+    miss = []
+    for want in c["require_chunks"]:
+        if (want["source"], want["chunk_index"]) in got:
+            continue
+        # 區分兩種 FAIL：同檔撈到別的 index（真缺陷）vs 該檔完全沒撈到（可能是 chunk 重編號）
+        same_file = sorted(i for f, i in got if f == want["source"] and i is not None)
+        miss.append(f"{want['source']}#{want['chunk_index']} 缺席"
+                    + (f"（同檔撈到 #{same_file} ← 撈錯 chunk）" if same_file
+                       else "（該檔完全沒被撈到 ← 檢索全歪或 chunk 已重編號，先查後者）"))
+    if miss:
+        return "FAIL", "；".join(miss)
+    return "PASS", f"required chunk 全部在池內（該輪共 {len(got)} 個 chunk）"
+
+
+_EVALUATORS = {
+    "anchored_pct": _eval_anchored_pct,
+    "require_text": _eval_require_text,
+    "require_chunk": _eval_require_chunk,
+}
+
+
+def _claim_header(c: dict) -> str:
+    """印在主張標題後面的括號內容——每種 kind 斷言的東西不同,不能都印成「正解 N%」。"""
+    kind = c.get("kind", "anchored_pct")
+    if kind == "anchored_pct":
+        s = f"正解 {c['expect_pct']:g}%"
+        if c.get("forbid_pct") is not None:
+            s += f"，禁止 {c['forbid_pct']:g}%"
+        return s
+    if kind == "require_text":
+        return f"答案必須含 /{c['expect_text']}/"
+    return "檢索池必須含 " + "、".join(
+        f"{w['source']}#{w['chunk_index']}" for w in c["require_chunks"])
+
+
 def _validate_claims(claims: list[dict]) -> None:
     """啟動就檢查主張檔自洽——量尺自己失去判別力時要吵,不要安靜地全部 PASS。"""
     for c in claims:
-        if c.get("status") == "known_defect" and c.get("forbid_pct") is None \
-                and not c.get("forbid_text"):
-            raise SystemExit(
-                f"number_claims.json: {c['id']} 是 known_defect 但沒有 forbid_pct／"
-                f"forbid_text。只問『正解在不在 anchor 附近』的話,答案把正解與干擾值"
-                f"並陳也會 PASS ＝ 這條主張沒有判別力（見 anchored_pcts docstring）。")
+        kind = c.get("kind", "anchored_pct")
+        if kind not in _EVALUATORS:
+            raise SystemExit(f"number_claims.json: {c['id']} 的 kind={kind!r} 不認得，"
+                             f"只接受 {tuple(_EVALUATORS)}")
+        if kind == "anchored_pct":
+            if not c.get("anchor") or c.get("expect_pct") is None:
+                raise SystemExit(f"number_claims.json: {c['id']} 是 anchored_pct，"
+                                 f"必須同時有 anchor 與 expect_pct。")
+            # 只問「正解在不在 anchor 附近」的話,答案把正解與干擾值並陳也會 PASS。
+            if c.get("status") == "known_defect" and c.get("forbid_pct") is None \
+                    and not c.get("forbid_text"):
+                raise SystemExit(
+                    f"number_claims.json: {c['id']} 是 known_defect 但沒有 forbid_pct／"
+                    f"forbid_text。只問『正解在不在 anchor 附近』的話,答案把正解與干擾值"
+                    f"並陳也會 PASS ＝ 這條主張沒有判別力（見 anchored_pcts docstring）。")
+        elif kind == "require_text":
+            if not c.get("expect_text"):
+                raise SystemExit(f"number_claims.json: {c['id']} 是 require_text 但沒有 "
+                                 f"expect_text ＝ 沒有任何斷言內容。")
+        elif kind == "require_chunk":
+            if not c.get("require_chunks"):
+                raise SystemExit(f"number_claims.json: {c['id']} 是 require_chunk 但 "
+                                 f"require_chunks 是空的 ＝ 沒有任何斷言內容。")
+            for w in c["require_chunks"]:
+                if not w.get("source") or w.get("chunk_index") is None:
+                    raise SystemExit(f"number_claims.json: {c['id']} 的 require_chunks "
+                                     f"每一項都要有 source 與 chunk_index，收到 {w!r}。")
 
 
 def load_results(path: Path) -> dict:
@@ -161,51 +314,16 @@ def main() -> None:
     _validate_claims(claims)
     tally = {n: {"PASS": 0, "FAIL": 0, "N/A": 0} for n, _ in runs}
     for c in claims:
-        print(f"  [{c['status']:16s}] {c['id']:8s} {c['claim']}"
-              f"（正解 {c['expect_pct']:g}%"
-              + (f"，禁止 {c['forbid_pct']:g}%" if c.get("forbid_pct") is not None else "") + "）")
+        kind = c.get("kind", "anchored_pct")
+        print(f"  [{c['status']:16s}] {c['id']:8s} <{kind}> {c['claim']}"
+              f"（{_claim_header(c)}）")
         for name, res in runs:
             rec = res.get(c["id"])
             if not rec:
                 tally[name]["N/A"] += 1
                 print(f"      {name[:28]:30s} N/A  該題不在結果檔裡")
                 continue
-            body = answer_body(rec.get("answer") or "")
-            got = anchored_pcts(body, c["anchor"], c.get("window", 60))
-            # `expect_text`／`forbid_text`：**金額**字串的獨立判準,可在 anchor 未命中時接手。
-            # 為什麼加：mix-03 修好後答案寫「營業利益較去年同期增加 64 億美元，增幅約 20%」,
-            # 完全沒用「整體/合併」字樣 → anchor 未命中 → 只有 anchor 的話會退化成 N/A,
-            # 給不出「修好了」的判定。金額（64 億／$6.4 billion vs 27 億／$2.7 billion）在
-            # 單一題目內幾乎不會撞,而百分比會（見本檔開頭的 ±1pt 巧合問題）。
-            txt_ok = txt_bad = None
-            if c.get("expect_text"):
-                txt_ok = bool(re.search(c["expect_text"], body))
-            if c.get("forbid_text"):
-                txt_bad = bool(re.search(c["forbid_text"], body))
-            if not got and txt_ok is None:
-                # ⚠ 不能算 PASS：答案改寫措辭或拒答時會靜默變成通過
-                tally[name]["N/A"] += 1
-                print(f"      {name[:28]:30s} N/A  anchor {c['anchor']!r} 附近沒有百分比（無法比對）")
-                continue
-            checks, ev = [], ""
-            if got:
-                vals = [v for v, _ in got]
-                hit_e = [(v, s) for v, s in got if abs(v - c["expect_pct"]) <= args.tolerance]
-                checks.append(bool(hit_e))
-                if c.get("forbid_pct") is not None:
-                    checks.append(not any(abs(v - c["forbid_pct"]) <= args.tolerance for v in vals))
-                # 證據優先印正解那一筆(證明它真的接地到 anchor);沒有正解就印第一筆錯值
-                v, seg = hit_e[0] if hit_e else got[0]
-                ev = (f"anchor 附近={['%g%%' % x for x in vals]} → 取 {v:g}%  …{seg[-60:]}")
-            else:
-                ev = "anchor 附近沒有百分比，改用金額判準"
-            if txt_ok is not None:
-                checks.append(txt_ok)
-                ev += f"  expect_text={'ok' if txt_ok else 'MISS'}"
-            if txt_bad is not None:
-                checks.append(not txt_bad)
-                ev += f"  forbid_text={'HIT' if txt_bad else 'ok'}"
-            verdict = "PASS" if all(checks) else "FAIL"
+            verdict, ev = _EVALUATORS[kind](c, rec, args.tolerance)
             tally[name][verdict] += 1
             print(f"      {name[:28]:30s} {verdict}  {ev}")
     print()

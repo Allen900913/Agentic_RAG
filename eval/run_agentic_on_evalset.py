@@ -63,9 +63,14 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
                          sub_queries: list) -> dict:
     """把 agentic 輸出攤平成 generation_judge.json 的 record schema。
     RAGAS 只讀 id/category/query/answer/contexts；其餘欄位補上以對齊 schema、方便複查。"""
-    contexts = [c["content"] for c in chunks if (c.get("content") or "").strip()]
+    # ⚠ 2026-08-11 修：`contexts` 與 `sources` 必須**同一次過濾**、逐位對齊。原本 contexts 濾掉
+    # 空內容、sources 沒濾 → 只要有一個 chunk 內容是空的，兩個 list 就錯位一格，之後所有
+    # 「用 contexts 的 index 去查 sources」的下游都會歸錯來源（`check_number_defects.py`
+    # 的 `source_types_of` 就是這樣用的：`sources[i]` 配 `contexts[i]`）。
+    kept = [c for c in chunks if (c.get("content") or "").strip()]
+    contexts = [c["content"] for c in kept]
     sources = [{"source": c.get("source"), "chunk_index": c.get("chunk_index")}
-               for c in chunks]
+               for c in kept]
     return {
         "id": q["id"],
         "category": q["category"],

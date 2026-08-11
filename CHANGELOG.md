@@ -11,6 +11,33 @@
 > **已知問題／已接受的極限**搬到 [`BACKLOG.md`](BACKLOG.md)。
 > 本檔只放日期式變更記錄。
 
+## 2026-08-11
+
+### 數字缺陷量尺加兩個斷言型別：`require_text`／`require_chunk`
+**動機**：mi-05 與 mix-07 兩個已確診缺陷**在既有工具下都判不出來**，只會落進 N/A（＝無法比對），等於它們不在零噪音回歸網裡。病根是**斷言型別只有一種**（`anchored_pct`），而這兩個缺陷的判別訊號不在「anchor 附近的百分比」那一層。
+
+**新增**（`eval/check_number_defects.py`，claims 用 `kind` 欄位分派，預設 `anchored_pct` 故既有 4 條零改動）：
+- `require_text`：答案本文必須匹配 `expect_text`。給 mix-07（Plan 把財報事實譯成新聞查詢→拒答；拒答文本零百分比，`anchored_pcts` 判不出來）。
+- `require_chunk`：檢索池 `sources` 必須含指定 `source`+`chunk_index`。給 mi-05（同檔撈到錯 chunk，答案層無論填 expect 或 forbid 都是陷阱）。FAIL 訊息區分「同檔撈到別的 index」（真缺陷）與「該檔完全沒撈到」（可能是重編號）。
+
+**為什麼搶在重建之前做**：封存結果檔是**已知答案的測試資料**，重建後那批 ground truth 就沒了。若那時新斷言回報 0 問題，分不清是修好了還是斷言壞了（CLAUDE.md：「稽核腳本回傳 0 筆問題先當壞消息查」）。
+
+**判別力雙向驗證**（四個封存檔：period full100／replay1／replay2、head full100）：
+
+| 主張 | 結果 | 說明 |
+|---|---|---|
+| mi-05 `require_chunk` | **4/4 FAIL** | 全部「同檔撈到 #[1] ← 撈錯 chunk」 |
+| mix-07 `require_text` | **2 PASS / 2 FAIL** | 兩個答對、兩個拒答 |
+| 正對照（斷言改指實際撈到的 #1／拒答文本必含的 `Wiz`） | **PASS** | 證明 FAIL 來自被斷言的內容，不是機制壞掉 |
+| 既有 mix-03／mix-09／col-11／mi-04 | **逐格未變** | col-11 3 PASS+1 N/A、mi-04 2 PASS+2 N/A，護欄零誤報 |
+| `_validate_claims` 負向測試 | **6/6 擋下** | kind 打錯字、require_chunks 空、缺 chunk_index、缺 expect_text、anchored_pct 缺 anchor、known_defect 缺 forbid |
+
+⚠ `require_text`／`require_chunk` 的 `known_defect` **不強制 forbid**（`anchored_pct` 仍強制）：那條規則的前提是「正解與干擾值並陳也會 PASS」，存在性斷言沒有並陳問題，缺席就是 FAIL。
+
+**附帶修一個潛在錯位**（`eval/run_agentic_on_evalset.py`）：`contexts` 濾掉空內容、`sources` 沒濾 → 兩個 list 可能錯位一格，下游用 `sources[i]` 配 `contexts[i]` 會歸錯來源。改成同一次過濾。**實測 14 個結果檔、1400 筆記錄零錯位＝從未實際發生**，純護欄，歷史結論不受影響。
+
+---
+
 ## 2026-08-08
 
 ### 抓取／處理分離：ingest 不再連網

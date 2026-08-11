@@ -10,9 +10,8 @@
 
 ## 立即可做（不需重建、不燒額度）
 
-- **`fetch_data.py` 尚未納入版控**。真實風險：它是唯一對外抓取入口且含 `_pct`，未來重抓會**靜默還原**小數→百分比的遷移。
-- **mix-07 換一種斷言型別**（答案必須含 `29.5 billion|295 億`），現行 `anchored_pcts` 對拒答只會給 N/A、判不出 FAIL。詳見下方〈已知缺陷：mix-07〉。
 - **`eval/replay_cache.json` 有未提交的新增項**（+25 translate_en、+141 check，0 筆覆寫）。要決定納不納版控。
+- **`us_stock_rag_edgar_exp4` 的 Fundamentals 比率還是小數**（`Revenue Growth (YoY): 0.183`），`head`／`period` 已是 `18.30%`——`migrate_fundamentals_pct.py` 沒套到 exp4。卡點：要先決定 exp4 的角色。**CLAUDE.md 寫它是「生產 collection」、本檔〈環境雜務〉寫它是「歷史基準」，兩者矛盾**；若是歷史基準就該留著不動並改 CLAUDE.md，若是生產就得補遷移。（2026-08-11 scroll 三個 collection 時發現）
 
 ---
 
@@ -81,9 +80,9 @@
 
 **與 collection 無關**（period 自己也會拒答），真因是 **Plan 節點把「收購金額」這個財報事實譯成新聞查詢** → 檢索被限制在 News chunk → 財報裡的 $29.5B 撈不到。`只撈到 News` 與拒答 **4/4 完全相關**，是乾淨的預測指標。
 
-**為什麼沒登錄成 `number_claims.json` 斷言**：拒答的答案裡沒有數字，anchored_pcts 判不出來（會落進 N/A 而不是 FAIL）。要當閘門得換一種斷言型別（例如「答案必須含 `29.5 billion|295 億`」），尚未做。
+**已登錄成斷言**（2026-08-11）：`kind: require_text`，`expect_text: 29\.5\s*billion|295\s*億`。舊的 `anchored_pcts` 判不出這個缺陷（拒答的答案裡沒有百分比 → N/A 而不是 FAIL）。四個封存檔實測 **2 PASS / 2 FAIL**＝雙向都有判別力。
 
-**卡點**：這是 plan 抽樣變異（4 個 run 有 2 種行為），修法可能要在 planner prompt 加「財報事實不要譯成新聞查詢」的約束，但那類 prompt 改動的效果在現有量尺下量不出來（同 `docs/EVAL.md` MDE）。
+**卡點**：這是 plan 抽樣變異（4 個 run 有 2 種行為），修法可能要在 planner prompt 加「財報事實不要譯成新聞查詢」的約束，但那類 prompt 改動的效果在現有量尺下量不出來（同 `docs/EVAL.md` MDE）。**現在至少有零噪音的進度指標**：拒答比例從 2/4 降下來才算有動。
 
 ---
 
@@ -100,10 +99,12 @@
 
 **不是抽樣變異**（四個 run 同一個結果），是檢索層對「營收成長率」這個 query 穩定挑錯 chunk——而 `Revenue Growth (YoY)` 這個字面就在 #0 裡，sparse/BM25 理應命中。可能與 #1 長三倍有關（rerank 對長 chunk 的偏好），**未驗證，不要當結論**。
 
-**為什麼不登錄成 `number_claims.json` 斷言**（量尺陷阱，記錄下來避免下次踩）：
+**為什麼不能用答案層斷言**（量尺陷阱，記錄下來避免下次踩）：
 - `forbid_pct` 不能填 16/17——那些是**合法的財期數字**（10-Q 的季度/累計成長），只是口徑與 gold 的 TTM 不同（同 memory `period-basis-ttm-disambiguation`）。
 - `expect_pct: 18.3` 也不行——head 答的「約 **18%**（增加 501 億美元）」是 FY2026 10-K 的財年數字，**數值恰好接近但是不同的量**，容差 ±1pt 下會 PASS，等於**用對的分數獎勵錯的理由**。
-- 真正的判別訊號是「**撈到的是 #0 還是 #1**」，那是檢索層斷言，現行工具沒有這種型別。
+- 真正的判別訊號是「**撈到的是 #0 還是 #1**」——那是檢索層，與答案措辭無關。
 
-**卡點**：要嘛做一個檢索層斷言型別（contexts 必須含指定 source+chunk_index），要嘛先釐清這題的 gold 口徑該是 TTM 還是財期（那是 eval 設計問題不是系統問題）。
+**已登錄成斷言**（2026-08-11）：`kind: require_chunk`，`require_chunks: [MSFT_Fundamentals_20260612.txt#0]`。四個封存檔實測 **4/4 FAIL**，訊息皆為「同檔撈到 #[1] ← 撈錯 chunk」；正對照（改指實際撈到的 #1）吐 PASS，證明 FAIL 來自被斷言的內容而非機制。索引穩定性已用 exp4／head／period 三個 collection 交叉確認（Fundamentals 都是 3 chunk、#0 是 Company Overview）。
+
+**卡點**：修法未定。要嘛查清為何 sparse/BM25 沒讓 `Revenue Growth (YoY)` 字面命中 #0（懷疑 #1 長三倍造成 rerank 偏好，**未驗證**），要嘛先釐清這題的 gold 口徑該是 TTM 還是財期（那是 eval 設計問題不是系統問題）。
 
