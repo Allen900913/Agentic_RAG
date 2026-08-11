@@ -62,6 +62,11 @@ REFUSAL_MARKERS = [
     "don't have enough information",
     "do not have enough information",
     "知識庫", "無法回答", "沒有足夠",
+    # 2026-08-11 加：實測 mix-07 的拒答就是這個措辭（「根據提供的參考資料，沒有任何文件提及…」），
+    # 舊清單一個都沒命中。⚠ 加標記前逐一量過誤報：`未提及`(18/22 誤報)、`資料中未`(20/23)、
+    # `參考資料中未`(5/8)、`沒有提及`(1/1)、`無相關資料`(1/1) **全部退回不加**——它們絕大多數是
+    # 「答案有實質作答，只是其中一項未揭露」。只有這一條在 2209 份存檔答案裡 1 命中、0 誤報。
+    "沒有任何文件提及",
 ]
 
 # ── 靜默降級偵測（2026-07-19 新增）───────────────────────────────────────────
@@ -570,9 +575,21 @@ def generate_actionable_feedback(
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
+_CITE_MARK = re.compile(r"[【\[][^】\]]{0,80}[】\]]")
+# 拒答的長度上界。⚠ 2026-08-11 加：只比對標記會把「答案主體有作答、只是其中一項未揭露」
+# 也判成拒答。實測 2209 份存檔答案裡命中標記的 42 份，剝掉引用標記後的長度分佈是
+#   ≤100 字元 34 份（真拒答）／100~200 1 份（mh-06，其實答了目標價 $330→$365）／
+#   200~300 **0 份**／≥300 字元 8 份（news-02、mi-01、mi-09、mi-12、mi-14 全是有實質
+#   作答的長答案）——中間有一段空白，門檻落在 150 兩邊都不擦邊。
+REFUSAL_MAX_CHARS = 150
+
+
 def looks_like_refusal(answer: str) -> bool:
-    a = (answer or "").lower()
-    return any(m.lower() in a for m in REFUSAL_MARKERS)
+    """整份答案都不作答才算拒答；「其中一項未揭露」不算（那是誠實標注，不是拒答）。"""
+    a = (answer or "")
+    if not any(m.lower() in a.lower() for m in REFUSAL_MARKERS):
+        return False
+    return len(_CITE_MARK.sub("", a).strip()) < REFUSAL_MAX_CHARS
 
 
 def snapshot_sources(client, collection):

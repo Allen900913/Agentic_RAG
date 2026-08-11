@@ -51,6 +51,8 @@ from dotenv import load_dotenv
 load_dotenv(override=True)
 
 import rag_query as rq
+# 拒答判定與單管線共用一份（見下方 is_refusal 的註解：先前各自一套，其中一套壞了半個月沒被發現）。
+from eval.eval_generation_llm_judge import looks_like_refusal
 
 EVAL_SET = Path("eval/eval_set.json")
 DEFAULT_COLLECTION = "us_stock_rag_edgar_period"
@@ -76,7 +78,13 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
         # 以下是 generation_judge schema 既有欄位，agentic 這條不自算（交給 RAGAS），補 null。
         "correctness": None,
         "correctness_verdict": None,
-        "is_refusal": answer.strip().startswith("I don't have enough") or answer.strip().startswith("I don’t have enough"),
+        # ⚠ 2026-08-11 修：原本是 `startswith("I don't have enough")`——**英文、且只認開頭**，
+        # 而本系統一律回繁體中文，所以這個欄位在所有既有 agentic 結果檔裡幾乎永遠是 False。
+        # 實測 mix-07 在 gj_v2_period_replay2／gj_head_full100 兩個 run 明確拒答
+        # （「沒有任何文件提及」「我沒有足夠的資訊來回答」）卻都記成 False。
+        # 改為複用單管線那邊已經寫好的 `looks_like_refusal`（含中文標記、全文比對），
+        # 不再維護第二套判定——兩套必然漂移，這次就是漂移的結果。
+        "is_refusal": looks_like_refusal(answer),
         "wrongful_refusal": None,
         "context_recall_llm": None,
         "context_recall_overlap": None,
