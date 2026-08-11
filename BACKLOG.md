@@ -10,7 +10,6 @@
 
 ## 立即可做（不需重建、不燒額度）
 
-- **mi-05 人工三判**：gold 的 18.3% 不在那個 run 撈到的 contexts 裡。卡點：要先確認是檢索缺口還是 gold 標錯。
 - **`fetch_data.py` 尚未納入版控**。真實風險：它是唯一對外抓取入口且含 `_pct`，未來重抓會**靜默還原**小數→百分比的遷移。
 - **mix-07 換一種斷言型別**（答案必須含 `29.5 billion|295 億`），現行 `anchored_pcts` 對拒答只會給 N/A、判不出 FAIL。詳見下方〈已知缺陷：mix-07〉。
 - **`eval/replay_cache.json` 有未提交的新增項**（+25 translate_en、+141 check，0 筆覆寫）。要決定納不納版控。
@@ -85,3 +84,26 @@
 **為什麼沒登錄成 `number_claims.json` 斷言**：拒答的答案裡沒有數字，anchored_pcts 判不出來（會落進 N/A 而不是 FAIL）。要當閘門得換一種斷言型別（例如「答案必須含 `29.5 billion|295 億`」），尚未做。
 
 **卡點**：這是 plan 抽樣變異（4 個 run 有 2 種行為），修法可能要在 planner prompt 加「財報事實不要譯成新聞查詢」的約束，但那類 prompt 改動的效果在現有量尺下量不出來（同 `docs/EVAL.md` MDE）。
+
+---
+
+## 已知缺陷：mi-05（同一個檔案裡撈到錯的 chunk，4/4 穩定）
+
+2026-08-11 三判完成，**gold 沒錯、語料有、檔案也撈到了——撈到的是同一個檔的錯 chunk**：
+
+| | |
+|---|---|
+| gold | `18.30%`（Revenue Growth YoY） |
+| 語料 | `MSFT_Fundamentals_20260612.txt` **#0** 有 `Revenue Growth (YoY): 18.30%`（698 字元） |
+| 四個 run 實際撈到 | 同一個檔的 **#1**（Balance Sheet：Total Cash／Total Debt／Debt/Equity／Current Ratio，2045 字元）——**4/4 完全一致** |
+| 各 run 答案 | 16%／16-17%／17%／18%（全部改用 10-K/10-Q 的財期數字） |
+
+**不是抽樣變異**（四個 run 同一個結果），是檢索層對「營收成長率」這個 query 穩定挑錯 chunk——而 `Revenue Growth (YoY)` 這個字面就在 #0 裡，sparse/BM25 理應命中。可能與 #1 長三倍有關（rerank 對長 chunk 的偏好），**未驗證，不要當結論**。
+
+**為什麼不登錄成 `number_claims.json` 斷言**（量尺陷阱，記錄下來避免下次踩）：
+- `forbid_pct` 不能填 16/17——那些是**合法的財期數字**（10-Q 的季度/累計成長），只是口徑與 gold 的 TTM 不同（同 memory `period-basis-ttm-disambiguation`）。
+- `expect_pct: 18.3` 也不行——head 答的「約 **18%**（增加 501 億美元）」是 FY2026 10-K 的財年數字，**數值恰好接近但是不同的量**，容差 ±1pt 下會 PASS，等於**用對的分數獎勵錯的理由**。
+- 真正的判別訊號是「**撈到的是 #0 還是 #1**」，那是檢索層斷言，現行工具沒有這種型別。
+
+**卡點**：要嘛做一個檢索層斷言型別（contexts 必須含指定 source+chunk_index），要嘛先釐清這題的 gold 口徑該是 TTM 還是財期（那是 eval 設計問題不是系統問題）。
+
