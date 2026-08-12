@@ -52,6 +52,7 @@ import argparse
 import json
 import math
 import os
+import re
 import statistics
 import sys
 from collections import defaultdict
@@ -133,12 +134,80 @@ def load_references(path: str | None) -> dict:
 # 整段 footer 判為 unsupported，短答案被砸最重（footer 佔比高）。餵 RAGAS 前一律剝掉。
 _CITATION_FOOTER_MARK = "\n\n---\n📚 引用來源"
 
+# 2026-08-09：footer 只是引用 metadata 的一半。生成契約要求**每句話後面**都掛
+# 【檔名, chunk #N】的 inline 標記，實測它佔答案本文的 **25.0% 字元**（中位 28.3%、
+# 最大 51.1%、96/100 題有），而 reference_answers 一個都沒有。
+#
+# ⚠ **剝除的理由是「像比像」，不是「分數會變好」——實測分數反而變差。** 別把下面兩個
+# 數字讀反了（我當天先假設「檔名雜訊稀釋 embedding」，兩個實驗都不支持）：
+#   · 確定性量測（零 LLM，BGE-M3 直接算 cosine，n=100）：含標記 0.9105 → 剝掉 0.9148，
+#     **差 +0.0043**，乘上 answer_correctness 的 0.25 相似度權重＝**+0.0011**。
+#     四分之一的字元是檔名，對 BGE-M3 的句向量幾乎沒有影響 → **稀釋假說證偽**。
+#   · judge 重評（28 題配對）：answer_correctness **-0.0408**。方向與假說相反，且該
+#     樣本數的偵測門檻是 0.035（1.96*0.094/sqrt(28)），只勉強超過 → 不足以反推機制。
+#     殘差只可能來自 0.75 權重的 statement F1 分解，尚未查清。
+# 保留剝除是**方法論選擇**：引用標記是 metadata 不是答案內容，reference 一個都沒有，
+# 剝掉才是 like-for-like。照「分數變低就退回」做,就是在 gaming 量尺。
+# ⚠ 這個改動使**所有後續數字與 2026-08-09 之前的結果檔不可比**，比較前先確認同一側。
+_INLINE_CITATION = re.compile(r"\s*【[^】]*?\.(?:html|txt)[^】]*?】")
+
+
+# ── 判讀護欄（2026-08-09）──────────────────────────────────────────────────
+# 兩組實測常數，用來擋掉「拿落在噪音裡的數字反推機制」這個已經犯過兩次的錯。
+#
+# NOISE：拿**同一份結果檔**評兩次的整體均值移動（檢索與生成完全固定，只有 judge 在變）。
+#   量了兩次獨立樣本（2026-08-09）：context_precision 0.0459 / 0.0452 幾乎複現——那是穩定
+#   的噪音底線，不是運氣。它不隨題數收斂，因為 precision 對每個 context 做二元判定再依排名
+#   加權，**最高排名那個判定翻面整題就 1.0→0.0**（實測 mh-05、mi-05 在相同輸入下正是如此）。
+#   context_recall 兩個樣本 0.0021 / 0.0128，取大的當門檻。
+#
+# GOLD_BASELINE：把 `reference_answers.json` 原文當成系統答案餵進來評分的結果（n=100）。
+#   它回答「這個指標的分數上限在哪」以及「追它有沒有意義」：
+#     · answer_correctness 0.989（85/100 拿滿分）→ 指標拿得到滿分,系統與 gold 的差距是真的。
+#     · faithfulness 0.656 → **gold 自己比系統的 0.82 還低,61/100 題輸給系統**。原因是 gold
+#       依 gold_files 生成、與 agentic 實際撈到的 contexts 不同源。繼續往上推等於要求系統
+#       答得比標準答案還保守 → 這個指標**沒有可追空間**。
+#     · answer_relevancy 0.842 vs 系統 0.823 → 幾乎沒有空間。
+NOISE = {"context_recall": 0.013, "context_precision": 0.046, "nv_context_relevance": 0.008,
+         "context_relevance": 0.008, "faithfulness": 0.004, "answer_relevancy": 0.001,
+         "answer_correctness": 0.005}
+GOLD_BASELINE = {"answer_correctness": 0.989, "faithfulness": 0.656, "answer_relevancy": 0.842,
+                 "context_recall": 0.766, "context_precision": 0.822,
+                 "nv_context_relevance": 0.965, "context_relevance": 0.965}
+
+
+def _print_interpretation_guide(overall: dict, present: list[str]) -> None:
+    """在 OVERALL 底下印出每個指標的噪音門檻與 gold 上限，讓分數無法被誤讀。"""
+    print("\n" + "=" * 92)
+    print("判讀護欄（實測常數，見本檔 NOISE / GOLD_BASELINE 註解）")
+    print(f"  {'metric':<24}{'本次':>8}{'噪音門檻':>10}{'gold當答案':>11}   判讀")
+    for m in present:
+        v = overall.get(m)
+        if not _is_num(v):
+            continue
+        noise = NOISE.get(m)
+        gold = GOLD_BASELINE.get(m)
+        notes = []
+        if noise is not None:
+            notes.append(f"跑分差異 <{noise:.3f} 不可解讀")
+        if gold is not None:
+            if v >= gold - 0.005:
+                notes.append("已達/超過 gold 水準 → 無可追空間")
+            else:
+                notes.append(f"距 gold 上限 {gold - v:+.3f}")
+        print(f"  {m:<24}{v:>8.3f}{(f'{noise:.3f}' if noise else 'n/a'):>10}"
+              f"{(f'{gold:.3f}' if gold else 'n/a'):>11}   {'；'.join(notes)}")
+    print("  ⚠ 這些常數綁定「NVIDIA gpt-oss-120b judge + 100 題 eval_set + 現行 reference」。")
+    print("    換 judge 模型、換題庫、或大改 reference 之後必須重量,別沿用。")
+
 
 def strip_citation_footer(text: str) -> str:
+    """剝掉引用 metadata（尾端 footer ＋ 句末 inline 標記），只留答案本文。"""
     if not text:
         return text
     idx = text.find(_CITATION_FOOTER_MARK)
-    return text[:idx].rstrip() if idx != -1 else text
+    body = text[:idx].rstrip() if idx != -1 else text
+    return _INLINE_CITATION.sub("", body)
 
 
 # ── 讀結果檔：id → list of {answer, contexts, rubric_score(optional), self-made 指標} ──
@@ -497,6 +566,7 @@ def main():
         line += f"{_fmt(overall[m]):>13}"
     print("-" * 100)
     print(line)
+    _print_interpretation_guide(overall, present)
 
     # ── RAGAS ↔ 自製 並排（整體）──────────────────────────────────────────
     print("\n" + "=" * 70)

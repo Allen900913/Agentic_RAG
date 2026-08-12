@@ -534,7 +534,7 @@
       "category": "mixed",
       "query": "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？",
       "relevant": [
-        "AMZN_10Q_202603.html"
+        "AMZN_10Q_202606.html"
       ],
       "answerable": true,
       "pin_chunks": [
@@ -553,7 +553,7 @@
       "category": "mixed",
       "query": "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？",
       "relevant": [
-        "AMZN_10Q_202603.html"
+        "AMZN_10Q_202606.html"
       ],
       "answerable": true,
       "pin_chunks": [
@@ -614,7 +614,7 @@
       "category": "mixed",
       "query": "Meta 最新一季總營收成長多少？主要驅動因素是什麼？",
       "relevant": [
-        "META_10Q_202603.html"
+        "META_10Q_202606.html"
       ],
       "answerable": true,
       "pin_chunks": [
@@ -629,7 +629,7 @@
       "category": "mixed",
       "query": "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？",
       "relevant": [
-        "AAPL_10Q_202603.html"
+        "AAPL_10Q_202606.html"
       ],
       "answerable": true,
       "pin_chunks": [
@@ -1058,7 +1058,7 @@
       "category": "colloquial",
       "query": "Meta 最近這一季賺（營收）成長多少？",
       "relevant": [
-        "META_10Q_202603.html"
+        "META_10Q_202606.html"
       ],
       "answerable": true,
       "maps_to": "mix-08",
@@ -1074,7 +1074,7 @@
       "category": "colloquial",
       "query": "蘋果在大中華區最近賣得好不好？",
       "relevant": [
-        "AAPL_10Q_202603.html"
+        "AAPL_10Q_202606.html"
       ],
       "answerable": true,
       "maps_to": "mix-09",

@@ -64,6 +64,7 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
+import llm_replay as _replay
 import rag_query as rq
 
 from langgraph.graph import StateGraph, START, END
@@ -896,6 +897,14 @@ _PLANNER_PROMPT = f"""你是美股情報 RAG 的規劃器。把使用者問題�
 
 def _plan_subqueries(query: str, freshness_mode: str) -> list[str]:
     """Planner 節點的核心：把問題拆成原子子問題。拆解失敗(解不出 JSON) → 退回單一問題,不讓規劃器失手就整個 run 掛。"""
+    # 重放快取（見 llm_replay）：未設 RAG_REPLAY_CACHE 時完全 no-op。key 刻意不含
+    # system_prompt——它內嵌隨 collection 變動的 KB Coverage Snapshot，納入 key 會讓
+    # 跨 collection A/B 全部 miss，正好毀掉這個快取唯一的用途。
+    _rk = f"{freshness_mode}|{query}"
+    _hit = _replay.get("plan", _rk)
+    if _hit is not _replay.MISS:
+        _trace(f"plan(replay): {len(_hit)} sub-queries → {_hit}")
+        return list(_hit)
     system_prompt = _PLANNER_PROMPT + "\n\n" + _build_temporal_contract(freshness_mode)
     messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": query}]
     with _quiet():
@@ -906,6 +915,7 @@ def _plan_subqueries(query: str, freshness_mode: str) -> list[str]:
         subs = [query.strip()]
     subs = subs[:MAX_SUBQUERIES]
     _trace(f"plan: {len(subs)} sub-queries → {subs}")
+    _replay.put("plan", _rk, subs)
     return subs
 
 
@@ -946,6 +956,14 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
         return {"sufficient": False, "missing": "尚未檢索到任何候選片段", "new_query": subquery, "relevant_ids": []}
     top = pool[:POOL_RETURN_K]
     shown_ids = {_chunk_id(c) for c in top}
+    # 重放快取：key = 子問題 + 這次實際看到的候選 id（順序敏感）。候選變了就是合法 miss
+    # ——那正是被測改動造成的差異，不該用舊決策蓋掉。temporal_scope 不入 key（同 plan 的
+    # 理由：它隨 collection 變，納入會讓跨 collection A/B 全部 miss）。
+    _rk = subquery + " || " + " ".join(_chunk_id(c) for c in top)
+    _hit = _replay.get("check", _rk)
+    if _hit is not _replay.MISS:
+        _trace(f"check(replay)[{subquery[:24]!r}] sufficient={_hit.get('sufficient')}")
+        return dict(_hit)
     ctx = "\n".join(
         f"[{i}] rerank={c['rerank_score']:.3f} | id={_chunk_id(c)}\n    {_snippet(c['content'], subquery)}"
         for i, c in enumerate(top, start=1)
@@ -970,7 +988,9 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
                     if isinstance(raw_ids, list) else [])
     _trace(f"check[{subquery[:24]!r}] sufficient={sufficient} missing={missing[:50]!r} "
            f"new_query={new_query[:50]!r} relevant_ids={len(relevant_ids)}/{len(shown_ids)}")
-    return {"sufficient": sufficient, "missing": missing, "new_query": new_query, "relevant_ids": relevant_ids}
+    out = {"sufficient": sufficient, "missing": missing, "new_query": new_query, "relevant_ids": relevant_ids}
+    _replay.put("check", _rk, out)
+    return out
 
 
 def _retrieve_chunks(query: str) -> list[dict]:
@@ -1072,6 +1092,438 @@ def _validate_and_fix_citations(query: str, answer: str, allowed_chunks: list[di
         revised = _write_final_answer(query, allowed_chunks, model_name, extra_user=suffix)
         if revised and revised.strip():
             answer = revised
+    return answer
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 一致性稽核：抓「同一主體同一指標,答案裡並陳兩組互斥數值卻不調和」。
+# 2026-08-07 雙臂 100 題實測到的真實病灶——Writer 抓錯運算元的「範圍/期間」,而且它自己
+# 往往同時把正確那組也寫進答案:
+#   mix-06 拿「Six Months 2025」欄當 Q2 2026 算出 +$12,260M,同一段又抄了來源的「+$11.1B」;
+#   mix-03 把 Intelligent Cloud 單一部門的 +$2.7B/24% 當成全公司,又提了九個月的 +$20.4B/22%。
+# 靜默選錯運算元、答案裡只有一組數字的情形,這層抓不到,交給 reflect / eval。
+#
+# **分工＝LLM 抽取、Python 判斷**：`_extract_claims` 把每個數值宣稱抽成結構化欄位,
+# `find_claim_conflicts` 跑零 LLM 的確定性規則。分界線畫在能力邊界上——抽取是感知任務,
+# 比對是邏輯任務（本管線 Plan=LLM／Execute=確定性 就是同一個分工）。
+#
+# 2026-08-08 移除了 regex 降級路徑（`find_numeric_conflicts` 與 `_CONSIST_*` 詞表）。
+# 它是用字串比對做**感知**：指標靠寫死的詞表（「資料中心營收」裡也有「營收」）、主體靠
+# 寫死的公司/分部清單（不在清單就抽成空）、並陳靠寫死的措辭清單——每加一家公司、每換一種
+# 說法就要改表。它已經被實測抓包過：col-11 漏抓的原因就是「另一份報告則顯示」不在措辭清單裡。
+# 而它作為 fallback 的觸發條件是「LLM 抽取失敗」,離線量測 200 份答案的失敗率是 **0**——
+# 等於一段從未在生產跑過、卻要永久維護的降級碼。現在抽取失敗就跳過一致性檢查（本來就沒
+# 檢查,不會更差),少一條沒被測過的路徑。
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+# ── 結構化宣稱抽取（LLM 只做抽取,判斷全交給下面的確定性規則）─────────────────────
+# 抽成結構化欄位後多拿到一個「逐句 regex」結構上做不到的檢查：**分部加總 vs 合併總計**（R2）。
+_CLAIM_EXTRACT_PROMPT = """你是財務數據抽取器。把「答案」裡每一個可比較的數值宣稱抽成 JSON 陣列。
+只抽答案裡真的出現的數字,不要自己推算、不要補充答案沒寫的東西。
+
+每個元素的欄位:
+- "value": 數值。金額一律換算成**百萬美元**（1 億美元 = 100；$1 billion = 1000）；百分比就給百分數本身（82 不是 0.82）
+- "unit": "USD_M" 或 "percent"
+- "metric": 指標,用答案的用詞（如 "營收"、"營業利益"、"淨利"、"毛利率"）
+- "entity": 這個數字屬於誰,照答案寫法（如 "Microsoft"、"Google Cloud"、"Intelligent Cloud"）。答案沒指明就填 ""
+- "scope": "consolidated"=全公司/合併總計, "segment"=單一部門或產品線, "unknown"=看不出來
+- "period_months": 期間**長度**的月數,只能填 3 / 6 / 9 / 12 其中之一。
+  原文 "Three Months Ended"→3、"Six Months"→6、"Nine Months"→9、"Twelve Months"或全年→12。
+  看不出來填 null。**不要自己換算成財年季度代碼**——那是最容易錯的一步。
+- "period_end": 期間**截止**的年月,格式 "YYYY-MM"（如 "Ended March 31, 2026" → "2026-03"）。看不出來填 null
+- "period": 期間的人類可讀寫法,用 "2026Q2"/"2026H1"/"2026YTD"/"FY2025"/"TTM" 這類;看不出來填 "unknown"。
+  **這欄只供人閱讀,判斷同不同期間是用上面兩欄**,所以上面兩欄填得出來時務必填
+- "kind": "level"=水準值(某期間的金額), "change"=變化量(增加/減少了多少), "growth_pct"=成長率
+- "basis": 比較基準。"yoy"=年增(較去年同期), "qoq"=季增/環比, "cc"=固定匯率, "other"=其他或不適用
+- "quote": 答案裡對應的原句片段（30 字內,供人工複查）。**同一句話拆出的多筆宣稱要填同一段 quote**
+- "period_evidence": 你憑什麼填上面那個 period_months/period_end。附了原文時,**直接抄原文裡那句期間標題**
+  （如 "Three Months Ended March 31, 2026 Compared with Three Months Ended March 31, 2025"）。
+  找不到原文出處就填 "answer"（代表只依答案的說法）。沒有附原文時一律填 "answer"
+
+判定要點:
+- 「從 A 增至 B,增加 C」要抽成三筆：兩筆 level（各自的 period 不同）+ 一筆 change。
+- 分辨 scope 很重要：「整體/公司/合併」是 consolidated;「XX 部門/業務/產品線」是 segment。
+- 分辨 period 很重要：單季（三個月）和累計（六個月/九個月/YTD/全年）**不是同一個期間**。
+
+附了「原文」段落時,**期間一律以原文為準,不以答案的說法為準**。答案很可能標錯期間——
+10-Q 把單季與累計寫成相鄰兩節,期間只寫在節標題,寫答案的模型常把兩節的數字混用並套上同一個期間。
+所以**不要相信答案括號裡的期間**,一定要逐個數字執行：
+
+1. 拿這個數字回原文搜,找出它出現在哪一段。
+2. 讀那一段自己的期間標題（"[Three Months Ended March 31, 2026 vs …]"、
+   "Nine Months Ended … Compared with …"）,照它填 period_months / period_end,
+   並把該標題原文抄進 period_evidence。
+3. 原文標的期間與答案括號裡寫的不一致時 → **以原文為準**,並在 quote 開頭加 "[答案期間有誤] "。
+4. 原文搜不到這個數字 → period_months / period_end 填 null、period 填 "unknown"、
+   period_evidence 填 "answer"。不要拿鄰近段落的期間硬套。
+
+注意：同一段答案文字裡連續出現的兩個數字,**很可能來自原文的不同期間段**（一個單季一個累計）。
+逐個查,不要因為它們寫在一起就給同一個期間。
+原文**只用來查證**,不要從原文抽出答案沒提到的新數字。
+
+只輸出 JSON 陣列,不要任何其他文字。抽不到任何數值宣稱就輸出 []。"""
+
+
+def _parse_period_months(v) -> int | None:
+    """期間長度只收 3/6/9/12。其餘（None、"unknown"、自創值）一律 None。"""
+    try:
+        n = int(str(v).strip())
+    except (TypeError, ValueError):
+        return None
+    return n if n in (3, 6, 9, 12) else None
+
+
+_PERIOD_END_RE = re.compile(r"^(\d{4})-(0[1-9]|1[0-2])$")
+
+
+def _parse_period_end(v) -> str | None:
+    s = str(v or "").strip()
+    return s if _PERIOD_END_RE.match(s) else None
+
+
+def _period_key(c: dict) -> str:
+    """同格判準用的期間鍵。
+
+    優先用 (period_months, period_end)——這兩個值直接讀原文標題就有（"Three Months Ended
+    March 31, 2026"），**不需要換算成財年季度代碼,而換算正是抽取器出錯的地方**：實測同一個
+    「截至 2026/3/31 的九個月」被寫成過 2026YTD / 2026Q1Q2Q3 / 2026Q3 / unknown 四種,
+    而 "2026Q3" 還同時被拿去指單季與累計。R1 拿 period 做字串相等比對,命名一飄就雙向失效
+    （真同期判成不同期 → 漏抓;不同期塌縮成同期 → 誤報）。
+
+    兩欄任一缺就退回舊的 period 字串,行為與加這層之前逐字相同（保住既有的離線校準）。
+    """
+    m, e = c.get("period_months"), c.get("period_end")
+    if m and e:
+        return f"{m}M@{e}"
+    return c.get("period") or "unknown"
+
+
+def _extract_claims(answer: str, model_name: str,
+                    chunks: list[dict] | None = None) -> list[dict] | None:
+    """呼叫 LLM 把答案抽成結構化宣稱。解析失敗回 None（呼叫端據此跳過一致性檢查）。
+
+    chunks 有給就一併餵原文,period/scope 改以原文標示為準。
+    只看答案是有天花板的：答案讀不出期間時只能填 unknown,答案標錯期間時只會忠實照抄
+    （col-11 實測：19% 其實是單季,答案寫成「九個月期間」,抽取層照抄成兩筆同期 → 誤報互斥）。
+    要糾正必須回讀原文,而原文得先在 ingest 期保住期間標籤（見 CLAUDE.md「期間章節邊界」）。
+    """
+    if chunks:
+        src = "\n\n".join(
+            f"[{c['source']} #{c['chunk_index']}]\n{(c.get('content') or '').strip()}"
+            for c in chunks)
+        user = f"原文:\n{src}\n\n答案:\n{answer}"
+    else:
+        user = f"答案:\n{answer}"
+    messages = [
+        {"role": "system", "content": _CLAIM_EXTRACT_PROMPT},
+        {"role": "user", "content": user},
+    ]
+    with _quiet():
+        raw = rq.call_llm(messages, model_name, temperature=0.0)
+    data = _loads_json_lenient(raw)
+    if not isinstance(data, list):
+        return None
+    out = []
+    for d in data:
+        if not isinstance(d, dict):
+            continue
+        try:
+            v = float(str(d.get("value", "")).replace(",", "").replace("$", ""))
+        except (ValueError, TypeError):
+            continue
+        c = {"value": v, "unit": d.get("unit") or "USD_M",
+             "metric": (d.get("metric") or "").strip(),
+             "entity": (d.get("entity") or "").strip(),
+             "scope": (d.get("scope") or "unknown").strip(),
+             "period": (d.get("period") or "unknown").strip(),
+             "period_months": _parse_period_months(d.get("period_months")),
+             "period_end": _parse_period_end(d.get("period_end")),
+             "kind": (d.get("kind") or "").strip(),
+             "basis": (d.get("basis") or "other").strip(),
+             "quote": (d.get("quote") or "").strip()[:60],
+             "period_evidence": (d.get("period_evidence") or "answer").strip()[:120]}
+        out.append(c)
+    if chunks:
+        _ground_period_from_source(out, chunks)
+    for c in out:
+        c["period_key"] = _period_key(c)
+    return out
+
+
+_WS_RE = re.compile(r"\s+")
+_MONTH_WORDS = {"three": 3, "six": 6, "nine": 9, "twelve": 12}
+_MONTH_NUM = {"january": "01", "february": "02", "march": "03", "april": "04",
+              "may": "05", "june": "06", "july": "07", "august": "08",
+              "september": "09", "october": "10", "november": "11", "december": "12"}
+# ingest 期注入到 chunk 開頭的期間標籤（見 data_update_edgar._split_by_period_section）
+_PERIOD_TAG_RE = re.compile(
+    r"\[(Three|Six|Nine|Twelve)\s+Months\s+Ended\s+([A-Z][a-z]+)\.?\s+\d{1,2},\s*(\d{4})[^\]]*\]",
+    re.I)
+
+
+def _chunk_period(content: str) -> tuple[int, str] | None:
+    """讀 chunk 開頭 ingest 注入的期間標籤 → (月數, "YYYY-MM")。沒有標籤回 None。"""
+    m = _PERIOD_TAG_RE.search(content or "")
+    if not m:
+        return None
+    months = _MONTH_WORDS.get(m.group(1).lower())
+    mon = _MONTH_NUM.get(m.group(2).lower())
+    return (months, f"{m.group(3)}-{mon}") if months and mon else None
+
+
+def _ground_period_from_source(claims: list[dict], chunks: list[dict]) -> None:
+    """**零 LLM** 的期間接地：拿每筆宣稱的數字回原文定位,用它所在 chunk 的期間標籤覆寫期間。
+
+    為什麼不問 LLM：「這個數字出現在哪一段」是字串定位,是封閉邏輯（見 memory
+    llm-vs-python-task-split）。實測讓 LLM 自己查證,8 輪只有 4 輪真的去查、其餘直接照抄答案。
+
+    為什麼**不能**把查不到出處的數字降級成 unknown（上一版就是這樣寫,實測真衝突偵測率 0/5）：
+    捏造的數字必然在原文查不到,降級等於讓 R1 永遠抓不到幻覺——而幻覺正是要抓的。
+    所以查不到就**保留答案自述的期間**,R1 照原本的方式判「答案自己有沒有前後矛盾」。
+    原文只用來**駁回**誤報（col-11：答案把單季 19% 說成九個月,定位到單季段就拆開了）。
+
+    保守條件：只在該數字唯一落在**一個**期間段時才覆寫;跨多段或無標籤段一律不動。
+    目前只處理百分比（col-11 的樣態）——金額寫法太多（$2.6 billion / $2,600 million /
+    26 億美元）,誤配的風險高過收益,留給答案自述。
+    """
+    tagged: list[tuple[tuple[int, str], str]] = []
+    for ch in chunks:
+        body = ch.get("content") or ""
+        p = _chunk_period(body)
+        if p:
+            tagged.append((p, body))
+    if not tagged:
+        return
+    for c in claims:
+        if c.get("unit") != "percent":
+            continue
+        v = c.get("value")
+        pats = [f"{v:g}%", f"{v:g} percent", f"{v:g} percentage points"]
+        hits = {p for p, body in tagged if any(t in body for t in pats)}
+        if len(hits) == 1:
+            months, end = hits.pop()
+            c["period_months"], c["period_end"] = months, end
+            c["period_grounded"] = True
+
+
+AUTHORITATIVE_TYPES = ("10-K", "10-Q", "income_statement", "fundamentals")
+
+
+def _ground_source_type(claims: list[dict], chunks: list[dict]) -> None:
+    """**零 LLM**：拿每筆宣稱的數字回 chunk 定位,記下它出現在哪些來源類型（`src_types`）。
+
+    為什麼需要：實測 mi-04 的 contexts 裡同時有新聞的「revenue growth of 12.8% LTM」與
+    Fundamentals 的「Revenue Growth (YoY): 0.166」,**兩個都在 context 裡**,答案挑了新聞那個
+    （gold 是 16.6%）。mix-09 更直接——同一個 chunk 裡新聞寫「Greater China grew 28%」、
+    10-Q 寫 22%,答案挑了 28%。所以病不在檢索,在「同一個指標有多個來源時沒有優先順序」。
+
+    定位方式與 `_ground_period_from_source` 同一路（字串比對＝封閉邏輯,不問 LLM）。除了
+    百分比的三種寫法,額外比對**小數表示**：Fundamentals 把比率寫成 `0.166` 而不是 `16.6%`,
+    這正是它輸給新聞「12.8%」的原因之一（新聞那個看起來更像答案）。
+    """
+    if not chunks:
+        return
+    typed = [(rq.infer_source_type(ch.get("source") or ""), ch.get("content") or "")
+             for ch in chunks]
+    for c in claims:
+        v = c.get("value")
+        if not isinstance(v, (int, float)):
+            continue
+        if c.get("unit") == "percent":
+            pats = [f"{v:g}%", f"{v:g} percent", f"{v:g} percentage points"]
+            # 小數表示（0.166 = 16.6%）**只在 Fundamentals 比對**。2026-08-09 全庫實測：
+            #   fundamentals     12/22 chunk 有 `0.xx` 比率、`NN%` 0 個  ← 只有它寫小數
+            #   income_statement  0/59 有 `0.xx`
+            #   10-K / 10-Q      87 / 106 處 `0.xx`,但全是**債券票面利率**（"0.875% Notes"）
+            #                    與**每股金額**（"2.40 | 0.77"），不是比率
+            #   news             20 處,全是**股價漲跌**（"GOOG +0.92%"）
+            # 所以在財報／新聞裡比對 `0.22` 會配到完全無關的東西 → 把只在新聞出現的宣稱
+            # 誤標成「權威來源也有」→ R3 該抓的反而不抓。範圍限定在 fundamentals 才安全。
+            dec = f"{v / 100:g}"
+            hits = {t for t, body in typed
+                    if any(pt in body for pt in pats)
+                    or (t == "fundamentals" and dec in body)}
+        elif c.get("unit") == "USD_M":
+            # 百萬美元：原文可能寫 16,621 / 16621 / $16.62 billion,只比前兩種（確定性高）
+            pats = [f"{v:,.0f}", f"{v:.0f}"]
+            hits = {t for t, body in typed if any(pt in body for pt in pats)}
+        else:
+            continue
+        if hits:
+            c["src_types"] = sorted(hits)
+
+
+def find_authority_conflicts(claims: list[dict], chunks: list[dict]) -> list[str]:
+    """R3 **財報優先**（零 LLM）：同一格出現互斥數值,且其中一個只在新聞裡、另一個在財報／
+    Fundamentals 裡 → 判新聞那個為錯。
+
+    為什麼是「逐個宣稱」而不是壓低新聞的檢索排名（2026-08-09 量過才這樣設計）：
+    **37/100 題需要新聞**——16 題（news 全部 ＋ col-14）的 gold 只靠新聞（訴訟和解、WWDC
+    發表、分析師目標價、合作案,財報裡根本沒有）,另 21 題是新聞＋財務的複合題（multi_intent
+    全 15 題 ＋ col-15 ＋ multi_hop 5 題,其中 5 題還靠新聞認出第一跳的主體）。任何壓低新聞
+    排名的做法都會重演 memory `multi-intent-hard-filter-bug` 的鏡像災難。
+    這條規則對那 37 題**完全不觸發**,因為財報裡沒有可比的數值 → 不構成同格衝突。
+
+    只在「同一格、互斥值、來源類型分屬新聞 vs 權威」時才發話,其餘一律沉默。
+    """
+    _ground_source_type(claims, chunks)
+    problems: list[str] = []
+    buckets: dict[tuple, list[dict]] = {}
+    for c in claims:
+        if not c.get("metric") or not c.get("src_types"):
+            continue
+        # period 刻意**不入 key**：新聞幾乎不標精確期間（「LTM」「近一年」），把期間納入
+        # 比對會讓新聞那筆永遠落到別的桶、R3 永遠不觸發。代價是可能拿不同期間的值互比，
+        # 由 metric+entity+scope+kind+unit 五項全等來控制誤報。
+        buckets.setdefault((c["metric"], c.get("entity"), c.get("scope"),
+                            c.get("kind"), c.get("unit")), []).append(c)
+    for key, group in buckets.items():
+        news_only = [g for g in group if g["src_types"] == ["news"]]
+        authoritative = [g for g in group
+                         if any(t in AUTHORITATIVE_TYPES for t in g["src_types"])]
+        if not news_only or not authoritative:
+            continue
+        for n in news_only:
+            for a in authoritative:
+                hi = max(abs(n["value"]), abs(a["value"]))
+                if hi > 0 and abs(n["value"] - a["value"]) / hi > 0.02:
+                    metric, entity = key[0], key[1]
+                    problems.append(
+                        f"「{entity or '（未指明主體）'}」的 {metric} 用了新聞的數值 "
+                        f"{n['value']:g}（{n['quote']}）,但財報／Fundamentals 給的是 "
+                        f"{a['value']:g}（{a['quote']}）——同一指標以財報為準,請改用後者。")
+                    break
+    return problems
+
+
+def find_claim_conflicts(claims: list[dict]) -> list[str]:
+    """對結構化宣稱跑確定性規則。**這裡完全不呼叫 LLM**——判斷是邏輯,交給程式。
+
+    R1 同一格（metric,entity,scope,period,kind,unit）出現互斥數值 → 衝突。
+    R2 同一 (metric,period,kind=change) 下,segment 們的加總對不上 consolidated → 衝突。
+       這條是 regex 版結構上做不到的：mix-03 的三個部門增幅合計 6,398 才是正解,
+       它卻報了單一部門的 2,700。
+    """
+    problems: list[str] = []
+
+    # R1：同格互斥。以下四道排除全是 2026-08-08 離線量測（200 份存檔答案）打出來的——
+    # 第一版 R1 在 agentic 新抓 6 題只有 1 個站得住,病因全在抽取器的系統性樣態,
+    # 用確定性規則擋掉比回去勸抽取器可靠。
+    buckets: dict[tuple, list[dict]] = {}
+    for c in claims:
+        pkey = c.get("period_key") or c["period"]
+        if pkey == "unknown" or not c["metric"]:
+            continue          # 期間不明就不比,避免拿不同期間的數字互撞
+        # ⓐ level 不比：「從 X 增至 Y」是一句話裡的兩個 level,抽取器幾乎都給同一個 period,
+        #    比下去必然誤報（實測 mi-08 637,959→716,924、mix-12 391億→752億 都是這樣炸的）。
+        #    真正該比的是變化量與成長率。
+        if c["kind"] not in ("change", "growth_pct"):
+            continue
+        # 期間用 _period_key（客觀的 長度@截止月）而非自由文字 period,見 _period_key docstring。
+        buckets.setdefault((c["metric"], c["entity"], c["scope"], pkey,
+                            c["kind"], c["unit"], c["basis"]), []).append(c)
+        # ⓑ basis 進 key：YoY 92% 與 QoQ 21%（mix-11）、reported 33% 與固定匯率 29%（mix-08）
+        #    是不同基準的合法並列,不是矛盾。
+    for key, group in buckets.items():
+        # ⓒ 同一句話拆出來的多筆不比：區間「EPS 增加 1 至 3 美元」(news-10) 會被拆成兩筆,
+        #    它們共用同一段 quote。
+        if len({g["quote"] for g in group}) < 2:
+            continue
+        vals = [g["value"] for g in group]
+        if len(vals) < 2:
+            continue
+        # ⓓ 百分比加總 ≈ 100 → 是佔比分配不是互斥值（sem-09 的 Reality Labs 支出 70%/30%）。
+        if key[5] == "percent" and abs(sum(vals) - 100) <= 1:
+            continue
+        # ⓔ 同一格出現 3 個以上相異值 → 幾乎都是抽取器把列舉壓成同一格,不是矛盾
+        #   （mix-08：一句 "Regional data ... (+29%, +39%, +40%)" 是四個地區,entity 全被填成 Meta）。
+        #   真正的「同一個量兩種互斥讀法」是二選一,不會有三個候選。
+        if len({round(v, 4) for v in vals}) > 2:
+            continue
+        lo, hi = min(vals), max(vals)
+        if hi > 0 and (hi - lo) / hi > 0.02:
+            metric, entity, scope, _pkey, kind = key[:5]
+            # 訊息給人看,用可讀的 period 字串;判斷才用 _pkey（見 _period_key）
+            period = group[0].get("period") or _pkey
+            detail = " / ".join(f"{g['value']:g}（{g['quote']}）" for g in group)
+            problems.append(f"「{entity or '（未指明主體）'}」的 {metric}（{period}、{scope}、{kind}）"
+                            f"出現互斥數值：{detail}")
+
+    # R2：分部加總 vs 合併總計。不依賴 period（實測分部常被抽成 period=unknown），
+    # 只依賴 scope + metric——mix-03 的分部是用 level 對（「從 X 增至 Y」）寫的，不是 change，
+    # 所以要先從 level 對推導增幅。
+    by_metric: dict[str, list[dict]] = {}
+    for c in claims:
+        if c["unit"] == "USD_M" and c["metric"]:
+            by_metric.setdefault(c["metric"], []).append(c)
+    for metric, group in by_metric.items():
+        seg_changes: dict[str, float] = {}
+        for ent in {g["entity"] for g in group if g["scope"] == "segment" and g["entity"]}:
+            mine = [g for g in group if g["scope"] == "segment" and g["entity"] == ent]
+            direct = [g["value"] for g in mine if g["kind"] == "change"]
+            if direct:
+                seg_changes[ent] = direct[0]
+                continue
+            levels = sorted(g["value"] for g in mine if g["kind"] == "level")
+            if len(levels) == 2:
+                seg_changes[ent] = levels[1] - levels[0]   # 兩個水準值 → 增幅
+        cons = [g["value"] for g in group if g["scope"] == "consolidated" and g["kind"] == "change"]
+        if len(seg_changes) < 2 or not cons:
+            continue
+        seg_sum, biggest = sum(seg_changes.values()), max(seg_changes.values())
+        if any(abs(t - seg_sum) / max(abs(seg_sum), 1e-9) <= 0.02 for t in cons):
+            continue          # 有一個合併值對得上加總 → 正常
+        # 只在「回報的合併總計比它自己列的某個分部還小」時才判——這是 mix-03 的簽名
+        # （報 2,700 卻列了一個 +3,594 的部門）。分部沒列全的正常情況下,合併值必 ≥ 任一分部,
+        # 因此這道門檻能擋掉「只列兩三個部門當佐證」的合法寫法。
+        if all(v > 0 for v in seg_changes.values()) and min(cons) < biggest * 0.98:
+            names = ", ".join(f"{k} +{v:g}" for k, v in sorted(seg_changes.items(), key=lambda x: -x[1]))
+            problems.append(
+                f"{metric}：回報的全公司增幅 {min(cons):g} 比它自己列的最大單一部門增幅 {biggest:g} 還小，"
+                f"且與各分部加總 {seg_sum:g} 對不上（{names}）——很可能把單一部門當成了全公司總計")
+    return problems
+
+
+_CONSIST_REVISE_SUFFIX = """
+
+⚠ 一致性檢查未通過：你的答案對「同一個主體的同一個指標」給了兩組互斥的數值,而且沒有說明
+它們為何不同。請重寫整份答案（維持 [filename, chunk #N] 引用格式）,並做到:
+1. 回到來源表格確認每個數字的「欄位」——多期間並排表常見 `Three Months Ended` 與
+   `Six/Nine Months Ended` 相鄰,分部門表也常把單一部門與合併總計並列。確認你取的是
+   使用者問的那個期間與範圍（問單季就不要拿累計欄,問全公司就不要拿單一部門）。
+2. 只保留正確的那一組;若兩組都正確（例如一組是單季、另一組是累計），必須各自明確標出
+   期間或範圍,不要讓它們看起來在講同一件事。
+
+以下是偵測到的衝突:
+{issues}"""
+
+
+def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
+                               verbose: bool = False) -> str:
+    """一致性稽核 → 有衝突則帶問題重生成一次 → 再過 citation 稽核。無衝突原樣回傳。"""
+    if not chunks or not (answer or "").strip():
+        return answer
+    # LLM 抽結構化宣稱 → 確定性規則判。抽取失敗（API 掛／JSON 解不出）就跳過這層,
+    # 不做降級偵測（見上方註解：舊的 regex 降級路徑實測從未被觸發過）。
+    claims = _extract_claims(answer, CHECKER_MODEL, chunks)
+    if claims is None:
+        _trace("consistency: 宣稱抽取失敗 → 跳過一致性檢查")
+        return answer
+    found = find_claim_conflicts(claims)
+    # R3 財報優先（零 LLM,見 find_authority_conflicts）：同格衝突且一邊只在新聞裡時,
+    # 判新聞那個為錯。與 R1/R2 併入同一份 issues,共用既有的重生成路徑。
+    found = found + find_authority_conflicts(claims, chunks)
+    if not found:
+        return answer
+    issues = "\n".join(f"- {p}" for p in found)
+    if verbose:
+        print(f"--- consistency validator: 發現互斥數值 ---\n{issues}")
+    _trace(f"consistency: 發現 {len(found)} 組互斥數值,重生成一次")
+    revised = _write_final_answer(query, chunks, model_name,
+                                  extra_user=_CONSIST_REVISE_SUFFIX.format(issues=issues))
+    if revised and revised.strip():
+        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose)
     return answer
 
 
@@ -1715,6 +2167,10 @@ def _node_synthesize(state: SupervisorState) -> dict:
     try:
         answer = _write_final_answer(state["query"], chunks, GEN_MODEL, extra_user=extra)
         answer = _validate_and_fix_citations(state["query"], answer, chunks, GEN_MODEL, verbose=verbose)
+        # 確定性一致性稽核（零 LLM 成本的偵測,只有真的抓到才花一次重生成）。放在 reflect 之前,
+        # 讓 reflect 稽核的是已調和過的版本。
+        if not answer.startswith("I don't have enough"):
+            answer = _consistency_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose)
         if state.get("enable_reflection", True) and not answer.startswith("I don't have enough"):
             answer = _reflect_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose)
     except Exception as e:

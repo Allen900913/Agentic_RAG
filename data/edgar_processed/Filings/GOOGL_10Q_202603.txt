@@ -271,10 +271,11 @@ Pursuant to Regulation S-K, Item 601(b)(4)(iii)(A), certain instruments which de
 |  |  |  | Form ...
 
 --- [TABLE extra #24] ---
+XBRL document types in the Inline XBRL Instance Document.
+
 | 101.INS | * |  |  | Inline XBRL Instance Document - the instance document does not appear in the Interactive Data File because its XBRL tags are embedded within the Inline XBRL document. |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 101.SCH | * |  |  | Inline XBRL Taxonomy Extension Schema Document |  |  |  |  |
-| 101.CAL | * |  |  | Inline XBRL Taxonomy Extension Calcu...
+| 101.SCH | * |  |  | Inline XBRL Taxonomy Extension Schema Document |  |  |  |  |...
 
 --- [TABLE extra #25] ---
 | ♦ | Indicates management compensatory plan, contract, or arrangement. |
@@ -291,9 +292,11 @@ ITEM 2.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS
 
 Please read the following discussion and analysis of our financial condition and results of operations together with "Note about Forward-Looking Statements" and our consolidated financial statements and related notes included under Item 1 of this Quarterly Report on Form 10-Q as well as our Annual Report ...
 
-[RCTS] item=Part_I_Item_2 原 chunk 1718 token > 1200 → 補切成 3 份
+[GROUND] item=Part_I_Item_2 period=None 49 → 47 段（無幅度數字的段併回帶表格的前一段）
 
-[RCTS] item=Part_I_Item_2 原 chunk 2573 token > 1200 → 補切成 4 份
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 47 段：(小標前=章節層) | Understanding Alphabet’s Financial Results | Revenues and Monetization Metrics | Google Services | Google Advertising | Google Subscriptions, Platforms, and Devices | Google Cloud | Other Bets | Costs and Expenses | Cost of Revenues | Operating Expenses | Other Income (Expense), Net | Provision for Income Taxes | Executive Overview | Revenues | Google Search & other | YouTube ads | Google Network | Monetization Metrics | Google Subscriptions, Platforms, and Devices | Google Cloud | Revenues by Geography | Cost of Revenues | Research and Development | Sales and Marketing | General and Administrative | Segment Profitability | Google Services | Google Cloud | Other Bets | Provision for Income Taxes | Cash, Cash Equivalents, and Marketable Securities | Cash Provided by Financing Activities | Liquidity and Material Cash Requirements | Capital Expenditures and Leases | Capital Expenditures | Leases | Financing | Share Repurchase Program | Dividend Program | Accrued Legal and Regulatory | Taxes | Purchase Commitments and Other Contractual Obligations | Acquisitions and Divestitures | Critical Accounting Estimates | Business Combinations | Available Information
+
+[MIN-MERGE] item=Part_I_Item_2 section=Cash Provided by Financing Activities 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part I, Item 1 (len=81413 chars) ---
 ITEM 1.FINANCIAL STATEMENTS
@@ -322,6 +325,8 @@ Accounts receivable, net62,886 62,999 
 
 O...
 
+[MIN-MERGE] item=Part_I_Item_1 section=None 35 → 34 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 [RCTS] item=Part_I_Item_1 原 chunk 1293 token > 1200 → 補切成 2 份
 
 [RCTS] item=Part_I_Item_1 原 chunk 1248 token > 1200 → 補切成 2 份
@@ -344,6 +349,8 @@ For a description of our material pending legal proceedings, see Note 10 “Comm
 ITEM 1A.RISK FACTORS                
 
 Our operations and financial results are subject to various risks and uncertainties, including but not limited to those described in Part I, Item 1A, "Risk Factors" in our Annual Report on Form 10-K for the year ended December 31, 2025, which could harm our business, reputation, financial condition, and operating results, and may affect the trading price and p...
+
+[SECTION] item=Part_II_Item_1A period=None 依小標切成 2 段：(小標前=章節層) | Risks Specific to our Company
 
 --- [ITEM] Part II, Item 2 (len=112 chars) ---
 ITEM 2.UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
@@ -373,3 +380,7 @@ FormDate
 4.1
 
 Indenture, ...
+
+[SECTION] item=Part_II_Item_6 period=None 依小標切成 2 段：(小標前=章節層) | Chief Executive Officer (Principal Executive Officer)
+
+[MIN-MERGE] item=Part_II_Item_6 section=None 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

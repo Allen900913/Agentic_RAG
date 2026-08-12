@@ -246,11 +246,11 @@ Exhibit Index
 | 3.2 |  | Amendment to Restated Certificate of Incorporation of NVIDI...
 
 --- [TABLE extra #14] ---
-The
+Exhibit index for various SEC filings and reports.
 
 | 10.10+ |  | Amended and Restated 2007 Equity Incentive Plan - Global Performance-Based Restricted Stock Unit Grant Notice and Performance-Based Restricted Stock Unit Agreement (2024) |  | 10-Q |  |  |  | 10.3 |  | 5/29/2024 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 10.11+ |  | Amended and Restated 2007 Equity Incentive Plan – Global Restricted Stock Unit Grant ...
+| 10.11+ |  | Amended and Restated 2007 Equity Incen...
 
 --- [TABLE extra #15] ---
 Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized, on February 25, 2026.
@@ -276,16 +276,24 @@ NVIDIA pioneered accelerated computing to help solve the most challenging comput
 
 Our technology stack includes the foundational NVIDIA CUDA development platform that runs on all NVIDIA GPUs, as well as hundreds of domain-specific software libraries, frameworks, alg...
 
-[RCTS] item=Item_1 原 chunk 1721 token > 1200 → 補切成 4 份
+[SECTION] item=Item_1 period=None 依小標切成 17 段：Our Company | Our Businesses | Our Markets | Data Center | Gaming | Professional Visualization | Automotive | Business Strategies | Sales and Marketing | Seasonality | Manufacturing | Competition | Patents and Proprietary Rights | Government Regulations | Human Capital Management | Information About Our Executive Officers | Available Information
 
-[RCTS] item=Item_1 原 chunk 1472 token > 1200 → 補切成 3 份
+[MIN-MERGE] item=Item_1 section=Our Markets 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_1 section=Government Regulations 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_1 section=Information About Our Executive Officers 7 → 6 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_1 section=Available Information 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 1A (len=114773 chars) ---
 Item 1A. Risk Factors
 
 The following risk factors should be considered in addition to the other information in this Annual Report on Form 10-K. The following risks could harm our business, financial condition, results of operations or reputation, which could cause our stock price to decline. Additional risks, trends and uncertainties not presently known to us or that we currently believe are immat...
 
-[RCTS] item=Item_1A 原 chunk 1328 token > 1200 → 補切成 2 份
+[MIN-MERGE] item=Item_1A section=None 54 → 52 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1A 原 chunk 1358 token > 1200 → 補切成 2 份
 
 [RCTS] item=Item_1A 原 chunk 2149 token > 1200 → 補切成 4 份
 
@@ -309,12 +317,18 @@ Not Applicable.
 
                                                                                                                                                                                                                                                                                                                                                                ...
 
+[SECTION] item=Item_16 period=None 依小標切成 4 段：(小標前=章節層) | SignatureTitleDate | Jen-Hsun Huang | Colette M. Kress
+
 --- [ITEM] Item 1C (len=3957 chars) ---
 Item 1C. Cybersecurity
 
 Risk management and strategy
 
 We have in place certain infrastructure, systems, policies, and procedures that are designed to proactively prevent or reduce the impact of, and reactively address circumstances that arise when, events such as a cybersecurity incident occur. These include processes for assessing, identifying, and managing material risks from cybersecurity threa...
+
+[SECTION] item=Item_1C period=None 依小標切成 2 段：(小標前=章節層) | Governance
+
+[MIN-MERGE] item=Item_1C section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 2 (len=925 chars) ---
 Table of Contents
@@ -340,6 +354,8 @@ Item 5. Market for Registrant's Common Equity, Related Stockholder Matters and I
 
 Our common stock is traded on the Nasdaq Global Select Market under the symbol NVDA. Public trading of our common stock began on January 22, 1999. Prior to that, there was no public market for our common stock. As of February 20, 2026, we had approximately 1,226 registered sharehol...
 
+[SECTION] item=Item_5 period=None 依小標切成 4 段：(小標前=章節層) | Issuer Purchases of Equity Securities | Restricted Stock Unit Share Withholding | Stock Performance Graphs
+
 --- [ITEM] Item 7 (len=34156 chars) ---
 Table of Contents
 
@@ -347,7 +363,11 @@ Item 7. Management's Discussion and Analysis of Financial Condition and Results 
 
 The following discussion and analysis of our financial condition and results of operations should be read in conjunction with “Item 1A. Risk Factors,” our Consolidated Financial Statements and related Notes thereto, as well as other cautionary statements and risks described elsewhere i...
 
-[RCTS] item=Item_7 原 chunk 1592 token > 1200 → 補切成 3 份
+[SECTION] item=Item_7 period=None 依小標切成 17 段：(小標前=章節層) | Our Company and Our Businesses | Recent Developments, Future Objectives and Challenges | Critical Accounting Estimates | Inventories | Income Taxes | Non-Marketable Equity Securities | Revenue Allowances | Contracts with Multiple Performance Obligations | Results of Operations | Concentration of Revenue | Gross Profit and Gross Margin | Income Taxes | Liquidity | Capital Return to Shareholders | Outstanding Indebtedness and Commercial Paper Program | Material Cash Requirements and Other Obligations
+
+[MIN-MERGE] item=Item_7 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Recent Developments, Future Objectives and Challenges 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 7A (len=4247 chars) ---
 Item 7A. Quantitative and Qualitative Disclosures about Market Risk
@@ -358,6 +378,8 @@ We are exposed to interest rate risk related to our fixed-rate investment portfo
 
 According to our sensitivity analys...
 
+[SECTION] item=Item_7A period=None 依小標切成 2 段：Investment and Interest Rate Risk | Foreign Exchange Rate Risk
+
 --- [ITEM] Item 8 (len=123742 chars) ---
 Item 8. Financial Statements and Supplementary Data
 
@@ -367,13 +389,15 @@ Item 14. Principal Accountant Fees and Services
 
 Information regarding accounting fees and services required by this item will be contained in our 2026 Proxy Statement under the caption “Fees...
 
+[MIN-MERGE] item=Item_8 section=None 47 → 43 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 [RCTS] item=Item_8 原 chunk 1421 token > 1200 → 補切成 2 份
 
 [RCTS] item=Item_8 原 chunk 2167 token > 1200 → 補切成 3 份
 
 [RCTS] item=Item_8 原 chunk 1313 token > 1200 → 補切成 2 份
 
-[RCTS] item=Item_8 原 chunk 2267 token > 1200 → 補切成 4 份
+[RCTS] item=Item_8 原 chunk 2288 token > 1200 → 補切成 4 份
 
 [RCTS] item=Item_8 原 chunk 1975 token > 1200 → 補切成 3 份
 
@@ -394,6 +418,8 @@ Controls and Procedures
 Disclosure Controls and Procedures
 
 Based on their evaluation as of January 25, 2026, our management, including our Chief Executive Officer and Chief Financial Officer, has concluded that our disclosure controls and procedures (as defined in Rule 13a-15(e) under the Exchange Act) were effective to provide reasonable assurance that the info...
+
+[SECTION] item=Item_9A period=None 依小標切成 2 段：Disclosure Controls and Procedures | Inherent Limitations on Effectiveness of Controls
 
 --- [ITEM] Item 9B (len=729 chars) ---
 Item 9B. Other Information
@@ -428,6 +454,8 @@ Identification of Executive Officers
 
 Reference is made to the information regarding executive officers appe...
 
+[SECTION] item=Item_10 period=None 依小標切成 4 段：Identification of Directors | Identification of Executive Officers | Code of Conduct | Insider Trading Policy
+
 --- [ITEM] Item 11 (len=360 chars) ---
 Item 11. Executive Compensation
 
@@ -441,6 +469,8 @@ Ownership of NVIDIA Securities
 Information regarding ownership of NVIDIA securities required by this item will be contained in our 2026 Proxy Statement under the caption “Security Ownership of Certain Beneficial Owners and Management,” and is hereby incorporated by reference.
 
 Equity Compensat...
+
+[SECTION] item=Item_12 period=None 依小標切成 2 段：Ownership of NVIDIA Securities | Equity Compensation Plan Information
 
 --- [ITEM] Item 13 (len=455 chars) ---
 Item 13. Certain Relationships and Related Transactions, and Director Independence

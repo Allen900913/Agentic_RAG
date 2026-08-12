@@ -21,13 +21,13 @@ Revenue (TTM)  : $318.27B
 Gross Profit   : $217.41B
 EBITDA         : $184.46B
 Net Income     : $125.22B
-Profit Margin  : 0.39341998
-Operating Margin: 0.46326
-Gross Margin   : 0.68309
+Profit Margin  : 39.34%
+Operating Margin: 46.33%
+Gross Margin   : 68.31%
 
 --- Growth ---
-Revenue Growth (YoY): 0.183
-Earnings Growth     : 0.234
+Revenue Growth (YoY): 18.30%
+Earnings Growth     : 23.40%
 EPS Trailing        : 16.78
 EPS Forward         : 19.3459
 
@@ -38,9 +38,9 @@ Debt/Equity: 30.271
 Current Ratio: 1.283
 
 --- Dividends & Returns ---
-Dividend Yield  : 0.93
-Return on Equity: 0.34013999
-Return on Assets: 0.14814
+Dividend Yield  : 0.93%
+Return on Equity: 34.01%
+Return on Assets: 14.81%
 Free Cash Flow  : $37.01B
 
 --- Business Summary ---

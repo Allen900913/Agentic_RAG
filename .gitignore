@@ -48,5 +48,14 @@ logs/
 .claude/
 data copy/
 project.md
-fetch_data.py
 HW3.md
+# 2026-08-11 把 fetch_data.py 從這一組移出並納入版控：它不是課程講義而是**生產碼**——
+# 唯一的對外抓取入口，CLAUDE.md 與 README.md 都指向它，缺了它任何人都無法重現語料。
+# 直接風險：它含 _pct（小數→百分比的寫法），未納版控時未來重抓會靜默還原那次遷移。
+# 已確認檔內無任何硬編碼金鑰／個資（金鑰一律讀 .env，而 .env 仍在版控之外）。
+# SEC 本機申報檔鏡像（279 MB .nc，處理層的離線來源）
+# 不入版控：體積大且可由 fetch_data.py 依 sec_manifest.json 重新取得
+data/raw/sec_local/
+
+# 遷移腳本的備份快照（migrate_*.py 產生）：git 歷史本身就有遷移前內容，不需要再存一份
+*.bak_pct

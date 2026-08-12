@@ -11,12 +11,12 @@
 
 --- Valuation Metrics --- Market Cap : $4362.98B Enterprise Value : $4303.78B P/E Ratio Trailing: 27.331549 P/E Ratio Forward : 24.706831 Price/Sales (TTM) : 10.3266325 Price/Book : 9.054259 EV/EBITDA : 26.679
 
---- Profitability --- Revenue (TTM) : $422.50B Gross Profit : $255.05B EBITDA : $161.32B Net Income : $160.21B Profit Margin : 0.37919 Operating Margin: 0.36121 Gross Margin : 0.60368
+--- Profitability --- Revenue (TTM) : $422.50B Gross Profit : $255.05B EBITDA : $161.32B Net Income : $160.21B Profit Margin : 37.92% Operating Margin: 36.12% Gross Margin : 60.37%
 
---- Growth --- Revenue Growth (YoY): 0.218 Earnings Growth : 0.82 EPS Trailing : 13.09 EPS Forward : 14.48061
+--- Growth --- Revenue Growth (YoY): 21.80% Earnings Growth : 82.00% EPS Trailing : 13.09 EPS Forward : 14.48061
 
 ==============================================================================
-[chunk 1] chunk_type=text  chars=417
+[chunk 1] chunk_type=text  chars=413
 ==============================================================================
 --
 
@@ -30,7 +30,7 @@ Debt/Equity: 20.026
 
 Current Ratio: 1.922
 
---- Dividends & Returns --- Dividend Yield : 0.25 Return on Equity: 0.38884997 Return on Assets: 0.14641 Free Cash Flow : $27.92B
+--- Dividends & Returns --- Dividend Yield : 0.25% Return on Equity: 38.88% Return on Assets: 14.64% Free Cash Flow : $27.92B
 
 --- Business Summary --- Alphabet Inc. offers various products and platforms in the United States, Europe, the Middle East, Africa, the Asia-Pacific, Canada, and Latin America.
 

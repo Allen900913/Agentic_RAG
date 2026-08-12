@@ -1,0 +1,74 @@
+[
+  {
+    "id": "mix-03",
+    "kind": "require_text",
+    "claim": "MSFT 最新一季『整體/合併』營業利益成長額（$6.4B）必須出現在答案裡",
+    "expect_text": "6\\.4 billion|64\\s*億",
+    "status": "known_defect",
+    "metric_design": "⚠ **2026-08-12 從 `anchored_pct` 改成 `require_text`，因為 `forbid_pct: 24` 與 `forbid_text: 27 億` 兩個都不安全**。ground2 r3 實證：答案先給正確的合併總計「整體增加 64 億美元、成長 20%」，再逐部門分解「Intelligent Cloud 由 110.95 億增至 137.53 億，增幅 27 億（24%）」——**每個數字都對且標註正確**，卻因為 forbid 命中 27 億／24% 被判 FAIL。這正是本檔 col-11 那條警告的實例：「forbid 只在錯值不會與正解正當並存時可用」，而**正確的分部分解必然包含分部的值**，所以 mix-03 結構上不能用 forbid。 判別力改由「合併總計的**金額**在不在」承擔：真缺陷的形態是把分部數字**當成**合併總計（r2：「整體營業利益增加 36 億美元、成長 21%」＝ Productivity 的數字），那種答案不會提到 64 億 → MISS → FAIL。 ⚠ **殘留的判別力缺口**：「金額對但百分比錯」（例如「整體 64 億、成長 24%」）會誤判成 PASS。10 個 run（4 封存 ＋ ground 3 ＋ ground2 3）裡零次出現，且那種答案會被 ① 頭條百分比候選抓成待判讀項，故接受此缺口。改回 anchored_pct 前請先確認 forbid 的並存問題已解。",
+    "why": "24% 是 Intelligent Cloud 分部（13,753-11,095=+2,658=+24%）；合併是 38,398-32,000=+6,398=+20%。系統會答 24% 是因為 MSFT_10Q_202603 #111 開頭就是那句、卻沒有分部標籤 → 讀起來像合併總計。",
+    "verified": "2026-08-09 用 MSFT 10-Q 合併損益表逐欄驗算；正解那句在 #104，語料裡有但沒被檢索到",
+    "fixed_by": "ingest 通用小標硬邊界（_split_by_subheading）＋重建 us_stock_rag_edgar_head",
+    "fix_verified": "period → head 方向一致，但**不是「全 FAIL → PASS」**：2026-08-11 逐檔盤點所有 period 結果檔，是 **3 FAIL / 1 PASS**（8q、replay1、replay2 讀到 24%；gj_v2_period_full100_20260808 答對 64 億/20%、引用 #104）；head 兩個檔（gj_head_full100_20260810、gj_head_claims4）**2/2 PASS**。⚠ 2026-08-10 原本記成「period 三個 run 全 FAIL」——那三個檔本身沒錯，但漏數了同樣是 period 且答對的 full100，等於把 75% 錯誤率寫成 100%。檢索端 context #0 帶期間標籤且無 [section:]＝合併層，#1 才是 [section: Productivity...]。四種比法版本下判別方向都一致（不是量尺造成的）。**結論仍是 head 較好，但這是機率提升不是結構性保證**——本題在 period 上本來就會偶發答對。"
+  },
+  {
+    "id": "mix-09",
+    "claim": "AAPL 大中華區『最新一季』營收成長率（snapshot 下＝截至 2026/6/27 的第三季）",
+    "anchor": "大中華區|Greater China",
+    "window": 60,
+    "expect_pct": 22.0,
+    "forbid_text": "20,497|204\\.97\\s*億|160\\.02\\s*億|16,002",
+    "status": "known_defect",
+    "why": "答錯的是**期間**不是數字：28% 是三月季（Q2）的真實值。系統被問「最新一季」時報了前一季。head collection 上更是結構性答不對——通用小標層把 Greater China 那句解釋與幅度表格切開，22% 根本不在 context 裡（chunk 只剩 451 字元、零數字），只能退回引用新聞的 28%。",
+    "verified": "2026-08-11 回 AAPL 10-Q 原文驗算兩期：Q3 (18,816-15,369)/15,369=22.4%（文件寫 22%）、Q2 (20,497-16,002)/16,002=28.1%（文件寫 28%）。新聞 AAPL_News_20260519_01.txt 也確認 28% 講的是 March quarter。",
+    "metric_design": "⚠ **刻意不填 `forbid_pct: 28`**：28% 是 Q2 的合法值，答案若同時交代兩期（「本季 22%、上季 28%」）是正確的，填 forbid 會誤報——同 col-11 的 Azure 40% 教訓。判別力改由 `forbid_text` 的**金額**承擔（Q2 的 20,497／16,002 與 Q3 的 18,816／15,369 不會互撞），這也是「金額比百分比適合當判準」的實例。",
+    "fixed_by": "ingest 幅度接地（_merge_unquantified_sections，2026-08-11 進碼）——待重建後才生效",
+    "fix_verified": "⚠ **2026-08-12 重建 us_stock_rag_edgar_ground 後，機制主張被自己的檢查推翻**：chunk 層仍然沒有任何一個 chunk 同時含 `Greater China net sales increased` 與 `18,816`。逐 collection 掃 AAPL_10Q_202606.html 的結果——ground：#61（593 字元）只有解釋、#60（1030 字元）只有數字，**兩者同 chunk = 0 個**；head：#63（451 字元）只有解釋，同樣 0 個；period：#65（3112 字元）**兩者都有**。也就是說 period 反而是唯一在 chunk 層正確的，因為它沒有小標層、整個 Segment Operating Performance 是一個大 chunk。 幅度接地確實生效（孤兒段 451→593 字元、`verify_segment_split.py` 判準⑤ 46→0），但它**併在 section 層，SemanticChunker 隨後又在 chunk 層把表格與 Greater China 散文切開**。 **教訓：判準⑤ 過關是必要不充分——它量 section 層，缺陷在 chunk 層。**（先前這裡寫「接地後三者落在同一段（2251 字元）」在 section 層是真的，但那個 section 被切成 1030+593。）同 memory `verify-mechanism-before-claiming`。 ⚠ 另外本題**跨 run 本來就不穩定**（period 三個 run：22%／28%／22%），驗收要跑多個 run，單一 run PASS 不算修好。"
+  },
+  {
+    "id": "mi-05",
+    "kind": "require_chunk",
+    "claim": "MSFT 營收成長率（TTM 口徑）——Fundamentals #0 必須進候選池",
+    "require_chunks": [
+      { "source": "MSFT_Fundamentals_20260612.txt", "chunk_index": 0 }
+    ],
+    "status": "known_defect",
+    "why": "gold 沒錯、語料有、檔案也撈到了——撈到的是同一個檔的錯 chunk。`Revenue Growth (YoY): 18.30%` 在 #0（698 字元），四個 run 全部撈到 #1（Balance Sheet：Total Cash／Total Debt／Debt-Equity／Current Ratio，2045 字元）。4/4 完全一致＝不是抽樣變異，是檢索層對「營收成長率」這個 query 穩定挑錯 chunk。`Revenue Growth (YoY)` 這個字面就在 #0 裡，sparse/BM25 理應命中；懷疑與 #1 長三倍（rerank 對長 chunk 的偏好）有關，**未驗證，不是結論**。",
+    "verified": "2026-08-11 直接 scroll Qdrant 三個 collection（exp4／head／period）確認：Fundamentals 都是 3 個 chunk、#0 是 Company Overview 含 Revenue Growth (YoY)、#1 是 Balance Sheet、#2 是 Mayo Clinic 合作段。⚠ exp4 的 #0 寫成小數 `0.183`，head／period 是 `18.30%`——`migrate_fundamentals_pct.py` 只套用到後兩者。",
+    "metric_design": "⚠ **刻意不用 `anchored_pct`**——答案層在這題必然選錯判準：（a）`forbid_pct: 16/17` 不行，那些是**合法的財期數字**（10-Q 的季度／累計成長），只是口徑與 gold 的 TTM 不同（見 memory `period-basis-ttm-disambiguation`）；（b）`expect_pct: 18.3` 也不行，head 答的「約 18%（增加 501 億美元）」是 FY2026 10-K 的**財年**數字，數值恰好接近但是不同的量，±1pt 容差下會 PASS ＝ **用對的分數獎勵錯的理由**。真正的判別訊號是「撈到 #0 還是 #1」，所以斷言下在檢索層，與答案措辭無關。 ⚠ 本 kind 綁 chunk_index ＝ 綁切塊結果；Fundamentals 走獨立 doc_type 路徑，不受 2026-08-11 那三個 filing 側 ingest 修法影響（已用上面三個 collection 交叉確認索引穩定）。若日後改 Fundamentals 切塊，這條要重新對號。",
+    "fixed_by": null,
+    "fix_verified": "尚未修。2026-08-11 在三個封存結果檔上驗判別力：3/3 FAIL，訊息皆為「同檔撈到 #[1] ← 撈錯 chunk」。"
+  },
+  {
+    "id": "mix-07",
+    "kind": "require_text",
+    "claim": "GOOGL 收購 Wiz 的金額（$29.5B）必須出現在答案裡",
+    "expect_text": "29\\.5\\s*billion|295\\s*億",
+    "status": "known_defect",
+    "why": "真因是 **Plan 節點把「收購金額」這個財報事實譯成新聞查詢** → 檢索被限制在 News chunk → 財報裡的 $29.5B 撈不到 → 拒答。與 collection 無關（period 自己也會拒答）。`只撈到 News` 與拒答 4/4 完全相關，是乾淨的預測指標。這是 plan 抽樣變異：四個 run 有 2 種行為（2 答對／2 拒答）。",
+    "verified": "2026-08-11 逐字讀四個封存檔的答案本文。答對的兩個都寫成「總金額 295 億美元（$29.5 billion）」並引用 GOOGL_10Q chunk #77／#94；拒答的兩個本文零數字。",
+    "metric_design": "⚠ **刻意不用 `anchored_pct`**：拒答的答案裡沒有任何百分比，`anchored_pcts` 只會回 N/A（＝無法比對）而不是 FAIL，**判不出這個缺陷**。改問存在性——該說的值缺席就是 FAIL。 ⚠ **不填 forbid**：這個缺陷的形態是「什麼都沒說」，沒有需要禁止的錯值；判別力來自必要條件缺席，實測在四個封存檔上得到 **2 PASS／2 FAIL** ＝ 雙向都有判別力（`_validate_claims` 對 require_text 因此不強制 forbid）。 ⚠ 不用 anchor：`Wiz` 在拒答文本裡也會出現（「關於 Wiz 的收購金額…沒有資料」），錨了反而讓判準繞路；金額字面本身已足夠獨特。",
+    "fixed_by": null,
+    "fix_verified": "尚未修。卡點：修法要在 planner prompt 加「財報事實不要譯成新聞查詢」的約束，但那類 prompt 改動的效果在現有量尺下量不出來（見 docs/EVAL.md MDE）。本條先當**回歸/進度指標**：拒答比例從 2/4 降下來才算有動。"
+  },
+  {
+    "id": "col-11",
+    "claim": "MSFT 最新一季 Microsoft Cloud 營收成長率",
+    "anchor": "Microsoft Cloud|整體雲端",
+    "window": 60,
+    "expect_pct": 29.0,
+    "status": "regression_guard",
+    "why": "答案頭條挑 Azure 的 40%，被舊的『比第一個百分比』誤判成衝突。實際上答案的 Microsoft Cloud 29% 與 gold 一致 → 不是缺陷。登錄為回歸護欄，防止日後真的答錯。",
+    "verified": "2026-08-09 逐字比對答案與 gold：兩邊都是 Cloud 29% / Azure 40%"
+  },
+  {
+    "id": "mi-04",
+    "claim": "AAPL 營收 YoY 成長率（非 LTM）",
+    "anchor": "YoY|年比年",
+    "window": 60,
+    "expect_pct": 16.6,
+    "status": "regression_guard",
+    "why": "答案同時給 LTM 12.8% 與 YoY 16.6% 並正確標注口徑，頭條是 12.8% 所以被舊比法誤判。登錄為護欄：關鍵是 YoY 這個口徑要對。",
+    "verified": "2026-08-10 逐字讀三個 run 的答案，皆同時給出兩個口徑且標注正確"
+  }
+]

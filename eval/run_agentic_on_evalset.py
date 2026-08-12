@@ -12,7 +12,8 @@ answer/contexts」，評分交給 RAGAS（standalone、在 .venv-ragas 跑），
 
 公平性保證：
   - 同題：讀 eval/eval_set.json 的 90 題（非 agentic 專屬題庫）。
-  - 同底座：--collection 預設 us_stock_rag_edgar_exp4（Exp4 最佳 chunking），agentic 與單次
+  - 同底座：--collection 預設 us_stock_rag_edgar_period（Exp4 chunking ＋ 期間章節硬邊界，
+    2026-08-09 起取代 exp4：期間標籤是修「口徑挑錯」的必要材料），agentic 與單次
     版共用同一個 Qdrant collection + 同一個 reranker，唯一差別是「編排」（decomposition）。
   - 同測量：輸出 schema 對齊 generation_judge.json，交給同一個 eval_ragas_vs_rubric.py。
   - contexts = run_agentic 回傳的 collected（全 run 各子問題撈到的 chunk 聯集，正是衡量
@@ -50,9 +51,11 @@ from dotenv import load_dotenv
 load_dotenv(override=True)
 
 import rag_query as rq
+# 拒答判定與單管線共用一份（見下方 is_refusal 的註解：先前各自一套，其中一套壞了半個月沒被發現）。
+from eval.eval_generation_llm_judge import looks_like_refusal
 
 EVAL_SET = Path("eval/eval_set.json")
-DEFAULT_COLLECTION = "us_stock_rag_edgar_exp4"
+DEFAULT_COLLECTION = "us_stock_rag_edgar_period"
 DEFAULT_OUTPUT = Path("experiments/agentic/generation_judge.json")
 
 
@@ -60,9 +63,14 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
                          sub_queries: list) -> dict:
     """把 agentic 輸出攤平成 generation_judge.json 的 record schema。
     RAGAS 只讀 id/category/query/answer/contexts；其餘欄位補上以對齊 schema、方便複查。"""
-    contexts = [c["content"] for c in chunks if (c.get("content") or "").strip()]
+    # ⚠ 2026-08-11 修：`contexts` 與 `sources` 必須**同一次過濾**、逐位對齊。原本 contexts 濾掉
+    # 空內容、sources 沒濾 → 只要有一個 chunk 內容是空的，兩個 list 就錯位一格，之後所有
+    # 「用 contexts 的 index 去查 sources」的下游都會歸錯來源（`check_number_defects.py`
+    # 的 `source_types_of` 就是這樣用的：`sources[i]` 配 `contexts[i]`）。
+    kept = [c for c in chunks if (c.get("content") or "").strip()]
+    contexts = [c["content"] for c in kept]
     sources = [{"source": c.get("source"), "chunk_index": c.get("chunk_index")}
-               for c in chunks]
+               for c in kept]
     return {
         "id": q["id"],
         "category": q["category"],
@@ -75,7 +83,13 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
         # 以下是 generation_judge schema 既有欄位，agentic 這條不自算（交給 RAGAS），補 null。
         "correctness": None,
         "correctness_verdict": None,
-        "is_refusal": answer.strip().startswith("I don't have enough") or answer.strip().startswith("I don’t have enough"),
+        # ⚠ 2026-08-11 修：原本是 `startswith("I don't have enough")`——**英文、且只認開頭**，
+        # 而本系統一律回繁體中文，所以這個欄位在所有既有 agentic 結果檔裡幾乎永遠是 False。
+        # 實測 mix-07 在 gj_v2_period_replay2／gj_head_full100 兩個 run 明確拒答
+        # （「沒有任何文件提及」「我沒有足夠的資訊來回答」）卻都記成 False。
+        # 改為複用單管線那邊已經寫好的 `looks_like_refusal`（含中文標記、全文比對），
+        # 不再維護第二套判定——兩套必然漂移，這次就是漂移的結果。
+        "is_refusal": looks_like_refusal(answer),
         "wrongful_refusal": None,
         "context_recall_llm": None,
         "context_recall_overlap": None,
@@ -125,7 +139,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--module", default="agentic_rag_v2", help="要跑的 agentic 模組")
     ap.add_argument("--collection", default=DEFAULT_COLLECTION,
-                    help="Qdrant collection（預設 Exp4 最佳 chunking，與單次版對照必須同一個）")
+                    help="Qdrant collection（預設 us_stock_rag_edgar_period，與單次版對照必須同一個）")
     ap.add_argument("--eval-set", default=str(EVAL_SET))
     ap.add_argument("--output", default=str(DEFAULT_OUTPUT))
     ap.add_argument("--limit", type=int, default=None, help="只跑前 N 題（smoke test）")
@@ -143,8 +157,8 @@ def main() -> None:
     ap.add_argument("--recursion-limit", type=int, default=100)
     args = ap.parse_args()
 
-    # 先把 collection 指到 Exp4（agentic 內部 rq.retrieve 讀 rq.COLLECTION_NAME）——
-    # 必須在跑任何檢索前設定，否則會撈到預設生產 collection、和 Exp4 對照不成立。
+    # 先把 collection 指到指定值（agentic 內部 rq.retrieve 讀 rq.COLLECTION_NAME）——
+    # 必須在跑任何檢索前設定，否則會撈到預設生產 collection、對照不成立。
     rq.COLLECTION_NAME = args.collection
 
     # 只 import agentic 模組（它會 monkeypatch rq.call_llm 成 NVIDIA 路由）；不碰 ej。

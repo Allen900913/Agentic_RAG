@@ -3,7 +3,7 @@
 # chunks    : 3
 
 ==============================================================================
-[chunk 0] chunk_type=text  chars=676
+[chunk 0] chunk_type=text  chars=672
 ==============================================================================
 === TSLA Company Fundamentals === Generated: 2026-06-12
 
@@ -11,12 +11,12 @@
 
 --- Valuation Metrics --- Market Cap : $1499.10B Enterprise Value : $1470.93B P/E Ratio Trailing: 369.5833 P/E Ratio Forward : 159.53555 Price/Sales (TTM) : 15.31582 Price/Book : 18.228525 EV/EBITDA : 132.588
 
---- Profitability --- Revenue (TTM) : $97.88B Gross Profit : $18.66B EBITDA : $11.09B Net Income : $3.86B Profit Margin : 0.03946 Operating Margin: 0.04203 Gross Margin : 0.19065
+--- Profitability --- Revenue (TTM) : $97.88B Gross Profit : $18.66B EBITDA : $11.09B Net Income : $3.86B Profit Margin : 3.95% Operating Margin: 4.20% Gross Margin : 19.06%
 
---- Growth --- Revenue Growth (YoY): 0.158 Earnings Growth : 0.083 EPS Trailing : 1.08 EPS Forward : 2.50195
+--- Growth --- Revenue Growth (YoY): 15.80% Earnings Growth : 8.30% EPS Trailing : 1.08 EPS Forward : 2.50195
 
 ==============================================================================
-[chunk 1] chunk_type=text  chars=437
+[chunk 1] chunk_type=text  chars=429
 ==============================================================================
 --
 
@@ -30,7 +30,7 @@ Debt/Equity: 18.738
 
 Current Ratio: 2.043
 
---- Dividends & Returns --- Dividend Yield : N/A Return on Equity: 0.04901 Return on Assets: 0.022330001 Free Cash Flow : $5.25B
+--- Dividends & Returns --- Dividend Yield : N/A Return on Equity: 4.90% Return on Assets: 2.23% Free Cash Flow : $5.25B
 
 --- Business Summary --- Tesla, Inc. designs, develops, manufactures, leases, and sells electric vehicles, and energy generation and storage systems in the United States, China, and internationally.
 

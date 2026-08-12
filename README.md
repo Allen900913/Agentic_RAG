@@ -3,6 +3,19 @@
 > **HW3 — Build Your Personal RAG System**  
 > 主題：美股科技龍頭情報分析（Apple · Microsoft · NVIDIA · Amazon · Alphabet · Meta · Tesla）
 
+### 文件導覽
+
+本檔（README）是**對外說明**：這個系統是什麼、怎麼裝、怎麼跑、為什麼這樣設計。其餘文件各有單一職責：
+
+| 想知道 | 看哪一份 |
+|---|---|
+| 架構、全域規則、每個檔案負責什麼 | [`CLAUDE.md`](CLAUDE.md) |
+| 語料怎麼切塊、重建要注意什麼 | [`docs/INGEST.md`](docs/INGEST.md) |
+| 怎麼評測、哪些數字可以相信、**哪些做法已試無效** | [`docs/EVAL.md`](docs/EVAL.md) |
+| agentic 管線各節點為什麼這樣設計 | [`docs/AGENTIC.md`](docs/AGENTIC.md) |
+| 還沒做的事、已接受的極限 | [`BACKLOG.md`](BACKLOG.md) |
+| 什麼時候改了什麼 | [`CHANGELOG.md`](CHANGELOG.md)、[`CHANGELOG_AGENTIC.md`](CHANGELOG_AGENTIC.md) |
+
 ---
 
 ## 1. 專案簡介

@@ -245,6 +245,8 @@ Evaluation of Disclosure Controls and Procedures
 
 Based on an evaluation under the supervision and with the participation of the Company’s management, the Company’s principal executive officer and principal financial officer have concluded that the Company’s disclosure controls and procedures as defined in Rules 13a-15(e) and 15d-15(e) under the Exchange Act wer...
 
+[MIN-MERGE] item=Part_I_Item_4 section=Evaluation of Disclosure Controls and Procedures 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 --- [ITEM] Part II, Item 1 (len=5545 chars) ---
 Item 1.    Legal Proceedings
 
@@ -252,10 +254,20 @@ Digital Markets Act Investigations
 
 On March 25, 2024, the European Commission (“Commission”) announced that it had opened a formal noncompliance investigation against the Company under Article 5(4) of the EU Digital Markets Act (“DMA”) (“Article 5(4) Investigation”). The Article 5(4) Investigation relates to how developers may communicate and promote offers to end us...
 
+[SECTION] item=Part_II_Item_1 period=None 依小標切成 4 段：Digital Markets Act Investigations | Department of Justice Lawsuit | Epic Games | Other Legal Proceedings
+
+[MIN-MERGE] item=Part_II_Item_1 section=Department of Justice Lawsuit 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_II_Item_1 section=Epic Games 3 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_II_Item_1 section=Other Legal Proceedings 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 --- [ITEM] Part II, Item 1A (len=19108 chars) ---
 Item 1A.    Risk Factors
 
 The Company’s business, reputation, results of operations, financial condition and stock price can be materially and adversely affected by a number of factors, whether currently known or unknown, including those described in Part I, Item 1A of the 2025 Form 10-K and Part II, Item 1A of the Form 10-Q for the quarter ended March 28, 2026 (the “second quarter 2026 Form 10-Q”...
+
+[MIN-MERGE] item=Part_II_Item_1A section=None 11 → 9 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 2 (len=2082 chars) ---
 Item 2.    Unregistered Sales of Equity Securities and Use of Proceeds
@@ -277,6 +289,8 @@ Item 4.    Mine Safety Disclosures
 Not applicable.
 
 Apple Inc. | Q3 2026 Form 10-Q | 24...
+
+[MIN-MERGE] item=Part_II_Item_4 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 5 (len=1428 chars) ---
 Item 5.    Other Information
@@ -304,9 +318,31 @@ Exhibit DescriptionFormExhibitFiling Date/Period End Date
 
 101*Inline XBRL Document Set for th...
 
+[MIN-MERGE] item=Part_II_Item_6 section=Exhibit DescriptionFormExhibitFiling Date/Period End Date 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 --- [ITEM] Part I, Item 2 (len=21464 chars) ---
 Item 2.    Management’s Discussion and Analysis of Financial Condition and Results of Operations
 
 This Item and other sections of this Quarterly Report on Form 10-Q (“Form 10-Q”) contain forward-looking statements, within the meaning of the Private Securities Litigation Reform Act of 1995, that involve risks and uncertainties. Forward-looking statements provide current expectations of future event...
 
-[RCTS] item=Part_I_Item_2 原 chunk 2207 token > 1200 → 補切成 3 份
+[GROUND] item=Part_I_Item_2 period=None 30 → 19 段（無幅度數字的段併回帶表格的前一段）
+
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 19 段：(小標前=章節層) | Available Information | Business Seasonality and Product Introductions | Macroeconomic Conditions | Tariffs and Other Measures | Segment Operating Performance | Products and Services Performance | Gross Margin | Operating Expenses | Provision for Income Taxes | Liquidity and Capital Resources | Manufacturing Purchase Obligations | Other Purchase Obligations | Deemed Repatriation Tax Payable | Capital Return Program | Internal-Use Software | Disaggregation of Income Statement Expenses | Income Taxes | Critical Accounting Estimates
+
+[MIN-MERGE] item=Part_I_Item_2 section=Macroeconomic Conditions 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Segment Operating Performance 3 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Products and Services Performance 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Gross Margin 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Provision for Income Taxes 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Capital Return Program 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Internal-Use Software 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Disaggregation of Income Statement Expenses 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Critical Accounting Estimates 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

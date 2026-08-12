@@ -7,40 +7,132 @@
 
 ---
 
-## 已試無效總表（改動前先查這裡，避免重踩）
+> **已試無效總表**搬到 [`docs/EVAL.md`](docs/EVAL.md)（改動前先查那裡，避免重踩）。
+> **已知問題／已接受的極限**搬到 [`BACKLOG.md`](BACKLOG.md)。
+> 本檔只放日期式變更記錄。
 
-| 項目 | 死因 | 復活條件 | 日期 |
+## 2026-08-12
+
+### 幅度接地判準下移到 `_merge_small_chunks`（section 層修法被實測推翻）
+**背景**：2026-08-11 的幅度接地（`_merge_unquantified_sections`）下在 **section 層**。重建 `us_stock_rag_edgar_ground` 後 `verify_segment_split.py` 判準⑤ 全綠（46→0），但 **mix-09 只有 1/3 PASS，還輸給完全沒有小標層的 `period`（2/3）**。
+
+**真因**：section 層併好之後，**SemanticChunker 會再切開**。AAPL `Segment Operating Performance` 的 2251 字元 section 被切成 1030 + 593——幅度表格留在前半、`Greater China net sales increased …` 落在後半。實測 `ground` 裡**沒有任何 chunk 同時含那句話與 `18,816`**（`period` 的 #65 有，因為它沒有小標層、整段是一個 3112 字元 chunk）。
+
+**修法**：判準下移到 [`_merge_small_chunks`](data_update_edgar.py)，它跑在 SemanticChunker 之後，是**最後一個會改變邊界的步驟**。並傳入 `token_len_fn`/`max_tokens`——呼叫端的 RCTS 補切在它之後，合併若推過門檻就會被切回去。
+⚠ **section 層那一層保留，兩者互補不重複**：`head` 的 Greater China 孤兒自成一個 section，同硬邊界內沒有前一塊可併；section 層先把它併進母節，chunk 層才有東西可併。
+
+**確定性單元測試 6/6**（用 `ground` 實際的 #60/#61）：正案例合併且解釋＋數字同在／只用長度判準時不合併／前一塊無數字時不併（＋加上數字後會併的對照）／超過 RCTS 門檻時不併（＋門檻放寬後會併的對照）。⚠ 第一版測試③ 是**我自己寫壞的**——前一塊只給 65 字元，觸發了既有的「首塊過短往後併」，與新判準無關；改用語料裡真實的 482 字元無數字 chunk 才是有效測試。
+
+**新增 [`eval/verify_chunk_grounding.py`](eval/verify_chunk_grounding.py)**：chunk 層閘門，三態 `groundable_not_grounded`（唯一閘門）／`unreachable`／`blocked_by_cap`。含與 `data_update_edgar.py` 的**常數一致性斷言**（讀原始碼文字、不 import，避免 >120s 相依）——常數兩份會漂移，漂移的話閘門會安靜地量錯並回報全綠。
+
+**`us_stock_rag_edgar_ground2` 驗收（21/21、4174 chunks、零 429／零 error）**：
+
+| 閘門 | `ground` | `ground2` |
+|---|---|---|
+| `verify_chunk_grounding` 漏接數 | 3（FAIL） | **0（PASS）** |
+| chunk 層孤兒率 | 8.0%（22/274） | **6.3%（17/270）**，殘餘全是 `unreachable` |
+| mix-09 機制（解釋＋數字同 chunk） | 沒有 | **#60（2315 字元）有** |
+| `verify_table_captions` 硬缺陷 | 0 | **0** |
+| `verify_segment_split` ②③⑤ | 0/0/46→0 | **0/0/46→0** |
+| rerank >2048 token 的 chunk | 2 | **2（未惡化）** |
+
+**四條斷言（每條 3 run，與封存基準對照）**：
+
+| 主張 | `period` (3) | `head` (1) | `ground` (3) | **`ground2` (3)** |
+|---|---|---|---|---|
+| mix-09 | 2/3 | 0/1 | 1/3 | **3/3** |
+| mix-07 | 2/3 | 0/1 | 3/3 | **3/3** |
+| mix-03 | 1/3 | 1/1 | 2/3 | **2/3** |
+| mi-05 | 0/3 | 0/1 | 1/3 | **1/3** |
+
+**mix-09 全勝，且贏過原本最好的 `period`**。殘餘兩個 FAIL 都不在本次改動的層：mix-03 剩下那個是生成層挑錯運算元（拿 Productivity 的 36 億當合併總計），mi-05 是檢索層撈錯 chunk。
+
+**兩個必須記住的教訓**：
+1. **修法要下在「最後一個會改變邊界」的層**，否則下游會把它切回去。
+2. **驗收閘門要與缺陷同層**。判準⑤ 量 section 層（刻意不跑 SemanticChunker 才能便宜地隨手跑），所以它**結構上看不到** chunk 層——它全綠的同時缺陷還在。「規則生效」與「缺陷消失」是兩個判準。
+
+### 全量 100 題 ＋ RAGAS：「沒崩壞」閘門過關，並解開了 head-vs-period 的懸案
+`gj_ground2_full100_20260812`（掛共用 replay fixture，與 `gj_v2_period_replay1` **plan 相同 92/100**——未 blocked 時實測只有 34/100）。六個整體指標**全部落在噪音內**（recall −0.027 vs 門檻 0.029、correctness −0.018 vs 0.019、precision +0.023 vs 0.046），±0.05 粗閘門 PASS。
+
+**但分類別有一個真訊號**：semantic 的 recall −0.190、correctness −0.110（n=15 的類別門檻約 ±0.075）。三臂對照證明**它不是幅度接地造成的，是通用小標層**：
+
+| | `period`（無小標層） | `head`（有小標層） | `ground2`（小標層＋chunk 層接地） |
 |---|---|---|---|
-| RRF-fusion（跨 query-variant 排名融合） | pool 是妥協排名，候選集更雜訊化 | 無（機制型） | 07-06 |
-| chunking 切細救 rerank 分數 | 孤立段落無上下文，cross-encoder 評分反更低 | 換對上下文無關的評分方式 | 07-07 |
-| dense+sparse 一起翻英文 | dense 翻譯本身有害，sem-11 退步 | 已拆開測試（見下條），仍死 | 07-08 |
-| `sparse_translate_en`（只翻 sparse） | 救不回任何 RECALL checkpoint，還傷 sem-11 | 無 | 07-08 |
-| Rule 10 prompt（策略題強制含財務數字） | 注意力層級問題，指令命令不動埋沒的訊號 | 已被句級抽取證偽同因 | 07-14 |
-| section-aware chunking（拆稀釋型大 chunk） | retrieval 層有改善但 end-to-end 無可靠增益 | 若多題受益證據出現，全量重估 | 07-14 |
-| 檢索後句級抽取（contextual compression） | 目標句已搬到最前面，生成仍 2/3 不引用——病灶是模型主動略過，非訊號埋沒 | 無（決定性診斷） | 07-14 |
-| `bge-reranker-base`（小 reranker 換速度） | position embedding 上限 512 token，長 chunk 中後段看不到 | 換支援長 context 的小 reranker | 07-13/14 |
-| ONNX Runtime fp32 | 無加速（1.05x） | 無 | 07-13 |
-| ONNX int8 動態量化 | 2.18x 加速但 correlation 掉到 0.858，排序改變 | QAT/校準式靜態量化+完整驗證 | 07-13 |
-| 級聯精排（base 篩 top-10 → v2-m3 精排） | lexical 翻車，critical chunk 被踢出 | 保守篩選收益不值得，或換模型 | 07-13 |
-| `max_length=512`（reranker 截斷） | sem-11 退步，關鍵句在段尾被截斷 | chunk 長度上限大幅壓低 | 07-13 |
-| col-08 投入新召回機制（HyDE 等） | dense rank 落差(25/106)超出射程，成本不值得 | eval set 擴大、同類失敗多題重現 | 07-12 |
-| RAGAS ground_truth 用 rubric 清單合成 | 篇幅錯配，F1 精確率崩塌，分數假性極低(~0.31) | 已解決——改用完整黃金參考答案 | 07-15 |
-| GGUF/fp8（reranker 量化，僅分析未跑） | 加速靠量化（同 int8 風險）+ 整合成本高；fp8 純 CPU 無加速 | CPU 再榨速度且願付驗證成本時 | 07-13 |
-| few-shot 修 `parse_query_filters` | 範例共現模式被模仿成新錯誤，8b few-shot 80.0% < 8b zero-shot 85.0% | 換避開該共現的範例組合 | 07-15 |
-| `z-ai/glm-5.2` 當 agentic GEN_MODEL | NVIDIA NIM 上單發 127~217s，跑 eval 不可行 | 該模型端上加速 | 08-01 |
-| `deepseek-ai/deepseek-v4-pro` 當 agentic GEN_MODEL | 品質/中文最佳但 per-model 429 硬牆，100 題必團滅（實測 34 題 22 fallback） | 該模型放寬單模型限速 | 08-01 |
+| semantic recall | 0.687 | **0.509** | 0.497 |
+| semantic correctness | 0.680 | **0.554** | 0.570 |
+| 整體 recall | 0.770 | 0.731 | **0.743** |
+| 整體 correctness | 0.662 | 0.630 | **0.644** |
 
-**復活成功案例**：`rerank_multi_query`（07-07 判死，變體仍中文）在「英文變體+glossary」新前提下（07-08）復活，現已併入生產雙 query 精排機制。
+`head` 早就是 −0.178／−0.126；`ground2` 與 `head` 的差距（recall −0.012、correctness **+0.016**）遠在類別噪音內。**而 `ground2` 在每一項整體指標上都優於 `head`**——幅度接地把小標層的代價回收了約三分之一。
+
+**這解開了 BACKLOG 的懸案**「head 的 correctness −0.032／recall −0.039，非 AAPL 的 42 題退步沒有已證實的解釋」：**semantic 15 題就貢獻了整體 recall 缺口的 ~68%、correctness 缺口的 ~59%**。機制是**小標層把 chunk 切小 → 每個撈到的 chunk 帶的證據變少**：semantic 的證據量 −31.6%（全類最大），chunk 數卻幾乎沒變（58→56）。
+
+**下一個槓桿（未做）**：`use_heading = item_name not in _TABLE_DOMINATED_ITEMS` ＝ **小標層套在所有散文 item 上**，但它的用途（mix-03 分部/合併混淆）只存在於 MD&A。實測 semantic 撈到的 52 個 filing chunk 有 **43 個（83%）來自非 MD&A**（Item 1 Business 25、Item 1A 7、Part II Item 1A 6），其中 `Item_1` 中位長度僅 1320 字元。把 `use_heading` 收窄到 `_MDNA_ITEMS` 應可同時保住 mix-03 與 semantic——見 `BACKLOG.md`。
+
+### mix-03 改用 `require_text`：`forbid` 對它結構上不安全
+ground2 r3 的答案**每個數字都對**（先給合併總計 64 億／20%，再逐部門分解 Intelligent Cloud 27 億／24%），卻因 `forbid_text` 命中 27 億被判 FAIL。**正確的分部分解必然包含分部的值**，所以 `forbid_pct: 24` 與 `forbid_text: 27 億` 兩個都不安全，不是換值就好（同 col-11 教訓）。改由「合併總計的**金額**在不在」承擔判別力。跨 10 個 run 逐格比對：**只有那一格從 FAIL 翻成 PASS，其餘 9 格不變**。
 
 ---
 
-## 已知問題 / 已接受的極限（不要再嘗試系統側修法）
+## 2026-08-11
 
-- **sem-08**（AMZN AWS 策略方向）——三種系統側修法皆因同一真因失敗：生成模型判定「獲利數字」與「策略方向」問法無關而主動略過，非訊號埋沒。復活條件：僅剩調整 rubric 或維持現狀。
-- **col-08**（Tesla 口語版）——dense rank 25/106，落差超出 rewrite 射程，不再投入新召回機制。
-- **col-04**（Azure 口語版）——關鍵內容在 top-5，但生成被口語框架帶偏、選擇誠實拒答。非 bug，觀察中。
-- **col-05**（AWS 口語版，sem-08 鏡像）——RECALL 層問題 + rewrite 變體品質不穩定。
-- **ckpt_R = 0.7307**（chunk recall, n=20）——約 27% checkpoint 在候選池階段沒被撈到，多非 critical，暫不優先處理。
+### 數字缺陷量尺加兩個斷言型別：`require_text`／`require_chunk`
+**動機**：mi-05 與 mix-07 兩個已確診缺陷**在既有工具下都判不出來**，只會落進 N/A（＝無法比對），等於它們不在零噪音回歸網裡。病根是**斷言型別只有一種**（`anchored_pct`），而這兩個缺陷的判別訊號不在「anchor 附近的百分比」那一層。
+
+**新增**（`eval/check_number_defects.py`，claims 用 `kind` 欄位分派，預設 `anchored_pct` 故既有 4 條零改動）：
+- `require_text`：答案本文必須匹配 `expect_text`。給 mix-07（Plan 把財報事實譯成新聞查詢→拒答；拒答文本零百分比，`anchored_pcts` 判不出來）。
+- `require_chunk`：檢索池 `sources` 必須含指定 `source`+`chunk_index`。給 mi-05（同檔撈到錯 chunk，答案層無論填 expect 或 forbid 都是陷阱）。FAIL 訊息區分「同檔撈到別的 index」（真缺陷）與「該檔完全沒撈到」（可能是重編號）。
+
+**為什麼搶在重建之前做**：封存結果檔是**已知答案的測試資料**，重建後那批 ground truth 就沒了。若那時新斷言回報 0 問題，分不清是修好了還是斷言壞了（CLAUDE.md：「稽核腳本回傳 0 筆問題先當壞消息查」）。
+
+**判別力雙向驗證**（四個封存檔：period full100／replay1／replay2、head full100）：
+
+| 主張 | 結果 | 說明 |
+|---|---|---|
+| mi-05 `require_chunk` | **4/4 FAIL** | 全部「同檔撈到 #[1] ← 撈錯 chunk」 |
+| mix-07 `require_text` | **2 PASS / 2 FAIL** | 兩個答對、兩個拒答 |
+| 正對照（斷言改指實際撈到的 #1／拒答文本必含的 `Wiz`） | **PASS** | 證明 FAIL 來自被斷言的內容，不是機制壞掉 |
+| 既有 mix-03／mix-09／col-11／mi-04 | **逐格未變** | col-11 3 PASS+1 N/A、mi-04 2 PASS+2 N/A，護欄零誤報 |
+| `_validate_claims` 負向測試 | **6/6 擋下** | kind 打錯字、require_chunks 空、缺 chunk_index、缺 expect_text、anchored_pct 缺 anchor、known_defect 缺 forbid |
+
+⚠ `require_text`／`require_chunk` 的 `known_defect` **不強制 forbid**（`anchored_pct` 仍強制）：那條規則的前提是「正解與干擾值並陳也會 PASS」，存在性斷言沒有並陳問題，缺席就是 FAIL。
+
+**附帶修一個潛在錯位**（`eval/run_agentic_on_evalset.py`）：`contexts` 濾掉空內容、`sources` 沒濾 → 兩個 list 可能錯位一格，下游用 `sources[i]` 配 `contexts[i]` 會歸錯來源。改成同一次過濾。**實測 14 個結果檔、1400 筆記錄零錯位＝從未實際發生**，純護欄，歷史結論不受影響。
+
+---
+
+## 2026-08-08
+
+### 抓取／處理分離：ingest 不再連網
+**改前**：`fetch_data.py::fetch_sec_filings` 抓 SEC 存 `.html`，`data_update_edgar.py` 又自己 `company.get_filings()` 抓一次、且不理會前者的檔。**同一批 filing 抓兩次，而且每次重新切塊都可能悄悄換到新版本文件**——切塊實驗的差異因此無法歸因。
+
+**改後**：`fetch_data.py` 是唯一對外抓取入口，產出 `sec_local/`（`.nc` 完整申報檔，279 MB / 21 份）＋ `sec_manifest.json`（取件清單）；`data_update_edgar.py` 只照 manifest 取件，零網路。新增 `--allow-fetch` 逃生口（預設拒絕）。
+
+**三個會靜默出錯的坑**（細節見 CLAUDE.md「抓取／處理分離」）：
+1. `Filing.sgml()` 本機缺檔會**無聲 fallback 下載** → 自寫 guard，缺檔即中止。
+2. `Filing.html()` 對 `<?xml` 開頭的 inline-XBRL **一律重新下載**，SEC 財報全中 → 本機儲存對 10-K/10-Q 幾乎沒生效。`_install_offline_html_patch()` 繞過，繞過前驗證兩份文件內容 **MD5 完全相同**。
+3. `local_filing_path()` 回絕對路徑、`SEC_LOCAL_DIR` 是相對路徑 → `relative_to` 拋錯被外層 `except` 吞掉：21 份 `.nc` 全寫成功但 manifest 是空的，畫面卻顯示 `x ... failed`。
+
+**驗證**：攔掉 `sec.gov` 的 DNS 解析後跑完整處理流程，**0 次連線嘗試**，MSFT 10-Q 產出 141 records。
+
+### 期間章節硬邊界（chunking）
+10-Q 的 MD&A 把單季與累計寫成相鄰章節，期間**只在章節標題**、內文不重述 → SemanticChunker 把標題切走，內文 chunk 讀不出自己屬於哪一期。**生成器不是讀錯，是資訊不在 context 裡。**
+
+- 曝險：109 個含變動陳述的 filing text chunk 有 **15 個（14%）** 讀不出期間，其中 9 個集中在 MSFT 10-Q（24 個裡 38%）。原因是 `X Compared with Y` 標題結構**只有 MSFT 在用**（12 份 10-Q：MSFT 24 處、其餘 6 家 0 處）。
+- 受害題：**col-11**（單季 19/33/12/22% 與九個月 18/29/20% 被當互斥數值並陳）、**mix-03**。
+- 修法：`_split_by_period_section` 把標題當硬邊界，切段後各自 chunk，期間標籤前綴進被 embed 的文字 ＋ payload `period_context`。**必須切段不能只貼標**（MSFT `#104` 開頭是九個月數字、標題在它中段）。
+- 實測落地：MSFT 10-Q 產出 40 個帶 `period_context` 的 chunk，兩種標籤。
+
+### 其他
+- `rag_query.COLLECTION_NAME` 改為可用 env **`RAG_COLLECTION`** 覆蓋——跑 collection A/B 不必改碼（改完忘了改回來是實際風險）。
+- `gen_reference_answers.py` 快取加**第三條件 `collection`**：原本只比 `query` + `gold_files`，對「同一份檔案、切塊變了」完全無感。另加 `--force`（配 `--ids` 定向）——條件 ③ 對既有沒有 `collection` 欄位的 reference 判不出來，第一次換 collection 要靠它。同時修掉 `gold_files` 比對的**順序敏感**問題（舊快取存未排序值 → mh-09 被誤判成換版而白白重寫）。
+
+### gold 重生成到 `us_stock_rag_edgar_period`（8 題）
+- 條件②自動觸發 4 題（`MSFT_10K_2025→2026`、`AMZN_10Q_202509→202606`）：sem-03 / sem-04 / col-02 / col-03
+- `--force` 定向 4 題（切塊改變、檔名沒變）：mix-01 / mix-02 / mix-03 / col-11
+- **稽核發現舊 gold 本身有錯**：mix-02 問「最新一季」，舊 gold 卻用了**九個月累計**數字——Search 廣告 `$1.0B/10%`（來自 `#116` Nine Months）、Xbox 硬體 `-31%`、內容 `-3%`。新 gold 取 `#112` **Three Months** 的 `$304M/9%`、`-33%`、`-5%`，與原文一致。**期間標籤脫落連 gold 都毒到了。**
+- 已知副作用：mix-01（199→127 字）、mix-03（453→231 字）變短，mix-03 的手寫註記「九個月累計是 $20.4B/22%，不是單季」遺失。長度落差會壓低 `answer_correctness`（見 memory `ragas-correctness-length-artifact`），讀分數時要分開看。
+- 移除 agentic 一致性 validator 的 **regex 降級路徑**（詳見 CHANGELOG_AGENTIC A5.3）。
 
 ---
 

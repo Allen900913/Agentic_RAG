@@ -15,7 +15,8 @@ data_update_edgar.py 一支，本檔只保留可被重用的「原始檔案 → 
 提供的組件：
   - 解析清理   partition_and_clean / render_processed
   - 表格處理   html_table_to_markdown / table_element_to_text / _find_caption /
-               _count_table_rows / _llm_summarize_table（無 caption 的大表用 Gemini 補摘要）
+               _count_table_rows / _table_context / _compact_table_markdown /
+               _llm_summarize_table（無 caption 的大表用 Groq 補摘要）
   - 分段切塊   _is_section_header / _split_text_elements_into_sections / build_chunk_records
   - filing 中繼資料  extract_filing_metadata / build_metadata_header
   - 其他       BGEM3DenseEmbeddings（SemanticChunker 的 BGE-M3 adapter）、deterministic_uuid
@@ -23,8 +24,9 @@ data_update_edgar.py 一支，本檔只保留可被重用的「原始檔案 → 
 用法：由 data_update_edgar.py import，不直接執行（沒有 main，執行了也不會做任何事）。
 """
 
-import os          # _llm_summarize_table 讀 GEMINI_API_KEY
+import os          # _llm_summarize_table 讀 GROQ_API_KEY
 import re
+import time        # _llm_summarize_table 的 429 退避
 import uuid
 from pathlib import Path
 from typing import Optional
@@ -235,12 +237,54 @@ TABLE_CAPTION_MAXLEN = 240
 # 列數 < 閾值的通常是封面 checkbox / IRS ID 之類的行政雜訊，不值得花 LLM call。
 TABLE_SUMMARY_MIN_ROWS = 4
 
+# caption 至少要有這麼多個英文字母，否則視為頁碼/編號雜訊（見 _is_meaningful_caption）。
+CAPTION_MIN_LETTERS = 3
+
+# 餵給 _llm_summarize_table 的表格 markdown 上限（壓掉分隔列之後才算）。
+TABLE_SUMMARY_MAX_CHARS = 2500
+
+# 摘要模型（Groq，OpenAI 相容；用法與 fetch_data.py::_get_groq_client 一致）。
+# 2026-08-11 從 gemini-2.5-flash 換過來。**刻意選非推理的 70B，而不是更大的
+# openai/gpt-oss-120b**：一句話 caption 不需要 reasoning，而 reasoning token 與正文共用
+# completion 額度，正是下面那個缺陷的根源。實測 gpt-oss-120b 在 max_completion_tokens=200
+# ＋ reasoning_effort=medium 下 **content 直接是空字串**（200 token 全被 reasoning 吃掉），
+# 連 effort=low 都出現過三次全空——reasoning 長度自己有跑次變異。llama-3.3-70b-versatile
+# 對同一張表三次輸出全等、句子完整。
+TABLE_SUMMARY_MODEL = os.getenv("TABLE_SUMMARY_MODEL", "llama-3.3-70b-versatile")
+
+# 摘要生成的 token 上限。⚠ 別再設成 60：舊版走 gemini-2.5-flash，而 2.5-flash 預設開
+# thinking、thinking token 與正文**共用**這個額度，60 會讓正文剛開頭就撞頂。實測
+# `us_stock_rag_edgar_head` 走到這條路的 11 筆裡 10 筆被砍在 2~3 個字
+# （`This table details`／`This table presents`／`This table`），等於整條路沒有產出。
+TABLE_SUMMARY_MAX_TOKENS = 200
+
+# 生成 caption 時往前收多少個 element 當脈絡。比 TABLE_CAPTION_LOOKBACK 大，因為這裡不是
+# 「挑一個 caption」而是「給 LLM 看夠不夠判斷這是什麼表」，寧可多給幾段。
+TABLE_CONTEXT_LOOKBACK = 8
+TABLE_CONTEXT_MAXLEN = 900
+
+# 429 退避。⚠ 這裡原本沒有任何重試 —— 撞到就靜默回傳 ""，表格變成完全沒 caption，而且
+# **失敗不留痕跡**。當初是在 Gemini 上實測出來的（free tier 對 2.5-flash 只有 5 requests/min，
+# 連呼叫三次就 429 兩次）；換 Groq 後額度寬得多，但重建時要跑上百張表，還是必須有退避。
+TABLE_SUMMARY_MAX_RETRIES = 4
+TABLE_SUMMARY_BACKOFF = 8.0      # 秒；指數退避 8/16/24（Groq 是 RPM/TPM 制，數秒即可跨窗）
+
 
 def _is_meaningful_caption(text: str) -> bool:
     """判斷一段前文能不能當表格 caption：要有實際文字內容，排除 unstructured 在
-    封面表格周圍吐出的純標點/空白雜訊（例如 ', ,' 或孤立的 'OR'）。"""
+    封面表格周圍吐出的純標點/空白雜訊（例如 ', ,' 或孤立的 'OR'）。
+
+    ⚠ 2026-08-11 加「至少 CAPTION_MIN_LETTERS 個英文字母」：原本只要求「≥3 字元且含任一
+    alnum」，**頁碼會通過**。實測 `us_stock_rag_edgar_head` 有 4 個 table chunk 的 caption
+    就是頁碼（META `3228`／`790`／`3215`／`3285`），其中 `META_10Q_202603 #12` 是真的
+    ARPP 指標時間序列（`| ARPP: | $11.20 | $11.89 | …`）、表格本身沒有任何期間標頭 —— 而
+    因為「3228」被判為有效 caption，`_llm_summarize_table` **根本沒被呼叫**。最需要摘要
+    的表被一個頁碼擋在門外。
+    """
     stripped = text.strip()
-    return len(stripped) >= 3 and any(ch.isalnum() for ch in stripped)
+    if len(stripped) < 3:
+        return False
+    return sum(1 for ch in stripped if ch.isalpha()) >= CAPTION_MIN_LETTERS
 
 
 # 往表格前方最多回溯幾個 element 找 caption。
@@ -259,37 +303,134 @@ def _count_table_rows(markdown: str) -> int:
 
 _TABLE_SUMMARY_SYSTEM = (
     "You are a financial document analyst. "
-    "Given a Markdown table from a SEC filing, write ONE concise sentence "
+    "Given a Markdown table from a SEC filing (plus the document text that "
+    "immediately precedes it, if provided), write ONE concise sentence "
     "(max 30 words) describing what the table contains: the type of data, "
-    "company/segment if apparent, and time period if visible. "
+    "which section/segment it belongs to, and the time period it covers. "
+    "Use the preceding text to identify the subject — do NOT guess. "
+    "If something is not stated, leave it out rather than inferring it. "
     "Do NOT repeat specific numbers. Output only the sentence, no preamble."
 )
 
+_SEPARATOR_ROW = re.compile(r"^[\s|:-]*$")
 
-def _llm_summarize_table(markdown: str) -> str:
-    """用 Gemini 為找不到 caption 的大型表格生成一行摘要。
+
+def _compact_table_markdown(markdown: str) -> str:
+    """壓掉壓平表格裡的分隔列與連續空格子，讓字元上限裝的是內容而不是 `| --- |`。
+
+    動機（實測）：走到 LLM 這條路的 11 張表，前 1500 字元裡平均 **41%** 是 `|`／`-`／空白，
+    最糟的 `TSLA_10Q_202606 #13` 是 66% —— 名目上給了 1500 字元，實際內容只有幾百字元。
+    只影響餵給 LLM 的副本，寫進 chunk 的 body 不變（數字訊號要留給檢索）。
+    """
+    lines = [l for l in markdown.splitlines() if not _SEPARATOR_ROW.match(l)]
+    out = []
+    for l in lines:
+        l = re.sub(r"(\|\s*)+\|", "|", l)     # `| | | |` → `|`
+        l = re.sub(r"[ \t]{2,}", " ", l).strip()
+        if l and not _SEPARATOR_ROW.match(l):
+            out.append(l)
+    return "\n".join(out)
+
+
+def _table_context(elements: list, table_idx: int) -> str:
+    """往前收最多 TABLE_CONTEXT_LOOKBACK 個 element 的原文，當作表格的脈絡。
+
+    與 _find_caption 的差別，也是為什麼要有這個函式：_find_caption 是在「挑**一個**能直接
+    當 caption 的前文」，被 _is_meaningful_caption 擋掉的一律不要；這裡是在「湊足夠讓 LLM
+    判斷這是什麼表的材料」，所以**照收**（頁碼之類的雜訊留給 LLM 自己忽略，比讓它完全看不到
+    上下文好）。遇到前一張 Table 就停 —— 跨過去就是別的區塊了，同 _find_caption。
+
+    ⚠ 這一段是**確定性取材**（Python），只有「概括成一句話」交給 LLM，判準見 memory
+    `llm-vs-python-task-split`。舊版只餵表格本身，而 caption 要還原的資訊（這是什麼表、
+    屬於哪一節、哪一期）本來就寫在表格**上方** —— 等於輸入裡沒有答案，換多大的模型都補不回來。
+    """
+    from unstructured.documents.elements import Table
+
+    picked: list[str] = []
+    for j in range(table_idx - 1, -1, -1):
+        if len(picked) >= TABLE_CONTEXT_LOOKBACK:
+            break
+        prev = elements[j]
+        if isinstance(prev, Table):
+            break
+        txt = (prev.text or "").strip()
+        if txt:
+            picked.append(txt)
+    ctx = " ".join(reversed(picked))
+    return ctx[-TABLE_CONTEXT_MAXLEN:] if len(ctx) > TABLE_CONTEXT_MAXLEN else ctx
+
+
+_groq_client = None
+
+
+def _get_summary_client():
+    """延遲初始化 Groq（OpenAI 相容）client；未設 GROQ_API_KEY 時回傳 None。
+    與 fetch_data.py::_get_groq_client 同一套用法，不另外引入 groq SDK。"""
+    global _groq_client
+    if not os.getenv("GROQ_API_KEY"):
+        return None
+    if _groq_client is None:
+        from openai import OpenAI
+        _groq_client = OpenAI(api_key=os.getenv("GROQ_API_KEY"),
+                              base_url=os.getenv("GROQ_BASE_URL",
+                                                 "https://api.groq.com/openai/v1"))
+    return _groq_client
+
+
+def _llm_summarize_table(markdown: str, context: str = "", item_id: str = "") -> str:
+    """為找不到 caption 的大型表格生成一行摘要（Groq，模型見 TABLE_SUMMARY_MODEL）。
     摘要只描述「這是什麼表、涵蓋哪些指標」，不重複表格數字（數字已在 body 裡）。
     LLM call 失敗時靜默回傳空字串，表格仍以純 Markdown 寫入。
-    走 GEMINI_API_KEY（與 rag_query.py 的 Gemini 路徑一致），而非 LiteLLM（額度/認證
-    不穩定，曾在批量 ingest 時整批 401 失敗）。"""
-    try:
-        from google import genai
-        from google.genai import types
 
-        client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-        config = types.GenerateContentConfig(
-            system_instruction=_TABLE_SUMMARY_SYSTEM,
-            max_output_tokens=60,
-        )
-        resp = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=markdown[:1500],
-            config=config,
-        )
-        return (resp.text or "").strip()
-    except Exception as e:
-        print(f"  [WARN] LLM table summary failed: {e!r}")
+    `context`（表格前方原文，由 _table_context 取）與 `item_id` 都是 2026-08-11 加的：
+    公司與期間**不需要**靠這裡補（chunk 文字已被 `[TSLA 10-Q period 202606]` 前綴注入），
+    缺的是「這張表在講什麼、屬於哪一節」。**不給前後文時模型不會沉默，它會填空**——實測
+    Gemini 對 META ARPP 那張（表格內完全沒有期間標頭）答出 `nine months ended September 30,
+    2023 and 2022`，而該檔是 202603；給了前文之後改答 `for various quarters`。捏造的期間
+    會被 prepend 進 chunk 文字一起 embed，變成帶錯標籤的可檢索片段，所以這不是美觀問題。
+
+    `temperature=0`：未固定 temperature 是 CLAUDE.md「重建不會逐字重現舊 collection」
+    第 ② 條記載的變異來源之一。⚠ **但別當成確定性**——實測三張表各跑三次，兩張全等、
+    `GOOGL_10Q_202606 #18` 在兩種都正確的措辭間跳動（`Changes in stockholders' equity
+    components for…` ↔ `Stockholders' equity changes for…`）。temperature=0 不等於確定性
+    這件事在 LLM 層是通例（同 memory `pipeline-nondeterminism-temp0`），所以「重建後
+    table chunk 有少量差異」這個現象**會收斂但不會消失**；要判斷改動有沒有動到切塊，
+    仍然是比 text chunk（確定性）而不是 table。
+    """
+    client = _get_summary_client()
+    if client is None:
         return ""
+    body = _compact_table_markdown(markdown)[:TABLE_SUMMARY_MAX_CHARS]
+    parts = []
+    if item_id:
+        parts.append(f"Filing section: {item_id}")
+    if context:
+        parts.append(f"Text immediately preceding the table:\n{context}")
+    parts.append(f"Table (Markdown):\n{body}")
+
+    for attempt in range(TABLE_SUMMARY_MAX_RETRIES):
+        try:
+            resp = client.chat.completions.create(
+                model=TABLE_SUMMARY_MODEL,
+                temperature=0,
+                max_completion_tokens=TABLE_SUMMARY_MAX_TOKENS,
+                messages=[{"role": "system", "content": _TABLE_SUMMARY_SYSTEM},
+                          {"role": "user", "content": "\n\n".join(parts)}],
+            )
+            return (resp.choices[0].message.content or "").strip()
+        except Exception as e:
+            # 只對額度類錯誤退避重試；其他錯誤（認證、參數、模型名打錯）重試也不會好。
+            if "429" not in str(e) and "rate" not in str(e).lower():
+                print(f"  [WARN] LLM table summary failed: {e!r}")
+                return ""
+            if attempt == TABLE_SUMMARY_MAX_RETRIES - 1:
+                print(f"  [WARN] LLM table summary 額度重試用盡: {e!r}")
+                return ""
+            wait = TABLE_SUMMARY_BACKOFF * (attempt + 1)
+            print(f"  [WARN] table summary 429，{wait:.0f}s 後重試 "
+                  f"({attempt + 1}/{TABLE_SUMMARY_MAX_RETRIES - 1})")
+            time.sleep(wait)
+    return ""
 
 
 def _find_caption(elements: list, table_idx: int) -> str:
@@ -370,8 +511,9 @@ def build_chunk_records(elements: list, semantic_chunker) -> list[dict]:
 
     Table 的 caption 取得策略（依序嘗試）：
       1. 向前回溯最多 TABLE_CAPTION_LOOKBACK 個 element，取最近的有意義前文。
-      2. 若找不到（回傳 ""）且表格列數 >= TABLE_SUMMARY_MIN_ROWS，
-         呼叫 LLM 生成一行摘要（只描述「這是什麼表」，不重複數字）。
+      2. 若找不到（回傳 ""）且表格列數 >= TABLE_SUMMARY_MIN_ROWS，呼叫 LLM 生成一行摘要
+         （只描述「這是什麼表」，不重複數字），**並把表格前方原文一起餵進去**
+         （`_table_context`，2026-08-11 加 —— 只餵表格等於輸入裡沒有答案）。
       3. 兩者都失敗（太小的表格或 LLM call 失敗），直接用純 Markdown，不加 caption。
 
     閾值設計理由：
@@ -392,7 +534,7 @@ def build_chunk_records(elements: list, semantic_chunker) -> list[dict]:
                 continue
             caption = _find_caption(elements, i)
             if not caption and _count_table_rows(body) >= TABLE_SUMMARY_MIN_ROWS:
-                caption = _llm_summarize_table(body)
+                caption = _llm_summarize_table(body, context=_table_context(elements, i))
             text = f"{caption}\n\n{body}" if caption else body
             records.append({"text": text, "chunk_type": "table"})
         else:

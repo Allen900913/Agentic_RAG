@@ -30,6 +30,7 @@ import re
 import sys
 import threading
 
+import llm_replay as _replay
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
@@ -39,7 +40,9 @@ QDRANT_PATH      = os.getenv("QDRANT_PATH", "./qdrant_db")
 QDRANT_URL       = os.getenv("QDRANT_URL", "")   # 若設定則走 server mode（Docker）
 EMBEDDING_MODEL  = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
 RERANK_MODEL     = os.getenv("RERANK_MODEL", "BAAI/bge-reranker-v2-m3")
-COLLECTION_NAME  = "us_stock_rag_edgar_exp4"
+# 生產 collection。用 env 覆蓋才能在不改碼的情況下跑 collection A/B（gold 生成、eval、
+# agentic 全都是 import rag_query 取這個常數，改碼跑完忘了改回來是實際發生過的風險）。
+COLLECTION_NAME  = os.getenv("RAG_COLLECTION", "us_stock_rag_edgar_period")
 DENSE_VECTOR_NAME  = "dense"
 SPARSE_VECTOR_NAME = "sparse"
 
@@ -860,6 +863,10 @@ def translate_query_to_english(query: str, model_name: str = DEFAULT_MODEL) -> s
     query 已是英文則原樣返回；翻譯失敗時 fallback 回原 query（不讓翻譯成為單點故障）。"""
     if _looks_english(query):
         return query
+    # 重放快取（見 llm_replay）：未設 RAG_REPLAY_CACHE 時完全 no-op。
+    _hit = _replay.get("translate_en", query)
+    if _hit is not _replay.MISS:
+        return _hit
     try:
         en = call_llm(
             [
@@ -873,7 +880,9 @@ def translate_query_to_english(query: str, model_name: str = DEFAULT_MODEL) -> s
         # 避免 Windows cp950 終端 print 時 UnicodeEncodeError，也讓 tokenizer 輸入更乾淨。
         for ch in ("‐", "‑", "‒", "–", "—", "―"):
             en = en.replace(ch, "-")
-        return en or query
+        en = en or query
+        _replay.put("translate_en", query, en)
+        return en
     except Exception as e:
         print(f"WARN  - rerank query translation failed ({e!r}); using original query")
         return query
@@ -986,6 +995,57 @@ def _build_fallback_note(filters: list[dict], fused_points: list) -> str:
         f"知識庫沒有「{scope}」在所詢問期間（{requested}）的資料，"
         f"以下回答改用最接近的可得期間（{actual_str}）。"
     )
+
+
+_NEAR_DUP_NUM = re.compile(r"\b\d{1,3},\d{3}\b")
+
+
+def _suppress_near_duplicates(ranked: list[dict], min_shared: int = 5,
+                              min_cover: float = 0.9) -> tuple[list[dict], int]:
+    """在 rerank 降序池上做確定性近重複抑制：**同一來源檔**、且低分那個的千分位數字集合被
+    高分那個近乎完整包含（子集）時，丟掉低分那個。回傳 (過濾後的池, 丟棄數)。零 LLM。
+
+    ⛔ **預設關閉**（env `RAG_SUPPRESS_NEAR_DUP=1` 才啟用）。原因見下面的量測——它解決的
+    問題在下游其實已經被處理掉大半，收益落在量不出來的區間，但誤刪風險是真的。
+
+    量測（`us_stock_rag_edgar_period`，100 題）：
+      · top-8 檢索池內「同來源且共享 >=3 個千分位數字」的重複對＝**149 對 / 32 題**
+        （組合分佈：text+text 81、table+text 61、table+table 7）
+      · 但這些**不是最後餵給生成器的東西**。agentic 的 Grader（`_check_sufficiency` 圈
+        `relevant_ids`）只留下約一半候選 → **最終 contexts 內只剩 18 對 / 11 題**，
+        LLM 相關性判斷已經順手清掉 88% 的重複。
+      · 殘留最嚴重的是 lex-14（Meta FY2025 Diluted EPS）：最後 4 個 chunk 全部來自
+        `META_10K_2025.html` 且兩兩重複（C(4,2)=6 對全中）。真正的病是**來源單一化**
+        （top-8 全部來自同一份文件），不只是「同一張表出現兩次」。
+
+    規則刻意保守,三個條件同時成立才丟：
+      1. 同一個 `source`（跨檔絕不比——不同公司/不同期的相同數字是巧合,不是重複）
+      2. 共享 >= min_shared 個千分位數字（<5 個容易是年份/股數等偶然相同）
+      3. 低分那個自己的數字有 >= min_cover 落在高分那個裡（**它是子集**）
+    **只丟子集、只丟低分的那個**：反過來丟超集會損失資訊,而高分那個是 cross-encoder
+    認為更相關的。數字少於 min_shared 個的 chunk（純敘述段落）永遠不會被丟。
+    """
+    kept: list[dict] = []
+    kept_nums: list[tuple[str, set]] = []
+    dropped = 0
+    for c in ranked:
+        nums = set(_NEAR_DUP_NUM.findall(c.get("content", "")))
+        src = c.get("source", "")
+        redundant = False
+        if len(nums) >= min_shared:
+            for ksrc, knums in kept_nums:
+                if ksrc != src:
+                    continue
+                shared = nums & knums
+                if len(shared) >= min_shared and len(shared) / len(nums) >= min_cover:
+                    redundant = True
+                    break
+        if redundant:
+            dropped += 1
+            continue
+        kept.append(c)
+        kept_nums.append((src, nums))
+    return kept, dropped
 
 
 def _ensure_ticker_coverage(ranked: list[dict], selected: list[dict], want_tickers) -> list[dict]:
@@ -1381,6 +1441,13 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
 
     # 每家保底覆蓋：query 明確點名多家 ticker 時，保證每一家在回傳 top_k 裡至少有一個 chunk
     # （缺的從完整排序池補上，必要時擴充；見 _ensure_ticker_coverage）。
+    # 近重複抑制（預設關閉，見 _suppress_near_duplicates）：在截斷成 top_k 之前做，
+    # 被丟掉的名額自動由池裡下一個候選遞補。
+    if os.getenv("RAG_SUPPRESS_NEAR_DUP", "") == "1":
+        enriched, _n_dup = _suppress_near_duplicates(enriched)
+        if _n_dup:
+            print(f"DEBUG - Near-dup suppression: dropped {_n_dup} redundant candidates")
+
     result = enriched[:top_k]
     _ticker_f = next((f for f in detected_filters
                       if f["field"] == "ticker" and f["polarity"] == "include"), None)

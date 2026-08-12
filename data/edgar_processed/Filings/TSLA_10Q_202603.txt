@@ -180,8 +180,9 @@ INDEX
 |  | Consolidated Statements of Cash Flows | 8 ...
 
 --- [TABLE extra #7] ---
-| Three Months Ended March 31, 2025 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Loss |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | ...
+Stockholders' equity changes for the three months ended March 31, 2025.
+
+| Three Months Ended March 31, 2025 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Loss |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  |  ...
 
 --- [TABLE extra #8] ---
 INDEX TO EXHIBITS
@@ -205,6 +206,8 @@ None of the Company’s directors or officers adopted, modified or terminated a 
 CEO Compensation
 
 As previously disclosed in the Company’s annual ...
+
+[SECTION] item=Part_II_Item_5 period=None 依小標切成 2 段：(小標前=章節層) | CEO Compensation
 
 --- [ITEM] Part I, Item 1 (len=73402 chars) ---
 ITEM 1. FINANCIAL STATEMENTS
@@ -235,6 +238,8 @@ Prepaid expenses and other current assets6,612 7,615 
 
 Total current assets69,...
 
+[MIN-MERGE] item=Part_I_Item_1 section=None 32 → 30 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 [RCTS] item=Part_I_Item_1 原 chunk 1606 token > 1200 → 補切成 3 份
 
 [RCTS] item=Part_I_Item_1 原 chunk 2354 token > 1200 → 補切成 4 份
@@ -252,7 +257,11 @@ Overview
 
 We are focused on bringing artificial intelligence into the real world, through prod...
 
-[RCTS] item=Part_I_Item_2 原 chunk 1681 token > 1200 → 補切成 3 份
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 17 段：(小標前=章節層) | Overview | Automotive and AI Enabled Products—Production | Infrastructure | Cash Flow and Capital Expenditure Trends | Critical Accounting Policies and Estimates | Recent Accounting Pronouncements | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Liquidity and Capital Resources | Material Cash Requirements | Sources and Conditions of Liquidity | Cash Flows from Operating Activities | Cash Flows from Investing Activities | Cash Flows from Financing Activities
+
+[MIN-MERGE] item=Part_I_Item_2 section=Automotive and AI Enabled Products—Production 5 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Cash Flows from Financing Activities 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 1 (len=230 chars) ---
 ITEM 1. LEGAL PROCEEDINGS
@@ -292,6 +301,12 @@ Exhibit DescriptionFormFile No.ExhibitFiling Date
 X
 
 31.1Rule 13a-14(a) / 15(d...
+
+[SECTION] item=Part_II_Item_6 period=None 依小標切成 2 段：(小標前=章節層) | Exhibit DescriptionFormFile No.ExhibitFiling Date
+
+[MIN-MERGE] item=Part_II_Item_6 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_II_Item_6 section=Exhibit DescriptionFormFile No.ExhibitFiling Date 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 4 (len=48 chars) ---
 ITEM 4. MINE SAFETY DISCLOSURES

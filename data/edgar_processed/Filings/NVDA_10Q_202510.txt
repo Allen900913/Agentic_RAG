@@ -235,6 +235,8 @@ Gross profit41,849 26,156 102,370 69,135 
 
 Operati...
 
+[MIN-MERGE] item=Part_I_Item_1 section=None 22 → 20 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 [RCTS] item=Part_I_Item_1 原 chunk 2512 token > 1200 → 補切成 4 份
 
 [RCTS] item=Part_I_Item_1 原 chunk 1896 token > 1200 → 補切成 3 份
@@ -248,7 +250,11 @@ Forward-Looking Statements 
 
 This Quarterly Report on Form 10-Q contains forward-looking statements within the meaning of Section 27A of the Securities Act of 1933, as amended, and Section 21E of the Securities Exchange Act of 1934, as amended, which are subject to the “safe harbor” created by those sect...
 
-[RCTS] item=Part_I_Item_2 原 chunk 2198 token > 1200 → 補切成 4 份
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 13 段：Forward-Looking Statements | Our Company and Our Businesses | Recent Developments, Future Objectives and Challenges | Critical Accounting Policies and Estimates | Results of Operations | Concentration of Revenue | Gross Profit and Gross Margin | Income Taxes | Liquidity | Capital Return to Shareholders | Outstanding Indebtedness and Commercial Paper Program | Material Cash Requirements and Other Obligations | Climate Change
+
+[MIN-MERGE] item=Part_I_Item_2 section=Liquidity 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Outstanding Indebtedness and Commercial Paper Program 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part I, Item 3 (len=1789 chars) ---
 Item 3. Quantitative and Qualitative Disclosures about Market Risk
@@ -256,6 +262,8 @@ Item 3. Quantitative and Qualitative Disclosures about Market Risk
 Investment and Interest Rate Risk
 
 Financial market risks related to investment and interest rate risk are described in Part II, Item 7A, “Quantitative and Qualitative Disclosures About Market Risk” in our Annual Report on Form 10-K for the fiscal year ended January 26, 2025. Our marketable equity securities consist of publicly-he...
+
+[SECTION] item=Part_I_Item_3 period=None 依小標切成 2 段：Investment and Interest Rate Risk | Foreign Exchange Rate Risk
 
 --- [ITEM] Part I, Item 4 (len=2333 chars) ---
 Item 4. Controls and Procedures
@@ -265,6 +273,8 @@ Controls and Procedures
 Disclosure Controls and Procedures
 
 Based on their evaluation as of October 26, 2025, our management, including our Chief Executive Officer and Chief Financial Officer, has concluded that our disclosure controls and procedures (as defined in Rule 13a-15(e) under the Exchange Act) were effective to provide reasonable assurance that the infor...
+
+[SECTION] item=Part_I_Item_4 period=None 依小標切成 2 段：Disclosure Controls and Procedures | Inherent Limitations on Effectiveness of Controls
 
 --- [ITEM] Part II, Item 1 (len=381 chars) ---
 Item 1. Legal Proceedings
@@ -289,6 +299,8 @@ On August 26, 2025, our Board of Directors approved an additional $60.0 billion
 
 We repurchased 70 million and 262 million shares of our common stock for $12.6 billion and $36.7 billion during the third quarter and first nine months of ...
 
+[SECTION] item=Part_II_Item_2 period=None 依小標切成 2 段：Issuer Purchases of Equity Securities | Employee Equity Incentive Program Share Withholding
+
 --- [ITEM] Part II, Item 5 (len=812 chars) ---
 Item 5. Other Information
 
@@ -312,3 +324,5 @@ Exhibit No. Exhibit Description
 32.1#*Certification of Chief Executive Officer as required by Rule 13a-14(b) of the Securities Exchange Act of 1934
 
 ...
+
+[SECTION] item=Part_II_Item_6 period=None 依小標切成 2 段：Exhibit No. Exhibit Description | Colette M. Kress
