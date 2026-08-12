@@ -42,7 +42,17 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
             api_server.py ──► app.py     eval/run_agentic_on_evalset.py
 ```
 
-- **生產 collection**：`us_stock_rag_edgar_exp4`。檢索＝BGE-M3 dense+sparse hybrid → RRF → cross-encoder rerank。
+- **檢索**：BGE-M3 dense+sparse hybrid → RRF → cross-encoder rerank。
+- **collection 現況（2026-08-12，⚠ 沒有單一「生產 collection」，選錯基準會量錯東西）**：
+
+  | collection | 角色 |
+  |---|---|
+  | `us_stock_rag_edgar_exp4` | **歷史基準，不要當對照臂**。Fundamentals 比率還是小數（`0.183` 而非 `18.30%`），且從未進入 period／head／ground 這條線的任何一次對照 |
+  | `us_stock_rag_edgar_ground2` | **目前最佳、尚未升生產**。四個 ingest 修法全生效；確定性閘門全綠、mix-03／mix-09 由 FAIL 轉 PASS、每一項整體 RAGAS 都優於 `head` |
+  | `us_stock_rag_edgar_period` | **碼上的實際預設**（[`rag_query.py`](rag_query.py) `COLLECTION_NAME`）＝沒帶 env 時真正被查的那個。無小標層，故 semantic 類最強、mix-03／mix-09 會錯 |
+  | `head` / `ground` | 切塊層的中間世代，只留作三臂對照 |
+
+  ⚠ **這一格曾經漂移過**：本檔原本寫「生產 collection ＝ exp4」，而碼上預設是 `period`——兩者不同已久。**跑任何實驗前先 `grep COLLECTION_NAME rag_query.py` 確認**，並用 env `RAG_COLLECTION` 覆蓋而不是改碼。升生產前的兩個卡點（`use_heading` 收窄、缺 exp4 對照臂）見 [`BACKLOG.md`](BACKLOG.md)〈未定案的決策〉。
 - **預設 LLM**：NVIDIA NIM `openai/gpt-oss-120b`；模型名 `gemini-*` 開頭走 Gemini（`rq.call_llm` 依名稱路由）。ingest 的表格摘要走 Groq `llama-3.3-70b-versatile`。
 - **切塊層級**：Item → 期間章節 → 通用小標 → 幅度接地 → SemanticChunker → RCTS 上界 → min-size 下界。前四層是**規則**（決定「哪裡不准切」），SemanticChunker 決定「裡面哪裡切」——**前者取代不了後者**。各層細節與診斷見 [`docs/INGEST.md`](docs/INGEST.md)。
 

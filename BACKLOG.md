@@ -11,7 +11,8 @@
 ## 立即可做（不需重建、不燒額度）
 
 - **`eval/replay_cache.json` 有未提交的新增項**（+25 translate_en、+141 check，0 筆覆寫）。要決定納不納版控。
-- **`us_stock_rag_edgar_exp4` 的 Fundamentals 比率還是小數**（`Revenue Growth (YoY): 0.183`），`head`／`period` 已是 `18.30%`——`migrate_fundamentals_pct.py` 沒套到 exp4。卡點：要先決定 exp4 的角色。**CLAUDE.md 寫它是「生產 collection」、本檔〈環境雜務〉寫它是「歷史基準」，兩者矛盾**；若是歷史基準就該留著不動並改 CLAUDE.md，若是生產就得補遷移。（2026-08-11 scroll 三個 collection 時發現）
+- ~~**`us_stock_rag_edgar_exp4` 的 Fundamentals 比率還是小數**~~ → **2026-08-12 定案：exp4 ＝ 歷史基準，不補遷移、不當對照臂**。比率留在 `0.183`（`head`／`period`／`ground2` 都已是 `18.30%`）。理由：查 [`rag_query.py`](rag_query.py) `COLLECTION_NAME` 後發現**碼上的預設一直是 `us_stock_rag_edgar_period`**，exp4 早就不是任何入口實際查的東西——CLAUDE.md 的「生產 collection ＝ exp4」是純文件漂移，已改成如實的 collection 現況表。
+  **復活條件**：若日後要拿 exp4 當對照臂（例如驗「切塊六層相對 Exp0~4 世代的累積效果」），得先跑 `migrate_fundamentals_pct.py`，否則 Fundamentals 類題目的差異分不清是切塊還是單位。
 
 ---
 
