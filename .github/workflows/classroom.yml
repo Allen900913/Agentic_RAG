@@ -9,7 +9,12 @@ permissions:
   contents: read
 jobs:
   run-autograding-tests:
-    runs-on: self-hosted
+    # ⚠ 原本是 `self-hosted`，但本 repo 沒有註冊任何自架 runner
+    # （`gh api .../actions/runners` → total_count=0），導致 2026-08-07 起的
+    # 5 次 run 全部在等滿 24 小時後被 cancelled ＝ 評分一次都沒跑過。
+    # 改用 GitHub 代管 runner；這 5 個測項都只是 shell 檔案存在性檢查，
+    # 不需要課程機器的環境。若日後課程提供 runner，改回 self-hosted 即可。
+    runs-on: ubuntu-latest
     if: github.actor != 'github-classroom[bot]'
 
     steps:
