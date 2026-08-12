@@ -76,8 +76,10 @@ def main() -> None:
             tag = f"{tk} {form} {filing.accession_no}"
             n_sections = 0
             for item_name, item_text in item_texts.items():
-                # 鏡射生產程式的 gate（見 _TABLE_DOMINATED_ITEMS）
-                use_heading = item_name not in du._TABLE_DOMINATED_ITEMS
+                # 鏡射生產程式的 gate（2026-08-12 隨主流程收窄成 _MDNA_ITEMS 白名單）。
+                # ⚠ 這一行必須與 data_update_edgar.py 的 use_heading 逐字一致——它是**複製**
+                # 不是 import，兩邊漂移的話這支腳本會量到一個生產上不存在的行為。
+                use_heading = item_name in du._MDNA_ITEMS
                 for plabel, sect in du._split_by_period_section(item_text):
                     subs = (du._split_by_subheading(sect) if use_heading
                             else [(None, sect)])
@@ -102,7 +104,12 @@ def main() -> None:
                     if len(subs) > 1:
                         n_sections += 1
                         if not use_heading:
-                            n_table_item_split += 1     # ② 不該發生
+                            # ⚠ 2026-08-12 查明：這個計數器**恆為 0，沒有判別力**。
+                            # use_heading=False 時上面把 subs 寫死成 [(None, sect)]（長度 1），
+                            # 而這裡在 `len(subs) > 1` 之內——結構上不可能到達。
+                            # 留著只是為了「若上面的 gate 寫法改變，這裡仍能接住」。
+                            # 真正有判別力的是判準③（表格對帳）與⑤（幅度接地）。
+                            n_table_item_split += 1     # ② 不該發生（實際不可達）
                         if args.show:
                             print(f"{tag} | {item_name} | period={plabel}")
                         for slabel, body in subs:

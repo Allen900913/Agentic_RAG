@@ -620,6 +620,10 @@ _MIN_SECTION_CHARS = 200
 # 'Page'／'/s/ PricewaterhouseCoopers LLP' 這類非標題。這些 Item 的表格本來就走
 # chunk_type=table 另一條路,散文殘渣不需要標題層。
 # 這是**格式定義的封閉集合**（SEC 表格結構固定）,列清單正當,同 VALID_*_ITEMS 的理由。
+# ⚠ 2026-08-12 起**已無使用點**：小標層改成 `_MDNA_ITEMS` 白名單（見 use_heading 那行），
+# 白名單天然涵蓋了這份黑名單想擋的東西。保留不刪的理由有二：① 下面那段註解記的是實測知識
+# （Item 8 抓到 150 個假標題、區間中位數 10 字元），刪掉就失傳；② 若收窄的驗收失敗要回退,
+# 這是回退目標。**復活條件**：`use_heading` 改回黑名單制時。
 _TABLE_DOMINATED_ITEMS = {"Item 6", "Item 8", "Item 15", "Part I, Item 1"}
 
 # 語意切塊的**下界**護欄。此前只有上界（RCTS_THRESHOLD=1200 token 補切）而沒有下界,
@@ -1124,8 +1128,17 @@ def _fetch_filing_records(ticker: str, form: str, filing, semantic_chunker,
             dump_lines.append(
                 f"[PERIOD] item={item_id} 依期間章節標題切成 {len(sections)} 段："
                 + " | ".join(lbl or "(標題前)" for lbl, _ in sections) + "\n")
-        # 表格／清單為主體的 Item 不套通用標題層（見 _TABLE_DOMINATED_ITEMS）。
-        use_heading = item_name not in _TABLE_DOMINATED_ITEMS
+        # 通用小標層**只套用在 MD&A**（2026-08-12 收窄；原本是「所有非表格主體的 Item」）。
+        # 這一層的用途是修 mix-03（把分部數字當成合併總計），而那個混淆**只存在於 MD&A**
+        # ——分部與合併總計並列是 MD&A 的固定寫法。套在 Item 1（Business）／Item 1A
+        # （Risk Factors）這些敘事 item 上只有代價沒有收益：把大段敘述切碎，每個 chunk 帶
+        # 的證據變少。三臂 RAGAS 的證據——semantic context_recall period 0.687 → head 0.509
+        # → ground2 0.497，而 semantic 撈到的 52 個 filing chunk 有 43 個（83%）來自非 MD&A
+        # （Item 1 Business 25、Item 1A 7、Part II Item 1A 6）,`Item_1` 中位長度僅 1320 字元。
+        # head 與 ground2 是兩個獨立 run 卻同樣掉 ~0.19，排除單次抽樣噪音＝機制性退步。
+        # ⚠ 這個收窄**碰不到 mix-03／mix-09 的路徑**：mix-03 在 `Part I, Item 2`、幅度接地
+        # （下一行）本來就 gate 在 `_MDNA_ITEMS`，兩者都在收窄後的範圍內。
+        use_heading = item_name in _MDNA_ITEMS
         for period_label, section_text in sections:
             # 期間章節之下再依通用小標切（第三層硬邊界，見 _split_by_subheading）。
             subsecs = (_split_by_subheading(section_text)
