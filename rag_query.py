@@ -42,7 +42,7 @@ EMBEDDING_MODEL  = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
 RERANK_MODEL     = os.getenv("RERANK_MODEL", "BAAI/bge-reranker-v2-m3")
 # 生產 collection。用 env 覆蓋才能在不改碼的情況下跑 collection A/B（gold 生成、eval、
 # agentic 全都是 import rag_query 取這個常數，改碼跑完忘了改回來是實際發生過的風險）。
-COLLECTION_NAME  = os.getenv("RAG_COLLECTION", "us_stock_rag_edgar_period")
+COLLECTION_NAME  = os.getenv("RAG_COLLECTION", "us_stock_rag_edgar_mdna")
 DENSE_VECTOR_NAME  = "dense"
 SPARSE_VECTOR_NAME = "sparse"
 

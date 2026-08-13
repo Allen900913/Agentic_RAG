@@ -10,28 +10,30 @@
 
 ## 立即可做（不需重建、不燒額度）
 
+- **`--trace` 不印 web 回傳內容，只印字數**（`web fallback → 2163 chars`）。導致「web 打了但資料沒進答案」無法診斷——分不出是 Tavily 沒撈到，還是 Generator 拿到了不用。**卡點**：無。就是加幾行 trace（印標題＋網域，不印全文避免 log 爆掉）。**這是下一步該做的第一件事**，在它做完之前不要再猜下面那條的成因。
 - **`eval/replay_cache.json` 有未提交的新增項**（+25 translate_en、+141 check，0 筆覆寫）。要決定納不納版控。
 - ~~**`us_stock_rag_edgar_exp4` 的 Fundamentals 比率還是小數**~~ → **2026-08-12 定案：exp4 ＝ 歷史基準，不補遷移、不當對照臂**。比率留在 `0.183`（`head`／`period`／`ground2` 都已是 `18.30%`）。理由：查 [`rag_query.py`](rag_query.py) `COLLECTION_NAME` 後發現**碼上的預設一直是 `us_stock_rag_edgar_period`**，exp4 早就不是任何入口實際查的東西——CLAUDE.md 的「生產 collection ＝ exp4」是純文件漂移，已改成如實的 collection 現況表。
   **復活條件**：若日後要拿 exp4 當對照臂（例如驗「切塊六層相對 Exp0~4 世代的累積效果」），得先跑 `migrate_fundamentals_pct.py`，否則 Fundamentals 類題目的差異分不清是切塊還是單位。
 
 ---
 
-## 立即該做（有證據、只缺一次重建）
-
-- **把 `use_heading` 收窄到 `_MDNA_ITEMS`**（目前是 `item_name not in _TABLE_DOMINATED_ITEMS` ＝ 所有散文 item）。
-  **證據**：通用小標層的用途是修 mix-03（分部數字冒充合併總計），那個混淆**只存在於 MD&A**；但它套在 Item 1／1A 上把敘事切碎。三臂 RAGAS 顯示 semantic recall `period` 0.687 → `head` 0.509 → `ground2` 0.497，而 **semantic 撈到的 52 個 filing chunk 有 43 個（83%）來自非 MD&A**（Item 1 Business 25、Item 1A 7、Part II Item 1A 6），`Item_1` 中位長度僅 1320 字元；semantic 證據量 −31.6% 而 chunk 數幾乎不變。
-  **預期**：保住 mix-03（在 Part I, Item 2）與幅度接地（已 gate 在 `_MDNA_ITEMS`），同時把 Item 1／1A 的 chunk 還原成大塊。
-  **卡點**：要一次重建 ＋ 走完驗收鏈（4 題×3 run 確認 mix-03／mix-09 不退，全量 100 ＋ RAGAS 看 semantic 是否回到 0.6 以上）。
-
----
-
 ## 未定案的決策
 
-- **`us_stock_rag_edgar_ground2` 是否升生產**（2026-08-12 重建，四個 ingest 修法全部生效：期間章節／通用小標／幅度接地（chunk 層）／表格 caption）。
-  **已知**：確定性閘門全綠；同 fixture blocked 對照下 **mix-03 與 mix-09 各從 FAIL 變 PASS、零回歸、兩個護欄零誤報**；六個整體 RAGAS 指標全在噪音內；**每一項整體指標都優於 `head`**。
-  **代價**：semantic recall −0.190／correctness −0.110（繼承自小標層，非本次改動）。
-  **卡點兩個**：①上面那條 `use_heading` 收窄做完再比，才知道這個代價是不是可以不付；②**所有對照都是對 `period`／`head`，`exp4`（CLAUDE.md 記載的生產 collection）從未進入任何一次對照**，而且它連 Fundamentals 的百分比遷移都沒套。要嘛補一個 exp4 臂，要嘛先確認 period/head/ground 這條線已取代 exp4。
+- ~~**`use_heading` 收窄到 `_MDNA_ITEMS`**~~ → **2026-08-13 完成並升生產**（`us_stock_rag_edgar_mdna`），見 [`CHANGELOG.md`](CHANGELOG.md)。
+- ~~**`us_stock_rag_edgar_ground2` 是否升生產**~~ → **2026-08-13 由 `mdna` 取代**（收窄後每項都不輸、`check_number_defects` 同為 PASS 4／FAIL 2、semantic recall 0.497 → 0.593）。當初的兩個卡點都已解消：①收窄做完了；②**exp4 對照臂不必補**——量尺已飽和（見下），補了也量不出東西，且 exp4 連 Fundamentals 百分比遷移都沒套。
 - ~~`us_stock_rag_edgar_head` 是否升生產~~ → 被 `ground2` 取代（每一項整體指標都更好）。當初的懸案「非 AAPL 的 42 題退步沒有已證實的解釋」**已解**：semantic 15 題貢獻整體 recall 缺口 ~68%、correctness 缺口 ~59%，機制是小標層把 chunk 切小→每個 chunk 帶的證據變少。
+- **web 打了但資料沒進最終答案（2026-08-13 殘留）**。兩個實例：①「蘋果的即時市值」7 次 web、**18 次時效改判**，答案仍是 `AAPL_Fundamentals_20260612` 的 $4342.02B；② FSD 進展某一跑 2 次 web、答案零個 `[web:]` 引用。
+  **已排除**：不是管線斷掉——同一題的答案從「截至**目前**的即時市值」變成「截至 **2026-06-12** 的即時市值」，證明 `web_extra` 確實進到 Generator（修訂條款＋時間契約生效）。
+  **相關觀察（未證因果）**：web 呼叫次數多的跑次答案就好（8月新聞 5 次→優／2 次→拒答；FSD 3 次→優／2 次→零引用／0 次→只有財報）。暗示成因可能在 Tavily 回傳品質而非管線。
+  **卡點**：`--trace` 不印 web 內容（見上一節第一條），無法分辨成因。**先補觀測性再查**。
+- **live 模式成本上升**：拿掉詞表閘門＋時效改判後，前漏網三題從 1~7 輪暴增到 21、21、4 輪。機制：時效改判把 `sufficient` 一路壓成 False → replanner 一直生新子問題（每題 3 輪 × 最多 7 個 todo）。**卡點**：要先確認品質收益站得住（目前 n 太小），才知道這個成本值不值得。上界仍由 `MAX_ITERS`／`MAX_TODOS`／`WEB_SEARCH_MAX_CALLS` 擋住，不會失控。
+- **Planner 對「KB 結構上不可能有」的題仍白搜一輪**。實測 `What is NVDA's latest stock price?` 跑 21 輪檢索才輪到 web，而股價根本不是財報內容。
+  **不要讓 Planner 自己判**：它手上只有 coverage 摘要、沒有真實 chunk，只能用猜的；且 `_plan_subqueries` 回傳 `list[str]`，格式上就沒有「不檢索」這個選項。猜錯的代價不對稱（猜「沒有」但其實有 → 整題答不出來），所以架構刻意把判斷延後到 Grader 看見真實候選之後——同 [[multi-intent-agentA-is-the-leak]] 的思路。
+  **可行方向**：在 todo 層加確定性判斷——`realtime_need == "intraday"` 的子問題（股價、盤中報價）標成 web-first。訊號跟 2026-08-13 加的那個一樣，只是用在更前面一層。**卡點**：要先有觀測性確認 web 這條路本身是好的，否則是把資源導向一條還沒驗證的路。
+- **`find_authority_conflicts`（R3 財報優先）對 web 來源全盲**。[`agentic_rag_v2.py`](agentic_rag_v2.py) `_ground_source_type` 只拿 **chunks** 回頭定位數字來源，web 內容從不在 `chunks` 裡 → 從 web 來的宣稱拿不到 `src_types` → R3 的 `if not c.get("src_types"): continue` 直接跳過。2026-08-13 放行「web 數字可引用」之後，這條防線對 web-vs-財報的衝突一格都不設防。
+  **但不要直接把 web 塞進 R3**：R3 的規則是「權威（財報）> 新聞」，而 web 觸發的情境恰恰是**時效性衝突**（KB 有舊值、web 有新值），正確答案是新的那個——硬接會讓 R3 系統性地判反，把剛修好的東西再弄壞一次。R3 處理的是「同期間、不同來源」，時效衝突不在它的設計範圍。
+  **卡點**：需要的是一條新規則（同指標、值不同、時點不同 → 兩個都保留並標時點），不是改 R3。而且目前沒有量得出它的題目——eval 全程 snapshot、web 恆關，這條路徑在跑分裡永遠不執行。
+  **復活條件**：要嘛做出帶 web 的評測情境（需固定 wall clock ＋ 錄下 Tavily 回應當 fixture，否則不可重現），要嘛實跑觀察到具體誤答案例。
 - **一致性 validator 的重寫路徑**：偵測 4/4 精準，但重寫實測 **2 好 1 壞**（col-11 修掉矛盾卻把總營收誤標成雲端營收，且三層驗證全過）。選項：改成**只偵測不重寫**（把矛盾標記給使用者看）以拿掉那個 1 壞。
 - **router（複雜度分派）**：簡單題→單發、複雜→agentic；保守偏 agentic（誤判複雜為簡單代價高）。ratio 路由屬**正交檢索提示、非第三分支**，應放共用檢索層讓兩條管線都吃到。卡點：measure-gated，目前量尺分不出。
 - 生產 `rag_query.py` 是否跟進 `full_translate_en=True`。卡點：要先確認同樣的 chunk-level rerank 平坦問題在單發管線也存在。
@@ -66,6 +68,7 @@
 | **col-07**（否定框架） | 病根是「非龍頭」vs「minority share」的**框架落差**，不是翻譯；`full_translate_en` 已開仍漏 | 不上 HyDE |
 | **ckpt_R = 0.7307**（chunk recall, n=20） | 約 27% checkpoint 在候選池階段沒被撈到，多非 critical | 暫不優先 |
 | **faithfulness 不再追高** | 這是**負空間**：把 gold 當答案餵回去只拿 0.656，61/100 題輸給系統。往上推等於要求系統比標準答案更保守 | 換 metric 才談 |
+| **切塊／ingest 不再改**（2026-08-13） | **量尺飽和**：六個 RAGAS 指標五個已達或超過 gold 上限；檢索全修到完美只值 +0.024，低於 0.067 噪音底線。詳見 [`docs/EVAL.md`](docs/EVAL.md)〈量尺飽和〉 | 換沒飽和的量尺（擴充 `check_number_defects` 覆蓋率），或改攻生成層 |
 
 ---
 

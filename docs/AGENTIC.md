@@ -14,6 +14,7 @@
   - [A5.3 2026-08-08 移除 regex 降級路徑](#a5-3-2026-08-08-移除-regex-降級路徑)
   - [A5.4 2026-08-08 期間接地：讓一致性 validator 看得到原文（三個改動，踩過兩個錯的設計）](#a5-4-2026-08-08-期間接地-讓一致性-validator-看得到原文三個改動-踩過兩個錯的設計)
   - [期間接地（2026-08-08 加，`agentic_rag_v2.py` 的消費端）](#期間接地2026-08-08-加-agentic_rag_v2-py-的消費端)
+- [A6 2026-08-13 live／web 這條路：三個阻塞點與 eval 隔離的真正來源](#a6-2026-08-13-liveweb-這條路三個阻塞點與-eval-隔離的真正來源)
 
 ---
 
@@ -176,3 +177,84 @@ Microsoft 365 消費者雲端 29% / 33%      Dynamics 365  20% / 22%
 **`_ground_period_from_source` 為什麼是 Python 不是 LLM**：「這個數字出現在哪一段」是字串定位＝封閉邏輯（見 memory `llm-vs-python-task-split`）。保守條件是**只在該數字唯一落在一個期間段時才覆寫**，跨多段或無標籤一律不動；目前只處理百分比——金額寫法太多（`$2.6 billion`／`$2,600 million`／`26 億美元`），誤配風險高過收益。
 
 `period_key` 取代自由文字 `period` 當同格判準：實測同一個「截至 2026/3/31 的九個月」被 LLM 寫成過 `2026YTD`／`2026Q1Q2Q3`／`2026Q3`／`unknown` 四種，而 `2026Q3` 還同時被拿去指單季與累計 → 字串比對雙向失效（真同期判成不同期＝漏抓；不同期塌縮成同期＝誤報）。`period_months`/`period_end` 直接讀原文標題就有，**不需要換算成財年季度代碼，而換算正是出錯的那一步**。
+
+---
+
+## A6 2026-08-13 live／web 這條路：三個阻塞點與 eval 隔離的真正來源
+
+**起點**：生產模式問四題時效題（8月新聞／Azure／FSD 進展／股價市值），web_search **0/4 觸發**。逐層拆下去發現不是一個 bug，是三個獨立阻塞點疊在一起。
+
+### 阻塞點① 詞表閘門（拿掉兩道）
+
+`rq.looks_like_news_query` 與 `_RELATIVE_TIME_RE` 都掛在 web 補救判斷式上，都是硬編碼詞表。
+
+實測 18 個真實時效措辭，`_RELATIVE_TIME_RE` **漏 10 個**：「今天股價」「即時市值」「盤中報價」「這禮拜」「昨天」「今年以來」「過去一個月」「股價多少錢一股」「有什麼新聞嗎」「今年第三季」。最諷刺的是「**即時**市值」比「目前」更明確要求即時資料，卻打不到 web。
+
+**漏網的代價不是答不出來，是自信地把舊資料當成即時資料**（今天＝08-13）：
+
+| 答案 | 實際來源 |
+|---|---|
+| 「特斯拉**今天**股價下跌 2.96%」 | `TSLA_News_20260721` ← 三週前 |
+| 「蘋果**截至目前的即時市值** $4342.02B」 | `AAPL_Fundamentals_20260612` ← 兩個月前 |
+| 「Tesla **本週**將公布財報」 | `TSLA_News_20260721` ← 三週前 |
+
+三個都零時點揭露。而且詞表**連帶擋掉時效警語**——`_format_unresolved_freshness_notice` 掛在「有 web 待辦未解決」路徑上，沒觸發 web 就連警語都不會出現。
+
+### 阻塞點② 生成契約禁止引用 web（這是 binding 的那個）
+
+`rq.SYSTEM_PROMPT` 三條規則合起來讓 web 內容**不可引用因而不可用**：Rule 1「Answer ONLY based on the provided reference materials」、Rule 2「後接 `[filename, chunk #N]`」、Rule 8 最後一句「**Every number you state must be traceable to a cited chunk**」。
+
+**決定性證據**：接好管線（web 資料確實進到 prompt）後，三次跑分**仍全數退回 6 月快照的 $4,962.16B**，其中一次寧可拿舊市值除以 10-K 股數捏造「每股 $204」——**違反 Rule 8 前半句「Never invent」，只為守住後半句**。一個單純搞不清誰新誰舊的模型會直接抄那個標著 `as of` 的 $5.27T；它沒有。**缺的從來不是格式，是許可。**
+
+**修法必須在 system message**。舊版 web 區塊已在 user message 寫「若引用請用 `[web: 網址]` 標註」——沒用。拿 user turn 去赦免 system rule 權重太低。改成有 web 時才附加 `_WEB_SOURCE_AMENDMENT`（點名修訂 Rule 1/2/8）＋ `_build_temporal_contract`。
+
+⚠ **Generator 一直沒有時間契約**：`_build_temporal_contract` 掛在 Planner／Replanner／Researcher 上，唯獨 `_write_final_answer` 漏接。不是「LLM 沒有時鐘」，是系統造好了契約卻少接一個呼叫點。
+
+### 阻塞點③ Grader 不看時效——而且 coverage 讓它更嚴重
+
+`_CHECKER_PROMPT` 的「⏱ KB 時間天花板」是為了防無限空轉加的，明文寫「若候選已涵蓋 KB 最新可得資料，**即使子問題要求的期間比 KB 更新，也要判 sufficient=true**」。
+
+**結果 coverage 知識把 Grader 推向判「夠」**：「Apple 現在的本益比」撈到 6/12 Fundamentals 就 `sufficient=True`，web 永遠打不到——**這題的正規式是有過的**，證明拿掉詞表只修一半。
+
+**修法刻意不改那段 prompt**（防空轉規則本身還需要），改在 Python 層做時效改判，分工照 CLAUDE.md 判準：
+
+| 子任務 | 給誰 | 為什麼 |
+|---|---|---|
+| 「這題需要多新」 | LLM（`realtime_need` 三態：`intraday`／`days`／`none`） | 沒有唯一正確答案 |
+| 「來源多舊」 | Python（`_source_newest_date` 讀檔名 stamp） | 確定性 |
+
+單一天數門檻行不通——「今天股價」容忍 1 天、「最近進展」容忍一週，差一個數量級。改判**只降不升**（只把 true 改 false），不繞過 Grader 原本的離題判斷。
+
+`10-K/10-Q` 的 stamp 是**財報期間不是發布日**，刻意算成該期間最後一天（`NVDA_10K_2026` → 2026-12-31 ＝ 永不過期）：財報數字不該因為 wall clock 走了就被判需要上網。
+
+### eval 隔離的真正來源（別再誤認）
+
+三道詞表／相關性閘門**都不是隔離機制**。隔離只靠兩個獨立條件，各自都足夠：
+
+| 條件 | 角色 |
+|---|---|
+| `freshness_mode == LIVE` | `run_agentic_on_evalset.py` 的 `--freshness-mode` 預設就是 `snapshot` |
+| `ENABLE_WEB_SEARCH` | `--no-web` 設 False |
+| `not verdict["sufficient"]` | **生產端擋濫用**，不是隔離 |
+
+更根本的一點：**eval 裡沒有任何一題需要 KB 以外的資料**。snapshot 模式把「最新」重新定義成「KB 中最新可用資料」，所以不存在「答案在 cutoff 之後」的題。web 在 eval 中不是被擋掉造成損失，而是**根本用不上**。
+
+⚠ 但 eval **不保證檢索找得到**——`context_recall = 0.766` 就是在量這個。eval 消除的是「時間上搆不到」，不是「檢索搆不到」。
+
+常駐證明：[`eval/verify_web_gate_isolation.py`](../eval/verify_web_gate_isolation.py)，五道閘門 22 項斷言，零 LLM／零網路／零 Qdrant。其中兩項是 **byte-identical 斷言**（無 web 時 system message 逐字不變、snapshot 的 Checker prompt 不含新欄位）——那是 eval 基準不被動到的證明。
+
+### 來源白名單（放行 web 引用的必要配套）
+
+放行「web 數字可引用」而不管來源品質才是危險組合；先前只是因為 web 資料根本進不了答案而被遮住。`WEB_ALLOWED_DOMAINS` 分兩類：原始揭露方（SEC／交易所／IR 站／stockanalysis）與有編輯流程的財經媒體（Reuters／AP／CNBC／Bloomberg／Yahoo Finance）。不收論壇與意見文。
+
+**白名單濾空時明確回報查無、不退回全網**——靜默 fallback 等於白名單沒生效卻沒人知道。實測沒有餓死結果（每次仍回 ~2KB）。
+
+⚠ 這是**授權清單**不是感知詞表，性質同 `VALID_*_ITEMS`，與「硬編碼詞表是警訊」那條規則不衝突：它不試圖理解內容，只決定哪些來源准進來。
+
+### 量測教訓：n=1 測不出這條路的任何東西
+
+八題各跑一次的回歸裡，兩題看起來明顯退步（8月新聞從四條有來源的消息變成拒答、FSD 從 3 個 web 來源變成 0）。**各補跑 2 次後兩個都被推翻**——重跑中都產出了比修法前更好的答案（FSD 那次挖到 `ir.tesla.com` 的 7/22 SEC 附件：無監督 Robotaxi 已擴到邁阿密／奧蘭多／坦帕）。
+
+**答案品質的 run-to-run 變異大於單次測試的解析度**，而且 web 又多疊了一層隨機性（Tavily 每次回的東西不同）。這條路上任何「改好了／改壞了」的宣稱都需要重複跑，跟聚合指標的 0.067 噪音底線是同一件事的另一個面向。
+
+觀察到的相關性（尚未證實因果）：**web 呼叫次數多的跑次答案就好**（8月新聞 5 次→優、2 次→拒答；FSD 3 次→優、2 次→零 web 引用、0 次→只有財報）。

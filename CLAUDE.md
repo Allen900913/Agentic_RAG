@@ -43,16 +43,18 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 ```
 
 - **檢索**：BGE-M3 dense+sparse hybrid → RRF → cross-encoder rerank。
-- **collection 現況（2026-08-12，⚠ 沒有單一「生產 collection」，選錯基準會量錯東西）**：
+- **collection 現況（2026-08-13）**：
 
   | collection | 角色 |
   |---|---|
+  | `us_stock_rag_edgar_mdna` | **生產**（[`rag_query.py`](rag_query.py) `COLLECTION_NAME` 預設）。小標層收窄到 `_MDNA_ITEMS` 白名單；三道確定性閘門全綠、`check_number_defects` PASS 4／FAIL 2 為四臂最佳、檢索類 RAGAS 已達 gold 上限 |
+  | `us_stock_rag_edgar_period` | 前生產（2026-08-13 以前的碼上預設）。無小標層，**mix-03 會錯**（把分部的 24%／27 億當成公司整體，答案拼自三個 chunk） |
+  | `us_stock_rag_edgar_ground2` | 收窄前的最佳臂。四個 ingest 修法全生效，但 Item 1／1A 被小標層切碎 → semantic recall 0.497 |
   | `us_stock_rag_edgar_exp4` | **歷史基準，不要當對照臂**。Fundamentals 比率還是小數（`0.183` 而非 `18.30%`），且從未進入 period／head／ground 這條線的任何一次對照 |
-  | `us_stock_rag_edgar_ground2` | **目前最佳、尚未升生產**。四個 ingest 修法全生效；確定性閘門全綠、mix-03／mix-09 由 FAIL 轉 PASS、每一項整體 RAGAS 都優於 `head` |
-  | `us_stock_rag_edgar_period` | **碼上的實際預設**（[`rag_query.py`](rag_query.py) `COLLECTION_NAME`）＝沒帶 env 時真正被查的那個。無小標層，故 semantic 類最強、mix-03／mix-09 會錯 |
-  | `head` / `ground` | 切塊層的中間世代，只留作三臂對照 |
+  | `head` / `ground` | 切塊層的中間世代，只留作對照 |
 
-  ⚠ **這一格曾經漂移過**：本檔原本寫「生產 collection ＝ exp4」，而碼上預設是 `period`——兩者不同已久。**跑任何實驗前先 `grep COLLECTION_NAME rag_query.py` 確認**，並用 env `RAG_COLLECTION` 覆蓋而不是改碼。升生產前的兩個卡點（`use_heading` 收窄、缺 exp4 對照臂）見 [`BACKLOG.md`](BACKLOG.md)〈未定案的決策〉。
+  ⚠ **這一格漂移過兩次**，改碼時請一併更新：①本檔原本寫「生產 ＝ exp4」而碼上是 `period`；②本檔原本寫 `period` 的 mix-03／mix-09 都會錯，**實測只有 mix-03 錯、mix-09 是 PASS**。**跑任何實驗前先 `grep COLLECTION_NAME rag_query.py` 確認**，並用 env `RAG_COLLECTION` 覆蓋而不是改碼。
+- **⚠ 切塊／ingest 這條路已經到頂，不要再改**：六個 RAGAS 指標有五個已達或超過 gold 上限（把標準答案原文當系統答案餵進去評的分數，常數見 [`eval/eval_ragas_vs_rubric.py`](eval/eval_ragas_vs_rubric.py) `GOLD_BASELINE`）。檢索完美與檢索全失敗的題只差 0.141 correctness → 全修好也只有 +0.024，低於噪音底線。詳見 [`docs/EVAL.md`](docs/EVAL.md)〈量尺飽和〉。
 - **預設 LLM**：NVIDIA NIM `openai/gpt-oss-120b`；模型名 `gemini-*` 開頭走 Gemini（`rq.call_llm` 依名稱路由）。ingest 的表格摘要走 Groq `llama-3.3-70b-versatile`。
 - **切塊層級**：Item → 期間章節 → 通用小標 → 幅度接地 → SemanticChunker → RCTS 上界 → min-size 下界。前四層是**規則**（決定「哪裡不准切」），SemanticChunker 決定「裡面哪裡切」——**前者取代不了後者**。各層細節與診斷見 [`docs/INGEST.md`](docs/INGEST.md)。
 
@@ -112,6 +114,10 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 |---|---|
 | [`agentic_rag_v2.py`](agentic_rag_v2.py) | **現役 agentic 入口**。LangGraph 管線 Plan → Execute（確定性檢索）→ Grade → Synthesize（生成 + citation validator + 一致性 validator + reflect）。模型分層 RETRIEVAL=`gpt-oss-20b`、CHECKER/GEN=`gpt-oss-120b`（env `AGENTIC_*_MODEL` 可覆蓋）。時間感知走 `freshness_mode`：`snapshot`（eval）／`live`（prod）。**節點設計理由與 validator 實測見 [`docs/AGENTIC.md`](docs/AGENTIC.md)** |
 
+**web_search（live 專用）的兩條規則**：
+- **eval 隔離只靠 `freshness_mode == LIVE` 與 `ENABLE_WEB_SEARCH` 兩個獨立條件**，各自都足夠。任何「相關性詞表」（`looks_like_news_query`、`_RELATIVE_TIME_RE`）**都不是隔離機制**，2026-08-13 已全數移除——它們守的是相關性卻讓非新聞措辭的即時題永遠打不到 web，且**漏網的代價是把三週前的數字講成「今天股價」**。要改 web 判斷式，先跑 [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py)。
+- **web 內容要能被引用才用得到**。`rq.SYSTEM_PROMPT` Rule 1/2/8（尤其「Every number you state must be traceable to a cited chunk」）會讓模型寧可捏造推導值也不碰 web 數字。放行條款**必須加在 system message**，user message 版本已實測無效。
+
 ### Ingest
 | 檔案 | 是什麼 |
 |---|---|
@@ -136,5 +142,6 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 | [`eval/audit_gold_numbers.py`](eval/audit_gold_numbers.py) | **gold 自洽性稽核（零 LLM、零網路）＝跑任何評測前的前置閘門**。⚠ 不查 filing 類的數字（大乾草堆裡「值有沒有出現」不帶資訊） | 生產 `.venv` |
 | [`eval/verify_segment_split.py`](eval/verify_segment_split.py) | 驗收 ingest 的三層硬邊界（期間／小標／幅度接地）。零網路、零 embedding、不碰 Qdrant → **可在別的實驗跑的時候執行** | 生產 `.venv` |
 | [`eval/verify_table_captions.py`](eval/verify_table_captions.py) | 驗收表格 caption 品質（零 LLM、只讀 Qdrant）。**重建後必跑**：`missing_on_big` 是 Groq 429 靜默降級的唯一出口，`numeric/stub` 是 caption 選錯來源。⚠ `no_caption` 本身不是缺陷（小表不值得花 LLM call） | 生產 `.venv` |
+| [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py) | **驗收 web_search 的 eval 隔離與資料流（零 LLM、零網路、零 Qdrant，秒級）**。五道閘門 22 項斷言：①eval 隔離真值表 ②`web_extra` 跟著每次重生成走 ③**無 web 時 system message 逐字不變**（＝eval 基準不被動到的證明）④來源白名單有生效且濾空不退回全網 ⑤Grader 時效判準的日期算術。⚠ 閘門① 的 `_gate()` 是生產判斷式的**抄寫不是 import**，改那一行務必同步改這裡 | 生產 `.venv` |
 | [`eval/verify_chunk_grounding.py`](eval/verify_chunk_grounding.py) | 驗收 **chunk 層**的幅度接地（零 LLM、只讀 Qdrant ＋ reranker tokenizer）。**重建後必跑**——`verify_segment_split.py` 判準⑤ 量的是 section 層，SemanticChunker 之後的邊界它看不到（2026-08-12 就是這個盲點讓「mix-09 已修好」的宣稱被推翻）。閘門只有 `groundable_not_grounded`；`unreachable`／`blocked_by_cap` 是規則正確地不作用 | 生產 `.venv` |
 | [`eval/migrate_fundamentals_pct.py`](eval/migrate_fundamentals_pct.py) | 一次性遷移（2026-08-09 已執行）：Fundamentals 比率欄位小數 → 百分比，**並同步修 gold** | 生產 `.venv` |

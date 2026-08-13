@@ -11,6 +11,78 @@
 > **已知問題／已接受的極限**搬到 [`BACKLOG.md`](BACKLOG.md)。
 > 本檔只放日期式變更記錄。
 
+## 2026-08-13
+
+### live／web 這條路修通：三個阻塞點、來源白名單、Grader 時效判準
+
+**起點**：生產模式四題時效題，web_search **0/4 觸發**。拆下去是三個獨立阻塞點，不是一個 bug。設計理由與完整證據見 [`docs/AGENTIC.md`](docs/AGENTIC.md) A6。
+
+| # | 阻塞點 | 修法 |
+|---|---|---|
+| ① | 兩道硬編碼詞表閘門（`rq.looks_like_news_query`、`_RELATIVE_TIME_RE`）擋在 web 補救判斷式上 | 都拿掉。18 個真實時效措辭實測**漏 10 個** |
+| ② | `rq.SYSTEM_PROMPT` Rule 1/2/8 讓 web 內容不可引用＝不可用 | 有 web 時才在 **system message** 附加 `_WEB_SOURCE_AMENDMENT` ＋ 補上 Generator 一直漏接的 `_build_temporal_contract` |
+| ③ | Grader 只問「有沒有這個欄位」不問「夠不多新」 | 新增 `realtime_need` 三態（LLM 判）＋ `_source_newest_date`／`_stale_for_realtime`（Python 算），**只降不升** |
+
+**② 的決定性證據**：接好管線（web 資料確實進 prompt）後三次跑分**仍全數退回 6 月快照 $4,962.16B**，其中一次寧可拿舊市值除股數捏造「每股 $204」——違反 Rule 8「Never invent」只為守住「traceable to a cited chunk」。**缺的不是格式，是許可**；且修訂必須在 system message（user message 版本已實測無效）。
+
+**③ 的證據**：「Apple 現在的本益比」**正規式是有過的**，`sufficient=True` 擋下 → 拿掉詞表只修一半。coverage 知識反而把 Grader 推向判「夠」（`_CHECKER_PROMPT` 的防空轉條款明文如此），故**刻意不改那段 prompt**，改在 Python 層改判。
+
+**新增來源白名單** `WEB_ALLOWED_DOMAINS`（原始揭露方 ＋ 有編輯流程的財經媒體，不收論壇／意見文）。**濾空明確回報查無、不退回全網**。實測未餓死結果（每次仍 ~2KB）。
+
+**驗收（8 題 live，今天＝08-13）**：
+
+| | 修法前 | 修法後 |
+|---|---|---|
+| 「特斯拉今天股價漲跌」 | 「今天下跌 2.96%」← 三週前新聞、零揭露 | **「上漲 2.02%，收於 $334.11，截至 2026-08-13」**【web】 |
+| 「Apple 現在的本益比」 | 35.83（6/12 快照，無時點） | 財報 35.83（截至 6-12）＋ **即時 34.67**【web】並列 |
+| 「Azure 最新一季成長」（過度觸發控制） | 0 web、答 40% 正確 | **0 web、1 輪、答 40% 正確** |
+
+**eval 不受影響**：`_CHECKER_LIVE_RECENCY_BLOCK` 只在 live 附加、replay cache key 在 live 加 `|| live` 分流、時效改判整段包在 `if _live`。新增 [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py)：**五道閘門 22 項斷言**（零 LLM／零網路／零 Qdrant），含兩項 byte-identical 斷言。
+
+**未解決**（見 [`BACKLOG.md`](BACKLOG.md)）：web 打了但資料沒進答案（蘋果即時市值 7 次 web／18 次時效改判仍用 6/12 值）；成本上升（前漏網三題 1~7 輪 → 21 輪）。
+
+**量測教訓**：八題各跑一次時有兩題看似明顯退步，**各補跑 2 次後兩個都被推翻**。答案品質的 run-to-run 變異大於單次測試的解析度，web 又多疊一層 Tavily 隨機性。
+
+### `us_stock_rag_edgar_mdna` 升生產；切塊這條路確認到頂
+
+**改動**：[`rag_query.py`](rag_query.py) `COLLECTION_NAME` 預設 `us_stock_rag_edgar_period` → `us_stock_rag_edgar_mdna`。
+
+**mdna 驗收鏈（`b6db628`，小標層收窄到 `_MDNA_ITEMS` 白名單）**：
+
+| 關卡 | 結果 |
+|---|---|
+| 重建（`--rebuild --rcts-fallback`） | 21 filings、3925 chunks、零 429 |
+| `verify_segment_split` 判準③／⑤ | 0 ／ 46→0 |
+| `verify_table_captions` 硬缺陷 | 0（`footer_caption` 4，非閘門） |
+| `verify_chunk_grounding` | `groundable_not_grounded` 0、`unreachable` 17 |
+| agentic 全量 100 題 | 100/100，零 `[WARN]` |
+| `check_number_defects` | **PASS 4／FAIL 2**（`mix-03`／`mix-09`／`col-11`／`mi-04` PASS；`mi-05`／`mix-07` FAIL，兩者皆為已知缺陷） |
+
+RAGAS：semantic `context_recall` 0.497（ground2）→ **0.593**；`_overall` 0.743 → **0.770**。⚠ 單類別 n=15 的誤差棒約 0.17，**+0.096 不足以宣稱效果成立**，只能說方向與預測機制一致。
+
+### 「改用最簡單的 collection」假設被同源對照證偽
+
+**問題**：既然各臂 RAGAS 都在噪音內，是否該直接用層數最少的 `period`（3699 chunks）？
+
+**做法**：用**今天的 code ＋ 同一份 `replay_cache.json`** 重跑 `period` 全量 100 題（`gj_period_full100_20260813.json`），兩臂唯一差異只剩 collection。**不跑 RAGAS**——檢索指標已飽和，跑了拿不到資訊。
+
+**結果 `period` P3 F3 vs `mdna` P4 F2，差在 `mix-03`**：
+
+```
+mdna  ：營業利益增加 64 億美元、成長 20%    ← 單一 chunk #63（正確）
+period：營業利益成長 24%、增加約 27 億美元  ← 拼自 #111 + #109 + #108
+```
+
+`period` 把**分部層級**的數字當成公司整體。這正是小標層要防的失效模式：沒有小標邊界，「公司整體合計」與「分部門明細」落進同一片沒有範圍標記的文字，LLM 分不清數字的作用域。**小標層（收窄後）的價值由 `mix-03` 證實。**
+
+⚠ **`gj_v2_period_full100_20260808.json` 不是合法對照臂**——它早於 `agentic_rag_v2.py` 的 `3396d55`（期間接地）與 `2f93309`（重放快取＋R3 財報優先來源接地），且當時沒有 replay cache。用它比較會得到**三個假結論**，對齊 code 後全部翻掉：`col-11`／`mi-04` 的 N/A（其實是 anchor 措辭沒對上，數字本來就對）、`mix-07` 的 PASS（今天是 FAIL，與 ground2／mdna 一致）。**以後拿舊結果檔當對照臂，一律先查 code drift。**
+
+### 量尺飽和（詳見 [`docs/EVAL.md`](docs/EVAL.md)〈量尺飽和〉）
+
+六個 RAGAS 指標**五個已達或超過 gold 上限**（`context_recall` 上限 0.766／實測 0.770）。按檢索成敗分桶：`recall`=1.0 的 44 題 correctness 0.684、`recall`<0.5 的 12 題 0.543——**全修好只值 +0.024，低於 0.067 噪音底線**。08-06 之後十二次全量跑分全部落在 recall 0.73~0.77、correctness 0.62~0.66。**切塊／ingest 這條路不要再改了。**
+
+---
+
 ## 2026-08-12
 
 ### 幅度接地判準下移到 `_merge_small_chunks`（section 層修法被實測推翻）

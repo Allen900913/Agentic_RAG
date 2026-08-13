@@ -50,6 +50,7 @@ call_llm / 重模型建構。無 tool-call 的呼叫（planner/grader/replanner/
 from __future__ import annotations
 
 import argparse
+import calendar
 import contextlib
 import json
 import os
@@ -199,6 +200,24 @@ SUBAGENT_RECURSION_LIMIT = int(os.getenv("AGENTIC_SUBAGENT_RECURSION", "12"))  #
 # web_search（Tavily）開關；--no-web 或此環境變數關掉。TAVILY_API_KEY 由 .env 提供，缺 key 走 graceful 降級。
 ENABLE_WEB_SEARCH = os.getenv("AGENTIC_WEB_SEARCH", "true").lower() not in ("false", "0", "no")
 TAVILY_MAX_RESULTS = 5
+# web 來源白名單（2026-08-13 新增）。**這是授權清單，不是感知用的詞表**——它不試圖理解內容，
+# 只決定「哪些來源准進來」，性質同 VALID_*_ITEMS，列清單正當（見 CLAUDE.md〈LLM 與 Python 的分工〉）。
+#
+# 為什麼非做不可：在此之前 `_tavily_search` 是全網無過濾，而同一批改動放行了「web 數字可被引用」。
+# 「可引用」＋「來源不設限」才是真正危險的組合；先前只是因為 web 資料根本進不了答案而被遮住。
+#
+# 選法：只收「原始揭露方」與「有編輯流程的財經媒體」，不收論壇、內容農場、個人分析（Seeking Alpha
+# 一類意見文與事實混排，摘要 300 字截斷後分不出來）。分兩類純粹是為了讓後人知道各自在守什麼。
+_WEB_DOMAINS_PRIMARY = [        # 原始揭露／交易所級數據
+    "sec.gov", "nasdaq.com", "nyse.com",
+    "investor.nvidia.com", "microsoft.com", "apple.com", "abc.xyz", "ir.tesla.com",
+    "stockanalysis.com", "companiesmarketcap.com", "macrotrends.net",
+]
+_WEB_DOMAINS_PRESS = [          # 有編輯流程的財經新聞
+    "reuters.com", "apnews.com", "bloomberg.com", "wsj.com", "ft.com",
+    "cnbc.com", "barrons.com", "finance.yahoo.com", "marketwatch.com",
+]
+WEB_ALLOWED_DOMAINS = _WEB_DOMAINS_PRIMARY + _WEB_DOMAINS_PRESS
 # web_search 每個待辦的硬性呼叫上限（工程層閘門，不只靠 prompt 服從性——實測弱腦會對「最近新聞」題
 # 瞎猜關鍵字狂打 33 次 Tavily 仍一次都沒採用）。超過上限直接回拒、不再真的打 API。
 WEB_SEARCH_MAX_CALLS = int(os.getenv("AGENTIC_WEB_SEARCH_MAX_CALLS", "3"))
@@ -340,6 +359,55 @@ _RELATIVE_TIME_RE = re.compile(
     re.IGNORECASE,
 )
 _WEB_TODO_RE = re.compile(r"網路|上網|web\s*search|internet", re.IGNORECASE)
+
+# 時效需求分級 → 容忍幾天（2026-08-13）。**分工**：「這題要多新」沒有唯一機械答案 → 交給 Grader
+# 判（`realtime_need` 欄位，只在 live 模式問）；「來源多舊」是確定性的 → 交給 Python 從檔名算。
+# 單一天數門檻行不通：「今天股價漲跌」容忍 1 天，「最近有什麼進展」容忍一週，兩者差一個數量級。
+REALTIME_STALE_DAYS = {
+    "intraday": int(os.getenv("AGENTIC_STALE_DAYS_INTRADAY", "1")),   # 即時報價、今日漲跌、當前市值
+    "days": int(os.getenv("AGENTIC_STALE_DAYS_RECENT", "7")),         # 近期新聞、最新進展
+    "none": None,                                                     # 財報期間數字 → 永不過期
+}
+
+
+def _source_newest_date(source: str) -> date | None:
+    """從來源檔名推它「最新可能」的日期。`TICKER_KIND_STAMP`，stamp 為 4/6/8 碼。
+
+    刻意取**該期間的最後一天**（4 碼→12/31、6 碼→月底、8 碼→當天）：寧可高估新鮮度也不要誤判過期。
+    誤判過期會叫 web 白跑一趟，誤判新鮮只是維持現狀，前者才是我們要避免的成本。
+    ⚠ 10-K/10-Q 的 stamp 是**財報期間**不是發布日，所以 `NVDA_10K_2026` 會被算成 2026-12-31＝
+    永遠不過期。這是刻意的：財報數字本來就不該因為 wall clock 走了就被判為需要上網補。
+    """
+    m = _COVERAGE_SOURCE_RE.match(source or "")
+    if not m:
+        return None
+    stamp = m.group("stamp")
+    try:
+        if len(stamp) == 8:
+            return date(int(stamp[:4]), int(stamp[4:6]), int(stamp[6:8]))
+        if len(stamp) == 6:
+            y, mo = int(stamp[:4]), int(stamp[4:6])
+            return date(y, mo, calendar.monthrange(y, mo)[1])
+        if len(stamp) == 4:
+            return date(int(stamp), 12, 31)
+    except ValueError:
+        return None
+    return None
+
+
+def _stale_for_realtime(need: str, chunks: list[dict], as_of: date) -> int | None:
+    """候選裡**最新**的來源距今幾天算過期？回傳天數（過期）或 None（夠新／無此需求／算不出日期）。
+
+    用最新那一筆而非全部：只要池裡有一筆夠新就不該叫 web。
+    """
+    limit = REALTIME_STALE_DAYS.get(need)
+    if limit is None:
+        return None
+    dates = [d for d in (_source_newest_date(c.get("source") or "") for c in chunks) if d]
+    if not dates:
+        return None            # 算不出日期 → 不主張過期（維持 Grader 原判，不製造假陽性）
+    age = (as_of - max(dates)).days
+    return age if age > limit else None
 
 
 def _get_as_of_date() -> date:
@@ -943,8 +1011,29 @@ _CHECKER_PROMPT = """你是嚴格的「資訊充足度評論家」。給你一�
 {"sufficient": true 或 false, "missing": "缺什麼(夠則空字串)", "new_query": "改寫後的新 query(夠則空字串)",
  "relevant_ids": ["真正相關的候選 id", ...]}"""
 
+# ⚠ 只在 **live** 模式附加（2026-08-13）。snapshot（＝eval 走的路）的 Checker prompt 因此**逐字不變**,
+# 既有跑分基準一格都不動；由 `eval/verify_web_gate_isolation.py` 的 byte-identical 斷言長期把關。
+#
+# 為什麼要多這個欄位：實測 Grader 只問「有沒有這個欄位」,不問「這個值夠不夠新」。
+# 「Apple 現在的本益比」撈到 6/12 的 Fundamentals 就判 sufficient=true,結果答案把兩個月前的
+# 35.83 講成「現在的本益比」,完全沒有揭露時點。同一個病讓「蘋果的即時市值」「特斯拉今天股價」
+# 都拿三週到兩個月前的數字當即時值答。
+#
+# 只問「需要多新」,**不要**問「候選夠不夠新」——後者要比對日期,那是 Python 的活(見 _stale_for_realtime)。
+_CHECKER_LIVE_RECENCY_BLOCK = """
 
-def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = "") -> dict:
+⏱ 額外欄位 realtime_need（**只判斷子問題本身需要多新的資料**,不要去看候選片段的日期）:
+- "intraday"：問即時／當下的市場數值——股價、今天漲跌、當前市值、即時本益比、盤中報價。
+- "days"：問近期動態——最新消息、最近進展、近期發表,可容忍數天內的資料。
+- "none"：問特定財報期間或不隨時間變動的事實——某季營收、財報風險因素、跨公司比較、歷史數字。
+  子問題已明確指定期間(FY2026、2026 年第三季、10-K 提到…)一律填 "none"。
+
+JSON 因此多一個欄位:
+{"sufficient": …, "missing": …, "new_query": …, "relevant_ids": […], "realtime_need": "intraday"|"days"|"none"}"""
+
+
+def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = "",
+                       freshness_mode: str = FRESHNESS_SNAPSHOT) -> dict:
     """Sufficiency Checker 節點的核心:一次 LLM 呼叫吐出 {sufficient, missing, new_query, relevant_ids}。
     temporal_scope(KB coverage + 時間政策)一併餵給 Grader,讓它能分辨「搜得不夠好」與「KB 天花板已到」
     ——否則對『要求比 KB 更新期間』的題(如指定未來日期的新聞題)Grader 會一路判不足、逼 Agent 空轉
@@ -959,7 +1048,10 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
     # 重放快取：key = 子問題 + 這次實際看到的候選 id（順序敏感）。候選變了就是合法 miss
     # ——那正是被測改動造成的差異，不該用舊決策蓋掉。temporal_scope 不入 key（同 plan 的
     # 理由：它隨 collection 變，納入會讓跨 collection A/B 全部 miss）。
-    _rk = subquery + " || " + " ".join(_chunk_id(c) for c in top)
+    # live 多問一個欄位、且會套時效改判 → key 必須分流,否則 live 的決策會蓋掉 snapshot 的快取
+    # （反之亦然）。snapshot 的 key 因此與 2026-08-13 以前逐字相同,既有 fixture 全部照舊命中。
+    _live = freshness_mode == FRESHNESS_LIVE
+    _rk = subquery + " || " + " ".join(_chunk_id(c) for c in top) + (" || live" if _live else "")
     _hit = _replay.get("check", _rk)
     if _hit is not _replay.MISS:
         _trace(f"check(replay)[{subquery[:24]!r}] sufficient={_hit.get('sufficient')}")
@@ -970,7 +1062,8 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
     )
     scope_block = f"時間與資料邊界:\n{temporal_scope}\n\n" if temporal_scope else ""
     user = f"{scope_block}子問題:{subquery}\n\n檢索到的候選片段:\n{ctx}"
-    messages = [{"role": "system", "content": _CHECKER_PROMPT}, {"role": "user", "content": user}]
+    system = _CHECKER_PROMPT + (_CHECKER_LIVE_RECENCY_BLOCK if _live else "")
+    messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
     with _quiet():
         raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
     data = _loads_json_lenient(raw)
@@ -986,6 +1079,18 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
     relevant_ids = ([str(x).strip() for x in raw_ids
                      if isinstance(x, str) and str(x).strip() in shown_ids]
                     if isinstance(raw_ids, list) else [])
+    # live 時效改判：Grader 說「有這個欄位就夠」,但欄位可能是兩個月前的快照。只降不升
+    # ——只把 true 改成 false,絕不把 false 改成 true(不繞過 Grader 原本的離題判斷)。
+    if _live:
+        need = str(data.get("realtime_need", "none") or "none").strip().lower()
+        stale_days = _stale_for_realtime(need, top, _get_as_of_date())
+        if stale_days is not None and sufficient:
+            sufficient = False
+            missing = (f"候選中最新來源已是 {stale_days} 天前的資料,而本題需要 {need} 等級的即時性"
+                       f"（原判定：{missing or '足夠'}）")
+            new_query = new_query or subquery
+            _trace(f"check[{subquery[:24]!r}] 時效改判 sufficient=True→False "
+                   f"(need={need}, 最新來源 {stale_days} 天前)")
     _trace(f"check[{subquery[:24]!r}] sufficient={sufficient} missing={missing[:50]!r} "
            f"new_query={new_query[:50]!r} relevant_ids={len(relevant_ids)}/{len(shown_ids)}")
     out = {"sufficient": sufficient, "missing": missing, "new_query": new_query, "relevant_ids": relevant_ids}
@@ -1032,11 +1137,46 @@ _ZH_ANSWER_DIRECTIVE = (
 )
 
 
-def _write_final_answer(query: str, chunks: list[dict], model_name: str, extra_user: str = "") -> str:
-    """單次 Generator 呼叫:把 chunks 全文塞進生產生成契約產出答案。extra_user 夾帶糾錯指示(重生成用)。"""
-    user_prompt = rq.build_user_prompt(query, chunks) + extra_user
+# 只在**真的有 web 結果時**才附加到 system message 的修訂條款（2026-08-13）。
+#
+# 為什麼一定要在 system 而不是 user：`rq.SYSTEM_PROMPT` 的 Rule 1「Answer ONLY based on the provided
+# reference materials」、Rule 2「後接 [filename, chunk #N]」、Rule 8「Every number you state must be
+# traceable to a cited chunk」都在 system message。在 user message 寫「web 內容可引用」是拿 user turn
+# 去赦免 system rule，權重較低——**實測失敗過**：舊版 web 區塊已寫「若引用請用 [web: 網址] 標註」，
+# 三次跑分仍全數退回 6 月快照的 $4,962.16B，甚至寧可拿舊市值除股數捏造「每股 $204」（違反 Rule 8
+# 前半句「Never invent」）也不碰那個不可引用的數字。所以缺的從來不是格式，是**許可**。
+#
+# 同時補上時間契約：Planner(_PLANNER_PROMPT)、Replanner、Researcher 都掛了 _build_temporal_contract，
+# **唯獨 Generator 漏接**。不是「LLM 沒有時鐘」，是這個系統造好了契約卻少接一個呼叫點。
+_WEB_SOURCE_AMENDMENT = """
+
+=== 本次生成的規則修訂（僅適用於下方標示為「網路搜尋結果」的區塊）===
+使用者訊息中的「網路搜尋結果」區塊來自即時網路檢索，已通過來源白名單過濾。針對該區塊：
+- Rule 1 修訂：該區塊**屬於** provided reference materials，可以據以作答。
+- Rule 2／Rule 8 修訂：該區塊的內容用 `[web: 網址]` 標註出處即**視為已滿足引用要求**，
+  不需要也不應該替它編造 `[filename, chunk #N]`。「traceable to a cited chunk」對該區塊
+  等價於「traceable to a cited web URL」。
+- 時效優先：問題問「最新／目前／現在」的數值（股價、市值、近期動態）時，**該區塊比財報 chunk 新**，
+  應優先採用並註明來源與日期；若與財報數字不一致，那通常是時間點不同，不是矛盾——請說明兩者各自的時點。
+- Rule 8 的「Never invent」不變：仍然不得自行推算或估計任何來源沒有明說的數字。"""
+
+
+def _write_final_answer(query: str, chunks: list[dict], model_name: str, extra_user: str = "",
+                        web_extra: str = "") -> str:
+    """單次 Generator 呼叫:把 chunks 全文塞進生產生成契約產出答案。extra_user 夾帶糾錯指示(重生成用)。
+
+    `web_extra`(網路搜尋區塊)刻意獨立於 `extra_user`:它要同時進 **system**(修訂引用契約 + 補時間契約)
+    與 **user**(內容本身),且必須跟著**每一次重生成**走。web_extra 為空時 system message 與 2026-08-13
+    以前**逐字相同**——eval 的 web_notes 恆為空,所以既有基準一個都不會動到(由
+    `eval/verify_web_gate_isolation.py` 的 byte-identical 斷言長期把關)。
+    """
+    system = rq.SYSTEM_PROMPT + _ZH_ANSWER_DIRECTIVE
+    if web_extra:
+        # 用 _get_as_of_date() 而非 date.today():AGENTIC_AS_OF_DATE 要能固定 wall clock 供回歸測試。
+        system += _WEB_SOURCE_AMENDMENT + "\n\n" + _build_temporal_contract(FRESHNESS_LIVE)
+    user_prompt = rq.build_user_prompt(query, chunks) + web_extra + extra_user
     messages = [
-        {"role": "system", "content": rq.SYSTEM_PROMPT + _ZH_ANSWER_DIRECTIVE},
+        {"role": "system", "content": system},
         {"role": "user", "content": user_prompt},
     ]
     with _quiet():
@@ -1062,8 +1202,16 @@ def _extract_citations(text: str) -> set[tuple[str, int]]:
 
 
 def _validate_and_fix_citations(query: str, answer: str, allowed_chunks: list[dict],
-                                 model_name: str, verbose: bool = False) -> str:
-    """確定性 citation 稽核 + 有界重試。回傳(盡量)合格的答案。"""
+                                 model_name: str, verbose: bool = False,
+                                 web_extra: str = "") -> str:
+    """確定性 citation 稽核 + 有界重試。回傳(盡量)合格的答案。
+
+    `web_extra`＝synthesize 組出來的網路搜尋補充區塊（含 `[web: 網址]` 標註規則）。
+    ⚠ 2026-08-13 新增：**重生成時必須把它一起帶回去**，否則 web 拿到的即時資料只活在第一次
+    生成，任何一次 validator 重寫都會讓它消失（實測 Q4「NVIDIA 目前股價與市值」三次跑分，
+    Tavily 每次都帶回 `$5.27T`，最終答案卻三次都退回 6 月快照的 `$4,962.16B`）。
+    `[web: 網址]` 本身不會被 `_CITE_RE` 當成引用（它要求 `, chunk #N`），所以不會誤判成捏造 ID。
+    """
     allowed = {(c["source"], c["chunk_index"]) for c in allowed_chunks}
     if not allowed:
         return answer
@@ -1089,7 +1237,8 @@ def _validate_and_fix_citations(query: str, answer: str, allowed_chunks: list[di
             print(f"--- citation validator (attempt {attempt+1}): 不合格,重寫 ---\n" + "\n".join(problems))
         suffix = ("\n\n⚠ 引用檢查未通過，請修正後重寫整份答案（內容依據不變，只改引用）：\n"
                   + "\n".join(problems))
-        revised = _write_final_answer(query, allowed_chunks, model_name, extra_user=suffix)
+        revised = _write_final_answer(query, allowed_chunks, model_name,
+                                      extra_user=suffix, web_extra=web_extra)
         if revised and revised.strip():
             answer = revised
     return answer
@@ -1500,8 +1649,13 @@ _CONSIST_REVISE_SUFFIX = """
 
 
 def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                               verbose: bool = False) -> str:
-    """一致性稽核 → 有衝突則帶問題重生成一次 → 再過 citation 稽核。無衝突原樣回傳。"""
+                               verbose: bool = False, web_extra: str = "") -> str:
+    """一致性稽核 → 有衝突則帶問題重生成一次 → 再過 citation 稽核。無衝突原樣回傳。
+
+    `web_extra` 只在**重生成**時帶回（見 `_validate_and_fix_citations` 的說明）。
+    ⚠ 偵測邏輯（`_extract_claims`／`find_authority_conflicts`）仍只看 `chunks`：R3 的判準是
+    「同格衝突且一邊只在新聞裡」，把 web 併進去會改變那個判準的語意，需要另外量測，故不在此改。
+    """
     if not chunks or not (answer or "").strip():
         return answer
     # LLM 抽結構化宣稱 → 確定性規則判。抽取失敗（API 掛／JSON 解不出）就跳過這層,
@@ -1521,9 +1675,11 @@ def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], mode
         print(f"--- consistency validator: 發現互斥數值 ---\n{issues}")
     _trace(f"consistency: 發現 {len(found)} 組互斥數值,重生成一次")
     revised = _write_final_answer(query, chunks, model_name,
-                                  extra_user=_CONSIST_REVISE_SUFFIX.format(issues=issues))
+                                  extra_user=_CONSIST_REVISE_SUFFIX.format(issues=issues),
+                                  web_extra=web_extra)
     if revised and revised.strip():
-        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose)
+        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
+                                           web_extra=web_extra)
     return answer
 
 
@@ -1564,11 +1720,18 @@ _REFLECT_REVISE_SUFFIX = """
 
 
 def _reflect_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                     verbose: bool = False) -> str:
-    """Reflection 節點的核心:稽核幻覺→有則帶問題重生成一次→再過 citation 稽核。無幻覺原樣回傳。"""
+                     verbose: bool = False, web_extra: str = "") -> str:
+    """Reflection 節點的核心:稽核幻覺→有則帶問題重生成一次→再過 citation 稽核。無幻覺原樣回傳。
+
+    ⚠ 2026-08-13：`web_extra` 要進 **`sources_text`**，不只進重生成。這一層是拿「答案」對
+    「來源全文」比對判幻覺——來源若少了網路結果，任何從 web 得到的即時數字都會被判成幻覺
+    而觸發重寫，等於 web 資料永遠活不到最終答案。
+    """
     if not chunks or not (answer or "").strip():
         return answer
     sources_text = "\n\n".join(f"[{c['source']} #{c['chunk_index']}]\n{c['content']}" for c in chunks)
+    if web_extra:
+        sources_text += "\n\n" + web_extra
     messages = [
         {"role": "system", "content": _REFLECT_PROMPT},
         {"role": "user", "content": f"問題:{query}\n\n答案:\n{answer}\n\n來源 chunk 全文:\n{sources_text}"},
@@ -1582,10 +1745,12 @@ def _reflect_and_fix(query: str, answer: str, chunks: list[dict], model_name: st
         print(f"--- reflection: 發現疑似幻覺 ---\n{issues}")
     _trace(f"reflect: 發現幻覺,重生成一次 → {issues[:80]!r}")
     revised = _write_final_answer(query, chunks, model_name,
-                                  extra_user=_REFLECT_REVISE_SUFFIX.format(issues=issues))
+                                  extra_user=_REFLECT_REVISE_SUFFIX.format(issues=issues),
+                                  web_extra=web_extra)
     if revised and revised.strip():
         # 重生成後再過 citation 稽核,確保修正時沒引入捏造引用
-        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose)
+        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
+                                           web_extra=web_extra)
     return answer
 
 
@@ -1645,7 +1810,12 @@ def _reset_run_pool() -> None:
 
 def _tavily_search(query: str) -> str:
     """Tavily 網路搜尋，回傳幾則結果的標題/摘要/網址（每則帶 [web: url] 供生成端引用）。
-    任何失敗（停用 / 缺 key / API 錯）→ 回傳明確說明字串，絕不 raise（不讓 web 成為單點故障）。"""
+    任何失敗（停用 / 缺 key / API 錯）→ 回傳明確說明字串，絕不 raise（不讓 web 成為單點故障）。
+
+    ⚠ 2026-08-13 起限定 `WEB_ALLOWED_DOMAINS`。**白名單濾空時明確回報查無，不退回全網**——
+    靜默 fallback 等於白名單沒生效卻沒人知道（同 CLAUDE.md「稽核回傳 0 筆先當壞消息查」的道理）。
+    濾空會走 _trace，讓它在 trace 看得見而不是安靜消失。
+    """
     if not ENABLE_WEB_SEARCH:
         return "（web search 已停用）"
     api_key = os.getenv("TAVILY_API_KEY")
@@ -1654,10 +1824,12 @@ def _tavily_search(query: str) -> str:
     try:
         from tavily import TavilyClient
         client = TavilyClient(api_key=api_key)
-        resp = client.search(query, max_results=TAVILY_MAX_RESULTS, search_depth="basic")
+        resp = client.search(query, max_results=TAVILY_MAX_RESULTS, search_depth="basic",
+                             include_domains=WEB_ALLOWED_DOMAINS)
         results = resp.get("results", []) if isinstance(resp, dict) else []
         if not results:
-            return "（web search 查無結果）"
+            _trace(f"  web_search({query[:40]!r}) → 白名單內查無結果（不退回全網）")
+            return "（web search 查無結果：白名單來源內找不到，未退回全網搜尋）"
         lines = []
         for r in results[:TAVILY_MAX_RESULTS]:
             title = (r.get("title") or "").strip()
@@ -1825,7 +1997,8 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
                 out = app.invoke({"messages": messages},
                                  config={"recursion_limit": SUBAGENT_RECURSION_LIMIT})
             messages = out["messages"]
-            verdict = _check_sufficiency(task, state.pool, temporal_scope)   # Agent B｜Grader（單次 LLM、無工具）
+            verdict = _check_sufficiency(task, state.pool, temporal_scope,
+                                         freshness_mode)   # Agent B｜Grader（單次 LLM、無工具）
             state.relevant_ids.clear()
             state.relevant_ids.update(verdict.get("relevant_ids", []))
             _trace(f"execute[{subq_index}] round={rnd} pool={len(state.pool)} "
@@ -1879,7 +2052,7 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
             merged = _merge_chunks(list(state.pool), chunks)    # 併池：只加不減，補救輪不洗掉先前好 chunk
             state.pool.clear()
             state.pool.extend(merged)
-            verdict = _check_sufficiency(task, state.pool, temporal_scope)   # Agent B｜Grader
+            verdict = _check_sufficiency(task, state.pool, temporal_scope, freshness_mode)  # Agent B｜Grader
             state.relevant_ids.clear()
             state.relevant_ids.update(verdict.get("relevant_ids", []))
             _trace(f"execute[{subq_index}] det round={rnd} q={active_query[:32]!r} pool={len(state.pool)} "
@@ -1888,9 +2061,23 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
                 break
             active_query = verdict["new_query"] or task        # Grader 的 targeted rewrite（唯一改寫來源，deterministic temp=0）
 
-        # live 時效補救：KB 仍不足且是近期新聞題 → 補一次 web（snapshot 不補、不製造 wall-clock 缺口）
-        if (freshness_mode == FRESHNESS_LIVE and ENABLE_WEB_SEARCH and not verdict["sufficient"]
-                and rq.looks_like_news_query(task) and _RELATIVE_TIME_RE.search(task or "")):
+        # live 時效補救：KB 仍不足 → 補一次 web（snapshot 不補、不製造 wall-clock 缺口）。
+        #
+        # ⚠ 2026-08-13 **兩道詞表閘門都已拿掉**：先是 `rq.looks_like_news_query(task)`，再是
+        # `_RELATIVE_TIME_RE.search(task)`。兩者是同一個病——用硬編碼詞表做感知，換個措辭就漏。
+        # 實測 18 個真實時效措辭，`_RELATIVE_TIME_RE` 漏掉 10 個（「今天股價」「即時市值」「盤中報價」
+        # 「這禮拜」「昨年以來」…），而且漏網的代價不是答不出來，是**自信地把舊資料當成即時資料**：
+        # 「特斯拉今天股價下跌 2.96%」引用的是三週前的新聞、「蘋果即時市值 $4342.02B」是兩個月前的
+        # 快照，兩者都零揭露。詞表還連帶擋掉時效警語（`_format_unresolved_freshness_notice` 掛在
+        # 「有 web 待辦未解決」路徑上，沒觸發 web 就連警語都不會出現）。
+        #
+        # **它們都不是 eval 隔離機制**——隔離由 `freshness_mode == LIVE` 與 `ENABLE_WEB_SEARCH`
+        # 兩個獨立條件負責，且 eval 的 freshness 預設就是 snapshot，各自都足以擋住。
+        # 常駐證明見 [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py)。
+        #
+        # 現在擋濫用的只剩 `not verdict["sufficient"]`，而它已被補上時效判準（見 _check_sufficiency
+        # 的 live 改判）：KB 答得出**且夠新**才不上網。成本上界仍是 WEB_SEARCH_MAX_CALLS。
+        if (freshness_mode == FRESHNESS_LIVE and ENABLE_WEB_SEARCH and not verdict["sufficient"]):
             note = _tavily_search(verdict.get("new_query") or task)
             if note and not note.startswith("（"):
                 web_notes.append(note)
@@ -2150,10 +2337,15 @@ def _node_synthesize(state: SupervisorState) -> dict:
             answer += _format_unresolved_freshness_notice(state.get("todos", []))
         return {"answer": answer}
 
-    extra = ""
+    # web 區塊獨立成 web_extra：它要跟著**每一次重生成**走（validator 重寫時 extra_user 會被換掉），
+    # 且 reflect 的稽核來源也要含它。只放進 extra 的話，web 資料只活在第一次生成。
+    # ⚠ 標頭措辭與 `_WEB_SOURCE_AMENDMENT` 是一組的：修訂條款靠「網路搜尋結果」這個字串指認要修訂
+    # 哪一段，兩邊改動要同步。舊版寫「非知識庫」會與修訂條款的 Rule 1 修訂互相矛盾，已改掉。
+    web_extra = ""
     if web_notes:
-        extra += ("\n\n=== 補充：網路搜尋結果（非知識庫；若引用請用 [web: 網址] 標註，不要當成 chunk 引用）===\n"
-                  + "\n\n".join(web_notes))
+        web_extra = ("\n\n=== 網路搜尋結果（即時檢索，已通過來源白名單；引用請用 [web: 網址]）===\n"
+                     + "\n\n".join(web_notes))
+    extra = ""
     # 有待辦查無足夠佐證（局部結果是降級的「查無」標記）→ 提示 Writer 明說查無、勿臆測
     unmet = [t["task"] for t in state.get("todos", [])
              if t.get("status") == "done" and "查無足夠資料" in (t.get("result") or "")]
@@ -2165,14 +2357,18 @@ def _node_synthesize(state: SupervisorState) -> dict:
     # （見實測 NVIDIA 端連續 504）,不能讓整個 graph.invoke 炸穿、零產出——退回零 LLM 的機械式摘要,
     # 至少保留真實 chunk 內容 + citation。
     try:
-        answer = _write_final_answer(state["query"], chunks, GEN_MODEL, extra_user=extra)
-        answer = _validate_and_fix_citations(state["query"], answer, chunks, GEN_MODEL, verbose=verbose)
+        answer = _write_final_answer(state["query"], chunks, GEN_MODEL, extra_user=extra,
+                                     web_extra=web_extra)
+        answer = _validate_and_fix_citations(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
+                                             web_extra=web_extra)
         # 確定性一致性稽核（零 LLM 成本的偵測,只有真的抓到才花一次重生成）。放在 reflect 之前,
         # 讓 reflect 稽核的是已調和過的版本。
         if not answer.startswith("I don't have enough"):
-            answer = _consistency_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose)
+            answer = _consistency_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
+                                                web_extra=web_extra)
         if state.get("enable_reflection", True) and not answer.startswith("I don't have enough"):
-            answer = _reflect_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose)
+            answer = _reflect_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
+                                      web_extra=web_extra)
     except Exception as e:
         _trace(f"synthesize: 最終生成失敗（{e!r}）→ 退回零 LLM 機械式摘要")
         answer = _mechanical_summary(state["query"], chunks) if chunks else \
