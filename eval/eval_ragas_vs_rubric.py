@@ -398,7 +398,12 @@ def main():
 
     ap = argparse.ArgumentParser(description="RAGAS 6-metric vs self-made 5-metric 對照")
     ap.add_argument("--from-results", nargs="+", required=True,
-                    help="一或多個結果檔（含 records[].answer/contexts/correctness）")
+                    help="一或多個結果檔（含 records[].answer/contexts/correctness）。"
+                         "⚠ 多個檔是**拼接同一臂**（同 id 的多筆會被平均，用於局部重跑後併回、"
+                         "或同一臂重跑多次消變異）——**不是 A/B 兩臂對照**。"
+                         "要比兩臂請各跑一次、各給一個 --output；"
+                         "把兩臂丟進同一次會得到兩臂的平均值，哪一邊都回答不了"
+                         "（2026-08-14 這樣燒掉 2h49m）。")
     ap.add_argument("--ragas-model", default=DEFAULT_RAGAS_MODEL)
     ap.add_argument("--categories", nargs="*", default=None,
                     help="只跑指定類別（semantic/lexical/mixed/colloquial/news/multi_intent）")

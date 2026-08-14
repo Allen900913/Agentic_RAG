@@ -60,6 +60,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime
 from typing import TypedDict
+from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 
@@ -199,7 +200,15 @@ SUBAGENT_MODEL = os.getenv("AGENTIC_SUBAGENT_MODEL", GEN_MODEL)
 SUBAGENT_RECURSION_LIMIT = int(os.getenv("AGENTIC_SUBAGENT_RECURSION", "12"))  # 單一 subagent invoke 的工具迴圈上限。
 # web_search（Tavily）開關；--no-web 或此環境變數關掉。TAVILY_API_KEY 由 .env 提供，缺 key 走 graceful 降級。
 ENABLE_WEB_SEARCH = os.getenv("AGENTIC_WEB_SEARCH", "true").lower() not in ("false", "0", "no")
-TAVILY_MAX_RESULTS = 5
+TAVILY_MAX_RESULTS = 5            # 最終塞進 prompt 的則數
+TAVILY_FETCH_RESULTS = 12         # 先多撈,再去重／限域名／濾過期,剩下的取前 TAVILY_MAX_RESULTS 則
+TAVILY_PER_DOMAIN_CAP = 2         # 單一域名最多佔幾個名額（見 _dedupe_web_results 的理由）
+# 每則保留的摘要字數。
+# ⚠ **原本是 300,那是 2026-08-13 「即時市值答不出來」的真正主因**（比日期把關、比白名單都嚴重）：
+#    Tavily 的 content 實測 596~1982 字,而數據頁的**數字排在站台樣板文字後面**,300 字正好切在
+#    數字前一個字——trace 裡看到的 `Apple market cap as of Augus` 就是被切斷的 `$4572.79B`。
+#    「資料撈到了卻被自己截掉」與「根本沒撈到」在舊 trace 裡長得一模一樣,是加了逐則印摘要才看見的。
+WEB_CONTENT_CHARS = int(os.getenv("AGENTIC_WEB_CONTENT_CHARS", "1200"))
 # web 來源白名單（2026-08-13 新增）。**這是授權清單，不是感知用的詞表**——它不試圖理解內容，
 # 只決定「哪些來源准進來」，性質同 VALID_*_ITEMS，列清單正當（見 CLAUDE.md〈LLM 與 Python 的分工〉）。
 #
@@ -207,10 +216,27 @@ TAVILY_MAX_RESULTS = 5
 # 「可引用」＋「來源不設限」才是真正危險的組合；先前只是因為 web 資料根本進不了答案而被遮住。
 #
 # 選法：只收「原始揭露方」與「有編輯流程的財經媒體」，不收論壇、內容農場、個人分析（Seeking Alpha
-# 一類意見文與事實混排，摘要 300 字截斷後分不出來）。分兩類純粹是為了讓後人知道各自在守什麼。
-_WEB_DOMAINS_PRIMARY = [        # 原始揭露／交易所級數據
+# 一類意見文與事實混排，只看 `WEB_CONTENT_CHARS` 那段摘要分不出來）。分兩類純粹是為了讓後人知道各自在守什麼。
+# ⚠⚠ **這份清單必須完全公司無關（O(1)）**，不得再出現任何一家公司的 IR 主機名。
+#
+# 為什麼（2026-08-13 兩次事故，都出在「某家公司專屬的條目」）：
+#   ① 寫 `apple.com`／`microsoft.com`（本意是 IR）→ Tavily 連子網域一起收 → 「蘋果的即時市值」
+#      35 筆結果有 33 筆是 apps.apple.com 的《股市》App 頁、support.apple.com 的「在 iPhone 上
+#      查看股市」、podcasts.apple.com 的節目，**零筆財經資料**，5 個名額全被佔滿。
+#   ② 改成精確主機名（investor.apple.com…）雖然修掉①，但清單隨公司數 O(n) 成長，
+#      **每加一家就是一次重複①的機會**（granularity 猜錯就靜默壞掉，且白名單仍會回 ~2KB
+#      看起來很健康——這是「稽核回傳有東西也可能是壞消息」的一例）。
+#
+# 統一入口是 `sec.gov`：它涵蓋所有上市公司的 10-K/10-Q/8-K，而重大新聞稿本來就以 8-K 的
+# EX-99 附件形式在裡面。實測佐證——`ir.tesla.com` 那次命中的網址路徑裡就有 `/sec/`，
+# 那本來就是一份 SEC 文件、只是鏡像在 IR 站上。
+# 代價：失去活動行事曆與未以 8-K 提交的新聞稿。若日後實測確認缺這類內容，再**帶著證據**單獨加回。
+#
+# ⚠ web fallback **不負責抓最新 10-Q**。filing 一律走 fetch_data.py → data_update_edgar.py
+# 的 ingest 管線（見 CLAUDE.md〈抓取與處理分離〉）；讓 web 撈財報會繞過切塊六層、期間標籤與
+# chunk 引用。KB 落後一季的正解是重跑 ingest。
+_WEB_DOMAINS_PRIMARY = [        # 原始揭露／交易所級數據（全市場，非單一公司）
     "sec.gov", "nasdaq.com", "nyse.com",
-    "investor.nvidia.com", "microsoft.com", "apple.com", "abc.xyz", "ir.tesla.com",
     "stockanalysis.com", "companiesmarketcap.com", "macrotrends.net",
 ]
 _WEB_DOMAINS_PRESS = [          # 有編輯流程的財經新聞
@@ -218,6 +244,21 @@ _WEB_DOMAINS_PRESS = [          # 有編輯流程的財經新聞
     "cnbc.com", "barrons.com", "finance.yahoo.com", "marketwatch.com",
 ]
 WEB_ALLOWED_DOMAINS = _WEB_DOMAINS_PRIMARY + _WEB_DOMAINS_PRESS
+
+
+def _domain_admits(entry: str, host: str) -> bool:
+    """Tavily `include_domains` 的比對語意：**一筆 entry 會連子網域一起收**。
+
+    把這條語意寫成可執行的形式,是因為 2026-08-13 的白名單事故就出在它:憑直覺以為
+    `apple.com` 只收官網,實際上 `apps.apple.com`／`support.apple.com` 全被收進來。
+    `eval/verify_web_gate_isolation.py` 用它斷言那些消費端主機**不得**被放行。
+    ⚠ 這是對 Tavily 行為的**建模**,不是 Tavily 的實作;若哪天它改了比對規則,這裡要跟著改。
+    """
+    host = (host or "").lower().strip().lstrip(".")
+    entry = (entry or "").lower().strip().lstrip(".")
+    if not host or not entry:
+        return False
+    return host == entry or host.endswith("." + entry)
 # web_search 每個待辦的硬性呼叫上限（工程層閘門，不只靠 prompt 服從性——實測弱腦會對「最近新聞」題
 # 瞎猜關鍵字狂打 33 次 Tavily 仍一次都沒採用）。超過上限直接回拒、不再真的打 API。
 WEB_SEARCH_MAX_CALLS = int(os.getenv("AGENTIC_WEB_SEARCH_MAX_CALLS", "3"))
@@ -370,6 +411,175 @@ REALTIME_STALE_DAYS = {
 }
 
 
+def _domain_of(url: str) -> str:
+    """從網址取域名（去掉 www.）。純顯示用，失敗回原字串前段——絕不因為 log 而讓查詢炸掉。"""
+    try:
+        host = urlparse(url or "").netloc.lower()
+        return host[4:] if host.startswith("www.") else (host or (url or "")[:28])
+    except Exception:
+        return (url or "")[:28]
+
+
+# web 結果的「明顯過時」門檻（天）。**刻意比 REALTIME_STALE_DAYS 寬得多**,兩者做的是不同的事:
+#   REALTIME_STALE_DAYS 判「KB 夠不夠新到可以不上網」——嚴格,寧可多上網一次。
+#   WEB_STALE_DAYS     判「這則網頁是不是歷史文章」——寬鬆,因為即時題也需要幾天內的脈絡報導,
+#                       用 1 天砍會把有用的近期報導一起砍光,只剩沒有日期的數據頁。
+# 實測要擋的是 `cnbc.com/2020/08/19/apple-reaches-2-trillion-market-cap`（六年前）被當成現值,
+# 那種東西超出任何合理門檻,不需要把門檻壓到天級。抽不出日期的一律**保留**(數據頁沒有日期,
+# 而數據頁正是即時題最需要的)——濾掉「日期不明」等於濾掉正確答案。
+WEB_STALE_DAYS = {
+    # ⚠ intraday 原本設 90,實測太寬：「特斯拉今天股價」放進一則 **22 天前**的 WSJ 報導
+    #   （$319.69 / −14.52%）,模型就把它當成「最新可得」寫進答案,反而把未標日期的即時
+    #   行情頁（$327.51）降為次要。問當下數值時,**任何有日期的舊報導都不可能是答案**,
+    #   留著只會製造更好聽的錯誤。7 天與 REALTIME_STALE_DAYS["days"] 同級,仍容得下脈絡報導。
+    "intraday": int(os.getenv("AGENTIC_WEB_STALE_INTRADAY", "7")),
+    "days": int(os.getenv("AGENTIC_WEB_STALE_RECENT", "180")),
+    "none": None,   # 問特定財報期間 → 歷史文章本來就正當,不濾
+}
+
+# 網址裡的日期。**確定性、公司無關、格式定義**——屬於「比對／定位給 Python」那一側。
+_URL_DATE_PATTERNS = (
+    # `/2020/08/19/`（CNBC 式）與 `-2026-08-11/`（Reuters／AP 式，日期在網址結尾）都收
+    (re.compile(r"[/-](20\d{2})[/-](\d{1,2})[/-](\d{1,2})(?:[/-]|$)"), (1, 2, 3)),
+    (re.compile(r"[/-](\d{1,2})-(\d{1,2})-(20\d{2})(?:[/-]|$)"), (3, 1, 2)),      # -07-28-2026（wsj livecoverage）
+    (re.compile(r"[/-](20\d{2})(\d{2})(\d{2})(?:[/-]|$)"), (1, 2, 3)),            # -20260728-
+    (re.compile(r"/(20\d{2})[/-](\d{1,2})(?:[/-]|$)"), (1, 2, 0)),                # /2020/08/ → 當月 1 日
+)
+
+
+def _url_published_date(url: str) -> date | None:
+    """從網址推發布日。抽不到回 None（**不是缺陷**：數據頁本來就沒有日期）。
+    取第一個成功的樣式；日期不合法（月份 13、日 32）就當抽不到,不 raise。"""
+    for pat, (yi, mi, di) in _URL_DATE_PATTERNS:
+        m = pat.search(url or "")
+        if not m:
+            continue
+        try:
+            return date(int(m.group(yi)), int(m.group(mi)), int(m.group(di)) if di else 1)
+        except (ValueError, IndexError):
+            continue
+    return None
+
+
+def _web_result_date(r: dict) -> date | None:
+    """一則 web 結果的日期：優先用 API 的 `published_date`,沒有才退回網址推斷。
+    ⚠ 實測（2026-08-13）：只有 `topic="news"` 會回 `published_date`,而 news 模式**拿不到數據頁**
+      （macrotrends／stockanalysis／companiesmarketcap 全消失）,即時報價題要的正是數據頁。
+      所以生產走預設 topic ＋ 網址推斷；這裡仍先讀 `published_date`,將來若改 topic 不必再動這裡。"""
+    raw = (r.get("published_date") or "").strip()
+    if raw:
+        for fmt in ("%a, %d %b %Y %H:%M:%S %Z", "%a, %d %b %Y %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"):
+            try:
+                return datetime.strptime(raw, fmt).date()
+            except ValueError:
+                continue
+        m = re.search(r"(20\d{2})-(\d{2})-(\d{2})", raw)   # 任何帶 ISO 日期的變體
+        if m:
+            try:
+                return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+            except ValueError:
+                pass
+    return _url_published_date(r.get("url") or "")
+
+
+def _normalize_url(url: str) -> str:
+    """去重用的正規化鍵：拿掉協定／www.／amp 路徑段／query／結尾斜線,子網域前綴 `new.`／`m.` 也去掉。
+    要擋的是同一頁的多種寫法佔掉多個名額——實測同一次搜尋同時回了
+    `cnbc.com/2020/…` 與 `cnbc.com/amp/2020/…`、`www.macrotrends.net/…` 與 `new.macrotrends.net/…`。"""
+    try:
+        p = urlparse(url or "")
+        host = (p.netloc or "").lower()
+        for pre in ("www.", "new.", "m.", "amp."):
+            if host.startswith(pre):
+                host = host[len(pre):]
+        path = re.sub(r"/amp(?=/|$)", "", (p.path or "").lower()).rstrip("/")
+        return host + path
+    except Exception:
+        return (url or "").lower()
+
+
+# 衍生性商品頁的網址樣式。**OCC 選擇權代號是標準化格式**（`{代號}{YYMMDD}{C|P}{8 位履約價}`,
+# 例 `TSLA260814C00257500` ＝ 2026-08-14 到期、履約價 $257.50 的買權），屬於格式定義的封閉集合,
+# 用樣式排除正當（同 CLAUDE.md 對 `VALID_*_ITEMS` 的例外）。
+# 為什麼要擋：它與「外國掛牌」同一類——**拿到的是別的標的**。選擇權頁上的價格是權利金,
+# 被當成股價就是數量級的錯。實測「特斯拉今天股價」一次跑分有 3 個名額被選擇權合約頁佔走。
+_DERIVATIVE_URL_RE = re.compile(r"/[A-Z]{1,6}\d{6}[CP]\d{6,8}(?:[/?]|$)")
+
+
+def _is_derivative_page(url: str) -> bool:
+    """網址看起來是選擇權／衍生性商品合約頁？只認 OCC 標準格式,認不出就回 False（保守側）。"""
+    return bool(_DERIVATIVE_URL_RE.search(url or ""))
+
+
+def _host_allowed(host: str) -> bool:
+    """**本地端**的白名單複核：只認 entry 本身或它的 `www.` 形式，**不認任意子網域**。
+
+    為什麼要在 Tavily 的 `include_domains` 之外再擋一層：Tavily 的比對是子網域包含式的
+    （`_domain_admits` 模型化了這件事），而**地區子網域拿到的是別的市場的報價**——
+      `ca.finance.yahoo.com/quote/TSLA.NE`（加拿大 NEO）、`finance.yahoo.com/quote/TL0.SG`（新加坡）、
+      `cn.wsj.com`（實測給出多年前的 Apple／MSFT 市值對比,直接害答案說市值「下降」）。
+    這與 2026-08-13 `apple.com` 收進 `apps.apple.com` 是同一個缺陷類,只是換一家。
+    白名單本身已是精確主機名,所以「exact ＋ www」不會誤殺（`www.sec.gov`／`www.reuters.com` 都過）。
+    ⚠ 這擋的是**子網域**；同一主機下的外國掛牌路徑（`stockanalysis.com/quote/bvl/AAPL`）擋不到,
+      見 BACKLOG〈web 外國掛牌〉。"""
+    host = (host or "").lower().strip().lstrip(".")
+    if host.startswith("www."):
+        host = host[4:]
+    return host in {e.lower().lstrip(".") for e in WEB_ALLOWED_DOMAINS}
+
+
+def _dedupe_web_results(results: list[dict], need: str, as_of: date) -> tuple[list[dict], dict]:
+    """對 Tavily 原始結果做三道**確定性**過濾,回傳 (保留的結果, 統計)。順序即 Tavily 的相關性排序。
+      ⓪ 本地端白名單複核（`_host_allowed`，擋地區子網域）＋ 衍生性商品頁排除（`_is_derivative_page`）
+      ① 同頁去重（`_normalize_url`）
+      ② 單域名上限 `TAVILY_PER_DOMAIN_CAP`——實測 `companiesmarketcap.com` 用五種幣別變體
+         （$USD／A$AUD／C$CAD／€EUR…）**吃掉全部 5 個名額**,五則內容一模一樣且都不含 Apple 數字,
+         等於整次 web 搜尋作廢。這是通用現象（同站多變體頁),不是某一家的問題。
+      ③ 明顯過時（`WEB_STALE_DAYS`）；抽不出日期一律保留。
+    三道都不看內容、不看公司名,純結構。"""
+    limit = WEB_STALE_DAYS.get(need)
+    kept: list[dict] = []
+    seen: set[str] = set()
+    per_domain: dict[str, int] = {}
+    stats = {"dup": 0, "domain_cap": 0, "stale": 0, "dated": 0, "off_host": 0, "derivative": 0}
+    for r in results:
+        url = (r.get("url") or "").strip()
+        key = _normalize_url(url)
+        if not url or key in seen:
+            stats["dup"] += 1
+            continue
+        try:
+            host = urlparse(url).netloc.lower()
+        except Exception:
+            host = ""
+        if not _host_allowed(host):
+            stats["off_host"] += 1
+            _trace(f"    web ✗ 非白名單主機（多為地區子網域）{host} {url[:60]}")
+            continue
+        if _is_derivative_page(url):
+            stats["derivative"] += 1
+            _trace(f"    web ✗ 衍生性商品合約頁（非該股票）{url[:70]}")
+            continue
+        dom = _domain_of(url)
+        if per_domain.get(dom, 0) >= TAVILY_PER_DOMAIN_CAP:
+            stats["domain_cap"] += 1
+            continue
+        d = _web_result_date(r)
+        if d:
+            stats["dated"] += 1
+            if limit is not None and (as_of - d).days > limit:
+                stats["stale"] += 1
+                _trace(f"    web ✗ 過時 {(as_of - d).days} 天（>{limit}）{_domain_of(url)} {url[:60]}")
+                continue
+        seen.add(key)
+        per_domain[dom] = per_domain.get(dom, 0) + 1
+        r["_pub_date"] = d
+        kept.append(r)
+        if len(kept) >= TAVILY_MAX_RESULTS:
+            break
+    return kept, stats
+
+
 def _source_newest_date(source: str) -> date | None:
     """從來源檔名推它「最新可能」的日期。`TICKER_KIND_STAMP`，stamp 為 4/6/8 碼。
 
@@ -408,6 +618,47 @@ def _stale_for_realtime(need: str, chunks: list[dict], as_of: date) -> int | Non
         return None            # 算不出日期 → 不主張過期（維持 Grader 原判，不製造假陽性）
     age = (as_of - max(dates)).days
     return age if age > limit else None
+
+
+def _kb_ceiling_date(chunks: list[dict]) -> date | None:
+    """這些 ticker 在**整個 collection** 裡最新能提供到哪一天（與本次檢索撈到什麼無關）。
+
+    ⚠ 存在理由：`_stale_for_realtime()` 量的是**候選池**裡最新那筆,而候選池是語意檢索的結果
+      ——池子裡最新是 60 天前,不代表 collection 沒有 3 天前的,很可能只是這輪措辭沒命中。
+      兩者一比就能把兩種不足分開：**檢索沒撈到**（改寫有救）vs **KB 根本沒有**（改寫沒救）。
+      少了這個天花板,前者會被誤判成後者,白白跳過還有救的改寫。
+
+    刻意與 `_stale_for_realtime()` 共用 `_source_newest_date()`：兩邊的日期必須是同一套算法,
+    否則比出來的大小沒有意義。
+    """
+    cov = _get_kb_coverage()
+    if not cov.get("available"):
+        return None                      # 掃不到 → 無法證明「還有更新的」,不主張可修
+    tickers = {str(c.get("ticker") or "").upper().strip() for c in chunks}
+    tickers.discard("")
+    dates = [d
+             for t in tickers
+             for record in (cov.get("tickers", {}).get(t) or {}).values()
+             for d in (_source_newest_date(str(record.get("source") or "")),)
+             if d]
+    return max(dates) if dates else None
+
+
+def _classify_staleness(need: str, chunks: list[dict],
+                        as_of: date) -> tuple[int | None, bool]:
+    """回傳 (候選池最新來源過期幾天 or None, 這種不足 KB 補不補得了)。
+
+    抽成獨立函式是為了**讓閘門能零 LLM 測到這個判斷**——它原本內嵌在 `_check_sufficiency()`
+    的 LLM 回傳處理裡,測不到就等於沒有被證偽過。
+    """
+    stale_days = _stale_for_realtime(need, chunks, as_of)
+    if stale_days is None:
+        return None, False
+    limit = REALTIME_STALE_DAYS.get(need)
+    ceiling = _kb_ceiling_date(chunks)
+    # 天花板本身也過期 → 再怎麼改寫都是同一批檔案,沒救；天花板夠新 → 是這次沒撈到,還有救
+    unfixable = ceiling is None or limit is None or (as_of - ceiling).days > limit
+    return stale_days, unfixable
 
 
 def _get_as_of_date() -> date:
@@ -746,10 +997,19 @@ def _is_web_todo(task: str) -> bool:
 
 
 def _format_unresolved_freshness_notice(todos: list[dict]) -> str:
-    """只對 live 且 web 沒成功補到的新聞缺口產生機械式時效聲明；snapshot 永遠沒有 gap。"""
+    """只對 live 且 web 沒成功補到的新聞缺口產生機械式時效聲明；snapshot 永遠沒有 gap。
+
+    ⚠ 缺口是**逐待辦**算的，但這段警語**整篇答案只印一次**——所以措辭不能講成整篇的結論。
+      2026-08-14 實測：「Azure 最新一季成長率」的答案主體引用了 CNBC 與 sec.gov 兩個 web 來源，
+      底下卻印出「Web 未提供可用補充」，因為另外幾個沒查網的待辦各自帶著 gap。警語與答案互相矛盾
+      比沒有警語更糟（它會讓讀者不信任明明有出處的數字），故依「這一次跑分到底有沒有用到 web」分岔。"""
     unique: dict[tuple[str, str, str], dict] = {}
+    any_web = False
     for todo in todos or []:
-        if todo.get("status") != "done" or todo.get("web_used"):
+        if todo.get("status") != "done":
+            continue
+        if todo.get("web_used"):
+            any_web = True
             continue
         for gap in todo.get("freshness_gaps", []) or []:
             key = (gap.get("ticker", ""), gap.get("cutoff", ""), gap.get("as_of", ""))
@@ -760,8 +1020,10 @@ def _format_unresolved_freshness_notice(todos: list[dict]) -> str:
         f"{ticker} 新聞資料截至 {cutoff}（查詢日 {as_of}）"
         for ticker, cutoff, as_of in sorted(unique)
     )
-    return ("\n\n---\n⚠ 資料時效：" + details
-            + "；Web 未提供可用補充，因此以上新聞資訊不代表涵蓋至查詢日。")
+    tail = ("；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。"
+            if any_web else
+            "；Web 未提供可用補充，因此以上新聞資訊不代表涵蓋至查詢日。")
+    return "\n\n---\n⚠ 資料時效：" + details + tail
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -1081,19 +1343,28 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
                     if isinstance(raw_ids, list) else [])
     # live 時效改判：Grader 說「有這個欄位就夠」,但欄位可能是兩個月前的快照。只降不升
     # ——只把 true 改成 false,絕不把 false 改成 true(不繞過 Grader 原本的離題判斷)。
+    need, kb_unfixable = "none", False
     if _live:
         need = str(data.get("realtime_need", "none") or "none").strip().lower()
-        stale_days = _stale_for_realtime(need, top, _get_as_of_date())
+        if need not in REALTIME_STALE_DAYS:
+            need = "none"
+        stale_days, kb_unfixable = _classify_staleness(need, top, _get_as_of_date())
         if stale_days is not None and sufficient:
             sufficient = False
+            # ⚠ `kb_unfixable` 只在**整個 collection 的天花板**也過期時才成立（見 _classify_staleness）。
+            #   若天花板還夠新,代表是這次檢索沒撈到最新那筆 → 保留改寫機會,別跳過。
             missing = (f"候選中最新來源已是 {stale_days} 天前的資料,而本題需要 {need} 等級的即時性"
                        f"（原判定：{missing or '足夠'}）")
             new_query = new_query or subquery
             _trace(f"check[{subquery[:24]!r}] 時效改判 sufficient=True→False "
-                   f"(need={need}, 最新來源 {stale_days} 天前)")
+                   f"(need={need}, 最新來源 {stale_days} 天前, "
+                   f"{'KB 補不了' if kb_unfixable else 'KB 還有更新的 → 保留改寫'})")
+        else:
+            kb_unfixable = False   # 沒觸發改判就不帶旗標,避免污染執行層的早退判斷
     _trace(f"check[{subquery[:24]!r}] sufficient={sufficient} missing={missing[:50]!r} "
            f"new_query={new_query[:50]!r} relevant_ids={len(relevant_ids)}/{len(shown_ids)}")
-    out = {"sufficient": sufficient, "missing": missing, "new_query": new_query, "relevant_ids": relevant_ids}
+    out = {"sufficient": sufficient, "missing": missing, "new_query": new_query,
+           "relevant_ids": relevant_ids, "realtime_need": need, "kb_unfixable": kb_unfixable}
     _replay.put("check", _rk, out)
     return out
 
@@ -1156,8 +1427,14 @@ _WEB_SOURCE_AMENDMENT = """
 - Rule 2／Rule 8 修訂：該區塊的內容用 `[web: 網址]` 標註出處即**視為已滿足引用要求**，
   不需要也不應該替它編造 `[filename, chunk #N]`。「traceable to a cited chunk」對該區塊
   等價於「traceable to a cited web URL」。
-- 時效優先：問題問「最新／目前／現在」的數值（股價、市值、近期動態）時，**該區塊比財報 chunk 新**，
-  應優先採用並註明來源與日期；若與財報數字不一致，那通常是時間點不同，不是矛盾——請說明兩者各自的時點。
+- 每則結果標了「（發布日 YYYY-MM-DD）」或「（未標示日期）」。⚠ 不要因為某則被放進
+  「網路搜尋結果」就當它是今天的——網頁可能是好幾年前的報導。日期的用法分兩種情況：
+  - 問**當下的數值**（今天股價、即時市值、現在的本益比）：**「（未標示日期）」的行情／統計頁
+    才是當前值**，優先採用；標了日期的報導講的是**那一天**發生的事，即使只差幾天也不能拿來
+    當今天的數值，只能當背景並註明日期。
+  - 問**近期發展或歷史事件**：以標示日期**最新**的來源為準，並在答案裡寫出那個日期。
+- 只有「（未標示日期）」可以當當前值；但**不得**拿它當某個歷史里程碑事件的日期依據。
+- 與財報 chunk 數字不一致時，那通常是時間點不同，不是矛盾——請並列說明兩者各自的時點。
 - Rule 8 的「Never invent」不變：仍然不得自行推算或估計任何來源沒有明說的數字。"""
 
 
@@ -1791,6 +2068,40 @@ class _RunState:
 
 _run_state_var: contextvars.ContextVar[_RunState] = contextvars.ContextVar("agentic_run_state")
 
+# ── 整個 query 共用的 web 預算（跨子問題、跨 replan 輪次）
+#
+# ⚠ **`WEB_SEARCH_MAX_CALLS` 擋不住這件事**，2026-08-14 才發現：它記在 `_RunState.web_calls`，
+#   而 `_RunState` 是**每個子問題各自歸零**的（`_reset_run_pool()` 在 executor 開頭呼叫），
+#   所以「上限 3 次」的真實語意是「每個子問題 3 次」；而且確定性執行層的 web fallback 直接
+#   呼叫 `_tavily_search`，連那個計數器都沒經過。實測「蘋果的即時市值是多少？」跑出 7 次 web。
+#
+# 為什麼會生出那麼多子問題：時效改判讓子問題恆為 sufficient=False，replanner 每輪就再加一個
+# 措辭更強調「請上網」的同義待辦（'改用網路搜尋查…' → '即時網路搜尋…' → '使用即時金融網站…'）。
+# **不要用字串相似度去認這些同義句**——實測分離度是負的：正向最低 jaccard 0.04、負向最高 0.50，
+# 而最糟的負向正是「即時市值」vs「即時本益比」這種字面幾乎一樣、需求卻不同的配對。那等於
+# 用字串比對做語意感知，就是被拿掉的 `_RELATIVE_TIME_RE` 換個外觀（見 CLAUDE.md〈LLM 與 Python〉）。
+# 這裡改成**不判斷語意、只封成本**：web 是最後手段，一個 query 用掉 N 次就不再花錢。
+QUERY_WEB_BUDGET = int(os.getenv("AGENTIC_QUERY_WEB_BUDGET", "3"))
+_query_web_budget_lock = threading.Lock()
+_query_web_calls = 0
+
+
+def _reset_query_web_budget() -> None:
+    """每個新 query 開始時歸零（在 graph 入口呼叫，不是 executor 入口——那正是舊計數器的 bug）。"""
+    global _query_web_calls
+    with _query_web_budget_lock:
+        _query_web_calls = 0
+
+
+def _take_query_web_budget() -> bool:
+    """取用一次 query 級 web 額度；用完回 False。子問題並行跑，所以要上鎖。"""
+    global _query_web_calls
+    with _query_web_budget_lock:
+        if _query_web_calls >= QUERY_WEB_BUDGET:
+            return False
+        _query_web_calls += 1
+        return True
+
 
 def _current_run_state() -> _RunState:
     """取得目前 context 的 run state；理論上 executor 一律先呼叫 _reset_run_pool()，這裡的
@@ -1808,13 +2119,40 @@ def _reset_run_pool() -> None:
     _run_state_var.set(_RunState())
 
 
-def _tavily_search(query: str) -> str:
-    """Tavily 網路搜尋，回傳幾則結果的標題/摘要/網址（每則帶 [web: url] 供生成端引用）。
+def _web_query_en(query: str) -> str:
+    """送給 Tavily 之前把 query 翻成英文（複用 `rq.translate_query_to_english`：已英文則原樣、
+    有重放快取、翻譯失敗降級回原句，不會成為單點故障）。
+
+    為什麼（2026-08-13 實測，同一次比較）：
+      中文「改用即時網路搜尋查蘋果市值」→ `cn.wsj.com` 的多年前舊文（Apple $2.48T vs MSFT $1.76T），
+        模型把舊文的「上週收盤」當本週，還推論出「市值下降了」。
+      英文 `Apple market cap`          → `stockanalysis.com/stocks/aapl/market-cap`，score 0.91。
+    順帶解掉地區子網域問題：英文 query 本來就不會撈到 `cn.wsj.com`／`hk.finance.yahoo.com`，
+    不必維護一份地區站台排除清單（那又會變成 O(n)）。
+    ⚠ 這只改善命中品質，**不是日期把關**——舊英文文章一樣進得來，那要另外解。
+    """
+    try:
+        en = rq.translate_query_to_english(query, CHECKER_MODEL)
+    except Exception as e:
+        _trace(f"  web query 英譯失敗（{e!r}）→ 用原句")
+        return query
+    if en and en.strip() and en.strip() != (query or "").strip():
+        _trace(f"  web query 英譯：{query[:32]!r} → {en[:48]!r}")
+    return en or query
+
+
+def _tavily_search(query: str, need: str = "none") -> str:
+    """Tavily 網路搜尋，回傳幾則結果的標題/發布日/摘要/網址（每則帶 [web: url] 供生成端引用）。
+    `need` 是 Grader 的 `realtime_need`（intraday／days／none），只用來決定過時門檻 `WEB_STALE_DAYS`。
     任何失敗（停用 / 缺 key / API 錯）→ 回傳明確說明字串，絕不 raise（不讓 web 成為單點故障）。
 
     ⚠ 2026-08-13 起限定 `WEB_ALLOWED_DOMAINS`。**白名單濾空時明確回報查無，不退回全網**——
     靜默 fallback 等於白名單沒生效卻沒人知道（同 CLAUDE.md「稽核回傳 0 筆先當壞消息查」的道理）。
     濾空會走 _trace，讓它在 trace 看得見而不是安靜消失。
+
+    ⚠ 2026-08-14 起 `search_depth="advanced"`（原 basic）。實測同一 query：basic 的 content 596~1296 字、
+    advanced 820~1982 字，且 advanced 把數字段落排到前面（macrotrends 從 3 個數字變 6 個）。
+    差別對「即時報價／市值」這種**值在頁面深處**的題是決定性的。
     """
     if not ENABLE_WEB_SEARCH:
         return "（web search 已停用）"
@@ -1824,18 +2162,40 @@ def _tavily_search(query: str) -> str:
     try:
         from tavily import TavilyClient
         client = TavilyClient(api_key=api_key)
-        resp = client.search(query, max_results=TAVILY_MAX_RESULTS, search_depth="basic",
+        resp = client.search(query, max_results=TAVILY_FETCH_RESULTS, search_depth="advanced",
                              include_domains=WEB_ALLOWED_DOMAINS)
         results = resp.get("results", []) if isinstance(resp, dict) else []
         if not results:
             _trace(f"  web_search({query[:40]!r}) → 白名單內查無結果（不退回全網）")
             return "（web search 查無結果：白名單來源內找不到，未退回全網搜尋）"
+        kept, stats = _dedupe_web_results(results, need, _get_as_of_date())
+        _trace(f"  web_search({query[:40]!r}) 原始 {len(results)} → 保留 {len(kept)}"
+               f"（非白名單主機 {stats['off_host']}、衍生性商品頁 {stats['derivative']}、"
+               f"同頁重複 {stats['dup']}、同域名超額 {stats['domain_cap']}、"
+               f"過時 {stats['stale']}、可判日期 {stats['dated']}；need={need}）")
+        if not kept:
+            return "（web search 查無結果：白名單來源內的結果全部過時或重複）"
         lines = []
-        for r in results[:TAVILY_MAX_RESULTS]:
+        for r in kept:
             title = (r.get("title") or "").strip()
             url = (r.get("url") or "").strip()
-            content = " ".join((r.get("content") or "").split())[:300]
-            lines.append(f"- {title} [web: {url}]\n  {content}")
+            content = " ".join((r.get("content") or "").split())[:WEB_CONTENT_CHARS]
+            # 日期直接標進 prompt：**讓生成端能自己排序新舊**,而不是把「哪個比較新」留給它猜。
+            # 標不出日期的寫「未標示日期」而非省略——省略會被讀成「就是今天」。
+            d = r.get("_pub_date")
+            stamp = f"（發布日 {d.isoformat()}）" if d else "（未標示日期）"
+            lines.append(f"- {title} {stamp} [web: {url}]\n  {content}")
+            # 逐則印出網址/發布日/標題/摘要全文（--trace 才有，平時 no-op）。
+            # ⚠ 沒有這一段就分不出「Tavily 根本沒撈到那個數字」與「Generator 拿到了卻不用」
+            #   ——2026-08-13 的「蘋果即時市值」就是卡在這裡無法診斷：7 次 web、18 次時效改判，
+            #   答案仍用 6/12 快照，而 trace 只有 `→ 2163 chars` 這種字數，什麼也推不出來。
+            # 印摘要全文（已截到 WEB_CONTENT_CHARS）是刻意的：只印前 80 字很可能正好切掉要找的數字
+            #   ——2026-08-14 就是靠這一段才看見 `Apple market cap as of Augus` 是被自己截斷的。
+            # 印完整網址：上一輪診斷就是因為只印域名，無法判斷日期抽取為何失效（Reuters 的
+            # 日期在網址結尾而非開頭），只好另外打 API 去問。觀測成本比再跑一次便宜太多。
+            _trace(f"    web ← {stamp} {url}")
+            _trace(f"      {title[:70]}")
+            _trace(f"      {content}")
         return "網路搜尋結果:\n" + "\n".join(lines)
     except Exception as e:
         return f"（web search 失敗：{e!r}）"
@@ -1876,10 +2236,19 @@ def web_search(query: str) -> str:
     引用請用 [web: 網址] 標註）。"""
     state = _current_run_state()
     if state.web_calls >= WEB_SEARCH_MAX_CALLS:
-        _trace(f"  tool web_search({query[:40]!r}) → 已達硬上限 {WEB_SEARCH_MAX_CALLS} 次,拒絕")
+        _trace(f"  tool web_search({query[:40]!r}) → 已達本子問題上限 {WEB_SEARCH_MAX_CALLS} 次,拒絕")
         return (f"（web_search 已達本子問題上限 {WEB_SEARCH_MAX_CALLS} 次，不再搜尋。"
                 f"請改用你已從 rag_search 檢索到的知識庫內容作答；若知識庫確實查無，就如實說明查無。）")
+    # 兩層上限缺一不可：`web_calls` 管單一子問題內的濫用，`_take_query_web_budget()` 管整個 query
+    # 的總成本——子問題數量本身會被 replanner 撐大，只有前者時總量無上界（見 QUERY_WEB_BUDGET 註解）。
+    if not _take_query_web_budget():
+        _trace(f"  tool web_search({query[:40]!r}) → 整個 query 的 web 預算已用完,拒絕")
+        return (f"（本次查詢的網路搜尋額度已用完（{QUERY_WEB_BUDGET} 次）。"
+                f"請改用已檢索到的知識庫內容作答；若確實查無，就如實說明查無。）")
     state.web_calls += 1
+    # ⚠ 這條路（ReAct executor，`AGENTIC_REACT_EXECUTOR=true` 才啟用，非預設）沒有 Grader 的
+    #   `realtime_need`，所以 `need` 只能用預設 "none" ＝**不做過時過濾**。刻意選保守側（寧可
+    #   多留也不誤刪）；要補的話得先讓 ReAct 那條路也產出時效判斷。
     note = _tavily_search(query)
     if note and not note.startswith("（"):
         state.web_notes.append(note)
@@ -2059,6 +2428,14 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
                    f"sufficient={verdict['sufficient']} missing={verdict['missing'][:40]!r}")
             if verdict["sufficient"] or rnd >= MAX_REWRITES:
                 break
+            # KB 補不了的不足（目前唯一來源：live 時效改判）→ 立刻跳出，別把改寫次數燒在必敗的重試上。
+            # ⚠ 2026-08-14 實測「蘋果的即時市值」：時效改判每輪都判 False，而**任何 KB 檢索都不可能
+            #   讓 KB 變新**，於是 7 個子問題 × 3 輪 = 21 次檢索、7 次 web call 全在原地打轉。
+            #   這是結構性死迴圈，不是這一題的巧合——只要「不足的原因是資料不在 KB 裡」就會發生。
+            if verdict.get("kb_unfixable"):
+                _trace(f"execute[{subq_index}] 不足原因 KB 補不了（時效）→ 跳過剩餘 "
+                       f"{MAX_REWRITES - rnd} 次改寫，直接走 web")
+                break
             active_query = verdict["new_query"] or task        # Grader 的 targeted rewrite（唯一改寫來源，deterministic temp=0）
 
         # live 時效補救：KB 仍不足 → 補一次 web（snapshot 不補、不製造 wall-clock 缺口）。
@@ -2076,12 +2453,19 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
         # 常駐證明見 [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py)。
         #
         # 現在擋濫用的只剩 `not verdict["sufficient"]`，而它已被補上時效判準（見 _check_sufficiency
-        # 的 live 改判）：KB 答得出**且夠新**才不上網。成本上界仍是 WEB_SEARCH_MAX_CALLS。
+        # 的 live 改判）：KB 答得出**且夠新**才不上網。
+        # ⚠ 成本上界是 `QUERY_WEB_BUDGET`（query 級），**不是** `WEB_SEARCH_MAX_CALLS`——後者記在
+        #   每個子問題各自歸零的 `_RunState`，2026-08-14 才發現它從來沒有封住總量（實跑 7 次）。
         if (freshness_mode == FRESHNESS_LIVE and ENABLE_WEB_SEARCH and not verdict["sufficient"]):
-            note = _tavily_search(verdict.get("new_query") or task)
-            if note and not note.startswith("（"):
-                web_notes.append(note)
-                _trace(f"execute[{subq_index}] det web fallback → {len(note)} chars")
+            if not _take_query_web_budget():
+                _trace(f"execute[{subq_index}] 整個 query 的 web 預算已用完"
+                       f"（{QUERY_WEB_BUDGET} 次）→ 不再搜尋")
+            else:
+                note = _tavily_search(_web_query_en(verdict.get("new_query") or task),
+                                      need=verdict.get("realtime_need", "none"))
+                if note and not note.startswith("（"):
+                    web_notes.append(note)
+                    _trace(f"execute[{subq_index}] det web fallback → {len(note)} chars")
     except Exception as e:
         _trace(f"execute[{subq_index}] deterministic executor 例外 → 降級：{e!r}")
         if not state.pool:
@@ -2430,6 +2814,7 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
     chunks = 全 run 收進 collected 的聯集(衡量 retrieval recall,供 eval;非 Generator 最終引用那幾個)。"""
     if freshness_mode not in FRESHNESS_MODES:
         raise ValueError(f"freshness_mode 必須是 {sorted(FRESHNESS_MODES)}，收到 {freshness_mode!r}")
+    _reset_query_web_budget()   # 每個 query 一份預算；⚠ 這裡是唯一的歸零點，不要移進 executor
     graph = _get_graph()
     init: SupervisorState = {
         "query": query,

@@ -114,9 +114,11 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 |---|---|
 | [`agentic_rag_v2.py`](agentic_rag_v2.py) | **現役 agentic 入口**。LangGraph 管線 Plan → Execute（確定性檢索）→ Grade → Synthesize（生成 + citation validator + 一致性 validator + reflect）。模型分層 RETRIEVAL=`gpt-oss-20b`、CHECKER/GEN=`gpt-oss-120b`（env `AGENTIC_*_MODEL` 可覆蓋）。時間感知走 `freshness_mode`：`snapshot`（eval）／`live`（prod）。**節點設計理由與 validator 實測見 [`docs/AGENTIC.md`](docs/AGENTIC.md)** |
 
-**web_search（live 專用）的兩條規則**：
+**web_search（live 專用）的四條規則**：
 - **eval 隔離只靠 `freshness_mode == LIVE` 與 `ENABLE_WEB_SEARCH` 兩個獨立條件**，各自都足夠。任何「相關性詞表」（`looks_like_news_query`、`_RELATIVE_TIME_RE`）**都不是隔離機制**，2026-08-13 已全數移除——它們守的是相關性卻讓非新聞措辭的即時題永遠打不到 web，且**漏網的代價是把三週前的數字講成「今天股價」**。要改 web 判斷式，先跑 [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py)。
 - **web 內容要能被引用才用得到**。`rq.SYSTEM_PROMPT` Rule 1/2/8（尤其「Every number you state must be traceable to a cited chunk」）會讓模型寧可捏造推導值也不碰 web 數字。放行條款**必須加在 system message**，user message 版本已實測無效。
+- **白名單只是授權，不是過濾**。Tavily 的 `include_domains` 是**子網域包含式**比對，一筆 `finance.yahoo.com` 會連 `ca.`／`hk.` 一起收，而那些是**別的市場的報價**（同一天差 12%）。所以收到結果後還要用 `_host_allowed` 自己複核一次（只認 exact ＋ `www.`）。這個坑踩過兩次（`apple.com`→`apps.apple.com`、`finance.yahoo.com`→`ca.finance.yahoo.com`）。**清單本身必須公司無關**（統一入口是 `sec.gov`），加一筆 IR 主機名就是 O(n) 的開始。
+- **web 這條路的診斷成本主要在觀測性**。實測兩次根因都是「trace 印得不夠」才查不出來：只印字數看不出摘要被自己截掉（`content[:300]` 切掉了數字）、只印網域看不出日期為何抽不到。**先把要判斷的東西印出來，再猜成因**——這條路每猜錯一次就要重跑一次 LLM＋網路。
 
 ### Ingest
 | 檔案 | 是什麼 |
@@ -142,6 +144,6 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 | [`eval/audit_gold_numbers.py`](eval/audit_gold_numbers.py) | **gold 自洽性稽核（零 LLM、零網路）＝跑任何評測前的前置閘門**。⚠ 不查 filing 類的數字（大乾草堆裡「值有沒有出現」不帶資訊） | 生產 `.venv` |
 | [`eval/verify_segment_split.py`](eval/verify_segment_split.py) | 驗收 ingest 的三層硬邊界（期間／小標／幅度接地）。零網路、零 embedding、不碰 Qdrant → **可在別的實驗跑的時候執行** | 生產 `.venv` |
 | [`eval/verify_table_captions.py`](eval/verify_table_captions.py) | 驗收表格 caption 品質（零 LLM、只讀 Qdrant）。**重建後必跑**：`missing_on_big` 是 Groq 429 靜默降級的唯一出口，`numeric/stub` 是 caption 選錯來源。⚠ `no_caption` 本身不是缺陷（小表不值得花 LLM call） | 生產 `.venv` |
-| [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py) | **驗收 web_search 的 eval 隔離與資料流（零 LLM、零網路、零 Qdrant，秒級）**。五道閘門 22 項斷言：①eval 隔離真值表 ②`web_extra` 跟著每次重生成走 ③**無 web 時 system message 逐字不變**（＝eval 基準不被動到的證明）④來源白名單有生效且濾空不退回全網 ⑤Grader 時效判準的日期算術。⚠ 閘門① 的 `_gate()` 是生產判斷式的**抄寫不是 import**，改那一行務必同步改這裡 | 生產 `.venv` |
+| [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py) | **驗收 web_search 的 eval 隔離與資料流（零 LLM、零網路、零 Qdrant，秒級）**。六道閘門 79 項斷言：①eval 隔離真值表 ②`web_extra` 跟著每次重生成走 ③**無 web 時 system message 逐字不變**（＝eval 基準不被動到的證明）④來源白名單有生效、濾空不退回全網、**清單必須公司無關** ⑤Grader 時效判準的日期算術，含 `kb_unfixable` 的誤殺真值表（**候選池過期 ≠ KB 沒有更新的**，要拿 collection 天花板再比一次） ⑥**web 結果整理**（摘要不得截掉深處數字、地區子網域要擋、單域名上限、同頁去重、過時過濾、query 級 web 預算、`kb_unfixable` 提早跳出）。⚠ 閘門① 的 `_gate()` 是生產判斷式的**抄寫不是 import**，改那一行務必同步改這裡 | 生產 `.venv` |
 | [`eval/verify_chunk_grounding.py`](eval/verify_chunk_grounding.py) | 驗收 **chunk 層**的幅度接地（零 LLM、只讀 Qdrant ＋ reranker tokenizer）。**重建後必跑**——`verify_segment_split.py` 判準⑤ 量的是 section 層，SemanticChunker 之後的邊界它看不到（2026-08-12 就是這個盲點讓「mix-09 已修好」的宣稱被推翻）。閘門只有 `groundable_not_grounded`；`unreachable`／`blocked_by_cap` 是規則正確地不作用 | 生產 `.venv` |
 | [`eval/migrate_fundamentals_pct.py`](eval/migrate_fundamentals_pct.py) | 一次性遷移（2026-08-09 已執行）：Fundamentals 比率欄位小數 → 百分比，**並同步修 gold** | 生產 `.venv` |

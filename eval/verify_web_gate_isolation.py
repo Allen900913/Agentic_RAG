@@ -213,10 +213,40 @@ def _check_domain_allowlist() -> int:
             os.environ["TAVILY_API_KEY"] = orig_key
 
     allow = captured.get("include_domains") or []
+
+    # 2026-08-13 事故的常駐回歸：清單寫 `apple.com`／`microsoft.com`（本意是 IR）時，Tavily
+    # 連子網域一起收 → 「蘋果的即時市值」35 筆結果有 33 筆是這些消費端主機，零筆財經資料。
+    # 這些字串全部取自當時的實跑 trace，不是想像出來的。
+    MUST_REJECT = ["apps.apple.com", "support.apple.com", "podcasts.apple.com",
+                   "support.microsoft.com", "learn.microsoft.com"]
+    MUST_ADMIT = ["www.sec.gov", "stockanalysis.com", "finance.yahoo.com",
+                  "www.macrotrends.net", "www.reuters.com", "www.cnbc.com"]
+    leaked = [h for h in MUST_REJECT if any(ar._domain_admits(e, h) for e in allow)]
+    missed = [h for h in MUST_ADMIT if not any(ar._domain_admits(e, h) for e in allow)]
+
+    # **清單必須公司無關（O(1)）**：拿 rq 的公司別名表當測資，所以未來新增追蹤公司時，
+    # 這道斷言會自動涵蓋新名字——不需要有人記得回來改測試。
+    # 只查長度 ≥4 的別名（短別名會在正常域名裡誤命中）。
+    #
+    # ⚠ **已知限制**：靠「域名含公司名」偵測，抓不到字面上與公司無關的 IR 域名。
+    #    實測負向控制 4/5——`abc.xyz`（Alphabet 的 IR）漏掉，故另列 `_IR_NO_NAME` 補齊。
+    #    這一格擋得住「順手加一筆 investor.xxx.com」這種常見手滑，擋不住刻意用冷門域名。
+    _IR_NO_NAME = {"abc.xyz"}
+    import rag_query as rq
+    aliases = {a.lower() for a in getattr(rq, "_COMPANY_TICKER", {}) if len(a) >= 4}
+    company_specific = [e for e in allow
+                        if any(a in e.lower() for a in aliases)
+                        or e.lower().startswith(("investor.", "ir."))
+                        or e.lower() in _IR_NO_NAME]
+
     results = [
         ("白名單有傳給 Tavily", allow == ar.WEB_ALLOWED_DOMAINS and len(allow) > 0),
         ("濾空不退回全網", "未退回全網" in out),
         ("清單含原始揭露方", "sec.gov" in allow),
+        (f"消費端子網域不得放行{('：'+leaked[0]) if leaked else ''}", not leaked),
+        (f"財經來源必須放行{('：缺 '+missed[0]) if missed else ''}", not missed),
+        (f"清單必須公司無關{('：'+company_specific[0]) if company_specific else ''}",
+         not company_specific),
     ]
     print()
     print(f"  {'web 來源白名單':<28}{'判定':>20}")
@@ -263,6 +293,237 @@ def _check_recency_gate() -> int:
         ok = got == expect_stale
         fail += 0 if ok else 1
         print(f"  {name:<34}{('OK' if ok else '**FAIL**'):>16}")
+
+    # ── ③ `kb_unfixable` 不得誤殺（2026-08-14 追加）────────────────────────────
+    # 缺陷：原本只要「候選池最新那筆過期」就標 kb_unfixable=True 並跳過剩餘改寫。
+    # 但候選池是**語意檢索的結果**——池子裡最新是 62 天前,不代表 collection 沒有 3 天前的。
+    # 那種情況改寫真的有救,跳過就是誤殺。修法是拿整個 collection 的天花板再比一次。
+    stale_cov = {"available": True, "tickers": {
+        "AAPL": {"fundamentals": {"source": "AAPL_Fundamentals_20260612.txt"}}}}
+    fresh_cov = {"available": True, "tickers": {
+        "AAPL": {"fundamentals": {"source": "AAPL_Fundamentals_20260612.txt"},
+                 "news": {"source": "AAPL_News_20260812_01.txt"}}}}   # 1 天前,天花板夠新
+    pool = [{"source": "AAPL_Fundamentals_20260612.txt", "ticker": "AAPL"}]
+    unfix_cases = [
+        # (名稱, coverage, chunks, need, 期望 stale, 期望 unfixable)
+        ("天花板也過期 → 真的沒救", stale_cov, pool, "intraday", True, True),
+        ("天花板還夠新 → 是檢索沒撈到", fresh_cov, pool, "intraday", True, False),
+        ("coverage 掃不到 → 保守當沒救", {"available": False}, pool, "intraday", True, True),
+        ("chunk 無 ticker → 算不出天花板", fresh_cov,
+         [{"source": "AAPL_Fundamentals_20260612.txt"}], "intraday", True, True),
+        ("池子本來就夠新 → 不改判", fresh_cov,
+         [{"source": "AAPL_News_20260812_01.txt", "ticker": "AAPL"}], "intraday", False, False),
+        ("need=none → 永不觸發", stale_cov, pool, "none", False, False),
+    ]
+    real_cov = ar._get_kb_coverage
+    try:
+        for name, cov, chunks, need, exp_stale, exp_unfix in unfix_cases:
+            ar._get_kb_coverage = lambda _c=cov: _c
+            stale_days, unfixable = ar._classify_staleness(need, chunks, as_of)
+            ok = (stale_days is not None) == exp_stale and unfixable == exp_unfix
+            fail += 0 if ok else 1
+            print(f"  {name:<34}{('OK' if ok else '**FAIL**'):>16}")
+    finally:
+        ar._get_kb_coverage = real_cov
+    return fail
+
+
+def _check_web_result_hygiene() -> int:
+    """閘門⑥：web 結果的四道**確定性**整理（零 LLM、零網路）——2026-08-14 五個缺陷的常駐回歸。
+
+    案例全部取自 2026-08-14「蘋果的即時市值是多少？」的實跑 trace，不是想像出來的：
+      D1 摘要截斷 300 字 → macrotrends 的 `$4572.79B` 被切成 `Apple market cap as of Augus`
+      D2 `companiesmarketcap.com` 用五種幣別變體吃掉全部 5 個名額，五則都不含 Apple 數字
+      D3 `cnbc.com/2020/08/19/apple-reaches-2-trillion` 與今天的值並列進答案
+      D5 同一頁的 `/amp/`、`new.` 子網域、`http://` 變體各佔一個名額
+      D4 時效不足 KB 補不了 → replanner 生出 7 個同義待辦，各自再跑一次 web
+    """
+    import types
+
+    print()
+    print(f"  {'web 結果整理':<34}{'判定':>16}")
+    print("  " + "-" * 50)
+    fail = 0
+
+    def _assert(name: str, ok: bool) -> None:
+        nonlocal fail
+        fail += 0 if ok else 1
+        print(f"  {name:<34}{('OK' if ok else '**FAIL**'):>16}")
+
+    # ── D3 網址日期抽取（確定性、公司無關）
+    D = ar._url_published_date
+    _assert("網址日期 /2020/08/19/", D("https://www.cnbc.com/2020/08/19/apple-2t.html") == ar.date(2020, 8, 19))
+    _assert("網址日期 -07-28-2026", D("https://www.wsj.com/livecoverage/stock-market-today-07-28-2026") == ar.date(2026, 7, 28))
+    _assert("網址日期 /2026/07", D("https://reuters.com/2026/07/apple") == ar.date(2026, 7, 1))
+    # Reuters／AP 式：日期在網址**結尾**。上一版樣式要求年份前必須是 `/`，整類都抽不到。
+    _assert("網址日期 …-2026-08-11/", D(
+        "https://www.reuters.com/business/apple-briefly-tops-5-trillion-2026-08-11/") == ar.date(2026, 8, 11))
+    _assert("數據頁無日期 → None", D("https://stockanalysis.com/stocks/aapl/market-cap") is None)
+    _assert("不合法日期 → None", D("https://x.com/2020/13/45/a") is None)
+    # `published_date` 優先於網址（將來若改用 topic="news" 不必再動這裡）
+    _assert("published_date 優先", ar._web_result_date(
+        {"published_date": "Tue, 11 Aug 2026 17:00:00 GMT",
+         "url": "https://www.cnbc.com/2020/08/19/a.html"}) == ar.date(2026, 8, 11))
+
+    # ── D6 本地端白名單複核：地區子網域拿到的是**別的市場**的報價，必須擋掉。
+    # 這些主機全部取自實跑：`ca.finance.yahoo.com/quote/TSLA.NE`（加拿大 NEO）、
+    # `finance.yahoo.com/quote/TL0.SG`（新加坡）、`cn.wsj.com`（給出多年前的市值對比）。
+    for h in ("ca.finance.yahoo.com", "hk.finance.yahoo.com", "cn.wsj.com",
+              "apps.apple.com", "new.macrotrends.net"):
+        _assert(f"擋掉子網域 {h}", not ar._host_allowed(h))
+    for h in ("finance.yahoo.com", "www.reuters.com", "sec.gov", "www.sec.gov",
+              "stockanalysis.com", "www.cnbc.com"):
+        _assert(f"放行 {h}", ar._host_allowed(h))
+
+    # ── D9 衍生性商品合約頁：拿到的是**別的標的**，價格是權利金不是股價。
+    # 實測「特斯拉今天股價」一次跑分有 3 個名額被 OCC 選擇權頁佔走。
+    for u in ("https://finance.yahoo.com/quote/TSLA260814C00257500",
+              "https://finance.yahoo.com/quote/AAPL261218P00150000/",
+              "https://finance.yahoo.com/quote/NVDA260814C00610000?p=x"):
+        _assert(f"擋掉選擇權頁 {u[-22:]}", ar._is_derivative_page(u))
+    # 負向控制：一般報價／資料頁**不得**被誤殺
+    for u in ("https://finance.yahoo.com/quote/TSLA", "https://finance.yahoo.com/quote/AAPL/key-statistics",
+              "https://stockanalysis.com/stocks/aapl/market-cap", "https://www.cnbc.com/quotes/TSLA",
+              "https://www.cnbc.com/2026/07/28/apple-touches-5-trillion-market-cap.html"):
+        _assert(f"不得誤殺 {u[-26:]}", not ar._is_derivative_page(u))
+
+    # ── D5 同頁去重的等價類
+    N = ar._normalize_url
+    _assert("amp 與原頁同鍵", N("https://www.cnbc.com/amp/2020/08/19/a.html") == N("https://www.cnbc.com/2020/08/19/a.html"))
+    _assert("new. 子網域與主站同鍵", N("https://new.macrotrends.net/x/y") == N("http://www.macrotrends.net/x/y"))
+    _assert("不同頁不得同鍵", N("https://stockanalysis.com/stocks/aapl/") != N("https://stockanalysis.com/stocks/msft/"))
+
+    # ── D2/D3 過濾行為
+    as_of = ar.date(2026, 8, 14)
+    raw = [
+        {"url": "https://companiesmarketcap.com/apple/marketcap", "content": "a"},
+        {"url": "https://companiesmarketcap.com/aud/apple/marketcap", "content": "b"},
+        {"url": "https://companiesmarketcap.com/cad/apple/marketcap", "content": "c"},   # 超過單域名上限
+        {"url": "https://www.cnbc.com/2020/08/19/apple-2t.html", "content": "d"},        # 六年前
+        {"url": "https://www.macrotrends.net/stocks/charts/AAPL/apple/market-cap", "content": "e"},
+        {"url": "https://new.macrotrends.net/stocks/charts/AAPL/apple/market-cap", "content": "f"},  # 同頁
+        {"url": "https://stockanalysis.com/stocks/aapl/market-cap", "content": "g"},
+    ]
+    kept, stats = ar._dedupe_web_results([dict(r) for r in raw], "intraday", as_of)
+    doms = [ar._domain_of(r["url"]) for r in kept]
+    _assert("單域名不得超過上限", doms.count("companiesmarketcap.com") <= ar.TAVILY_PER_DOMAIN_CAP)
+    _assert("同頁變體只佔一個名額", doms.count("macrotrends.net") == 1)
+    _assert("六年前的文章被濾掉", not any("cnbc.com" in d for d in doms) and stats["stale"] == 1)
+    _assert("無日期的數據頁保留", any("stockanalysis.com" in d for d in doms))
+    _assert("不超過 TAVILY_MAX_RESULTS", len(kept) <= ar.TAVILY_MAX_RESULTS)
+    # 三週前的報導：問「今天股價」時必須擋掉，問「近期發展」時必須留下。
+    # 實測（2026-08-14）：門檻設 90 天時，一則 22 天前的 WSJ 報導（$319.69 / −14.52%）被模型
+    # 當成「最新可得」寫進「特斯拉今天股價」的答案，反把未標日期的即時行情頁降為次要。
+    three_wk = [{"url": "https://www.wsj.com/livecoverage/stock-market-today-07-23-2026/card/tesla-slides",
+                 "content": "x"}]
+    k_intra, _ = ar._dedupe_web_results([dict(r) for r in three_wk], "intraday", as_of)
+    k_days, _ = ar._dedupe_web_results([dict(r) for r in three_wk], "days", as_of)
+    _assert("三週前報導：intraday 擋掉", not k_intra)
+    _assert("三週前報導：days 保留", len(k_days) == 1)
+
+    # 負向控制：need="none"（問財報期間）時歷史文章**不該**被濾掉
+    kept_none, stats_none = ar._dedupe_web_results([dict(r) for r in raw], "none", as_of)
+    _assert("need=none 不濾歷史文章", stats_none["stale"] == 0
+            and any("cnbc.com" in ar._domain_of(r["url"]) for r in kept_none))
+
+    # ── D1 摘要不得再被截掉數字（**這是 2026-08-14 的主因，必須端到端驗**）
+    # 造一則「數字排在站台樣板文字之後」的結果——正是 macrotrends 的真實形狀。
+    MARKER = "$4572.79B"
+    padded = ("Market capitalization is the most commonly used method of measuring the size of a "
+              "publicly traded company. " * 8) + f" Apple market cap as of August 2026 is {MARKER}."
+    assert padded.index(MARKER) > 300, "測資本身要讓數字落在 300 字之後，否則這格驗不到東西"
+
+    class _FakeClient:
+        def __init__(self, api_key=None):
+            pass
+
+        def search(self, query, **kw):
+            return {"results": [{"url": "https://www.macrotrends.net/stocks/charts/AAPL/apple/market-cap",
+                                 "title": "Apple Market Cap", "content": padded}]}
+
+    fake_mod = types.ModuleType("tavily")
+    fake_mod.TavilyClient = _FakeClient
+    orig_mod, orig_key = sys.modules.get("tavily"), os.environ.get("TAVILY_API_KEY")
+    sys.modules["tavily"] = fake_mod
+    os.environ["TAVILY_API_KEY"] = "stub-key"
+    try:
+        note = _REAL_TAVILY_SEARCH("Apple market cap", need="intraday")
+    finally:
+        sys.modules.pop("tavily", None) if orig_mod is None else sys.modules.__setitem__("tavily", orig_mod)
+        os.environ.pop("TAVILY_API_KEY", None) if orig_key is None else os.environ.__setitem__("TAVILY_API_KEY", orig_key)
+    _assert("摘要不得截掉深處的數字", MARKER in note)
+    _assert("無日期時標「未標示日期」", "未標示日期" in note)
+
+    # ── D8 時效警語不得與答案自相矛盾。
+    # 實測：Azure 那題主體引用了 CNBC 與 sec.gov 兩個 web 來源，底下卻印「Web 未提供可用補充」。
+    gap = [{"ticker": "MSFT", "cutoff": "2026-06-12", "as_of": "2026-08-14"}]
+    mixed = [{"status": "done", "web_used": False, "freshness_gaps": gap},
+             {"status": "done", "web_used": True, "freshness_gaps": []}]
+    none_web = [{"status": "done", "web_used": False, "freshness_gaps": gap}]
+    n_mixed = ar._format_unresolved_freshness_notice(mixed)
+    n_none = ar._format_unresolved_freshness_notice(none_web)
+    _assert("有用 web 時不得說「未提供」", "未提供可用補充" not in n_mixed and "部分子問題" in n_mixed)
+    _assert("完全沒用 web 時照舊", "未提供可用補充" in n_none)
+    _assert("無缺口 → 不印警語", ar._format_unresolved_freshness_notice(
+        [{"status": "done", "web_used": False, "freshness_gaps": []}]) == "")
+
+    # ── D4 後半：整個 query 的 web 預算是**跨子問題**的硬上限。
+    # ⚠ 舊的 `WEB_SEARCH_MAX_CALLS` 記在 `_RunState`，而 `_RunState` 每個子問題歸零，
+    #   所以它的真實語意是「每個子問題 N 次」，總量無上界——實跑量到 7 次。這一格量的是總量。
+    ar._reset_query_web_budget()
+    taken = sum(1 for _ in range(ar.QUERY_WEB_BUDGET + 5) if ar._take_query_web_budget())
+    _assert(f"query 級 web 預算封頂（實得 {taken}）", taken == ar.QUERY_WEB_BUDGET)
+    ar._reset_query_web_budget()
+    _assert("歸零後恢復額度", ar._take_query_web_budget())
+    # 負向控制：預算不得由 executor 歸零——那正是舊計數器失效的原因。
+    ar._reset_query_web_budget()
+    for _ in range(ar.QUERY_WEB_BUDGET):
+        ar._take_query_web_budget()
+    ar._reset_run_pool()          # 模擬「換下一個子問題」
+    _assert("換子問題不得重置預算", not ar._take_query_web_budget())
+    ar._reset_query_web_budget()
+
+    # ── D4 前半：KB 補不了的不足 → 執行層必須**立刻**跳出改寫迴圈，不是燒完 MAX_REWRITES。
+    # 全程零 LLM 零網路：把 Grader／檢索／摘要／web 都換成 stub，只量「檢索被呼叫幾次」。
+    n_retrieve = {"n": 0}
+
+    def _fake_retrieve(q):
+        n_retrieve["n"] += 1
+        return [{"source": "AAPL_Fundamentals_20260612.txt", "chunk_index": 0, "text": "x",
+                 "rerank_score": 1.0, "raw_rerank_score": 1.0}]
+
+    def _fake_check(subquery, pool, temporal_scope="", freshness_mode=ar.FRESHNESS_SNAPSHOT):
+        return {"sufficient": False, "missing": "太舊", "new_query": subquery,
+                "relevant_ids": [], "realtime_need": "intraday", "kb_unfixable": True}
+
+    saved = (ar._retrieve_chunks, ar._check_sufficiency, ar._fallback_local_summary, ar._tavily_search)
+    ar._retrieve_chunks, ar._check_sufficiency = _fake_retrieve, _fake_check
+    ar._fallback_local_summary = lambda task, chunks: "stub"
+    ar._tavily_search = lambda q, need="none": "（stub）"
+    try:
+        ar._run_executor_deterministic("蘋果的即時市值", "", ar.FRESHNESS_LIVE, 0, False)
+    finally:
+        (ar._retrieve_chunks, ar._check_sufficiency,
+         ar._fallback_local_summary, ar._tavily_search) = saved
+    _assert(f"KB 補不了 → 只檢索 1 次（實得 {n_retrieve['n']}）", n_retrieve["n"] == 1)
+
+    # 負向控制：一般的「不夠」仍然要用滿改寫次數，否則等於把補救能力一起關掉。
+    n_retrieve["n"] = 0
+
+    def _fake_check_plain(subquery, pool, temporal_scope="", freshness_mode=ar.FRESHNESS_SNAPSHOT):
+        return {"sufficient": False, "missing": "離題", "new_query": subquery,
+                "relevant_ids": [], "realtime_need": "none", "kb_unfixable": False}
+
+    saved = (ar._retrieve_chunks, ar._check_sufficiency, ar._fallback_local_summary, ar._tavily_search)
+    ar._retrieve_chunks, ar._check_sufficiency = _fake_retrieve, _fake_check_plain
+    ar._fallback_local_summary = lambda task, chunks: "stub"
+    ar._tavily_search = lambda q, need="none": "（stub）"
+    try:
+        ar._run_executor_deterministic("蘋果的營收", "", ar.FRESHNESS_SNAPSHOT, 0, False)
+    finally:
+        (ar._retrieve_chunks, ar._check_sufficiency,
+         ar._fallback_local_summary, ar._tavily_search) = saved
+    _assert(f"一般不足仍跑滿改寫（實得 {n_retrieve['n']}）", n_retrieve["n"] == ar.MAX_REWRITES + 1)
     return fail
 
 
@@ -292,6 +553,7 @@ def main() -> int:
     fail += _check_system_prompt_amendment()
     fail += _check_domain_allowlist()
     fail += _check_recency_gate()
+    fail += _check_web_result_hygiene()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0
