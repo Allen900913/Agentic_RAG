@@ -269,16 +269,26 @@ def _check_recency_gate() -> int:
     F = [{"source": "AAPL_Fundamentals_20260612.txt"}]      # 62 天前
     N = [{"source": "TSLA_News_20260721_01.txt"}]           # 23 天前
     K = [{"source": "MSFT_10Q_202603.html"}]                # 財報期間 → 月底 2026-03-31
-    Y = [{"source": "NVDA_10K_2026.html"}]                  # 財年 → 2026-12-31，永不過期
+    Y = [{"source": "NVDA_10K_2026.html"}]                  # 財年 → 2026-12-31（**未來日期**）
+    FRESH = [{"source": "AAPL_News_20260812_01.txt"}]       # 1 天前，真實日曆日期
     cases = [
         ("即時市值 vs 兩個月前基本面", "intraday", F, True),
         ("今天股價 vs 三週前新聞", "intraday", N, True),
         ("最近進展 vs 三週前新聞", "days", N, True),
         ("季度數字 vs 兩個月前基本面", "none", F, False),      # none → 永不過期
-        ("即時 vs 10-K（財年期間非發布日）", "intraday", Y, False),
+        ("季度數字 vs 10-K", "none", Y, False),                # 同上：財報數字不因 wall clock 過期
         ("最近消息 vs 10-Q 期間", "days", K, True),
-        ("來源算不出日期 → 不主張過期", "intraday", [{"source": "weird.txt"}], False),
-        ("無候選 → 不主張過期", "intraday", [], False),
+        # ── 2026-08-19：以下四條是**推翻舊行為**後的新語意，見 `_stale_for_realtime` docstring ──
+        # 舊行為把「財報永不過期」誤用成「財報能證明池子夠新」。KB 有新聞時無害（池裡有真日期
+        # 的新聞壓著）；拔除新聞後財報成了唯一日期來源，於是 intraday 題也判不出過期。
+        ("即時 vs 10-K：財報不得證明池子夠新", "intraday", Y, True),
+        ("來源算不出日期 → 證明不了夠新 → 判過期", "intraday", [{"source": "weird.txt"}], True),
+        ("無候選 → 證明不了夠新", "intraday", [], True),
+        # ⚠ **這一條是這個 bug 的回歸鎖**：未來日期的 10-K 不得蓋過真實日期的 Fundamentals。
+        #   舊碼 max(2026-12-31, 2026-06-12) = 未來 → 判不過期；新碼只認 8 碼真實日期 → 62 天。
+        ("未來日期的 10-K 不得蓋過真實日期來源", "days", Y + F, True),
+        # ⚠ **誤報對照**：證明修法不是「一律判過期」。池裡有 1 天前的真實日期來源 → 夠新。
+        ("池裡有 1 天前的真實日期來源 → 不判過期", "intraday", Y + FRESH, False),
     ]
     print()
     print(f"  {'Grader 時效判準':<34}{'判定':>16}")

@@ -67,6 +67,7 @@ from dotenv import load_dotenv
 load_dotenv(override=True)
 
 import llm_replay as _replay
+import web_replay as _web_replay      # Tavily 原始回應的錄／放（未設 env 時 no-op）
 import rag_query as rq
 
 from langgraph.graph import StateGraph, START, END
@@ -147,10 +148,17 @@ rq.call_llm = _nvidia_call_llm
 # ──────────────────────────────────────────────────────────────────────────────
 # 常數 / 模型選型（NVIDIA 目錄 id，實測見舊版 CHANGELOG 續八）
 # ──────────────────────────────────────────────────────────────────────────────
-# RETRIEVAL_MODEL：只做 retrieve 內部 filter/translate 這類「機械型」輕量呼叫（求快），
-# 與 CHECKER_MODEL（推理）、GEN_MODEL（生成）分離。這類簡單工作直接用小模型 gpt-oss-20b
-# （同 gpt-oss 家族，NVIDIA 上與 120b 同樣快且合法、JSON 輸出穩）。
-RETRIEVAL_MODEL = os.getenv("AGENTIC_RETRIEVAL_MODEL", "openai/gpt-oss-20b")
+# RETRIEVAL_MODEL：只做 retrieve 內部 filter/translate 這類「機械型」輕量呼叫，
+# 與 CHECKER_MODEL（推理）、GEN_MODEL（生成）分離。
+# 2026-08-14 從 gpt-oss-20b 改為 120b。原本的理由是「機械型輕量呼叫，用小模型求快」，
+# 而 `eval/ablate_retrieval_model.py`（100 題零噪音對照）把那個前提推翻了：
+#   · 速度：**20b 在 NIM 上慢一倍**（3.57s vs 1.76s，n=200/模型）——理由本身是反的。
+#   · 品質：等價。gold recall 0.8459(20b) vs 0.8479(120b)，差 0.0020，而同一個模型跑
+#     兩次的噪音就有 0.0014；完全撈不到 gold 的四題（col-07/lex-03/lex-07/lex-14）三臂
+#     一模一樣；候選池雖然會換（Jaccard 0.897 vs 噪音 0.947）但換掉的都是無關 chunk。
+# ⚠ 這會讓本次之後的 agentic 跑分與 2026-08-14 以前的前處理不同（雖已量到無作用）。
+#   要重現舊跑分請設 env `AGENTIC_RETRIEVAL_MODEL=openai/gpt-oss-20b`。
+RETRIEVAL_MODEL = os.getenv("AGENTIC_RETRIEVAL_MODEL", "openai/gpt-oss-120b")
 # GEN_MODEL：實際寫答案的 Generator。2026-07-31 定案用 gpt-oss-120b，理由是「限速」這一維：
 #   glm-5.2            單發 150~220s（NIM 上被拖），100 題不可行
 #   deepseek-v4-pro    品質最好但有很低的單模型限速，eval 密集打立刻 429（實測 34 題就撞牆）
@@ -285,6 +293,11 @@ REFLECTION_MAX_REVISIONS       = 1  # reflection 抓到幻覺後重生成的上�
 # 同時吃全形括號【】與全形逗號，：（gpt-oss-120b 生成中文會把 [] 轉全形，只認 ASCII 會 false-negative）。
 _CITE_RE = re.compile(r"[\[【]([^\[\]【】,，]+?)[,，]\s*chunk\s*#?\s*(\d+)[\]】]", re.IGNORECASE)
 _REF_PREFIX_RE = re.compile(r"^\s*reference\s*\d+\s*:\s*", re.IGNORECASE)
+# 「只有序號、沒有檔名」的引用：`【Reference 7, chunk #15】`。序號是**我們自己給的**
+# （`rq.build_user_prompt` 產生 `[Reference i+1: source, chunk #idx]`），所以它可以被
+# 確定性地還原成檔名——見 `_repair_reference_citations`。
+_BARE_REF_CITE_RE = re.compile(
+    r"([\[【])\s*reference\s*(\d+)\s*[,，]\s*chunk\s*#?\s*(\d+)\s*([\]】])", re.IGNORECASE)
 
 # [TRACE]：把每個節點的當下決策印到 stderr（retrieve 的 DEBUG 已被 _quiet() 靜音）。
 _TRACE = os.getenv("AGENTIC_TRACE", "false").lower() in ("true", "1", "yes")
@@ -394,11 +407,11 @@ _COVERAGE_SOURCE_RE = re.compile(
     r"(?P<stamp>\d{4,8})(?:_|\.|$)",
     re.IGNORECASE,
 )
-_RELATIVE_TIME_RE = re.compile(
-    r"最近|最新|近期|目前|現在|截至今天|今日|"
-    r"\b(?:latest|recent|current|today|as\s+of\s+now)\b",
-    re.IGNORECASE,
-)
+# ⚠ `_RELATIVE_TIME_RE` 已於 2026-08-15 **從碼上刪除**（2026-08-13 只從 web 觸發拿掉，時效警語那條
+#   漏改，文件卻已寫成「全數移除」——漂移了兩天）。留這段是因為它在多處註解／CHANGELOG 被引用：
+#   它曾是 `最近|最新|近期|目前|現在|截至今天|今日|latest|recent|current|today` 的詞表，
+#   實測 18 個真實時效措辭漏 10 個。要判「這題要不要即時資料」請看 Grader 的 `realtime_need`，
+#   要判「這次答案有沒有用到新聞」請看 `_news_freshness_gaps`——兩者都不靠字串比對。
 _WEB_TODO_RE = re.compile(r"網路|上網|web\s*search|internet", re.IGNORECASE)
 
 # 時效需求分級 → 容忍幾天（2026-08-13）。**分工**：「這題要多新」沒有唯一機械答案 → 交給 Grader
@@ -605,19 +618,82 @@ def _source_newest_date(source: str) -> date | None:
     return None
 
 
+# 「這一筆來源能不能證明候選池夠新」＝ stamp 是不是**真實日曆日期**（8 碼）。
+# 10-K 的 4 碼／10-Q 的 6 碼是**財報期間**不是發布日：`MSFT_10K_2026` 會被
+# `_source_newest_date` 算成 2026-12-31，那是未來。
+NO_REALTIME_SOURCE = -1        # `_stale_for_realtime` 的哨符，見該函式 docstring
+
+
+def _is_freshness_evidence(source: str) -> bool:
+    """這一筆來源可否作為「候選池夠新」的證據（只有 8 碼真實日期算數）。"""
+    m = _COVERAGE_SOURCE_RE.match(source or "")
+    return bool(m) and len(m.group("stamp")) == 8
+
+
 def _stale_for_realtime(need: str, chunks: list[dict], as_of: date) -> int | None:
-    """候選裡**最新**的來源距今幾天算過期？回傳天數（過期）或 None（夠新／無此需求／算不出日期）。
+    """候選裡**最新**的來源距今幾天算過期？
+
+    回傳：天數（過期）／`NO_REALTIME_SOURCE`(-1，池裡沒有任何能證明新鮮度的來源)／
+    None（夠新／`need="none"` 無此需求）。
 
     用最新那一筆而非全部：只要池裡有一筆夠新就不該叫 web。
+
+    ⚠ **2026-08-19 推翻了一個先前刻意的決定**，理由是 KB 拔除新聞後成本算式反轉了：
+      舊行為是「財報永不過期」＋ 全池取 `max(dates)`。那讓財報不只是**棄權**，而是
+      **替整個候選池背書說夠新**——「永不過期」與「能證明夠新」被混成同一件事。
+      新聞還在時無害（池裡有真日期的新聞 chunk 壓著）；新聞拔掉後財報成了唯一日期來源，
+      於是 `MSFT_10K_2026`(→2026-12-31，未來) 讓「微軟現在的股價是多少？」**判不出過期、
+      web 不會被叫**。實測 6 題有 4 題如此，含兩題 intraday。
+      ⚠ 其中 3 題**與拔除新聞無關**（從來沒被 `looks_like_news_query` 攔過）＝ 既有的洞。
+      舊註解寫「誤判過期只是叫 web 白跑一趟，誤判新鮮只是維持現狀，前者才是要避免的」——
+      **那句話在 KB 有新聞時成立**。現在「維持現狀」＝ 拿 10-K 回答今天股價，成本大得多。
     """
     limit = REALTIME_STALE_DAYS.get(need)
     if limit is None:
-        return None
-    dates = [d for d in (_source_newest_date(c.get("source") or "") for c in chunks) if d]
+        return None            # need="none"：財報數字不因 wall clock 走了就要上網補
+    dates = [d for d in (_source_newest_date(c.get("source") or "") for c in chunks
+                         if _is_freshness_evidence(c.get("source") or "")) if d and d <= as_of]
     if not dates:
-        return None            # 算不出日期 → 不主張過期（維持 Grader 原判，不製造假陽性）
+        # 池裡沒有任何真實日期來源（現在的 KB：只有 Fundamentals 有）→ 無法證明夠新。
+        # 對 intraday／days 來說「證明不了夠新」就該上網，不是維持原判。
+        return NO_REALTIME_SOURCE
     age = (as_of - max(dates)).days
     return age if age > limit else None
+
+
+# ── 財報期別排序（跨 10-K/10-Q，只在同一家公司內比較）────────────────────────────
+#
+# ⚠ **不能用 `_source_newest_date()` 做這件事**。它把 `TICKER_10K_YYYY` 一律算成該年 12/31
+#   （刻意高估新鮮度，見它的 docstring），而各家財年結束月份不同：
+#     NVDA 財年 1 月底結束 → `NVDA_10K_2026`(→2026-12-31) 會被算得比真正更新的
+#     `NVDA_10Q_202604`(FY2027 Q1) 還新，**排序直接反轉**。
+#   payload 的 (fiscal_year, fiscal_period) 才是精確的（2026-08-15 實測）：
+#     MSFT_10K_2026 = (2026, FY) > MSFT_10Q_202603 = (2026, Q3)   ← web-03 要抓的就是這組
+#     NVDA_10K_2026 = (2026, FY) < NVDA_10Q_202604 = (2027, Q1)   ← 不能誤報成這組
+#
+# FY 排在 Q4 之後：10-K 涵蓋整個財年，是那一年的最後一期。
+# Q1~Q4/FY 是**格式定義的封閉集合**（SEC 就這幾種），列清單正當——見 CLAUDE.md〈硬編碼詞表〉的例外。
+_FISCAL_PERIOD_ORDER = {"Q1": 1, "Q2": 2, "Q3": 3, "Q4": 4, "FY": 5}
+_FISCAL_PERIOD_LABEL = {v: k for k, v in _FISCAL_PERIOD_ORDER.items()}
+
+
+def _fiscal_rank(source: str) -> tuple[int, int] | None:
+    """source → (fiscal_year, 期別序)，可直接比大小。
+
+    非財報檔、或期別欄位缺漏 → 回 None，代表**不參與比較**（寧可漏判也不製造誤報）。
+    """
+    rec = (_get_kb_coverage().get("sources") or {}).get(source)
+    if not rec:
+        return None
+    order = _FISCAL_PERIOD_ORDER.get(str(rec.get("fiscal_period") or "").upper().strip())
+    year = re.sub(r"\D", "", str(rec.get("fiscal_year") or ""))
+    if order is None or len(year) != 4:
+        return None
+    return int(year), order
+
+
+def _fiscal_label(rank: tuple[int, int]) -> str:
+    return f"FY{rank[0]} {_FISCAL_PERIOD_LABEL.get(rank[1], '?')}"
 
 
 def _kb_ceiling_date(chunks: list[dict]) -> date | None:
@@ -636,10 +712,14 @@ def _kb_ceiling_date(chunks: list[dict]) -> date | None:
         return None                      # 掃不到 → 無法證明「還有更新的」,不主張可修
     tickers = {str(c.get("ticker") or "").upper().strip() for c in chunks}
     tickers.discard("")
+    # ⚠ 與 `_stale_for_realtime` 共用**同一套資格判準**（`_is_freshness_evidence`）：
+    #   兩邊若一邊算財報、一邊不算，比出來的大小沒有意義（見本函式 docstring）。
     dates = [d
              for t in tickers
              for record in (cov.get("tickers", {}).get(t) or {}).values()
-             for d in (_source_newest_date(str(record.get("source") or "")),)
+             for src in (str(record.get("source") or ""),)
+             if _is_freshness_evidence(src)
+             for d in (_source_newest_date(src),)
              if d]
     return max(dates) if dates else None
 
@@ -695,6 +775,11 @@ def _scan_kb_coverage(client, collection_name: str) -> dict:
         "collection": collection_name,
         "sources_scanned": 0,
         "tickers": {},
+        # source → 該檔的財報期別（只收 10-K/10-Q）。**沿用同一次 scroll**，不多掃一遍。
+        # 存在理由：`rq.retrieve()` 回傳的 chunk dict 只帶 source/chunk_index/ticker/chunk_type，
+        # **沒有 fiscal_year／fiscal_period**（2026-08-15 實測），而期別排序非有它不可
+        # （見 `_fiscal_rank`）。要嘛在這裡建表，要嘛去改全專案共用的 retrieve 投影——選前者。
+        "sources": {},
     }
     seen_sources: set[str] = set()
     offset = None
@@ -750,6 +835,12 @@ def _scan_kb_coverage(client, collection_name: str) -> dict:
 
                 if not _coverage_sort_key(record).strip("0"):
                     continue
+                if kind in ("10-Q", "10-K"):
+                    coverage["sources"][source] = {
+                        "ticker": ticker, "kind": kind,
+                        "fiscal_year": record["fiscal_year"],
+                        "fiscal_period": record["fiscal_period"],
+                    }
                 ticker_cov = coverage["tickers"].setdefault(ticker, {})
                 old = ticker_cov.get(kind)
                 if old is None or _coverage_sort_key(record) > _coverage_sort_key(old):
@@ -954,46 +1045,88 @@ def _build_temporal_contract(freshness_mode: str) -> str:
     return policy + "\n\n" + coverage_text
 
 
-def _build_todo_temporal_scope(task: str, freshness_mode: str) -> tuple[str, list[dict]]:
-    """為單一 todo 產生精簡 coverage 與可機械判定的 live-news freshness gap。"""
+def _build_todo_temporal_scope(task: str, freshness_mode: str) -> str:
+    """為單一 todo 產生精簡的 coverage 說明（餵給 Grader 的 `temporal_scope`）。
+
+    ⚠ 2026-08-15 起**不再回傳 freshness gap**。缺口改由執行完的實際結果算（`_news_freshness_gaps`），
+      理由見那支的 docstring。這裡回傳單一字串而不是留一個永遠是空 list 的第二欄——
+      留著等於是給下一個人一個會漂移的死欄位。
+    """
     coverage = _get_kb_coverage()
-    mentioned = _mentioned_tickers(task)
-    scope_coverage = _format_kb_coverage(coverage, mentioned or None)
+    scope_coverage = _format_kb_coverage(coverage, _mentioned_tickers(task) or None)
     if freshness_mode == FRESHNESS_SNAPSHOT:
-        return (
-            "snapshot 模式：『最近／最新』= KB 中最新可用資料；不要參照 wall clock，"
-            "不要加入 cutoff 警語。\n" + scope_coverage,
-            [],
-        )
+        return ("snapshot 模式：『最近／最新』= KB 中最新可用資料；不要參照 wall clock，"
+                "不要加入 cutoff 警語。\n" + scope_coverage)
+    return (f"live 模式：今天是 {_get_as_of_date().isoformat()}。不得把今天誤認成 KB cutoff；"
+            "不得創造未出現在下方 snapshot 或工具結果中的期間。\n" + scope_coverage)
 
-    today = _get_as_of_date()
+
+def _news_freshness_gaps(chunks: list[dict], as_of: date) -> list[dict]:
+    """從**實際採用的 chunk** 算新聞時效缺口：用到了某家的 news、而該家 news cutoff 早於今天 → 一筆。
+
+    ⚠ **2026-08-19 起對 KB 恆回空集合**（KB 已不收新聞,沒有 `doc_type=news` 的 chunk）。
+    保留函式與 `eval/verify_answer_validators.py` 閘門④⑤ 的斷言,是為了「新聞復活時警語
+    立刻回來」——那些斷言餵的是合成 chunk,不讀 KB,所以現在仍有判別力。
+    ⚠ **但時效警語本身沒有跟著死**：它現在由 `_unmet_realtime_gaps` 供應（判準改成「這個
+    子問題需要即時資料、卻沒拿到 web 補充」）。兩種缺口併存,見 `_run_one_todo` 的接線。
+
+    ⚠ 2026-08-15 從「看問法」改成「看結果」。舊判準是兩個硬編碼詞表串聯：
+          `bool(_RELATIVE_TIME_RE.search(task)) and rq.looks_like_news_query(task)`
+      這正是 CLAUDE.md 明列的反模式（用字串比對做感知），而**漏網的代價是零揭露**：
+      「Microsoft 最新一季的 Azure 營收成長率」過得了 `_RELATIVE_TIME_RE`（有「最新」）卻過不了
+      `looks_like_news_query`（不是新聞措辭）→ 一句時效警語都不會印。
+      （2026-08-13 拿掉的是 **web 觸發**那兩道同名閘門；警語這道當時漏改，文件卻已寫成「全數移除」。）
+
+    改看結果之後判準是純比對、零詞表，而且更準：問法像新聞、答案其實全靠財報時，舊版會印一句
+    無關的新聞 cutoff 警語，新版不會。cutoff 取 **KB coverage 裡該 ticker 最新的一則新聞**
+    （警語講的是「KB 的新聞收到哪天」，不是「這次剛好引到哪一則」）。
+    """
+    if not chunks:
+        return []
+    cov = _get_kb_coverage()
+    if not cov.get("available"):
+        return []
+    used = {parts[0] for c in chunks
+            for parts in (_source_coverage_parts(str(c.get("source") or "")),)
+            if parts and parts[1] == "news"}
     gaps: list[dict] = []
-    is_current_news = bool(_RELATIVE_TIME_RE.search(task or "")) and rq.looks_like_news_query(task)
-    if is_current_news and coverage.get("available"):
-        all_tickers = coverage.get("tickers", {})
-        targets = mentioned or set(all_tickers)
-        for ticker in sorted(targets):
-            news = all_tickers.get(ticker, {}).get("news")
-            digits = re.sub(r"\D", "", str((news or {}).get("date") or ""))
-            if len(digits) != 8:
-                continue
-            try:
-                cutoff = date.fromisoformat(f"{digits[:4]}-{digits[4:6]}-{digits[6:]}")
-            except ValueError:
-                continue
-            if cutoff < today:
-                gaps.append({"ticker": ticker, "cutoff": cutoff.isoformat(),
-                             "as_of": today.isoformat(), "doc_type": "news"})
-
-    return (
-        f"live 模式：今天是 {today.isoformat()}。不得把今天誤認成 KB cutoff；"
-        "不得創造未出現在下方 snapshot 或工具結果中的期間。\n" + scope_coverage,
-        gaps,
-    )
+    for ticker in sorted(used):
+        cutoff = _source_newest_date(
+            str(((cov.get("tickers", {}).get(ticker) or {}).get("news") or {}).get("source") or ""))
+        if cutoff and cutoff < as_of:
+            gaps.append({"ticker": ticker, "cutoff": cutoff.isoformat(),
+                         "as_of": as_of.isoformat(), "doc_type": "news"})
+    return gaps
 
 
 def _is_web_todo(task: str) -> bool:
     return bool(_WEB_TODO_RE.search(task or ""))
+
+
+def _unmet_realtime_gaps(task: str, need: str, chunks: list[dict], as_of: date) -> list[dict]:
+    """這個子問題**需要即時資料**（Grader 判 `realtime_need != none`）→ 記一筆時效缺口。
+
+    ⚠ **2026-08-19 新增，補上 KB 拔除新聞後死掉的那道揭露。**
+      舊的唯一缺口來源 `_news_freshness_gaps` 的判準是「用了 KB 新聞、而那則新聞過期」。
+      KB 不收新聞之後那個判準**沒有指涉對象 → 恆回空集合 → 時效警語永遠不印**（實測）。
+      但風險沒有消失，只是換了位置：即時題 → Grader 正確判不足 → 去打 web →
+      **web 預算用完（`QUERY_WEB_BUDGET`）或搜不到** → 答案回頭用財報 chunk 生成 → 零揭露。
+      那正是 CLAUDE.md 記著的「把三週前的數字講成『今天股價』」，只是來源從新聞換成了 10-K。
+
+    判準刻意**只看 Grader 的 `realtime_need`**，不看問法、不看候選內容：
+      · 「需不需要即時資料」有判斷成分 → LLM（已在 Grader 內，不多花一次呼叫）
+      · 「這次有沒有拿到 web」是確定性的 → `_format_unresolved_freshness_notice` 用 `web_used` 篩
+    兩者分屬 CLAUDE.md〈LLM 與 Python 的分工〉的兩邊，這裡不重複判斷。
+
+    ⚠ 本函式**不檢查 `web_used`**：那個過濾統一在 `_format_unresolved_freshness_notice`
+      裡做（它已經有「這個待辦用了 web 就跳過」的邏輯）。兩邊都做會在未來漂移。
+    """
+    if need not in ("intraday", "days"):
+        return []
+    ticker = next(iter(sorted(_mentioned_tickers(task))), "")
+    ceiling = _kb_ceiling_date(chunks) if chunks else None
+    return [{"ticker": ticker, "cutoff": ceiling.isoformat() if ceiling else "",
+             "as_of": as_of.isoformat(), "doc_type": "realtime", "need": need}]
 
 
 def _format_unresolved_freshness_notice(todos: list[dict]) -> str:
@@ -1012,17 +1145,24 @@ def _format_unresolved_freshness_notice(todos: list[dict]) -> str:
             any_web = True
             continue
         for gap in todo.get("freshness_gaps", []) or []:
-            key = (gap.get("ticker", ""), gap.get("cutoff", ""), gap.get("as_of", ""))
+            # doc_type 入 key：news 缺口與 realtime 缺口措辭不同，混在一起會互相蓋掉
+            key = (gap.get("ticker", ""), gap.get("cutoff", ""),
+                   gap.get("as_of", ""), gap.get("doc_type", "news"))
             unique[key] = gap
     if not unique:
         return ""
-    details = "; ".join(
-        f"{ticker} 新聞資料截至 {cutoff}（查詢日 {as_of}）"
-        for ticker, cutoff, as_of in sorted(unique)
-    )
+    def _phrase(ticker: str, cutoff: str, as_of: str, doc_type: str) -> str:
+        who = ticker or "本次查詢"
+        if doc_type == "realtime":
+            # KB 只有財報 → 要講「知識庫本來就沒有這種資料」，不是「資料有點舊」
+            span = f"，知識庫最新期別截至 {cutoff}" if cutoff else "，知識庫僅含 SEC 財報與基本面"
+            return f"{who} 需要即時／近期資料{span}（查詢日 {as_of}）"
+        return f"{who} 新聞資料截至 {cutoff}（查詢日 {as_of}）"
+
+    details = "; ".join(_phrase(*k) for k in sorted(unique))
     tail = ("；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。"
             if any_web else
-            "；Web 未提供可用補充，因此以上新聞資訊不代表涵蓋至查詢日。")
+            "；Web 未提供可用補充，因此以上內容不代表涵蓋至查詢日。")
     return "\n\n---\n⚠ 資料時效：" + details + tail
 
 
@@ -1205,9 +1345,12 @@ _PLANNER_PROMPT = f"""你是美股情報 RAG 的規劃器。把使用者問題�
     金額與其「驅動因素 / 主要原因 / 如何影響某部門」的歸因,一律寫在 10-Q/10-K 的財報數字與 MD&A(管理層
     討論與分析),**不是**新聞。像「X 最新一季營收成長多少?驅動因素是什麼」「收購 Y 花多少錢?如何影響 Z 部門」
     這種題,子問題絕不可加「…的新聞內容是什麼 / 相關新聞」——那會把 10-Q 擠掉、只撈到零散新聞而漏掉正解。
-    唯一例外:原句明確是市場事件/情緒/風評(例如「因為某公司要上市被搶風頭」「傳出裁員」),那才容許 news 子問題。
-- 【檢索標的檢驗】每個子問題都必須指向一個「向量庫裡撈得到的離散事實」——具體的財報數字、一則具體的
-  新聞事件/分析師動作、或 10-K/10-Q 裡的一段具體業務/策略敘述。子問題若只是要求「解讀 / 影響 / 意義 / 背景 /
+    ⚠ **不再有例外**(2026-08-19 KB 拔除新聞):向量庫裡**只有** 10-K/10-Q 與 Fundamentals,
+    沒有任何新聞 chunk。原句是市場事件/情緒/風評(「因為某公司要上市被搶風頭」「傳出裁員」)時,
+    子問題照原問法寫成中性事實查詢即可——那類內容由 live web 補,不是靠向量庫。寫成
+    「…的新聞內容是什麼」只會撈到空的。
+- 【檢索標的檢驗】每個子問題都必須指向一個「向量庫裡撈得到的離散事實」——具體的財報數字、
+  Fundamentals 的估值/比率欄位、或 10-K/10-Q 裡的一段具體業務/策略敘述。(向量庫裡沒有新聞。)子問題若只是要求「解讀 / 影響 / 意義 / 背景 /
   綜合看法 / 透露什麼訊息 / 反映什麼
   策略」,它**沒有自己的檢索標的**(答案要靠把上面撈到的事實做綜合,那是最後生成階段的工作),絕不可拆成獨立子問題:
   · 「這則新聞對 X 股價/處境的影響是什麼」「這透露了 X 的什麼策略訊息」→ 併進「那則新聞的內容是什麼」子問題,
@@ -1353,8 +1496,12 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
             sufficient = False
             # ⚠ `kb_unfixable` 只在**整個 collection 的天花板**也過期時才成立（見 _classify_staleness）。
             #   若天花板還夠新,代表是這次檢索沒撈到最新那筆 → 保留改寫機會,別跳過。
-            missing = (f"候選中最新來源已是 {stale_days} 天前的資料,而本題需要 {need} 等級的即時性"
-                       f"（原判定：{missing or '足夠'}）")
+            missing = ((f"候選中沒有任何能證明時效的來源（KB 只有財報期間資料，"
+                        f"財報期間不是發布日）,而本題需要 {need} 等級的即時性"
+                        f"（原判定：{missing or '足夠'}）")
+                       if stale_days == NO_REALTIME_SOURCE else
+                       (f"候選中最新來源已是 {stale_days} 天前的資料,而本題需要 {need} 等級的即時性"
+                        f"（原判定：{missing or '足夠'}）"))
             new_query = new_query or subquery
             _trace(f"check[{subquery[:24]!r}] 時效改判 sufficient=True→False "
                    f"(need={need}, 最新來源 {stale_days} 天前, "
@@ -1478,6 +1625,43 @@ def _extract_citations(text: str) -> set[tuple[str, int]]:
     return out
 
 
+def _repair_reference_citations(answer: str, allowed_chunks: list[dict]) -> tuple[str, int, int]:
+    """把 `【Reference 7, chunk #15】` 這種**只有序號沒有檔名**的引用還原成真檔名。
+
+    **為什麼可以確定性還原**：那個序號是我們自己編的——`rq.build_user_prompt` 把候選排成
+    `[Reference i+1: {source}, chunk #{chunk_index}]` 餵給 Generator。所以 `N` 就是
+    `allowed_chunks[N-1]`，屬於 CLAUDE.md〈LLM 與 Python 的分工〉的 Python 那一半，不必再問 LLM。
+
+    **為什麼需要它**（2026-08-20 實測）：live 路徑 5/37 題吐出這種標記，snapshot 路徑 0/100。
+    而那 5 題的**有效 KB 引用是 0**——不是多一個壞引用，是整份答案沒有任何可追溯的財報出處，
+    答案裡卻有大量財報數字。舊行為是：validator 判它捏造 → 丟回重寫 → `CITATION_VALIDATOR_MAX_RETRIES`
+    用完 → **原樣出貨**。（舊 trace 寫「走機械式收尾」，但程式裡從來沒有任何機械收尾。）
+
+    ⚠ **兩個守門條件，缺一不可**——寧可不修，也不要把「無法追溯」變成「看起來可追溯的錯引用」：
+      ① `N` 必須落在 `1..len(allowed_chunks)`；超出範圍 → **不動**（維持被判捏造、走原本的重寫路徑）。
+      ② 引用裡的 `chunk #M` 必須等於第 N 筆的 `chunk_index`；**兩半不一致就不知道模型指的是哪一個**
+         → **不動**。這一條讓修補在套用時是**被資料自己確認過的**，而不是靠「排序假設」。
+    回傳 (修好的答案, 修補筆數, 因守門條件而略過的筆數)。"""
+    if not allowed_chunks or not answer:
+        return answer, 0, 0
+    fixed = skipped = 0
+
+    def _sub(m: re.Match) -> str:
+        nonlocal fixed, skipped
+        n, want_idx = int(m.group(2)), int(m.group(3))
+        if not (1 <= n <= len(allowed_chunks)):        # 守門①
+            skipped += 1
+            return m.group(0)
+        c = allowed_chunks[n - 1]
+        if c.get("chunk_index") != want_idx:           # 守門②
+            skipped += 1
+            return m.group(0)
+        fixed += 1
+        return f"{m.group(1)}{c['source']}, chunk #{want_idx}{m.group(4)}"
+
+    return _BARE_REF_CITE_RE.sub(_sub, answer), fixed, skipped
+
+
 def _validate_and_fix_citations(query: str, answer: str, allowed_chunks: list[dict],
                                  model_name: str, verbose: bool = False,
                                  web_extra: str = "") -> str:
@@ -1493,6 +1677,11 @@ def _validate_and_fix_citations(query: str, answer: str, allowed_chunks: list[di
     if not allowed:
         return answer
     for attempt in range(CITATION_VALIDATOR_MAX_RETRIES + 1):
+        # 確定性修補先跑：能還原的就不必浪費一次 LLM 重寫（也不必賭重寫會變好）。
+        answer, _n_fix, _n_skip = _repair_reference_citations(answer, allowed_chunks)
+        if _n_fix or _n_skip:
+            _trace(f"citation repair: 還原 {_n_fix} 筆 Reference 序號引用"
+                   f"（守門條件擋下 {_n_skip} 筆，維持原樣走重寫）")
         cited = _extract_citations(answer)
         hallucinated = cited - allowed
         has_valid = bool(cited & allowed)
@@ -1500,7 +1689,10 @@ def _validate_and_fix_citations(query: str, answer: str, allowed_chunks: list[di
             return answer
         if attempt >= CITATION_VALIDATOR_MAX_RETRIES:
             if verbose:
-                print(f"--- citation validator: 重試耗盡,走機械式收尾"
+                # ⚠ 這裡**沒有**任何機械式收尾：修不掉的引用維持原樣出貨。
+                #   2026-08-20 之前這行寫的是「走機械式收尾」，而程式裡從來沒有——
+                #   註解描述一個不存在的行為比沒有註解更糟，所以改成照實說。
+                print(f"--- citation validator: 重試耗盡,維持現狀出貨"
                       f"（has_valid={has_valid}, hallucinated={sorted(hallucinated)}）---")
             break
         problems = []
@@ -1736,7 +1928,7 @@ def _ground_period_from_source(claims: list[dict], chunks: list[dict]) -> None:
 AUTHORITATIVE_TYPES = ("10-K", "10-Q", "income_statement", "fundamentals")
 
 
-def _ground_source_type(claims: list[dict], chunks: list[dict]) -> None:
+def _ground_source_type(claims: list[dict], chunks: list[dict], web_extra: str = "") -> None:
     """**零 LLM**：拿每筆宣稱的數字回 chunk 定位,記下它出現在哪些來源類型（`src_types`）。
 
     為什麼需要：實測 mi-04 的 contexts 裡同時有新聞的「revenue growth of 12.8% LTM」與
@@ -1748,10 +1940,17 @@ def _ground_source_type(claims: list[dict], chunks: list[dict]) -> None:
     百分比的三種寫法,額外比對**小數表示**：Fundamentals 把比率寫成 `0.166` 而不是 `16.6%`,
     這正是它輸給新聞「12.8%」的原因之一（新聞那個看起來更像答案）。
     """
-    if not chunks:
+    # ⚠ 早退條件必須同時看 web_extra：只有 chunks 的舊寫法會讓「候選池空、只有 web」
+    #   這個**正是 live 路徑的常見形狀**整個跳過 grounding（閘門⑧ 抓到的）。
+    if not chunks and not (web_extra or "").strip():
         return
     typed = [(rq.infer_source_type(ch.get("source") or ""), ch.get("content") or "")
              for ch in chunks]
+    # ⚠ 2026-08-19：web 內容走 `web_extra` **字串**、不是 chunk，所以 `chunks` 看不到它。
+    #   不併進來的話，只出現在 web 的數字會拿到空的 `src_types` → R3／R4 一律跳過 ＝ 靜默漏判。
+    #   來源型別記 `"web"`，**刻意不列入 `AUTHORITATIVE_TYPES`**（web 沒有揭露義務）。
+    if (web_extra or "").strip():
+        typed = typed + [("web", web_extra)]
     for c in claims:
         v = c.get("value")
         if not isinstance(v, (int, float)):
@@ -1763,7 +1962,7 @@ def _ground_source_type(claims: list[dict], chunks: list[dict]) -> None:
             #   income_statement  0/59 有 `0.xx`
             #   10-K / 10-Q      87 / 106 處 `0.xx`,但全是**債券票面利率**（"0.875% Notes"）
             #                    與**每股金額**（"2.40 | 0.77"），不是比率
-            #   news             20 處,全是**股價漲跌**（"GOOG +0.92%"）
+            #   news             20 處,全是**股價漲跌**（"GOOG +0.92%"）← 2026-08-19 後 KB 已無此類
             # 所以在財報／新聞裡比對 `0.22` 會配到完全無關的東西 → 把只在新聞出現的宣稱
             # 誤標成「權威來源也有」→ R3 該抓的反而不抓。範圍限定在 fundamentals 才安全。
             dec = f"{v / 100:g}"
@@ -1780,20 +1979,80 @@ def _ground_source_type(claims: list[dict], chunks: list[dict]) -> None:
             c["src_types"] = sorted(hits)
 
 
-def find_authority_conflicts(claims: list[dict], chunks: list[dict]) -> list[str]:
+_WEB_MARK = "[web:"
+_KB_MARK_RE = re.compile(r"chunk\s*#\s*\d+")
+
+
+def find_unreconciled_web_conflicts(claims: list[dict]) -> list[str]:
+    """R4 **web ↔ 財報並陳**（零 LLM）：同一格出現互斥數值、一邊只在 web、另一邊在財報 →
+    要求答案**兩個都講、各自標出處與時點**。
+
+    ⚠ **刻意不是「判 web 那個為錯」**——那是 R3 對 KB 新聞的形狀，套到 web 是錯的：
+      web 可以**合法地比任何 filing 都新**（盤中報價、8-K 事件、財報已發布但 10-Q 未申報）。
+      宣告「財報永遠對」會讓系統**系統性地報舊數字**，正是 CLAUDE.md 那句
+      「把三週前的數字講成『今天股價』」的鏡像。
+
+    **為什麼「並陳」在誤報下是安全的**（這條是選這個動作而不是裁決的主要理由）：
+      本規則最大的誤報來源是「同一指標、不同期間」——`period` 刻意不入 bucket key
+      （沿用 R3 的理由：新聞／web 幾乎不標精確期間，納入會讓兩邊永遠落到不同桶、規則永不觸發）。
+      而誤報時要求模型做的事是「把兩個值連同各自的時點講清楚」，**那對不同期間的兩個值本來
+      就是正確行為**。裁決型規則沒有這個性質：判錯一次就是把對的數字刪掉。
+
+    ⚠ **能力上界（寫清楚免得被當成保證）**：claims 是從**答案**抽的，所以本規則只看得到
+      「答案自己講了兩個互斥的值」。答案只講其中一個、而另一個來源有不同值的情況，
+      這裡**看不到**——那需要從來源側反向抽取指標，不是確定性能做的事。
+
+    只在「同一格、互斥值、一邊只有 web、另一邊有權威來源、且至少一邊沒標出處」時發話。
+    兩邊都已標出處 ＝ 模型已經並陳了，保持沉默。
+    """
+    problems: list[str] = []
+    buckets: dict[tuple, list[dict]] = {}
+    for c in claims:
+        if not c.get("metric") or not c.get("src_types"):
+            continue
+        buckets.setdefault((c["metric"], c.get("entity"), c.get("scope"),
+                            c.get("kind"), c.get("unit")), []).append(c)
+    for key, group in buckets.items():
+        web_only = [g for g in group if g["src_types"] == ["web"]]
+        authoritative = [g for g in group
+                         if any(ty in AUTHORITATIVE_TYPES for ty in g["src_types"])]
+        if not web_only or not authoritative:
+            continue
+        for w in web_only:
+            for a in authoritative:
+                hi = max(abs(w["value"]), abs(a["value"]))
+                if hi <= 0 or abs(w["value"] - a["value"]) / hi <= 0.02:
+                    continue
+                w_cited = _WEB_MARK in (w.get("quote") or "")
+                a_cited = bool(_KB_MARK_RE.search(a.get("quote") or ""))
+                if w_cited and a_cited:
+                    continue          # 已經並陳且各有出處 → 不囉嗦
+                metric, entity = key[0], key[1]
+                problems.append(
+                    f"「{entity or '（未指明主體）'}」的 {metric} 同時出現網路值 "
+                    f"{w['value']:g}（{w['quote']}）與財報值 {a['value']:g}（{a['quote']}）。"
+                    f"**兩者都要保留**：網路值標 [web: 網址] 並註明查得時點，財報值標 "
+                    f"[檔名, chunk #N] 並註明所屬財報期間；不要只挑一個講，也不要把其中一個當錯的刪掉。")
+    return problems
+
+
+def find_authority_conflicts(claims: list[dict], chunks: list[dict],
+                             web_extra: str = "") -> list[str]:
     """R3 **財報優先**（零 LLM）：同一格出現互斥數值,且其中一個只在新聞裡、另一個在財報／
     Fundamentals 裡 → 判新聞那個為錯。
 
-    為什麼是「逐個宣稱」而不是壓低新聞的檢索排名（2026-08-09 量過才這樣設計）：
-    **37/100 題需要新聞**——16 題（news 全部 ＋ col-14）的 gold 只靠新聞（訴訟和解、WWDC
-    發表、分析師目標價、合作案,財報裡根本沒有）,另 21 題是新聞＋財務的複合題（multi_intent
-    全 15 題 ＋ col-15 ＋ multi_hop 5 題,其中 5 題還靠新聞認出第一跳的主體）。任何壓低新聞
-    排名的做法都會重演 memory `multi-intent-hard-filter-bug` 的鏡像災難。
-    這條規則對那 37 題**完全不觸發**,因為財報裡沒有可比的數值 → 不構成同格衝突。
+    ⚠ **2026-08-19 起這條規則在 KB 上永久不觸發**,而那是正確的而非退化：它治的病是
+    「KB 裡的新聞數字壓過財報數字」（實測 mi-04 用了新聞的 12.8% LTM 而非 Fundamentals 的
+    16.6%、mix-09 用了新聞的 28% 而非 10-Q 的 22%）。KB 已不收新聞 → `src_types == ["news"]`
+    這個桶永遠是空的 → 病源消失,治療自然閒置。**刻意保留不刪**：新聞若復活它要立刻生效。
+
+    ⚠ **新的同類風險沒有被這條規則涵蓋**：live web 的內容走 `web_extra` 字串、不是 chunk,
+    `_ground_source_type` 看不到它,所以「web 說 X、10-Q 說 Y」不會被抓。那需要另一條規則
+    與它自己的確定性測試,記在 BACKLOG〈web 數值與財報衝突無人看守〉。
 
     只在「同一格、互斥值、來源類型分屬新聞 vs 權威」時才發話,其餘一律沉默。
     """
-    _ground_source_type(claims, chunks)
+    _ground_source_type(claims, chunks, web_extra)
     problems: list[str] = []
     buckets: dict[tuple, list[dict]] = {}
     for c in claims:
@@ -1930,8 +2189,12 @@ def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], mode
     """一致性稽核 → 有衝突則帶問題重生成一次 → 再過 citation 稽核。無衝突原樣回傳。
 
     `web_extra` 只在**重生成**時帶回（見 `_validate_and_fix_citations` 的說明）。
-    ⚠ 偵測邏輯（`_extract_claims`／`find_authority_conflicts`）仍只看 `chunks`：R3 的判準是
-    「同格衝突且一邊只在新聞裡」，把 web 併進去會改變那個判準的語意，需要另外量測，故不在此改。
+    ⚠ **2026-08-19 修正了這段原本的說明**：舊版寫「把 web 併進去會改變 R3 的語意，故不在此改」
+    ——前半對、後半不完整。R3 的語意**確實不能動**（它判「新聞那個為錯」，套到 web 是錯的：
+    web 可以合法地比 filing 新）。正確做法是**新增一條動作不同的規則**而不是擴充 R3：
+    `find_unreconciled_web_conflicts`（R4）要求**並陳**而不是裁決。
+    `_ground_source_type` 現在會吃 `web_extra`（來源型別 `"web"`，非權威），R3 因此**仍然不會**
+    對 web 觸發（它只看 `src_types == ["news"]`），R4 才會。
     """
     if not chunks or not (answer or "").strip():
         return answer
@@ -1944,7 +2207,10 @@ def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], mode
     found = find_claim_conflicts(claims)
     # R3 財報優先（零 LLM,見 find_authority_conflicts）：同格衝突且一邊只在新聞裡時,
     # 判新聞那個為錯。與 R1/R2 併入同一份 issues,共用既有的重生成路徑。
-    found = found + find_authority_conflicts(claims, chunks)
+    # ⚠ R3 與 R4 共用 `_ground_source_type` 打的 `src_types`,所以只呼叫一次（在 R3 內）。
+    found = found + find_authority_conflicts(claims, chunks, web_extra)
+    # R4 web↔財報並陳（零 LLM,見 find_unreconciled_web_conflicts）：不判誰對,要求兩個都講。
+    found = found + find_unreconciled_web_conflicts(claims)
     if not found:
         return answer
     issues = "\n".join(f"- {p}" for p in found)
@@ -1953,6 +2219,218 @@ def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], mode
     _trace(f"consistency: 發現 {len(found)} 組互斥數值,重生成一次")
     revised = _write_final_answer(query, chunks, model_name,
                                   extra_user=_CONSIST_REVISE_SUFFIX.format(issues=issues),
+                                  web_extra=web_extra)
+    if revised and revised.strip():
+        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
+                                           web_extra=web_extra)
+    return answer
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 期別稽核：抓「答案自稱『最新一季／最新一年』，但引用的不是證據集合裡最新的那一期」。
+#
+# 2026-08-15 web-03 實測到的病灶。「Microsoft 最新一季的 Azure 營收成長率」答成
+#   40%【MSFT_10Q_202603.html】並標「截至 2026 年 3 月 31 日的三個月」
+# ——數字沒錯、期間也標了，但 MSFT 最新一季是 Q4 FY2026（4–6 月，**沒有獨立 10-Q，包在 10-K 裡**），
+# 而 `MSFT_10K_2026.html #129`（"Azure and other cloud services revenue grew 41%"）**就在同一份
+# 證據集合裡、rerank rank 4**，完全沒被用到。KB 一點都不缺資料，缺的是「哪一份才是最新期別」。
+#
+# **為什麼判準看答案而不是看問題**：要判「使用者是不是在問最新一期」得對問句做語意判斷，
+#   那要嘛加詞表（換個措辭就漏，CLAUDE.md 明列的反模式）、要嘛動 Grader prompt
+#   （會破壞 snapshot prompt 逐字不變的 eval 隔離，`verify_web_gate_isolation.py` 有常駐斷言）。
+#   但**答案寫出「最新一季」時，它就是在做一個宣稱**，而「你引的是不是證據裡最新的一期」是純比對
+#   ——這是驗證答案自己的宣稱，不是猜使用者意圖。使用者問 FY2025 時答案本來就不會寫「最新一季」，
+#   誤報風險因此很低；而漏判的代價只是維持現狀（跟沒有這層一樣）。方向刻意選在安全側。
+#
+# ⚠ 這層**不會**因為「KB 沒有更新的期別」而觸發——那是另一件事（該不該上網），判準完全不同，
+#   而且目前 KB 裡沒有任何一家的 filing 天花板超出申報週期，等於無從測起。見 BACKLOG。
+# 「最新／最近」＋ 5 個字以內的期別詞。⚠ 第一版寫成窮舉（`最新一季|最新季度|最新財季|…`），
+# **同一次迭代內就漏了兩個**：修正後重生成的答案自己寫的是「最新**單季**」與「最新公布的**季報**」，
+# 兩個都不在清單裡 → validator 對自己造成的新問題視而不見。窮舉措辭必漏，改成「錨詞 + 鄰近期別詞」。
+# 中間不許出現數字，讓「最新的 2026 年財報」這種**絕對期間**不誤觸（它不是相對指稱）。
+# 這條的失敗方向刻意釘在漏判側：漏判＝維持現狀，誤判＝多燒一次生成。
+_LATEST_CLAIM_RE = re.compile(
+    r"(?:最新|最近)[^\d。，,、\n]{0,5}[季年期]|"
+    r"(?:latest|most\s+recent)(?:\s+\w+){0,2}\s+(?:quarter|year)",
+    re.IGNORECASE,
+)
+
+
+def _filing_kind(source: str) -> str:
+    return str(((_get_kb_coverage().get("sources") or {}).get(source) or {}).get("kind") or "")
+
+
+def find_stale_period_claims(answer: str, chunks: list[dict]) -> list[str]:
+    """零 LLM、零網路：只做 (fiscal_year, fiscal_period) 的比大小，且**只在同一家公司內比**
+    （跨公司比期別沒有意義——AAPL 的 FY2026 Q3 與 NVDA 的 FY2027 Q1 不可比）。
+
+    每家比**兩輪**，缺一不可：
+      (a) 全期別：引到的最新一份 vs 證據裡最新一份。抓 web-03 的原病（只引 10-Q、更新的 10-K 沒用）。
+      (b) 只比 10-Q：引到的最新一份 10-Q vs 證據裡最新一份 10-Q。
+    ⚠ (b) 是 2026-08-15 補的，來源是 (a) 修好之後**重生成的答案自己暴露的殘留缺口**：
+      它照指示引了 10-K 並說明「全年 41%、未拆單季」，卻拿 `MSFT_10Q_202512`（FY2026 Q2, 39%）
+      當「最新單季」，而 `MSFT_10Q_202603`（FY2026 Q3）就在同一份證據集合裡。
+      只有 (a) 的話這一版是**全綠**的——引到的最新一份就是 10-K，確實等於證據裡最新一份。
+      「最新一季」問的是最新的**季**，10-K 過關不代表季別選對了。
+    """
+    if not answer or not chunks or not _LATEST_CLAIM_RE.search(answer):
+        return []
+    ticker_of: dict[str, str] = {}
+    for c in chunks:
+        src = str(c.get("source") or "").strip()
+        tk = str(c.get("ticker") or "").upper().strip()
+        if src and tk:
+            ticker_of.setdefault(src, tk)
+    cited = {s for s, _ in _extract_citations(answer)}
+    problems: list[str] = []
+    for tk in sorted({ticker_of[s] for s in cited if s in ticker_of}):
+        mine = {s: r for s, t in ticker_of.items() if t == tk
+                for r in (_fiscal_rank(s),) if r is not None}
+        for scope, ranked in (("", mine),
+                              ("單季（10-Q）", {s: r for s, r in mine.items()
+                                                if _filing_kind(s) == "10-Q"})):
+            cited_ranked = {s: r for s, r in ranked.items() if s in cited}
+            if not cited_ranked:
+                continue     # 這家（在這個範圍內）沒被引用任何財報 → 沒有期別可比
+            best_src, best = max(cited_ranked.items(), key=lambda kv: kv[1])
+            newest_src, newest = max(ranked.items(), key=lambda kv: kv[1])
+            if newest > best:
+                where = f"的{scope}" if scope else ""
+                problems.append(
+                    f"{tk}：答案自稱在講「最新」期別，但引用到{where}最新一份是 {best_src}"
+                    f"（{_fiscal_label(best)}）；參考資料裡 {tk} 還有更新的 {newest_src}"
+                    f"（{_fiscal_label(newest)}）完全沒有被引用")
+    return problems
+
+
+_PERIOD_REVISE_SUFFIX = """
+
+⚠ 期別檢查未通過：你的答案自稱在講「最新」的期別,但你引用的並不是參考資料裡最新的那一期。
+請重寫整份答案（維持 [filename, chunk #N] 引用格式）,並做到:
+1. 以**參考資料裡最新的那一期**為準回答。
+2. 若最新那一期沒有使用者要的那個數字（常見情況：10-K 只揭露整個財年、不單獨列最後一季）,
+   **必須明說這件事**,再給出有揭露的最近一期並標明它的期間——不可以直接把較舊的一期
+   講成「最新一季」。
+3. 不要臆測參考資料裡沒有出現的期間或數字。
+
+以下是偵測到的期別落差:
+{issues}"""
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 數字溯源稽核：答案裡「不可能被換算」形態的數字，必須在來源原文裡逐字出現。
+#
+# ⚠ **這是一道防線，不是對已觀測缺陷的修補。目前沒有任何實測正例。**
+#   它原本是為了封住 `web-02` 的「$196.82 憑空生成」而寫的，但那個 FAIL 後來查明是**量尺誤報**
+#   （fixture 的 macrotrends 表裡就有 `196.8165`，答案是正確四捨五入）。留下它的理由改成結構性的：
+#
+#   `_validate_and_fix_citations` 的 `_CITE_RE` 要求 `, chunk #N`，**`[web: url]` 不算引用**；
+#   而 `reflect` 雖然會把 `web_extra` 併進稽核來源（所以 web 數字不是零驗證），**它自己的重生成
+#   之後就只剩 citation validator 了**。也就是說：任何 validator 的重生成引入的數字問題，
+#   只有下一個 validator 看得到，最後一個之後沒人看。這一層補的是那個位置。
+#
+# 判準原本只活在 [`eval/check_web_claims.py`](eval/check_web_claims.py) 的
+# `numbers_must_be_in_fixture`。生產時 `web_notes` 與 chunk 全文都在手上，**不需要 fixture**。
+#
+# ⚠ **形態必須收窄到「不可能被換算」的**。換算過的值（億／兆／百分比）本來就不會逐字出現在來源，
+#   拿來斷言只會製造假 FAIL。所以只收「兩位小數 ＋ 至少兩位整數（或帶千分位）」這種報價／市值形態，
+#   且排除後面接 `%` 的。漏判的代價是維持現狀，誤判的代價是白燒一次重生成——刻意選在漏判側。
+#   ⚠ 後面接 `億／兆／萬` 的一律排除——那**就是**換算值。實測 100 題乾跑：不排除會誤報 11 題，
+#     而且 11 題全是同一種形狀（`153.69 億美元（$15,369 million）`，來源寫的是 `15,369`）。
+#     這種「答案自己把來源數字換算成中文單位」是生產契約要求的寫法，不是幻覺。
+_TRACEABLE_NUM_RE = re.compile(
+    r"(?<![\d.,])(?:\d{1,3}(?:,\d{3})+|\d{2,})\.\d{2}(?![\d%])(?!\s*[億兆萬])")
+
+
+def find_untraceable_numbers(answer: str, chunks: list[dict], web_extra: str = "") -> list[str]:
+    """零 LLM、零網路：答案裡每個受測形態的數字，都必須在 chunk 全文或 web 結果裡逐字出現。
+
+    乾草堆同時含 KB chunk 與 web 結果——**不按引用歸屬拆開**：要判「這個數字是不是編的」，
+    只需要問「我們到底有沒有看過它」，不需要先解出它掛在哪個來源名下（那才是 LLM 的活）。
+    比對時兩邊都去掉千分位逗號（來源寫 `4342.02`、答案寫 `4,342.02` 是同一個數）。
+    """
+    if not (answer or "").strip():
+        return []
+    found = set(_TRACEABLE_NUM_RE.findall(answer))
+    if not found:
+        return []
+    hay = "\n".join([(c.get("content") or "") for c in (chunks or [])] + [web_extra or ""])
+    hay_flat = hay.replace(",", "")
+    # 來源小數位數常多於答案（`P/E Ratio Trailing: 31.325687` → 答案寫 `31.33`）。四捨五入到兩位
+    # 相等就算找得到——**這是正確的引用行為，不是幻覺**。100 題乾跑時它是最後一個誤報。
+    hay_rounded = set()
+    for tok in re.findall(r"\d[\d,]*\.\d+", hay):
+        try:
+            hay_rounded.add(round(float(tok.replace(",", "")), 2))
+        except ValueError:
+            continue
+
+    def _seen(n: str) -> bool:
+        if n in hay or n.replace(",", "") in hay_flat:
+            return True
+        try:
+            return round(float(n.replace(",", "")), 2) in hay_rounded
+        except ValueError:
+            return True          # 解不出來就不主張是幻覺
+    return [f"數字 {n} 在提供的參考資料與網路結果裡都找不到（＝憑空生成或自行推算）"
+            for n in sorted(found) if not _seen(n)]
+
+
+_NUMBER_REVISE_SUFFIX = """
+
+⚠ 數字溯源檢查未通過：你的答案裡有數字**在提供的參考資料與網路結果裡都找不到**。
+請重寫整份答案（維持 [filename, chunk #N] 與 [web: 網址] 的引用格式）,並做到:
+1. **刪掉**這些找不到出處的數字,或改用來源裡真實出現的數值。
+2. **不要自己推算**（平均、換算、年化、與其他數字相減得出的差額都不行）。來源沒寫的就說沒有。
+3. 其餘正確的內容照舊,不要因為刪掉一個數字就重寫整段結論。
+
+以下是找不到出處的數字:
+{issues}"""
+
+
+def _number_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
+                          verbose: bool = False, web_extra: str = "") -> str:
+    """數字溯源稽核 → 有找不到出處的數字則帶問題重生成一次 → 再過 citation 稽核。
+
+    **放在 reflect 之後**：那正是缺口所在（reflect 的重生成引入的幻覺沒有任何人再看）。
+    """
+    if not (answer or "").strip():
+        return answer
+    found = find_untraceable_numbers(answer, chunks, web_extra)
+    if not found:
+        return answer
+    issues = "\n".join(f"- {p}" for p in found)
+    if verbose:
+        print(f"--- number validator: 數字找不到出處 ---\n{issues}")
+    _trace(f"number: {len(found)} 個數字找不到出處,重生成一次")
+    revised = _write_final_answer(query, chunks, model_name,
+                                  extra_user=_NUMBER_REVISE_SUFFIX.format(issues=issues),
+                                  web_extra=web_extra)
+    if revised and revised.strip():
+        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
+                                           web_extra=web_extra)
+    return answer
+
+
+def _period_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
+                          verbose: bool = False, web_extra: str = "") -> str:
+    """期別稽核 → 有落差則帶問題重生成一次 → 再過 citation 稽核。無落差原樣回傳。
+
+    與 `_consistency_check_and_fix` 分開而不合併成一次重生成：兩者的修訂指示語意完全不同
+    （一個是「兩組互斥數值要調和」，一個是「你引錯期別了」），塞在同一段會互相稀釋。
+    偵測本身零成本，只有真的抓到才花那一次生成，經濟性與一致性稽核相同。
+    """
+    if not chunks or not (answer or "").strip():
+        return answer
+    found = find_stale_period_claims(answer, chunks)
+    if not found:
+        return answer
+    issues = "\n".join(f"- {p}" for p in found)
+    if verbose:
+        print(f"--- period validator: 引用的不是最新期別 ---\n{issues}")
+    _trace(f"period: 發現 {len(found)} 組期別落差,重生成一次")
+    revised = _write_final_answer(query, chunks, model_name,
+                                  extra_user=_PERIOD_REVISE_SUFFIX.format(issues=issues),
                                   web_extra=web_extra)
     if revised and revised.strip():
         return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
@@ -2141,6 +2619,33 @@ def _web_query_en(query: str) -> str:
     return en or query
 
 
+def _tavily_raw(query: str) -> dict:
+    """真正打 Tavily 的那一層，**錄／放就在這裡**（見 `web_replay` 模組 docstring）。
+
+    ⚠ 刻意錄「原始回應」而不是 `_tavily_search` 的回傳字串：後者是跑完 `_host_allowed`
+      複核 → `_normalize_url` 去重 → 單域名上限 → `_url_published_date` 抽日期 → 過時過濾
+      → 摘要截斷之後的成品。錄在那裡等於把要測的六道處理一起 mock 掉＝測了個寂寞。
+    replay 命中時**不需要 TAVILY_API_KEY、不 import tavily**——fixture 就是全部的輸入。"""
+    key = _web_replay.make_key(query, TAVILY_FETCH_RESULTS, "advanced", WEB_ALLOWED_DOMAINS)
+    hit = _web_replay.get(key)          # replay 模式 miss 會在這裡直接報錯，不會偷偷連網
+    if hit is not _web_replay.MISS:
+        _trace(f"  web_search(replay) {query[:40]!r}")
+        return hit
+    api_key = os.getenv("TAVILY_API_KEY")
+    if not api_key:
+        raise _NoTavilyKey()
+    from tavily import TavilyClient
+    resp = TavilyClient(api_key=api_key).search(
+        query, max_results=TAVILY_FETCH_RESULTS, search_depth="advanced",
+        include_domains=WEB_ALLOWED_DOMAINS)
+    _web_replay.put(key, resp)
+    return resp
+
+
+class _NoTavilyKey(Exception):
+    """缺 key 與「API 打壞了」要分開：前者是組態問題，回傳的說明字串不同。"""
+
+
 def _tavily_search(query: str, need: str = "none") -> str:
     """Tavily 網路搜尋，回傳幾則結果的標題/發布日/摘要/網址（每則帶 [web: url] 供生成端引用）。
     `need` 是 Grader 的 `realtime_need`（intraday／days／none），只用來決定過時門檻 `WEB_STALE_DAYS`。
@@ -2156,14 +2661,8 @@ def _tavily_search(query: str, need: str = "none") -> str:
     """
     if not ENABLE_WEB_SEARCH:
         return "（web search 已停用）"
-    api_key = os.getenv("TAVILY_API_KEY")
-    if not api_key:
-        return "（web search 不可用：未設定 TAVILY_API_KEY）"
     try:
-        from tavily import TavilyClient
-        client = TavilyClient(api_key=api_key)
-        resp = client.search(query, max_results=TAVILY_FETCH_RESULTS, search_depth="advanced",
-                             include_domains=WEB_ALLOWED_DOMAINS)
+        resp = _tavily_raw(query)
         results = resp.get("results", []) if isinstance(resp, dict) else []
         if not results:
             _trace(f"  web_search({query[:40]!r}) → 白名單內查無結果（不退回全網）")
@@ -2197,6 +2696,13 @@ def _tavily_search(query: str, need: str = "none") -> str:
             _trace(f"      {title[:70]}")
             _trace(f"      {content}")
         return "網路搜尋結果:\n" + "\n".join(lines)
+    except (_web_replay.FixtureMiss, _web_replay.RecordError):
+        # 絕不降級：fixture 沒涵蓋／寫不進去都要大聲炸，否則會被下面的通用處理吞成
+        # 「查無結果」，整輪 replay 實驗在無 fixture 下跑完、或錄出一份安靜少幾筆的 fixture，
+        # 兩種都是事後分不出來的失敗。
+        raise
+    except _NoTavilyKey:
+        return "（web search 不可用：未設定 TAVILY_API_KEY）"
     except Exception as e:
         return f"（web search 失敗：{e!r}）"
 
@@ -2353,6 +2859,7 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
     query 把 planner 已對的子問題搞砸），預設已改走 _run_executor_deterministic。"""
     from langchain_core.messages import HumanMessage
 
+    verdict: dict = {}          # 迴圈可能一次都沒跑（例外／弱腦）→ 先給空的
     _reset_run_pool()
     state = _current_run_state()
     summary = ""
@@ -2399,11 +2906,11 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
     if not (summary or "").strip():
         # react 跑完但沒吐摘要（弱腦跳過）→ 降級用池裡的 chunk 生成
         summary = _fallback_local_summary(task, state.pool[:WRITER_MAX_CHUNKS])
-    return summary, list(state.web_notes)
+    return summary, list(state.web_notes), (verdict or {}).get("realtime_need", "none")
 
 
 def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: str,
-                                subq_index: int, verbose: bool) -> tuple[str, list[str]]:
+                                subq_index: int, verbose: bool) -> tuple[str, list[str], str]:
     """[預設] Executor 核心（deterministic，2026-07-29 修）：**planner 子問題原封不動直接檢索**，不讓
     Agent A(ReAct) 自行改寫 query。流程：直接 retrieve → Grader 評分 → 不夠則用 Grader 的 targeted
     new_query 再 retrieve（併池、只加不減）→ 有界 MAX_REWRITES → 走生產契約產局部摘要。
@@ -2473,12 +2980,15 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
                 state.pool.extend(_merge_chunks([], _retrieve_chunks(task)))
 
     summary = _fallback_local_summary(task, state.pool[:WRITER_MAX_CHUNKS])  # 走生產契約單次生成（內含 try/except 保底）
-    return summary, web_notes
+    return summary, web_notes, verdict.get("realtime_need", "none")
 
 
 def _run_executor(task: str, temporal_scope: str, freshness_mode: str,
-                  subq_index: int, verbose: bool) -> tuple[str, list[str]]:
-    """Dispatcher：預設 deterministic（planner 子問題直接檢索）；AGENTIC_REACT_EXECUTOR=true 回舊 ReAct。"""
+                  subq_index: int, verbose: bool) -> tuple[str, list[str], str]:
+    """Dispatcher：預設 deterministic（planner 子問題直接檢索）；AGENTIC_REACT_EXECUTOR=true 回舊 ReAct。
+
+    第三個回傳值是 Grader 最後一次的 `realtime_need`——`_run_one_todo` 要靠它判「這個子問題
+    需不需要即時資料」，那是時效警語的新判準（見 `_unmet_realtime_gaps`）。"""
     if USE_REACT_EXECUTOR:
         return _run_executor_react(task, temporal_scope, freshness_mode, subq_index, verbose)
     return _run_executor_deterministic(task, temporal_scope, freshness_mode, subq_index, verbose)
@@ -2519,12 +3029,12 @@ def _node_plan(state: SupervisorState) -> dict:
     subs = _plan_subqueries(state["query"], freshness_mode)   # 沿用 nv 版拆解器
     todos = []
     for i, subquery in enumerate(subs):
-        scope, gaps = _build_todo_temporal_scope(subquery, freshness_mode)
+        scope = _build_todo_temporal_scope(subquery, freshness_mode)
         todos.append({
             "id": i,
             "task": subquery,
             "temporal_scope": scope,
-            "freshness_gaps": gaps,
+            "freshness_gaps": [],      # 執行完才知道用了誰的新聞 → 由 _node_execute 回填
             "web_used": False,
             "status": "pending",
             "result": "",
@@ -2538,7 +3048,7 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
     迴圈 + commit 篩選，回傳這個子問題的完整結果。不觸碰任何跨子問題共用的可變狀態，讓 wave 執行
     可以安全平行呼叫（已用 ThreadPoolExecutor 實測驗證 contextvars 在 submit() 下天生隔離）。"""
     task = todo["task"]
-    summary, web_notes = _run_executor(
+    summary, web_notes, realtime_need = _run_executor(
         task, todo.get("temporal_scope", ""), freshness_mode, todo["id"], verbose,
     )
     # executor 剛跑完、還在同一個 thread/context 內，_current_run_state() 拿到的就是這個子問題
@@ -2561,8 +3071,17 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
         picked = _ensure_ratio_source_coverage(run_state.pool, picked, mentioned)
     for c in picked:
         c["_subq"] = todo["id"]
+    # 時效缺口在這裡算,不在 plan 時算：判準是「這個子問題**實際用到了**誰的新聞」,
+    # 不是「問法看起來像不像新聞題」（見 _news_freshness_gaps 的 docstring）。
+    if freshness_mode == FRESHNESS_LIVE:
+        _now = _get_as_of_date()
+        # 兩種缺口併存：① 用了過期的 KB 新聞（新聞若復活才會有）② 需要即時資料卻沒拿到 web
+        gaps = (_news_freshness_gaps(picked, _now)
+                + _unmet_realtime_gaps(task, realtime_need, picked, _now))
+    else:
+        gaps = []
     return {"id": todo["id"], "summary": summary, "web_used": bool(web_notes),
-            "web_notes": web_notes, "picked": picked}
+            "web_notes": web_notes, "picked": picked, "freshness_gaps": gaps}
 
 
 def _node_execute(state: SupervisorState) -> dict:
@@ -2596,8 +3115,7 @@ def _node_execute(state: SupervisorState) -> dict:
                 if filled != todos[i]["task"]:
                     _trace(f"execute: 第二跳回填實體 {entity!r} → {filled!r}")
                     todos[i]["task"] = filled
-                    sc, gp = _build_todo_temporal_scope(filled, freshness_mode)
-                    todos[i]["temporal_scope"], todos[i]["freshness_gaps"] = sc, gp
+                    todos[i]["temporal_scope"] = _build_todo_temporal_scope(filled, freshness_mode)
             else:   # 解不出實體(理論上不該發生)→ 原樣檢索,降級但不 deadlock
                 _trace(f"execute: 第二跳無法解出實體,原樣檢索(降級) → {todos[i]['task']!r}")
         pending_idxs = deferred
@@ -2619,7 +3137,8 @@ def _node_execute(state: SupervisorState) -> dict:
                 _trace(f"execute[{todos[i]['id']}] wave worker 未預期例外 → {e!r}")
                 results[i] = {"id": todos[i]["id"],
                               "summary": f"（子問題「{todos[i]['task']}」執行時發生未預期錯誤）",
-                              "web_used": False, "web_notes": [], "picked": []}
+                              "web_used": False, "web_notes": [], "picked": [],
+                              "freshness_gaps": []}
 
     collected = state.get("collected", [])
     web = list(state.get("web_notes", []))
@@ -2627,6 +3146,7 @@ def _node_execute(state: SupervisorState) -> dict:
         r = results[i]
         todos[i]["result"] = r["summary"]
         todos[i]["web_used"] = r["web_used"]
+        todos[i]["freshness_gaps"] = r.get("freshness_gaps", [])
         todos[i]["status"] = "done"
         collected = _merge_chunks(collected, r["picked"])
         web += r["web_notes"]
@@ -2673,12 +3193,12 @@ def _node_replan(state: SupervisorState) -> dict:
                 if _is_web_todo(task) and (freshness_mode == FRESHNESS_SNAPSHOT or not ENABLE_WEB_SEARCH):
                     _trace(f"replan: 拒絕不符合時間模式的 web todo → {task!r}")
                     continue
-                scope, gaps = _build_todo_temporal_scope(task, freshness_mode)
+                scope = _build_todo_temporal_scope(task, freshness_mode)
                 todos.append({
                     "id": next_id,
                     "task": task,
                     "temporal_scope": scope,
-                    "freshness_gaps": gaps,
+                    "freshness_gaps": [],   # 同上：執行完由 _node_execute 回填
                     "web_used": False,
                     "status": "pending",
                     "result": "",
@@ -2750,9 +3270,20 @@ def _node_synthesize(state: SupervisorState) -> dict:
         if not answer.startswith("I don't have enough"):
             answer = _consistency_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
                                                 web_extra=web_extra)
+        # 確定性期別稽核（零 LLM 偵測）：答案自稱「最新一季」卻引用了較舊的期別 → 重生成一次。
+        # 放在一致性之後、reflect 之前：期別改對可能連帶換掉數字，要讓 reflect 稽核最終版本。
+        if not answer.startswith("I don't have enough"):
+            answer = _period_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
+                                           web_extra=web_extra)
         if state.get("enable_reflection", True) and not answer.startswith("I don't have enough"):
             answer = _reflect_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
                                       web_extra=web_extra)
+        # 數字溯源（零 LLM 偵測）**放最後**：這是唯一會看 reflect 重生成結果的檢查。
+        # 100 題乾跑誤報 0 題（見 find_untraceable_numbers 的兩條排除規則），所以放進主線不會
+        # 擾動既有基準；真的觸發才花一次重生成。
+        if not answer.startswith("I don't have enough"):
+            answer = _number_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
+                                           web_extra=web_extra)
     except Exception as e:
         _trace(f"synthesize: 最終生成失敗（{e!r}）→ 退回零 LLM 機械式摘要")
         answer = _mechanical_summary(state["query"], chunks) if chunks else \
@@ -2836,9 +3367,11 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
                                            enable_rewrite=False, full_translate_en=True)
         answer_fb = _fallback_local_summary(query, chunks_fb)
         if freshness_mode == FRESHNESS_LIVE:
-            _scope, gaps = _build_todo_temporal_scope(query, freshness_mode)
+            # 降級路徑同樣看**實際用到的 chunk**（`chunks_fb` 就是這次的全部依據），
+            # 不再用詞表猜問法——與正常路徑同一套判準。
             answer_fb = answer_fb.rstrip() + _format_unresolved_freshness_notice([{
-                "status": "done", "freshness_gaps": gaps, "web_used": False,
+                "status": "done", "web_used": False,
+                "freshness_gaps": _news_freshness_gaps(chunks_fb, _get_as_of_date()),
             }])
         return {"answer": answer_fb, "chunks": chunks_fb, "sub_queries": [query], "messages": []}
 

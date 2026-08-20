@@ -119,7 +119,13 @@ SEC_MANIFEST    = RAW_DIR / "sec_manifest.json"
 # data/raw 的分類子目錄（2026-08-07 語料重整）：Filings / Fundamentals / News，外加
 # _archive_stale（刻意封存的過期快照，不 ingest）。掃描必須遞迴——重整後 data/raw 根目錄
 # 已經沒有任何檔案，沿用非遞迴的 iterdir() 會一個 .txt 都掃不到（靜默 ingest 0 筆）。
-RAW_EXCLUDE_DIRS = {"_archive_stale"}
+# ⚠ 2026-08-19：`News` 加進排除清單 ＝ **KB 不再收新聞語料**（`data/raw/News/` 的檔案留在磁碟
+# 上但不進 collection）。這一行是整條「拔除新聞」的**單一開關**，要復活就是把 "News" 拿掉。
+# 為什麼拔：KB 收的是「記錄」（有揭露義務、期別明確、可引用、數字可驗），新聞是「流」——
+# 沒有期別標籤（payload 的 report_period_code 覆蓋率 0%）、來源品質不受控、抓下來就開始過期。
+# 這個專案為期別正確性做的每一層（期別階梯／跨期 collapse／期間意圖）對新聞都結構性失效。
+# 「市場現在怎麼看」改由 agentic 的 live web 路徑供應。詳見 docs/EVAL.md〈KB 拔除新聞〉。
+RAW_EXCLUDE_DIRS = {"_archive_stale", "News"}
 
 # data/edgar_processed 的傾印輸出鏡像 data/raw 的三分類，方便逐類人眼對照。
 CATEGORY_FILINGS      = "Filings"
@@ -804,7 +810,7 @@ def _enable_local_storage() -> None:
     if not SEC_LOCAL_DIR.exists():
         raise RuntimeError(
             f"SEC 本機儲存不存在：{SEC_LOCAL_DIR}\n"
-            f"處理層不自己抓 SEC。請先跑：python fetch_data.py --tickers <...> --skip-news --skip-fundamentals")
+            f"處理層不自己抓 SEC。請先跑：python fetch_data.py --tickers <...> --skip-fundamentals")
     edgar.set_local_storage_path(SEC_LOCAL_DIR)
     edgar.use_local_storage(True)
     _install_offline_html_patch()
@@ -1469,7 +1475,7 @@ def main() -> None:
     # Fundamentals / IncomeStatement：沿用舊 partition_and_clean + build_chunk_records
     # （這兩種是 key:value 純文字，本來就沒有 HTML 表格可偵測，維持原行為）。
     if not args.skip_txt:
-        print("\n[INFO] Ingesting News/Fundamentals/IncomeStatement .txt ...")
+        print("\n[INFO] Ingesting Fundamentals/IncomeStatement .txt ...（News 已排除，見 RAW_EXCLUDE_DIRS）")
         # --rebuild 會重建 collection，舊快取對這個 collection 全部作廢，從空的開始記。
         all_hashes = _load_hashes()
         txt_hashes: dict = {} if args.rebuild else dict(all_hashes.get(args.collection, {}))
@@ -1490,7 +1496,7 @@ def main() -> None:
               f"（已排除 {'/'.join(sorted(RAW_EXCLUDE_DIRS))}）")
         # 去重守門（Item 2，2026-07-30）：Fundamentals / IncomeStatement 只保留每個 ticker 最新一份
         # 快照（如 0508/0519/0612 → 只留 0612），避免舊快照與最新版在檢索時互相競爭、放大版本漂移。
-        # News 不去重——多篇不同日期新聞是正當時間序列。
+        # （News 已不進 KB，這裡只剩 Fundamentals/IncomeStatement 的 keep-latest。）
         def _txt_stamp(p) -> str:
             m = re.search(r"_(\d{8})(?=[_.]|$)", p.stem)
             return m.group(1) if m else ""
@@ -1535,6 +1541,9 @@ def main() -> None:
                 continue
 
             if doc_type == "news":
+                # ⚠ 2026-08-19 起**這條路走不到**：News 目錄已在 RAW_EXCLUDE_DIRS 裡於掃描階段
+                # 排除。刻意保留分支與 `_build_news_records`，讓「復活新聞」是改一個集合、
+                # 不是重寫切塊邏輯。
                 text = filepath.read_text(encoding="utf-8", errors="replace").strip()
                 if not text:
                     print(f"  [SKIP] {filepath.name}: empty")

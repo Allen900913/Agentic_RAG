@@ -595,7 +595,77 @@
   "Android 第三方開發者 生態系 黏著度 建立因素 Google Play 分潤 開發者工具 支援 市場佔有率": "Drivers of stickiness in the Android third-party developer ecosystem: Google Play revenue sharing, developer tools, support, market share.",
   "Microsoft Windows third‑party developer ecosystem stickiness strategies Visual Studio SDK Microsoft Store partnership incentives developer tools compatibility guarantees": "Microsoft Windows third-party developer ecosystem stickiness strategies Visual Studio SDK Microsoft Store partnership incentives developer tools compatibility guarantees",
   "Microsoft Windows third‑party developer ecosystem strategy developer tools SDK incentives Windows Store partner program licensing revenue sharing": "Microsoft Windows third-party developer ecosystem strategy developer tools SDK incentives Windows Store partner program licensing revenue sharing",
-  "查找 Google 收購 Wiz 的金額及對 Google Cloud 部門的影響": "Find the acquisition price of Google's purchase of Wiz and its impact on the Google Cloud division."
+  "查找 Google 收購 Wiz 的金額及對 Google Cloud 部門的影響": "Find the acquisition price of Google's purchase of Wiz and its impact on the Google Cloud division.",
+  "檢索 Google 收購 Wiz 的金額與對 Google Cloud 部門的影響": "Retrieve the acquisition amount of Google's purchase of Wiz and its impact on the Google Cloud division.",
+  "Apple 大中華區 2026 第三季 營收 成長 百分比": "Apple Greater China Region 2026 Q3 Revenue Growth Percentage",
+  "在知識庫中搜尋 Google 收購 Wiz 的金額與對 Google Cloud 部門的影響": "Search the knowledge base for the amount of Google's acquisition of Wiz and its impact on the Google Cloud division.",
+  "從 KB 中找出分析師對微軟 AI 策略的評價與看法": "Retrieve analysts' assessments and opinions on Microsoft's AI strategy from the knowledge base.",
+  "檢索 TSLA 2026-07-21 前的完整新聞摘要": "Retrieve the full news summary for TSLA before July 21, 2026.",
+  "查找 Amazon 在歐洲逾 100 億歐元的投資計畫的完整細節（金額、時間表、具體項目）": "Find the full details of Amazon's investment program in Europe exceeding €10 billion (amount, schedule, specific initiatives).",
+  "查找 AMZN 2026 Q2 10-Q 中關於 AWS 基礎設施與 AI（含 Anthropic 合作）投資策略的具體描述": "Find the specific description of AWS infrastructure and AI (including Anthropic collaboration) investment strategy in Amazon's 2026 Q2 10-Q.",
+  "查找 AMZN 2025‑2026 年度新聞中有關 AWS 基礎設施與 AI 投資及與 Anthropic 合作的最新資訊": "Search for the latest news on AMZN 2025-2026 regarding AWS infrastructure, AI investments, and collaboration with Anthropic.",
+  "補充 Google Search 中 Gemini AI 功能細節（AI Overviews、AI Mode 等）": "Supplement details of Gemini AI features in Google Search (AI Overviews, AI Mode, etc.)",
+  "補充 Google Workspace、Google Cloud、消費者產品（Pixel、Android 等）中 Gemini AI 的整合與應用細節": "Supplement details on the integration and application of Gemini AI in Google Workspace, Google Cloud, and consumer products (Pixel, Android, etc.)",
+  "查閱 META 10-K 2025 中關於 AI 與 Reality Labs 的投資規模、長期願景與具體執行計畫": "Review META's 2025 10-K for AI and Reality Labs investment size, long-term vision, and specific execution plans.",
+  "查閱 META 2026-06-12 前的新聞摘要，補充 AI 與 Reality Labs 的最新進展與資金投入情況": "Review news summaries of META up to June 12, 2026, and supplement with the latest developments and capital allocation for AI and Reality Labs.",
+  "Meta Reality Labs AI 進展 2026 新聞 資金投入 金額": "Meta Reality Labs AI progress 2026 news funding amount",
+  "Microsoft Windows third‑party developer ecosystem stickiness strategies developer tools SDK Visual Studio Windows Store partnership revenue sharing Azure integration": "Microsoft Windows third-party developer ecosystem stickiness strategies developer tools SDK Visual Studio Windows Store partnership revenue sharing Azure integration",
+  "Microsoft Windows third‑party developer ecosystem stickiness mechanisms Visual Studio .NET Microsoft Store developer incentives Azure integration 2026 10‑K": "Microsoft Windows third-party developer ecosystem stickiness mechanisms, Visual Studio .NET, Microsoft Store developer incentives, Azure integration, 2026 10-K filing.",
+  "搜尋 KB 中關於亞馬遜與 AI 公司合作的最新資訊": "Search KB for the latest information on Amazon and AI company collaboration.",
+  "查找 GOOGL 2025 年營收及 2024 年營收以計算年增率": "Find GOOGL's 2025 revenue and 2024 revenue to calculate the year-over-year growth rate.",
+  "查找分析師對微軟 AI 策略的評論": "Search for analyst commentary on Microsoft's AI strategy",
+  "從 KB 快照中列出截至 2026-07-21 的所有 Tesla 或 Elon Musk 相關、可能影響關注度的新聞": "From the KB snapshot, list all Tesla or Elon Musk related news up to July 21, 2026 that could affect investor attention.",
+  "查找 Microsoft 10-K 2026 中有關 Copilot 在 Microsoft 365 產品路線圖、功能整合與商業模式的詳細說明": "Find detailed information in Microsoft's 2026 10-K about Copilot in the Microsoft 365 product roadmap, feature integration, and business model.",
+  "查閱 MSFT FY2026 Q3 10‑Q 中 Windows OEM 授權收入與雲端服務交叉銷售數據": "Review the cross-selling data of Windows OEM licensing revenue and cloud services in MSFT FY2026 Q3 10-Q.",
+  "查閱 MSFT FY2026 Q3 10‑Q 中 Copilot 於 Windows 的採用率與相關收入貢獻": "Review the adoption rate of Copilot on Windows and related revenue contribution in MSFT FY2026 Q3 10-Q.",
+  "Microsoft FY2026 Q3 10-Q Windows OEM licensing revenue amount and cross‑sell with cloud services figure": "Microsoft FY2026 Q3 10-Q Windows OEM licensing revenue amount and cross-sell with cloud services figure",
+  "Microsoft 2026 Q3 10-Q Windows OEM licensing revenue amount and cloud services cross‑sell figures": "Microsoft 2026 Q3 10-Q Windows OEM licensing revenue amount and cloud services cross-sell figures",
+  "查閱 MSFT FY2026 Q3 10‑Q 中 Azure 雲端服務因 Windows 用戶增長的貢獻": "Review the contribution of Azure cloud services from Windows user growth in MSFT FY2026 Q3 10-Q.",
+  "查閱 MSFT FY2026 10‑K 中 Windows OEM 與 Azure/Cloud 交叉銷售與 Copilot 採用相關資訊": "Review MSFT FY2026 10-K for Windows OEM and Azure/Cloud cross-sell and Copilot adoption.",
+  "Microsoft FY2026 10-K Windows OEM Azure cross‑sell details Copilot adoption metrics": "Microsoft FY2026 10-K Windows OEM Azure cross-sell details Copilot adoption metrics",
+  "Microsoft FY2026 10-K Windows OEM Azure cross‑sell Copilot adoption details": "Microsoft FY2026 10-K Windows OEM Azure cross-sell Copilot adoption details",
+  "查閱 GOOGL 10-Q 202606 相關段落說明 Gemini 在搜尋與其他產品整合的細節": "Review the relevant section of GOOGL’s 10-Q for June 2026 that explains Gemini’s integration with search and other products.",
+  "查閱 GOOGL 2026-07-21 之新聞稿或報導，取得最新 Gemini 整合資訊": "Review the GOOGL July 21, 2026 press release or article to obtain the latest Gemini integration information.",
+  "查找 NVIDIA FY2025 10-K 中中國市場資料中心晶片營收或出貨量": "Find NVIDIA FY2025 10-K data center chip revenue or shipment volume in the Chinese market.",
+  "NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？": "What is the revenue growth rate reported in NVIDIA's latest earnings, and how does its recent AI cloud partnership with IREN reflect specific progress in the company's data center strategy?",
+  "Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？": "What recent trend has Tesla’s automotive gross margin shown, and how does the recent decline across the Magnificent Seven tech stocks affect Tesla’s stock performance?",
+  "NVIDIA 的核心技術護城河是什麼？": "What is NVIDIA's core technology moat?",
+  "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？": "What antitrust or regulatory risks does Amazon face in its AWS, Prime, and e-commerce businesses?",
+  "Meta 的廣告獲利模式與 Meta AI 在旗下 App 中扮演的角色是什麼？": "What is Meta's advertising revenue model and the role of Meta AI within its apps?",
+  "Tesla 在電動車市場面臨什麼樣的競爭態勢？": "What competitive landscape does Tesla face in the electric vehicle market?",
+  "Apple 的第三方開發者生態系相對於 Android、Windows 等平台的黏著度是如何建立的？": "How does Apple establish developer ecosystem stickiness compared to Android, Windows, and other platforms?",
+  "Microsoft More Personal Computing 部門最新一季營收表現如何？哪些因素互相抵銷？": "How did Microsoft’s More Personal Computing segment revenue perform in the latest quarter, and what offsetting factors were present?",
+  "Microsoft 最新一季整體營業利益成長多少？主要由哪些部門帶動？": "What was Microsoft's most recent quarter's overall operating profit growth, and which segments drove it?",
+  "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？": "What percentage of total revenue did Amazon’s International segment represent in the most recent quarter?",
+  "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？": "What were the primary drivers of operating income growth for Amazon's AWS segment in the most recent quarter?",
+  "Google 收購 Wiz 花了多少錢？這如何影響 Google Cloud 部門？": "How much did Google pay to acquire Wiz, and what is the impact on the Google Cloud segment?",
+  "Meta 最新一季總營收成長多少？主要驅動因素是什麼？": "What was Meta's total revenue growth in the most recent quarter, and what were the primary drivers?",
+  "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？": "What was Apple's revenue growth in Greater China for the most recent quarter, and what were the primary drivers?",
+  "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？": "What was NVIDIA's most recent quarter Data Center revenue growth, and which products were the primary drivers?",
+  "NVIDIA 這一季在中國市場的資料中心晶片出貨狀況如何？跟去年同期相比有何變化？": "How were NVIDIA's data center chip shipments in the China market this quarter, and how did they change compared to the same quarter last year?",
+  "Tesla 能源生成與儲能業務最新一季營收表現如何？": "What was Tesla's energy generation and storage revenue performance in the latest quarter?",
+  "Tesla 汽車銷售營收最新一季成長多少？主要驅動因素是什麼？": "What was the growth in Tesla's automotive sales revenue for the most recent quarter, and what were the primary drivers?",
+  "Tesla 2026 年至今生產與交付了多少輛消費性車輛？": "How many consumer vehicles has Tesla produced and delivered from 2026 to date?",
+  "Google 完成收購 Wiz 的確切日期是哪一天？金額是多少？": "What is the exact date Google completed its acquisition of Wiz, and what was the purchase price?",
+  "為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？": "Why does the AI industry rely on NVIDIA’s technology, and why can’t other companies replicate it?",
+  "亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？": "What has Amazon recently invested in AI, and which AI company has it partnered with?",
+  "Google 的 AI 助手現在有整合進搜尋引擎裡嗎？": "Is Google's AI assistant now integrated into its search engine?",
+  "Meta 搞的那些 VR 眼鏡跟 AI，到底想往哪個方向發展？": "What direction is Meta pursuing with its VR headsets and AI initiatives?",
+  "特斯拉的自動駕駛跟別家車廠比，厲害在哪裡？": "What are the competitive advantages of Tesla’s Autopilot versus other manufacturers?",
+  "蘋果自己是不是也承認在手機市場其實不算市佔龍頭？": "Did Apple acknowledge that it is not the market share leader in the smartphone market?",
+  "微軟的雲端服務最近成長得快不快？": "Is Microsoft's cloud services experiencing rapid recent growth?",
+  "Meta 最近這一季賺（營收）成長多少？": "What was Meta's revenue growth in the latest quarter?",
+  "蘋果在大中華區最近賣得好不好？": "How have Apple's recent sales performed in Greater China?",
+  "特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？": "Has Tesla recently lost some of its spotlight due to Elon Musk's other company preparing for an IPO, and how did its earnings look this quarter?",
+  "新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？": "Which company announced in the news that it is committing over €10 billion to an investment plan in Europe, and what is that company's total revenue for its most recent fiscal year?",
+  "Apple 過去三個財年的營收與毛利率走勢如何變化？": "How have Apple's revenue and gross margin trends changed over the past three fiscal years?",
+  "NVIDIA 資料中心業務的營收在最近幾季是怎麼一路成長上來的？": "How has NVIDIA's data center revenue grown over the past several quarters?",
+  "比較 Microsoft 2024、2025、2026 三個財年的營業利益率變化。": "Compare Microsoft’s operating margin changes across fiscal years 2024, 2025, and 2026.",
+  "Tesla 的車輛交付量逐季變化趨勢是什麼？": "What is the quarterly trend in Tesla's vehicle deliveries?",
+  "Google Cloud 的營收與獲利在過去幾年是如何逐步改善的？": "How have Google Cloud's revenue and profitability improved over the past several years?",
+  "Amazon 的資本支出在最近三個年度分別是多少？增減趨勢如何？": "What were Amazon’s capital expenditures for each of the last three fiscal years, and what is the trend in their increase or decrease?",
+  "Meta 的 Reality Labs 部門虧損逐年擴大還是收斂？": "Is Meta's Reality Labs division's loss expanding year over year or narrowing?",
+  "Apple 在大中華區的營收這幾季是成長還是衰退？": "Is Apple's revenue in Greater China growing or declining over the recent quarters?"
  },
  "check": {
   "Apple 最近與 Siri 相關的法律訴訟或和解消息 || AAPL_News_20260508_01.txt#2 AAPL_News_20260519_01.txt#5 AAPL_News_20260519_01.txt#4 AAPL_News_20260612_03.txt#0 AAPL_News_20260612_02.txt#0": {
@@ -4984,6 +5054,1703 @@
     "NVDA_10Q_202604.html#75",
     "NVDA_10K_2026.html#210"
    ]
+  },
+  "Microsoft 的營收成長率表現如何 || MSFT_10K_2026.html#127 MSFT_10Q_202512.html#75 MSFT_10Q_202512.html#70 MSFT_10K_2026.html#124 MSFT_10Q_202603.html#63": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#127",
+    "MSFT_10K_2026.html#124"
+   ]
+  },
+  "Microsoft 最新一季的營業利益成長多少 || MSFT_10Q_202603.html#74 MSFT_10Q_202603.html#68 MSFT_10Q_202603.html#63 MSFT_10Q_202603.html#70 MSFT_10Q_202603.html#67": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#63",
+    "MSFT_10Q_202603.html#70"
+   ]
+  },
+  "Microsoft 最新一季的營業利益成長主要由哪些部門帶動 || MSFT_10Q_202603.html#63 MSFT_10Q_202603.html#68 MSFT_10Q_202603.html#67 MSFT_10Q_202603.html#74 MSFT_Fundamentals_20260612.txt#1": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#67"
+   ]
+  },
+  "檢索 Google 收購 Wiz 的金額與對 Google Cloud 部門的影響 || GOOGL_10Q_202603.html#50 GOOGL_10Q_202606.html#67 GOOGL_10Q_202603.html#126 GOOGL_10Q_202606.html#154 GOOGL_10K_2025.html#299": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10Q_202603.html#50",
+    "GOOGL_10Q_202606.html#67",
+    "GOOGL_10Q_202603.html#126",
+    "GOOGL_10Q_202606.html#154",
+    "GOOGL_10K_2025.html#299"
+   ]
+  },
+  "Apple 大中華區最新一季營收成長多少？ || AAPL_News_20260519_01.txt#2 AAPL_News_20260519_01.txt#4 AAPL_10Q_202606.html#37 AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#26": {
+   "sufficient": false,
+   "missing": "缺少大中華區最新一季（即2026 Q3）營收成長的百分比數字，片段只提供了營收金額或較早季度的成長率，未直接給出最新季的成長率。",
+   "new_query": "Apple 大中華區 2026 第三季 營收 成長 百分比",
+   "relevant_ids": [
+    "AAPL_News_20260519_01.txt#2",
+    "AAPL_10Q_202606.html#26",
+    "AAPL_10Q_202606.html#37"
+   ]
+  },
+  "Apple 大中華區最新一季營收的主要驅動因素是什麼？ || AAPL_News_20260519_01.txt#4 AAPL_News_20260519_01.txt#2 AAPL_10Q_202606.html#37 AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#26": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_10Q_202606.html#37"
+   ]
+  },
+  "Apple 大中華區最新一季營收成長多少？ || AAPL_News_20260519_01.txt#2 AAPL_10Q_202606.html#37 AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#26 AAPL_News_20260519_01.txt#4": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_10Q_202606.html#26",
+    "AAPL_10Q_202606.html#37"
+   ]
+  },
+  "在知識庫中搜尋 Google 收購 Wiz 的金額與對 Google Cloud 部門的影響 || GOOGL_10Q_202603.html#50 GOOGL_10Q_202606.html#67 GOOGL_10K_2025.html#299 GOOGL_10Q_202603.html#126 GOOGL_10Q_202606.html#154": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10Q_202603.html#50",
+    "GOOGL_10Q_202606.html#67",
+    "GOOGL_10K_2025.html#299",
+    "GOOGL_10Q_202603.html#126",
+    "GOOGL_10Q_202606.html#154"
+   ]
+  },
+  "從 KB 中找出分析師對微軟 AI 策略的評價與看法 || MSFT_News_20260612_01.txt#0 MSFT_10K_2026.html#32 MSFT_10Q_202512.html#151 MSFT_10K_2026.html#82 MSFT_10Q_202603.html#48": {
+   "sufficient": false,
+   "missing": "缺少具體的分析師對微軟 AI 策略的評價與看法，例如分析師對其 AI 產品組合、競爭優勢、成長前景或風險的具體評論或評分。",
+   "new_query": "analyst commentary on Microsoft's AI strategy 2026 Build conference outlook",
+   "relevant_ids": [
+    "MSFT_News_20260612_01.txt#0"
+   ]
+  },
+  "從 KB 中找出分析師對微軟 AI 策略的評價與看法 || MSFT_News_20260612_01.txt#0 MSFT_10K_2026.html#60 MSFT_10K_2026.html#33 MSFT_10K_2026.html#32 MSFT_10K_2026.html#75": {
+   "sufficient": false,
+   "missing": "缺少分析師對微軟 AI 策略的具體評價與看法，例如分析師報告、目標價、對 AI 產品組合或競爭定位的評論等。",
+   "new_query": "sell-side analyst opinion Microsoft AI strategy 2026 target price commentary",
+   "relevant_ids": [
+    "MSFT_News_20260612_01.txt#0"
+   ]
+  },
+  "Meta 最近的 AI 投資消息是什麼 || META_10Q_202606.html#181 META_10Q_202606.html#110 META_10Q_202606.html#75 META_News_20260612_01.txt#0 META_10K_2025.html#28": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10Q_202606.html#110",
+    "META_10Q_202606.html#75",
+    "META_News_20260612_01.txt#0"
+   ]
+  },
+  "檢索 TSLA 2026-07-21 前的完整新聞摘要 || NVDA_News_20260519_01.txt#1 TSLA_News_20260721_01.txt#0 GOOGL_News_20260721_01.txt#0 TSLA_News_20260612_01.txt#0 TSLA_News_20260612_01.txt#3": {
+   "sufficient": false,
+   "missing": "缺少一份涵蓋截至 2026‑07‑21 前所有 Tesla（TSLA）相關新聞的完整彙總摘要，需包括主要財報、產品、合作、訴訟、股價變動等關鍵事件的概覽，而非僅單篇影片文字稿或零散片段。",
+   "new_query": "Tesla TSLA news roundup July 2026 up to July 21 2026 comprehensive summary site:finance.yahoo.com OR site:reuters.com",
+   "relevant_ids": [
+    "TSLA_News_20260721_01.txt#0",
+    "TSLA_News_20260612_01.txt#0",
+    "TSLA_News_20260612_01.txt#3"
+   ]
+  },
+  "檢索 TSLA 2026-07-21 前的完整新聞摘要 || NVDA_News_20260519_01.txt#1 TSLA_News_20260721_01.txt#0 GOOGL_News_20260721_01.txt#0 TSLA_News_20260612_01.txt#0 TSLA_News_20260612_01.txt#4": {
+   "sufficient": false,
+   "missing": "缺乏完整的特斯拉（TSLA）在 2026‑07‑21 前的所有新聞摘要，包括每則新聞的標題、發布日期、主要內容與關鍵數據的彙整。",
+   "new_query": "Tesla news summary July 2026 up to July 21 2026 site:finance.yahoo.com TSLA",
+   "relevant_ids": [
+    "TSLA_News_20260721_01.txt#0",
+    "GOOGL_News_20260721_01.txt#0"
+   ]
+  },
+  "檢索 TSLA 2026-07-21 前的完整新聞摘要 || TSLA_News_20260721_01.txt#0 NVDA_News_20260519_01.txt#1 GOOGL_News_20260721_01.txt#0 TSLA_News_20260612_01.txt#0 TSLA_News_20260612_01.txt#4": {
+   "sufficient": false,
+   "missing": "缺少對截至 2026-07-21 前所有 Tesla (TSLA) 相關新聞的綜合摘要，包括每則新聞的標題、發布日期、主要內容要點以及簡要結論，且未提供完整的時間序列概覽。",
+   "new_query": "Tesla news summary July 2026 up to July 20 2026 comprehensive overview",
+   "relevant_ids": [
+    "TSLA_News_20260721_01.txt#0",
+    "TSLA_News_20260612_01.txt#0",
+    "TSLA_News_20260612_01.txt#4"
+   ]
+  },
+  "Apple 為什麼被視為值得長期持有的股票？ || AAPL_News_20260519_01.txt#5 AAPL_News_20260612_05.txt#1 AAPL_News_20260612_04.txt#1 AAPL_10K_2025.html#61 AAPL_News_20260612_04.txt#2": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_News_20260519_01.txt#5",
+    "AAPL_News_20260612_05.txt#1",
+    "AAPL_News_20260612_04.txt#1",
+    "AAPL_News_20260612_04.txt#2"
+   ]
+  },
+  "NVIDIA 目前的毛利率是多少 || NVDA_Fundamentals_20260612.txt#0 NVDA_Fundamentals_20260612.txt#1 NVDA_10Q_202604.html#14 NVDA_10Q_202604.html#35 NVDA_10Q_202604.html#20": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Apple 目前的毛利率是多少 || AAPL_News_20260519_01.txt#5 AAPL_10Q_202606.html#39 AAPL_10Q_202606.html#0 AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202606.html#15": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Apple 的 Evercore ISI 最新調升的目標價與評等是什麼 || AAPL_News_20260612_05.txt#0 AAPL_10Q_202606.html#20 AAPL_10Q_202603.html#19 AAPL_10K_2025.html#75 AAPL_News_20260519_01.txt#4": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_News_20260612_05.txt#0"
+   ]
+  },
+  "Microsoft 目前的淨利率是多少 || MSFT_Fundamentals_20260612.txt#1 MSFT_10Q_202603.html#0 MSFT_Fundamentals_20260612.txt#0 MSFT_10Q_202603.html#61 MSFT_10Q_202603.html#66": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並且它反映了什麼樣的成長策略？ || AMZN_News_20260612_01.txt#0 AMZN_10Q_202606.html#59 AMZN_10Q_202606.html#43 AMZN_10Q_202606.html#24 AMZN_10Q_202606.html#12": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_News_20260612_01.txt#0"
+   ]
+  },
+  "查找 Amazon 在歐洲逾 100 億歐元的投資計畫的完整細節（金額、時間表、具體項目） || AMZN_News_20260612_01.txt#0 AMZN_10Q_202606.html#2 AMZN_10Q_202603.html#2 AMZN_10Q_202606.html#26 AMZN_10Q_202603.html#26": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_News_20260612_01.txt#0"
+   ]
+  },
+  "Amazon 近一年營收成長率是多少 || AMZN_Fundamentals_20260612.txt#0 AMZN_10Q_202603.html#12 AMZN_10K_2025.html#113 AMZN_10Q_202603.html#72 AMZN_10Q_202606.html#74": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_Fundamentals_20260612.txt#0",
+    "AMZN_10K_2025.html#113"
+   ]
+  },
+  "Alphabet 目前的毛利率是多少 || GOOGL_Fundamentals_20260612.txt#0 GOOGL_Fundamentals_20260612.txt#1 GOOGL_10Q_202606.html#1 GOOGL_10Q_202606.html#2 GOOGL_10Q_202606.html#37": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Alphabet 近一年的營收成長率是多少 || GOOGL_Fundamentals_20260612.txt#0 GOOGL_10K_2025.html#282 GOOGL_10Q_202606.html#38 GOOGL_10K_2025.html#268 GOOGL_10K_2025.html#272": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Meta 目前的毛利率是多少 || META_Fundamentals_20260612.txt#1 META_Fundamentals_20260612.txt#0 META_10Q_202606.html#2 META_IncomeStatement_20260612.txt#6 META_IncomeStatement_20260612.txt#1": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Meta 近一年營收成長率是多少 || META_Fundamentals_20260612.txt#0 META_Fundamentals_20260612.txt#1 META_10K_2025.html#0 META_10Q_202606.html#0 META_10Q_202606.html#63": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_Fundamentals_20260612.txt#0",
+    "META_10Q_202606.html#63"
+   ]
+  },
+  "Tesla 目前的毛利率是多少 || TSLA_Fundamentals_20260612.txt#0 TSLA_Fundamentals_20260612.txt#1 TSLA_10Q_202606.html#71 TSLA_10Q_202606.html#1 TSLA_10Q_202606.html#0": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Tesla 汽車業務的毛利率近期的變化趨勢是什麼 || TSLA_10Q_202606.html#73 TSLA_10Q_202606.html#41 TSLA_10Q_202606.html#0 TSLA_Fundamentals_20260612.txt#0 TSLA_10Q_202606.html#22": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_10Q_202606.html#73"
+   ]
+  },
+  "Magnificent Seven 科技股近期全數下跌的新聞內容及其對 Tesla 股價表現透露了什麼 || NVDA_News_20260612_01.txt#0 TSLA_10Q_202606.html#35 TSLA_10Q_202606.html#20 TSLA_10Q_202606.html#0 TSLA_10Q_202606.html#22": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_News_20260612_01.txt#0"
+   ]
+  },
+  "NVIDIA 的核心技術護城河是什麼 || NVDA_10K_2026.html#20 NVDA_10K_2026.html#26 NVDA_10K_2026.html#28 NVDA_10K_2026.html#120 NVDA_10Q_202604.html#40": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#20",
+    "NVDA_10K_2026.html#26",
+    "NVDA_10K_2026.html#28",
+    "NVDA_10K_2026.html#120",
+    "NVDA_10Q_202604.html#40"
+   ]
+  },
+  "Microsoft 如何把 Copilot 整合進 Microsoft 365 的產品策略？ || MSFT_10K_2026.html#35 MSFT_10K_2026.html#38 MSFT_Fundamentals_20260612.txt#1 MSFT_News_20260612_03.txt#2 MSFT_10Q_202603.html#68": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#35",
+    "MSFT_Fundamentals_20260612.txt#1",
+    "MSFT_News_20260612_03.txt#2",
+    "MSFT_10Q_202603.html#68"
+   ]
+  },
+  "Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？ || MSFT_10K_2026.html#33 MSFT_10K_2026.html#38 MSFT_Fundamentals_20260612.txt#1 MSFT_News_20260612_03.txt#2 MSFT_10Q_202512.html#75": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#33",
+    "MSFT_10Q_202512.html#75"
+   ]
+  },
+  "Amazon 在 AWS 基礎設施與 AI 領域（含與 Anthropic 的合作）的投資策略是什麼？ || AMZN_10K_2025.html#97 AMZN_10Q_202606.html#40 AMZN_10Q_202603.html#38 AMZN_10Q_202606.html#79 AMZN_10K_2025.html#119": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10K_2025.html#97",
+    "AMZN_10Q_202606.html#40",
+    "AMZN_10Q_202603.html#38"
+   ]
+  },
+  "查找 AMZN 2026 Q2 10-Q 中關於 AWS 基礎設施與 AI（含 Anthropic 合作）投資策略的具體描述 || AMZN_10Q_202606.html#40 AMZN_10Q_202606.html#35 AMZN_10Q_202606.html#79 AMZN_10Q_202606.html#57 AMZN_10Q_202606.html#85": {
+   "sufficient": false,
+   "missing": "缺少對 AWS 基礎設施投資計畫的具體說明（如資料中心擴建、AWS 晶片開發、資本支出細節）以及更完整的 AI 投資策略描述（如 AI 服務、產品路線圖），僅有金額承諾不足以構成完整的策略說明。",
+   "new_query": "Amazon 2026 Q2 10-Q AWS infrastructure investment plan AI strategy Anthropic collaboration capital expenditures data center chip development",
+   "relevant_ids": [
+    "AMZN_10Q_202606.html#35",
+    "AMZN_10Q_202606.html#79",
+    "AMZN_10Q_202606.html#40"
+   ]
+  },
+  "查找 AMZN 2025‑2026 年度新聞中有關 AWS 基礎設施與 AI 投資及與 Anthropic 合作的最新資訊 || AMZN_News_20260612_01.txt#1 MSFT_News_20260519_01.txt#0 AMZN_News_20260612_01.txt#0 NVDA_News_20260519_02.txt#0 NVDA_News_20260519_01.txt#4": {
+   "sufficient": false,
+   "missing": "缺少 AWS 基礎設施的投資或擴建細節、AWS 在 AI 方向的具體投資金額或計畫，以及與 Anthropic 合作的具體內容（如在 AWS 上部署 Anthropic 模型、合作項目名稱或金額）。",
+   "new_query": "Amazon AWS infrastructure expansion AI investment 2025 2026 Anthropic partnership news",
+   "relevant_ids": [
+    "AMZN_News_20260612_01.txt#0"
+   ]
+  },
+  "查找 AMZN 2026 Q2 10-Q 中關於 AWS 基礎設施與 AI（含 Anthropic 合作）投資策略的具體描述 || AMZN_10Q_202606.html#79 AMZN_10Q_202606.html#35 AMZN_10Q_202606.html#0 AMZN_10Q_202606.html#2 AMZN_10Q_202606.html#40": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10Q_202606.html#79",
+    "AMZN_10Q_202606.html#35"
+   ]
+  },
+  "Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼？ || AMZN_10K_2025.html#81 AMZN_10Q_202606.html#45 AMZN_10Q_202603.html#124 AMZN_10Q_202606.html#125 AMZN_10K_2025.html#87": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10K_2025.html#81",
+    "AMZN_10Q_202603.html#124",
+    "AMZN_10Q_202606.html#125"
+   ]
+  },
+  "Amazon 在 Prime 服務上面臨的反壟斷或監管風險是什麼？ || AMZN_10K_2025.html#81 AMZN_10Q_202603.html#124 AMZN_10Q_202606.html#45 AMZN_10Q_202606.html#125 AMZN_10K_2025.html#182": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10K_2025.html#81",
+    "AMZN_10Q_202603.html#124",
+    "AMZN_10Q_202606.html#125"
+   ]
+  },
+  "Amazon 在電商業務上面臨的反壟斷或監管風險是什麼？ || AMZN_10K_2025.html#81 AMZN_10K_2025.html#63 AMZN_10Q_202603.html#105 AMZN_10Q_202606.html#106 AMZN_10Q_202606.html#45": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10K_2025.html#81",
+    "AMZN_10Q_202606.html#45",
+    "AMZN_10K_2025.html#63",
+    "AMZN_10Q_202603.html#105",
+    "AMZN_10Q_202606.html#106"
+   ]
+  },
+  "Google 如何把 Gemini AI 整合進搜尋與其他產品生態系？ || GOOGL_10K_2025.html#128 GOOGL_10K_2025.html#134 GOOGL_10K_2025.html#135 GOOGL_10K_2025.html#132 GOOGL_Fundamentals_20260612.txt#2": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10K_2025.html#128",
+    "GOOGL_10K_2025.html#132"
+   ]
+  },
+  "補充 Google Search 中 Gemini AI 功能細節（AI Overviews、AI Mode 等） || GOOGL_10K_2025.html#132 GOOGL_10K_2025.html#196 GOOGL_10K_2025.html#128 GOOGL_10K_2025.html#135 GOOGL_News_20260612_01.txt#1": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10K_2025.html#132",
+    "GOOGL_10K_2025.html#196"
+   ]
+  },
+  "補充 Google Workspace、Google Cloud、消費者產品（Pixel、Android 等）中 Gemini AI 的整合與應用細節 || GOOGL_10K_2025.html#128 GOOGL_10K_2025.html#135 GOOGL_Fundamentals_20260612.txt#2 GOOGL_10Q_202606.html#100 GOOGL_10K_2025.html#203": {
+   "sufficient": false,
+   "missing": "缺少 Gemini AI 在消費者產品（如 Pixel 手機、Android 系統）中的具體整合與應用細節，例如哪些功能使用 Gemini、模型部署方式、用戶體驗提升等資訊。",
+   "new_query": "Gemini AI integration details in Google consumer products Pixel Android features",
+   "relevant_ids": [
+    "GOOGL_10K_2025.html#128",
+    "GOOGL_10K_2025.html#135",
+    "GOOGL_Fundamentals_20260612.txt#2",
+    "GOOGL_10Q_202606.html#100",
+    "GOOGL_10K_2025.html#203"
+   ]
+  },
+  "Google 搜尋如何演變出 AI Overviews 與 AI Mode 來回應生成式 AI 對搜尋的衝擊？ || GOOGL_10K_2025.html#196 GOOGL_10K_2025.html#132 GOOGL_10K_2025.html#127 GOOGL_10K_2025.html#128 GOOGL_10K_2025.html#19": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10K_2025.html#196",
+    "GOOGL_10K_2025.html#132"
+   ]
+  },
+  "Meta 在 AI 與 Reality Labs 上的長期願景與投資方向是什麼？ || META_10Q_202603.html#165 META_10K_2025.html#56 META_10Q_202606.html#168 META_10K_2025.html#25 META_10K_2025.html#67": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10Q_202603.html#165",
+    "META_10K_2025.html#56",
+    "META_10Q_202606.html#168",
+    "META_10K_2025.html#25",
+    "META_10K_2025.html#67"
+   ]
+  },
+  "查閱 META 10-K 2025 中關於 AI 與 Reality Labs 的投資規模、長期願景與具體執行計畫 || META_10K_2025.html#67 META_10K_2025.html#56 META_10K_2025.html#26 META_10K_2025.html#25 META_10K_2025.html#174": {
+   "sufficient": false,
+   "missing": "缺少 2025 年 AI 相關的具體投資金額（美元數字）",
+   "new_query": "META 10-K 2025 AI investment amount dollars",
+   "relevant_ids": [
+    "META_10K_2025.html#67",
+    "META_10K_2025.html#26",
+    "META_10K_2025.html#25",
+    "META_10K_2025.html#174"
+   ]
+  },
+  "查閱 META 2026-06-12 前的新聞摘要，補充 AI 與 Reality Labs 的最新進展與資金投入情況 || META_News_20260612_01.txt#0 NVDA_News_20260612_01.txt#0 META_News_20260612_01.txt#1": {
+   "sufficient": false,
+   "missing": "缺少關於 Reality Labs 的最新進展與具體資金投入數字，以及更詳細的 AI 相關產品或技術更新資訊。",
+   "new_query": "Meta Reality Labs AI 進展 2026 新聞 資金投入 金額",
+   "relevant_ids": [
+    "META_News_20260612_01.txt#0"
+   ]
+  },
+  "查閱 META 10-K 2025 中關於 AI 與 Reality Labs 的投資規模、長期願景與具體執行計畫 || META_10K_2025.html#67 META_10K_2025.html#219 META_10K_2025.html#56 META_10K_2025.html#266 META_10K_2025.html#26": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10K_2025.html#67",
+    "META_10K_2025.html#219",
+    "META_10K_2025.html#56",
+    "META_10K_2025.html#266",
+    "META_10K_2025.html#26"
+   ]
+  },
+  "Meta 的廣告獲利模式是什麼 || META_10Q_202603.html#78 META_10K_2025.html#177 META_10Q_202603.html#71 META_10Q_202603.html#56 META_10K_2025.html#148": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10Q_202603.html#78",
+    "META_10Q_202603.html#56"
+   ]
+  },
+  "Meta AI 在 Meta 旗下 App 中扮演什麼角色 || META_10K_2025.html#22 META_Fundamentals_20260612.txt#1 META_10K_2025.html#25 META_News_20260612_01.txt#0 META_10Q_202603.html#66": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10K_2025.html#22",
+    "META_Fundamentals_20260612.txt#1",
+    "META_10K_2025.html#25"
+   ]
+  },
+  "Tesla 如何把自動駕駛（FSD/Autopilot）技術當作與競爭對手的核心差異化？ || TSLA_10K_2025.html#25 TSLA_10K_2025.html#24 TSLA_10K_2025.html#221 TSLA_10K_2025.html#44 TSLA_10Q_202603.html#42": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_10K_2025.html#25",
+    "TSLA_10K_2025.html#24",
+    "TSLA_10K_2025.html#44"
+   ]
+  },
+  "Tesla 在電動車市場的競爭態勢是什麼 || TSLA_10K_2025.html#43 TSLA_10K_2025.html#55 TSLA_10K_2025.html#44 TSLA_10K_2025.html#29 TSLA_Fundamentals_20260612.txt#2": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_10K_2025.html#43"
+   ]
+  },
+  "Tesla 的能源生成與儲能業務在公司整體策略中扮演什麼角色？ || TSLA_Fundamentals_20260612.txt#2 TSLA_10K_2025.html#29 TSLA_10K_2025.html#44 TSLA_10K_2025.html#26 TSLA_Fundamentals_20260612.txt#1": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_Fundamentals_20260612.txt#2",
+    "TSLA_10K_2025.html#26"
+   ]
+  },
+  "Apple 自己在 10-K 中如何描述它在智慧型手機、PC、平板市場面臨的競爭壓力與市佔地位？ || AAPL_10K_2025.html#22 AAPL_10K_2025.html#21 AAPL_10K_2025.html#40 AAPL_10K_2025.html#17 AAPL_10K_2025.html#39": {
+   "sufficient": false,
+   "missing": "缺少 Apple 在 10‑K 中對智慧型手機、個人電腦、平板電腦的具體市佔率數字與其在這些市場的相對定位描述（如 iPhone 在全球智慧型手機市場的排名與佔比、Mac 在 PC 市場的佔比、iPad 在平板市場的佔比），以及對這些市場競爭壓力的具體敘述。",
+   "new_query": "Apple 2025 Form 10-K market share iPhone PC Mac iPad competition pressure",
+   "relevant_ids": [
+    "AAPL_10K_2025.html#22",
+    "AAPL_10K_2025.html#21",
+    "AAPL_10K_2025.html#39"
+   ]
+  },
+  "Apple 自己在 10-K 中如何描述它在智慧型手機、PC、平板市場面臨的競爭壓力與市佔地位？ || AAPL_10K_2025.html#21 AAPL_10K_2025.html#115 AAPL_10K_2025.html#22 AAPL_10K_2025.html#85 AAPL_10K_2025.html#39": {
+   "sufficient": false,
+   "missing": "缺少 Apple 在 10‑K 中對智慧型手機 (iPhone)、個人電腦 (Mac) 與平板 (iPad) 市場的具體市佔率數字，以及針對這三個細分市場的競爭壓力（如主要競爭者、價格競爭、技術創新等）的具體描述。",
+   "new_query": "Apple 2025 Form 10-K competition smartphone market share iPhone market share PC market share Mac market share tablet market share iPad competition pressure",
+   "relevant_ids": [
+    "AAPL_10K_2025.html#21",
+    "AAPL_10K_2025.html#22",
+    "AAPL_10K_2025.html#39"
+   ]
+  },
+  "Apple 自己在 10-K 中如何描述它在智慧型手機、PC、平板市場面臨的競爭壓力與市佔地位？ || AAPL_10K_2025.html#115 AAPL_10K_2025.html#85 AAPL_10K_2025.html#21 AAPL_10K_2025.html#22 AAPL_10K_2025.html#17": {
+   "sufficient": false,
+   "missing": "缺少 Apple 在 10‑K 中對智慧型手機、PC、平板的具體市場佔有率描述，以及在這三個細分市場的競爭者名稱或競爭強度的具體說明。",
+   "new_query": "Apple 2025 Form 10-K competition smartphone market share iPhone market share Mac market share iPad market share competitive landscape",
+   "relevant_ids": [
+    "AAPL_10K_2025.html#21",
+    "AAPL_10K_2025.html#22"
+   ]
+  },
+  "Apple 的第三方開發者生態系黏著度是如何建立的 || AAPL_10K_2025.html#45 AAPL_10K_2025.html#40 AAPL_10Q_202606.html#60 AAPL_10Q_202606.html#22 AAPL_10Q_202603.html#60": {
+   "sufficient": false,
+   "missing": "缺少具體說明 Apple 透過哪些機制建立開發者黏著度，例如 Apple Developer Program、開發者工具與 SDK（如 Xcode、ARKit、HealthKit 等）、年度開發者大會 WWDC、App Store 收益分成政策、行銷與曝光機會、技術支援與審核流程等具體措施與數據。",
+   "new_query": "Apple developer ecosystem stickiness mechanisms Apple Developer Program SDK tools Xcode WWDC App Store revenue share incentives",
+   "relevant_ids": [
+    "AAPL_10K_2025.html#45",
+    "AAPL_10Q_202606.html#60"
+   ]
+  },
+  "Android 的第三方開發者生態系黏著度是如何建立的 || AAPL_10K_2025.html#45 META_10Q_202606.html#159 META_10Q_202603.html#156 META_10K_2025.html#47 AAPL_10Q_202606.html#60": {
+   "sufficient": false,
+   "missing": "缺少 Android 平台本身如何透過 Google Play、Android Studio、SDK/API、收入分成、政策、開發者支援計畫、獎勵機制等具體措施與實例，說明其第三方開發者生態系黏著度的建立方式。",
+   "new_query": "Android developer ecosystem stickiness Google Play revenue share incentives developer support programs Android Studio tools",
+   "relevant_ids": []
+  },
+  "Apple 的第三方開發者生態系黏著度是如何建立的 || AAPL_10K_2025.html#115 AAPL_10K_2025.html#45 AAPL_News_20260519_01.txt#4 AAPL_10K_2025.html#40 AAPL_10Q_202606.html#60": {
+   "sufficient": false,
+   "missing": "缺乏具體說明 Apple 如何透過開發者計畫、工具 (如 Xcode、SDK)、收入分潤機制、行銷支援、平台整合、開發者獎勵與社群活動等方式，建立與第三方開發者的黏著度，以及相關的數據（開發者數量、App 數量、收入分成比例等）。",
+   "new_query": "Apple developer program incentives tools Xcode SDK revenue share 70/30 App Store developer support strategies stickiness",
+   "relevant_ids": [
+    "AAPL_10K_2025.html#45",
+    "AAPL_10Q_202606.html#60"
+   ]
+  },
+  "Android 的第三方開發者生態系黏著度是如何建立的 || AAPL_10K_2025.html#45 META_10Q_202606.html#159 META_10Q_202603.html#156 META_10K_2025.html#47 GOOGL_10Q_202606.html#89": {
+   "sufficient": false,
+   "missing": "缺少 Android 第三方開發者生態系黏著度的具體建立方式說明，例如 Google Play 收費政策、開發者工具與 SDK、用戶基礎規模、收入分成、激勵計畫、技術支援與行銷資源等具體事實。",
+   "new_query": "Google Android developer ecosystem stickiness mechanisms revenue share Play Store incentives developer tools Android Studio support programs",
+   "relevant_ids": []
+  },
+  "Android 的第三方開發者生態系黏著度是如何建立的 || AAPL_10K_2025.html#45 GOOGL_10Q_202606.html#46 GOOGL_10Q_202603.html#78 GOOGL_10Q_202603.html#63 GOOGL_10Q_202606.html#105": {
+   "sufficient": false,
+   "missing": "缺乏關於 Android 第三方開發者生態系黏著度的具體建立方式，如 Google Play 商店的收入分成機制、開發者工具與 API 支援、行銷與推廣計畫、開發者社群與教育資源、平台市場佔有率帶來的網路效應等具體說明。",
+   "new_query": "Android 第三方開發者 生態系 黏著度 建立 方式 Google Play 收入分成 開發者工具 API 支援 行銷 推廣 社群",
+   "relevant_ids": []
+  },
+  "Windows 的第三方開發者生態系黏著度是如何建立的 || AAPL_10K_2025.html#45 MSFT_10K_2026.html#38 META_10K_2025.html#58 META_10Q_202606.html#170 META_10K_2025.html#47": {
+   "sufficient": false,
+   "missing": "缺少關於 Microsoft 為 Windows 平台建立第三方開發者生態系黏著度的具體策略與做法，例如提供的開發工具、SDK、Visual Studio、Windows Store 上架機制、收入分成模式、合作夥伴計畫、技術支援、與 Azure 整合等具體說明或數據。",
+   "new_query": "Microsoft Windows third‑party developer ecosystem stickiness strategies developer tools SDK Visual Studio Windows Store partnership revenue sharing Azure integration",
+   "relevant_ids": []
+  },
+  "Windows 的第三方開發者生態系黏著度是如何建立的 || MSFT_10K_2026.html#37 MSFT_10K_2026.html#36 MSFT_10K_2026.html#38 MSFT_Fundamentals_20260612.txt#1 AAPL_10K_2025.html#45": {
+   "sufficient": false,
+   "missing": "缺少具體說明 Microsoft 如何透過開發者工具、平台、激勵機制、App Store、Azure 整合等方式建立 Windows 第三方開發者生態系的黏著度，亦缺乏相關數據或案例。",
+   "new_query": "Microsoft Windows third‑party developer ecosystem stickiness mechanisms Visual Studio .NET Microsoft Store developer incentives Azure integration 2026 10‑K",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#37",
+    "MSFT_10K_2026.html#36",
+    "MSFT_10K_2026.html#38",
+    "MSFT_Fundamentals_20260612.txt#1"
+   ]
+  },
+  "Windows 的第三方開發者生態系黏著度是如何建立的 || MSFT_10K_2026.html#28 MSFT_10K_2026.html#241 MSFT_10K_2026.html#36 MSFT_10K_2026.html#37 MSFT_10K_2026.html#12": {
+   "sufficient": false,
+   "missing": "缺少關於 Windows 第三方開發者生態系如何建立的具體說明，例如開發者工具、API、應用商店、激勵機制、合作夥伴計畫、開發者社群規模或參與度等資訊。",
+   "new_query": "Microsoft Windows third‑party developer ecosystem strategy developer tools APIs app store incentives partnership",
+   "relevant_ids": []
+  },
+  "Microsoft Azure 最新一季的營收成長率是多少？ || MSFT_10Q_202603.html#75 MSFT_10Q_202603.html#65 MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#62 MSFT_10Q_202603.html#69": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#75",
+    "MSFT_10Q_202603.html#49",
+    "MSFT_10Q_202603.html#69"
+   ]
+  },
+  "Microsoft More Personal Computing 部門 FY2026 Q3 的營收是多少 || MSFT_10Q_202603.html#71 MSFT_10Q_202603.html#44 MSFT_10Q_202603.html#63 MSFT_10Q_202603.html#66 MSFT_10Q_202603.html#67": {
+   "sufficient": false,
+   "missing": "缺少 Microsoft More Personal Computing 部門 FY2026 Q3 的絕對營收金額（具體數字）",
+   "new_query": "Microsoft 10-Q 202603 More Personal Computing revenue FY2026 Q3 amount",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#71",
+    "MSFT_10Q_202603.html#63",
+    "MSFT_10Q_202603.html#66",
+    "MSFT_10Q_202603.html#67"
+   ]
+  },
+  "Microsoft More Personal Computing 部門 FY2026 Q3 營收的互相抵銷因素有哪些 || MSFT_10Q_202603.html#63 MSFT_10Q_202603.html#71 MSFT_10Q_202603.html#66 MSFT_10Q_202603.html#76 MSFT_10Q_202603.html#44": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#63",
+    "MSFT_10Q_202603.html#71",
+    "MSFT_10Q_202603.html#66",
+    "MSFT_10Q_202603.html#76"
+   ]
+  },
+  "Microsoft More Personal Computing 部門 FY2026 Q3 的營收是多少 || MSFT_10Q_202603.html#63 MSFT_10Q_202603.html#71 MSFT_10Q_202603.html#66 MSFT_10Q_202603.html#44 MSFT_10Q_202603.html#37": {
+   "sufficient": false,
+   "missing": "缺少 Microsoft More Personal Computing 部門 FY2026 Q3 的總營收金額（例如約 13.2 億美元的具體數值）",
+   "new_query": "Microsoft FY2026 Q3 10-Q More Personal Computing segment revenue total",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#71",
+    "MSFT_10Q_202603.html#44"
+   ]
+  },
+  "Microsoft More Personal Computing 部門 FY2026 Q3 的營收是多少 || MSFT_10Q_202603.html#63 MSFT_10Q_202603.html#71 MSFT_10Q_202603.html#66 MSFT_10Q_202603.html#37 MSFT_10Q_202603.html#44": {
+   "sufficient": false,
+   "missing": "缺少 Microsoft More Personal Computing 部門在 FY2026 Q3（截至 2026 年 3 月 31 日）的實際營收金額（例如以百萬美元表示的具體數字）。",
+   "new_query": "Microsoft FY2026 Q3 More Personal Computing segment revenue amount",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#63",
+    "MSFT_10Q_202603.html#71",
+    "MSFT_10Q_202603.html#66",
+    "MSFT_10Q_202603.html#37"
+   ]
+  },
+  "Amazon 國際業務在最新一季佔整體營收的比例是多少 || AMZN_Fundamentals_20260612.txt#1 AMZN_10Q_202606.html#12 AMZN_10Q_202606.html#27 AMZN_10Q_202606.html#104 AMZN_10Q_202606.html#74": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10Q_202606.html#12",
+    "AMZN_10Q_202606.html#74"
+   ]
+  },
+  "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼 || AMZN_10Q_202606.html#85 AMZN_10Q_202606.html#74 AMZN_10Q_202606.html#56 AMZN_10Q_202606.html#35 AMZN_10Q_202606.html#12": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10Q_202606.html#85"
+   ]
+  },
+  "Google Cloud 部門最新一季的營收成長多少？ || GOOGL_10Q_202606.html#120 GOOGL_10Q_202606.html#130 GOOGL_10Q_202606.html#50 GOOGL_10Q_202606.html#111 GOOGL_10Q_202606.html#91": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10Q_202606.html#120",
+    "GOOGL_10Q_202606.html#111"
+   ]
+  },
+  "Meta 最新一季總營收成長多少 || META_Fundamentals_20260612.txt#0 META_Fundamentals_20260612.txt#1 META_10Q_202606.html#63 META_10Q_202606.html#0 META_10Q_202606.html#2": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10Q_202606.html#63"
+   ]
+  },
+  "Meta 最新一季總營收的主要驅動因素是什麼 || META_Fundamentals_20260612.txt#1 META_10Q_202606.html#63 META_10Q_202606.html#2 META_10Q_202606.html#94 META_10Q_202606.html#0": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10Q_202606.html#63",
+    "META_10Q_202606.html#94"
+   ]
+  },
+  "Apple iPhone 營收成長主要是由哪些機型帶動的？ || AAPL_News_20260519_01.txt#4 AAPL_News_20260612_04.txt#2 AAPL_10K_2025.html#85 AAPL_10Q_202606.html#38 AAPL_10Q_202603.html#37": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_News_20260612_04.txt#2",
+    "AAPL_10K_2025.html#85",
+    "AAPL_10Q_202606.html#38",
+    "AAPL_10Q_202603.html#37"
+   ]
+  },
+  "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼 || NVDA_10Q_202604.html#42 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#72 NVDA_Fundamentals_20260612.txt#2": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10Q_202604.html#42"
+   ]
+  },
+  "NVIDIA 本季在中國市場的資料中心晶片出貨量是多少 || NVDA_10Q_202604.html#84 NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#35 NVDA_10Q_202604.html#36 NVDA_News_20260519_01.txt#4": {
+   "sufficient": false,
+   "missing": "中國市場資料中心晶片的出貨量（具體單位或數量）",
+   "new_query": "NVIDIA Q1 FY2027 China data center chip shipments units",
+   "relevant_ids": []
+  },
+  "NVIDIA 去年同季在中國市場的資料中心晶片出貨量是多少 || NVDA_10K_2026.html#20 NVDA_10Q_202604.html#84 NVDA_10Q_202510.html#40 NVDA_10K_2026.html#24 NVDA_10Q_202510.html#97": {
+   "sufficient": false,
+   "missing": "缺少去年同季（例如2025年Q3）在中國市場的資料中心晶片出貨量的具體數字（單位數量）",
+   "new_query": "NVIDIA 2025 Q3 China data center GPU shipments units",
+   "relevant_ids": []
+  },
+  "NVIDIA 本季在中國市場的資料中心晶片出貨量是多少 || NVDA_10Q_202604.html#84 NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#26 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#35": {
+   "sufficient": false,
+   "missing": "缺少本季（FY2027 Q1）在中國市場的資料中心晶片（如 A100、H100）出貨量的具體數字（單位數量）",
+   "new_query": "NVIDIA FY2027 Q1 China data center GPU shipment volume units",
+   "relevant_ids": [
+    "NVDA_10Q_202604.html#84"
+   ]
+  },
+  "NVIDIA 去年同季在中國市場的資料中心晶片出貨量是多少 || NVDA_10Q_202510.html#40 NVDA_10Q_202510.html#28 NVDA_10K_2026.html#20 NVDA_10Q_202510.html#39 NVDA_10Q_202604.html#84": {
+   "sufficient": false,
+   "missing": "缺少去年同季在中國市場的資料中心晶片出貨量（具體單位數量）",
+   "new_query": "NVIDIA data center GPU shipments to China quarter 2025 units",
+   "relevant_ids": []
+  },
+  "NVIDIA 本季在中國市場的資料中心晶片出貨量是多少 || NVDA_10Q_202604.html#84 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#26 NVDA_10Q_202604.html#35": {
+   "sufficient": false,
+   "missing": "本季在中國市場的資料中心晶片（如 A100、H100 等）出貨量的具體單位數字或數量",
+   "new_query": "NVIDIA Q1 FY2027 China data center GPU shipments units",
+   "relevant_ids": []
+  },
+  "NVIDIA 去年同季在中國市場的資料中心晶片出貨量是多少 || NVDA_10Q_202510.html#40 NVDA_10Q_202510.html#94 NVDA_10Q_202510.html#28 NVDA_10Q_202510.html#50 NVDA_10K_2026.html#20": {
+   "sufficient": false,
+   "missing": "缺少去年同季（例如2023财年某一季度）在中国市场的资料中心芯片（GPU）出货量的具体数字（件/个）",
+   "new_query": "NVIDIA 2023 财年 第三季度 中国 数据中心 GPU 出货量 单位 件",
+   "relevant_ids": []
+  },
+  "Tesla 能源生成與儲能業務最新一季的營收是多少 || TSLA_10Q_202606.html#70 TSLA_10Q_202606.html#0 TSLA_Fundamentals_20260612.txt#2 TSLA_10Q_202606.html#74 TSLA_10Q_202606.html#22": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_10Q_202606.html#0"
+   ]
+  },
+  "Tesla 汽車銷售營收最新一季成長多少 || TSLA_10Q_202606.html#0 TSLA_10Q_202606.html#68 TSLA_10Q_202606.html#18 TSLA_10Q_202606.html#22 TSLA_10Q_202606.html#67": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_10Q_202606.html#68",
+    "TSLA_10Q_202606.html#67"
+   ]
+  },
+  "Tesla 汽車銷售營收最新一季的主要驅動因素是什麼 || TSLA_10Q_202606.html#22 TSLA_10Q_202606.html#0 TSLA_News_20260721_01.txt#2 TSLA_10Q_202606.html#18 TSLA_10Q_202606.html#14": {
+   "sufficient": false,
+   "missing": "缺乏對最新一季汽車銷售營收的具體驅動因素說明，如車輛交付量、平均售價變化、法規信用貢獻、價格策略或新車型推出等定性或數值分析。",
+   "new_query": "Tesla 2026 Q2 automotive revenue drivers vehicle deliveries average selling price regulatory credits commentary",
+   "relevant_ids": [
+    "TSLA_10Q_202606.html#0",
+    "TSLA_10Q_202606.html#14",
+    "TSLA_News_20260721_01.txt#2"
+   ]
+  },
+  "Tesla 汽車銷售營收最新一季的主要驅動因素是什麼 || TSLA_10Q_202606.html#68 TSLA_10Q_202606.html#22 TSLA_10Q_202606.html#23 TSLA_10Q_202606.html#0 TSLA_10Q_202606.html#18": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_10Q_202606.html#68"
+   ]
+  },
+  "Tesla 2026 年至今的消費性車輛生產量是多少 || TSLA_10K_2025.html#102 TSLA_10Q_202606.html#1 TSLA_10Q_202603.html#12 TSLA_10Q_202606.html#35 TSLA_10Q_202606.html#22": {
+   "sufficient": false,
+   "missing": "2026 年至今的消費性車輛（consumer vehicles）生產量（單位：輛）",
+   "new_query": "Tesla 2026 year-to-date consumer vehicle production volume",
+   "relevant_ids": [
+    "TSLA_10K_2025.html#102"
+   ]
+  },
+  "Tesla 2026 年至今的消費性車輛交付量是多少 || TSLA_10Q_202603.html#49 TSLA_10Q_202606.html#55 TSLA_10K_2025.html#102 TSLA_10Q_202603.html#34 TSLA_10Q_202606.html#42": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_10Q_202603.html#49",
+    "TSLA_10Q_202606.html#55"
+   ]
+  },
+  "Tesla 2026 年至今的消費性車輛生產量是多少 || TSLA_10K_2025.html#102 TSLA_10Q_202606.html#35 TSLA_10Q_202603.html#12 TSLA_10Q_202603.html#1 TSLA_10Q_202606.html#22": {
+   "sufficient": false,
+   "missing": "2026 年度（截至最新可得的 2026 Q2）Tesla 消費性車輛的生產量（單位：輛）",
+   "new_query": "Tesla 2026 consumer vehicle production total Q2 2026",
+   "relevant_ids": []
+  },
+  "Tesla 2026 年至今的消費性車輛生產量是多少 || TSLA_10K_2025.html#102 TSLA_10Q_202606.html#56 TSLA_10Q_202606.html#0 TSLA_10Q_202606.html#35 TSLA_10Q_202603.html#12": {
+   "sufficient": false,
+   "missing": "2026 年度（截至目前）Tesla 消費性車輛的具體生產量數字",
+   "new_query": "Tesla 2026 consumer vehicle production volume",
+   "relevant_ids": []
+  },
+  "NVIDIA 目前的 Market Cap（市值）是多少？ || NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#118 NVDA_Fundamentals_20260612.txt#1 NVDA_10K_2026.html#164 NVDA_10K_2026.html#165": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "NVIDIA 的 trailing P/E Ratio 是多少？ || NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#20 NVDA_10K_2026.html#165 NVDA_10K_2026.html#164 NVDA_Fundamentals_20260612.txt#1": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？ || NVDA_10K_2026.html#164 NVDA_10Q_202604.html#14 NVDA_10K_2026.html#0 NVDA_10K_2026.html#181 NVDA_10Q_202510.html#15": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#164",
+    "NVDA_10K_2026.html#181"
+   ]
+  },
+  "NVIDIA 收購 Mellanox 是哪一年？ || NVDA_10K_2026.html#21 NVDA_10K_2026.html#85 NVDA_10Q_202604.html#83 NVDA_10Q_202604.html#30 NVDA_10K_2026.html#166": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#21"
+   ]
+  },
+  "Apple fiscal year 2025 的 Diluted EPS 是多少？ || AAPL_10K_2025.html#0 AAPL_10K_2025.html#115 AAPL_10K_2025.html#108 AAPL_10K_2025.html#1 AAPL_10K_2025.html#2": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_10K_2025.html#0",
+    "AAPL_10K_2025.html#115"
+   ]
+  },
+  "Microsoft 目前的 Free Cash Flow 是多少？ || MSFT_Fundamentals_20260612.txt#1 MSFT_10Q_202512.html#2 MSFT_10K_2026.html#2 MSFT_10K_2026.html#218 MSFT_10Q_202512.html#1": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_Fundamentals_20260612.txt#1"
+   ]
+  },
+  "Amazon 目前的 Total Debt 是多少？ || AMZN_Fundamentals_20260612.txt#1 AMZN_10K_2025.html#1 AMZN_10Q_202603.html#1 AMZN_10Q_202606.html#1 AMZN_10K_2025.html#144": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_Fundamentals_20260612.txt#1"
+   ]
+  },
+  "Amazon 在 2025 年的現金資本支出（cash capital expenditures）是多少？ || AMZN_10K_2025.html#105 AMZN_10K_2025.html#142 AMZN_10K_2025.html#2 AMZN_10K_2025.html#107 AMZN_10K_2025.html#1": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10K_2025.html#105",
+    "AMZN_10K_2025.html#142"
+   ]
+  },
+  "Alphabet（Google）目前的員工人數是多少？ || GOOGL_10K_2025.html#137 GOOGL_Fundamentals_20260612.txt#0 GOOGL_10Q_202606.html#37 GOOGL_10Q_202606.html#38 GOOGL_10Q_202603.html#29": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10K_2025.html#137",
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Google 完成收購 Wiz 的日期是什麼時候？ || GOOGL_10Q_202603.html#50 GOOGL_10Q_202606.html#67 GOOGL_10Q_202603.html#126 GOOGL_10Q_202606.html#154 GOOGL_10Q_202603.html#85": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10Q_202603.html#50",
+    "GOOGL_10Q_202606.html#67",
+    "GOOGL_10Q_202603.html#126",
+    "GOOGL_10Q_202606.html#154",
+    "GOOGL_10Q_202603.html#85"
+   ]
+  },
+  "Google 收購 Wiz 的金額是多少？ || GOOGL_10Q_202603.html#50 GOOGL_10Q_202606.html#67 GOOGL_10K_2025.html#252 GOOGL_10Q_202606.html#154 GOOGL_10Q_202603.html#126": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10Q_202603.html#50",
+    "GOOGL_10Q_202606.html#67",
+    "GOOGL_10Q_202606.html#154",
+    "GOOGL_10Q_202603.html#126"
+   ]
+  },
+  "Meta fiscal year 2025 的 Diluted EPS 是多少？ || META_10K_2025.html#0 META_10K_2025.html#242 META_10K_2025.html#241 META_10K_2025.html#2 META_10K_2025.html#1": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10K_2025.html#0",
+    "META_10K_2025.html#242",
+    "META_10K_2025.html#241"
+   ]
+  },
+  "Tesla 在 2026 年 1 月啟用的鋰精煉廠位於哪裡？ || TSLA_10K_2025.html#33 TSLA_10K_2025.html#26 TSLA_10Q_202603.html#12 TSLA_10Q_202606.html#22 TSLA_Fundamentals_20260612.txt#2": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_10K_2025.html#33"
+   ]
+  },
+  "微軟是怎麼把 AI 塞進 Office 那些軟體裡的？ || MSFT_10K_2026.html#32 MSFT_10K_2026.html#35 MSFT_10K_2026.html#33 MSFT_10K_2026.html#75 MSFT_News_20260612_03.txt#1": {
+   "sufficient": false,
+   "missing": "缺少具體說明 AI 如何嵌入 Office 各個應用（如 Word、Excel、PowerPoint、Outlook、Teams）的細節，包括使用的技術（如 Azure OpenAI、大型語言模型）、提供的功能（如生成式文字、數據分析、設計建議）以及部署方式（雲端服務、插件、Copilot 等）。",
+   "new_query": "Microsoft 365 Copilot integration details in Office apps Word Excel PowerPoint Outlook generative AI features 2026 filing",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#35",
+    "MSFT_10K_2026.html#33"
+   ]
+  },
+  "微軟是怎麼把 AI 塞進 Office 那些軟體裡的？ || MSFT_10K_2026.html#35 MSFT_10Q_202603.html#42 MSFT_10K_2026.html#128 MSFT_10Q_202603.html#74 MSFT_10Q_202603.html#68": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#35",
+    "MSFT_10Q_202603.html#42",
+    "MSFT_10K_2026.html#128",
+    "MSFT_10Q_202603.html#74",
+    "MSFT_10Q_202603.html#68"
+   ]
+  },
+  "亞馬遜最近在 AI 方面的投資或支出有哪些 || AMZN_10K_2025.html#119 AMZN_10Q_202606.html#79 AMZN_10Q_202606.html#73 AMZN_10K_2025.html#52 AMZN_News_20260612_01.txt#1": {
+   "sufficient": false,
+   "missing": "缺乏具體的 AI 投資金額、項目或支出細節，例如在人工智慧研發、AWS AI 服務、生成式 AI 等方面的實際支出數字或描述。",
+   "new_query": "Amazon AI investment spending 2025 2026 10-K AI R&D expenses amount",
+   "relevant_ids": [
+    "AMZN_10Q_202606.html#73"
+   ]
+  },
+  "亞馬遜最近與哪家 AI 公司合作 || AMZN_10Q_202606.html#44 AMZN_News_20260612_01.txt#1 AMZN_10K_2025.html#52 AMZN_10K_2025.html#50 AMZN_10K_2025.html#216": {
+   "sufficient": false,
+   "missing": "缺少最近與亞馬遜合作的 AI 公司的名稱（例如 Anthropic、OpenAI 等）以及合作的具體時間或內容",
+   "new_query": "Amazon recent AI partnership company name 2025 2026",
+   "relevant_ids": []
+  },
+  "亞馬遜最近在 AI 方面的投資或支出有哪些 || AMZN_10K_2025.html#119 AMZN_10K_2025.html#135 AMZN_10K_2025.html#45 AMZN_10K_2025.html#2 AMZN_10K_2025.html#160": {
+   "sufficient": false,
+   "missing": "缺少其他 AI 相關的投資或支出細節，例如 AWS AI 服務、生成式 AI、AI 專用硬體或雲端 AI 基礎設施的支出金額與項目",
+   "new_query": "Amazon 2025 10-K AI investment Amazon Leo AWS generative AI services cloud AI infrastructure spending amount",
+   "relevant_ids": [
+    "AMZN_10K_2025.html#135"
+   ]
+  },
+  "亞馬遜最近與哪家 AI 公司合作 || AMZN_10K_2025.html#45 AMZN_10Q_202606.html#44 AMZN_10Q_202606.html#2 AMZN_10K_2025.html#216 AMZN_10K_2025.html#135": {
+   "sufficient": false,
+   "missing": "缺少具體的 AI 公司名稱以及合作內容的描述（例如 Amazon 與哪家 AI 公司合作、合作的時間與形式）",
+   "new_query": "Amazon recent AI partnership with company 2024 2025",
+   "relevant_ids": []
+  },
+  "亞馬遜最近在 AI 方面的投資或支出有哪些 || AMZN_10K_2025.html#119 AMZN_10K_2025.html#135 AMZN_10K_2025.html#199 AMZN_10K_2025.html#150 AMZN_10K_2025.html#45": {
+   "sufficient": false,
+   "missing": "缺少其他 AI 相關的投資與支出細節，例如 AWS Bedrock、生成式 AI 服務、AI 專用晶片、AI 研發中心的支出金額或比例等。",
+   "new_query": "Amazon AI investments 2025 2026 AWS Bedrock generative AI spend Amazon AI research labs capital expenditures",
+   "relevant_ids": [
+    "AMZN_10K_2025.html#135"
+   ]
+  },
+  "亞馬遜最近與哪家 AI 公司合作 || AMZN_10K_2025.html#140 AMZN_10K_2025.html#170 AMZN_10K_2025.html#45 AMZN_10K_2025.html#216 AMZN_10K_2025.html#44": {
+   "sufficient": false,
+   "missing": "缺少最近與亞馬遜合作的 AI 公司的名稱以及合作內容的具體說明",
+   "new_query": "Amazon recent AI partnership 2024 2025 collaboration with AI company",
+   "relevant_ids": []
+  },
+  "搜尋 KB 中關於亞馬遜與 AI 公司合作的最新資訊 || AMZN_10K_2025.html#52 AMZN_News_20260612_01.txt#1 AMZN_10Q_202603.html#24 AMZN_10K_2025.html#50 AMZN_10K_2025.html#216": {
+   "sufficient": false,
+   "missing": "缺少具體的亞馬遜與 AI 公司合作的資訊，例如合作的 AI 公司名稱、合作內容或項目、合作時間或公告日期等具體事實。",
+   "new_query": "Amazon AI partnership 2025 2026 collaboration with AI companies OpenAI Anthropic Google DeepMind",
+   "relevant_ids": []
+  },
+  "搜尋 KB 中關於亞馬遜與 AI 公司合作的最新資訊 || AMZN_10Q_202606.html#40 AMZN_10Q_202603.html#39 AMZN_10Q_202603.html#38 GOOGL_10K_2025.html#196 AMZN_10K_2025.html#112": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10Q_202606.html#40",
+    "AMZN_10Q_202603.html#39",
+    "AMZN_10Q_202603.html#38"
+   ]
+  },
+  "Google 的 AI 助手是否已整合到搜尋引擎中？ || GOOGL_10K_2025.html#196 GOOGL_10K_2025.html#132 GOOGL_10K_2025.html#128 GOOGL_10K_2025.html#272 GOOGL_10K_2025.html#127": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10K_2025.html#196",
+    "GOOGL_10K_2025.html#132"
+   ]
+  },
+  "Meta 在 VR 眼鏡方面的發展方向是什麼 || META_10K_2025.html#25 META_Fundamentals_20260612.txt#1 META_10K_2025.html#22 META_10Q_202603.html#165 META_10Q_202606.html#168": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10K_2025.html#25",
+    "META_Fundamentals_20260612.txt#1",
+    "META_10K_2025.html#22",
+    "META_10Q_202603.html#165",
+    "META_10Q_202606.html#168"
+   ]
+  },
+  "Meta 在 AI 方面的發展方向是什麼 || META_10K_2025.html#22 META_10K_2025.html#29 META_10Q_202603.html#165 META_Fundamentals_20260612.txt#1 META_10K_2025.html#56": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10K_2025.html#22",
+    "META_10K_2025.html#29",
+    "META_10Q_202603.html#165",
+    "META_Fundamentals_20260612.txt#1",
+    "META_10K_2025.html#56"
+   ]
+  },
+  "特斯拉的自動駕駛系統的主要功能與技術是什麼？ || TSLA_10K_2025.html#25 TSLA_10Q_202603.html#42 TSLA_10K_2025.html#55 TSLA_10K_2025.html#155 TSLA_10K_2025.html#24": {
+   "sufficient": false,
+   "missing": "缺少特斯拉自動駕駛系統的具體功能（如自動巡航、車道保持、導航自動駕駛、交通號誌辨識、召喚等）以及底層技術細節（如視覺神經網路、感測器組合、Tesla AI 晶片、Dojo 超級電腦等）",
+   "new_query": "Tesla Full Self-Driving main features and underlying technology details vision neural network camera radar Dojo chip",
+   "relevant_ids": [
+    "TSLA_10K_2025.html#25",
+    "TSLA_10K_2025.html#155",
+    "TSLA_10K_2025.html#24"
+   ]
+  },
+  "其他主要車廠的自動駕駛系統的主要功能與技術是什麼？ || TSLA_10K_2025.html#59 TSLA_10K_2025.html#25 NVDA_10K_2026.html#29 TSLA_10K_2025.html#40 GOOGL_10K_2025.html#129": {
+   "sufficient": false,
+   "missing": "缺少其他主要車廠（如GM、Ford、BMW、Mercedes等）自動駕駛系統的功能說明與使用的感測器、演算法、硬體平台等具體資訊",
+   "new_query": "major automotive manufacturers autonomous driving system features technology GM Super Cruise Ford BlueCruise BMW Driving Assistant Plus Mercedes Drive Pilot details",
+   "relevant_ids": []
+  },
+  "特斯拉的自動駕駛系統的主要功能與技術是什麼？ || TSLA_10K_2025.html#25 TSLA_10K_2025.html#221 TSLA_10Q_202603.html#42 TSLA_10K_2025.html#24 TSLA_10Q_202606.html#48": {
+   "sufficient": false,
+   "missing": "缺少特斯拉自動駕駛系統的具體功能（如自動變道、交通信號辨識、城市街道導航、召喚、停車輔助等）以及支撐這些功能的核心技術細節（如純視覺感測器、深度神經網路、Dojo 超級電腦、軟體堆疊等）。",
+   "new_query": "Tesla Full Self-Driving features list and underlying technology camera vision neural network Dojo",
+   "relevant_ids": []
+  },
+  "其他主要車廠的自動駕駛系統的主要功能與技術是什麼？ || TSLA_10K_2025.html#59 TSLA_10K_2025.html#40 TSLA_10K_2025.html#25 NVDA_10K_2026.html#29 TSLA_10K_2025.html#24": {
+   "sufficient": false,
+   "missing": "缺少其他主要車廠（如GM、Ford、BMW、Mercedes等）自動駕駛系統的主要功能說明與所採用的感測器、AI、定位、規劃等技術細節。",
+   "new_query": "major car manufacturers autonomous driving systems functions technology GM Super Cruise Ford BlueCruise BMW Driving Assistant Plus Mercedes Drive Pilot features sensors cameras radar lidar AI mapping",
+   "relevant_ids": []
+  },
+  "其他主要車廠的自動駕駛系統的主要功能與技術是什麼？ || TSLA_10K_2025.html#59 TSLA_10K_2025.html#40 TSLA_10K_2025.html#25 TSLA_10Q_202606.html#58 NVDA_10K_2026.html#29": {
+   "sufficient": false,
+   "missing": "缺少其他主要車廠（如GM、Ford、Toyota、Honda等）的自動駕駛系統的功能說明與核心技術細節，包括感測器組合、演算法、硬體平台、軟體堆疊等具體資訊。",
+   "new_query": "major automotive manufacturers autonomous driving system features technology GM Super Cruise Ford BlueCruise Toyota Guardian Honda Sensing details",
+   "relevant_ids": []
+  },
+  "Apple 是否承認在手機市場不算市佔龍頭 || AAPL_10Q_202606.html#59 AAPL_News_20260519_01.txt#4 AAPL_News_20260519_01.txt#5 AAPL_10K_2025.html#117 AAPL_10K_2025.html#19": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_10Q_202606.html#59"
+   ]
+  },
+  "NVIDIA 的市值是多少 || NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#118 NVDA_10K_2026.html#165 NVDA_Fundamentals_20260612.txt#1 NVDA_10K_2026.html#10": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "微軟目前的自由現金流大概是多少 || MSFT_Fundamentals_20260612.txt#1 MSFT_10Q_202512.html#2 MSFT_10K_2026.html#2 MSFT_10Q_202512.html#1 MSFT_10K_2026.html#218": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_Fundamentals_20260612.txt#1"
+   ]
+  },
+  "微軟的雲端服務最近的營收成長率是多少 || MSFT_10Q_202603.html#73 MSFT_10Q_202603.html#68 MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#75 MSFT_10Q_202603.html#69": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#49",
+    "MSFT_10Q_202603.html#75",
+    "MSFT_10Q_202603.html#69",
+    "MSFT_10Q_202603.html#73",
+    "MSFT_10Q_202603.html#68"
+   ]
+  },
+  "Meta 最近一季的營收成長是多少 || META_Fundamentals_20260612.txt#0 META_Fundamentals_20260612.txt#1 META_10Q_202606.html#63 META_10Q_202606.html#0 META_10Q_202606.html#77": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_10Q_202606.html#63"
+   ]
+  },
+  "蘋果在大中華區最近的銷售情況如何 || AAPL_News_20260519_01.txt#2 AAPL_10Q_202606.html#37 AAPL_News_20260519_01.txt#4 AAPL_10Q_202606.html#26 AAPL_10Q_202606.html#20": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_News_20260519_01.txt#2",
+    "AAPL_10Q_202606.html#37",
+    "AAPL_10Q_202606.html#26"
+   ]
+  },
+  "特斯拉最近一季的淨利是多少？ || TSLA_10Q_202606.html#0 TSLA_10Q_202606.html#2 TSLA_10Q_202606.html#19 TSLA_10Q_202606.html#1 TSLA_Fundamentals_20260612.txt#0": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_10Q_202606.html#19"
+   ]
+  },
+  "Meta 最近一年營收年增率是多少？ || META_Fundamentals_20260612.txt#0 META_Fundamentals_20260612.txt#1 META_IncomeStatement_20260612.txt#4 META_10Q_202606.html#0 META_10Q_202606.html#63": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Alphabet 最近一年營收年增率是多少？ || GOOGL_Fundamentals_20260612.txt#0 GOOGL_10Q_202606.html#0 GOOGL_10Q_202606.html#38 GOOGL_10Q_202606.html#1 GOOGL_Fundamentals_20260612.txt#1": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0",
+    "GOOGL_10Q_202606.html#0"
+   ]
+  },
+  "Alphabet 的最近一年營收年增率是多少 || GOOGL_Fundamentals_20260612.txt#0 GOOGL_10Q_202606.html#0 GOOGL_10Q_202606.html#38 GOOGL_10Q_202606.html#1 GOOGL_10Q_202606.html#2": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Microsoft 的最近一年營收年增率是多少 || MSFT_Fundamentals_20260612.txt#0 MSFT_10Q_202603.html#73 MSFT_10Q_202603.html#68 MSFT_10Q_202603.html#63 MSFT_10Q_202603.html#66": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Amazon 的最近一年營收年增率是多少 || AMZN_Fundamentals_20260612.txt#0 AMZN_10Q_202606.html#12 AMZN_10Q_202606.html#74 AMZN_Fundamentals_20260612.txt#1 AMZN_10Q_202606.html#94": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Evercore ISI 最新調升目標價與評等的公司是哪一家？ || AAPL_News_20260612_05.txt#0 TSLA_10K_2025.html#106 AAPL_News_20260612_03.txt#0 MSFT_News_20260612_01.txt#0 NVDA_News_20260508_01.txt#8": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_News_20260612_05.txt#0"
+   ]
+  },
+  "Apple目前的毛利率是多少？ || AAPL_News_20260519_01.txt#5 AAPL_10Q_202603.html#38 AAPL_10Q_202606.html#39 AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202606.html#15": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "Amazon最新年度的總營收是多少？ || AMZN_Fundamentals_20260612.txt#1 AMZN_10K_2025.html#0 AMZN_Fundamentals_20260612.txt#0 AMZN_10K_2025.html#2 AMZN_10Q_202603.html#27": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10K_2025.html#0"
+   ]
+  },
+  "查找 GOOGL 2025 年營收及 2024 年營收以計算年增率 || GOOGL_10K_2025.html#217 GOOGL_10K_2025.html#281 GOOGL_10K_2025.html#213 GOOGL_10K_2025.html#44 GOOGL_10K_2025.html#2": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10K_2025.html#281",
+    "GOOGL_10K_2025.html#213"
+   ]
+  },
+  "Alphabet最近一年的營收年增率是多少？ || GOOGL_Fundamentals_20260612.txt#0 GOOGL_10K_2025.html#282 GOOGL_10Q_202606.html#38 GOOGL_10K_2025.html#268 GOOGL_10K_2025.html#271": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "哪家公司在 6 月 5 日的 847.5 億美元融資案被穆迪評為信用正面？ || GOOGL_News_20260612_02.txt#0 TSLA_Fundamentals_20260612.txt#2 MSFT_10K_2026.html#195 GOOGL_News_20260721_01.txt#0 META_10Q_202606.html#27": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_News_20260612_02.txt#0"
+   ]
+  },
+  "Alphabet目前的營業利益率是多少？ || GOOGL_Fundamentals_20260612.txt#0 GOOGL_Fundamentals_20260612.txt#1 GOOGL_10K_2025.html#271 GOOGL_10Q_202606.html#37 GOOGL_10Q_202606.html#41": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "查找分析師對微軟 AI 策略的評論 || MSFT_News_20260612_01.txt#0 MSFT_10K_2026.html#48 MSFT_News_20260612_03.txt#1 MSFT_10Q_202512.html#100 MSFT_10Q_202603.html#107": {
+   "sufficient": false,
+   "missing": "缺少具體分析師的姓名或機構、直接引用的評論內容，以及對微軟 AI 策略（如 Azure AI、Copilot、與 OpenAI 合作等）的具體分析與評價。",
+   "new_query": "Microsoft AI strategy analyst commentary 2026 report analyst name",
+   "relevant_ids": [
+    "MSFT_News_20260612_01.txt#0"
+   ]
+  },
+  "查找分析師對微軟 AI 策略的評論 || MSFT_10K_2026.html#82 MSFT_News_20260612_01.txt#0 MSFT_10K_2026.html#99 MSFT_10K_2026.html#49 MSFT_10K_2026.html#48": {
+   "sufficient": false,
+   "missing": "缺少分析師對微軟 AI 策略的評論、分析師姓名、觀點、預測或評級等具體分析內容。",
+   "new_query": "Microsoft AI strategy analyst commentary equity research 2026",
+   "relevant_ids": []
+  },
+  "查找分析師對微軟 AI 策略的評論 || MSFT_10K_2026.html#99 MSFT_10K_2026.html#49 MSFT_10K_2026.html#82 MSFT_News_20260612_01.txt#0 MSFT_10K_2026.html#138": {
+   "sufficient": false,
+   "missing": "缺少分析師對微軟 AI 策略的評論、觀點、評級、目標價或情緒等外部分析師意見",
+   "new_query": "Microsoft analyst commentary on AI strategy 2026 OR Microsoft AI strategy analyst opinion OR equity research Microsoft AI",
+   "relevant_ids": []
+  },
+  "從 KB 快照中列出截至 2026-07-21 的所有 Tesla 或 Elon Musk 相關、可能影響關注度的新聞 || NVDA_News_20260519_01.txt#1 TSLA_News_20260721_01.txt#0 NVDA_News_20260612_01.txt#0 GOOGL_News_20260721_01.txt#0 TSLA_News_20260612_01.txt#0": {
+   "sufficient": false,
+   "missing": "缺少完整的新聞條目清單——需要列出 KB 快照中截至 2026-07-21 所有與 Tesla 或 Elon Musk 相關、可能影響關注度的新聞，現有僅 5 條，仍有其他新聞未被涵蓋。",
+   "new_query": "Tesla OR \"Elon Musk\" news 2026-07-21 site:news OR source:YahooFinance OR source:Reuters",
+   "relevant_ids": [
+    "NVDA_News_20260519_01.txt#1",
+    "TSLA_News_20260721_01.txt#0",
+    "NVDA_News_20260612_01.txt#0",
+    "GOOGL_News_20260721_01.txt#0",
+    "TSLA_News_20260612_01.txt#0"
+   ]
+  },
+  "從 KB 快照中列出截至 2026-07-21 的所有 Tesla 或 Elon Musk 相關、可能影響關注度的新聞 || NVDA_News_20260519_01.txt#1 TSLA_News_20260721_01.txt#0 TSLA_News_20260612_01.txt#0 NVDA_News_20260612_01.txt#0 GOOGL_News_20260721_01.txt#0": {
+   "sufficient": false,
+   "missing": "缺少完整的截至 2026-07-21 的 Tesla 或 Elon Musk 相關新聞列表，尤其是 2026-07-01 至 2026-07-21 期間的其他報導（如 Tesla 股價波動、產品發布、SpaceX IPO 後續、Musk 個人動向等），以及任何在 KB 中存在但未被檢索到的相關新聞條目。",
+   "new_query": "Tesla OR \"Elon Musk\" news 2026-07-01..2026-07-21",
+   "relevant_ids": [
+    "NVDA_News_20260519_01.txt#1",
+    "TSLA_News_20260721_01.txt#0",
+    "TSLA_News_20260612_01.txt#0",
+    "NVDA_News_20260612_01.txt#0",
+    "GOOGL_News_20260721_01.txt#0"
+   ]
+  },
+  "查找 Microsoft 10-K 2026 中有關 Copilot 在 Microsoft 365 產品路線圖、功能整合與商業模式的詳細說明 || MSFT_10K_2026.html#51 MSFT_10K_2026.html#143 MSFT_10K_2026.html#54 MSFT_10K_2026.html#49 MSFT_10K_2026.html#140": {
+   "sufficient": false,
+   "missing": "缺少 Microsoft 10-K 2026 中對 Copilot 在 Microsoft 365 產品路線圖的具體說明、其在各個 Microsoft 365 應用（如 Word、Excel、Teams 等）中的功能整合細節，以及 Copilot 的商業模式（定價、訂閱結構、收入來源等）的詳細描述。",
+   "new_query": "Microsoft 10-K 2026 Copilot Microsoft 365 product roadmap integration pricing subscription model",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#51",
+    "MSFT_10K_2026.html#143",
+    "MSFT_10K_2026.html#140"
+   ]
+  },
+  "查閱 MSFT FY2026 Q3 10‑Q 中 Windows OEM 授權收入與雲端服務交叉銷售數據 || MSFT_10Q_202603.html#97 MSFT_10Q_202603.html#100 MSFT_10Q_202603.html#46 MSFT_10Q_202603.html#10 MSFT_10Q_202603.html#114": {
+   "sufficient": false,
+   "missing": "缺少 Windows OEM 授權收入的具體金額（如美元數值）以及與雲端服務的交叉銷售數據或比例。",
+   "new_query": "Microsoft FY2026 Q3 10-Q Windows OEM licensing revenue amount and cross‑sell with cloud services figure",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#97",
+    "MSFT_10Q_202603.html#100",
+    "MSFT_10Q_202603.html#10",
+    "MSFT_10Q_202603.html#46"
+   ]
+  },
+  "查閱 MSFT FY2026 Q3 10‑Q 中 Windows OEM 授權收入與雲端服務交叉銷售數據 || MSFT_10Q_202603.html#97 MSFT_10Q_202603.html#100 MSFT_10Q_202603.html#46 MSFT_10Q_202603.html#2 MSFT_10Q_202603.html#0": {
+   "sufficient": false,
+   "missing": "缺少 Windows OEM 授權收入的具體金額（如 $xxx 百萬）以及與雲端服務的交叉銷售數據（如 OEM 客戶中雲服務的貢獻比例或金額）",
+   "new_query": "Microsoft 2026 Q3 10-Q Windows OEM licensing revenue amount and cloud services cross‑sell figures",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#97",
+    "MSFT_10Q_202603.html#100",
+    "MSFT_10Q_202603.html#46"
+   ]
+  },
+  "查閱 MSFT FY2026 Q3 10‑Q 中 Copilot 於 Windows 的採用率與相關收入貢獻 || MSFT_10Q_202603.html#100 MSFT_10Q_202603.html#97 MSFT_10Q_202603.html#114 MSFT_10Q_202603.html#109 MSFT_10Q_202603.html#107": {
+   "sufficient": false,
+   "missing": "缺少 Windows 上 Copilot 的採用率（例如使用比例或用戶數）以及其直接貢獻的收入金額或佔比的具體數據。",
+   "new_query": "Microsoft FY2026 Q3 10-Q Windows Copilot adoption rate revenue contribution",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#100",
+    "MSFT_10Q_202603.html#114",
+    "MSFT_10Q_202603.html#109"
+   ]
+  },
+  "查閱 MSFT FY2026 Q3 10‑Q 中 Azure 雲端服務因 Windows 用戶增長的貢獻 || MSFT_10Q_202603.html#97 MSFT_10Q_202603.html#100 MSFT_10Q_202603.html#115 MSFT_10Q_202603.html#110 MSFT_10Q_202603.html#104": {
+   "sufficient": false,
+   "missing": "缺少直接說明 Azure 雲端服務收入或貢獻是因 Windows 用戶增長而帶來的具體數據或敘述，例如「Azure 收入因 Windows 用戶增長貢獻了 X%/X 億美元」等資訊。",
+   "new_query": "MSFT FY2026 Q3 10-Q Azure revenue contribution Windows user growth",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#97",
+    "MSFT_10Q_202603.html#100",
+    "MSFT_10Q_202603.html#115",
+    "MSFT_10Q_202603.html#110"
+   ]
+  },
+  "查閱 MSFT FY2026 Q3 10‑Q 中 Azure 雲端服務因 Windows 用戶增長的貢獻 || MSFT_10Q_202603.html#97 MSFT_10Q_202603.html#103 MSFT_10Q_202603.html#100 MSFT_10Q_202603.html#2 MSFT_10Q_202603.html#115": {
+   "sufficient": false,
+   "missing": "缺少說明 Windows 用戶增長對 Azure 雲端服務收入貢獻的具體數據或敘述（如貢獻的百分比、金額或明確的因果說明）。",
+   "new_query": "Microsoft FY2026 Q3 10-Q Azure revenue contribution from Windows user growth",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#97",
+    "MSFT_10Q_202603.html#103",
+    "MSFT_10Q_202603.html#100",
+    "MSFT_10Q_202603.html#115"
+   ]
+  },
+  "查閱 MSFT FY2026 10‑K 中 Windows OEM 與 Azure/Cloud 交叉銷售與 Copilot 採用相關資訊 || MSFT_10K_2026.html#143 MSFT_10K_2026.html#53 MSFT_10Q_202603.html#114 MSFT_10K_2026.html#141 MSFT_10Q_202603.html#107": {
+   "sufficient": false,
+   "missing": "缺少 Windows OEM 與 Azure/Cloud 之間的交叉銷售具體說明（如聯合方案、收入貢獻或客戶採用情況），以及 Copilot 的採用量化資訊（如使用者數、座位數、收入貢獻或成長率）。",
+   "new_query": "Microsoft FY2026 10-K Windows OEM Azure cross‑sell details Copilot adoption metrics",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#53",
+    "MSFT_10K_2026.html#143",
+    "MSFT_10K_2026.html#141"
+   ]
+  },
+  "查閱 MSFT FY2026 10‑K 中 Windows OEM 與 Azure/Cloud 交叉銷售與 Copilot 採用相關資訊 || MSFT_10K_2026.html#143 MSFT_10K_2026.html#140 MSFT_10K_2026.html#53 MSFT_10Q_202603.html#114 MSFT_10K_2026.html#141": {
+   "sufficient": false,
+   "missing": "缺少 Windows OEM 與 Azure/Cloud 之間的交叉銷售具體說明（如 OEM 方案中捆綁 Azure 服務、相關收入或策略），以及 Copilot 在 Windows OEM 或 Azure 產品中的採用情況與具體數據（如 Copilot 產生的收入、使用量或在 OEM 產品中的整合情形）。",
+   "new_query": "Microsoft FY2026 10-K Windows OEM Azure cross‑sell Copilot adoption details",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#140",
+    "MSFT_10K_2026.html#143",
+    "MSFT_10K_2026.html#53"
+   ]
+  },
+  "查閱 GOOGL 10-Q 202606 相關段落說明 Gemini 在搜尋與其他產品整合的細節 || GOOGL_10Q_202606.html#47 GOOGL_10Q_202606.html#48 GOOGL_10Q_202606.html#18 GOOGL_10Q_202606.html#1 GOOGL_10Q_202606.html#2": {
+   "sufficient": false,
+   "missing": "缺少關於 Gemini 在搜尋及其他 Google 產品整合的具體說明與細節（如功能、部署範圍、預期影響等）",
+   "new_query": "Alphabet 10-Q 202606 Gemini integration with Google Search and other products",
+   "relevant_ids": []
+  },
+  "查閱 GOOGL 2026-07-21 之新聞稿或報導，取得最新 Gemini 整合資訊 || AAPL_News_20260612_02.txt#0 GOOGL_News_20260612_01.txt#1 AAPL_News_20260612_03.txt#0 GOOGL_News_20260612_01.txt#0 GOOGL_News_20260612_02.txt#0": {
+   "sufficient": false,
+   "missing": "缺少2026-07-21的Google官方新聞稿或報導，具體說明最新的Gemini整合內容（如新功能、合作夥伴、發布細節）",
+   "new_query": "Google July 21 2026 press release Gemini integration latest details",
+   "relevant_ids": [
+    "AAPL_News_20260612_02.txt#0",
+    "GOOGL_News_20260612_01.txt#1",
+    "GOOGL_News_20260612_01.txt#0"
+   ]
+  },
+  "查閱 GOOGL 10-Q 202606 相關段落說明 Gemini 在搜尋與其他產品整合的細節 || GOOGL_10Q_202606.html#68 GOOGL_10Q_202606.html#118 GOOGL_10Q_202606.html#47 GOOGL_10Q_202606.html#71 GOOGL_10Q_202606.html#77": {
+   "sufficient": false,
+   "missing": "缺少 Gemini 在搜尋與其他產品整合的具體說明（如功能、部署方式、效益等）",
+   "new_query": "Alphabet 10-Q 202606 Gemini integration with Search and other products",
+   "relevant_ids": []
+  },
+  "查閱 GOOGL 2026-07-21 之新聞稿或報導，取得最新 Gemini 整合資訊 || GOOGL_10K_2025.html#128 GOOGL_News_20260612_01.txt#1 AAPL_News_20260612_02.txt#0 GOOGL_10K_2025.html#135 AAPL_News_20260612_03.txt#0": {
+   "sufficient": false,
+   "missing": "缺少 2026-07-21 的 Google 官方新聞稿或報導，內含最新的 Gemini 整合資訊（如最新模型版本、產品整合、企業服務等）",
+   "new_query": "Google news press release July 21 2026 Gemini integration",
+   "relevant_ids": [
+    "GOOGL_10K_2025.html#128",
+    "GOOGL_News_20260612_01.txt#1"
+   ]
+  },
+  "查找 NVIDIA FY2025 10-K 中中國市場資料中心晶片營收或出貨量 || NVDA_10K_2026.html#210 NVDA_10K_2026.html#94 NVDA_10K_2026.html#33 NVDA_10K_2026.html#142 NVDA_10K_2026.html#143": {
+   "sufficient": false,
+   "missing": "缺少 FY2025 10-K 中中國市場資料中心晶片的營收數字或出貨量資訊",
+   "new_query": "NVIDIA FY2025 10-K China data center revenue shipment",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#210"
+   ]
+  },
+  "查找 NVIDIA FY2025 10-K 中中國市場資料中心晶片營收或出貨量 || NVDA_10K_2026.html#210 NVDA_10K_2026.html#94 NVDA_10K_2026.html#33 NVDA_10K_2026.html#142 NVDA_10K_2026.html#190": {
+   "sufficient": false,
+   "missing": "缺少 FY2025 10-K 中針對中國市場的資料中心晶片營收數字或出貨量資訊",
+   "new_query": "NVIDIA FY2025 10-K China data center chip revenue shipment",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#210"
+   ]
+  },
+  "NVIDIA 的 trailing P/E Ratio 是多少？ || NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#20 NVDA_10Q_202510.html#46 NVDA_10K_2026.html#161 NVDA_10K_2026.html#167": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ]
+  },
+  "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？ || NVDA_10K_2026.html#160 NVDA_10K_2026.html#166 NVDA_10Q_202604.html#14 NVDA_10K_2026.html#0 NVDA_10K_2026.html#186": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#160",
+    "NVDA_10K_2026.html#166",
+    "NVDA_10K_2026.html#186"
+   ]
+  }
+ },
+ "period_intent": {
+  "NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "NVIDIA 的核心技術護城河是什麼？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA 如何用同一套底層架構同時佈局資料中心、遊戲、專業視覺化與車用市場？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft 如何把 Copilot 整合進 Microsoft 365 的產品策略？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 在 AWS 基礎設施與 AI 領域（含與 Anthropic 的合作）的投資策略是什麼？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Google 如何把 Gemini AI 整合進搜尋與其他產品生態系？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Google 搜尋如何演變出 AI Overviews 與 AI Mode 來回應生成式 AI 對搜尋的衝擊？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Meta 在 AI 與 Reality Labs 上的長期願景與投資方向是什麼？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Meta 的廣告獲利模式與 Meta AI 在旗下 App 中扮演的角色是什麼？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Tesla 如何把自動駕駛（FSD/Autopilot）技術當作與競爭對手的核心差異化？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Tesla 在電動車市場面臨什麼樣的競爭態勢？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Tesla 的能源生成與儲能業務在公司整體策略中扮演什麼角色？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple 自己在 10-K 中如何描述它在智慧型手機、PC、平板市場面臨的競爭壓力與市佔地位？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple 的第三方開發者生態系相對於 Android、Windows 等平台的黏著度是如何建立的？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft Azure 最新一季的營收成長率是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Microsoft More Personal Computing 部門最新一季營收表現如何？哪些因素互相抵銷？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Microsoft 最新一季整體營業利益成長多少？主要由哪些部門帶動？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Google Cloud 部門最新一季的營收成長多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Google 收購 Wiz 花了多少錢？這如何影響 Google Cloud 部門？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Meta 最新一季總營收成長多少？主要驅動因素是什麼？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Apple iPhone 營收成長主要是由哪些機型帶動的？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "NVIDIA 這一季在中國市場的資料中心晶片出貨狀況如何？跟去年同期相比有何變化？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Tesla 能源生成與儲能業務最新一季營收表現如何？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Tesla 汽車銷售營收最新一季成長多少？主要驅動因素是什麼？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Tesla 2026 年至今生產與交付了多少輛消費性車輛？": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "NVIDIA 是哪一年推出 CUDA 開發平台的？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA 收購 Mellanox 是哪一年？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 在 2025 年的現金資本支出（cash capital expenditures）是多少？": {
+   "period_ref": "absolute",
+   "fiscal_year": 2025,
+   "granularity": "annual"
+  },
+  "Google 完成收購 Wiz 的確切日期是哪一天？金額是多少？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Tesla 在 2026 年 1 月啟用的鋰精煉廠位於哪裡？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "微軟是怎麼把 AI 塞進 Office 那些軟體裡的？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Google 的 AI 助手現在有整合進搜尋引擎裡嗎？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Meta 搞的那些 VR 眼鏡跟 AI，到底想往哪個方向發展？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "特斯拉的自動駕駛跟別家車廠比，厲害在哪裡？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "蘋果自己是不是也承認在手機市場其實不算市佔龍頭？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "微軟的雲端服務最近成長得快不快？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Meta 最近這一季賺（營收）成長多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "蘋果在大中華區最近賣得好不好？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Apple 過去三個財年的營收與毛利率走勢如何變化？": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "NVIDIA 資料中心業務的營收在最近幾季是怎麼一路成長上來的？": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "比較 Microsoft 2024、2025、2026 三個財年的營業利益率變化。": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Tesla 的車輛交付量逐季變化趨勢是什麼？": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Google Cloud 的營收與獲利在過去幾年是如何逐步改善的？": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Amazon 的資本支出在最近三個年度分別是多少？增減趨勢如何？": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Meta 的 Reality Labs 部門虧損逐年擴大還是收斂？": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Apple 在大中華區的營收這幾季是成長還是衰退？": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Apple 最新一季營收跟去年同期比成長多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
   }
  }
 }

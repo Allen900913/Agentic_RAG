@@ -317,11 +317,11 @@ def infer_source_type(source: str) -> str:
     return "other"
 
 
-# 新聞意圖詞：純子字串比對即可的一組，加上需守衛的「報導」。
-# 「報導」單獨子字串比對會誤中「財報導致 / 季報導向」（財報/季報 + 導 X）——用 negative
-# lookbehind 擋掉 財/季/年/月/週/日/快/半 這些「X報」前綴，避免財報題被誤判成 news
-# 而觸發 doc_type=news 硬篩、把財報 chunk 全排除（見 Gap 2 mi-14：planner 用「報導」而非
-# 「新聞」措辭，原本漏判→市場級新聞路徑沒啟動）。
+# ⚠ 2026-08-19 起 **這組詞表不參與任何生產判斷**。KB 已不收新聞語料，原本靠它注入的
+# `doc_type=news` 硬 filter 已移除（見 retrieve() 內的說明）。保留函式的唯一理由是
+# `eval/probe_multi_company_period.py` 等診斷探針仍拿它當分類標籤——那是**觀測**不是決策。
+# ⚠ 不要再把它接回任何路由：它是硬編碼詞表做感知，換個措辭就漏，而漏掉的代價是整題失敗
+# （見 CLAUDE.md〈LLM 與 Python 的分工〉）。
 _NEWS_KEYWORDS = (
     "news", "headline", "headlines", "favorable", "unfavorable",
     "新聞", "消息", "利多", "利空", "有利", "不利", "媒體", "頭條", "外電",
@@ -330,6 +330,7 @@ _NEWS_GUARDED_RE = re.compile(r"(?<![財季年月週日快半])報導")
 
 
 def looks_like_news_query(query: str) -> bool:
+    """**僅供診斷探針分類使用**，不接在任何生產路徑上（理由見上方註解）。"""
     query_lower = query.lower()
     if any(keyword in query_lower for keyword in _NEWS_KEYWORDS):
         return True
@@ -453,8 +454,10 @@ def _extract_structural_filters(query: str) -> list[dict]:
 #   ② 季度/財報指標訊號（季/營收/成長/利益/銷售/賣/margin/revenue…）——把「最近做了什麼/
 #      搭上線」這類跨期質化題（col-03）與「目前市值/FCF」這類 Fundamentals 題擋在門外
 #   ③ 恰好一家公司（多/零公司 → 不明確，不路由）
-#   ④ 非新聞（looks_like_news_query）  ⑤ 非 TTM（_detect_period_basis）
-#   ⑥ 問題未自帶明確 yyyymm 期碼（尊重使用者指定的期間）
+#   ④ 非 TTM（_detect_period_basis）
+#   ⑤ 問題未自帶明確 yyyymm 期碼（尊重使用者指定的期間）
+#   ⚠ 原本還有一條「非新聞題」（`looks_like_news_query`），2026-08-19 隨 KB 拔除新聞一併移除：
+#     那道守衛會讓任何含「新聞／消息／報導」的複合題拿不到最新一季路由。
 # 任一不滿足 → 回 None（原行為）。即使誤觸，report_period_code 硬 filter 仍有 Tier2 fallback 兜底。
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -526,6 +529,239 @@ def _get_latest_10q_periods(client) -> dict:
         return _latest_10q_cache
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# 期別 ladder（2026-08-19）：每家公司的 filing 由新到舊排好
+#
+# **為什麼不能沿用 `_get_latest_10q_periods` 的字串比大小**：那個函式靠 `code > latest[tk]`
+# 取 max，並用 `len(code) < 6: continue` 把 10-K 擋在門外。期碼是「顯示用編碼」不是
+# 「可比大小的序」——10-K 是 4 位年份、10-Q 是 6 位 yyyymm，混在一起比字串會**時對時錯**：
+#   · `'2026' > '202510'` 為 True（比到第 4 位 6>5）→ 10-K 較新，**這個剛好對**
+#   · `'2025' < '202506'` 為 True（'2025' 是前綴、較短即較小）→ 判 10-Q 較新，**這個是錯的**
+#     （AAPL FY2025 年報當然比自己的 FY2025 Q3 新）
+# **2026-08-19 在 77 份 filing 上實測：385 個配對有 31 對（8.1%）被字串比大小判反。**
+# 正確的序是 payload 的 `(fiscal_year, fiscal_period)`。
+#
+# ⚠ **財年不等於曆年**：`NVDA_10K_2026` 是 FY2026 FY，而 `NVDA_10Q_202604` 是 **FY2027 Q1**
+# ——後者才新。同一個坑 agentic 端已經踩過並用 `_fiscal_rank` 修好（見
+# `agentic_rag_v2._fiscal_rank` 的 NVDA 反轉註解）；這裡是**同一套序**放在共用層，
+# 讓兩條管線不要各寫一份。
+# ══════════════════════════════════════════════════════════════════════════════
+
+_FISCAL_PERIOD_ORDER = {"Q1": 1, "Q2": 2, "Q3": 3, "Q4": 4, "FY": 5}
+
+_period_ladder_cache: dict | None = None
+_period_ladder_cache_collection: str | None = None
+_period_ladder_lock = threading.Lock()
+
+
+def _fiscal_sort_key(fiscal_year, fiscal_period) -> tuple[int, int] | None:
+    """(年, 期別序)——可直接比大小。任一欄缺漏回 None（＝不參與比較，寧可漏判也不誤報）。"""
+    order = _FISCAL_PERIOD_ORDER.get(str(fiscal_period or "").upper().strip())
+    year = re.sub(r"\D", "", str(fiscal_year or ""))
+    return (int(year), order) if order is not None and len(year) == 4 else None
+
+
+def _get_period_ladder(client) -> dict:
+    """掃目前 COLLECTION_NAME，回傳 {ticker: [entry, ...]}，每個 ticker 內**由新到舊**。
+
+    entry = {source, kind(10-K/10-Q), period_code, fiscal_year, fiscal_period, rank}
+    cache 以 collection 為界（eval 切 collection 時自動重算）。掃描失敗回空 dict
+    → 上層退回原行為，不讓 coverage 故障拖垮檢索。"""
+    global _period_ladder_cache, _period_ladder_cache_collection
+    if _period_ladder_cache is not None and _period_ladder_cache_collection == COLLECTION_NAME:
+        return _period_ladder_cache
+    with _period_ladder_lock:
+        if _period_ladder_cache is not None and _period_ladder_cache_collection == COLLECTION_NAME:
+            return _period_ladder_cache
+        by_source: dict[str, dict] = {}
+        offset = None
+        try:
+            while True:
+                points, offset = client.scroll(
+                    collection_name=COLLECTION_NAME, limit=512, offset=offset,
+                    with_payload=["source", "ticker", "filing_type",
+                                  "fiscal_year", "fiscal_period", "report_period_code"],
+                    with_vectors=False)
+                for p in points:
+                    pl = p.payload or {}
+                    src = pl.get("source") or ""
+                    if not src or src in by_source:
+                        continue
+                    kind = str(pl.get("filing_type") or "").upper()
+                    if kind not in ("10-K", "10-Q"):
+                        continue
+                    rank = _fiscal_sort_key(pl.get("fiscal_year"), pl.get("fiscal_period"))
+                    if rank is None:
+                        continue
+                    by_source[src] = {
+                        "source": src,
+                        "ticker": str(pl.get("ticker") or "").upper().strip(),
+                        "kind": kind,
+                        "period_code": str(pl.get("report_period_code") or ""),
+                        "fiscal_year": rank[0],
+                        "fiscal_period": str(pl.get("fiscal_period") or "").upper().strip(),
+                        "rank": rank,
+                    }
+                if offset is None:
+                    break
+        except Exception as e:
+            print(f"WARN  - period ladder scan failed ({e!r}); period routing disabled")
+            by_source = {}
+        ladder: dict[str, list] = {}
+        for rec in by_source.values():
+            ladder.setdefault(rec["ticker"], []).append(rec)
+        for tk in ladder:
+            ladder[tk].sort(key=lambda r: r["rank"], reverse=True)
+        _period_ladder_cache = ladder
+        _period_ladder_cache_collection = COLLECTION_NAME
+        return _period_ladder_cache
+
+
+def ladder_pick(ladder: dict, ticker: str, *, kind: str | None = None,
+                year: int | None = None, nth: int = 0) -> dict | None:
+    """從 ladder 挑第 `nth` 新的 filing（0 ＝ 最新）。
+
+    `kind`：限定 10-K／10-Q；`year`：限定**財年**（`fiscal_year`，不是檔名年份）。
+    挑不到回 None ＝ 呼叫端不注入任何期別 filter（維持原行為），**不要退而求其次挑別的**
+    ——挑錯期別比不挑更糟（答案會帶著引用一起錯）。"""
+    rows = ladder.get((ticker or "").upper().strip()) or []
+    if kind:
+        rows = [r for r in rows if r["kind"] == kind]
+    if year is not None:
+        rows = [r for r in rows if r["fiscal_year"] == year]
+    return rows[nth] if 0 <= nth < len(rows) else None
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 期間意圖解析（2026-08-19）：把「這題問的是哪個期間」交給 LLM，「那是哪個期碼」留給 Python
+#
+# **為什麼要另開一個函式，而不是往 `parse_query_filters` 加欄位**（實測逼出來的）：
+# `parse_query_filters` 前面有一道 `_FILING_HINT_RE` 詞表閘門，沒命中就**整個跳過 LLM**。
+# 2026-08-19 實測：eval_set 的 filing 類題目裡，**`relative`（相對期間指稱）21 題有 20 題被
+# 那道閘門擋下**——「Microsoft Azure 最新一季的營收成長率是多少？」不含年報／季報／FY／Qx／
+# 四位數年份任何一個。所以把 `period_ref` 加進那個 prompt 對最需要它的一類**完全無效**。
+# 那道閘門的正確性論證是「這類 query 的 LLM 本來就只會回空」，而那句話**只對『抽取明確
+# 約束』成立**；`period_ref` 問的正是隱含意圖，論證不成立。
+#
+# 本函式因此：①獨立呼叫、不吃那道閘門 ②自己的 `llm_replay` kind → **不動任何既有 prompt、
+# 不讓任何既有 fixture 失效** ③代價明確＝每次 retrieve 多一次 LLM（實測中位 1.54s）。
+#
+# **分工照 CLAUDE.md**：「這題要哪個期間」沒有唯一機械答案 → LLM；「那是哪個期碼」是
+# 確定性的 → Python 從 `_get_period_ladder()` 算。
+# ══════════════════════════════════════════════════════════════════════════════
+
+PERIOD_INTENT_SYSTEM_PROMPT = """\
+You are a query-understanding assistant for a financial RAG system over SEC filings \
+(10-K annual reports, 10-Q quarterly reports).
+
+Decide WHICH REPORTING PERIOD the question is asking about. Output ONLY this JSON object:
+{"period_ref": "latest" | "absolute" | "range" | "none",
+ "fiscal_year": "<4-digit year>" | null,
+ "granularity": "quarter" | "annual" | null}
+
+period_ref:
+- "latest"   — asks about the MOST RECENT period. Includes relative wording such as \
+"latest", "most recent", "current", "so far this year", "year-to-date", "right now", \
+"最新", "最近", "近期", "目前", "現在", "本季", "當季", "這一季", "今年至今".
+- "absolute" — names ONE specific period ("fiscal 2024", "FY2025", "Q2 2026", "2025 年第二季").
+- "range"    — needs MORE THAN ONE FILING to answer: multi-period trends such as \
+"past three years", "逐季", "逐年", "趨勢", "這幾年", "變化過程", or an explicit comparison \
+of two or more named periods.
+  IMPORTANT — a question about ONE period that also asks how it compares with the SAME \
+period a year earlier (e.g. "this quarter vs the year-ago quarter", "跟去年同期相比") is \
+"latest", NOT "range": every 10-Q and 10-K already reports the prior-period comparison \
+inside the same filing, so one filing answers it.
+- "none"     — no period constraint at all. Use this for questions about a specific event, \
+product, policy or fact where the asker did not indicate any period.
+
+fiscal_year: the 4-digit year IF the question names one (works with "latest" too — \
+"2026 年至今" is {"period_ref":"latest","fiscal_year":"2026","granularity":"quarter"}). \
+Otherwise null.
+
+granularity: "quarter" if the question is about a quarter / quarterly results \
+("一季", "本季", "quarterly", "Q1".."Q4", "year-to-date" within a year); "annual" if it is \
+about a full fiscal year / annual report ("年度", "全年", "財年", "annual", "full-year", "FY"); \
+null if unclear.
+
+Rules:
+- Judge the ASKER'S INTENT, not the vocabulary. A question with no time words at all is "none".
+- "range" beats "latest": if the question needs several periods to answer, it is "range" \
+even when it also says "最近".
+- Output ONLY the JSON object — no markdown fences, no explanation.
+"""
+
+_VALID_PERIOD_REFS = ("latest", "absolute", "range", "none")
+_PERIOD_INTENT_NONE = {"period_ref": "none", "fiscal_year": None, "granularity": None}
+
+
+def resolve_period_intent(query: str, model_name: str = DEFAULT_MODEL) -> dict:
+    """LLM 判「這題問的是哪個期間」→ {period_ref, fiscal_year, granularity}。
+
+    失敗一律回 `none`（＝不注入任何期別 filter、也不擋 collapse），**不讓期間理解成為單點
+    故障**，行為退回本函式存在之前。"""
+    import json
+    import re as _re
+
+    q = (query or "").strip()
+    if not q:
+        return dict(_PERIOD_INTENT_NONE)
+    _hit = _replay.get("period_intent", q)
+    if _hit is not _replay.MISS:
+        return _hit
+    try:
+        raw = call_llm([{"role": "system", "content": PERIOD_INTENT_SYSTEM_PROMPT},
+                        {"role": "user", "content": q}], model_name)
+        raw = _re.sub(r"^```(?:json)?|```$", "", raw.strip(), flags=_re.MULTILINE).strip()
+        parsed = json.loads(raw)
+        ref = str(parsed.get("period_ref") or "none").lower().strip()
+        if ref not in _VALID_PERIOD_REFS:
+            ref = "none"
+        year = _re.sub(r"\D", "", str(parsed.get("fiscal_year") or ""))
+        gran = str(parsed.get("granularity") or "").lower().strip()
+        out = {"period_ref": ref,
+               "fiscal_year": int(year) if len(year) == 4 else None,
+               "granularity": gran if gran in ("quarter", "annual") else None}
+    except Exception as e:
+        print(f"WARN  - period intent parsing failed ({e!r}); treating as 'none'")
+        return dict(_PERIOD_INTENT_NONE)
+    _replay.put("period_intent", q, out)
+    return out
+
+
+def _resolve_period_filter_llm(query: str, client, intent: dict) -> dict | None:
+    """`period_ref` → 具體的 `report_period_code` 硬 filter（確定性，零 LLM）。
+
+    只有 `latest` 會產生 filter：
+      · `absolute` 由既有的 `parse_query_filters`（fiscal_year／fiscal_period）處理，這裡不搶
+      · `range` 刻意**不注入**——多期題硬鎖單一期碼會直接答不出來
+      · `none` 沒有期間可鎖
+    多／零公司回 None：`build_qdrant_filter` 吃 flat AND list，**結構上寫不出 per-ticker 的
+    OR-of-ANDs**（MatchAny 是全域 OR，會讓 A 公司的舊季通過 B 公司的期碼）。這是既有限制，
+    見 BACKLOG〈「最新期間」路由的覆蓋面〉。"""
+    if intent.get("period_ref") != "latest":
+        return None
+    tickers = _find_all_ticker_aliases(query.lower(), query)
+    if len(tickers) != 1:
+        return None
+    # ⚠ `granularity` 缺漏時預設 **10-Q**，不是「所有類型裡最新的」。
+    #   實測（col-11「微軟的雲端服務最近成長得快不快？」）：不設限會挑到 `MSFT_10K_2026`
+    #   （年報財年序最新），把 gold 的 `MSFT_10Q_202603` 整個擠掉，gold_rank 1 → None。
+    #   舊的 `_resolve_latest_quarter_filter` 本質上是**季路由**、只在偵測到年度意圖時讓路
+    #   （`_ANNUAL_INTENT_RE`），這裡沿用同一個預設方向：**沒說就是問季**。
+    kind = "10-K" if (intent.get("granularity") == "annual") else "10-Q"
+    pick = ladder_pick(_get_period_ladder(client), tickers[0],
+                       kind=kind, year=intent.get("fiscal_year"))
+    if pick is None and intent.get("fiscal_year") is not None:
+        # 指定年份挑不到（例：問 2026 但該公司當年還沒有那種 filing）→ 放掉年份限制再試一次。
+        # ⚠ 只在「有 kind」時才退：完全不設限地挑「最新」會把年報與季報混在一起比，
+        #   而那正是使用者可能沒指定的維度。
+        pick = ladder_pick(_get_period_ladder(client), tickers[0], kind=kind) if kind else None
+    if pick is None:
+        return None
+    return {"field": "report_period_code", "value": pick["period_code"],
+            "polarity": "include", "routed_latest": True}
+
+
 def _resolve_latest_quarter_filter(query: str, client) -> dict | None:
     """Gap 1（2026-08-02）：偵測「最新一季財報指標 + 單一公司」→ 回傳該公司最新 10-Q 的
     report_period_code include filter；任一觸發條件不滿足回 None。判定準則見上方註解。"""
@@ -533,8 +769,6 @@ def _resolve_latest_quarter_filter(query: str, client) -> dict | None:
     if not _LATEST_QUARTER_TIME_RE.search(q):
         return None
     if not _QUARTER_METRIC_RE.search(q):
-        return None
-    if looks_like_news_query(q):          # 新聞題走 doc_type=news，不搶
         return None
     if _detect_period_basis(q):           # TTM 走既有口徑硬 filter，不搶
         return None
@@ -955,8 +1189,8 @@ def build_qdrant_filter(filters: list[dict], strict: bool = False,
 def _build_tier2_filter(filters: list[dict]):
     """Tier 2：只保留 ticker + filing_type + doc_type（放掉年份/期碼），strict 模式。
     讓「問 2026 但庫裡只有 2025」退回最新一份 filing，而不是拒答。
-    doc_type 一併保留：新聞 hard filter（doc_type=news）在 Tier1 若因帶了 news 不具備的
-    report_period_code 而落空時，Tier2 仍守住「只回新聞」的意圖，不會漏放財報 chunk 進來。"""
+    doc_type 一併保留：LLM 仍可能抽出 doc_type（如「年報」→ 10-K），Tier1 落空時 Tier2 要守住
+    那個意圖。⚠ 2026-08-19 前這裡守的是「只回新聞」，KB 拔除新聞後不再有 doc_type=news 這條路。"""
     tier2 = [f for f in filters
              if f["field"] in ("ticker", "mentioned_tickers", "filing_type", "doc_type")
              and f["polarity"] == "include"]
@@ -1045,6 +1279,99 @@ def _suppress_near_duplicates(ranked: list[dict], min_shared: int = 5,
             continue
         kept.append(c)
         kept_nums.append((src, nums))
+    return kept, dropped
+
+
+def _section_group(c: dict):
+    """`(ticker, filing_type, item_id)` ——「同一家公司的同一節」。只有 filing 有 `item_id`；
+    News／Fundamentals 回 None（它們沒有跨期競爭的概念，硬塞進來只會製造假的排擠訊號）。"""
+    if c.get("filing_type") not in ("10-K", "10-Q") or not c.get("item_id"):
+        return None
+    return (c.get("ticker", ""), c["filing_type"], c["item_id"])
+
+
+def _collapse_cross_period_sections(ranked: list[dict], keep_per_group: int = 1,
+                                    prefer: str = "rank") -> tuple[list[dict], int]:
+    """跨期 field collapsing：同一節（`_section_group`）最多只讓 `keep_per_group` **份 filing**
+    佔位，其餘丟掉。回傳 (過濾後的池, 丟棄數)。零 LLM、零參數（`keep_per_group` 除外）。
+
+    **這是搜尋引擎的標準原語**（Solr `CollapsingQParser`／Elasticsearch `collapse`／Google
+    「同一站點只顯示一兩筆」），不是自創。⚠ **不是 MMR**：MMR 靠 embedding 相似度、帶 λ 超參數
+    ＝連續權衡；這裡是 metadata 分組的**硬保證**。本專案的量尺已飽和（六個 RAGAS 指標五個達
+    gold 上限），**沒有能調 λ 的尺**，所以只有零參數的版本可被零噪音斷言驗證。
+
+    **為什麼需要它**（2026-08-19 多年語料壓測，詳見 docs/EVAL.md〈多年語料的期別干擾〉）：
+    KB 從 1 年長到 ~2.5 年後，「問題沒提期間」那類題的 top-5 有 **48%** 席位被**同一節的別年份**
+    佔走（單年時是 8%）。10-K 的 Item 1／1A 年年 80~90% 逐字相同，embedding 與 cross-encoder
+    **兩層都分不出來**。最極端的實例：`col-02`「微軟怎麼把 AI 塞進 Office」top-5 有 4 席是
+    MSFT 三個年度 10-K 的同一節 `Item_1`。
+
+    ⚠ **同一份 filing 的同一節有多個 chunk 時全部保留**（`item_chunk_index` 0/1/2 是互補內容，
+    不是重複）。只丟「額外的 filing」。這條界線就是本函式與 `_suppress_near_duplicates` 的分野：
+    後者比的是**同檔內的數字集合包含關係**、規則一明寫「跨檔絕不比」；本函式要的是**章節同一性、
+    跨檔才比**。概念不同，所以是兩個函式而不是改那一個。
+
+    ⚠ **收益指標與本規則是同一個定義** → 開了之後「排擠席位」必然歸零，那是套套邏輯不是證據。
+    驗收要看 (a) 讓出來的席位換到了什麼（gold@k）(b) 有沒有弄壞本來就需要多期的題
+    （`eval/period_probe_trend_queries.json` 的陰性對照）。
+
+    **`prefer` ＝ 組內留誰**，這一格是實測逼出來的、不是設計時想到的：
+      · `"rank"`   留 rerank 最高的那份 filing（最直覺）。**但 cross-encoder 對年份無感**
+        ——實測 `sem-03`／`sem-04` 的 gold `MSFT_10K_2026` 在 `MSFT Item_1` 那組裡不是最高分，
+        於是 collapse 留下 `MSFT_10K_2024`、**把 gold 整個刪掉**（`gold_rank` 從 3 變成 None）。
+        降低了排擠卻換來 F2，正是本來要防的東西換個方向發作。
+      · `"newest"` 留**財年序最新**的那份（`fiscal_rank`）。只決定「同一節顯示哪一年」，
+        不決定「這一節要不要出現」，所以比全域時間衰減安全得多。⚠ 但它仍然是一個時間先驗，
+        對「問 FY2024 那一節」的題是錯的 → 期別 filter 生效時本函式其實是 no-op（同組只剩
+        一份 filing），所以真正吃到這個先驗的只有**期間無法解析**的題。
+
+    **預設開啟**（`RAG_CROSS_PERIOD_COLLAPSE=0` 可關）。參數與四臂實測見呼叫端註解，
+    以及 docs/EVAL.md〈跨期 field collapsing〉。
+    """
+    if keep_per_group < 1:
+        return ranked, 0
+
+    if prefer == "newest":
+        # 先決定每組的贏家（財年序由新到舊取前 N），再照原順序過濾——這樣輸出仍是
+        # rerank 降序，只是組內換了代表。`fiscal_rank` 為 None 的排最後（不參與時間比較，
+        # 但仍可能因為 rerank 名次而入選）。
+        best: dict[tuple, list[str]] = {}
+        seen_src: dict[tuple, dict] = {}
+        for c in ranked:
+            g = _section_group(c)
+            if g is None:
+                continue
+            seen_src.setdefault(g, {}).setdefault(c["source"], c.get("fiscal_rank"))
+        for g, srcs in seen_src.items():
+            best[g] = [s for s, _ in sorted(
+                srcs.items(), key=lambda kv: (kv[1] is not None, kv[1] or (0, 0)),
+                reverse=True)][:keep_per_group]
+        kept, dropped = [], 0
+        for c in ranked:
+            g = _section_group(c)
+            if g is None or c["source"] in best.get(g, ()):
+                kept.append(c)
+            else:
+                dropped += 1
+        return kept, dropped
+
+    seen: dict[tuple, list[str]] = {}
+    kept: list[dict] = []
+    dropped = 0
+    for c in ranked:
+        g = _section_group(c)
+        if g is None:
+            kept.append(c)
+            continue
+        srcs = seen.setdefault(g, [])
+        if c["source"] in srcs:        # 同一份 filing 的同節多 chunk：互補，全留
+            kept.append(c)
+            continue
+        if len(srcs) >= keep_per_group:
+            dropped += 1
+            continue
+        srcs.append(c["source"])
+        kept.append(c)
     return kept, dropped
 
 
@@ -1145,43 +1472,38 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
     # 用原始 query（結構化代碼抽取，語言無關——ticker/filing_type/fiscal_year 不管中英文
     # 問法都對應同一組代碼，翻譯與否不影響 filter 準確度，見 CHANGELOG 2026-07-08）。
     detected_filters = [] if disable_filter else parse_query_filters(query, model_name)
-    # 新聞意圖 → 硬篩 doc_type=news（見 CHANGELOG 2026-07-21）。用 deterministic 關鍵字偵測
-    # （looks_like_news_query，無 LLM），與 filing 期別 filter 疊加：「NVDA 最近新聞」→
-    # ticker=NVDA AND doc_type=news。動機：News/Fundamentals/IncomeStatement 的 .txt 只有
-    # ticker、無 filing_type，新聞題原本走 Tier3 軟 filter 與長篇財報 chunk 同池競爭、常被
-    # reranker 壓過（looks_like_news_query 舊有只印 WARN、未做路由）；ingest 端已為每個 chunk
-    # 補 doc_type，這裡把「偵測到但沒用」變成真正的硬排除。disable_filter（eval nofilter 對照）
-    # 時一併關閉，維持乾淨 baseline。
-    if not disable_filter and looks_like_news_query(query) \
-            and not any(f["field"] == "doc_type" for f in detected_filters):
-        detected_filters.append({"field": "doc_type", "value": "news", "polarity": "include"})
-    # 市場級新聞（Gap 2，2026-08-02）：news 的 ticker 硬篩改用 mentioned_tickers（內文實際提到的
-    # 公司陣列，migrate_add_mentioned_tickers 補）而非 owner ticker。市場級新聞（「Magnificent
-    # Seven 全跌」等）物理歸檔在某一家、內文卻提及多家；用 owner ticker 硬篩會讓它對其他被提及公司
-    # 完全隱形（mi-08/12/14 probe：被誤殺的正是 rerank 最高的 gold，0.71~0.73）。改 mentioned_tickers
-    # 「陣列包含 X 即命中」，owner 一律已 union 進陣列故不傷單公司新聞。只在 news 查詢改；財報
-    # （10-Q/10-K/Fundamentals）維持 owner ticker——那些提到競爭對手不代表報表「是」對方的。
-    _is_news_q = any(f["field"] == "doc_type" and f["value"] == "news" and f["polarity"] == "include"
-                     for f in detected_filters)
-    if _is_news_q:
-        for f in detected_filters:
-            if f["field"] == "ticker" and f["polarity"] == "include":
-                f["field"] = "mentioned_tickers"
+    # ⚠ 2026-08-19 **KB 不再收新聞**（見 CLAUDE.md〈資料範圍〉）。原本這裡有兩段：
+    #   ① `looks_like_news_query` → 注入 `doc_type=news` 硬 filter
+    #   ② 新聞題把 `ticker` 硬篩改寫成 `mentioned_tickers`
+    # 兩段都已移除。① 是硬編碼詞表做的**硬排除**，代價是「NVIDIA 最新財報…加上新聞中…」
+    # 這種複合題只因為出現「新聞」二字，整題就被鎖死在 news chunk 裡、filing gold 連候選池
+    # 都進不去（實測 mi-01／mi-14／mh-07 三題，是 KB 拔新聞前最大的殘留失敗）。
+    # 「市場現在怎麼看」改由 agentic 的 live web 路徑供應，那條路有發布日、來源白名單與
+    # 過時過濾，是這件事的正解。復活條件：KB 重新收新聞語料時（屆時 ① 要改成加權不是硬篩）。
     # 註：period_basis（TTM 口徑）已由 _extract_structural_filters 統一吐出（走 parse_query_filters
     # 的 deterministic 抽取，含 gate-skip 路徑），不再在此另外注入。硬 filter 效果不變——Tier1
     # strict 命中 Fundamentals，某 ticker 無 TTM chunk 則自動退回 Tier2/3（不會因 basis 過濾而拒答）。
     #
     # 「最新一季」deterministic 路由（Gap 1，2026-08-02）：問最新單季財報指標、單一公司、且未
     # 自帶期碼時，解出該公司 KB 中最新 10-Q 期碼注入 report_period_code 硬 filter，排除舊季/年報
-    # chunk 對排序的污染（見 _resolve_latest_quarter_filter 註解）。放在 news filter 之後：新聞題
-    # 已先被 looks_like_news_query 擋掉，不會兩者同時注入。已有 report_period_code（使用者指定或
+    # chunk 對排序的污染（見 _resolve_latest_quarter_filter 註解）。已有 report_period_code（使用者指定或
     # LLM 抽出）時不覆蓋。coverage 掃描需 client，故在此（而非 parse_query_filters）注入。
     # env RQ_LATEST_QUARTER_ROUTING=0/off/false 可關閉（供 eval on/off A/B；預設開）
     _lq_routing_on = os.getenv("RQ_LATEST_QUARTER_ROUTING", "1").strip().lower() \
         not in ("0", "off", "false", "no")
+    # `RQ_PERIOD_INTENT_LLM=1` → 期間意圖交 LLM 判（`resolve_period_intent`），取代
+    # `_resolve_latest_quarter_filter` 的兩道硬編碼詞表。⛔ 預設關閉，量完再決定翻不翻。
+    # 動機：那兩道詞表擋掉 eval_set 裡 20/21 題的相對期間指稱（見 resolve_period_intent
+    # 上方註解），而多年語料下漏一題的代價從「差一季」變成「差兩年」。
+    _period_intent = None
     if _lq_routing_on and not disable_filter \
             and not any(f["field"] == "report_period_code" for f in detected_filters):
-        _lq_filter = _resolve_latest_quarter_filter(query, client)
+        if os.getenv("RQ_PERIOD_INTENT_LLM", "") == "1":
+            _period_intent = resolve_period_intent(query, model_name)
+            _lq_filter = _resolve_period_filter_llm(query, client, _period_intent)
+            print(f"DEBUG - period intent (LLM): {_period_intent}")
+        else:
+            _lq_filter = _resolve_latest_quarter_filter(query, client)
         if _lq_filter is not None:
             detected_filters.append(_lq_filter)
             print(f"DEBUG - latest-quarter routing → report_period_code={_lq_filter['value']}")
@@ -1421,6 +1743,18 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
             "ticker":           payload.get("ticker", ""),   # 供每家保底覆蓋（_ensure_ticker_coverage）
             "chunk_index":      payload.get("chunk_index", 0),
             "chunk_type":       payload.get("chunk_type", "n/a"),
+            # ↓ 期別三欄（2026-08-19 補）。加進來之前，任何需要「這個 chunk 是哪一節、哪一期」
+            #   的下游都得自己再掃一次 Qdrant——實測被迫這麼做的有三處：
+            #   agentic_rag_v2 的期別 validator、`_scan_kb_coverage`、
+            #   eval/probe_temporal_interference。payload 本來就有，只是沒帶出來。
+            "item_id":          payload.get("item_id", ""),
+            "filing_type":      payload.get("filing_type", ""),
+            "period_code":      str(payload.get("report_period_code") or ""),
+            # ⚠ 比新舊一律用這個 `(fiscal_year, 期別序)`，**不要拿 `period_code` 比字串**
+            #   ——10-K 是 4 位、10-Q 是 6 位，混比會時對時錯（實測 385 對裡 31 對判反，
+            #   見 `_get_period_ladder` 上方註解）。缺欄位時是 None ＝ 不參與比較。
+            "fiscal_rank":      _fiscal_sort_key(payload.get("fiscal_year"),
+                                                 payload.get("fiscal_period")),
             "rrf_score":        float(p.score),
             "raw_rerank_score": float(raw),
             "rerank_score":     float(1 / (1 + math.exp(-raw))),
@@ -1436,9 +1770,6 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
             f"raw={c['raw_rerank_score']:.4f} | sigmoid={c['rerank_score']:.4f}"
         )
 
-    if looks_like_news_query(query) and not any(c["source_type"] == "news" for c in enriched):
-        print("WARN  - This looks like a news query, but no news chunks were retrieved.")
-
     # 每家保底覆蓋：query 明確點名多家 ticker 時，保證每一家在回傳 top_k 裡至少有一個 chunk
     # （缺的從完整排序池補上，必要時擴充；見 _ensure_ticker_coverage）。
     # 近重複抑制（預設關閉，見 _suppress_near_duplicates）：在截斷成 top_k 之前做，
@@ -1447,6 +1778,37 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
         enriched, _n_dup = _suppress_near_duplicates(enriched)
         if _n_dup:
             print(f"DEBUG - Near-dup suppression: dropped {_n_dup} redundant candidates")
+
+    # 跨期 field collapsing（預設關閉，見 _collapse_cross_period_sections）：同一節最多留
+    # N 份 filing。跟近重複抑制一樣掛在截斷之前，讓出的名額由池裡下一個候選遞補。
+    # 預設 keep=2 / prefer=newest 是量出來的，不是選的——四個臂的完整對照見
+    # docs/EVAL.md〈跨期 field collapsing〉。摘要：keep=1 收益較高（gold@5 0.878 vs 0.857）
+    # 但代價是**新增 3 個沉默失效**（事件錨定題）＋ 趨勢題期別數 −38%；keep=2/newest 在每個
+    # 安全性軸上都不退步。`prefer="rank"` 更是嚴重退步（gold@5 0.653），別改回去。
+    # ⚠ `period_ref == "range"` 時**整個跳過 collapse**：趨勢／逐年比較題本來就需要多個
+    #   期別，collapse 會把它們砍掉（實測趨勢題期別數 keep=1 −38%、keep=2 −6%）。這是 A
+    #   反過來保護 B 的一格——沒有 LLM 的期間意圖就做不出這個條件式。
+    _skip_collapse = bool(_period_intent and _period_intent.get("period_ref") == "range")
+    if _skip_collapse:
+        print("DEBUG - Cross-period collapse skipped (period_ref=range，多期題需要跨期證據)")
+    # **預設開啟**（`RAG_CROSS_PERIOD_COLLAPSE=0` 可關）。參數 keep=2／prefer=newest 是量出來
+    # 的、不是選的——四臂完整對照見 docs/EVAL.md〈跨期 field collapsing〉：
+    #   · `prefer="rank"`（留 rerank 最高）**嚴重退步**：gold@5 0.837 → 0.653、錯期率 ×3.5。
+    #     cross-encoder 對年份無感，「分數最高」與「對的年份」無關。別改回去。
+    #   · `keep=1` 聚合較好（gold@5 0.878 vs 0.857）但代價是**新增 3 個沉默失效**（事件錨定題
+    #     ——Wiz 收購金額只揭露在 `202603`，更新的季報不重複）、趨勢題期別數 −38%，
+    #     **而且會讓現在的單年生產 collection 退步**（gold@5 0.918 → 0.878）。
+    #   · `keep=2` 在單年 collection 上是**逐題完全的 no-op**（0/49 題 top-5 有任何變化），
+    #     在多年上改 23/49 題、gold@5 +0.020、排擠率 −30%、零新增失效。
+    # 敢開預設就是因為最後那一條：**資料還不需要時它不作用，需要時自己生效**。
+    if os.getenv("RAG_CROSS_PERIOD_COLLAPSE", "1") == "1" and not _skip_collapse:
+        _keep = max(1, int(os.getenv("RAG_CROSS_PERIOD_KEEP", "2")))
+        _prefer = os.getenv("RAG_CROSS_PERIOD_PREFER", "newest")
+        enriched, _n_col = _collapse_cross_period_sections(
+            enriched, keep_per_group=_keep, prefer=_prefer)
+        if _n_col:
+            print(f"DEBUG - Cross-period collapse (keep={_keep}, prefer={_prefer}): "
+                  f"dropped {_n_col} same-section candidates")
 
     result = enriched[:top_k]
     _ticker_f = next((f for f in detected_filters

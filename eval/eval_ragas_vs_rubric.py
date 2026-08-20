@@ -197,8 +197,12 @@ def _print_interpretation_guide(overall: dict, present: list[str]) -> None:
                 notes.append(f"距 gold 上限 {gold - v:+.3f}")
         print(f"  {m:<24}{v:>8.3f}{(f'{noise:.3f}' if noise else 'n/a'):>10}"
               f"{(f'{gold:.3f}' if gold else 'n/a'):>11}   {'；'.join(notes)}")
-    print("  ⚠ 這些常數綁定「NVIDIA gpt-oss-120b judge + 100 題 eval_set + 現行 reference」。")
+    print("  ⚠ 這些常數綁定「NVIDIA gpt-oss-120b judge + **100 題** eval_set + 當時的 reference」。")
     print("    換 judge 模型、換題庫、或大改 reference 之後必須重量,別沿用。")
+    print("  ⛔ 2026-08-19：eval_set 已從 100 題拆成 63 題再補回 **65 題**（news 類與 multi_intent 全數移出,")
+    print("     見 docs/EVAL.md〈KB 拔除新聞〉）→ **上面這組 gold 上限與噪音底線都已失效**。")
+    print("     題目組成變了,分母與難度分佈都不同,跨 2026-08-19 的數字不可直接比。")
+    print("     要恢復判讀能力必須在 65 題上重跑一次 gold baseline（把 reference 當系統答案餵進去）。")
 
 
 def strip_citation_footer(text: str) -> str:
