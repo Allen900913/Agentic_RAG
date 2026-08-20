@@ -510,6 +510,88 @@ def gate9_reference_citation_repair() -> None:
             f"fixed={tot_fix} clean={clean_after}")
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+def gate10_ratio_source_field() -> None:
+    """⑩ `_ensure_ratio_source_coverage` 必須補「含被問欄位」的 Fundamentals，不是分數最高的。
+
+    **實測根因（2026-08-20，推翻 BACKLOG 掛了 9 天的「未驗證」猜測）**：
+      · `MSFT_Fundamentals #0`（698 字元）含 Revenue Growth／Gross／Operating／Profit Margin
+        ——**每一個比率都在這裡**；`#1`（2045 字元）只有 Total Cash／Total Debt，**一個都沒有**。
+      · cross-encoder 對「Microsoft 的毛利率是多少？」把 **#1 排在 #0 前面**（0.928 vs 0.918）。
+      · 保底機制原本補「分數最高的 Fundamentals」→ 補進零比率的 #1 → Generator 沒有 TTM 值可引
+        → 退回 10-K/10-Q 的財年／單季數字（口徑不同、數值接近、**無揭露**）。
+      舊記載猜「#1 長三倍造成 rerank 偏好」——方向對了，但傷害不在 rerank，
+      **在保底用「分數最高」而不是「有沒有那個欄位」挑**。
+
+    ⚠ 誤報方向：認不出欄位時**必須退回舊行為**（補分數最高的），不可以什麼都不補——
+      那會讓 ratio 題完全沒有 Fundamentals 錨源，比原本更糟。
+    """
+    print()
+    print("⑩ ratio 保底要補「含該欄位」的 Fundamentals")
+    F = ar._ensure_ratio_source_coverage
+
+    def _c(src, idx, score, content):
+        return {"source": src, "chunk_index": idx, "ticker": src.split("_")[0],
+                "raw_rerank_score": score, "content": content}
+
+    # 逐字取自 us_stock_rag_edgar_mdna 的 MSFT_Fundamentals_20260612.txt（2026-08-20）
+    C0 = _c("MSFT_Fundamentals_20260612.txt", 0, 0.918,
+            "Market Cap : $2899.62B Revenue Growth (YoY): 18.30% "
+            "Gross Margin : 68.31% Operating Margin: 46.33% Profit Margin : 39.34%")
+    C1 = _c("MSFT_Fundamentals_20260612.txt", 1, 0.928,
+            "Total Cash : $78.23B Total Debt : $125.43B Debt-Equity ... Current Ratio ...")
+    FILING = _c("MSFT_10K_2026.html", 124, 0.90, "revenue increased 18% or $50.1 billion")
+    ranked = [C1, C0, FILING]
+
+    got = F(ranked, [C1, FILING], ["MSFT"], "Microsoft 的毛利率是多少？")
+    _assert("⑩ selected 只有零比率的 #1 → 必須把含 Gross Margin 的 #0 補進來",
+            any(c["chunk_index"] == 0 for c in got if "Fundamentals" in c["source"]),
+            [(c["source"], c["chunk_index"]) for c in got])
+
+    got = F(ranked, [C0, FILING], ["MSFT"], "Microsoft 的毛利率是多少？")
+    _assert("⑩ 誤報對照①：已經有含該欄位的 #0 → 不重複補、不動",
+            len(got) == 2 and sum(1 for c in got if "Fundamentals" in c["source"]) == 1,
+            [(c["source"], c["chunk_index"]) for c in got])
+
+    # ⚠ 這條的第一版寫成「selected=[C1, FILING] → 結果要含 Fundamentals」，**沒有判別力**：
+    #   C1 本來就在 selected 裡，函式什麼都不做也會通過（變異測試實測沒 FAIL 才發現）。
+    #   要測「認不出欄位時會不會退回舊行為」，selected 就**不能先放 Fundamentals**。
+    got = F(ranked, [FILING], ["MSFT"], "Microsoft 的自由現金流是多少？")
+    _assert("⑩ 誤報對照②：認不出欄位（自由現金流不在對照表）→ 退回舊行為補分數最高的，"
+            "**不可以什麼都不補**",
+            any("Fundamentals" in c["source"] for c in got),
+            [(c["source"], c["chunk_index"]) for c in got])
+
+    _assert("⑩ 誤報對照③：want_tickers 為空 → 原樣回傳",
+            F(ranked, [C1], [], "Microsoft 的毛利率是多少？") == [C1])
+    _assert("⑩ 市值題不是 ratio 意圖（單一來源，補了只是多餘）",
+            not ar._is_ratio_intent("NVIDIA 目前的市值是多少？"))
+    _assert("⑩ 成長率／毛利率／淨利率各自對到不同欄位",
+            ar._wanted_ratio_fields("營收成長率") == ["Revenue Growth"]
+            and ar._wanted_ratio_fields("毛利率") == ["Gross Margin"]
+            and ar._wanted_ratio_fields("淨利率") == ["Profit Margin"])
+
+    # ── 活體對照：欄位名是不是還長這樣（ingest 改了格式，這條會先叫）─────────────
+    try:
+        from qdrant_client import models as _qm
+        _cl = ar.rq.make_qdrant_client()
+        _pts, _ = _cl.scroll(ar.rq.COLLECTION_NAME, limit=20, with_payload=True, with_vectors=False,
+                             scroll_filter=_qm.Filter(must=[_qm.FieldCondition(
+                                 key="source", match=_qm.MatchValue(
+                                     value="MSFT_Fundamentals_20260612.txt"))]))
+        _by = {p.payload.get("chunk_index"): (p.payload.get("document") or "") for p in _pts}
+        _assert("⑩ 活體：真實 Fundamentals #0 仍含全部四個欄位名（ingest 改格式時這條先叫）",
+                all(f.lower() in _by.get(0, "").lower()
+                    for f in ("Revenue Growth", "Gross Margin", "Operating Margin", "Profit Margin")),
+                f"#0 長度={len(_by.get(0, ''))}")
+        _assert("⑩ 活體：#1 仍然一個比率欄位都沒有（＝這個機制針對的形狀還在）",
+                not any(f.lower() in _by.get(1, "").lower()
+                        for f in ("Revenue Growth", "Gross Margin", "Profit Margin")),
+                f"#1 長度={len(_by.get(1, ''))}")
+    except Exception as e:
+        _assert("⑩ 活體對照可執行（掃不到就等於這道閘門只測了合成資料）", False, repr(e))
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -529,6 +611,7 @@ def main() -> int:
     gate7_untraceable_numbers()
     gate8_web_authority()
     gate9_reference_citation_repair()
+    gate10_ratio_source_field()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")

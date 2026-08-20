@@ -945,6 +945,33 @@ _RATIO_INTENT_RE = re.compile(
 )
 
 
+# ratio 意圖 → Fundamentals 檔裡的**欄位名**。這是**格式定義的封閉集合**（欄位名由本專案自己的
+# ingest 產生，見 data/edgar_processed/Fundamentals/*.txt），不是拿字串比對做感知，
+# 屬於 CLAUDE.md〈硬編碼詞表是警訊〉明列的正當例外。
+#
+# **為什麼需要它**（2026-08-20 實測，推翻了 BACKLOG 掛了 9 天的「未驗證」假設）：
+#   MSFT_Fundamentals #0（698 字元）含 Revenue Growth (YoY) 18.30%、Gross Margin 68.31%、
+#   Operating Margin 46.33%、Profit Margin 39.34% ——**每一個比率都在這裡**；
+#   #1（2045 字元）只有 Total Cash／Total Debt，**一個比率都沒有**。
+#   而 cross-encoder 對「Microsoft 的毛利率是多少？」把 **#1 排在 #0 前面**（0.928 vs 0.918）。
+#   → `_ensure_ratio_source_coverage` 原本補「該家分數最高的 Fundamentals」，補進來的正是
+#     那個一個比率都沒有的 #1；Generator 因此沒有 TTM 值可引，退回 10-K/10-Q 的財年／單季數字
+#     （口徑不同、數值接近、無揭露）。這就是 mi-05／lex-17 的真因。
+#   舊記載猜的是「#1 長三倍造成 rerank 偏好」——**方向對了，但真正的傷害不在 rerank 本身，
+#   而在保底機制用「分數最高」而不是「有沒有那個欄位」來挑**。
+_RATIO_FIELD_HINTS: tuple[tuple[str, str], ...] = (
+    (r"毛利率|gross\s*margin", "Gross Margin"),
+    (r"營業利益率|营业利益率|營業利潤率|operating\s*margin", "Operating Margin"),
+    (r"淨利率|净利率|淨利潤率|净利润率|net\s*margin|profit\s*margin", "Profit Margin"),
+    (r"營收成長|营收成长|營收增長|营收增长|成長率|成长率|growth\s*rate", "Revenue Growth"),
+)
+
+
+def _wanted_ratio_fields(task: str) -> list[str]:
+    """這個子問題問的是 Fundamentals 的哪幾個欄位。認不出來就回空 list ＝ 退回舊行為（挑分數最高）。"""
+    return [f for pat, f in _RATIO_FIELD_HINTS if re.search(pat, task or "", re.IGNORECASE)]
+
+
 def _is_ratio_intent(task: str) -> bool:
     """子問題是否問「可從 10-K/10-Q 現算、故有雙來源」的比率/成長率指標（毛利率/淨利率/成長率…）。
     這類指標 Fundamentals 已預算好寫死值，應以 Fundamentals 為錨、繞開 10-Q 現算路徑（路由非算術）。
@@ -952,7 +979,8 @@ def _is_ratio_intent(task: str) -> bool:
     return bool(_RATIO_INTENT_RE.search(task or ""))
 
 
-def _ensure_ratio_source_coverage(ranked: list[dict], selected: list[dict], want_tickers) -> list[dict]:
+def _ensure_ratio_source_coverage(ranked: list[dict], selected: list[dict], want_tickers,
+                                  task: str = "") -> list[dict]:
     """ratio 題財務錨源保底：保證 want_tickers 每一家在 selected 裡至少有一個 Fundamentals chunk；
     缺的就從 ranked（完整 rerank 降序池）補上該家分數最高的 Fundamentals，回傳仍按 rerank 降序。
     照 rq._ensure_ticker_coverage 的結構（只加不減）。零/未知 ticker 時原樣回傳。
@@ -961,7 +989,18 @@ def _ensure_ratio_source_coverage(ranked: list[dict], selected: list[dict], want
     if not want:
         return selected
     is_fund = lambda c: "Fundamentals" in (c.get("source") or "")
-    covered = {c.get("ticker", "") for c in selected if is_fund(c)}
+    # 要補的不是「隨便一個 Fundamentals」，是**含被問欄位的那一個**（見 _RATIO_FIELD_HINTS 上方的實測）。
+    fields = _wanted_ratio_fields(task)
+
+    def _has_field(c: dict) -> bool:
+        if not fields:
+            return True                      # 認不出欄位 → 退回舊行為，不要更糟
+        txt = c.get("content") or ""
+        return any(f.lower() in txt.lower() for f in fields)
+
+    # 已經有「含該欄位的 Fundamentals」才算 covered——原本只看有沒有 Fundamentals，
+    # 於是 #1（Balance Sheet，零比率）也會被算成已覆蓋，保底機制當場失效。
+    covered = {c.get("ticker", "") for c in selected if is_fund(c) and _has_field(c)}
     missing = set(want) - covered
     if not missing:
         return selected
@@ -974,7 +1013,7 @@ def _ensure_ratio_source_coverage(ranked: list[dict], selected: list[dict], want
             continue
         t = c.get("ticker", "")
         key = (c["source"], c["chunk_index"])
-        if t in missing and key not in seen:
+        if t in missing and key not in seen and _has_field(c):
             out.append(c)
             seen.add(key)
             missing.discard(t)
@@ -3068,7 +3107,7 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
     # ratio 題財務錨源保底（Phase 2）：ratio 意圖時保證每家至少有一個 Fundamentals，接住 Grader 對
     # 「Fundamentals vs 10-K/10-Q」雙來源的擲硬幣（見 _ensure_ratio_source_coverage）。deterministic、無 LLM。
     if mentioned and _is_ratio_intent(task):
-        picked = _ensure_ratio_source_coverage(run_state.pool, picked, mentioned)
+        picked = _ensure_ratio_source_coverage(run_state.pool, picked, mentioned, task)
     for c in picked:
         c["_subq"] = todo["id"]
     # 時效缺口在這裡算,不在 plan 時算：判準是「這個子問題**實際用到了**誰的新聞」,
