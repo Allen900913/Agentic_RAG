@@ -168,12 +168,30 @@ _INLINE_CITATION = re.compile(r"\s*【[^】]*?\.(?:html|txt)[^】]*?】")
 #       依 gold_files 生成、與 agentic 實際撈到的 contexts 不同源。繼續往上推等於要求系統
 #       答得比標準答案還保守 → 這個指標**沒有可追空間**。
 #     · answer_relevancy 0.842 vs 系統 0.823 → 幾乎沒有空間。
-NOISE = {"context_recall": 0.013, "context_precision": 0.046, "nv_context_relevance": 0.008,
-         "context_relevance": 0.008, "faithfulness": 0.004, "answer_relevancy": 0.001,
-         "answer_correctness": 0.005}
-GOLD_BASELINE = {"answer_correctness": 0.989, "faithfulness": 0.656, "answer_relevancy": 0.842,
-                 "context_recall": 0.766, "context_precision": 0.822,
-                 "nv_context_relevance": 0.965, "context_relevance": 0.965}
+# 2026-08-20 在 **65 題**上重量一對（同一份結果檔 gj_mdna_65q_r1 餵給 judge 兩次，
+# experiments/ragas_system_65q_j{1,2}.json）。實測 |j1-j2|：
+#   recall .0170 / precision .0050 / nv .0040 / faith .0100 / relevancy .0040 / correctness .0070
+#
+# ⚠ **取新舊兩者的較大值當門檻，不是直接換成新值。** 兩個理由：
+#   ① **一對樣本只是噪音的一次抽樣，不是噪音的上界**。舊值 context_precision 0.046 的成因寫在
+#      上面那段註解裡——precision 對每個 context 做二元判定再依排名加權，**最高排名那個判定
+#      翻面整題就 1.0→0.0**。這次那一對剛好沒翻（.005），**不代表它不會翻**。
+#      把門檻從 .046 降到 .005 會讓一堆抽樣變異被誤讀成「顯著改善」。
+#   ② 噪音門檻取大只會讓我**要求更多證據**，永遠不會讓我少要求——錯的方向是安全的那一邊。
+#   → 想真的收斂 precision 的門檻，要多跑幾對，不是拿一對就改。
+NOISE = {"context_recall": 0.017, "context_precision": 0.046, "nv_context_relevance": 0.008,
+         "context_relevance": 0.008, "faithfulness": 0.010, "answer_relevancy": 0.004,
+         "answer_correctness": 0.007}
+# 2026-08-20 在 **65 題**上重量（experiments/ragas_gold_baseline_65q.json）。
+# 作法：把 reference_answers.json 原文當成系統答案，**contexts 沿用同一份 agentic 跑分結果**
+# （experiments/agentic/gj_mdna_65q_r1.json）→ 只換 answer 這一個變因。
+# ⚠ 舊的 n=100 常數保留在下方註解供對照，**不要再引用**：題目組成變了，分母與難度分佈都不同。
+#   舊值：correctness .989 / faith .656 / relevancy .842 / recall .766 / precision .822 / nv .965
+#   換算下來最大的變化是 **answer_correctness .989 → .972**——gold 在 65 題上沒有像在 100 題上
+#   那麼容易拿滿分，所以「距上限還有多少」這個判讀在新舊之間**不可直接比**。
+GOLD_BASELINE = {"answer_correctness": 0.972, "faithfulness": 0.659, "answer_relevancy": 0.871,
+                 "context_recall": 0.788, "context_precision": 0.843,
+                 "nv_context_relevance": 0.969, "context_relevance": 0.969}
 
 
 def _print_interpretation_guide(overall: dict, present: list[str]) -> None:
@@ -199,10 +217,10 @@ def _print_interpretation_guide(overall: dict, present: list[str]) -> None:
               f"{(f'{gold:.3f}' if gold else 'n/a'):>11}   {'；'.join(notes)}")
     print("  ⚠ 這些常數綁定「NVIDIA gpt-oss-120b judge + **100 題** eval_set + 當時的 reference」。")
     print("    換 judge 模型、換題庫、或大改 reference 之後必須重量,別沿用。")
-    print("  ⛔ 2026-08-19：eval_set 已從 100 題拆成 63 題再補回 **65 題**（news 類與 multi_intent 全數移出,")
-    print("     見 docs/EVAL.md〈KB 拔除新聞〉）→ **上面這組 gold 上限與噪音底線都已失效**。")
-    print("     題目組成變了,分母與難度分佈都不同,跨 2026-08-19 的數字不可直接比。")
-    print("     要恢復判讀能力必須在 65 題上重跑一次 gold baseline（把 reference 當系統答案餵進去）。")
+    print("  ✔ 2026-08-20：gold 上限與噪音門檻**都已在 65 題上重量**，可以引用。")
+    print("     ⚠ 噪音只量了**一對**（j1/j2）。門檻取新舊較大值——一對樣本是抽樣不是上界，")
+    print("        尤其 context_precision：最高排名判定翻面整題就 1.0→0.0，這次剛好沒翻。")
+    print("     ⛔ 跨 2026-08-19 的分數一律不可直接比：題庫從 100 題變成 65 題，分母與難度分佈都不同。")
 
 
 def strip_citation_footer(text: str) -> str:
