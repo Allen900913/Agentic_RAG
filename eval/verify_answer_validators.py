@@ -592,6 +592,67 @@ def gate10_ratio_source_field() -> None:
         _assert("⑩ 活體對照可執行（掃不到就等於這道閘門只測了合成資料）", False, repr(e))
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+def gate11_basis_disclosure() -> None:
+    """⑪ `_basis_disclosure_notice`：答案只有財報期間口徑時必須揭露（零 LLM）。
+
+    治的病（lex-17 實測）：問「營收成長率」沒指定口徑 → 答案給 10-K 的財年 18%，
+    而 gold 是 Fundamentals 的 TTM 18.30%。**數字不是假的，錯的是口徑，且零揭露**——
+    兩個值差 0.3pt，讀者無從分辨拿到的是哪一種。
+
+    ⚠ **這道閘門的重點是三條沉默對照**，理由同 ⑧⑩：警語的失敗方向**不是漏印，是話太多**。
+      每個財報題底下都掛一段「這不是 TTM」會讓警語變成背景噪音，等到真的需要時沒人看
+      ——2026-08-14 的時效警語已經踩過一次同樣的坑。
+    ⚠ 口徑判定用 payload 的 `period_basis`（全庫只有 TTM／fiscal_year 兩個值），
+      **不是檔名也不是 doc_type**——換 collection 或改 ingest 時，活體那條會先叫。
+    """
+    print()
+    print("⑪ 口徑揭露（TTM vs 財報期間）")
+    N = ar._basis_disclosure_notice
+    FY = {"period_basis": "fiscal_year"}
+    TTM = {"period_basis": "TTM"}
+
+    _assert("⑪ 陽性：沒指定口徑的成長率題、只引到財年 chunk → 必須揭露",
+            ar._BASIS_NOTICE_MARK in N("Microsoft 的營收成長率表現如何？", [FY]))
+    _assert("⑪ 陽性：毛利率題同樣成立（不是只認成長率）",
+            ar._BASIS_NOTICE_MARK in N("Apple 的毛利率是多少？", [FY]))
+
+    _assert("⑪ 沉默對照①：引用裡已經有 TTM chunk → 不必再講",
+            N("Microsoft 的營收成長率表現如何？", [FY, TTM]) == "")
+    _assert("⑪ 沉默對照②：問題自己指定了財年（2025 財年／FY2026）→ 財報口徑正是要的，講了是雜訊",
+            N("Apple 2025 財年的毛利率是多少？", [FY]) == ""
+            and N("Apple FY2026 gross margin", [FY]) == "")
+    _assert("⑪ 沉默對照③：問題帶 yyyymm 期碼 → 同上",
+            N("Microsoft 202603 的毛利率", [FY]) == "")
+    _assert("⑪ 沉默對照④：市值／EPS 這類單一來源指標沒有口徑歧義 → 不觸發",
+            N("NVIDIA 目前的市值是多少？", [FY]) == ""
+            and N("Apple 的 Diluted EPS 是多少？", [FY]) == "")
+    _assert("⑪ 沉默對照⑤：沒引到任何財報期間 chunk（純 web 答案）→ 不是這條的守備範圍",
+            N("Microsoft 的毛利率", []) == "")
+
+    _assert("⑪ 措辭只陳述事實、不宣稱原因（KB 可能有 TTM 只是沒被引用，"
+            "斷言一個查不到的原因＝製造新的不可信內容）",
+            "缺乏" not in N("Apple 的毛利率是多少？", [FY])
+            and "TTM" in N("Apple 的毛利率是多少？", [FY]))
+
+    # ── 活體對照：period_basis 這個欄位還在不在、值還是不是那兩個 ──────────────
+    try:
+        import collections as _c
+        _cl = ar.rq.make_qdrant_client()
+        _seen, _off = _c.Counter(), None
+        while True:
+            _pts, _off = _cl.scroll(ar.rq.COLLECTION_NAME, limit=1000, offset=_off,
+                                    with_payload=["period_basis"], with_vectors=False)
+            for _p in _pts:
+                _seen[_p.payload.get("period_basis")] += 1
+            if _off is None:
+                break
+        _assert(f"⑪ 活體：period_basis 仍只有 TTM／fiscal_year 兩個值（實測 {dict(_seen)}）",
+                set(_seen) == {"TTM", "fiscal_year"} and _seen["TTM"] > 0, str(dict(_seen)))
+    except Exception as e:
+        _assert("⑪ 活體對照可執行（掃不到就等於這道閘門只測了合成資料）", False, repr(e))
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -612,6 +673,7 @@ def main() -> int:
     gate8_web_authority()
     gate9_reference_citation_repair()
     gate10_ratio_source_field()
+    gate11_basis_disclosure()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")

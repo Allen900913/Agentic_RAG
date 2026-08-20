@@ -1168,6 +1168,49 @@ def _unmet_realtime_gaps(task: str, need: str, chunks: list[dict], as_of: date) 
              "as_of": as_of.isoformat(), "doc_type": "realtime", "need": need}]
 
 
+# ── 口徑揭露 validator（確定性，零 LLM）─────────────────────────────────────────
+# 治的病（2026-08-20 實測 lex-17）：使用者問「營收成長率」沒指定口徑 → 答案給 10-K 的財年 18%，
+# 而 gold 是 Fundamentals 的 TTM 18.30%。**數字不是假的，錯的是口徑，而且沒有任何揭露**——
+# 兩個值差 0.3pt，讀者無從分辨自己拿到的是哪一種。
+#
+# ⚠ **刻意做成 validator 而不是 prompt 指令**。理由是本檔已經寫過一次的教訓：
+#   「Prompt 是機率性約束；snapshot / --no-web 再用 Python 硬擋」。而這裡要判的兩件事
+#   **都是確定性的**——「答案引了哪些 chunk」是 regex，「那些 chunk 是什麼口徑」是 payload
+#   的 `period_basis` 欄位（實測全庫只有兩個值：fundamentals=TTM 22 筆／其餘 fiscal_year 3805 筆）。
+#   照 CLAUDE.md〈LLM 與 Python 的分工〉，這一半不該交給 LLM 去記得。
+#
+# ⚠ 措辭刻意**只陳述事實、不宣稱原因**。Gemini 版的建議是「由於缺乏最新 TTM 數據」，
+#   但那個因果**可能是假的**：KB 裡可能有 TTM chunk，只是這次沒被引用。斷言一個查不到的原因
+#   就是在製造新的不可信內容——同 R4 選「並陳」不選「裁決」的理由。
+_BASIS_NOTICE_MARK = "⚠ 口徑說明："
+# 「問題自己講明了絕對期別」＝ 使用者要的就是財報期間，這時講 TTM 是雜訊（話太多方向）。
+# 只認**格式化的字面訊號**（yyyymm 期碼、年份＋財年字樣），不做語意判斷。
+_EXPLICIT_FY_RE = re.compile(r"(?:19|20)\d{2}\s*(?:財年|财年|會計年度|会计年度|年度)"
+                             r"|(?:fiscal\s*year|FY)\s*(?:19|20)?\d{2}", re.IGNORECASE)
+
+
+def _basis_disclosure_notice(task: str, cited_chunks: list[dict]) -> str:
+    """答案只引到財報期間口徑的數字、卻是在回答一個沒指定口徑的比率題 → 回傳揭露警語。
+
+    三個沉默條件（缺一不可，全部是「話太多」方向的誤報對照）：
+      ① 不是比率／成長率題（市值、EPS 這類單一來源指標沒有口徑歧義）
+      ② 問題自己指定了絕對期別（`2025 財年`、`FY2026`、yyyymm 期碼）——那時財報口徑正是要的
+      ③ 引用裡**已經有** TTM 口徑的 chunk ＝ 答案已經看得到 TTM，不需要這段
+    """
+    if not _is_ratio_intent(task):
+        return ""
+    if _EXPLICIT_FY_RE.search(task or "") or rq._PERIOD_CODE_RE.search(task or ""):
+        return ""
+    basis = {(c.get("period_basis") or "") for c in (cited_chunks or [])}
+    if "TTM" in basis:
+        return ""
+    if "fiscal_year" not in basis:
+        return ""                      # 沒引到任何財報期間 chunk（例如純 web 答案）→ 不是這條的守備範圍
+    return (chr(10) + chr(10) + "---" + chr(10) + _BASIS_NOTICE_MARK
+            + "以上比率／成長率取自財報期間口徑（財年或單季），"
+              "**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。")
+
+
 def _format_unresolved_freshness_notice(todos: list[dict]) -> str:
     """只對 live 且 web 沒成功補到的新聞缺口產生機械式時效聲明；snapshot 永遠沒有 gap。
 
@@ -3336,6 +3379,12 @@ def _node_synthesize(state: SupervisorState) -> dict:
     # collection metadata 誤當成無引用的回答事實。snapshot 的 todos 不會帶 freshness_gaps。
     if state.get("freshness_mode", FRESHNESS_LIVE) == FRESHNESS_LIVE:
         answer = answer.rstrip() + _format_unresolved_freshness_notice(state.get("todos", []))
+    # 口徑揭露：與時效聲明同一個位置、同一個理由（機械式附加，不要求 Writer 自己記得）。
+    # ⚠ 判的是**答案實際引用**的 chunk，不是候選池——池裡有 TTM 但答案沒用，讀者一樣拿不到。
+    _cited = _extract_citations(answer)
+    _used = [c for c in (state.get("collected") or [])
+             if (c.get("source"), c.get("chunk_index")) in _cited]
+    answer = answer.rstrip() + _basis_disclosure_notice(state.get("query", ""), _used)
     return {"answer": answer}
 
 

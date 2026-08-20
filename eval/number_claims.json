@@ -85,5 +85,14 @@
     "verified": "2026-08-19 gj_mdna_claims6_r1.json：答案「營收年增長率為 18.30%」，且明列 TTM 營收 $318.27B。",
     "expect_text": "18\\.3",
     "metric_design": "⚠ **狀態刻意留在 `regression_guard` 而不是 `known_defect`，雖然它也會間歇 FAIL**（同題 1/2）。`_validate_claims` 要求 known_defect 必須填 forbid，而這題的錯值（10-K 財年 18%、增加 501 億美元）**可以與正解正當並存**——一個同時給 TTM 與財年兩個口徑並標注清楚的答案是好答案。照 anchored_pcts docstring 的判準，這種情況不可用 forbid。缺陷本身由同題的 `require_chunk` 那條（`known_defect`）負責記帳，**判別訊號在檢索層、與答案措辭無關**，那也是 mi-05 當初選擇 require_chunk 的理由。"
+  },
+  {
+    "id": "lex-17",
+    "kind": "require_text",
+    "claim": "MSFT 營收成長率：要嘛給 TTM 的 18.3%，要嘛明講「這不是 TTM」——兩者缺一就是無揭露的口徑錯配",
+    "expect_text": "18\\.3|⚠ 口徑說明：",
+    "status": "known_defect",
+    "why": "⚠ **刻意寫成「A 或 B」而不是「必須有警語」**。Gemini 的建議是把警語字串寫死成必要條件，但那條斷言在檢索修好之後**必然 FAIL**——答案拿到 TTM 就不該印警語。真正該守的不變量是「**讀者不可能誤把財年數字當成 TTM**」，而那有兩種合格解：①答案直接給 TTM 18.30% ②答案給了財年數字但明講口徑。把兩者寫成 or，這條主張在修法前後都測得到東西，不會隨修法生效而失去判別力（同本專案量尺失效史的第五次教訓）。",
+    "verified": "2026-08-20 對現有結果檔實測雙向：gj_mdna_claims6_r1（答 18.30%）→ PASS；gj_mdna_claims6_r2（答 10-K 財年 18%、增加 501 億美元，且早於 validator）→ FAIL。⚠ r2 那次正是這條主張存在的理由：數字不假，錯的是口徑，而且零揭露。"
   }
 ]
