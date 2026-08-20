@@ -66,7 +66,7 @@ python data_update_edgar.py --tickers MSFT --skip-txt --rcts-fallback --collecti
 
 ### 重建不會逐字重現舊 collection——兩個正當差異
 1. **SEC 新申報**：edgar 每次抓「最新 10-K ＋ 最近 2 份 10-Q」，SEC 一有新申報就換版（2026-08-07 實測換掉 4 份：AAPL/AMZN/META 的 10-Q、MSFT 的 10-K）。
-2. **表格抽取有跑次間變異（約 2~3 個 chunk/filing）**：兩個成因——① 無 caption 的大表格由 `_llm_summarize_table` 生成摘要（**2026-08-11 起走 Groq `llama-3.3-70b-versatile`＋`temperature=0`，此前是 Gemini 且未固定 temperature、`max_output_tokens=60` 會截斷**；變異會收斂但不會消失，實測三張表各跑三次仍有一張在兩種正確措辭間跳動，細節見該函式 docstring） ② **連表格本體都會變**（實測 GOOGL Exhibit Index 等行政表格，表頭列有無、長度差 5~17 字元），推測來自 unstructured 對原始 HTML 的表格偵測與 `_find_caption` 回溯。**text chunk 完全不受影響**。
+2. **表格抽取有跑次間變異（約 2~3 個 chunk/filing）**：兩個成因——① 無 caption 的大表格由 `_llm_summarize_table` 生成摘要（**2026-08-11 起走 Groq＋`temperature=0`（模型 2026-08-18 由 `llama-3.3-70b-versatile` 改為 `openai/gpt-oss-20b`，前者被 Groq 退役），此前是 Gemini 且未固定 temperature、`max_output_tokens=60` 會截斷**；變異會收斂但不會消失，實測三張表各跑三次仍有一張在兩種正確措辭間跳動，細節見該函式 docstring） ② **連表格本體都會變**（實測 GOOGL Exhibit Index 等行政表格，表頭列有無、長度差 5~17 字元），推測來自 unstructured 對原始 HTML 的表格偵測與 `_find_caption` 回溯。**text chunk 完全不受影響**。
    > 這是變異不是 bug 的證據：2026-08-07 三方交叉比對同一份 `GOOGL_10K_2025`（127 個 table chunk），exp4↔HEAD＝2、HEAD↔新碼＝2、exp4↔新碼＝3——**兩個都不含新改動的版本彼此就差 2**，沒有任何一方是離群值。要判斷某次改動有沒有動到切塊，比 text chunk（確定性）而不是 table。
 
 扣除這兩項後，2026-08-07 驗證結果：`.txt` 三類（news 98／fundamentals 22／income_statement 59）**逐字全等**；排除換版文件後 filing chunk 數 2832 vs 2832 相同，其中 2355 個 text chunk **逐字全等**。→ 判斷重建是否正常，看的是「扣掉換版文件後 **text chunk** 是否逐字相同」，不是總 chunk 數，也不要拿 table 當判準。
