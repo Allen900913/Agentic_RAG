@@ -16,6 +16,33 @@
 # ——本專案已經發生過未追蹤的 eval 檔被刪、git 完全救不回的情況。
 !reference_answers.json
 
+# ── 2026-08-20 補：白名單漏了六個「輸入／標準答案」類檔案 ─────────────────────────
+# 上面那段自己寫著「本專案已經發生過未追蹤的 eval 檔被刪、git 完全救不回的情況」，
+# 而同樣的事又發生了一次：`*.json` 是黑名單制，**新增的標準答案檔預設就被吃掉**，
+# 而且不會有任何警告。判準沿用上面那一條——「腳本能不能免費重現它」：
+#   · eval_set_news.json          冷凍的 37 題（拆自 eval_set.json，人工分類過）
+#   · reference_answers_news.json 對應的 RAGAS ground truth（含人工校正）
+#   · number_claims_news.json     對應的逐條斷言
+#   · web_claims.json / web_claims_news37.json  live web 路徑的斷言（全部人工寫的）
+#   · period_probe_baseline.json  期別探針的**凍結快照**——照當下 manifest 展開會讓量尺失去判別力
+#   · period_probe_trend_queries.json  跨期 collapse 的陰性對照（eval_set 裡沒有這個形狀的題）
+!eval_set_news.json
+!reference_answers_news.json
+!number_claims_news.json
+!web_claims.json
+!web_claims_news37.json
+!period_probe_baseline.json
+!period_probe_trend_queries.json
+
+# ── web fixture：**體積大但仍然入版控**，這是刻意的例外 ────────────────────────────
+# 它不是「跑分輸出」而是**錄下來的外部世界**：重錄要連網、燒 Tavily 額度，而且**錄不回同一份**
+# （網路內容每天在變）。fixture 綁定一組環境（as-of 日期 + collection），是那批斷言唯一的依據；
+# 掉了就等於那些斷言全部失效，且無法重現。llm replay cache 同理——沒有它，重放會生出
+# 不同的 web query、打不到 fixture（MoE 不固定路由）。
+!web_fixture.json
+!web_fixture_news37.json
+!web_replay_llm_news37.json
+
 # 跑分 log（stdout dump）
 *_log.txt
 

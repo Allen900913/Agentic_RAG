@@ -1,0 +1,61 @@
+{
+  "_meta": {
+    "這是什麼": "跨期 field collapsing 的**陰性對照**：本來就需要多個期別才答得出來的題。",
+    "為什麼必須有": "collapse 的規則是『同一 (ticker, filing_type, item_id) 只留 rerank 最高的一份 filing』。它的**收益指標（排擠席位）與規則本身是同一個定義** → collapse 一開，排擠率必然歸零，那是套套邏輯不是證據。真正要問的是『它弄壞了什麼』，而 eval_set 的 100 題裡沒有任何一題需要多個期別 → 量尺對這個方向**完全沒有判別力**。這份檔案補的就是那個方向。",
+    "怎麼判讀": "指標是 `periods_covered@k` ＝ top-k 裡屬於被點名公司、且來自 filing 的**相異期碼**個數。collapse 關 → 開，這個數字掉多少就是損害。⚠ 先量再判，不要預設門檻。",
+    "⚠ 一個會讓人誤判的事實": "單一份 10-K 的 MD&A 本來就含跨年比較（`Fiscal Year 2024 Compared with Fiscal Year 2023`），所以『三年趨勢』有時候一兩份 filing 就答得完。因此 `periods_covered` 低**不一定**代表答不出來——它量的是『證據涵蓋的期別廣度』，是損害的**上界**不是實害。要判實害得看生成端，那要另外花 LLM。",
+    "為什麼不放進 eval_set.json": "eval_set 是有標準答案、進 RAGAS 的題庫；這 8 題只有結構性期望（要涵蓋多期），沒有 gold 答案，混進去會污染那把尺。",
+    "產生於": "2026-08-19",
+    "誰在用": "eval/probe_temporal_interference.py --trend"
+  },
+  "queries": [
+    {
+      "id": "tr-01",
+      "ticker": "AAPL",
+      "query": "Apple 過去三個財年的營收與毛利率走勢如何變化？",
+      "why": "10-K 三個年度（2023/2024/2025）的 Item 7 是同一個 item_id，正是 collapse 會砍的形狀"
+    },
+    {
+      "id": "tr-02",
+      "ticker": "NVDA",
+      "query": "NVIDIA 資料中心業務的營收在最近幾季是怎麼一路成長上來的？",
+      "why": "需要多份 10-Q 的同一節；NVDA 財年非曆年，順便壓期別排序"
+    },
+    {
+      "id": "tr-03",
+      "ticker": "MSFT",
+      "query": "比較 Microsoft 2024、2025、2026 三個財年的營業利益率變化。",
+      "why": "明確點名三個年度的年報，是最強的多期需求"
+    },
+    {
+      "id": "tr-04",
+      "ticker": "TSLA",
+      "query": "Tesla 的車輛交付量逐季變化趨勢是什麼？",
+      "why": "逐季趨勢，需要多份 10-Q"
+    },
+    {
+      "id": "tr-05",
+      "ticker": "GOOGL",
+      "query": "Google Cloud 的營收與獲利在過去幾年是如何逐步改善的？",
+      "why": "跨年度分部趨勢，證據散在多份 filing 的同一節"
+    },
+    {
+      "id": "tr-06",
+      "ticker": "AMZN",
+      "query": "Amazon 的資本支出在最近三個年度分別是多少？增減趨勢如何？",
+      "why": "數字型跨年比較，最容易因為只留一年而答不完整"
+    },
+    {
+      "id": "tr-07",
+      "ticker": "META",
+      "query": "Meta 的 Reality Labs 部門虧損逐年擴大還是收斂？",
+      "why": "方向性判斷，缺任何一年都會判錯方向"
+    },
+    {
+      "id": "tr-08",
+      "ticker": "AAPL",
+      "query": "Apple 在大中華區的營收這幾季是成長還是衰退？",
+      "why": "區域營收逐季走勢，與 tr-01 同公司但走 10-Q 而非 10-K"
+    }
+  ]
+}

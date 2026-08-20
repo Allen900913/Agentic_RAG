@@ -1,0 +1,1699 @@
+[
+  {
+    "id": "news-01",
+    "category": "news",
+    "query": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+    "gold_files": [
+      "AAPL_News_20260508_01.txt",
+      "AAPL_News_20260519_01.txt",
+      "AAPL_News_20260612_01.txt",
+      "AAPL_News_20260612_02.txt",
+      "AAPL_News_20260612_03.txt",
+      "AAPL_News_20260612_04.txt",
+      "AAPL_News_20260612_05.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AAPL_News_20260508_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260612_02.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "AAPL_News_20260612_02.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 0
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Apple 最近已就「Siri」相關的廣告爭議達成一項和解，擬以 **2.5 億美元** 的金額結束訴訟，並可能讓符合條件的 iPhone 用戶每人獲得最高 **95 美元** 的賠償。\n\n此案為一項在加州北區聯邦法院提起的集體訴訟，原告指稱 Apple 在行銷「Enhanced Siri」功能時，宣稱該人工智慧特性已可使用，實際上卻尚未推出，導致消費者基於錯誤廣告購買 iPhone。Apple 在回覆中表示已「就兩項額外功能的可用性」與原告達成和解，目的是「讓我們專注於為使用者提供最創新的產品與服務」。若法院批准，此和解金額將成為 Apple 史上規模較大的和解之一，且將為全美數千萬名消費者提供即時救濟。"
+  },
+  {
+    "id": "news-02",
+    "category": "news",
+    "query": "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？",
+    "gold_files": [
+      "AAPL_News_20260508_01.txt",
+      "AAPL_News_20260519_01.txt",
+      "AAPL_News_20260612_01.txt",
+      "AAPL_News_20260612_02.txt",
+      "AAPL_News_20260612_03.txt",
+      "AAPL_News_20260612_04.txt",
+      "AAPL_News_20260612_05.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AAPL_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260612_02.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260508_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_02.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Apple 在本屆 WWDC 上正式公布了全新升級的「Siri AI」——一個結合 Apple Intelligence 與 Google Gemini 技術的 AI 助理，將於今年秋季以測試版（beta）形式在美國先行上線，僅支援英文。\n\n在發表會上，Apple 表示 Siri AI 能夠直接從使用者的應用程式中取得上下文資訊，例如使用者只要說出「我妹妹推薦的那個 Podcast 名稱」即可在不開啟任何其他應用的情況下直接呈現內容，並且能同時搜尋裝置內的資料與網路資訊。為了加強個人化與隱私保護，Apple 同時推出了全新 Siri 應用程式，讓使用者可以在同一介面中管理所有對話，並強調安全與資料不被保留的設計。\n\n技術層面上，Siri AI 依賴 Apple 自家訓練的「Apple Frontier Models」作為基礎，這些模型先以專屬資料與強化學習訓練，再以 Google Gemini Frontier 模型的輸出進行微調；此外，Apple 亦利用 Private Cloud Compute 以及 Nvidia 晶片在 Google 雲端上擴充運算能力，確保即使在雲端處理也能維持裝置端的隱私保護。整體而言，這次的 Siri 重新設計旨在把助理從「計時器」升級為 AI 時代的「數位幫手」，並在語音辨識、內容檢索與第三方應用自動化等方面提供更完整的體驗。"
+  },
+  {
+    "id": "news-03",
+    "category": "news",
+    "query": "最近分析師對 Apple 股票有哪些利多的看法？",
+    "gold_files": [
+      "AAPL_News_20260508_01.txt",
+      "AAPL_News_20260519_01.txt",
+      "AAPL_News_20260612_01.txt",
+      "AAPL_News_20260612_02.txt",
+      "AAPL_News_20260612_03.txt",
+      "AAPL_News_20260612_04.txt",
+      "AAPL_News_20260612_05.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 0
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "分析師普遍認為 Apple 股票仍具上行空間，因為公司正受惠於服務營收高速成長、iPhone 17 週期的強勁需求、AI 功能升級、龐大且持續擴大的裝置基數，以及大規模的現金回饋與股利提升等多項利多因素。\n\n具體來說，Trefis 強調 Apple 正在從以硬體為主的週期性營收轉向高毛利、可預測的服務收入，服務營收在 FY2026 第二季較去年同期成長 16%，創下 310 億美元的歷史新高，服務毛利率達 74.2%。公司活躍裝置總數已突破 25 億部，為未來服務貨幣化提供廣大基礎。iPhone 方面，最新財報顯示 iPhone 營收跳升 22%至 570 億美元，且 iPhone 整體成長率在不同報導中分別被提及為 16% 以及 iPhone 17 週期的 23% 增長，顯示新機型的市場接受度相當強勁。\n\n在 AI 佈局上，Deep Asset Management 的 Gene Munster 於 6 月 6 日指出，Apple 將在全球開發者大會（WWDC）上推出重新設計的 Siri 以及 Apple Intelligence，預期此舉將提升數位助理的個人化與資訊檢索能力，進一步鞏固其在 AI 競爭中的位置。Ken Griffin 的投資組合亦將 Apple 列為 13 檔最佳持股之一，顯示大型資金對其長期前景持正面看法。\n\nEvercore ISI 在 5 月 14 日將 Apple 的目標股價上調至 365 美元（原為 330 美元），並維持「Outperform」評等，理由包括 iPhone 高溢價以及即將推出的可摺疊機型。RiverPark Large Growth Fund 在其 2025 年第四季投資人信中稱讚 Apple 為「全球最具韌性與獲利能力的企業」之一，並指出隨著 Apple Intelligence 在 Safari、密碼與訊息等應用的擴散，未來多年度升級與服務貨幣化將持續推動經常性收入。\n\n此外，董事會最近授權再度回購 1000 億美元股票，並將股息提升 4%，顯示公司現金流充沛且願意以回饋股東的方式支撐股價。財務指標方面，Apple 最近 12 個月的營運現金流利潤率為 31.1%，營運利潤率為 32.6%，遠高於標準普爾同業的 21.3% 與 18.4%。市盈率為 34.9，亦高於同業的 23.8，反映市場對其高品質獲利的溢價預期。\n\n綜合以上，分析師看好 Apple 的主要理由包括：服務收入高速成長與高毛利、iPhone 17 帶動的雙位數硬體增長、AI 功能持續升級、龐大且持續擴大的裝置基數、強勁的現金流與大規模回購/股息提升，以及多家機構上調目標價與維持正面評等，這些因素共同支撐了對 Apple 股價未來上漲的樂觀預期。"
+  },
+  {
+    "id": "news-04",
+    "category": "news",
+    "query": "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？",
+    "gold_files": [
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "NVDA_News_20260508_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "NVDA_News_20260508_02.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260508_02.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 3
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 0
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Nvidia 最近與 IREN 簽署了多項合作協議，包含一項 5 GW 的戰略夥伴關係以及一項價值 34 億美元、為期五年的 AI 雲端合約，並賦予 Nvidia 以每股 70 美元的價格購買最多 3,000 萬普通股的權利，若全部行使則相當於最高 21 億美元的潛在投資。  \n\n根據公告，雙方的合作將聚焦於 Nvidia 對應的 DSX AI 工廠基礎建設，未來的部署重點放在 IREN 位於德州 Sweetwater 的兩吉瓦校園。除此之外，IREN 亦宣布與 Nvidia 簽訂一項五年期、金額 34 億美元的 AI 雲端合約，採用空冷版 Blackwell GPU，預計在 60 MW 的部署容量內完成，並以「受管理服務」的方式提供。  \n\n該 21 億美元的投資權利僅在 Nvidia 的 GPU 基礎設施於 IREN 各校園部署後才會逐步歸屬，全部權利將於部署 600,000 顆 GPU 後完全生效。此合作為 IREN 從比特幣挖礦向 AI 計算服務的轉型提供了公開市場的重大信號，也使其股價在消息公布後於盤後交易中上漲逾 20%。"
+  },
+  {
+    "id": "news-05",
+    "category": "news",
+    "query": "關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？",
+    "gold_files": [
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "NVDA_News_20260519_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_03.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "NVDA_News_20260508_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260519_03.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Nvidia 近期的訊息顯示，儘管美國仍限制其最先進的 AI 晶片在中國的銷售，Nvidia 執行長黃仁勳認為中國市場最終會「逐步」向高階美國晶片開放，且 H200 晶片已取得向中國授權的許可。\n\n黃仁勳在接受 Bloomberg 電視訪問時指出，「中國政府必須決定要保護本地市場多少，我的感覺是，隨著時間的推移，市場會開放。」他說雖然在北京與中國高層會面時未直接討論 H200，但「H200 已獲准向中國銷售」；同時他補充，Nvidia 最高階的 Blackwell 以及即將推出的 Rubin 系列仍被禁止在中國販售。黃仁勳也提到，特朗普在去年十二月曾與習近平達成協議，放寬對 H200 晶片的限制，儘管美國部分立法者警告此舉可能助長中國軍事用途。\n\n目前尚未看到中國科技公司實際購買 H200 晶片的跡象，因為北京正加速發展本土晶片以挑戰美國在該領域的主導地位。整體而言，Nvidia 期待未來中國市場會逐步放寬限制，但短期內仍受美國出口管制與中國自研策略的雙重影響。"
+  },
+  {
+    "id": "news-06",
+    "category": "news",
+    "query": "NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？",
+    "gold_files": [
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 8
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 3
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "NVDA_News_20260519_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "在財報公布前，新聞主要聚焦於 Nvidia 正在面臨日益激烈的 AI 晶片競爭以及其在全球市場，特別是中國市場的開放前景。\n\n首先，競爭者方面，報導指出 Cerebras 以不同形態的 AI 處理器切入市場，並聲稱其整體效能更快；AMD 則計畫在今年稍後推出競爭性的機架規模伺服器系統；此外，Nvidia 的主要客戶 Amazon 與 Google 也開始向第三方客戶提供自家 AI 晶片。Amazon 在最新財報中透露，其晶片業務的年度收入跑道已超過 **200 億美元（$20 billion）**，且以三位數的年增率成長。這些因素共同加劇了 Nvidia 在 AI 晶片領域的競爭壓力。\n\n其次，市場焦點方面，新聞強調 Nvidia 的業績被視為人工智慧貿易的晴雨表，並特別提到中國市場的限制與未來機會。美國政府曾因國安考量禁止將高階 H200 晶片銷往中國，儘管 Jensen Huang 表示 H200 已取得對華授權，但目前仍未見中國科技公司大量採購；同時，Huang 也預期中國市場將「逐步」向高階美國 AI 晶片開放。整體而言，投資人關注的焦點集中在 AI 晶片的競爭格局、Amazon 與 Google 內部晶片的崛起，以及中國市場的政策變化如何影響 Nvidia 的長期營收前景。"
+  },
+  {
+    "id": "news-07",
+    "category": "news",
+    "query": "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？",
+    "gold_files": [
+      "MSFT_News_20260519_01.txt",
+      "MSFT_News_20260612_01.txt",
+      "MSFT_News_20260612_02.txt",
+      "MSFT_News_20260612_03.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "MSFT_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 8
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 10
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "微軟最近宣佈將推出七個自行開發的 AI 模型，並投入大量 GPU 資源於內部研發，以加強模型微調與成本優化，這些新舉措在 2026 年的 Build 大會上公開，分析師因此給予正面評價。  \n\nTD Cowen 在 6 月 4 日重申對微軟的「Buy」評等，並將目標股價上調至 **540 美元**，其看好理由正是微軟透過七個新自建模型，減少對外部前沿實驗室的依賴，並在 AI 堆疊層面與 DIY 應用上取得顯著進展，同時已為內部研發團隊配置大量圖形處理單元（GPU）容量，顯示公司正進入 AI 產品組合的新階段。"
+  },
+  {
+    "id": "news-08",
+    "category": "news",
+    "query": "有沒有 Microsoft 參與 AI 資安合作的新聞？",
+    "gold_files": [
+      "MSFT_News_20260519_01.txt",
+      "MSFT_News_20260612_01.txt",
+      "MSFT_News_20260612_02.txt",
+      "MSFT_News_20260612_03.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "MSFT_News_20260519_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_News_20260519_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 8
+      },
+      {
+        "source": "MSFT_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 0
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "是的，微軟正參與一項以 AI 為核心的資安合作計畫。根據路透社 2026 年 5 月 18 日的報導，Anthropic 正在推動名為「Project Glasswing」的計畫，讓包括微軟在內的少數大型科技公司使用其尚未公開的 Claude Mythos 預覽模型，協助防禦資安威脅。Mythos 具備高階程式碼撰寫能力，能夠前所未有地偵測漏洞並模擬攻擊手法。Anthropic 近期修正先前的政策，允許參與者在遵守負責任披露原則的前提下，向其他公司安全團隊、產業組織、監管機構、政府機關、開源維護者、媒體或公眾分享其在 Glasswing 計畫中的發現、最佳實務、工具或程式碼。美國國防部亦正將 Mythos 部署於全美政府系統，以找出並修補軟體漏洞。這些資訊顯示微軟正透過與 Anthropic 的合作，利用 AI 技術加強資安防護並共享相關威脅情報。"
+  },
+  {
+    "id": "news-09",
+    "category": "news",
+    "query": "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+    "gold_files": [
+      "GOOGL_News_20260612_01.txt",
+      "GOOGL_News_20260612_02.txt",
+      "GOOGL_News_20260721_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "GOOGL_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260721_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260612_02.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "GOOGL_News_20260721_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 3
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Alphabet 最近宣布將進行大規模的資金募集與資本支出，計畫透過股權方式籌得約 **847.5 億美元（$84.75 billion）**，其中約 **347.5 億美元（$34.75 billion）** 透過公開發行普通股與 6.25% 強制可轉換優先證券取得，另有 **400 億美元（$40 billion）** 的市場股權發行計畫以及 **100 億美元（$10 billion）** 的私募給予 Berkshire Hathaway。公司表示，籌得的淨收益將用於一般企業用途，並預期今年的資本支出將升至 **1,850 億美元（$185 billion）**，較去年 **915 億美元（$91.5 billion）** 大幅增加。"
+  },
+  {
+    "id": "news-10",
+    "category": "news",
+    "query": "最近有哪些關於 Meta 的利多分析與 AI 投資消息？",
+    "gold_files": [
+      "META_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "META_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "META_News_20260612_01.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Meta 最近受到摩根士丹利分析師的高度肯定，該公司被視為「永遠值得持有」的最佳股票之一，主要因為其在人工智慧領域的大規模投資與未來營收潛力。摩根士丹利分析師 Brian Nowak 在 6 月 6 日指出，市場普遍低估了 Meta，尤其是其預計在 2027 與 2028 年投入的 3,800 億美元資本支出。Nowak 預測，這些 AI 相關投資有望在 2028 年為每股盈餘再貢獻 1 至 3 美元。除此之外，Meta 正在開發結合 Meta AI 的多億美元搜尋服務，若能吸引 10 億使用者並將每日查詢的 10% 變現，預計每年可產生超過 100 億美元的營收。公司亦已開始推出分層訂閱方案，以追求更高毛利的收入來源。這些利多因素共同顯示，Meta 在 AI 投資與新產品布局上具備顯著的成長動能。"
+  },
+  {
+    "id": "news-11",
+    "category": "news",
+    "query": "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+    "gold_files": [
+      "AMZN_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AMZN_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AMZN_News_20260612_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AMZN_News_20260612_01.txt",
+        "chunk_index": 2
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "亞馬遜最近宣布將投入超過 **€100 億（10 billion）** 用於歐洲的擴張與升級。公司計畫在歐洲現有的履行中心進行現代化改造，導入下一代機器人系統，包括在 2027 年上半年部署自主的 Proteus 機器人，以及擴大與員工協作的 STARK 托盤放置機器人。此投資同時預計創造 25,000 個新工作機會，並於今年底前在曼徹斯特與伯明翰推出 Amazon Now 超快速配送服務（已於倫敦上線）。此外，亞馬遜亦承諾投入 **10 億美元（$1 billion）** 用於員工教育與培訓。這一系列舉措旨在加強亞馬遜在歐洲的營運規模與競爭力。"
+  },
+  {
+    "id": "news-12",
+    "category": "news",
+    "query": "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？",
+    "gold_files": [
+      "TSLA_News_20260612_01.txt",
+      "TSLA_News_20260721_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "TSLA_News_20260721_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "TSLA_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "TSLA_News_20260721_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "TSLA_News_20260721_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "TSLA_News_20260612_01.txt",
+        "chunk_index": 3
+      },
+      {
+        "source": "TSLA_News_20260612_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "TSLA_News_20260612_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "TSLA_News_20260612_01.txt",
+        "chunk_index": 4
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "最近有兩則與 Tesla 或 Elon Musk 相關、可能顯著影響 Tesla 關注度的新聞。第一則是 2026 年 7 月 20 日的 Tesla 財報預告，分析師指出本週將公布財報，市場特別關注兩大議題：一是傳聞中的併購計畫，雖未正式確認但已被多方提及，可能為股價帶來意外的正向衝擊；二是本季交付表現出乎意料地好，雖未公布具體數字，但被形容為「突如其來的好消息」，同時投資人也將密切追蹤 Optimus 機器人與自動駕駛（robo‑taxi）進展，因這兩項被視為 Tesla 未來成長的關鍵驅動力。第二則是 2026 年 6 月 11 日的報導，說明 Elon Musk 所創立的 SpaceX 正在於 2026 年 6 月 12 日於納斯達克以代號 SPCX 首次公開發行（IPO），預計發行價為每股 **$135**，此舉不僅將提升 Musk 個人及其旗下事業的曝光度，也可能把部分市場焦點從 Tesla 轉移至 SpaceX，進一步影響投資者對 Tesla 的整體評價。這兩則消息共同構成近期最受矚目的與 Tesla 或 Elon Musk 相關的動態。"
+  },
+  {
+    "id": "news-13",
+    "category": "news",
+    "query": "最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？",
+    "gold_files": [
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "NVDA_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260612_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "NVDA_News_20260508_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 3
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 8
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "最近，包含 Nvidia、Apple、Amazon、Alphabet、Meta、Tesla 與 Microsoft 在內的「Magnificent Seven」股價普遍走低，且追蹤這七大科技股的 Roundhill Magnificent Seven ETF 自 6 月 5 日以來已下跌超過 2.4%。  \n\n根據 JPMorgan 的最新資料，對沖基金在 SpaceX 即將上市前拋售了這些大型科技股，甚至在部分公司加碼了看跌部位；同時也有投資人逢低買進。報導指出，這七大公司自上週五以來皆呈現下跌走勢。儘管整體趨勢偏跌，個別股價仍有小幅上揚：Nvidia（NVDA）上漲 2.22%，Apple（AAPL）上漲 1.39%，Amazon（AMZN）上漲 1.47%，以及 Alphabet（GOOG）上漲 0.92%。  \n\n市場分析認為，投資人可能在為 Elon Musk 的 SpaceX 首次公開發行（目標估值 17,700 億美元（$1.77 兆））做資金調整，導致對科技股的風險敞口被縮減。整體而言，Magnificent Seven 的股價近期呈現整體下跌、ETF 跌逾 2.4% 的顯著走勢。"
+  },
+  {
+    "id": "news-14",
+    "category": "news",
+    "query": "新聞如何評價 Apple 服務業務的成長與獲利能力？",
+    "gold_files": [
+      "AAPL_News_20260508_01.txt",
+      "AAPL_News_20260519_01.txt",
+      "AAPL_News_20260612_01.txt",
+      "AAPL_News_20260612_02.txt",
+      "AAPL_News_20260612_03.txt",
+      "AAPL_News_20260612_04.txt",
+      "AAPL_News_20260612_05.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 5
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "新聞普遍認為 Apple 的服務業務正以高速成長且高獲利的姿態成為公司最重要的利潤來源。服務營收在最新一季創下 310 億美元的歷史新高，較去年同期成長 16%，佔全公司營收約 28%。服務的毛利率更高，根據 Trefis 的報導，服務毛利率達 74.2%，遠高於硬體部門，顯示其具備極強的定價權與獲利能力。服務收入的快速擴張與高毛利直接推升了 Apple 的整體毛利率，TTM 毛利率已由 46.2%（FY2024）提升至 47.9%，而營業利益率則維持在 32.6% 左右，營運現金流利率亦保持在 31.1% 左右，說明服務業務對整體現金產生與盈餘貢獻顯著。\n\n分析師普遍將服務業務視為 Apple 從週期性硬體銷售向更可預測、持續性收入模式轉型的關鍵驅動力，認為其高毛利與訂閱式收入能支撐公司獲得溢價估值。市場亦注意到 Apple 正在提升服務價格，展現在生態系統內的定價能力。另一方面，部分報導提醒，若因歐盟《數位市場法》或美國司法部訴訟導致 App Store 佣金模式被迫調整，可能削弱服務的主要獲利來源，對股價形成下行壓力。整體而言，新聞對 Apple 服務業務的評價是「成長迅速、毛利極高、是公司未來獲利的核心」，同時也警示監管風險可能對其獲利能力產生衝擊。"
+  },
+  {
+    "id": "news-15",
+    "category": "news",
+    "query": "新聞報導 Apple 為什麼被視為值得長期持有的股票？",
+    "gold_files": [
+      "AAPL_News_20260508_01.txt",
+      "AAPL_News_20260519_01.txt",
+      "AAPL_News_20260612_01.txt",
+      "AAPL_News_20260612_02.txt",
+      "AAPL_News_20260612_03.txt",
+      "AAPL_News_20260612_04.txt",
+      "AAPL_News_20260612_05.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AAPL_News_20260612_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 5
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 4
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Apple 被視為值得長期持有的股票，主要是因為它同時具備 AI 佈局與 iPhone 強勁成長、服務高利潤的雙重動能，加上龐大且持續擴大的活躍裝置基礎、穩健的現金產生能力與持續的資本回饋機制，使公司在營收結構、獲利能力與資本配置上都具備長期競爭優勢。\n\n首先，Apple 正在將 AI 深度整合至其生態系統。公司在全球開發者大會上推出重新設計的 Siri 以及 Apple Intelligence，這些功能不僅提升語音辨識與第三方應用自動化，還將在 Safari、密碼與訊息等核心應用中提供 AI 搜尋或提問功能，讓 Apple 能在 ChatGPT、Grok、Gemini 等競爭對手之間保持技術前沿。  \n\n其次，iPhone 的銷售仍保持高速增長。最新財季 iPhone 營收跳升 22% 至 570 億美元，iPhone 17 系列更帶來約 23% 的成長，顯示即使在中國宏觀疲軟的環境下，手機仍是公司收入的主要驅動力（佔總營收約 51%）。  \n\n再者，服務業務已成為高利潤的穩定現金來源。服務收入在 2026 財年第二季同比成長 16% 至 310 億美元，創下歷史新高；服務毛利率高達 74.2%。服務的持續擴張使 Apple 的營收結構從過去依賴週期性硬體銷售，轉變為更可預測的高品質經常性收入，進一步支撐了公司 34.9 的本益比與 9.5 的市銷率。  \n\n此外，Apple 的財務狀況極為健康。過去三年平均營業現金流利潤率為 29.1%，最近十二個月達 31.1%；營業利潤率則在同期間平均 31.8%，最近十二個月為 32.6%。公司負債比率僅 2.0%，遠低於同業平均的 21.5%。強大的現金流使 Apple 能持續執行大規模資本回饋：董事會已授權再度回購 1000 億美元的股票，且股息亦提升 4%。  \n\n最後，Apple 具備龐大的生態系統鎖定效應。活躍裝置總數已超過 25 億部，涵蓋 iPhone、Mac、iPad、可穿戴裝置與 Vision Pro 等多元產品，為服務、廣告與付費應用提供持續的用戶基礎。這種裝置與服務的互補關係，使公司在未來多年度內能持續推出升級、提升變現與擴大經常性收入。  \n\n綜合以上因素——AI 先行、iPhone 高速成長、高毛利服務、卓越現金流與低負債、以及持續的股東回饋——使 Apple 被分析師與投資人視為最具韌性與獲利性的長期投資標的。"
+  },
+  {
+    "id": "mi-01",
+    "category": "multi_intent",
+    "query": "NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？",
+    "gold_files": [
+      "NVDA_10Q_202604.html",
+      "NVDA_Fundamentals_20260612.txt",
+      "NVDA_IncomeStatement_20260612.txt",
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260508_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "NVDA_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_10Q_202604.html",
+        "chunk_index": 47
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "NVDA_10Q_202604.html",
+        "chunk_index": 40
+      },
+      {
+        "source": "NVDA_Fundamentals_20260612.txt",
+        "chunk_index": 2
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "NVIDIA 最新財報顯示，2027 財政年度第一季營收為 **816 億美元（$81.6 billion）**，較去年同期成長 **85%**，較前一季則成長 **20%**；其中資料中心營收為 **752 億美元（$75.2 billion）**，較去年同期成長 **92%**，較前一季成長 **21%**。  \n\n結合新聞中與 IREN 的最新 AI 雲端合作，NVIDIA 簽訂了為期五年的 **34 億美元（$3.4 billion）** AI Cloud 合約，合約金額會隨 GPU 部署而逐步解鎖。IREN 目前已確保 **5 GW** 的電力供應，計畫在 2026 年建置 **480 MW** 的 AI Cloud 容量，約配備 **150,000 台 GPU**，並於 2027 年擴增至 **1,210 MW**，其中 **300 MW** 由 Childress 站點的液冷系統主導。IREN 亦在 60 MW 的空冷 Blackwell GPU 部署中使用 NVIDIA GPU，且當部署達到 **600,000 台 GPU** 時，NVIDIA 的投資權利（最高 **21 億美元（$2.1 billion）**、每股 $70）將全部生效。  \n\n這些數據顯示，NVIDIA 正透過大型 AI Cloud 合約與 GPU 供應，協助 IREN 快速擴張 AI 資料中心容量，從空冷到液冷的多樣化建置、數十萬甚至數百萬顆 GPU 的部署，以及跨國大型電力與基礎建設的整合，具體體現了 NVIDIA 在資料中心布局上的高速成長與深度佈局。"
+  },
+  {
+    "id": "mi-02",
+    "category": "multi_intent",
+    "query": "NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？",
+    "gold_files": [
+      "NVDA_Fundamentals_20260612.txt",
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "NVDA_News_20260519_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_03.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "NVDA_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "NVIDIA 目前的毛利率約為 74.1%。根據最新的公司基本面資料，2026 年截至目前的營收為 2,534.9 億美元（$253.49 billion），毛利為 1,879.5 億美元（$187.95 billion），計算得出的毛利率為 74.14%（即 74.1%），顯示公司在 AI 晶片與圖形處理器的銷售上仍保有相當高的利潤空間。\n\n在近期接受 Bloomberg 采訪時，執行長黃仁勳指出，中國市場「將會逐步開放」高階美國 AI 晶片的銷售，尤其是已取得授權可向中國出售的 H200 晶片。雖然目前最頂級的 Blackwell 與即將推出的 Rubin 系列仍被禁，但若未來中國政府放寬限制，NVIDIA 有望在中國獲得額外的晶片訂單。這種市場開放將為公司帶來新的收入來源，提升營收增長的潛在動能，尤其在全球 AI 需求持續高漲的情況下，新增的中國銷售有可能在保持現有高毛利率的同時，為未來營收增添正面貢獻。"
+  },
+  {
+    "id": "mi-03",
+    "category": "multi_intent",
+    "query": "Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？",
+    "gold_files": [
+      "AAPL_Fundamentals_20260612.txt",
+      "AAPL_News_20260508_01.txt",
+      "AAPL_News_20260519_01.txt",
+      "AAPL_News_20260612_01.txt",
+      "AAPL_News_20260612_02.txt",
+      "AAPL_News_20260612_03.txt",
+      "AAPL_News_20260612_04.txt",
+      "AAPL_News_20260612_05.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 5
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "AAPL_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Apple 目前的毛利率約為 47.9%（TTM 毛利率 47.86%），較 FY 2024 的 46.2% 以及 2019 年的 38.2% 均有明顯提升，顯示服務業務比重上升正持續推高整體利潤率。\n\n在新聞中，Evercore ISI 於 5 月 14 日將 Apple 的目標股價由原先的 $330 上調至 $365，並維持「Outperform」評等。此調升反映分析師對 Apple 高價 iPhone、即將推出的可摺疊機型以及服務收入持續高成長的正面預期。\n\n綜合市場觀點，投資者普遍將 Apple 視為高品質、現金流充沛且低負債的優質公司，服務業務的高毛利（服務毛利 74.2%）與持續的毛利率提升支撐其溢價估值；同時，因美國司法部訴訟與歐盟 DMA 可能改變 App Store 收費模式，市場情緒被調整為中性，形成「高毛利與監管風險」的兩面拉鋸。Evercore ISI 的目標價上調與 Outperform 評等進一步強化了市場對 Apple 長期獲利能力的信心，儘管短期仍需關注監管因素對毛利率的潛在衝擊。"
+  },
+  {
+    "id": "mi-04",
+    "category": "multi_intent",
+    "query": "Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？",
+    "gold_files": [
+      "AAPL_Fundamentals_20260612.txt",
+      "AAPL_IncomeStatement_20260612.txt",
+      "AAPL_News_20260508_01.txt",
+      "AAPL_News_20260519_01.txt",
+      "AAPL_News_20260612_01.txt",
+      "AAPL_News_20260612_02.txt",
+      "AAPL_News_20260612_03.txt",
+      "AAPL_News_20260612_04.txt",
+      "AAPL_News_20260612_05.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AAPL_News_20260612_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "AAPL_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260612_01.txt",
+        "chunk_index": 2
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Apple 近一年（TTM）的整體營收成長率約為 **16.6%**（公司基本面揭示的 Revenue Growth YoY = 16.60%），即過去十二個月的營收較前一年同期成長約 16.6%。\n\n在今年的 WWDC 上，Apple 公布了全新升級的 Siri AI，此舉對未來成長動能的意義在於：\n\n1. **提升服務與生態系統的黏著度**：新 Siri 能夠安全地取得使用者在各 App 中的個人情境，並即時回應查詢或自動化第三方應用，讓語音助理不再只是簡單的指令執行器，而成為跨設備、跨服務的「數位幫手」，進一步刺激服務收入的雙位數成長。\n\n2. **加速 AI 競爭力與品牌形象**：分析師認為 Siri AI 的推出將提升 Apple 在生成式 AI 市場的能見度，並因結合 Google 的 AI 技術而具備差異化優勢，提升市場對 Apple AI 路線圖的信心。\n\n3. **創造長期營收來源**：隨著 AI 功能在 iPhone、Mac、Wearables 及服務上持續擴散，預期帶來多年度的功能升級與新訂閱服務，支撐公司在硬體銷售放緩時的營收韌性。\n\n綜合來看，Apple 目前已展現約 16.6% 的營收年增率（TTM），而 Siri AI 的推出則有望透過提升使用者體驗、擴大服務收入以及強化 AI 形象，為公司未來成長提供新動能。",
+    "_gold_fix_note": "17%(quarterly)→16.6%(Fundamentals YoY) convention-align 20260805"
+  },
+  {
+    "id": "mi-05",
+    "category": "multi_intent",
+    "query": "Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？",
+    "gold_files": [
+      "MSFT_Fundamentals_20260612.txt",
+      "MSFT_News_20260519_01.txt",
+      "MSFT_News_20260612_01.txt",
+      "MSFT_News_20260612_02.txt",
+      "MSFT_News_20260612_03.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "MSFT_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "MSFT_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "MSFT_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 8
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Microsoft 近期的營收年增長率為 **18.30%**（即約 18.3%），顯示公司營收持續以兩位數的速度成長。  \n\n在此成長基礎上，新聞指出 Microsoft 正在自行開發七個全新 AI 模型，這些模型聚焦於微調（fine‑tuning）與成本最佳化，意在降低對外部前沿實驗室（frontier labs）的依賴。公司已將大量圖形處理單元（GPU）資源配置給內部研發團隊，並在 Build 2026 大會上展示了 AI 平台的最新進展，突顯其在 AI 模型、AI 堆疊層級以及自助式（DIY）應用方面的佈局。此舉傳遞出 Microsoft 正從單純使用外部大模型，轉向打造自有模型生態，以加強技術主導權、提升成本效益，並在 AI 基礎設施上形成更完整的端到端解決方案。"
+  },
+  {
+    "id": "mi-06",
+    "category": "multi_intent",
+    "query": "Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？",
+    "gold_files": [
+      "MSFT_Fundamentals_20260612.txt",
+      "MSFT_News_20260519_01.txt",
+      "MSFT_News_20260612_01.txt",
+      "MSFT_News_20260612_02.txt",
+      "MSFT_News_20260612_03.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "MSFT_News_20260519_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "MSFT_News_20260519_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "MSFT_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "MSFT_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "MSFT_News_20260612_03.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Microsoft 目前的淨利率約為 39.34%（即約 39.34%）。  \n\n根據最新財務資料，Microsoft 於最近一期的營收 3,182.7 億美元（$318.27 billion） 中獲得淨利 1,252.2 億美元（$125.22 billion），計算出的淨利率為 39.34%，顯示公司在營運上具備相當高的獲利能力。  \n\n同時，新聞指出 Microsoft 已成為 Anthropic 「Project Glasswing」計畫的選定合作夥伴，使用尚未公開的 Claude Mythos Preview 模型來加強防禦性資安工作。Mythos 具備高階程式碼生成與漏洞偵測能力，Microsoft 可透過此模型快速識別資安弱點並研發修補方案，且在計畫允許下，Microsoft 亦可將發現的威脅資訊、最佳實務、工具或程式碼分享給其他合作夥伴、產業組織、監管機構或政府單位。美國國防部亦正部署 Mythos 於政府系統，以找出並修補軟體漏洞。  \n\n這些動作顯示 Microsoft 正在以下幾個層面布局 AI 資安領域：\n\n1. **與前沿 AI 公司合作**：透過與 Anthropic 的合作，直接取得最先進的 AI 資安模型，提升自家安全產品的偵測與防禦效能。  \n2. **資安資訊共享機制**：在 Glasswing 計畫下，Microsoft 能將威脅情報與修補方法分享給產業夥伴與政府，形成跨組織的資安防護網。  \n3. **將 AI 整合至安全服務**：Mythos 的高階程式碼分析能力可被嵌入 Microsoft 365、Azure 及其他安全與合規服務，增強整體資安防護層級。  \n\n綜合來看，Microsoft 以其高淨利率支撐財務實力，同時透過參與 Anthropic Mythos 計畫，積極將先進 AI 技術嵌入資安防護，展現在 AI 資安領域的前瞻布局與合作策略。"
+  },
+  {
+    "id": "mi-07",
+    "category": "multi_intent",
+    "query": "Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？",
+    "gold_files": [
+      "AMZN_Fundamentals_20260612.txt",
+      "AMZN_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AMZN_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AMZN_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AMZN_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AMZN_News_20260612_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "AMZN_Fundamentals_20260612.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AMZN_News_20260612_01.txt",
+        "chunk_index": 2
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Amazon 目前的毛利率約為 50.6%。根據最新財務資料，Amazon 2026 年的營收為 7,427.8 億美元（$742.78 billion），毛利為 3,758.8 億美元（$375.88 billion），計算得出的毛利率為 50.60%，即 50.6%。\n\n在毛利率保持在五成左右的同時，Amazon 於 2026 年 6 月宣布將在歐洲投入超過 100 億歐元的資本支出。此投資計畫包括升級履行中心、部署可接受文字指令的下一代機器人、在 2027 年上半年導入自主式 Proteus 機器人、擴大 STARK 機器人系統、以及在曼徹斯特與伯明翰推出「Amazon Now」超快速配送服務，並創造 25,000 個新工作機會。這一系列舉措顯示 Amazon 正以加強物流基礎建設與自動化為核心，提升歐洲市場的配送速度與服務品質，從而擴大在該區域的市場佔有率並多元化收入來源。換言之，Amazon 正透過大規模資本投入與技術升級，將成長重心向歐洲物流與即時配送服務延伸，以鞏固其全球電商與雲端生態系的競爭優勢。"
+  },
+  {
+    "id": "mi-08",
+    "category": "multi_intent",
+    "query": "Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？",
+    "gold_files": [
+      "AMZN_Fundamentals_20260612.txt",
+      "AMZN_IncomeStatement_20260612.txt",
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "NVDA_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 8
+      },
+      {
+        "source": "AMZN_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AMZN_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "AMZN_IncomeStatement_20260612.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "AMZN_IncomeStatement_20260612.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Amazon 在過去一年（TTM）的營收成長率為 **16.60%**（即約 16.6%）。這一數字來自公司最新的財務概況，顯示其營收較前一年同期成長了 16.6%。\n\n同時，根據路透社報導，對沖基金在 SpaceX IPO 前拋售了包括 Amazon 在內的「Magnificent Seven」大型科技股，且追蹤這些股票的 Roundhill Magnificent Seven ETF 自 6 月 5 日以來已下跌超過 2.4%。此舉表明投資人正主動減少對這些高估值科技公司的敞口，對 Amazon 也採取了較為謹慎甚至偏空的態度。儘管 Amazon 仍保持兩位數的營收成長，市場卻因即將到來的 SpaceX 上市而顯示出清倉與風險規避的情緒，暗示投資者認為 Amazon 近期的股價可能已被高估，或至少在短期內缺乏進一步上漲的動能。"
+  },
+  {
+    "id": "mi-09",
+    "category": "multi_intent",
+    "query": "Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？",
+    "gold_files": [
+      "GOOGL_Fundamentals_20260612.txt",
+      "GOOGL_News_20260612_01.txt",
+      "GOOGL_News_20260612_02.txt",
+      "GOOGL_News_20260721_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "GOOGL_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "GOOGL_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_Fundamentals_20260612.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "GOOGL_News_20260721_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 2
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Alphabet 目前的毛利率為 60.368%。  \n\n根據 Moody’s 於 2026 年 6 月 5 日的報導，Alphabet 正在透過公開發行普通股與 6.25% 強制可轉換優先股募集約 847.5 億美元（$84.75 billion）（其中 347.5 億美元（$34.75 billion）為普通股發行），並同時規劃 400 億美元（$40 billion）的市場股權發行與 100 億美元（$10 billion）的私募配售。公司表示，募集資金將用於一般企業用途，明確提及包括人工智慧（AI）相關的投資。與此同時，Moody’s 預估 Alphabet 本年度的資本支出將升至 1,850 億美元（$185 billion），較去年 915 億美元（$91.5 billion）大幅翻倍。  \n\n這兩項動作共同傳遞出 Alphabet 正以股權方式而非舉債來支撐其 AI 版圖的擴張，顯示其財務政策相當審慎且具備充裕的資金緩衝。巨額的資本支出增長暗示公司正加速建置 AI 基礎設施、資料中心與相關硬體（如 AI 晶片），並持續在 Google Cloud、Vertex AI、Gemini 企業版等服務上投入資源，以鞏固在 AI 市場的領先地位。換言之，透過 850 多億美元的籌資與大幅提升的資本支出，Alphabet 正在為未來的 AI 產品與服務鋪設更堅實的財務與技術基礎。"
+  },
+  {
+    "id": "mi-10",
+    "category": "multi_intent",
+    "query": "Alphabet 近一年的營收成長率是多少？加上新聞中 Navan 與 Google Gemini 的合作案例，反映出 Google 在 AI 生態系布局上的哪些進展？",
+    "gold_files": [
+      "GOOGL_Fundamentals_20260612.txt",
+      "GOOGL_IncomeStatement_20260612.txt",
+      "GOOGL_News_20260612_01.txt",
+      "GOOGL_News_20260612_02.txt",
+      "GOOGL_News_20260721_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "GOOGL_Fundamentals_20260612.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "GOOGL_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260721_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "GOOGL_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 2
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Alphabet 近一年營收成長率為 21.8%（來源列示為 21.80% 的年度成長率）。  \n\n這個成長率背後，新聞中 Navan 與 Google Gemini 的合作顯示 Google 正在加速 AI 生態系的佈局。Navan 透過與 Gemini Enterprise 的整合，讓使用者在旅行預訂時能以 AI 代理人完成全程訂票，實現行程的即時個人化與自動化，說明 Google 已將生成式 AI 從純粹的搜尋與廣告延伸至垂直產業應用。Google Cloud 旗下的 AI 方案（包括 AI 基礎建設、Vertex AI 平台與 Gemini Enterprise）正被外部 SaaS 夥伴直接使用，顯示 Google 正以平台化方式向企業與消費者提供可重複部署的 AI 代理功能。再加上 Google Services 仍涵蓋廣告、Android、YouTube 等核心產品，AI 能力可在這些服務間互相串接，形成跨產品的智慧體驗。整體而言，Navan 與 Gemini 的合作不僅證明 Google 已在「未管理」的旅遊市場取得先機，也突顯其透過雲端 AI 服務與企業合作夥伴，打造可在多種情境下重複使用的 AI 生態系，進一步鞏固其在人工智慧領域的領先地位。"
+  },
+  {
+    "id": "mi-11",
+    "category": "multi_intent",
+    "query": "Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？",
+    "gold_files": [
+      "META_Fundamentals_20260612.txt",
+      "META_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "META_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "META_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "META_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "META_Fundamentals_20260612.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "META_News_20260612_01.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Meta 目前的毛利率約為 81.9%。  \n\n根據 Morgan Stanley 分析師 Brian Nowak 的評估，市場普遍低估了 Meta 在人工智慧領域的競爭護城河。分析師指出，Meta 正在進行規模龐大的 AI 相關資本支出，預計 2027 與 2028 年的資本支出將達到約 3,800 億美元（$380 billion），雖然短期可見度有限，但這些投資有望在 2028 年為每股盈餘再貢獻 1 至 3 美元。Nowak 亦認為，Meta AI 整合的多億美元搜尋機會若能吸引 10 億使用者並將每日查詢的 10% 變現，將可產生超過 100 億美元的年營收；同時公司已開始推出分層訂閱方案，以追求更高毛利的收入來源。基於上述因素，Morgan Stanley 將 Meta 列為「最佳永續持有」股票之一，市場因此將其 AI 投資視為提升競爭力、擴大高利潤收入及長期盈餘成長的關鍵驅動力。"
+  },
+  {
+    "id": "mi-12",
+    "category": "multi_intent",
+    "query": "Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？",
+    "gold_files": [
+      "META_Fundamentals_20260612.txt",
+      "META_IncomeStatement_20260612.txt",
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "NVDA_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 8
+      },
+      {
+        "source": "META_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "META_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "META_IncomeStatement_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "META_IncomeStatement_20260612.txt",
+        "chunk_index": 5
+      },
+      {
+        "source": "META_IncomeStatement_20260612.txt",
+        "chunk_index": 6
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Meta 近一年的營收成長率為 **33.1 %**（Revenue Growth YoY = 33.10%）。  \n\n根據路透社報導，對沖基金在 SpaceX 即將上市前拋售了包括 Meta 在內的「Magnificent Seven」大型科技股，導致追蹤這些股票的 Roundhill Magnificent Seven ETF 自 6 月 5 日以來下跌逾 2.4%，且相關科技股自上週五以來皆呈現跌勢。這表示市場情緒在 SpaceX IPO 前出現了顯著的風險偏好收縮，投資人正以拋售方式「清倉」以備未來波動。  \n\n因此，儘管 Meta 本身的營收以 33.1 % 的高速成長支撐其基本面，但其股價在短期內仍受到整體科技板塊被拋售的負面衝擊，股價表現可能被區域性賣壓掩蓋，或出現波動。投資者在評估 Meta 股價走勢時，需要同時考量公司強勁的營收增長與當前因 SpaceX IPO 前避險基金拋售所帶來的市場情緒壓力。"
+  },
+  {
+    "id": "mi-13",
+    "category": "multi_intent",
+    "query": "Tesla 目前的毛利率表現如何？加上新聞中 SpaceX 即將 IPO 讓 Tesla 關注度降溫的報導，這對 Tesla 目前的市場處境有何影響？",
+    "gold_files": [
+      "TSLA_Fundamentals_20260612.txt",
+      "TSLA_News_20260612_01.txt",
+      "TSLA_News_20260721_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "TSLA_News_20260721_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "TSLA_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "TSLA_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "TSLA_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "TSLA_News_20260721_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "TSLA_Fundamentals_20260612.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "TSLA_News_20260721_01.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "TSLA_News_20260612_01.txt",
+        "chunk_index": 3
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Tesla 目前的毛利率約為 19.1%。根據最新的公司基本面資料，Tesla 的營收為 978.8 億美元（$97.88 billion），毛利為 186.6 億美元（$18.66 billion），計算得出的毛利率為 19.06%，即 19.065%。  \n\n新聞指出 SpaceX 即將於本週在納斯達克以每股 135 美元的價格上市，市場焦點因此轉向太空事業，Tesla 的股價近期表現平淡，未出現顯著波動。分析師認為，因為 SpaceX 的 IPO 把投資者的注意力從 Tesla 移開，Tesla 目前在市場上的關注度下降，使得其股價缺乏明顯的上漲動能；同時，若投資者重新聚焦於 Tesla，尤其是其交付量好於預期或自動駕駛與機器人計畫的進展，仍有可能帶來意外的正面驚喜。總體而言，儘管 SpaceX 的上市暫時分散了市場注意力，Tesla 仍以約 19% 的毛利率維持穩健的盈利能力，投資者需關注公司核心業務的表現以及未來可能的市場情緒回升。"
+  },
+  {
+    "id": "mi-14",
+    "category": "multi_intent",
+    "query": "Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？",
+    "gold_files": [
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt",
+      "TSLA_10Q_202606.html"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 75
+      },
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 77
+      },
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 15
+      },
+      {
+        "source": "NVDA_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260612_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 63
+      },
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 59
+      },
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 30
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Tesla 汽車業務的毛利率正呈現下降趨勢；在最新的三個月（截至 2026 年 6 月 30 日）毛利率為 16.8%，較前一年同季的 17.2% 下降了 0.4 個百分點。  \n\n同時，根據路透社報導，包含 Tesla 在內的「Magnificent Seven」七大科技股自上週五以來全部走低，追蹤這些股票的 Roundhill Magnificent Seven ETF 自 6 月 5 日以來已下跌逾 2.4%。這顯示投資人正因即將到來的 SpaceX 首次公開發行而減少風險敞口，對整體科技板塊採取拋售行動。因而 Tesla 的股價也受到同樣的拋售壓力，與毛利率下降的基本面趨勢相呼應，透露出近期 Tesla 股價面臨雙重不利因素——毛利率走弱與大盤科技股同步下跌，導致股價呈現下行或承壓的情形。"
+  },
+  {
+    "id": "mi-15",
+    "category": "multi_intent",
+    "query": "NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？",
+    "gold_files": [
+      "NVDA_Fundamentals_20260612.txt",
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "NVDA_News_20260519_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_03.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "NVDA_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_Fundamentals_20260612.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "NVIDIA 目前的淨利率為 **62.97%**（即約 62.97%），顯示公司在最近的財務期間能將約六成的營收轉化為淨利。\n\n根據黃仁勳在接受 Bloomberg 訪問時的說法，儘管美國仍對最高階的 Blackwell 與即將推出的 Rubin 系列保持禁售，H200 晶片已取得對中國的授權，且他預期「隨著時間推移」中國市場最終會對高階美國 AI 晶片開放。此訊息透露出幾個對輝達 AI 晶片競爭定位的關鍵意涵：\n\n1. **市場潛在擴大**：中國是全球最大的半導體需求市場之一，若未來能逐步銷售 H200 甚至更高階產品，輝達的可服務客戶基礎將顯著擴大，進一步鞏固其在 AI 基礎設施領域的領先地位。\n\n2. **競爭環境仍然激烈**：即使中國市場有望開放，輝達仍面臨來自 Cerebras、AMD 以及雲端巨頭 Amazon 與 Google 自研 AI 晶片的加劇競爭。這些對手正推出不同架構或自家晶片，爭奪同一客戶群。\n\n3. **政策與供應鏈風險**：美國對 H200 的限制仍未完全解除，且最高階的 Blackwell 與 Rubin 仍被禁售，顯示政策風險仍存。若美國或中國的出口管制政策出現變動，可能影響輝達在中國的銷售節奏。\n\n綜合來看，輝達目前以約 63% 的高淨利率展現強勁獲利能力；黃仁勳的表態暗示未來中國市場有望逐步開放，這將為其 AI 晶片提供新的成長動能，提升在全球 AI 晶片競爭中的領先優勢，但同時也必須持續應對來自其他晶片廠商與政策限制的挑戰。"
+  },
+  {
+    "id": "col-14",
+    "category": "colloquial",
+    "query": "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？",
+    "gold_files": [
+      "NVDA_News_20260508_01.txt",
+      "NVDA_News_20260508_02.txt",
+      "NVDA_News_20260519_01.txt",
+      "NVDA_News_20260519_02.txt",
+      "NVDA_News_20260519_03.txt",
+      "NVDA_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "NVDA_News_20260508_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260508_02.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260519_01.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "NVDA_News_20260508_01.txt",
+        "chunk_index": 3
+      },
+      {
+        "source": "NVDA_News_20260519_02.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "NVDA_News_20260519_03.txt",
+        "chunk_index": 0
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "NVIDIA 最近與從事比特幣挖礦的 IREN Limited（NASDAQ: IREN）建立了 AI 相關的合作夥伴關係。  \n\n根據公開資訊，雙方簽署了為期五年的戰略合作，內容包括：  \n- IREN 授予 NVIDIA 五年內以每股 70 美元的價格購買最高 3,000 萬普通股的權利，若全部行使，潛在投資金額可達 21 億美元。  \n- 雙方將在 IREN 全球資料中心管線中部署 NVIDIA‑aligned DSX AI 工廠基礎設施，首要聚焦於 IREN 位於德州 Sweetwater 的 2 GW 產能園區。  \n- IREN 亦簽訂了一份價值 34 億美元、為期五年的 AI Cloud 合約，採用 NVIDIA 的空冷 Blackwell GPU，預計在 60 MW 的現有基礎上展開部署。  \n\n此合作標誌著 IREN 從純粹的比特幣挖礦業務向 AI 雲端服務的轉型，同時為 NVIDIA 帶來在能源密集型算力領域的長期客戶。"
+  },
+  {
+    "id": "col-15",
+    "category": "colloquial",
+    "query": "特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？",
+    "gold_files": [
+      "TSLA_10Q_202606.html",
+      "TSLA_News_20260612_01.txt",
+      "TSLA_News_20260721_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "TSLA_News_20260721_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "TSLA_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "TSLA_News_20260721_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 27
+      },
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 30
+      },
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 2
+      },
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 45
+      },
+      {
+        "source": "TSLA_10Q_202606.html",
+        "chunk_index": 63
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "是的，隨著馬斯克的太空公司 SpaceX 於 2026 年 6 月 12 日以每股 135 美元的價格在納斯達克上市，市場焦點已被大量轉移到 SpaceX，特斯拉的熱度相對被削弱；而在最新的財報中，特斯拉在截至 2026 年 6 月 30 日的六個月內淨利為 16.19 億美元（$1,619 百萬），顯示本季仍保持盈餘。"
+  },
+  {
+    "id": "mh-06",
+    "category": "multi_hop",
+    "query": "新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？",
+    "gold_files": [
+      "AAPL_Fundamentals_20260612.txt",
+      "AAPL_News_20260508_01.txt",
+      "AAPL_News_20260519_01.txt",
+      "AAPL_News_20260612_01.txt",
+      "AAPL_News_20260612_02.txt",
+      "AAPL_News_20260612_03.txt",
+      "AAPL_News_20260612_04.txt",
+      "AAPL_News_20260612_05.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 5
+      },
+      {
+        "source": "AAPL_News_20260519_01.txt",
+        "chunk_index": 5
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "AAPL_News_20260612_03.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_04.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AAPL_News_20260612_05.txt",
+        "chunk_index": 1
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Evercore ISI 最近調升目標價與評等的公司是 Apple Inc.（蘋果），其最新的毛利率為 47.9%。  \n\n根據報導，Evercore ISI 在 2026 年 5 月 14 日的覆蓋中將蘋果的股價目標從 330 美元上調至 365 美元，並維持「Outperform」評等。另有資料顯示，蘋果在最近的十二個月（TTM）毛利率達到 47.9%，較 2024 財年 46.2% 以及 2019 財年的 38.2% 均有提升。"
+  },
+  {
+    "id": "mh-07",
+    "category": "multi_hop",
+    "query": "新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？",
+    "gold_files": [
+      "AMZN_10K_2025.html",
+      "AMZN_IncomeStatement_20260612.txt",
+      "AMZN_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "AMZN_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "AMZN_10K_2025.html",
+        "chunk_index": 101
+      },
+      {
+        "source": "AMZN_10K_2025.html",
+        "chunk_index": 53
+      },
+      {
+        "source": "AMZN_10K_2025.html",
+        "chunk_index": 76
+      },
+      {
+        "source": "AMZN_10K_2025.html",
+        "chunk_index": 121
+      },
+      {
+        "source": "AMZN_10K_2025.html",
+        "chunk_index": 190
+      },
+      {
+        "source": "AMZN_10K_2025.html",
+        "chunk_index": 100
+      },
+      {
+        "source": "AMZN_10K_2025.html",
+        "chunk_index": 46
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Amazon.com, Inc.（亞馬遜）在新聞中宣布將在歐洲投入逾 100 億歐元的投資計畫；根據其 2025 年財報，亞馬遜當年度的總營收為 **7,169.24 億美元（$716,924 百萬，即約 $716.9 billion）**。  \n\n此數字來自公司 2025 年 12 月 31 日止的合併淨銷售（Consolidated Net Sales），列示為 7,169.24 億美元（$716,924 百萬），代表該年度的全部營業收入。"
+  },
+  {
+    "id": "mh-08",
+    "category": "multi_hop",
+    "query": "新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？",
+    "gold_files": [
+      "GOOGL_Fundamentals_20260612.txt",
+      "GOOGL_News_20260612_01.txt",
+      "GOOGL_News_20260612_02.txt",
+      "GOOGL_News_20260721_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "GOOGL_News_20260721_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "GOOGL_Fundamentals_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "GOOGL_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_Fundamentals_20260612.txt",
+        "chunk_index": 2
+      },
+      {
+        "source": "GOOGL_News_20260612_01.txt",
+        "chunk_index": 2
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "新聞中提到的「850 多億美元」籌資計畫以及大幅提升資本支出的是 Alphabet Inc.（谷歌母公司）。根據最新的公司基本面資料，Alphabet 近期一年的營收年增率為 21.80%，約等於 21.8%。這顯示其營收較前一年成長了約二成多。"
+  },
+  {
+    "id": "mh-09",
+    "category": "multi_hop",
+    "query": "新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？",
+    "gold_files": [
+      "GOOGL_Fundamentals_20260612.txt",
+      "GOOGL_News_20260612_02.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "GOOGL_News_20260612_02.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "GOOGL_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "在新聞中，於 6 月 5 日獲穆迪（Moody's Ratings）將其 847.5 億美元（$84.75 billion）融資案評為「信用正面（credit-positive）」的公司是 **Alphabet Inc.（Google，NASDAQ: GOOGL）**；該公司目前的營業利益率（Operating Margin）約為 **36.1%（36.12%）**。\n\n穆迪指出，這筆大規模募資凸顯了 Alphabet 強健的財務體質，足以支應額外的投資需求。依公司最新的基本面資料，Alphabet 的 TTM 營收為 4,225 億美元（$422.50 billion）、營業利益率為 36.12%（約 36.1%），淨利率（Profit Margin）為 37.9%，顯示其核心業務維持高獲利能力。",
+    "_gold_fix_note": "rewrote fabricated hook→grounded Alphabet/Moody cross-doc multihop 20260805"
+  },
+  {
+    "id": "mh-10",
+    "category": "multi_hop",
+    "query": "新聞中被 Morgan Stanley 特別稱許其 AI 護城河、同時大舉提高資本支出的是哪一家公司？該公司最新年度的淨利（net income）是多少？",
+    "gold_files": [
+      "META_IncomeStatement_20260612.txt",
+      "META_News_20260612_01.txt"
+    ],
+    "gold_chunks_used": [
+      {
+        "source": "META_News_20260612_01.txt",
+        "chunk_index": 0
+      },
+      {
+        "source": "META_IncomeStatement_20260612.txt",
+        "chunk_index": 3
+      },
+      {
+        "source": "META_IncomeStatement_20260612.txt",
+        "chunk_index": 8
+      },
+      {
+        "source": "META_IncomeStatement_20260612.txt",
+        "chunk_index": 1
+      },
+      {
+        "source": "META_IncomeStatement_20260612.txt",
+        "chunk_index": 5
+      },
+      {
+        "source": "META_IncomeStatement_20260612.txt",
+        "chunk_index": 7
+      },
+      {
+        "source": "META_IncomeStatement_20260612.txt",
+        "chunk_index": 4
+      },
+      {
+        "source": "META_IncomeStatement_20260612.txt",
+        "chunk_index": 6
+      }
+    ],
+    "reference_lang": "Traditional Chinese",
+    "reference": "Meta Platforms, Inc.（NASDAQ: META）是被 Morgan Stanley 稱讚其 AI 護城河並大幅提升資本支出的公司；該公司在最新財政年度（FY2025）的淨利為 **604.6 億美元（$60.46 十億）**。\n\n根據 2025 財政年度的財務資料，Meta 的淨利（Net Income）為 604.6 億美元（$60.46 十億），對應的每股攤薄盈餘（Diluted EPS）為 $23.49，基本每股盈餘（Basic EPS）為 $23.98。此數字同時出現在「Net Income」與「Net Income Common Stockholders」項目中，顯示公司在該年度的稅後淨利為 604.6 億美元（$60.46 十億）。",
+    "_gold_fix_note": "FY2024→FY2025 column-misread corrected 20260805"
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "mi-05",
+    "kind": "require_chunk",
+    "claim": "MSFT 營收成長率（TTM 口徑）——Fundamentals #0 必須進候選池",
+    "require_chunks": [
+      {
+        "source": "MSFT_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      }
+    ],
+    "status": "known_defect",
+    "why": "gold 沒錯、語料有、檔案也撈到了——撈到的是同一個檔的錯 chunk。`Revenue Growth (YoY): 18.30%` 在 #0（698 字元），四個 run 全部撈到 #1（Balance Sheet：Total Cash／Total Debt／Debt-Equity／Current Ratio，2045 字元）。4/4 完全一致＝不是抽樣變異，是檢索層對「營收成長率」這個 query 穩定挑錯 chunk。`Revenue Growth (YoY)` 這個字面就在 #0 裡，sparse/BM25 理應命中；懷疑與 #1 長三倍（rerank 對長 chunk 的偏好）有關，**未驗證，不是結論**。",
+    "verified": "2026-08-11 直接 scroll Qdrant 三個 collection（exp4／head／period）確認：Fundamentals 都是 3 個 chunk、#0 是 Company Overview 含 Revenue Growth (YoY)、#1 是 Balance Sheet、#2 是 Mayo Clinic 合作段。⚠ exp4 的 #0 寫成小數 `0.183`，head／period 是 `18.30%`——`migrate_fundamentals_pct.py` 只套用到後兩者。",
+    "metric_design": "⚠ **刻意不用 `anchored_pct`**——答案層在這題必然選錯判準：（a）`forbid_pct: 16/17` 不行，那些是**合法的財期數字**（10-Q 的季度／累計成長），只是口徑與 gold 的 TTM 不同（見 memory `period-basis-ttm-disambiguation`）；（b）`expect_pct: 18.3` 也不行，head 答的「約 18%（增加 501 億美元）」是 FY2026 10-K 的**財年**數字，數值恰好接近但是不同的量，±1pt 容差下會 PASS ＝ **用對的分數獎勵錯的理由**。真正的判別訊號是「撈到 #0 還是 #1」，所以斷言下在檢索層，與答案措辭無關。 ⚠ 本 kind 綁 chunk_index ＝ 綁切塊結果；Fundamentals 走獨立 doc_type 路徑，不受 2026-08-11 那三個 filing 側 ingest 修法影響（已用上面三個 collection 交叉確認索引穩定）。若日後改 Fundamentals 切塊，這條要重新對號。",
+    "fixed_by": null,
+    "fix_verified": "尚未修。2026-08-11 在三個封存結果檔上驗判別力：3/3 FAIL，訊息皆為「同檔撈到 #[1] ← 撈錯 chunk」。"
+  },
+  {
+    "id": "mi-04",
+    "claim": "AAPL 營收 YoY 成長率（非 LTM）",
+    "anchor": "YoY|年比年",
+    "window": 60,
+    "expect_pct": 16.6,
+    "status": "regression_guard",
+    "why": "答案同時給 LTM 12.8% 與 YoY 16.6% 並正確標注口徑，頭條是 12.8% 所以被舊比法誤判。登錄為護欄：關鍵是 YoY 這個口徑要對。",
+    "verified": "2026-08-10 逐字讀三個 run 的答案，皆同時給出兩個口徑且標注正確"
+  }
+]
