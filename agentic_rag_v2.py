@@ -979,6 +979,64 @@ def _is_ratio_intent(task: str) -> bool:
     return bool(_RATIO_INTENT_RE.search(task or ""))
 
 
+def _fetch_fundamentals_with_field(ticker: str, fields: list[str], task: str) -> dict | None:
+    """直接從 Qdrant 撈該公司「含指定欄位」的 Fundamentals chunk（零 LLM、只讀 payload）。
+
+    ⚠ **為什麼保底不能只掃池**（2026-08-21 實測，這是 lex-17 的第二層真因）：
+      `_ensure_ratio_source_coverage` 原本只在 `run_state.pool` 裡找，而 pool ＝ Qdrant
+      server-side RRF 回傳的 `RRF_TOP_N_PRIMARY`(=20) 個候選。實測「Microsoft 的營收成長率
+      表現如何」在生產組態（`full_translate_en=True`，英譯句
+      "How is Microsoft's revenue growth rate performing?"）下，**`MSFT_Fundamentals #0`
+      連候選名單都沒進**（進來的是零比率的 #1，rank 5）。也就是說：名字叫「保底」，
+      實作卻是「希望它剛好在池裡」——池裡沒有的時候，它什麼也做不到。
+      （中文原句反而撈得到 #0，rank 7。這不是 recall 調參能一勞永逸的方向，
+       且 `RRF_TOP_N_PRIMARY` 碼上註明 sweep 過 20 > 40，不該為一題去動它。）
+
+    所以補撈走**確定性查詢**而不是相似度：「這家公司的哪個 Fundamentals chunk 含
+    Revenue Growth 欄位」有唯一正確答案 → 照 CLAUDE.md〈LLM 與 Python 的分工〉交給 Python。
+    篩選鍵用 `period_basis == "TTM"`（全庫只有 Fundamentals 是 TTM，見
+    `data_update_edgar._period_basis_for`，22 筆，且該欄位有 payload 索引）。
+
+    ⚠ 分數用**真實的 cross-encoder 重算**，不要捏造：這個 `raw_rerank_score` 會被印在
+      答案底下的引用區塊給使用者看，塞一個假數字等於出貨一個看起來可追溯的謊。
+      （量尺與被測物耦合之外的另一種同型錯誤：讓「無法追溯」變成「看起來可追溯」。）
+    """
+    if not ticker or not fields:
+        return None
+    try:
+        from qdrant_client import models as qmodels
+        _bge, reranker, client = _get_models()
+        pts, _ = client.scroll(
+            collection_name=rq.COLLECTION_NAME,
+            scroll_filter=qmodels.Filter(must=[
+                qmodels.FieldCondition(key="ticker", match=qmodels.MatchValue(value=ticker)),
+                qmodels.FieldCondition(key="period_basis", match=qmodels.MatchValue(value="TTM")),
+            ]),
+            limit=64, with_payload=True, with_vectors=False,
+        )
+    except Exception as exc:                       # Qdrant 不可用時退回舊行為，不要讓保底變成故障點
+        _trace(f"ratio-coverage: Fundamentals 補撈失敗 {exc!r}")
+        return None
+
+    cands = []
+    for pt in pts:
+        pl = pt.payload or {}
+        if "Fundamentals" not in (pl.get("source") or ""):
+            continue
+        txt = pl.get("document") or ""
+        if any(f.lower() in txt.lower() for f in fields):
+            cands.append(pl)
+    if not cands:
+        return None
+    scores = reranker.predict([[task, (pl.get("document") or "")] for pl in cands], batch_size=1)
+    scores = scores.tolist() if hasattr(scores, "tolist") else list(scores)
+    best = max(range(len(cands)), key=lambda i: scores[i])
+    chunk = rq._payload_to_chunk(cands[best], 0.0, float(scores[best]))
+    _trace(f"ratio-coverage: 補撈 {chunk['source']}#{chunk['chunk_index']} "
+           f"（欄位 {fields}，rerank={chunk['raw_rerank_score']:.4f}）")
+    return chunk
+
+
 def _ensure_ratio_source_coverage(ranked: list[dict], selected: list[dict], want_tickers,
                                   task: str = "") -> list[dict]:
     """ratio 題財務錨源保底：保證 want_tickers 每一家在 selected 裡至少有一個 Fundamentals chunk；
@@ -1017,6 +1075,17 @@ def _ensure_ratio_source_coverage(ranked: list[dict], selected: list[dict], want
             out.append(c)
             seen.add(key)
             missing.discard(t)
+    # 池裡沒有「含該欄位的 Fundamentals」→ 確定性補撈，讓保底真的是保底
+    # （為什麼掃池不夠，見 _fetch_fundamentals_with_field 的 docstring）
+    for t in sorted(missing):
+        c = _fetch_fundamentals_with_field(t, fields, task)
+        if not c:
+            continue
+        key = (c["source"], c["chunk_index"])
+        if key in seen:
+            continue
+        out.append(c)
+        seen.add(key)
     out.sort(key=lambda x: x["raw_rerank_score"], reverse=True)
     return out
 

@@ -1410,6 +1410,44 @@ def _ensure_ticker_coverage(ranked: list[dict], selected: list[dict], want_ticke
 # Hybrid Retrieval via Qdrant (server-side RRF) + client-side rerank
 # ══════════════════════════════════════════════════════════════════════════════
 
+def _payload_to_chunk(payload: dict, rrf_score: float, raw_rerank: float) -> dict:
+    """Qdrant payload → 下游共用的 chunk dict。**這是唯一的建構點**（retrieve 與任何補撈路徑都走它）。
+
+    ⚠ 為什麼抽成具名函式：2026-08-21 實測，`period_basis` 在 payload 裡、也建了索引，
+      但**沒有被帶進 chunk dict**，於是 `agentic_rag_v2._basis_disclosure_notice`
+      在生產上結構性永遠不觸發。而它的閘門之所以全綠，是因為測試自己造 dict、
+      親手寫上了 `period_basis`——量尺與被測物耦合，這是同類第五次。
+      抽成函式之後，閘門可以拿**真實 payload 餵這個生產建構子**，
+      「欄位有沒有傳下來」就變成可證偽的。加欄位請一律加在這裡。"""
+    source = payload.get("source", "unknown")
+    return {
+        "content":          payload.get("document", ""),
+        "source":           source,
+        "source_type":      infer_source_type(source),
+        "ticker":           payload.get("ticker", ""),   # 供每家保底覆蓋（_ensure_ticker_coverage）
+        "chunk_index":      payload.get("chunk_index", 0),
+        "chunk_type":       payload.get("chunk_type", "n/a"),
+        # ↓ 期別三欄（2026-08-19 補）。加進來之前，任何需要「這個 chunk 是哪一節、哪一期」
+        #   的下游都得自己再掃一次 Qdrant——實測被迫這麼做的有三處：
+        #   agentic_rag_v2 的期別 validator、`_scan_kb_coverage`、
+        #   eval/probe_temporal_interference。payload 本來就有，只是沒帶出來。
+        "item_id":          payload.get("item_id", ""),
+        "filing_type":      payload.get("filing_type", ""),
+        "period_code":      str(payload.get("report_period_code") or ""),
+        # 數字口徑（TTM／fiscal_year）。Fundamentals 是 TTM，filing 是 fiscal_year；
+        # 供 agentic 的口徑揭露 validator 判斷「答案引到的是哪一種口徑」。
+        "period_basis":     payload.get("period_basis", ""),
+        # ⚠ 比新舊一律用這個 `(fiscal_year, 期別序)`，**不要拿 `period_code` 比字串**
+        #   ——10-K 是 4 位、10-Q 是 6 位，混比會時對時錯（實測 385 對裡 31 對判反，
+        #   見 `_get_period_ladder` 上方註解）。缺欄位時是 None ＝ 不參與比較。
+        "fiscal_rank":      _fiscal_sort_key(payload.get("fiscal_year"),
+                                             payload.get("fiscal_period")),
+        "rrf_score":        rrf_score,
+        "raw_rerank_score": raw_rerank,
+        "rerank_score":     float(1 / (1 + math.exp(-raw_rerank))),
+    }
+
+
 def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_K,
              model_name: str = DEFAULT_MODEL, enable_rewrite: bool = False,
              disable_filter: bool = False, rewrite_merge_top_n: int | None = None,
@@ -1732,33 +1770,8 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
         raw_scores  = rerank_model.predict(cross_input, batch_size=1)
         raw_scores  = raw_scores.tolist() if hasattr(raw_scores, "tolist") else list(raw_scores)
 
-    enriched = []
-    for p, raw in zip(fused, raw_scores):
-        payload = p.payload or {}
-        source  = payload.get("source", "unknown")
-        enriched.append({
-            "content":          payload.get("document", ""),
-            "source":           source,
-            "source_type":      infer_source_type(source),
-            "ticker":           payload.get("ticker", ""),   # 供每家保底覆蓋（_ensure_ticker_coverage）
-            "chunk_index":      payload.get("chunk_index", 0),
-            "chunk_type":       payload.get("chunk_type", "n/a"),
-            # ↓ 期別三欄（2026-08-19 補）。加進來之前，任何需要「這個 chunk 是哪一節、哪一期」
-            #   的下游都得自己再掃一次 Qdrant——實測被迫這麼做的有三處：
-            #   agentic_rag_v2 的期別 validator、`_scan_kb_coverage`、
-            #   eval/probe_temporal_interference。payload 本來就有，只是沒帶出來。
-            "item_id":          payload.get("item_id", ""),
-            "filing_type":      payload.get("filing_type", ""),
-            "period_code":      str(payload.get("report_period_code") or ""),
-            # ⚠ 比新舊一律用這個 `(fiscal_year, 期別序)`，**不要拿 `period_code` 比字串**
-            #   ——10-K 是 4 位、10-Q 是 6 位，混比會時對時錯（實測 385 對裡 31 對判反，
-            #   見 `_get_period_ladder` 上方註解）。缺欄位時是 None ＝ 不參與比較。
-            "fiscal_rank":      _fiscal_sort_key(payload.get("fiscal_year"),
-                                                 payload.get("fiscal_period")),
-            "rrf_score":        float(p.score),
-            "raw_rerank_score": float(raw),
-            "rerank_score":     float(1 / (1 + math.exp(-raw))),
-        })
+    enriched = [_payload_to_chunk(p.payload or {}, float(p.score), float(raw))
+                for p, raw in zip(fused, raw_scores)]
 
     enriched.sort(key=lambda x: x["raw_rerank_score"], reverse=True)
 

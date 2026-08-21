@@ -11,6 +11,49 @@
 > **已知問題／已接受的極限**搬到 [`BACKLOG.md`](BACKLOG.md)。
 > 本檔只放日期式變更記錄。
 
+---
+
+## 2026-08-21 — lex-17 的兩個真因都在「我修的那一層下面」；after 臂是 null result
+
+**預先寫死的判準沒過**：`lex-17` 三條主張要**同時**轉 PASS 才算修法有效。after 臂
+（`experiments/agentic/gj_mdna_65q_after.json`）跑出 **PASS 5／FAIL 3，與 before 臂逐條相同**，
+且 `require_chunk` 的訊息從「同檔撈到 #1」變成「該檔完全沒被撈到」＝**更壞**。
+→ 照判準記為 null result，不算部分成功。
+
+逐層印出來之後，找到兩個各自獨立、都在前一天修法**下面一層**的真因：
+
+**真因 A：保底掃的池，本來就沒有那個 chunk。**
+`_ensure_ratio_source_coverage` 只在 `run_state.pool` 裡找，而 pool ＝ Qdrant server-side RRF
+回傳的 `RRF_TOP_N_PRIMARY`(=20) 個候選。生產組態是 `full_translate_en=True`，實測英譯句
+`"How is Microsoft's revenue growth rate performing?"` 之下，**`MSFT_Fundamentals #0` 連候選名單
+都沒進**（進來的是零比率的 `#1`，RRF rank 5）；中文原句反而撈得到 `#0`（rank 7）。
+名字叫「保底」，實作卻是「希望它剛好在池裡」。前一天的修法（改成挑「含該欄位」的）方向對，
+但在池裡沒有 `#0` 的情況下，效果只是**正確地拒絕補一個沒用的 `#1`** → Fundamentals 整個消失。
+→ 新增 `_fetch_fundamentals_with_field()`：池裡沒有時**直接查 Qdrant**（`ticker` ＋
+`period_basis="TTM"` 兩個都有索引，全庫 22 筆）。「哪個 chunk 含 Revenue Growth 欄位」有唯一
+正確答案 → 照〈LLM 與 Python 的分工〉交給 Python，不靠相似度。
+⚠ 分數用 cross-encoder **真的重算**，不塞常數——那個數字會印在引用區塊給使用者看。
+⚠ 沒有動 `RRF_TOP_N_PRIMARY`：碼上註明 sweep 過 20 > 40，不為一題改全域召回。
+
+**真因 B：validator 讀的欄位，生產從來沒供給過。**
+`_basis_disclosure_notice` 判 `chunk["period_basis"]`，但 `rq.retrieve()` 建 chunk dict 時
+**沒有帶這個欄位**（payload 有、還建了索引，就是沒帶出來）→ 該 validator 在線上
+**結構性永遠不觸發**。而閘門⑪ 全綠，是因為那 8 條斷言都拿測試自己造的
+`{"period_basis": ...}` 餵進去。**量尺與被測物耦合，同型第五次。**
+→ payload→chunk 的建構抽成 `rq._payload_to_chunk()`（唯一建構點），補上 `period_basis`。
+
+**量尺跟著修**（`eval/verify_answer_validators.py` 89 → **117** 項）：
+- ⑩b 確定性補撈：含「欄位不存在 → 回 `None`，**不可退而求其次**」與「分數必須真的算出來」兩條誤報對照；reranker 用樁替代，仍是零模型載入。
+- ⑪b 生產建構子對照：拿**真實 payload 餵 `rq._payload_to_chunk`**，不自己造 dict。
+- **變異測試三發全中且判別力落在對的斷言上**：M1（建構子不帶 `period_basis`）→ ⑪ 那 8 條**照樣全 PASS**、只有 ⑪b 的 3 條叫；M2（補撈不看欄位）→ ⑩b 5 條叫；M3（補撈整個移除）→ ⑩b 4 條叫。
+
+**端到端實測**（`experiments/agentic/gj_lex17_smoke.json`）：`lex-17` 三條全 PASS，答案引到
+`MSFT_Fundamentals_20260612.txt #0` 並明列 **TTM 18.30%**，且每個數字都標了所屬期間；
+口徑警語**沒有**印出來——沉默條件③ 正確生效（引用裡已經有 TTM 就不需要警語）。
+⚠ 殘留兩點，都不算修好：① 開頭第一句仍以 10-K 財年 **18%** 當結論，gold 是 TTM 18.3%；
+② `anchored_pct` 這條是靠昨天加的 `expect_text` 析取才 PASS 的（anchor 抓到的仍是 18%），
+**它現在和 `require_text` 幾乎重複，名字說的事情已經不再量了**。
+
 ## 2026-08-20
 
 ### live web 取代 KB 新聞：②內容這一半量完——可信，但抓到一個 live 專屬的引用缺陷

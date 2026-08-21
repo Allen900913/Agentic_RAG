@@ -591,6 +591,61 @@ def gate10_ratio_source_field() -> None:
     except Exception as e:
         _assert("⑩ 活體對照可執行（掃不到就等於這道閘門只測了合成資料）", False, repr(e))
 
+    # ── ⑩b 確定性補撈：池裡沒有含該欄位的 Fundamentals 時，直接查 Qdrant ──────────
+    # ⚠ **為什麼需要這一組**（2026-08-21）：上面那幾條測的是「池裡有 #0 時會不會挑對」，
+    #   而實測的生產失敗是「**池裡根本沒有 #0**」——英譯 query 下 #0 連 RRF 候選名單都沒進。
+    #   也就是說 ⑩ 原本整組斷言測的形狀，在生產上不成立；量尺看得見的病和實際的病不是同一個。
+    # ⚠ reranker 用樁替代（不載模型）：要測的是**選哪一個 chunk**（確定性），不是分數本身。
+    #   樁的回傳值同時當成分數溯源的探針——見下方最後一條。
+    class _StubRR:
+        def __init__(self): self.calls = 0
+        def predict(self, pairs, batch_size=1):
+            self.calls += 1
+            return [0.4242 + i * 0.01 for i in range(len(pairs))]
+
+    _stub = _StubRR()
+    _orig_get_models = ar._get_models
+    try:
+        _cl2 = ar.rq.make_qdrant_client()
+        ar._get_models = lambda: (None, _stub, _cl2)
+
+        _got = ar._fetch_fundamentals_with_field("MSFT", ["Revenue Growth"], "營收成長率")
+        _assert("⑩b 池裡沒有 → 直接從 Qdrant 撈到含 Revenue Growth 的那一個（實測是 #0）",
+                _got is not None and "Fundamentals" in _got["source"]
+                and "revenue growth" in (_got["content"] or "").lower(),
+                None if _got is None else (_got["source"], _got["chunk_index"]))
+        _assert("⑩b 補撈的 chunk 走生產建構子 → 期別／口徑欄位齊全（下游 validator 靠它們）",
+                _got is not None and _got.get("period_basis") == "TTM"
+                and "fiscal_rank" in _got and _got.get("ticker") == "MSFT",
+                None if _got is None else sorted(_got))
+        _assert("⑩b 分數是**真的算出來的**，不是捏造的常數"
+                "（這個數字會印在引用區塊給使用者看）",
+                _got is not None and abs(_got["raw_rerank_score"] - 0.4242) < 1e-9
+                and _stub.calls == 1,
+                None if _got is None else (_got["raw_rerank_score"], _stub.calls))
+
+        _assert("⑩b 誤報對照①：欄位在庫裡不存在 → 回 None，**不可以退而求其次補一個隨便的 Fundamentals**"
+                "（那正是原本的病）",
+                ar._fetch_fundamentals_with_field("MSFT", ["Zzz Nonexistent Field"], "x") is None)
+        _assert("⑩b 誤報對照②：沒有 ticker／沒有欄位 → 回 None，不查庫",
+                ar._fetch_fundamentals_with_field("", ["Revenue Growth"], "x") is None
+                and ar._fetch_fundamentals_with_field("MSFT", [], "x") is None)
+
+        # 端到端：ranked 裡**一個 Fundamentals 都沒有**（＝實測的生產池形狀）
+        _e2e = F([FILING], [FILING], ["MSFT"], "Microsoft 的營收成長率表現如何？")
+        _assert("⑩b 端到端：池裡零個 Fundamentals（實測的生產形狀）→ 保底仍要補到含該欄位的 chunk",
+                any("Fundamentals" in c["source"] and "revenue growth" in (c["content"] or "").lower()
+                    for c in _e2e),
+                [(c["source"], c["chunk_index"]) for c in _e2e])
+        _assert("⑩b 端到端誤報對照：不是 ratio 欄位時不會憑空補（自由現金流→池裡沒有就沒有）",
+                not any("Fundamentals" in c["source"]
+                        for c in F([FILING], [FILING], ["MSFT"], "Microsoft 的自由現金流？")),
+                None)
+    except Exception as e:
+        _assert("⑩b 可執行（跑不起來就等於這一組沒測到東西）", False, repr(e))
+    finally:
+        ar._get_models = _orig_get_models
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 def gate11_basis_disclosure() -> None:
@@ -651,6 +706,45 @@ def gate11_basis_disclosure() -> None:
                 set(_seen) == {"TTM", "fiscal_year"} and _seen["TTM"] > 0, str(dict(_seen)))
     except Exception as e:
         _assert("⑪ 活體對照可執行（掃不到就等於這道閘門只測了合成資料）", False, repr(e))
+
+    # ── ⑪b 生產建構子對照：validator 讀的欄位，retrieve() 到底供不供得出來 ──────────
+    # ⚠ **這一組是補一個真實的漏洞**（2026-08-21）：上面每一條都拿測試自己造的
+    #   `{"period_basis": ...}` 餵進去，於是全綠——而生產的 `rq.retrieve()`
+    #   **根本沒把 `period_basis` 放進 chunk dict**，這個 validator 在線上結構性永遠不觸發。
+    #   「payload 裡有這個欄位」（上面那條活體）和「chunk dict 裡有這個欄位」是兩件事，
+    #   中間隔著一個建構子。量尺與被測物耦合的同型錯誤，這是第五次。
+    #   → 所以這裡拿**真實 payload 餵生產建構子** `rq._payload_to_chunk`，不自己造 dict。
+    try:
+        from qdrant_client import models as _qm2
+        _cl3 = ar.rq.make_qdrant_client()
+
+        def _one(**match):
+            _pts, _ = _cl3.scroll(ar.rq.COLLECTION_NAME, limit=1, with_payload=True,
+                                  with_vectors=False,
+                                  scroll_filter=_qm2.Filter(must=[
+                                      _qm2.FieldCondition(key=k, match=_qm2.MatchValue(value=v))
+                                      for k, v in match.items()]))
+            return (_pts[0].payload or {}) if _pts else None
+
+        _fund_pl = _one(ticker="MSFT", period_basis="TTM")
+        _fil_pl = _one(ticker="MSFT", period_basis="fiscal_year")
+        _fund = ar.rq._payload_to_chunk(_fund_pl or {}, 0.0, 0.0)
+        _fil = ar.rq._payload_to_chunk(_fil_pl or {}, 0.0, 0.0)
+
+        _assert("⑪b 生產建構子把 period_basis 帶進 chunk dict（少了它，這道閘門上面全部是假綠）",
+                "period_basis" in _fund and "period_basis" in _fil,
+                sorted(_fund))
+        _assert("⑪b Fundamentals → TTM、filing → fiscal_year（值也要對，不是有 key 就好）",
+                _fund.get("period_basis") == "TTM" and _fil.get("period_basis") == "fiscal_year",
+                (_fund.get("period_basis"), _fil.get("period_basis")))
+        _assert("⑪b 端到端：真實 filing chunk 直接餵 validator → 會揭露"
+                "（上面的陽性用的是合成 dict，這條用的是庫裡真的那一筆）",
+                ar._BASIS_NOTICE_MARK in N("Microsoft 的營收成長率表現如何？", [_fil]),
+                _fil.get("period_basis"))
+        _assert("⑪b 端到端沉默對照：真實 Fundamentals chunk 一起引 → 不揭露",
+                N("Microsoft 的營收成長率表現如何？", [_fil, _fund]) == "")
+    except Exception as e:
+        _assert("⑪b 生產建構子對照可執行（跑不起來＝這道閘門仍然只測合成資料）", False, repr(e))
 
 
 def main() -> int:
