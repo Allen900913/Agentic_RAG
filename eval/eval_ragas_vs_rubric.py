@@ -179,9 +179,20 @@ _INLINE_CITATION = re.compile(r"\s*【[^】]*?\.(?:html|txt)[^】]*?】")
 #      把門檻從 .046 降到 .005 會讓一堆抽樣變異被誤讀成「顯著改善」。
 #   ② 噪音門檻取大只會讓我**要求更多證據**，永遠不會讓我少要求——錯的方向是安全的那一邊。
 #   → 想真的收斂 precision 的門檻，要多跑幾對，不是拿一對就改。
+#
+# 2026-08-21 **第二對**（同樣是 gj_mdna_65q_r1 餵給 judge 兩次，相隔一天；
+# experiments/agentic/ragas_65q_r1.json vs 前一輪的聚合值）。實測 |passA-passB|：
+#   recall .006 / precision .013 / nv .000 / faith .003 / relevancy .003 / **correctness .012**
+# → `answer_correctness` 的 **.007 被這一對推翻，改成 .012**（取兩對的較大值）。
+# ⚠ **這條常數差點害我誤判一次修法**：拿 after 臂去比**前一天那一輪**的 correctness 得到
+#   −.009，看起來「略高於 .007 門檻的下降」→ 我已經開始找機制了。把基準換成同期重跑的
+#   passB 之後，真實差值是 **+.003（噪音內）**。
+#   兩個教訓：① **跨輪比較 RAGAS 分數等於把 judge 噪音算進系統差異**——A/B 兩臂要在
+#   同一批判分裡比，或至少各自附一個同期基準；② 上面①「一對不是上界」那句話寫得很對，
+#   但寫下它的同一支腳本仍然用一對定了 correctness 的門檻。**寫下警告不等於服從警告。**
 NOISE = {"context_recall": 0.017, "context_precision": 0.046, "nv_context_relevance": 0.008,
          "context_relevance": 0.008, "faithfulness": 0.010, "answer_relevancy": 0.004,
-         "answer_correctness": 0.007}
+         "answer_correctness": 0.012}
 # 2026-08-20 在 **65 題**上重量（experiments/ragas_gold_baseline_65q.json）。
 # 作法：把 reference_answers.json 原文當成系統答案，**contexts 沿用同一份 agentic 跑分結果**
 # （experiments/agentic/gj_mdna_65q_r1.json）→ 只換 answer 這一個變因。
@@ -218,7 +229,9 @@ def _print_interpretation_guide(overall: dict, present: list[str]) -> None:
     print("  ⚠ 這些常數綁定「NVIDIA gpt-oss-120b judge + **100 題** eval_set + 當時的 reference」。")
     print("    換 judge 模型、換題庫、或大改 reference 之後必須重量,別沿用。")
     print("  ✔ 2026-08-20：gold 上限與噪音門檻**都已在 65 題上重量**，可以引用。")
-    print("     ⚠ 噪音只量了**一對**（j1/j2）。門檻取新舊較大值——一對樣本是抽樣不是上界，")
+    print("     ⚠ 噪音量了**兩對**（correctness 已因第二對從 .007 上調到 .012）。門檻取較大值——")
+    print("        ⛔ **不要拿本次分數去比別輪跑出來的聚合值**：實測同一份結果檔兩次判分，")
+    print("           correctness 就差 .012。跨輪比＝把 judge 噪音算進系統差異（2026-08-21 誤判過一次）。")
     print("        尤其 context_precision：最高排名判定翻面整題就 1.0→0.0，這次剛好沒翻。")
     print("     ⛔ 跨 2026-08-19 的分數一律不可直接比：題庫從 100 題變成 65 題，分母與難度分佈都不同。")
 
