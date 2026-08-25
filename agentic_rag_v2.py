@@ -1258,21 +1258,70 @@ _EXPLICIT_FY_RE = re.compile(r"(?:19|20)\d{2}\s*(?:財年|财年|會計年度|�
                              r"|(?:fiscal\s*year|FY)\s*(?:19|20)?\d{2}", re.IGNORECASE)
 
 
-def _basis_disclosure_notice(task: str, cited_chunks: list[dict]) -> str:
+# Fundamentals chunk 裡「欄位名 : 12.34%」的取值。⚠ 這不是感知，是**解析本專案自己 ingest
+# 產生的固定格式**（見 data/edgar_processed/Fundamentals/*.txt），屬於格式定義的封閉集合。
+_FUND_PCT_TMPL = r"{field}\s*(?:\([^)]*\))?\s*[:：]\s*(-?\d+(?:\.\d+)?)\s*%"
+
+
+def _ttm_field_values(cited_chunks: list[dict], fields: list[str]) -> dict[str, str]:
+    """引用到的 TTM chunk 裡，被問欄位各自的值（`{"Revenue Growth": "18.30"}`）。認不出就不放。"""
+    out: dict[str, str] = {}
+    for c in cited_chunks or []:
+        if (c.get("period_basis") or "") != "TTM":
+            continue
+        txt = c.get("content") or ""
+        for f in fields:
+            m = re.search(_FUND_PCT_TMPL.format(field=re.escape(f)), txt, re.IGNORECASE)
+            if m:
+                out.setdefault(f, m.group(1))
+    return out
+
+
+def _value_stated(answer: str, val: str) -> bool:
+    """答案裡有沒有真的講出這個值。`18.30` 與 `18.3` 視為同一個；`118.3` 不算（前後要有邊界）。"""
+    trimmed = val.rstrip("0").rstrip(".") if "." in val else val
+    return re.search(rf"(?<![\d.]){re.escape(trimmed)}0*(?![\d])", answer or "") is not None
+
+
+def _basis_disclosure_notice(task: str, cited_chunks: list[dict], answer: str = "") -> str:
     """答案只引到財報期間口徑的數字、卻是在回答一個沒指定口徑的比率題 → 回傳揭露警語。
 
-    三個沉默條件（缺一不可，全部是「話太多」方向的誤報對照）：
+    沉默條件（全部是「話太多」方向的誤報對照——這道護欄的失敗方向不是漏印，是變成背景噪音）：
       ① 不是比率／成長率題（市值、EPS 這類單一來源指標沒有口徑歧義）
       ② 問題自己指定了絕對期別（`2025 財年`、`FY2026`、yyyymm 期碼）——那時財報口徑正是要的
-      ③ 引用裡**已經有** TTM 口徑的 chunk ＝ 答案已經看得到 TTM，不需要這段
+      ③ **答案裡真的講出了那個 TTM 值**
+
+    ⚠ ③ 原本寫的是「引用裡有 TTM chunk」，**那是錯的，而且是被自己要抓的行為解除武裝**
+      （2026-08-21 實測，lex-17）：補撈修好之後，答案確實引到 `MSFT_Fundamentals #0`，
+      眼前就是 `Revenue Growth (YoY): 18.30%`，它卻寫成
+      「全年與最近的 **TTM** 都在約 **18%** 左右【…chunk #0】」——**把 TTM 四捨五入成 18%，
+      再與 10-K 的財年 18% 併成同一個說法**。引用是真的、數字看起來也對，兩個口徑就這樣消失了。
+      而舊條件③ 看到「有 TTM chunk 被引用」就沉默 → **護欄正好在該叫的那一刻關掉**。
+      → 判準改成看**值有沒有出現在答案裡**（確定性字串比對，見 `_value_stated`）。
+
+    ⚠ 有值的時候警語就**把值講出來**，不是只講「這不是 TTM」：值逐字取自**答案自己引用的
+      那個 chunk**，所以仍然可追溯；這是 R4 那條「要求並陳不裁決」的同一個做法。
     """
     if not _is_ratio_intent(task):
         return ""
     if _EXPLICIT_FY_RE.search(task or "") or rq._PERIOD_CODE_RE.search(task or ""):
         return ""
+
+    fields = _wanted_ratio_fields(task)
+    ttm_vals = _ttm_field_values(cited_chunks, fields)
+    if ttm_vals:
+        missing = {f: v for f, v in ttm_vals.items() if not _value_stated(answer, v)}
+        if not missing:
+            return ""                  # 答案真的給了 TTM 值 → 不需要這段
+        detail = "、".join(f"{f} {v}%" for f, v in sorted(missing.items()))
+        return (chr(10) + chr(10) + "---" + chr(10) + _BASIS_NOTICE_MARK
+                + f"上文引用的 TTM（最近十二個月）口徑數值為 **{detail}**，"
+                  "與文中的財報期間（財年／單季）數字不是同一個口徑——"
+                  "兩者數值可能接近但不可互換。")
+
     basis = {(c.get("period_basis") or "") for c in (cited_chunks or [])}
     if "TTM" in basis:
-        return ""
+        return ""                      # 引到 TTM chunk 但認不出欄位值 → 維持沉默，不在看不懂時多話
     if "fiscal_year" not in basis:
         return ""                      # 沒引到任何財報期間 chunk（例如純 web 答案）→ 不是這條的守備範圍
     return (chr(10) + chr(10) + "---" + chr(10) + _BASIS_NOTICE_MARK
@@ -3453,7 +3502,7 @@ def _node_synthesize(state: SupervisorState) -> dict:
     _cited = _extract_citations(answer)
     _used = [c for c in (state.get("collected") or [])
              if (c.get("source"), c.get("chunk_index")) in _cited]
-    answer = answer.rstrip() + _basis_disclosure_notice(state.get("query", ""), _used)
+    answer = answer.rstrip() + _basis_disclosure_notice(state.get("query", ""), _used, answer)
     return {"answer": answer}
 
 

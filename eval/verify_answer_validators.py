@@ -672,7 +672,8 @@ def gate11_basis_disclosure() -> None:
     _assert("⑪ 陽性：毛利率題同樣成立（不是只認成長率）",
             ar._BASIS_NOTICE_MARK in N("Apple 的毛利率是多少？", [FY]))
 
-    _assert("⑪ 沉默對照①：引用裡已經有 TTM chunk → 不必再講",
+    _assert("⑪ 沉默對照①（退路）：引到 TTM chunk 但解不出欄位值 → 維持沉默，"
+            "不在看不懂的情況下多話",
             N("Microsoft 的營收成長率表現如何？", [FY, TTM]) == "")
     _assert("⑪ 沉默對照②：問題自己指定了財年（2025 財年／FY2026）→ 財報口徑正是要的，講了是雜訊",
             N("Apple 2025 財年的毛利率是多少？", [FY]) == ""
@@ -706,6 +707,43 @@ def gate11_basis_disclosure() -> None:
                 set(_seen) == {"TTM", "fiscal_year"} and _seen["TTM"] > 0, str(dict(_seen)))
     except Exception as e:
         _assert("⑪ 活體對照可執行（掃不到就等於這道閘門只測了合成資料）", False, repr(e))
+
+    # ── ⑪c 沉默條件③：看**值有沒有講出來**，不是看有沒有引到 TTM chunk ──────────
+    # ⚠ **這一組是回歸鎖，來自一次「護欄被自己要抓的行為解除武裝」**（2026-08-21，lex-17）：
+    #   補撈修好之後，答案確實引到了 MSFT_Fundamentals #0（眼前就是 Revenue Growth 18.30%），
+    #   卻寫成「全年與最近的 TTM 都在約 18% 左右【…chunk #0】」——把 TTM 四捨五入成 18%，
+    #   再與 10-K 的財年 18% 併成同一個說法。引用是真的、數字看起來也對，兩個口徑就這樣消失。
+    #   而舊條件③「引用裡有 TTM chunk 就沉默」→ **正好在該叫的那一刻把警語關掉**。
+    # ⚠ 陽性答案**逐字凍結在這裡，不讀 experiments/**（同閘門② 的理由）：讀結果檔的話，
+    #   一修好陽性就消失，這道閘門會隨修法生效而自己失去判別力。
+    _TTM0 = {"source": "MSFT_Fundamentals_20260612.txt", "chunk_index": 0, "period_basis": "TTM",
+             "content": "Market Cap : $2899.62B Revenue Growth (YoY): 18.30% "
+                        "Gross Margin : 68.31% Operating Margin: 46.33% Profit Margin : 39.34%"}
+    _Q = "Microsoft 的營收成長率表現如何？"
+    # 逐字取自 experiments/agentic/gj_mdna_65q_after2.json 的 lex-17（2026-08-21）
+    _ANS_BAD = ("Microsoft 的營收持續以兩位數的高速成長，全年與最近的 TTM 都在約 18% 左右的 "
+                "YoY 增長率【MSFT_Fundamentals_20260612.txt, chunk #0】。")
+    _ANS_GOOD = "TTM（截至 2026-06-12）：營收年增率 **18.30%**（YoY）【MSFT_Fundamentals_20260612.txt, chunk #0】"
+
+    _n = N(_Q, [FY, _TTM0], _ANS_BAD)
+    _assert("⑪c 陽性（回歸鎖）：引了 TTM chunk 卻把 18.30% 講成「約 18%」→ 必須揭露"
+            "（舊條件③ 在這裡會沉默＝護欄被自己要抓的行為關掉）",
+            ar._BASIS_NOTICE_MARK in _n, repr(_n[:60]))
+    _assert("⑪c 警語要把**值**講出來，不是只說「這不是 TTM」"
+            "（值逐字取自答案自己引用的那個 chunk，仍可追溯）",
+            "18.30" in _n, repr(_n[:120]))
+
+    _assert("⑪c 沉默對照①：答案真的講出 18.30% → 不必再講",
+            N(_Q, [FY, _TTM0], _ANS_GOOD) == "")
+    _assert("⑪c 沉默對照②：講成 18.3%（去掉尾零）視為同一個值 → 仍沉默",
+            N(_Q, [FY, _TTM0], "營收年增率 18.3%") == "")
+    _assert("⑪c 誤報對照：118.3 不算講出了 18.30（前後要有邊界，否則警語會被無關數字關掉）",
+            ar._BASIS_NOTICE_MARK in N(_Q, [FY, _TTM0], "營收 118.3 億美元"))
+    _assert("⑪c 沉默對照③：不是 ratio 題 → 不管引了什麼都不觸發",
+            N("NVIDIA 目前的市值是多少？", [FY, _TTM0], "市值 2.9 兆") == "")
+    _assert("⑪c 多欄位：只有其中一個值沒講出來 → 只講那一個",
+            "68.31" in N("Microsoft 的毛利率與營收成長率？", [FY, _TTM0], "營收年增率 18.30%")
+            and "18.30" not in N("Microsoft 的毛利率與營收成長率？", [FY, _TTM0], "營收年增率 18.30%"))
 
     # ── ⑪b 生產建構子對照：validator 讀的欄位，retrieve() 到底供不供得出來 ──────────
     # ⚠ **這一組是補一個真實的漏洞**（2026-08-21）：上面每一條都拿測試自己造的
