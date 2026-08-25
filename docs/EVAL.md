@@ -30,6 +30,7 @@
 | 項目 | 死因 | 復活條件 | 日期 |
 |---|---|---|---|
 | RRF-fusion（跨 query-variant 排名融合） | pool 是妥協排名，候選集更雜訊化 | 無（機制型） | 07-06 |
+| SYSTEM_PROMPT 加「不得四捨五入」（Rule 8 NUMERIC FIDELITY） | 規則被明文違反：兩輪重跑裡 r2 的 `lex-17` 開場句仍寫「約在 18% 左右【Fundamentals #0】」，而那個 chunk 眼前就是 18.30%。發生率 1/2 輪 vs 改動前 1/3 個封存檔——**在噪音內，量不出效果**。⚠ 規則本身沒有害處（同批 RAGAS faithfulness +.067），死的是「能證明它有效」這件事 | 事件率拉高到可量的量級：造一批 gold 是 Fundamentals 兩位小數比率、且同公司 10-K 有相近整數值的題（見 BACKLOG） | 08-25 |
 | chunking 切細救 rerank 分數 | 孤立段落無上下文，cross-encoder 評分反更低 | 換對上下文無關的評分方式 | 07-07 |
 | dense+sparse 一起翻英文 | dense 翻譯本身有害，sem-11 退步 | 已拆開測試（見下條），仍死 | 07-08 |
 | `sparse_translate_en`（只翻 sparse） | 救不回任何 RECALL checkpoint，還傷 sem-11 | 無 | 07-08 |
