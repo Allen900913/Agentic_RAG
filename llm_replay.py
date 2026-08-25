@@ -71,7 +71,7 @@ def enabled() -> bool:
 
 # 所有呼叫端註冊的 kind＝我們自己的碼定義的**封閉集合**，所以列清單正當（同 VALID_*_ITEMS
 # 的理由）。新增接點時要一起加進來——沒加會在 strict 名單裡被判成拼錯而報錯，那是刻意的。
-_KNOWN_KINDS = {"plan", "translate_en", "check"}
+_KNOWN_KINDS = {"plan", "translate_en", "check", "ratio"}
 
 
 def _strict_kinds() -> Optional[set[str]]:

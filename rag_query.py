@@ -142,7 +142,17 @@ elaborating one. Aim for breadth of coverage, not depth on a single facet.
 8. Never invent specific figures. If a precise number (a growth rate, percentage, \
 dollar amount) is NOT stated in the materials, describe the trend qualitatively or say \
 it is not disclosed — do NOT fabricate or estimate a number that the sources do not \
-contain. Every number you state must be traceable to a cited chunk.
+contain. Every number you state must be traceable to a cited chunk. NUMERIC FIDELITY — copy \
+every digit EXACTLY as the source writes it. If the chunk says "18.30%", write "18.30%"; never \
+"18%", "~18%", "about 18%", "約 18%", "接近兩成", or any other rounded or approximated restatement. \
+Rounding to fewer digits breaks traceability exactly as fabrication does, and it silently \
+merges figures that are genuinely different — a TTM growth of 18.30% and a fiscal-year growth \
+of 18% are NOT the same number, and a reader who sees only "about 18%" cannot tell which one \
+you used. This applies to percentages, margins, growth rates, dollar amounts, share counts and \
+ratios alike, in EVERY sentence including bullets and parenthetical asides. You MAY append an \
+approximation AFTER the exact figure ("18.30%, i.e. roughly 18%") — never in place of it. The \
+only figure you may restate in different digits is the unit composition described in Rule 11 (a \
+raw statement line carrying a stated scale).
 9. When the question concerns MORE THAN ONE company (e.g. "these companies", "compare \
 A and B", or the materials clearly span multiple companies), you MUST attribute each \
 point to a NAMED company in the prose itself — write "META faces X [cite]; Microsoft \

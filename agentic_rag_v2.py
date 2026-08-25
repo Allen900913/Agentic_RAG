@@ -979,6 +979,120 @@ def _is_ratio_intent(task: str) -> bool:
     return bool(_RATIO_INTENT_RE.search(task or ""))
 
 
+# ── ratio 意圖：LLM 判定（詞表退位成 fallback）────────────────────────────────
+# **為什麼要改**（2026-08-25，BACKLOG 殘留①）：上面那條 `_RATIO_INTENT_RE` 是拿字串比對
+#   做感知，正是 CLAUDE.md〈硬編碼詞表是警訊〉講的形狀。實測 `col-11` 連跑四輪，Planner
+#   把子問題寫成「Microsoft 的營收成長得快不快？」時整條 ratio 機制**靜默繞過**——不是
+#   補撈失敗，是根本沒進到補撈。往詞表加「快不快」只會換一個措辭再漏一次。
+# **判準**（CLAUDE.md〈LLM 與 Python 的分工〉）：「這句話想知道哪個量」沒有唯一機械答案
+#   → LLM；「那個量在 Fundamentals 叫什麼欄位名」是封閉集合 → 由 enum 收斂。所以 LLM 只
+#   被允許從 `_RATIO_FIELD_ENUM` 裡挑，挑到集合外的一律丟掉。
+# ⚠ **為什麼不擴 `_PLANNER_PROMPT` 而是另外一次 call**：planner prompt 一動，子問題拆解
+#   本身就會漂（輸出格式從 `["字串"]` 變成物件陣列），**65 題每一題的檢索池都會跟著變**，
+#   等於把被測項和基準一起搬走。多付一次輕量 call 換 planner prompt 逐字不變，是這裡唯一
+#   划算的交易（同 `verify_web_gate_isolation` 對 Checker prompt 的 byte-identical 斷言）。
+# ⚠ **fallback 會遮住 LLM 的失手**：解析失敗回 None → 退回詞表，行為與舊碼完全相同。
+#   所以「LLM 判得準不準」不能從端到端結果推，要用 `eval/probe_ratio_intent.py` 直接量。
+_RATIO_FIELD_ENUM: tuple[str, ...] = tuple(f for _, f in _RATIO_FIELD_HINTS)
+
+_RATIO_INTENT_PROMPT = """你是財務問句的欄位分類器。給你一組編號的「子問題」，逐一判斷它想知道的
+是不是本知識庫 Fundamentals 檔裡那四個**預先算好的比率欄位**之一。
+
+可選欄位（只能從這四個挑，不可自創、不可改寫）：
+- "Gross Margin"      毛利率
+- "Operating Margin"  營業利益率／營業利潤率
+- "Profit Margin"     淨利率／純益率／利潤率／獲利率
+- "Revenue Growth"    營收成長率（YoY）
+
+判準是**問題想知道的那個量**，不是它用了哪些字——口語、比喻、反問、間接問法都要照樣判：
+「營收成長得快不快」問的就是 Revenue Growth；「每賺一塊錢留下多少」問的就是 Profit Margin。
+
+問到多個就都列。問的**不是**這四個比率時回空陣列，例如：
+- 市值／股價／本益比／ROE／EPS／自由現金流／現金與負債 → []
+- 營收「金額」是多少、獲利「金額」多少 → []（那是金額不是比率／成長率）
+- 風險、策略、競爭、產品、業務描述 → []
+
+只輸出一個 JSON 陣列，長度與子問題數完全相同，第 i 個元素是第 i 題的欄位陣列。
+不要輸出任何其他文字。例（輸入兩題）：[["Revenue Growth"],[]]"""
+
+
+def _classify_ratio_fields(tasks: list[str]) -> list[list[str] | None]:
+    """一次 LLM call 判定每個子問題問的是哪幾個 Fundamentals 比率欄位。
+
+    回傳與 `tasks` 等長的清單，每格是 `list[str]`（**空 list 是有效答案＝判定不是 ratio 題**）
+    或 `None`（＝LLM 沒表態，呼叫端須退回詞表）。**這兩者不可混為一談**：空 list 要能壓過
+    詞表，否則詞表仍然是實際做決定的人，這次改動就只是裝飾。"""
+    if not tasks:
+        return []
+    _rk = "\n".join(tasks)
+    _hit = _replay.get("ratio", _rk)
+    if _hit is not _replay.MISS:
+        return [None if x is None else list(x) for x in _hit]
+    user = "\n".join(f"{i + 1}. {t}" for i, t in enumerate(tasks))
+    try:
+        with _quiet():
+            raw = rq.call_llm(
+                [{"role": "system", "content": _RATIO_INTENT_PROMPT},
+                 {"role": "user", "content": user}],
+                RETRIEVAL_MODEL, temperature=0.0,
+            )
+        data = _loads_json_lenient(raw)
+        if not isinstance(data, list) or len(data) != len(tasks):
+            raise ValueError(f"shape mismatch: {data!r}")
+        out: list[list[str] | None] = []
+        for item in data:
+            if not isinstance(item, list):
+                raise ValueError(f"element not a list: {item!r}")
+            out.append([f for f in _RATIO_FIELD_ENUM if f in item])   # enum 外一律丟掉
+    except Exception as exc:
+        _trace(f"ratio-intent: LLM 判定失敗 {exc!r} -> 退回詞表")
+        return [None] * len(tasks)
+    _trace(f"ratio-intent: {list(zip(tasks, out))}")
+    _replay.put("ratio", _rk, out)
+    return out
+
+
+def _resolve_ratio_fields(fields: list[str] | None, task: str) -> list[str]:
+    """要撈的 Fundamentals 欄位：LLM 表態過就以它為準（**含空 list**），沒表態才退回詞表。"""
+    if fields is not None:
+        return [f for f in _RATIO_FIELD_ENUM if f in fields]
+    return _wanted_ratio_fields(task)
+
+
+def _has_ratio_intent(fields: list[str] | None, task: str) -> bool:
+    """ratio 意圖：LLM 表態過就是「有沒有挑到欄位」，沒表態才退回詞表。
+
+    ⚠ 這裡把「意圖」與「欄位」**合成同一個訊號**，是刻意的：舊碼允許 `_is_ratio_intent`
+      為真而 `_wanted_ratio_fields` 為空（兩份詞表不同步，例如「獲利率」在前者不在後者），
+      而那個組合會讓 `_ensure_ratio_source_coverage` 退回「挑分數最高的 Fundamentals」——
+      那正是 mi-05／lex-17 的真因。走 LLM 這條路時不再有那個縫。"""
+    if fields is not None:
+        return bool(_resolve_ratio_fields(fields, task))
+    return _is_ratio_intent(task)
+
+
+def _todos_ratio_fields(todos: list[dict] | None) -> list[str] | None:
+    """把各子問題的欄位判定收成一個聯集，供 Synthesize 端的揭露 validator 用。
+
+    ⚠ 回 `None` 的條件是「**沒有任何一個** todo 帶著判定」（＝ LLM 整批失手，或這是一份
+      舊格式的 state）——那時呼叫端會退回詞表、行為同舊碼。只要有一個 todo 表過態，就以
+      LLM 的判定為準，即使聯集是空的：Synthesize 看的是原始問句，而原始問句正是詞表最會
+      誤判的地方（「營收多少」被 `成長率` 以外的字樣掃到）。"""
+    seen = False
+    out: list[str] = []
+    for t in todos or []:
+        f = t.get("ratio_fields")
+        if f is None:
+            continue
+        seen = True
+        for x in f:
+            if x in _RATIO_FIELD_ENUM and x not in out:
+                out.append(x)
+    if not seen:
+        return None
+    return [f for f in _RATIO_FIELD_ENUM if f in out]     # 順序穩定，方便斷言
+
+
 def _fetch_fundamentals_with_field(ticker: str, fields: list[str], task: str) -> dict | None:
     """直接從 Qdrant 撈該公司「含指定欄位」的 Fundamentals chunk（零 LLM、只讀 payload）。
 
@@ -1038,7 +1152,8 @@ def _fetch_fundamentals_with_field(ticker: str, fields: list[str], task: str) ->
 
 
 def _ensure_ratio_source_coverage(ranked: list[dict], selected: list[dict], want_tickers,
-                                  task: str = "") -> list[dict]:
+                                  task: str = "",
+                                  ratio_fields: list[str] | None = None) -> list[dict]:
     """ratio 題財務錨源保底：保證 want_tickers 每一家在 selected 裡至少有一個 Fundamentals chunk；
     缺的就從 ranked（完整 rerank 降序池）補上該家分數最高的 Fundamentals，回傳仍按 rerank 降序。
     照 rq._ensure_ticker_coverage 的結構（只加不減）。零/未知 ticker 時原樣回傳。
@@ -1048,7 +1163,7 @@ def _ensure_ratio_source_coverage(ranked: list[dict], selected: list[dict], want
         return selected
     is_fund = lambda c: "Fundamentals" in (c.get("source") or "")
     # 要補的不是「隨便一個 Fundamentals」，是**含被問欄位的那一個**（見 _RATIO_FIELD_HINTS 上方的實測）。
-    fields = _wanted_ratio_fields(task)
+    fields = _resolve_ratio_fields(ratio_fields, task)
 
     def _has_field(c: dict) -> bool:
         if not fields:
@@ -1283,7 +1398,8 @@ def _value_stated(answer: str, val: str) -> bool:
     return re.search(rf"(?<![\d.]){re.escape(trimmed)}0*(?![\d])", answer or "") is not None
 
 
-def _basis_disclosure_notice(task: str, cited_chunks: list[dict], answer: str = "") -> str:
+def _basis_disclosure_notice(task: str, cited_chunks: list[dict], answer: str = "",
+                             ratio_fields: list[str] | None = None) -> str:
     """答案只引到財報期間口徑的數字、卻是在回答一個沒指定口徑的比率題 → 回傳揭露警語。
 
     沉默條件（全部是「話太多」方向的誤報對照——這道護欄的失敗方向不是漏印，是變成背景噪音）：
@@ -1302,12 +1418,12 @@ def _basis_disclosure_notice(task: str, cited_chunks: list[dict], answer: str = 
     ⚠ 有值的時候警語就**把值講出來**，不是只講「這不是 TTM」：值逐字取自**答案自己引用的
       那個 chunk**，所以仍然可追溯；這是 R4 那條「要求並陳不裁決」的同一個做法。
     """
-    if not _is_ratio_intent(task):
+    if not _has_ratio_intent(ratio_fields, task):
         return ""
     if _EXPLICIT_FY_RE.search(task or "") or rq._PERIOD_CODE_RE.search(task or ""):
         return ""
 
-    fields = _wanted_ratio_fields(task)
+    fields = _resolve_ratio_fields(ratio_fields, task)
     ttm_vals = _ttm_field_values(cited_chunks, fields)
     if ttm_vals:
         missing = {f: v for f, v in ttm_vals.items() if not _value_stated(answer, v)}
@@ -3227,6 +3343,10 @@ _REPLANNER_PROMPT = f"""你是美股情報 RAG 的動態重規劃器。給你「
 def _node_plan(state: SupervisorState) -> dict:
     freshness_mode = state.get("freshness_mode", FRESHNESS_LIVE)
     subs = _plan_subqueries(state["query"], freshness_mode)   # 沿用 nv 版拆解器
+    # ratio 意圖交 LLM（見 _classify_ratio_fields）。整批一次 call，且**在這裡**判：
+    # 子問題是這條路的實際輸入，原始問句不是（「Microsoft 的營收成長率」可能被拆成
+    # 口語的「成長得快不快」，詞表在那一刻就漏了）。
+    rfields = _classify_ratio_fields(subs)
     todos = []
     for i, subquery in enumerate(subs):
         scope = _build_todo_temporal_scope(subquery, freshness_mode)
@@ -3234,6 +3354,7 @@ def _node_plan(state: SupervisorState) -> dict:
             "id": i,
             "task": subquery,
             "temporal_scope": scope,
+            "ratio_fields": rfields[i] if i < len(rfields) else None,
             "freshness_gaps": [],      # 執行完才知道用了誰的新聞 → 由 _node_execute 回填
             "web_used": False,
             "status": "pending",
@@ -3267,8 +3388,9 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
         picked = rq._ensure_ticker_coverage(run_state.pool, picked, mentioned)
     # ratio 題財務錨源保底（Phase 2）：ratio 意圖時保證每家至少有一個 Fundamentals，接住 Grader 對
     # 「Fundamentals vs 10-K/10-Q」雙來源的擲硬幣（見 _ensure_ratio_source_coverage）。deterministic、無 LLM。
-    if mentioned and _is_ratio_intent(task):
-        picked = _ensure_ratio_source_coverage(run_state.pool, picked, mentioned, task)
+    _rf = todo.get("ratio_fields")
+    if mentioned and _has_ratio_intent(_rf, task):
+        picked = _ensure_ratio_source_coverage(run_state.pool, picked, mentioned, task, _rf)
     for c in picked:
         c["_subq"] = todo["id"]
     # 時效缺口在這裡算,不在 plan 時算：判準是「這個子問題**實際用到了**誰的新聞」,
@@ -3502,7 +3624,8 @@ def _node_synthesize(state: SupervisorState) -> dict:
     _cited = _extract_citations(answer)
     _used = [c for c in (state.get("collected") or [])
              if (c.get("source"), c.get("chunk_index")) in _cited]
-    answer = answer.rstrip() + _basis_disclosure_notice(state.get("query", ""), _used, answer)
+    answer = answer.rstrip() + _basis_disclosure_notice(
+        state.get("query", ""), _used, answer, _todos_ratio_fields(state.get("todos")))
     return {"answer": answer}
 
 

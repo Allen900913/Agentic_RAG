@@ -785,6 +785,103 @@ def gate11_basis_disclosure() -> None:
         _assert("⑪b 生產建構子對照可執行（跑不起來＝這道閘門仍然只測合成資料）", False, repr(e))
 
 
+def gate12_ratio_intent_llm() -> None:
+    """⑫ ratio 意圖改由 LLM 判定之後，**詞表必須真的退位**（零 LLM、零網路）。
+
+    治的病（BACKLOG 殘留①，2026-08-25）：`_is_ratio_intent` 是硬編碼詞表，Planner 只要把
+    子問題寫成口語的「營收成長得快不快？」，整條 ratio 保底就**靜默繞過**——不是補撈失敗，
+    是根本沒進到補撈。`col-11` 連跑四輪，兩輪這樣、兩輪不是，看起來像隨機退步。
+
+    ⚠ **這道閘門真正的判別力在「LLM 說空」那幾條**，不在口語陽性那條：
+      把覆寫寫成 `if fields:`（而不是 `if fields is not None:`）會讓「LLM 判定不是 ratio 題」
+      的空 list 掉回詞表 → 詞表仍然是實際做決定的人，整次改動只是裝飾，而**端到端跑分看不
+      出任何差別**（詞表判對的題本來就會過）。空 list 與 None 是兩件事，這裡逐條釘死。
+    ⚠ fallback（None → 詞表）是刻意保留的：LLM 掛掉時行為要與舊碼**逐字相同**，
+      而不是把 ratio 保底整個關掉。代價是它會遮住 LLM 的失手 → 分類準確度不能從端到端推，
+      要用 `eval/probe_ratio_intent.py` 直接量。
+    """
+    print()
+    print("⑫ ratio 意圖：LLM 判定壓過詞表")
+    H, R, U = ar._has_ratio_intent, ar._resolve_ratio_fields, ar._todos_ratio_fields
+
+    # 被修的病灶本身：詞表看不懂的口語措辭
+    # ⚠ 這句**逐字取自 BACKLOG 記的 col-11 三輪實測子問題**，不要自己改寫措辭：
+    #   「營收成長得快不快」含「營收成長」→ 詞表認得，拿它當陽性就測不到病灶了
+    #   （第一版斷言就是這樣寫的，當場 FAIL——那是量尺錯不是系統壞）。
+    _assert("⑫ 陽性：詞表判 False 的口語措辭，LLM 表過態就要成立（col-11 的形狀）",
+            ar._is_ratio_intent("微軟的雲端服務最近成長得快不快？") is False
+            and H(["Revenue Growth"], "微軟的雲端服務最近成長得快不快？") is True)
+
+    # ── 誤報對照：這幾條才是判別力來源 ─────────────────────────────────────────
+    _assert("⑫ 誤報對照①：LLM 判定不是 ratio 題（空 list）→ 詞表不得復活",
+            H([], "Apple 的毛利率是多少？") is False
+            and ar._is_ratio_intent("Apple 的毛利率是多少？") is True)
+    _assert("⑫ 誤報對照②：欄位同樣以 LLM 為準，空就是空",
+            R([], "Apple 的毛利率是多少？") == [])
+    _assert("⑫ 誤報對照③：LLM 挑到 enum 以外的欄位一律丟掉（不可自創欄位名）",
+            R(["Free Cash Flow", "Gross Margin"], "") == ["Gross Margin"]
+            and R(["revenue growth"], "") == [])
+
+    # ── fallback：None ＝ LLM 沒表態，行為必須與舊碼逐字相同 ────────────────────
+    _assert("⑫ fallback：None → 退回詞表，與舊碼同行為",
+            H(None, "Apple 的毛利率是多少？") is True
+            and R(None, "Apple 的毛利率是多少？") == ["Gross Margin"]
+            and H(None, "微軟的雲端服務最近成長得快不快？") is False)
+
+    # ── todos 聯集 ────────────────────────────────────────────────────────────
+    _assert("⑫ 聯集：沒有任何 todo 表過態 → None（＝呼叫端退回詞表）",
+            U([]) is None and U([{"ratio_fields": None}, {}]) is None)
+    _assert("⑫ 聯集邊界：有 todo 表態但聯集是空的 → 回 []，**不是 None**"
+            "（回 None 會讓詞表在 Synthesize 端復活）",
+            U([{"ratio_fields": []}]) == [])
+    _assert("⑫ 聯集：去重且順序穩定（照 enum 序，方便斷言與 trace 比對）",
+            U([{"ratio_fields": ["Profit Margin"]},
+               {"ratio_fields": ["Gross Margin", "Profit Margin"]},
+               {"ratio_fields": None}]) == ["Gross Margin", "Profit Margin"])
+
+    # ── 端到端：兩個生產呼叫點都要吃到覆寫 ─────────────────────────────────────
+    def _c(src, idx, score, content):
+        return {"source": src, "chunk_index": idx, "ticker": src.split("_")[0],
+                "raw_rerank_score": score, "content": content}
+
+    C0 = _c("MSFT_Fundamentals_20260612.txt", 0, 0.918,
+            "Market Cap : $2899.62B Revenue Growth (YoY): 18.30% "
+            "Gross Margin : 68.31% Operating Margin: 46.33% Profit Margin : 39.34%")
+    C1 = _c("MSFT_Fundamentals_20260612.txt", 1, 0.928,
+            "Total Cash : $78.23B Total Debt : $125.43B Debt-Equity ... Current Ratio ...")
+    FILING = _c("MSFT_10K_2026.html", 124, 0.90, "revenue increased 18% or $50.1 billion")
+    got = ar._ensure_ratio_source_coverage([C1, C0, FILING], [C1, FILING], ["MSFT"],
+                                           "微軟的雲端服務最近成長得快不快？",
+                                           ["Revenue Growth"])
+    _assert("⑫ 端到端①：口語 task ＋ LLM 覆寫 → 補撈仍認得出要哪個欄位（詞表在此解不出）",
+            any(c["chunk_index"] == 0 for c in got if "Fundamentals" in c["source"]),
+            [(c["source"], c["chunk_index"]) for c in got])
+
+    N, FY = ar._basis_disclosure_notice, {"period_basis": "fiscal_year"}
+    _assert("⑫ 端到端②：口語 task ＋ LLM 覆寫 → 口徑揭露要觸發（舊碼在此沉默）",
+            ar._BASIS_NOTICE_MARK in N("微軟的雲端服務最近成長得快不快？", [FY], "",
+                                       ["Revenue Growth"]))
+    _assert("⑫ 端到端③（誤報對照）：LLM 說不是 ratio 題 → 即使問句寫著「毛利率」也不揭露",
+            N("Apple 的毛利率是多少？", [FY], "", []) == "")
+
+    # ── 解析防護：不打真的 LLM，只測 `_classify_ratio_fields` 的三種輸出 ────────
+    _orig_call = ar.rq.call_llm
+    try:
+        ar.rq.call_llm = lambda *a, **k: '[["Revenue Growth"],[],["Bogus","Gross Margin"]]'
+        _assert("⑫ 解析：合法輸出照收，且第三題的 enum 外欄位被丟掉",
+                ar._classify_ratio_fields(["a", "b", "c"]) ==
+                [["Revenue Growth"], [], ["Gross Margin"]])
+        ar.rq.call_llm = lambda *a, **k: '[["Revenue Growth"]]'
+        _assert("⑫ 解析誤報對照①：長度對不上 → 整批回 None（退回詞表），"
+                "**不可**只對得上的那幾題套用（會把答案錯位到別的子問題）",
+                ar._classify_ratio_fields(["a", "b"]) == [None, None])
+        ar.rq.call_llm = lambda *a, **k: "抱歉，我不確定。"
+        _assert("⑫ 解析誤報對照②：解不出 JSON → 回 None 退回詞表，不是回空 list",
+                ar._classify_ratio_fields(["a"]) == [None])
+    finally:
+        ar.rq.call_llm = _orig_call
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -806,6 +903,7 @@ def main() -> int:
     gate9_reference_citation_repair()
     gate10_ratio_source_field()
     gate11_basis_disclosure()
+    gate12_ratio_intent_llm()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")
