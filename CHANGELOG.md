@@ -34,7 +34,7 @@
 - ⚠ **為什麼不擴 `_PLANNER_PROMPT`**（BACKLOG 原本寫的是「加在既有 call 上」）：
   planner 的輸出格式從 `["字串"]` 變成物件陣列，**子問題拆解本身就會漂 → 65 題每一題的
   檢索池跟著變**，等於把被測項和基準一起搬走。多付一次輕量 call 換 planner prompt 逐字不變，
-  是這裡唯一划算的交易。`llm_replay` 新增 `ratio` kind，舊 fixture 不受影響。
+  是這裡唯一划算的交易。`llm_replay` 新增 `ratio` kind。⚠ 既有 fixture（`eval/replay_cache.json`、`eval/web_replay_llm_news37.json`）**沒有 ratio 條目**，重放時會 miss → 真的打一次 LLM 並回寫。非 ratio 題一律判成 `[]`、不改變檢索路徑，所以 `check_web_claims.py` 那批不受影響；但「replay 完全不打 LLM」這個性質對新 kind 不成立，第一次重放會把它補齊。碼上沒有任何地方開 `RAG_REPLAY_MODE=strict`，所以不會硬失敗。
 - ⚠ **fallback（解析失敗 → 退回詞表）會遮住 LLM 的失手**，端到端跑分看不出差別。
   所以分類準不準只能直接量：[`eval/probe_ratio_intent.py`](eval/probe_ratio_intent.py)
   （含 LLM、非閘門，14 題含 4 題口語臂／4 題正式臂／6 題陰性對照）。
