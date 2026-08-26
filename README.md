@@ -269,10 +269,13 @@ pip install -r requirements-ragas.txt
 **推薦：Docker Qdrant（支援多 process 併發存取）**
 
 ```bash
-docker run -d --name qdrant_hnsw -p 6333:6333 -v qdrant_storage:/qdrant/storage qdrant/qdrant
+docker run -d --name qdrant --restart unless-stopped -p 6333:6333 -p 6334:6334 \
+  -v ./qdrant_docker_storage:/qdrant/storage qdrant/qdrant:v1.19.0
 ```
 
 啟動後在 `.env` 設定 `QDRANT_URL=http://localhost:6333`。所有腳本都透過 `make_qdrant_client()` 自動偵測並走 server 模式。
+
+⚠ **容器起來 ≠ 可以連**：Qdrant 會逐個 collection 恢復 shard（本機 9 個 collection 實測約 **22 秒**）才開始 listen。那段期間 client 會拿到 `RemoteProtocolError: Server disconnected without sending a response`——**那不是壞掉，是還沒好**。先 `docker logs qdrant | tail` 看到 `Qdrant HTTP listening on 6333` 再連。
 
 **替代：Local embedded mode（單人快速實驗，不需 Docker）**
 

@@ -417,8 +417,9 @@ def cmd_trend(args) -> int:
         else args.output + "_trend.json"
     Path(out_p).parent.mkdir(parents=True, exist_ok=True)
     Path(out_p).write_text(json.dumps(
-        {"meta": {"collection": rq.COLLECTION_NAME, "top_k": args.top_k},
-         "arms": {"collapse_off": off, "collapse_on": on}},
+        {"meta": {"collection": rq.COLLECTION_NAME, "top_k": args.top_k,
+                  "arms": [n for n, _, _ in ARMS], "queries": len(qs)},
+         "arms": out, "totals": tot},
         ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"寫入 {out_p}")
     return 0
