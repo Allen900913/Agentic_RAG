@@ -9,7 +9,9 @@
     "⚠ 這支量的是檢索不是生成": "『單年 KB 遇到歷史題會拒答，還是拿別的年份硬答』是**生成端**的問題，要花 LLM ＋ 標準答案，不在這裡。拆法同 probe_news_web_routing.py 的 ①／②：① 便宜的必要條件先量（本檔），② 貴的內容半另外做。② 見 BACKLOG。",
     "⚠ 為什麼 T-1、T-2 的題都不算數": "10-K 的合併損益表**自帶三年**（AAPL_10K_2025 就有 FY2025/2024/2023），MD&A 自帶兩年。所以『去年營收多少』單年 KB **本來就答得出來**，拿它當收益題會憑空灌水。真正的收益區從 **T-3（FY2022）** 才開始——這 20 題全部通過前提檢查，就是這件事的證據。",
     "產生於": "2026-08-27",
-    "誰在用": "eval/probe_historical_benefit.py"
+    "誰在用": "eval/probe_historical_benefit.py",
+    "⚠ 重述會讓前提檢查失效": "前提檢查比對的是**某個值**在不在單年 KB，而 10-K 會**重述**前一年的數字（改分部結構、改會計政策）→ 同一個事實在新年報裡是**另一個值**，於是「原始值查無」卻「事實查得到」。2026-08-27 實測就有 2/20 題（bh-07／bh-16）這樣被漏掉，已標 `void`。⚠ **抓到它們的不是前提檢查，是生成端那一輪**：單年臂把它們答出來了。所以 `check_historical_generation.py` 的 before 臂實際上是比值比對**更強的前提檢查**——新增收益題之後應該兩個都跑。",
+    "answer_literals 是什麼": "選用。`literal` 負責前提檢查與 gold 定位（在英文語料裡找），`answer_literals` 負責「答案有沒有講出來」（在中文答案裡找）。bh-19 的 `literal` 是英文片語，中文答案永遠不會逐字含它 → 不分開就會把答對的題判成危險態。"
   },
   "queries": [
     {
@@ -62,7 +64,9 @@
       "category": "historical",
       "query": "Microsoft 在 2023 財年的營收是多少？",
       "literal": "211,915",
-      "why": "MSFT 當期是 FY2026，所以 FY2023 已經退出單年 KB 的三年表"
+      "why": "MSFT 當期是 FY2026，所以 FY2023 已經退出單年 KB 的三年表",
+      "void": true,
+      "void_reason": "**重述**：答案給的 $219,790（MSFT FY2023 營收）就在單年 KB 的 `MSFT_10K_2026` 補充未審計表裡，單年 KB 其實答得出來。前提檢查只比對原始值 211,915，看不見重述。"
     },
     {
       "id": "bh-08",
@@ -128,7 +132,9 @@
       "category": "historical",
       "query": "Microsoft 的 Intelligent Cloud 部門在 2024 財年營收是多少？",
       "literal": "105,362",
-      "why": "唯一 gold 只有一份 filing 的分部題"
+      "why": "唯一 gold 只有一份 filing 的分部題",
+      "void": true,
+      "void_reason": "**重述**：$87,464（Intelligent Cloud FY2024 依新分部結構重述）同樣在單年 KB 的 `MSFT_10K_2026` 裡。同上，值不存在 ≠ 事實不存在。"
     },
     {
       "id": "bh-17",
@@ -152,7 +158,10 @@
       "category": "historical",
       "query": "Alphabet 2023 年的裁員在研發費用裡認列了多少員工資遣費用？",
       "literal": "reduction in our workforce",
-      "why": "片語型 literal；gold 只有 GOOGL_10K_2023 一份"
+      "why": "片語型 literal；gold 只有 GOOGL_10K_2023 一份",
+      "answer_literals": [
+        "848"
+      ]
     },
     {
       "id": "bh-20",

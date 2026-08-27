@@ -128,8 +128,23 @@ def _cell(v, width=14):
     return f"{'—' if v is None else v:>{width}}"
 
 
+def _load_queries(path: str) -> tuple[list, list]:
+    """回 (有效題, 被標 void 的題)。
+
+    ⚠ `void` 是 2026-08-27 加的，起因是**前提檢查漏掉重述**：它比對的是「某個值」在不在單年
+    KB，而 10-K 會重述前一年的數字（改分部結構／會計政策）→ 同一個事實在新年報裡是**另一個
+    值**，於是「原始值查無」卻「事實查得到」。bh-07／bh-16 就是這樣混進來的。
+    **抓到它們的不是這支，是生成端那一輪**（`check_historical_generation.py`：單年臂把它們
+    答出來了）→ 新增收益題之後**兩支都要跑**，值比對的前提檢查一個人擋不住。"""
+    qs_all = json.loads(Path(path).read_text(encoding="utf-8"))["queries"]
+    return [q for q in qs_all if not q.get("void")], [q for q in qs_all if q.get("void")]
+
+
 def run_arm(args) -> int:
-    qs = json.loads(Path(args.query_set).read_text(encoding="utf-8"))["queries"]
+    qs, void = _load_queries(args.query_set)
+    if void:
+        print(f"⚠ 題庫標了 {len(void)} 題 `void`，排除不計："
+              f"{[q['id'] for q in void]}（原因見題庫）")
     if args.limit:
         qs = qs[:args.limit]
 
@@ -226,7 +241,13 @@ def cmd_compare(before_p: str, after_p: str) -> int:
     gold 的那一臂**，兩臂共用。"""
     b = json.loads(Path(before_p).read_text(encoding="utf-8"))
     a = json.loads(Path(after_p).read_text(encoding="utf-8"))
-    ids = [i for i in a["rows"] if i in b["rows"]]
+    # 被標 void 的題一律排除——**既有結果檔裡還留著它們**，所以要在這裡濾，
+    # 否則舊檔會繼續用失效的分母報數字（見 `_load_queries` 的說明）。
+    _, voided = _load_queries(str(_ROOT / "eval" / "period_probe_benefit_queries.json"))
+    vids = {q["id"] for q in voided}
+    if vids:
+        print(f"⚠ 排除 {len(vids)} 題 `void`：{sorted(vids)}（原因見題庫）")
+    ids = [i for i in a["rows"] if i in b["rows"] and i not in vids]
     if len(ids) != len(a["rows"]) or len(ids) != len(b["rows"]):
         print(f"⚠ 兩份結果檔的題目不同（共同 {len(ids)} 題）→ 只比共同集；"
               "**分母變動過的兩份不可直接比**。")
@@ -291,7 +312,9 @@ def cmd_compare(before_p: str, after_p: str) -> int:
               f"{h['after_gold_topk']} 題 gold 真的進了 top-k → **兌現率 {realized:.3f}**。")
         print(f"before 臂不是空手：同節別期席位合計 {h['before_other_period_seats']} 席 → "
               "單年 KB 對這些題交回的是**同一節的別的年份**。")
-        print("  那是有引用、看起來很有根據的錯答，比空手而回更難被發現。")
+        print("  ⚠ **不要把這一格讀成「所以答案是錯的」**：2026-08-27 的生成端量測"
+              "（check_historical_generation.py）實測單年臂 **18/18 誠實承認、0 題硬答**。")
+        print("  檢索把別年份端上來 ≠ 生成器會拿它充數。這裡量的是檢索層的風險，不是實害。")
     print("⚠ 以上全是檢索層。生成端會不會拒答、會不會拿別年份硬答，這支量不到（見 docstring）。")
     return 0
 

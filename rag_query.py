@@ -110,6 +110,23 @@ def make_qdrant_client():
     return QdrantClient(path=QDRANT_PATH)
 
 
+# ── 答案尾端的「證據尾巴」──────────────────────────────────────────────────────
+# 生成器會在答案後面接一段 metadata（`---\n📚 引用來源…` 或 `---\n⚠ 口徑說明…`）。那是**呈現層**
+# 不是答案內容，任何「對答案本身做判斷」的地方都該先把它切掉。
+# ⚠ 這個概念在 repo 裡**已經各自長出四份定義**（`agentic_rag_v2` 的 producer、
+# `eval/check_number_defects.FOOTER`、`eval/check_rounding_fidelity._TAIL_RE`、
+# `eval/eval_ragas_vs_rubric` 的 footer strip）。這裡是**唯一的正式定義**，新的消費端一律用它；
+# 既有那幾份的收攏見 BACKLOG（動 RAGAS 那份會移動分數，不可順手改）。
+# 2026-08-27 加：起因是 `looks_like_refusal` 的長度閘把這條尾巴一起數進去，
+# 於是 agentic 的拒答少算 8/43（19%）。
+EVIDENCE_TAIL_RE = re.compile(r"\n-{3,}\n(?=\s*(?:📚|⚠))")
+
+
+def strip_evidence_tail(text: str) -> str:
+    """切掉答案尾端的引用／口徑 metadata，只留答案本體。"""
+    return EVIDENCE_TAIL_RE.split(text or "", 1)[0]
+
+
 SYSTEM_PROMPT = """\
 You are a professional US stock market analyst and financial expert specializing \
 in US technology stocks, including NVIDIA (NVDA), Microsoft (MSFT), Apple (AAPL), \

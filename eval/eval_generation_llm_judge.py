@@ -585,11 +585,20 @@ REFUSAL_MAX_CHARS = 150
 
 
 def looks_like_refusal(answer: str) -> bool:
-    """整份答案都不作答才算拒答；「其中一項未揭露」不算（那是誠實標注，不是拒答）。"""
+    """整份答案都不作答才算拒答；「其中一項未揭露」不算（那是誠實標注，不是拒答）。
+
+    ⚠ 2026-08-27 修：長度閘要量的是**答案本體**，但 agentic 會在答案尾端接一整塊
+    `---\\n📚 引用來源…` 的 metadata，舊寫法把那塊也數進去 → 拒答的答案幾乎永遠超過
+    `REFUSAL_MAX_CHARS`。實測 66 份 agentic 結果檔／2975 份答案：**少算 8 筆（35 → 43）**。
+    切尾巴用 `rq.strip_evidence_tail`（單一定義，不在這裡再寫一份正則）。
+    ⚠ 這個修法**只解「尾巴被算進長度」**；「寫得長的誠實拒答」（例如「只有 2023–2025 的資料，
+    未包含 2022」）仍然不算拒答——那是這個函式刻意的設計（見上一行），不是漏洞。要判「有沒有
+    承認問到的期間不可得」是**另一個概念**，見 `eval/check_historical_generation.py`。"""
     a = (answer or "")
     if not any(m.lower() in a.lower() for m in REFUSAL_MARKERS):
         return False
-    return len(_CITE_MARK.sub("", a).strip()) < REFUSAL_MAX_CHARS
+    body = rq.strip_evidence_tail(a)
+    return len(_CITE_MARK.sub("", body).strip()) < REFUSAL_MAX_CHARS
 
 
 def snapshot_sources(client, collection):
