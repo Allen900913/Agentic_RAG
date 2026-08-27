@@ -2761,6 +2761,31 @@ def _format_citations(chunks: list[dict]) -> str:
     return "\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n" + "\n".join(lines)
 
 
+def _compose_answer_tail(answer: str, writer_chunks: list[dict], unmet: list[str]) -> str:
+    """決定答案尾端要接哪些 metadata（機械式引用清單 ＋ 未涵蓋子問題揭露）。拒答一律不附。
+
+    ⚠ **拒答不附引用清單**：「📚 引用來源（Generator 實際依據的 chunk）」在一份剛宣告
+    自己沒有依據的答案底下是**假的宣稱**。舊守門寫成 `answer.startswith("I don't have enough")`,
+    只擋得住 graph 崩潰時那句英文預設值,擋不住模型自己用中文寫的拒答（「我沒有足夠的資訊
+    來回答…」）——實測既有結果檔 4175 份答案／59 份拒答,**21 份是帶著引用尾巴出貨的**。
+    判準改用 `rq.looks_like_refusal`（唯一定義,見 rag_query.py）,不在這裡再寫一份。
+
+    ⚠ 抽成純函式不是為了好看,是為了讓 `eval/verify_answer_validators.py` 閘門⑬ 能**零 LLM
+    直接測這條生產判斷**;去 inspect `run_agentic` 的原始碼字串等於又一次抄寫（見
+    `verify_web_gate_isolation.py` 閘門① 的教訓）。
+
+    ⚠ `unmet` 跟著引用清單一起被拒答關掉,是**維持舊行為**（兩者本來就在同一個 if 底下）,
+    不是新的決定。拒答時那份清單只是把答案已經講過的話再講一次。
+    """
+    if not writer_chunks or rq.looks_like_refusal(answer):
+        return ""
+    tail = _format_citations(writer_chunks)
+    if unmet:
+        tail += ("\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n"
+                 + "\n".join(f"  - {u}" for u in unmet))
+    return tail
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Reflection（選配,貴的一層）：LLM 忠實度稽核,找「來源無法支持的陳述(幻覺)」,有則帶問題重生成一次。
 # ──────────────────────────────────────────────────────────────────────────────
@@ -3715,12 +3740,7 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
     unmet = [t["task"] for t in todos
              if t.get("status") == "done" and "查無足夠資料" in (t.get("result") or "")]
 
-    # 機械式附上真實引用清單(provenance 不靠模型)——拒答不附。
-    if writer_chunks and not answer.startswith("I don't have enough"):
-        answer = answer.rstrip() + _format_citations(writer_chunks)
-        if unmet:
-            answer += ("\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n"
-                       + "\n".join(f"  - {u}" for u in unmet))
+    answer = answer.rstrip() + _compose_answer_tail(answer, writer_chunks, unmet)
 
     sub_queries = [t["task"] for t in todos]   # 對映舊回傳鍵（eval 依賴）
     if verbose:

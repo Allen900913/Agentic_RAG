@@ -589,7 +589,15 @@ BACKLOG【多年語料 ②】。檢索層量完之後剩下的問題是：**單�
   ⚠ 更正一句我當時說過頭的話：那不是「系統性為 False」，是少算 19%。
 - **`eval/judge_regression.py` 目前跑不起來**（`TypeError: … unexpected keyword argument
   'hall_result'`）。用 `git stash` 退掉當天的改動跑同一支，錯誤一模一樣 → **既有壞掉**，
-  等於 judge 現在沒有回歸保護。見 BACKLOG。
+  等於 judge 現在沒有回歸保護。→ **2026-08-27 當天稍晚修好**，見
+  [`CHANGELOG.md`](../CHANGELOG.md) 同日。⚠ 修好之後才量得到的事：**那支不是零噪音**，
+  同一份碼三個單輪 10/11、9/11、11/11，而**兩輪 `--repeat 3` 之間也不一致**
+  （`col01_true_fabrication_negative` 一輪 1/3、一輪 3/3）→ 一律看逐題 k/n，且 **n=3 還不夠**：
+  九次觀測攤開才看得出 col01 是 7/9（雜訊）、只有 `sem03_true_fabrication_negative` 是 **1/9**。
+  ⚠ 我在這上面被同一批資料修正了兩次（先把單輪 FAIL 當真陽性，再據一輪 repeat 3 寫下
+  「兩個捏造反例方向一致」）。
+  它同時照出兩件事：rubric 這條線**沒有活的消費端**（`eval_set.json` 65 題全無 rubric），
+  且 FABRICATION SCOPE 要 judge 判「未在來源出現」而 **judge 拿不到來源**。兩件都在 BACKLOG。
 
 
 ### 跨期 field collapsing 與期間意圖解析：兩個修法的四次自我否決（2026-08-19）

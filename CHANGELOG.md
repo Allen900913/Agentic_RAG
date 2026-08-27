@@ -13,6 +13,76 @@
 
 ---
 
+## 2026-08-27 — 拒答不再附假的引用清單；judge 的回歸套件修好（壞了一個月）
+
+### ① 拒答不得附「📚 引用來源」
+
+`agentic_rag_v2` 在答案尾端機械式附一段「📚 引用來源（Generator 實際依據的 chunk）」。
+守門原本寫成 `answer.startswith("I don't have enough")`——**只擋得住 graph 崩潰時那句英文預設值**。
+模型自己用中文寫的拒答（「我沒有足夠的資訊來回答…」）一路通過，於是那句 provenance 宣稱
+印在一份**剛宣告自己沒有依據**的答案底下。**實測既有結果檔 4175 份答案／59 份拒答，21 份是這樣出貨的。**
+
+- 判準改用 `rq.looks_like_refusal`。該函式與 `REFUSAL_MARKERS`／`REFUSAL_MAX_CHARS`
+  **從 `eval/eval_generation_llm_judge.py` 搬進 `rag_query.py`**——生產也要用它，而生產不可以
+  import `eval/`。eval 端改成轉出（`looks_like_refusal = rq.looks_like_refusal`），兩條 import 路徑都不變。
+- 尾巴組裝抽成純函式 `_compose_answer_tail(answer, writer_chunks, unmet)`。**抽它不是為了好看**，
+  是為了讓閘門能零 LLM 直接測**生產那條判斷**，而不是去 inspect `run_agentic` 的原始碼字串
+  （抄寫必然漂移）。`unmet` 揭露跟著拒答一起關掉是**維持舊行為**，兩者本來就在同一個 if 底下。
+- `eval/verify_answer_validators.py` 加**閘門⑬**（138 → **149 項**）。
+  ⚠ 判別力**不在陽性那幾條**（「一律不附」也會全過），在 ⑬b 的**誤報對照**——拒答判過頭＝
+  把真的有依據的答案的 provenance 砍掉，那才是危險方向。雙向變異測試實測：
+  換回舊守門 → ⑬a 掛 3 條；換成「一律不附」→ ⑬b 掛 4 條。
+  ⑬b 那三種近似形狀裡最重要的是**寫得長的誠實答案**（「只有 2023–2025、未包含 2022」），
+  那正是多年語料 before 臂 18/18 的形狀，也正是前一次量尺翻車的地方。
+
+⚠ **不會移動既有分數**：所有消費端本來就會切尾巴（`looks_like_refusal`、`check_number_defects.FOOTER`、
+RAGAS 的 footer strip），這次只是讓那塊 metadata 一開始就不要產生。
+
+### ② `eval/judge_regression.py` 修好
+
+`TypeError: evaluate_correctness_with_feedback() got an unexpected keyword argument 'hall_result'`。
+病灶：**2026-07-23 移除自製 Hallucination Rate／Answer Relevance** 時 judge 的簽章少了
+`hall_result`／`relevance_score`，本檔沒跟上。`fatal_hallucination` 現在由 must_not_include 命中在
+Python 端推導（`compute_correctness`），judge 不再需要那份輸入 → 兩個參數與 11 題身上的
+`hall_result` 死資料一併刪除，過期的預設 `--judge-model qwen/qwen3-32b`（2026-07-12 已下架）
+改成跟隨 `DEFAULT_JUDGE_MODEL`。
+
+⚠ **真正的教訓不是那個 TypeError，是「要燒 LLM 才跑得動的東西平常沒人跑」**。所以加了
+**零 LLM 的 `--dry-run` 接線檢查**：AST 從 `run_case` 自己的原始碼讀出實際送出的 kwargs 比對
+judge 簽章（不另抄常數，抄寫正是本次病灶）、每題 `expect` 的 checkpoint id 不得越界
+（`*_forbidden` 寫個不存在的 id 會**永遠成立**＝量尺無聲死掉）、整套要同時有正例與反例、
+`compute_correctness` 三態。變異測試：把 `hall_result=` 塞回去 → 叫；把 `mn0` 改成 `mn7` → 叫。
+
+⚠ **這支不是零噪音的閘門，單輪總分完全不可比**。修好後同一份碼、同一個模型連跑三個單輪：
+**10/11、9/11、11/11**，而兩輪 `--repeat 3` 之間**也不一致**
+（`col01_true_fabrication_negative` 一輪 1/3、另一輪 3/3）。當天 9 次觀測合起來：
+
+| | k/9 |
+|---|---|
+| 8 題 | 9/9 |
+| `col01_true_fabrication_negative` | 7/9（雜訊等級） |
+| `lex12_fiscal_calendar` | 7/9（財年措辭，已知系統性 bug 家族） |
+| `sem03_true_fabrication_negative` | **1/9** ← 只有這一題是真的 |
+
+出貨當下的 `--repeat 3`：全過 9、全掛 0、時好時壞 1、已知極限 1。判定改成 `--repeat`
+報**逐題 k/n**，**退出碼只認「全掛」**——把時好時壞也弄成紅燈，這支就會再次被當成壞掉而沒人跑。
+
+⚠ **「≥2 輪」那條規則在這一次不夠用，我被同一批資料修正了兩次**：第一個單輪看到 10/11 時
+差點把那個 FAIL 當真陽性（第三輪它自己過了）；接著一輪 `--repeat 3` 給出 col01 1/3，我據此
+寫下「兩個捏造反例方向一致、不是誇張的數字才抓得到」——**第二輪 3/3 把那句話推翻**。
+九次攤開才看得出 col01 是雜訊、只有 `sem03` 真的掉到底。**n=3 對這支還是不夠。**
+
+**修的過程照出兩件更重要的事**（都已進 [`BACKLOG.md`](BACKLOG.md)，不在這裡重述）：
+rubric 這條線**目前沒有活的消費端**（`eval_set.json` 65 題全無 rubric，結果檔 `correctness` 全 null）；
+FABRICATION SCOPE 那條規則要求 judge 判「未在來源出現」，而 **judge 從頭到尾拿不到來源**，
+於是只能靠合理性判——`col01` 的「市佔率 92%」離譜到光看答案就站不住（7/9），
+`sem03` 的「管理層預期 45% CAGR」不會（**1/9**）。
+`sem03_true_fabrication_negative` 因此標成 `known_limitation`：失敗記 **N/A 不記 FAIL**，
+並附復活條件。⚠ 那個旗標是**唯一能讓失敗不算失敗**的地方，所以 `--dry-run` 每次都會把
+「幾題帶著它、是哪幾題」印出來——不讓它變成安靜消音失敗的角落。
+
+---
+
 ## 2026-08-27 — 生成端的收益（BACKLOG ②）：擔心的那件事沒有發生，量尺被推翻三次
 
 新增 [`eval/check_historical_generation.py`](eval/check_historical_generation.py)（零 LLM、

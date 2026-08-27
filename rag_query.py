@@ -127,6 +127,52 @@ def strip_evidence_tail(text: str) -> str:
     return EVIDENCE_TAIL_RE.split(text or "", 1)[0]
 
 
+# ── 「這份答案整篇都不作答」的唯一判準 ─────────────────────────────────────────
+# ⚠ 這三個常數與 `looks_like_refusal` 原本住在 `eval/eval_generation_llm_judge.py`（量尺端）。
+# 2026-08-27 搬到這裡，因為**生產端也要用它**：agentic 會在答案尾端機械式附上
+# 「📚 引用來源（Generator 實際依據的 chunk）」，而拒答時那句話是**假的**——生成器
+# 剛剛才說自己沒有依據。舊守門寫成 `answer.startswith("I don't have enough")`，
+# 只擋得住 graph 崩潰時那句英文預設值，擋不住模型自己用中文寫的拒答
+# （實測既有結果檔 4175 份答案／59 份拒答，**21 份帶著引用尾巴出貨**）。
+# ⚠ 判準刻意是「**整份**都不作答」，兩個方向的邊界都是設計不是漏洞：
+#   ①「其中一項未揭露」不算拒答——那是誠實標註，答案本體有作答。
+#   ②「只有 2023–2025 的資料、未包含 2022」這種**寫得長的誠實答案**也不算——它真的讀了
+#      來源、真的有依據，引用清單對它成立。要判那個概念看 `eval/check_historical_generation.py`。
+REFUSAL_MARKERS = [
+    "don't have enough information",
+    "do not have enough information",
+    "知識庫", "無法回答", "沒有足夠",
+    # 2026-08-11 加：實測 mix-07 的拒答就是這個措辭（「根據提供的參考資料，沒有任何文件提及…」），
+    # 舊清單一個都沒命中。⚠ 加標記前逐一量過誤報：`未提及`(18/22 誤報)、`資料中未`(20/23)、
+    # `參考資料中未`(5/8)、`沒有提及`(1/1)、`無相關資料`(1/1) **全部退回不加**——它們絕大多數是
+    # 「答案有實質作答，只是其中一項未揭露」。只有這一條在 2209 份存檔答案裡 1 命中、0 誤報。
+    "沒有任何文件提及",
+]
+
+_CITE_MARK = re.compile(r"[【\[][^】\]]{0,80}[】\]]")
+
+# 拒答的長度上界。⚠ 2026-08-11 加：只比對標記會把「答案主體有作答、只是其中一項未揭露」
+# 也判成拒答。實測 2209 份存檔答案裡命中標記的 42 份，剝掉引用標記後的長度分佈是
+#   ≤100 字元 34 份（真拒答）／100~200 1 份（mh-06，其實答了目標價 $330→$365）／
+#   200~300 **0 份**／≥300 字元 8 份（news-02、mi-01、mi-09、mi-12、mi-14 全是有實質
+#   作答的長答案）——中間有一段空白，門檻落在 150 兩邊都不擦邊。
+REFUSAL_MAX_CHARS = 150
+
+
+def looks_like_refusal(answer: str) -> bool:
+    """整份答案都不作答才算拒答；「其中一項未揭露」不算（那是誠實標注，不是拒答）。
+
+    ⚠ 2026-08-27 修：長度閘要量的是**答案本體**，但 agentic 會在答案尾端接一整塊
+    `---\\n📚 引用來源…` 的 metadata，舊寫法把那塊也數進去 → 拒答的答案幾乎永遠超過
+    `REFUSAL_MAX_CHARS`。實測 66 份 agentic 結果檔／2975 份答案：**少算 8 筆（35 → 43）**。
+    """
+    a = (answer or "")
+    if not any(m.lower() in a.lower() for m in REFUSAL_MARKERS):
+        return False
+    body = strip_evidence_tail(a)
+    return len(_CITE_MARK.sub("", body).strip()) < REFUSAL_MAX_CHARS
+
+
 SYSTEM_PROMPT = """\
 You are a professional US stock market analyst and financial expert specializing \
 in US technology stocks, including NVIDIA (NVDA), Microsoft (MSFT), Apple (AAPL), \

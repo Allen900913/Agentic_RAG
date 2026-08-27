@@ -882,6 +882,88 @@ def gate12_ratio_intent_llm() -> None:
         ar.rq.call_llm = _orig_call
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# 閘門⑬：拒答不得附上「📚 引用來源」（`_compose_answer_tail`）
+#
+# 病灶：那段尾巴宣稱「Generator 實際依據的 chunk」,印在一份剛說自己沒有依據的答案底下就是
+# **假的宣稱**。舊守門是 `answer.startswith("I don't have enough")`——只擋得住 graph 崩潰時
+# 那句英文預設值。實測既有結果檔 4175 份答案／59 份拒答,**21 份帶著引用尾巴出貨**。
+#
+# ⚠ 判別力**不在陽性那幾條**（一個「一律不附」的實作也會全過），在 ⑬b 的**誤報對照**：
+#   拒答判過頭 = 把真的有依據的答案的 provenance 砍掉,那才是危險方向。三條各鎖一種近似形狀：
+#   ①「其中一項未揭露」的部分作答 ②**寫得長的誠實答案**（「只有 2023–2025、未包含 2022」,
+#     這正是多年語料 before 臂 18/18 的形狀）③ 完全正常的答案。
+# ⚠ ⑬a 最後一條是**回歸鎖**：舊守門唯一擋得住的那句英文預設值,改用新判準後仍然要擋得住。
+# ══════════════════════════════════════════════════════════════════════════════
+
+_REFUSAL_ZH = "我沒有足夠的資訊來回答這個問題。"
+# 逐字取自 experiments/agentic/gj_hist_before_mdna.json 的 bh-02（單年 KB 對歷史題的實際拒答）。
+_REFUSAL_ZH_CITED = ("很抱歉，根據提供的參考資料，未列出 Tesla 2022 年的總營收數字，"
+                     "無法回答此問題。【TSLA_10K_2025.html, chunk #0】")
+_REFUSAL_EN = "I don't have enough information in my knowledge base to answer this."
+# 逐字取自 gj_hist_before_mdna.json 的 bh-05：**寫得長的誠實答案**,有實質作答（列出 KB 真的
+# 有哪幾年）,必須留住引用清單。
+_HONEST_LONG = (
+    "根據提供的參考資料，Alphabet 的 10-K 僅列示 2023、2024 與 2025 年的營收金額"
+    "（分別為 $307,394 百萬、$350,018 百萬與 $394,986 百萬）【GOOGL_10K_2025.html, chunk #12】，"
+    "未包含 2022 年的營收資料，因此無法從這份文件得知該年度的總營收數字。"
+    "若要取得 2022 年數字，需要 FY2022 或 FY2023 的年報，而目前的知識庫沒有收錄那幾份。"
+)
+_PARTIAL = (
+    "Tesla 2026 財年第二季總營收為 $22,496 百萬【TSLA_10Q_202606.html, chunk #3】，"
+    "毛利率為 17.2%【TSLA_10Q_202606.html, chunk #5】。至於分車型的交付均價，"
+    "參考資料中未揭露，因此這一項無法提供。"
+)
+_NORMAL = "NVIDIA FY2026 資料中心營收為 $115,186 百萬【NVDA_10K_2026.html, chunk #21】。"
+
+
+def gate13_refusal_no_citation_tail() -> None:
+    print("\n[⑬] 拒答不得附引用清單（_compose_answer_tail）")
+    chunks = [dict(c, rerank_score=0.9) for c in _chunks("TSLA_10Q_202606.html", "TSLA_10K_2025.html")]
+    unmet = ["Tesla 2022 年總營收"]
+
+    def tail(ans: str, cs=None, um=()) -> str:
+        return ar._compose_answer_tail(ans, chunks if cs is None else cs, list(um))
+
+    # ⑬a 陽性：各種拒答形狀都不得附尾巴
+    _assert("⑬a 中文拒答 → 無尾巴", tail(_REFUSAL_ZH) == "", repr(tail(_REFUSAL_ZH))[:120])
+    _assert("⑬a 中文拒答（自帶 inline 引用）→ 無尾巴",
+            tail(_REFUSAL_ZH_CITED) == "", repr(tail(_REFUSAL_ZH_CITED))[:120])
+    _assert("⑬a 回歸鎖：英文預設拒答 → 無尾巴（舊守門唯一擋得住的那句）",
+            tail(_REFUSAL_EN) == "", repr(tail(_REFUSAL_EN))[:120])
+    _assert("⑬a 拒答時 unmet 揭露也不附（維持舊行為）",
+            tail(_REFUSAL_ZH, um=unmet) == "", repr(tail(_REFUSAL_ZH, um=unmet))[:120])
+    _assert("⑬a 沒有 writer_chunks → 無尾巴", tail(_NORMAL, cs=[]) == "")
+
+    # ⑬b 誤報對照（判別力在這裡）：有依據的答案必須留住 provenance
+    for label, ans in (("完全正常的答案", _NORMAL),
+                       ("部分作答＋其中一項未揭露", _PARTIAL),
+                       ("寫得長的誠實答案（只有 2023–2025、未包含 2022）", _HONEST_LONG)):
+        t = tail(ans)
+        _assert(f"⑬b 誤報對照：{label} → 仍附引用清單",
+                t.startswith("\n\n---\n📚 引用來源") and "TSLA_10Q_202606.html #0" in t,
+                repr(t)[:160])
+
+    # ⑬b unmet 揭露只在非拒答時接上,且接在引用清單之後
+    t = tail(_NORMAL, um=unmet)
+    _assert("⑬b 非拒答＋unmet → 引用清單在前、未涵蓋揭露在後",
+            t.count("\n\n---\n") == 2 and t.index("📚") < t.index("⚠ 知識庫未涵蓋"), repr(t)[:200])
+
+    # ⑬c 尾巴必須是 `rq.strip_evidence_tail` 認得的形狀——否則下游每個消費端都會把
+    # metadata 當成答案本體算進去（`looks_like_refusal` 的長度閘就是這樣少算 8 筆的）。
+    # （比 `.strip()` 後的本體：尾巴以 `\n\n---\n` 開頭而正則只吃掉一個 `\n`，會餘一個換行；
+    #   所有消費端本來就 strip，這裡要鎖的是「兩塊 metadata 都被切掉、答案本體一個字不少」。）
+    full = _NORMAL.rstrip() + tail(_NORMAL, um=unmet)
+    _assert("⑬c 產生的尾巴切得掉（producer/consumer 同一個定義）",
+            ar.rq.strip_evidence_tail(full).strip() == _NORMAL,
+            repr(ar.rq.strip_evidence_tail(full))[:160])
+
+    # ⑬d 單一定義：`eval` 端與生產端不可各有一份拒答判準
+    import eval.eval_generation_llm_judge as _ejg
+    _assert("⑬d eval 端的 looks_like_refusal 就是 rq 的那一個（不是複本）",
+            _ejg.looks_like_refusal is ar.rq.looks_like_refusal)
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -904,6 +986,7 @@ def main() -> int:
     gate10_ratio_source_field()
     gate11_basis_disclosure()
     gate12_ratio_intent_llm()
+    gate13_refusal_no_citation_tail()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")
