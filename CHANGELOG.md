@@ -13,6 +13,50 @@
 
 ---
 
+## 2026-08-27 — 修掉「Tier 1 命中 ≠ 答得了」：label-year 那半個 OR 會冒充財年命中
+
+同日的收益探針在 `bh-07` 上抓到、**回頭在生產 collection 複現**的缺陷。完整推導與實測表格見
+[`docs/EVAL.md`](docs/EVAL.md)〈Tier 1「命中」不等於「答得了」〉。
+
+**病灶**：`fiscal_year` 的 strict filter 是與 `report_label_year` 的雙座標系 OR。掃 77 份
+filing（`multiyear`，`mdna` 的超集）：**10-K 的兩個欄位永遠相等（21/21），會分歧的只有
+10-Q（15/56）** → 那半個 OR 的**全部效果**就是放行「曆年標籤是 V、財年不是 V」的季報。
+當它是 Tier 1 唯一的命中理由時，**Tier 2 的降級與揭露語會一起被關掉**。
+
+生產實測（`us_stock_rag_edgar_mdna`）：問「Microsoft 在 2025 財年的營收是多少？」→ top-5
+**五席全是 `MSFT_10Q_202512`**（FY2026 Q2、`report_label_year=2025`）、`note` 是空字串，而含
+FY2025 三年欄的 `MSFT_10K_2026` 被 `fiscal_year=2025` 擋在外面。
+
+**修法**：新增 `rq.tier1_hit_is_qualified()` —— **label-year 只能放寬命中，不能自己構成命中**。
+Tier 1 撈到之後再問「有沒有任何一點的 `fiscal_year` 真的等於問的年份」，沒有就當落空、降級
+Tier 2。⚠ `fiscal_year` 為空的點（News/Fundamentals，`relax_empty_fields` 刻意放行的 col-15
+那條路）**算合格**，否則是誤殺。
+
+**blast radius 可枚舉**：離線算出「只有 label 命得到」的 `(ticker, year)` 在生產語料上**只有
+`MSFT 2025` 與 `NVDA 2025` 兩組**（多年語料上是 `MSFT 2023`／`NVDA 2023`）。**65 題題庫一題都
+不受影響**——提到年份的 6 題全都有 `fiscal_year` 對得上的 filing。**那正是它從沒被抓到的原因。**
+
+| 查詢（mdna，top-5） | 前 | 後 |
+|---|---|---|
+| Microsoft **FY2025** 營收 | 5/5 `MSFT_10Q_202512`，note 空 | Tier 2；**3 席 `MSFT_10K_2026`** ＋ 揭露語 |
+| NVIDIA **FY2025** 營收 | 同型（`NVDA_10Q_202510`） | Tier 2；`NVDA_10K_2026` ＋ 揭露語 |
+| NVIDIA FY2026／Microsoft 最新財年／Apple `202606` | Tier 1 | **不變** |
+| Microsoft **2025 年**的季報（曆年語意） | Tier 1，無揭露語 | Tier 2；**前三名內容不變**，多一句揭露語 |
+
+**順手修掉一個自相矛盾**：降級揭露語的 `actual` 是從 payload 收的，會收到 `report_label_year`
+→ 舊措辭是「沒有**期間**（2025）的資料，改用最接近的可得期間（…, **2025**）」。改成「所詢問
+**財年**（2025）」。⚠ 這句同時是使用者可見句與注入 generator 的事實。缺陷本來就在，是這次修法
+把更多查詢趕進這條路才被看見。
+
+**閘門**：[`eval/verify_period_intent_routing.py`](eval/verify_period_intent_routing.py) 新增
+閘門⑥，**39 → 53 項**。判別力在 **⑥b**（掃真實 payload 鎖住「10-K 恆等」與「至少一份 10-Q
+不等」——⑥a 那 8 條全是合成 payload，ingest 一改就會集體失去意義）。變異測試：把
+`tier1_hit_is_qualified` 換成恆真（＝修法前）→ ⑥a **2 條 FAIL**。
+其餘確定性閘門重跑全綠（`verify_answer_validators` 138、`verify_web_gate_isolation`、
+`verify_cross_period_collapse` 17）。
+
+---
+
 ## 2026-08-27 — 多年語料的**收益**量尺：補完缺的那一半，順手照出一個現生產的錯
 
 階段 4 停在「量到的每一格都是損害，沒有量尺在量收益」。這次補上那把尺並跑完三臂。

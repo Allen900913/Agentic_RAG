@@ -1196,6 +1196,40 @@ def build_qdrant_filter(filters: list[dict], strict: bool = False,
     return models.Filter(must=must or None, must_not=must_not or None)
 
 
+def tier1_hit_is_qualified(filters: list[dict], fused_points: list) -> bool:
+    """Tier 1 撈到東西了，但**「命中」不等於「答得了」**——這個函式判它算不算真的命中。
+
+    背景：`fiscal_year` 的 include 條件在 strict 模式下是與 `report_label_year` 的**雙座標系
+    OR**（見 `build_qdrant_filter`）。實測 `multiyear` 的 77 份 filing（`mdna` 那 21 份的超集）：
+    **10-K 的 `fiscal_year` 與 `report_label_year` 永遠相等（21/21），會分歧的只有 10-Q**
+    （15/56，其中 3 份在生產的 `mdna` 裡）。所以那半個 OR 的**全部效果**就是「額外放行曆年
+    標籤是 V、但財年不是 V 的 10-Q」。
+
+    當它是 Tier 1 **唯一**的命中理由時，結果一定是拿一份別的財年的季報去回答一個財年問題，
+    而且因為 Tier 1 算命中，**Tier 2 的降級與 `_build_fallback_note` 的揭露語都不會發生**。
+    2026-08-27 在生產 collection 上實測：問「Microsoft 在 2025 財年的營收是多少？」→ top-5
+    五席全是 `MSFT_10Q_202512`（FY2026 Q2、`report_label_year=2025`）、`note` 是空字串，
+    而含 FY2025 三年表的 `MSFT_10K_2026` 被 `fiscal_year=2025` 擋在外面。
+
+    → 規則：**label-year 那半個 OR 只能「放寬」命中，不能自己「構成」命中。** 回 False 時
+    呼叫端把 Tier 1 當落空、照常降級 Tier 2——那條路撈得到年報，而且會附上揭露語。
+
+    ⚠ **`fiscal_year` 為空的點算合格**（News/Fundamentals，由 `relax_empty_fields` 刻意放行）：
+    它們不是被 label-year 放進來的，一起判不合格會誤殺「最新一季」那條路（col-15）。
+    ⚠ 這個修法的作用對象在生產語料上**只有兩組** `(ticker, year)`（`MSFT 2025`／`NVDA 2025`），
+    是刻意的：blast radius 可枚舉，不是全域行為改變。"""
+    want = next((f["value"] for f in filters
+                 if f["field"] == "fiscal_year" and f["polarity"] == "include"), None)
+    if want is None:
+        return True                                    # 沒有年份約束 → 不干預
+    wanted = set(want) if isinstance(want, list) else {want}
+    for p in fused_points:
+        fy = (p.payload or {}).get("fiscal_year")
+        if not fy or fy in wanted:
+            return True
+    return False
+
+
 def _build_tier2_filter(filters: list[dict]):
     """Tier 2：只保留 ticker + filing_type + doc_type（放掉年份/期碼），strict 模式。
     讓「問 2026 但庫裡只有 2025」退回最新一份 filing，而不是拒答。
@@ -1235,8 +1269,14 @@ def _build_fallback_note(filters: list[dict], fused_points: list) -> str:
     # note 不一致；且注入英文句要 generator 二次翻譯、忠實度不穩。值仍全動態（scope/
     # requested/actual 皆由 filter 與實際 payload 算出，無任何年份寫死）。呈現層的「請揭露」
     # 指示在 build_user_prompt 以模板包裹，與此使用者可見句分離。
+    # 「所詢問的是哪個座標系」要講清楚，否則這句話會自相矛盾：MSFT_10Q_202512 的
+    # fiscal_year 是 2026、report_label_year 是 2025，於是問「FY2025」降級之後，
+    # `actual` 裡會同時出現 2025 → 「沒有 2025 的資料，改用最接近的（…2025…）」。
+    # 2026-08-27 `tier1_hit_is_qualified` 上線後，走到這條路的曆年查詢變多，這句話就
+    # 開始被看見了。⚠ 這是**使用者可見句 ＋ 注入 generator 的事實**，措辭要精確。
+    coord = "財年" if year_f else "期間"
     return (
-        f"知識庫沒有「{scope}」在所詢問期間（{requested}）的資料，"
+        f"知識庫沒有「{scope}」在所詢問{coord}（{requested}）的資料，"
         f"以下回答改用最接近的可得期間（{actual_str}）。"
     )
 
@@ -1664,6 +1704,12 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
         _relax = {f["field"] for f in tier1_key_filters if f.get("routed_latest")}
         tier1_filter = build_qdrant_filter(tier1_key_filters, strict=True, relax_empty_fields=_relax)
         fused = _query_points(q_vecs, tier1_filter)
+        if fused and not tier1_hit_is_qualified(tier1_key_filters, fused):
+            # 只靠 report_label_year（曆年標籤）命中 → 當作落空，讓 Tier 2 接手。
+            # 理由與實測見 tier1_hit_is_qualified 的 docstring。
+            print("DEBUG - Tier 1 命中但只靠 report_label_year（曆年標籤，財年不符）"
+                  "→ 視為落空，降級 Tier 2")
+            fused = []
         if fused:
             winning_filter = tier1_filter
             print("DEBUG - Tier 1 (strict filter): hit")

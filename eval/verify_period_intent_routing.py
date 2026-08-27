@@ -179,6 +179,99 @@ def gate5_collapse_skip():
        '_period_intent.get("period_ref") == "range"' in src, True)
 
 
+class _P0:
+    """最小的假 point：只需要 payload。"""
+
+    def __init__(self, **payload):
+        self.payload = payload
+
+
+def gate6_tier1_label_year(client):
+    print("\n── 閘門⑥ Tier 1 的 label-year 命中資格（`tier1_hit_is_qualified`）──")
+    Y = [{"field": "fiscal_year", "value": "2025", "polarity": "include"},
+         {"field": "ticker", "value": "MSFT", "polarity": "include"}]
+    q = rq.tier1_hit_is_qualified
+
+    # ⑥a 真值表（合成點）。危險的方向是**放行**：讓一份別的財年的季報冒充年度答案，
+    #     而且連 Tier 2 的揭露語都不會出現。所以第一條是那條。
+    ck("⑥a 只靠 label-year 命中（財年不符）→ 不合格",
+       q(Y, [_P0(fiscal_year="2026", report_label_year="2025"),
+             _P0(fiscal_year="2026", report_label_year="2025")]), False)
+    ck("⑥a 有任一點的 fiscal_year 相符 → 合格（label-year 只是放寬，不影響這裡）",
+       q(Y, [_P0(fiscal_year="2026", report_label_year="2025"),
+             _P0(fiscal_year="2025", report_label_year="2025")]), True)
+    ck("⑥a **誤殺對照**：fiscal_year 為空的點（News/Fundamentals，relax_empty_fields "
+       "刻意放行的 col-15 那條路）→ 合格",
+       q(Y, [_P0(fiscal_year=None, report_label_year=None)]), True)
+    ck("⑥a 誤殺對照：payload 根本沒有 fiscal_year 這個 key → 合格",
+       q(Y, [_P0(source="AAPL_Fundamentals.txt")]), True)
+    ck("⑥a 沒有 fiscal_year 約束 → 一律合格（不干預既有行為）",
+       q([{"field": "ticker", "value": "MSFT", "polarity": "include"}],
+         [_P0(fiscal_year="2026")]), True)
+    ck("⑥a exclude 極性的 fiscal_year 不算約束",
+       q([{"field": "fiscal_year", "value": "2025", "polarity": "exclude"}],
+         [_P0(fiscal_year="2026")]), True)
+    ck("⑥a 多值（MatchAny）：命中其中一個就合格",
+       q([{"field": "fiscal_year", "value": ["2025", "2026"], "polarity": "include"}],
+         [_P0(fiscal_year="2026")]), True)
+    ck("⑥a 空候選 → 不合格（呼叫端本來就會走 Tier 2，這裡不可回 True）",
+       q(Y, []), False)
+
+    # ⑥b **這一組才是照到真實語料的**：⑥a 全部餵合成 payload，若哪天 ingest 改成
+    #     「10-K 的 report_label_year 也可能與 fiscal_year 不同」，⑥a 照樣全綠，而這個
+    #     修法的整個推理前提會崩掉（那時 label-year 那半個 OR 就不只放行 10-Q 了）。
+    #     ⚠ 同時要有「至少一份 10-Q 兩者不同」——否則這個修法沒有作用對象，
+    #     ⑥a 綠燈只是套套邏輯（同 CLAUDE.md：稽核 0 筆問題先當壞消息查）。
+    print("  ── ⑥b 語料的結構前提（實際 payload，不是合成的）──")
+    tenk_diff, tenq_diff, tenq_total = [], [], 0
+    seen: dict = {}
+    off = None
+    while True:
+        pts, off = client.scroll(
+            collection_name=rq.COLLECTION_NAME, limit=1024, offset=off, with_vectors=False,
+            with_payload=["source", "filing_type", "fiscal_year", "report_label_year"])
+        for p in pts:
+            pl = p.payload or {}
+            if pl.get("filing_type") in ("10-K", "10-Q"):
+                seen[pl.get("source")] = (pl["filing_type"], pl.get("fiscal_year"),
+                                          pl.get("report_label_year"))
+        if off is None:
+            break
+    for src, (ft, fy, rl) in seen.items():
+        if ft == "10-Q":
+            tenq_total += 1
+        if fy != rl:
+            (tenk_diff if ft == "10-K" else tenq_diff).append(src)
+    ck(f"⑥b **10-K 的 fiscal_year 一律等於 report_label_year**（{len(seen)} 份 filing 全掃）"
+       f"——這是「label-year 那半個 OR 只會放行 10-Q」的唯一依據",
+       tenk_diff, [])
+    ck(f"⑥b 至少一份 10-Q 兩者不同（{len(tenq_diff)}/{tenq_total}）＝這個修法有作用對象",
+       bool(tenq_diff), True)
+    print(f"       兩者不同的 10-Q：{sorted(tenq_diff)}")
+
+    # ⑥c 接線沒有被拆掉（同閘門⑤ 的作法：抄寫會漂移，這裡驗生產碼真的有呼叫）
+    src_txt = Path(rq.__file__).read_text(encoding="utf-8")
+    ck("⑥c 生產碼的 Tier 1 真的有呼叫這個資格判斷",
+       "not tier1_hit_is_qualified(tier1_key_filters, fused)" in src_txt, True)
+
+    # ⑥d 降級揭露語不可自相矛盾。⑥ 把更多曆年查詢趕進 Tier 2，於是這句話開始被看見：
+    #     `MSFT_10Q_202512` 的 fiscal_year=2026、report_label_year=2025，問 FY2025 降級後
+    #     `actual` 裡會**同時出現 2025** → 舊措辭是「沒有 2025 的資料，改用最接近的（…2025）」。
+    #     ⚠ 這句同時是使用者可見句與注入 generator 的事實，說錯比不說更糟。
+    note = rq._build_fallback_note(Y, [_P0(fiscal_year="2026", report_label_year="2025",
+                                           report_period_code="202512")])
+    ck("⑥d 年份降級的揭露語要說明是**財年**（否則與 actual 裡的曆年標籤自相矛盾）",
+       "所詢問財年（2025）" in note, True)
+    note_code = rq._build_fallback_note(
+        [{"field": "report_period_code", "value": "202509", "polarity": "include"}],
+        [_P0(fiscal_year="2026", report_period_code="202512")])
+    ck("⑥d 對照：期碼降級仍然說「期間」，措辭沒有被改壞",
+       "所詢問期間（202509）" in note_code, True)
+    ck("⑥d 對照：沒有年份／期碼約束 → 不算 fallback，回空字串",
+       rq._build_fallback_note([{"field": "ticker", "value": "MSFT",
+                                 "polarity": "include"}], [_P0(fiscal_year="2026")]), "")
+
+
 def main() -> int:
     client = rq.make_qdrant_client()
     print(f"collection = {rq.COLLECTION_NAME}")
@@ -187,6 +280,7 @@ def main() -> int:
     gate3_ladder_pick(client)
     gate4_period_ref_to_filter(client)
     gate5_collapse_skip()
+    gate6_tier1_label_year(client)
     print(f"\nPASS {_P}  FAIL {_F}")
     print("GATE: " + ("PASS" if _F == 0 else "FAIL"))
     return 1 if _F else 0
