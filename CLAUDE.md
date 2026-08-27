@@ -44,14 +44,14 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 ```
 
 - **檢索**：BGE-M3 dense+sparse hybrid → RRF → cross-encoder rerank。
-- **collection 現況（2026-08-13）**：
+- **collection 現況（2026-08-27 升生產：`mdna` → `multiyear`）**：
 
   | collection | 角色 |
   |---|---|
-  | `us_stock_rag_edgar_mdna` | **生產**（[`rag_query.py`](rag_query.py) `COLLECTION_NAME` 預設）。**2026-08-19 起無新聞**（3925 → 3827 chunks）。小標層收窄到 `_MDNA_ITEMS` 白名單；三道確定性閘門全綠、`check_number_defects` **7 條主張，同一份 collection 上兩輪跑出 PASS 7／FAIL 0 與 PASS 4／FAIL 3**（2026-08-19；差異全來自 Plan 子問題變異 → ⚠ **這個指標的判讀一律要 ≥2 輪，單輪會給出相反結論**，實測就吃過一次虧，見 CHANGELOG 同日）。⚠ 這一格當天走過 6 條 PASS 4／FAIL 2 → 拆題庫後 4 條 PASS 3／FAIL 1 → 補回 `lex-16`／`lex-17` 後 7 條；**「FAIL 變少」有一次是分母變動不是改善**。拔除新聞唯一零噪音量到的收益是 `mix-07`（2/2 拒答 → 答出 $29.5B）；`mi-05`／`lex-17` 的檢索缺陷**沒有**被修好、檢索類 RAGAS 已達 gold 上限 |
+  | `us_stock_rag_edgar_mdna` | **前生產（2026-08-13 ~ 2026-08-27）**。單年：21 份 filing／3,827 chunks。**2026-08-19 起無新聞**（3925 → 3827 chunks）。小標層收窄到 `_MDNA_ITEMS` 白名單；三道確定性閘門全綠、`check_number_defects` **7 條主張，同一份 collection 上兩輪跑出 PASS 7／FAIL 0 與 PASS 4／FAIL 3**（2026-08-19；差異全來自 Plan 子問題變異 → ⚠ **這個指標的判讀一律要 ≥2 輪，單輪會給出相反結論**，實測就吃過一次虧，見 CHANGELOG 同日）。⚠ 這一格當天走過 6 條 PASS 4／FAIL 2 → 拆題庫後 4 條 PASS 3／FAIL 1 → 補回 `lex-16`／`lex-17` 後 7 條；**「FAIL 變少」有一次是分母變動不是改善**。拔除新聞唯一零噪音量到的收益是 `mix-07`（2/2 拒答 → 答出 $29.5B）；`mi-05`／`lex-17` 的檢索缺陷**沒有**被修好、檢索類 RAGAS 已達 gold 上限 |
   | `us_stock_rag_edgar_period` | 前生產（2026-08-13 以前的碼上預設）。無小標層，**mix-03 會錯**（把分部的 24%／27 億當成公司整體，答案拼自三個 chunk） |
   | `us_stock_rag_edgar_ground2` | 收窄前的最佳臂。四個 ingest 修法全生效，但 Item 1／1A 被小標層切碎 → semantic recall 0.497 |
-  | `us_stock_rag_edgar_multiyear` | **壓測用，非生產**（2026-08-19）。77 份 filing／13,022 chunks（拔除新聞後），每家 3×10-K ＋ 8×10-Q 橫跨 ~2.5 年。用途是量「KB 長到多年之後檢索的期別干擾」，結論見 [`docs/EVAL.md`](docs/EVAL.md)〈多年語料的期別干擾〉。⚠ `verify_chunk_grounding` 有 1 筆 FAIL（見 [`BACKLOG.md`](BACKLOG.md)） |
+  | `us_stock_rag_edgar_multiyear` | **生產（2026-08-27 起，`COLLECTION_NAME` 預設）**。77 份 filing／13,022 chunks，每家 3×10-K ＋ 8×10-Q 橫跨 ~2.5 年、無新聞。⚠ **升生產是與 `RQ_PERIOD_INTENT_LLM` 預設翻開同一次做的**（多年語料上線而 A 沒開，當期題會退步——收益探針 control 臂 gold@5 4/4 → 3/4）。決策的兩半證據：**損害**見 [`docs/EVAL.md`](docs/EVAL.md)〈多年語料的期別干擾〉〈階段 4〉（45 題掉 2 題、錯期率 0.000 → 0.044，兩題都在「問題沒提期間」那類）；**收益**見〈多年語料買到了什麼〉（歷史題 gold@5 0/20 → 18/20，兌現率 0.900，當期陰性對照 4/4 不動）。⚠ `verify_chunk_grounding` 有 1 筆 FAIL（`MSFT_10K_2024.html#158`，1/1009＝0.1%）**帶著上線**——它的復活條件是「下次有正當理由重跑 ingest 時」，而升生產不需要重跑，見 [`BACKLOG.md`](BACKLOG.md)。其餘 ingest 閘門（table caption／segment split）全綠 |
   | `us_stock_rag_edgar_exp4` | **歷史基準，不要當對照臂**。Fundamentals 比率還是小數（`0.183` 而非 `18.30%`），且從未進入 period／head／ground 這條線的任何一次對照 |
   | `head` / `ground` | 切塊層的中間世代，只留作對照 |
 
@@ -129,7 +129,7 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 ### Agentic
 | 檔案 | 是什麼 |
 |---|---|
-| [`agentic_rag_v2.py`](agentic_rag_v2.py) | **現役 agentic 入口**。LangGraph 管線 Plan → Execute（確定性檢索）→ Grade → Synthesize（生成 + citation validator + 一致性 validator + reflect）。模型分層 RETRIEVAL=`gpt-oss-20b`、CHECKER/GEN=`gpt-oss-120b`（env `AGENTIC_*_MODEL` 可覆蓋）。時間感知走 `freshness_mode`：`snapshot`（eval）／`live`（prod）。**節點設計理由與 validator 實測見 [`docs/AGENTIC.md`](docs/AGENTIC.md)** |
+| [`agentic_rag_v2.py`](agentic_rag_v2.py) | **現役 agentic 入口**。LangGraph 管線 Plan → Execute（確定性檢索）→ Grade → Synthesize（生成 + citation validator + 一致性 validator + reflect）。模型分層 RETRIEVAL／CHECKER／GEN **三個都是 `gpt-oss-120b`**（env `AGENTIC_*_MODEL` 可覆蓋）。⚠ 這一格漂移過：RETRIEVAL 早在 2026-08-14 就從 `20b` 換成 `120b`（實測 20b 在 NIM 上**慢一倍**、品質等價，見該檔 `RETRIEVAL_MODEL` 上方），本檔卻一直寫著 20b。要重現 2026-08-14 以前的跑分請設 `AGENTIC_RETRIEVAL_MODEL=openai/gpt-oss-20b`。時間感知走 `freshness_mode`：`snapshot`（eval）／`live`（prod）。**節點設計理由與 validator 實測見 [`docs/AGENTIC.md`](docs/AGENTIC.md)** |
 
 **web_search（live 專用）的四條規則**：
 - **eval 隔離只靠 `freshness_mode == LIVE` 與 `ENABLE_WEB_SEARCH` 兩個獨立條件**，各自都足夠。任何「相關性詞表」（`looks_like_news_query`、`_RELATIVE_TIME_RE`）**都不是隔離機制**——它們守的是相關性卻讓非新聞措辭的即時題永遠打不到 web，且**漏網的代價是把三週前的數字講成「今天股價」**。要改 web 判斷式，先跑 [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py)。
@@ -160,7 +160,7 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 | [`eval/run_agentic_on_evalset.py`](eval/run_agentic_on_evalset.py) | 把 agentic 跑在 eval_set → 結果檔（含 `contexts` 供 RAGAS） | 生產 `.venv` |
 | [`eval/eval_generation_llm_judge.py`](eval/eval_generation_llm_judge.py) | 單管線版：真實 retrieve+generate ＋ 3 維判定 | 生產 `.venv` |
 | [`eval/eval_ragas_vs_rubric.py`](eval/eval_ragas_vs_rubric.py) | 讀結果檔 → RAGAS 六指標。跑完會印噪音門檻與 gold 上限的判讀護欄 | **`.venv-ragas`** |
-| [`eval/check_number_defects.py`](eval/check_number_defects.py) ＋ [`eval/number_claims.json`](eval/number_claims.json) | **確定性數字缺陷檢查（零 LLM、零噪音）＝「數字答錯」類改動的主要驗收指標**。逐條斷言判 PASS／FAIL／N/A 三態。⚠ N/A 不能併進 PASS——**它是「這一輪沒量到東西」不是通過**，第五次失效就是這樣抓到的（`col-11` 答對了卻因為 anchor 措辭寫死而判 N/A）。⚠ **一個 id 可以掛多條主張**（`lex-17` 掛 `require_chunk` ＋ `anchored_pct`：進池 ≠ 有用它）。量尺的五次失效史見 [`docs/EVAL.md`](docs/EVAL.md) | 生產 `.venv`（只讀結果檔） |
+| [`eval/check_number_defects.py`](eval/check_number_defects.py) ＋ [`eval/number_claims.json`](eval/number_claims.json) | **確定性數字缺陷檢查（零 LLM、零噪音）＝「數字答錯」類改動的主要驗收指標**。逐條斷言判 PASS／FAIL／N/A 三態。**跑之前先 `--selftest`**（`anchored_pcts` 的切窗四條雙向鎖）。⚠ N/A 不能併進 PASS——**它是「這一輪沒量到東西」不是通過**，第五、第六次失效都是這樣抓到的（`col-11` 答對了卻因為 anchor 措辭寫死而判 N/A）。⚠ **一個 id 可以掛多條主張**（`lex-17` 掛 `require_chunk` ＋ `anchored_pct`：進池 ≠ 有用它）。量尺的五次失效史見 [`docs/EVAL.md`](docs/EVAL.md) | 生產 `.venv`（只讀結果檔） |
 | [`eval/audit_gold_numbers.py`](eval/audit_gold_numbers.py) | **gold 自洽性稽核（零 LLM、零網路）＝跑任何評測前的前置閘門**。⚠ 不查 filing 類的數字（大乾草堆裡「值有沒有出現」不帶資訊） | 生產 `.venv` |
 | [`eval/verify_segment_split.py`](eval/verify_segment_split.py) | 驗收 ingest 的三層硬邊界（期間／小標／幅度接地）。零網路、零 embedding、不碰 Qdrant → **可在別的實驗跑的時候執行** | 生產 `.venv` |
 | [`eval/verify_table_captions.py`](eval/verify_table_captions.py) | 驗收表格 caption 品質（零 LLM、只讀 Qdrant）。**重建後必跑**：`missing_on_big` 是 Groq 429 靜默降級的唯一出口，`numeric/stub` 是 caption 選錯來源。⚠ `no_caption` 本身不是缺陷（小表不值得花 LLM call） | 生產 `.venv` |

@@ -42,7 +42,11 @@ EMBEDDING_MODEL  = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
 RERANK_MODEL     = os.getenv("RERANK_MODEL", "BAAI/bge-reranker-v2-m3")
 # 生產 collection。用 env 覆蓋才能在不改碼的情況下跑 collection A/B（gold 生成、eval、
 # agentic 全都是 import rag_query 取這個常數，改碼跑完忘了改回來是實際發生過的風險）。
-COLLECTION_NAME  = os.getenv("RAG_COLLECTION", "us_stock_rag_edgar_mdna")
+# 2026-08-27 升生產：`us_stock_rag_edgar_mdna`（21 份 filing、單年）→ `..._multiyear`
+# （77 份、每家 3×10-K ＋ 8×10-Q 橫跨 ~2.5 年）。收益／損害兩半的證據見 docs/EVAL.md
+# 〈多年語料買到了什麼〉與〈階段 4〉。⚠ 這一次同時翻了 `RQ_PERIOD_INTENT_LLM` 的預設
+# （見下方 retrieve() 內），**兩者必須一起**：多年語料上線而 A 沒開，當期題會退步。
+COLLECTION_NAME  = os.getenv("RAG_COLLECTION", "us_stock_rag_edgar_multiyear")
 DENSE_VECTOR_NAME  = "dense"
 SPARSE_VECTOR_NAME = "sparse"
 
@@ -1579,14 +1583,18 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
     # env RQ_LATEST_QUARTER_ROUTING=0/off/false 可關閉（供 eval on/off A/B；預設開）
     _lq_routing_on = os.getenv("RQ_LATEST_QUARTER_ROUTING", "1").strip().lower() \
         not in ("0", "off", "false", "no")
-    # `RQ_PERIOD_INTENT_LLM=1` → 期間意圖交 LLM 判（`resolve_period_intent`），取代
-    # `_resolve_latest_quarter_filter` 的兩道硬編碼詞表。⛔ 預設關閉，量完再決定翻不翻。
-    # 動機：那兩道詞表擋掉 eval_set 裡 20/21 題的相對期間指稱（見 resolve_period_intent
-    # 上方註解），而多年語料下漏一題的代價從「差一季」變成「差兩年」。
+    # 期間意圖交 LLM 判（`resolve_period_intent`），取代 `_resolve_latest_quarter_filter`
+    # 的兩道硬編碼詞表。動機：那兩道詞表擋掉 eval_set 裡 20/21 題的相對期間指稱（見
+    # resolve_period_intent 上方註解），而多年語料下漏一題的代價從「差一季」變成「差兩年」。
+    # **2026-08-27 預設翻成開**（env `RQ_PERIOD_INTENT_LLM=0` 可關掉做 A/B）。
+    # ⚠ 這一翻**必須與 COLLECTION_NAME 換成 multiyear 同一次做**：實測多年語料上 A 關掉時
+    # 當期題會退步（收益探針的 control 臂 gold@5 4/4 → 3/4、同節別期席位 0 → 7），而
+    # `range` 意圖跳過 cross-period collapse 那條趨勢題保護也要靠 A。
     _period_intent = None
     if _lq_routing_on and not disable_filter \
             and not any(f["field"] == "report_period_code" for f in detected_filters):
-        if os.getenv("RQ_PERIOD_INTENT_LLM", "") == "1":
+        if os.getenv("RQ_PERIOD_INTENT_LLM", "1").strip().lower() \
+                not in ("0", "off", "false", "no"):
             _period_intent = resolve_period_intent(query, model_name)
             _lq_filter = _resolve_period_filter_llm(query, client, _period_intent)
             print(f"DEBUG - period intent (LLM): {_period_intent}")

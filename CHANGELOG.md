@@ -13,6 +13,72 @@
 
 ---
 
+## 2026-08-27 — 多年語料**升生產**：`mdna` → `multiyear`，並翻開期間意圖 LLM
+
+決策的兩半證據都在同一天補齊之後才做（收益見〈多年語料買到了什麼〉、損害見〈階段 4〉）。
+
+**一起做的四件事**（`RQ_PERIOD_INTENT_LLM` 與換 collection **不可分兩次**：多年語料上線而 A
+沒開，當期題會退步——收益探針 control 臂 gold@5 4/4 → 3/4、同節別期席位 0 → 7）：
+- `rag_query.COLLECTION_NAME` → `us_stock_rag_edgar_multiyear`（21 → 77 份 filing、13,022 chunks）
+- `RQ_PERIOD_INTENT_LLM` 預設翻成**開**（`=0` 可關掉做 A/B）
+- `sem-03`／`sem-04`／`col-02`／`col-03` 的萬用字元 gold **釘死**成單年 KB 裡實際含答案的那幾份
+  （與 `period_probe_baseline.json` 同一條規則）。實查證實 2024／2025 那幾份**同樣含那些關鍵字**
+  ——那正是萬用字元會失去判別力的證據，不是留著它的理由。
+- README／CLAUDE.md 的 collection 現況同步（README 原本還停在更早退役的 `..._exp4`）
+
+**驗收（零噪音，兩輪；⚠ 這個指標規定 ≥2 輪，單輪會給出相反結論——這次就發生了）**：
+
+| | 單年 `mdna` r1 | `mdna` r2 | 多年 r1 | 多年 r2 |
+|---|---|---|---|---|
+| `check_number_defects` | 8/0/0 | 8/0/0 | **7/1/0** | **8/0/0** |
+
+**r1 的那個 FAIL 不是升生產造成的**，三個獨立證據：① 它是 `col-11`，而穩定性表顯示這題的頭條
+數字在**兩個 collection 上都在跳**（19% / 29% / 18% / 29%）② 它引的五個 chunk **全部在單年 KB
+裡**，沒有任何一份是新增的舊年度 filing ③ 這條主張的 `metric_design` 註記早就記過同一個失效
+在 `mdna` 的 r2 上發生過。
+
+**新增的舊 filing 真的有在用**：多年 r1 引用的 217 個 chunk 有 **45 個（20.7%）**來自新增的舊
+年度 filing，涉及 **23/65 題**。不是「加了沒人用」。
+
+**閘門**：`verify_period_intent_routing` 53、`verify_answer_validators` 138、
+`verify_cross_period_collapse` 17、`verify_web_gate_isolation` 全綠；ingest 側
+`verify_table_captions` 硬缺陷 0、`verify_segment_split` 三判準全 0。
+**閘門② 從此才有判別力**：期碼字串比大小判反的配對 **0 → 31/385**（單年語料上它一直是測資不足）。
+⚠ `verify_chunk_grounding` 的 `MSFT_10K_2024.html#158`（1/1009＝0.1%）**帶著上線**——修它要重跑
+三小時 ingest，而升生產不需要重跑，它自己的復活條件並沒有被觸發。BACKLOG 原本把它列成升生產
+前置條件，那是寫錯的，已更正。
+
+**兩個順手根除的靜默漂移**：
+- `run_agentic_on_evalset.py` 的 `DEFAULT_COLLECTION` **寫死成 2026-08-13 就退役的 `..._period`**
+  → 不帶 `--collection` 的每一次跑都跑在退役底座上，零警告。改成跟著 `rq.COLLECTION_NAME`。
+  同檔 docstring 的「90 題」也是舊的（現為 65）。
+- CLAUDE.md 寫著 agentic 的 RETRIEVAL 是 `gpt-oss-20b`，碼上 2026-08-14 就換成 `120b` 了。
+
+**還沒解的**：期別探針 gold 偏袒 B 這件事只解了一半（萬用字元釘死了，chunk 粒度重寫沒做）。
+升生產不靠 `gold@k`，但那個偏袒現在跑在生產 collection 上，復活條件已改寫成「下一次要用
+`gold@k` 的差值做決定時」。生成層的收益仍然沒量（BACKLOG【多年語料 ②】）。
+
+---
+
+## 2026-08-27 — `anchored_pct` 量尺第六次失效：切片把百分比 token 剖半
+
+升生產驗收時 `mix-09` 判 N/A——而答案是**對的**（「大中華區（Greater China）…成長 **22 %**」、
+引用正確）。根因：`anchored_pcts` 舊寫法**先把 text 切成 seg、再在 seg 上找百分比**，切口會把
+一個 token 剖半：
+- 往右切掉 `%` → 漏抓（`mix-09`，**答對了卻安靜地判 N/A**）
+- 往左切進數字中間更糟 → `122%` 被讀成 `22%`，**憑空生出一個不存在的值**
+
+改成**先在全文找完所有百分比，再用「數字起點是否落在 ±window 內」過濾**。窗口語意一字不變，
+token 永遠完整。docstring 裡「實測對窗口不敏感」那句同時更正（它只對當時那三條主張成立）。
+
+新增 `--selftest`（4 條雙向鎖）。⚠ **第一版的回歸鎖是假的**：直接抄 `mix-09` 原句當測資，
+**舊碼也會過**——真實答案用的是窄空格 U+202F，手打成一般空格字元數就變了，邊界不落在同一個
+位置。改成精確構造（填充字元數是算出來的）之後，舊碼在兩條上都 FAIL，鎖才真的鎖得住。
+
+重評既有結果檔：兩個 `mdna` 基準**分毫未動**（8/0/0），多年 r1 由 6/1/1 → **7/1/0**。
+
+---
+
 ## 2026-08-27 — 修掉「Tier 1 命中 ≠ 答得了」：label-year 那半個 OR 會冒充財年命中
 
 同日的收益探針在 `bh-07` 上抓到、**回頭在生產 collection 複現**的缺陷。完整推導與實測表格見

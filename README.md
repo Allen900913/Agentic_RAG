@@ -32,10 +32,18 @@
 ### 資料規模
 | 類別 | 檔案數 | 說明 |
 |---|---|---|
-| SEC filing（10-K / 10-Q） | 21 | 每家 1 份 10-K ＋ 最近 2 份 10-Q，由 API 即時抓取 |
+| SEC filing（10-K / 10-Q） | **77** | 每家 3 份 10-K ＋ 8 份 10-Q，橫跨約 2.5 年，由 API 即時抓取 |
 | Fundamentals / IncomeStatement | 14 | 每家各 2 份 `.txt`，只保留最新快照 |
-| News | 24 | `.txt`，多日期並存（時間序列） |
-| **合計來源文件** | **59** | → 生產 collection `us_stock_rag_edgar_exp4` 約 **3,650 chunks** |
+| **合計進索引的來源文件** | **91** | → 生產 collection `us_stock_rag_edgar_multiyear` 共 **13,022 chunks** |
+| News | 24 | `.txt` 仍在磁碟上，但**不進索引**（見下） |
+
+> **KB 只收「記錄」，不收「流」**（2026-08-19）：新聞由 agentic 的 live web 路徑供應，不進
+> Qdrant。判準是「這份東西的正確性靠什麼判定」——記錄靠期別對＋有引用＋數字可驗，流靠夠新
+> ＋來源可信，本專案為期別正確性做的每一層對新聞沒有一項成立。
+>
+> **多年語料於 2026-08-27 升為生產**（單年 21 份 → 77 份）。決策是兩半證據都量過才做的：
+> 損害是 45 題掉 2 題、錯期率 0.000 → 0.044；收益是「只有舊年報答得出來」的歷史題
+> gold@5 從 0/20 變 18/20，而當期題的陰性對照不動。
 
 ---
 
@@ -52,7 +60,7 @@ graph LR
     C1 --> D["SemanticChunker (BGE-M3)<br/>＋RCTS fallback<br/>(>1200 token 補切)"]
     C2 --> D
     D --> E["BGE-M3 一次編碼<br/>產生 Dense + Sparse"]
-    E --> F[("Qdrant<br/>us_stock_rag_edgar_exp4<br/>dense 1024D cosine<br/>＋sparse lexical")]
+    E --> F[("Qdrant<br/>us_stock_rag_edgar_multiyear<br/>dense 1024D cosine<br/>＋sparse lexical")]
 
     style F fill:#dbeafe,stroke:#3b82f6
     style E fill:#fce7f3,stroke:#db2777
@@ -301,7 +309,7 @@ docker run -d --name qdrant --restart unless-stopped -p 6333:6333 -p 6334:6334 \
 # ⑤ 啟動 Docker Qdrant                                → 見 4-2
 
 # ⑥ 全量重建索引 ── ⚠ --rcts-fallback 不可省（預設是關的）
-python data_update_edgar.py --rebuild --rcts-fallback --collection us_stock_rag_edgar_exp4
+python data_update_edgar.py --rebuild --rcts-fallback --collection us_stock_rag_edgar_multiyear
 
 # ⑦ 單管線問答（不加 -m 就用預設的 NVIDIA gpt-oss-120b）
 python rag_query.py -q "NVIDIA 最新財報的毛利率是多少？"

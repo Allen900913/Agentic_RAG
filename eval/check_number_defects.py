@@ -121,7 +121,15 @@ def anchored_pcts(text: str, anchor: str, window: int = 60) -> list[tuple[float,
       | 取最近(雙向)、首次命中 | 保留 | **2 個 run 誤報**（撈到 Azure 40%）| PASS |
       | 取最近(雙向)、全域最近 | 保留 | **1 個 run 誤報** | PASS |
     所以放棄挑值,改問**集合成員關係**（正解在不在、禁止值在不在）,與措辭方向無關。
-    實測 ±40 與 ±60 對三條主張結果完全相同＝對窗口不敏感。
+    ⚠ **「對窗口不敏感」這句話 2026-08-27 被推翻**（本指標的**第六次失效**）：mix-09 那一輪
+    答對了（「大中華區（Greater China）…營收較前一年同季成長 **22 %**」、引用正確），卻判 N/A
+    ——`22` 的數字剛好落在窗口邊界上，**切片把 `%` 切掉了**，於是 `PCT` 比不到。舊寫法是先把
+    text 切成 seg 再在 seg 上找百分比，**切口會把一個 token 剖半**：往後切掉 `%`（漏抓，
+    mix-09）、往前切進數字中間更糟（`122%` 被讀成 `22%`，**會生出一個不存在的值**）。
+    現在改成**先在全文上找完所有百分比，再用「數字起點是否落在 ±window 內」過濾**——窗口的
+    語意一字不變，但 token 永遠是完整的。`--selftest` 有這四條的雙向鎖。
+    （原註：實測 ±40 與 ±60 對當時那三條主張結果完全相同。那句話在那三條上仍然成立，
+    不成立的是把它推廣成「這個量尺對窗口不敏感」。）
 
     ⚠ **判別力由 `forbid_pct` 承擔,不是 `expect_pct`**：只問「正解在不在附近」時,答案把
     正解與干擾值並陳也會 PASS。所以 `known_defect` **必須**填 forbid（診斷清楚的缺陷必然
@@ -133,15 +141,17 @@ def anchored_pcts(text: str, anchor: str, window: int = 60) -> list[tuple[float,
     """
     out: list[tuple[float, str]] = []
     seen: set[float] = set()
+    # 先在**全文**上找完百分比（token 永遠完整），再用窗口過濾——見 docstring 第六次失效。
+    pcts = [(float(m.group(1)), m.start(), m.end()) for m in PCT.finditer(text)]
     for mo in re.finditer(anchor, text):
-        lo = max(0, mo.start() - window)
-        seg = text[lo:mo.end() + window]
-        for m in PCT.finditer(seg):
-            v = float(m.group(1))
+        lo, hi = mo.start() - window, mo.end() + window
+        for v, s, e in pcts:
+            if not lo <= s <= hi:      # 判準是**數字的起點**在不在窗口內
+                continue
             if v in seen:
                 continue
             seen.add(v)
-            out.append((v, re.sub(r"\s+", " ", seg[max(0, m.start() - 40):m.end()])))
+            out.append((v, re.sub(r"\s+", " ", text[max(0, s - 40):e])))
     return out
 
 
@@ -294,9 +304,47 @@ def load_results(path: Path) -> dict:
     return {r["id"]: r for r in data.get("records", [])}
 
 
+def selftest() -> int:
+    """`anchored_pcts` 的雙向自測（零檔案、毫秒級）。
+
+    這個量尺**已經失效過六次**，其中兩次是「答對了卻判 N/A」——那種失效不會叫，它只是安靜地
+    停止量測。所以切窗這件事必須有回歸鎖。"""
+    A = "大中華區"
+    # ⚠ 前兩條是**精確構造**的，不是抄一句真實答案：第一版直接抄 mix-09 的原句，結果**舊碼
+    #    也會過**（真實答案用的是窄空格 U+202F，我手打成一般空格，字元數一變邊界就不落在同
+    #    一個位置）——那把鎖根本沒鎖住東西。填充字元數是算出來的，改動前請重算。
+    #    「大中華區」長 4；anchor 命中 [0,4)，窗口右界 hi = 4 + 60 = 64。
+    cut_pct = "大中華區" + "。" * 58 + "22 %"      # 數字在 62、`%` 在 65 → 舊碼的切片切在 64
+    split_num = "122% " + "。" * 56 + "大中華區"   # anchor 起點 61 → 舊碼 lo=1，正好切在 1 與 22 之間
+    cases = [
+        # 第六次失效的形狀（2026-08-27）：數字在窗口內、`%` 在窗口外 → 必須算得到。
+        (cut_pct, A, 60, [22.0],
+         "數字在窗口內、`%` 被右邊界切掉 → 仍要抓到（mix-09 的形狀，回歸鎖）"),
+        # **最危險的方向**：舊寫法把窗口外的 `122%` 從左邊界剖半，讀成 `22%`＝憑空生出一個值。
+        (split_num, A, 60, [],
+         "誤報對照：窗口外的 `122%` 不得被左邊界切成 `22%`（舊寫法會生出不存在的值）"),
+        ("大中華區營收成長 22%，Azure 成長 40%", A, 60, [22.0, 40.0],
+         "窗口內多個百分比 → 全收（集合語意，見 docstring）"),
+        ("大中華區的表現不錯" + "。" * 200 + "整體成長 22%", A, 60, [],
+         "誤報對照：離 anchor 太遠的百分比不算"),
+    ]
+    ok = 0
+    for text, anchor, win, want, why in cases:
+        got = sorted(v for v, _ in anchored_pcts(text, anchor, win))
+        ok += got == sorted(want)
+        print(f"[{'PASS' if got == sorted(want) else 'FAIL'}] {why}\n"
+              f"         got={got} want={sorted(want)}")
+    print(f"\n{ok}/{len(cases)} PASS")
+    return 0 if ok == len(cases) else 1
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
+    if "--selftest" in sys.argv:
+        raise SystemExit(selftest())
+    ap.add_argument("--selftest", action="store_true",
+                    help="只跑 anchored_pcts 的切窗自測（零檔案）")
     ap.add_argument("--results", nargs="+", required=True, help="一或多份 generation_judge 結果檔")
     ap.add_argument("--gold", default=str(GOLD_PATH))
     ap.add_argument("--claims", default=str(CLAIMS_PATH))
