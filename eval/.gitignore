@@ -34,6 +34,18 @@
 !period_probe_baseline.json
 !period_probe_trend_queries.json
 
+# ── 2026-08-27 補：**同一件事第三次發生**（上面那段就是第二次寫的）─────────────────
+# 黑名單制的 `*.json` 又吃掉兩個「腳本不能免費重現」的檔，而且一樣沒有任何警告：
+#   · period_probe_benefit_queries.json  多年語料**收益**探針的題庫。20 題歷史題的 literal
+#     是人工從舊年度 filing 讀出來、逐條通過前提檢查（在單年 KB 必須查無、在多年 KB 必須查有）
+#     才留下的；4 題當期陰性對照少一題，「一律把舊年份排前面」就會滿分。重建＝重做一次造題。
+#   · web_replay_llm.json  `web_fixture.json`（5 題 live web）的 llm replay cache。它的
+#     **兄弟檔 `web_replay_llm_news37.json` 上面已經白名單了**，這一個漏掉——理由與那個一字不差：
+#     沒有它，重放會生出不同的 web query、打不到 fixture（MoE 不固定路由）。
+# ⚠ 下次再新增 eval 輸入檔，**先問「它在不在白名單裡」**：這條規則是黑名單制，沉默地吃掉新檔。
+!period_probe_benefit_queries.json
+!web_replay_llm.json
+
 # ── web fixture：**體積大但仍然入版控**，這是刻意的例外 ────────────────────────────
 # 它不是「跑分輸出」而是**錄下來的外部世界**：重錄要連網、燒 Tavily 額度，而且**錄不回同一份**
 # （網路內容每天在變）。fixture 綁定一組環境（as-of 日期 + collection），是那批斷言唯一的依據；

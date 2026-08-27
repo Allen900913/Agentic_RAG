@@ -1,0 +1,195 @@
+{
+  "_meta": {
+    "這是什麼": "**多年語料的收益量尺**：gold 只存在於舊年度 filing 的歷史題。單年 KB 結構性答不出來，多年 KB 有機會答得出來——「有機會」與「真的做到」之間差的就是這支探針要量的東西。",
+    "為什麼必須有": "多年壓測（docs/EVAL.md〈多年語料的期別干擾〉）量到的每一格都是**損害**：45 題掉 2 題、錯期率 0.000→0.044。沒有任何量尺在量多年語料**買到了什麼** → 升生產的決定只有一半證據。這份檔案補的是另一半。",
+    "為什麼不併進 eval_set.json": "① eval_set 的分母 2026-08-19 已經變動兩次，再變一次會讓所有歷史分數更難比 ② 這 20 題只有結構性期望（該撈到哪一份 filing），沒有寫過標準答案、也沒有進 RAGAS ③ 它們在單年 collection 上**必然全滅**，那不是系統壞掉，混進主題庫會把量尺本身弄壞。",
+    "gold 怎麼定義": "**不寫死檔名**，由 `literal` 這個絕對字串在 collection 裡確定性定位。理由：gold 與前提檢查（『這個事實在單年 KB 到底在不在』）**是同一個操作**，寫死檔名會讓兩者可能各自漂移。數字型 literal 用前後不接 `[0-9,.]` 的邊界比對（否則 `1,353` 會吃到 `21,353`）；片語型 literal 用大小寫無關的子字串。",
+    "前提檢查（這把尺的自我驗證）": "每題在每個 collection 上都會判 `kb_absent`。判準三態：`historical` 題在單年臂必須 absent（**那是定義使然，不是量測結果**）、在多年臂必須 present（否則題目無效，標 `void`）；`control` 題兩臂都必須 present。⚠ 兩邊都 absent ＝ 這個事實根本不在語料裡（造題時實測 `TSLA 1,313,851` 與 `GOOGL 1,431,802` 就是這樣被擋下來的），那種題**不能算多年語料的收益**。",
+    "為什麼要有 control": "少了它，「一律把舊年份排前面」也會在 historical 那一臂滿分。control 是當期題、兩個 collection 都答得出來，多年臂上必須**照樣**撈得到——historical 上升而 control 下降就不是收益是交換。",
+    "⚠ 這支量的是檢索不是生成": "『單年 KB 遇到歷史題會拒答，還是拿別的年份硬答』是**生成端**的問題，要花 LLM ＋ 標準答案，不在這裡。拆法同 probe_news_web_routing.py 的 ①／②：① 便宜的必要條件先量（本檔），② 貴的內容半另外做。② 見 BACKLOG。",
+    "⚠ 為什麼 T-1、T-2 的題都不算數": "10-K 的合併損益表**自帶三年**（AAPL_10K_2025 就有 FY2025/2024/2023），MD&A 自帶兩年。所以『去年營收多少』單年 KB **本來就答得出來**，拿它當收益題會憑空灌水。真正的收益區從 **T-3（FY2022）** 才開始——這 20 題全部通過前提檢查，就是這件事的證據。",
+    "產生於": "2026-08-27",
+    "誰在用": "eval/probe_historical_benefit.py"
+  },
+  "queries": [
+    {
+      "id": "bh-01",
+      "ticker": "AAPL",
+      "category": "historical",
+      "query": "Apple 在 2022 財年的總營收是多少？",
+      "literal": "394,328",
+      "why": "10-K 損益表自帶三年 → FY2023 單年 KB 有、FY2022 沒有。收益區的邊界題"
+    },
+    {
+      "id": "bh-02",
+      "ticker": "TSLA",
+      "category": "historical",
+      "query": "Tesla 2022 年的總營收是多少？",
+      "literal": "81,462"
+    },
+    {
+      "id": "bh-03",
+      "ticker": "GOOGL",
+      "category": "historical",
+      "query": "Alphabet 2022 年的總營收是多少？",
+      "literal": "282,836"
+    },
+    {
+      "id": "bh-04",
+      "ticker": "META",
+      "category": "historical",
+      "query": "Meta 2022 年的總營收是多少？",
+      "literal": "116,609"
+    },
+    {
+      "id": "bh-05",
+      "ticker": "AMZN",
+      "category": "historical",
+      "query": "Amazon 2022 年的淨銷售額是多少？",
+      "literal": "513,983"
+    },
+    {
+      "id": "bh-06",
+      "ticker": "NVDA",
+      "category": "historical",
+      "query": "NVIDIA 在 FY2023（截至 2023 年 1 月）的營收是多少？",
+      "literal": "26,974",
+      "why": "財年非曆年，順便壓 NVDA 的期別反轉"
+    },
+    {
+      "id": "bh-07",
+      "ticker": "MSFT",
+      "category": "historical",
+      "query": "Microsoft 在 2023 財年的營收是多少？",
+      "literal": "211,915",
+      "why": "MSFT 當期是 FY2026，所以 FY2023 已經退出單年 KB 的三年表"
+    },
+    {
+      "id": "bh-08",
+      "ticker": "TSLA",
+      "category": "historical",
+      "query": "Tesla 在 2024 年第一季的營收是多少？",
+      "literal": "21,301",
+      "why": "舊季 10-Q；當期 10-Q 只帶去年同季，跨不到 2024"
+    },
+    {
+      "id": "bh-09",
+      "ticker": "NVDA",
+      "category": "historical",
+      "query": "NVIDIA 在 2023 年 10 月底結束的那一季營收是多少？",
+      "literal": "18,120"
+    },
+    {
+      "id": "bh-10",
+      "ticker": "GOOGL",
+      "category": "historical",
+      "query": "Alphabet 在 2024 年第一季的營收是多少？",
+      "literal": "80,539"
+    },
+    {
+      "id": "bh-11",
+      "ticker": "AAPL",
+      "category": "historical",
+      "query": "Apple 在 2024 年 6 月底結束的那一季淨銷售額是多少？",
+      "literal": "85,777"
+    },
+    {
+      "id": "bh-12",
+      "ticker": "GOOGL",
+      "category": "historical",
+      "query": "Google Cloud 在 2022 年的營收是多少？",
+      "literal": "26,280",
+      "why": "分部層級：比合併損益表更深，也更容易被別年份的同一節擠掉"
+    },
+    {
+      "id": "bh-13",
+      "ticker": "META",
+      "category": "historical",
+      "query": "Meta 的 Reality Labs 部門在 2022 年虧損多少？",
+      "literal": "13,717"
+    },
+    {
+      "id": "bh-14",
+      "ticker": "AMZN",
+      "category": "historical",
+      "query": "AWS 在 2022 年的淨銷售額是多少？",
+      "literal": "80,096"
+    },
+    {
+      "id": "bh-15",
+      "ticker": "NVDA",
+      "category": "historical",
+      "query": "NVIDIA 資料中心業務在 FY2023 的營收是多少？",
+      "literal": "15,005"
+    },
+    {
+      "id": "bh-16",
+      "ticker": "MSFT",
+      "category": "historical",
+      "query": "Microsoft 的 Intelligent Cloud 部門在 2024 財年營收是多少？",
+      "literal": "105,362",
+      "why": "唯一 gold 只有一份 filing 的分部題"
+    },
+    {
+      "id": "bh-17",
+      "ticker": "TSLA",
+      "category": "historical",
+      "query": "Tesla 在 2023 年交付了多少輛車？",
+      "literal": "1,808,581",
+      "why": "敘述型（Item 7 內文，不是表格）"
+    },
+    {
+      "id": "bh-18",
+      "ticker": "NVDA",
+      "category": "historical",
+      "query": "NVIDIA 因為終止收購 Arm 認列了多少收購終止費用？",
+      "literal": "1,353",
+      "why": "敘述型；問題本身不含年份 → 期別 filter 幫不上忙，只能靠語料裡有沒有"
+    },
+    {
+      "id": "bh-19",
+      "ticker": "GOOGL",
+      "category": "historical",
+      "query": "Alphabet 2023 年的裁員在研發費用裡認列了多少員工資遣費用？",
+      "literal": "reduction in our workforce",
+      "why": "片語型 literal；gold 只有 GOOGL_10K_2023 一份"
+    },
+    {
+      "id": "bh-20",
+      "ticker": "META",
+      "category": "historical",
+      "query": "Meta 在 2023 年 12 月的家族日活躍人數（DAP）是多少？",
+      "literal": "3.19",
+      "why": "敘述型指標，不在任何財務報表裡"
+    },
+    {
+      "id": "bc-01",
+      "ticker": "AAPL",
+      "category": "control",
+      "query": "Apple 最新一個財年的總營收是多少？",
+      "literal": "416,161",
+      "why": "陰性對照：多年臂若為了撈舊年份而弄丟當期，這裡會叫"
+    },
+    {
+      "id": "bc-02",
+      "ticker": "NVDA",
+      "category": "control",
+      "query": "NVIDIA 最新一個財年的營收是多少？",
+      "literal": "215,938"
+    },
+    {
+      "id": "bc-03",
+      "ticker": "MSFT",
+      "category": "control",
+      "query": "Microsoft 最新一個財年的營收是多少？",
+      "literal": "331,839"
+    },
+    {
+      "id": "bc-04",
+      "ticker": "META",
+      "category": "control",
+      "query": "Meta 最新一個財年的營收是多少？",
+      "literal": "200,966"
+    }
+  ]
+}
