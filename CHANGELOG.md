@@ -13,6 +13,60 @@
 
 ---
 
+## 2026-08-28（下午）— 兩條接線：期間路由讀得到已解出的 ticker；四道 validator 守門換掉英文字面
+
+起點是使用者盤點「我的 LLM 到底用在哪些地方」。全碼庫 `call_llm` 共 **15 個呼叫點**
+（`rag_query.py` 8、`agentic_rag_v2.py` 7），單發管線一題 **3~4 次**、agentic 一題 **50~60 次**
+（每個子問題內部各跑一次完整 `rq.retrieve`，查詢理解層因此被乘上子問題數）。盤點順帶照出
+兩個缺陷，**兩個都是接線問題，零額外 LLM 呼叫、零 prompt 改動**。
+
+### ① 同一次 `retrieve()` 裡，兩條管線對「這是哪家公司」給出不同答案
+
+`parse_query_filters()` 先跑，產出裡已經有 `{"field":"ticker","value":"AMZN"}`（含 regex 沉默時
+LLM 補的產品名）。三十行之後 `_resolve_period_filter_llm()` 需要同一個答案，卻**自己重跑一次
+regex** → 看不到 AWS → `len(tickers) != 1` → 不路由。**答案早就擺在呼叫端手上，它只用了比較
+弱的那半個來源。**
+
+修法：新增 `rq._sole_ticker(filters, query)`，優先讀 `filters`、`None` 時才退回 regex；呼叫端
+把 `detected_filters` 傳進去。端到端（`top_k=5`）：
+
+| | 期間路由 | top-5 |
+|---|---|---|
+| 「AWS 最新一季的營收成長率」修法前 | ✗ 沒觸發 | — |
+| 同題修法後 | `report_period_code=202606` | **5/5 `AMZN_10Q_202606`** |
+| 「Microsoft 最新一季…」（陰性對照） | `report_period_code=202603` | 逐字不變 |
+
+⚠ 舊路徑 `_resolve_latest_quarter_filter` **刻意不接**：`RQ_PERIOD_INTENT_LLM=0` 的用途就是
+「逐字退回修法之前」做 A/B，接上去就不再是乾淨的對照臂。
+
+### ② Synthesize 還有四道守門寫著 `answer.startswith("I don't have enough")`
+
+2026-08-27 修引用尾巴時只改了尾巴，`_node_synthesize` 裡的
+`_consistency_check_and_fix`／`_period_check_and_fix`／`_reflect_and_fix`／`_number_check_and_fix`
+四道漏改。舊守門是**英文字面、只認開頭**而 Writer 講中文 → 中文拒答整句穿得過去 → 一份剛說
+自己沒有依據的答案，還會付 `_extract_claims` ＋ `_reflect_and_fix` **至少兩次 LLM 呼叫**去稽核
+一個沒有東西可稽核的對象。四道全部換成 `rq.looks_like_refusal`。
+
+⚠ **危險方向不是漏判而是判過頭**：真的有依據的答案被當成拒答 → 四道 validator 一次全部跳過。
+`REFUSAL_MAX_CHARS` 的 150 字上限就是擋這件事的。
+
+### 量尺
+
+| 閘門 | 前 | 後 |
+|---|---|---|
+| `verify_period_intent_routing.py` | 69 | **85**（新增⑧ 期間路由讀已解出的 ticker） |
+| `verify_answer_validators.py` | 152 | **170**（新增⑭ Synthesize 四道守門） |
+
+兩道的判別力都在**接線鎖**，各自做過零 LLM 變異測試：
+- ⑧g：把呼叫端的 `detected_filters` 引數拿掉 → **FAIL**（⑧a~⑧f 全是手餵 filters，少了 ⑧g 會全綠）
+- ⑭a：四道守門只改三道 → **FAIL 2 條**，逐個 validator 走 AST 驗，不是字串 grep
+
+⚠ **⑭e 第一版是我自己的量尺錯**：fixture 本體只有約 130 字、還在 150 字閘之下，於是它
+**本來就該**被判成拒答。照 CLAUDE.md「FAIL 先問是不是量尺錯」查出來，把 fixture 寫成真正
+超過閘值的實質答案才是對的測資。
+
+---
+
 ## 2026-08-28 — 產品名解析成母公司（AWS → AMZN）；順手鎖住「拒答還是會帶尾巴」
 
 ### ① `AWS` 沒有被解析成 AMZN（BACKLOG〈多年語料 ④〉）

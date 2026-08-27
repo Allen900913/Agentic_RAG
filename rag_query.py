@@ -926,7 +926,43 @@ def _append_llm_ticker(filters: list[dict], query: str, model_name: str) -> list
                        "polarity": "include"}]
 
 
-def _resolve_period_filter_llm(query: str, client, intent: dict) -> dict | None:
+def _sole_ticker(filters: list[dict] | None, query: str) -> str | None:
+    """這次 query 到底鎖定「恰好一家」哪間公司；不是恰好一家就回 None。
+
+    ⚠ **優先讀 `filters`，不要在這裡重跑 regex 當主要來源**（2026-08-28）。`filters` 是
+    `parse_query_filters()` 已經解出來的結論——含 regex 抽的字面公司名，**也含 regex 沉默時
+    LLM 補的產品／子公司名**（AWS → AMZN）。那個結論在同一次 `retrieve()` 裡早就算好了、
+    就擺在呼叫端手上，這裡自己重跑一次 regex 等於**故意只用比較弱的那半個來源**：
+    「AWS 最新一季」會解得出 ticker filter（管線 A 看得見）卻路由不到最新季（管線 B 看不見）。
+    修的是接線不是模型——**零額外 LLM 呼叫、零 prompt 改動**。
+
+    `filters is None`（沒把結論傳進來的呼叫端，例如閘門④ 的既有斷言）才退回 regex，
+    語意逐字等同本函式存在之前。
+
+    ⚠ 三條「不猜」的界線，每一條的危險方向都是**鎖到別人的財報**（答案會帶著正當的引用
+    一起錯，比不鎖更糟）：
+      · `polarity != include` 不算數——「不要 AAPL」讀成「鎖定 AAPL」是反向錯誤
+      · value 是多值（MatchAny）→ None，同下方 flat AND 的結構限制
+      · 兩條互相矛盾的 include ticker → None，不挑第一個
+    """
+    if filters is not None:
+        picked = None
+        for f in filters:
+            if f.get("field") != "ticker" or f.get("polarity", "include") != "include":
+                continue
+            v = f.get("value")
+            vs = [v] if isinstance(v, str) else list(v or [])
+            if len(vs) != 1 or (picked is not None and picked != vs[0]):
+                return None
+            picked = vs[0]
+        if picked is not None:
+            return picked
+    tickers = _find_all_ticker_aliases((query or "").lower(), query)
+    return tickers[0] if len(tickers) == 1 else None
+
+
+def _resolve_period_filter_llm(query: str, client, intent: dict,
+                               filters: list[dict] | None = None) -> dict | None:
     """`period_ref` → 具體的 `report_period_code` 硬 filter（確定性，零 LLM）。
 
     只有 `latest` 會產生 filter：
@@ -935,11 +971,13 @@ def _resolve_period_filter_llm(query: str, client, intent: dict) -> dict | None:
       · `none` 沒有期間可鎖
     多／零公司回 None：`build_qdrant_filter` 吃 flat AND list，**結構上寫不出 per-ticker 的
     OR-of-ANDs**（MatchAny 是全域 OR，會讓 A 公司的舊季通過 B 公司的期碼）。這是既有限制，
-    見 BACKLOG〈「最新期間」路由的覆蓋面〉。"""
+    見 BACKLOG〈「最新期間」路由的覆蓋面〉。
+
+    `filters` ＝ `parse_query_filters()` 的產出（見 `_sole_ticker`）。省略時退回 regex。"""
     if intent.get("period_ref") != "latest":
         return None
-    tickers = _find_all_ticker_aliases(query.lower(), query)
-    if len(tickers) != 1:
+    ticker = _sole_ticker(filters, query)
+    if ticker is None:
         return None
     # ⚠ `granularity` 缺漏時預設 **10-Q**，不是「所有類型裡最新的」。
     #   實測（col-11「微軟的雲端服務最近成長得快不快？」）：不設限會挑到 `MSFT_10K_2026`
@@ -947,13 +985,13 @@ def _resolve_period_filter_llm(query: str, client, intent: dict) -> dict | None:
     #   舊的 `_resolve_latest_quarter_filter` 本質上是**季路由**、只在偵測到年度意圖時讓路
     #   （`_ANNUAL_INTENT_RE`），這裡沿用同一個預設方向：**沒說就是問季**。
     kind = "10-K" if (intent.get("granularity") == "annual") else "10-Q"
-    pick = ladder_pick(_get_period_ladder(client), tickers[0],
+    pick = ladder_pick(_get_period_ladder(client), ticker,
                        kind=kind, year=intent.get("fiscal_year"))
     if pick is None and intent.get("fiscal_year") is not None:
         # 指定年份挑不到（例：問 2026 但該公司當年還沒有那種 filing）→ 放掉年份限制再試一次。
         # ⚠ 只在「有 kind」時才退：完全不設限地挑「最新」會把年報與季報混在一起比，
         #   而那正是使用者可能沒指定的維度。
-        pick = ladder_pick(_get_period_ladder(client), tickers[0], kind=kind) if kind else None
+        pick = ladder_pick(_get_period_ladder(client), ticker, kind=kind) if kind else None
     if pick is None:
         return None
     return {"field": "report_period_code", "value": pick["period_code"],
@@ -1782,9 +1820,15 @@ def retrieve(query: str, bge_m3, rerank_model, client, top_k: int = DEFAULT_TOP_
         if os.getenv("RQ_PERIOD_INTENT_LLM", "1").strip().lower() \
                 not in ("0", "off", "false", "no"):
             _period_intent = resolve_period_intent(query, model_name)
-            _lq_filter = _resolve_period_filter_llm(query, client, _period_intent)
+            # ⚠ `detected_filters` 一定要傳（2026-08-28）：期間路由需要「哪一家公司」，而那個
+            #   答案就在上面 `parse_query_filters()` 的產出裡（含 LLM 解出的產品／子公司名）。
+            #   不傳的話它會自己重跑 regex，於是「AWS 最新一季」解得出 ticker filter 卻路由
+            #   不到最新季——同一次 retrieve 裡兩條管線對「這是哪家公司」給出不同答案。
+            _lq_filter = _resolve_period_filter_llm(query, client, _period_intent, detected_filters)
             print(f"DEBUG - period intent (LLM): {_period_intent}")
         else:
+            # ⚠ 舊路徑刻意**不接**實體解析：`RQ_PERIOD_INTENT_LLM=0` 的用途就是「逐字退回
+            #   修法之前」做 A/B，接上去就不再是乾淨的對照臂了。
             _lq_filter = _resolve_latest_quarter_filter(query, client)
         if _lq_filter is not None:
             detected_filters.append(_lq_filter)

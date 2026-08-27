@@ -3612,23 +3612,32 @@ def _node_synthesize(state: SupervisorState) -> dict:
                                      web_extra=web_extra)
         answer = _validate_and_fix_citations(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
                                              web_extra=web_extra)
+        # ⚠ 以下四道守門共用同一個判準 `rq.looks_like_refusal`（2026-08-28 從
+        #   `answer.startswith("I don't have enough")` 換過來）。舊守門是**英文字面、只認開頭**,
+        #   而 Writer 講中文——「知識庫中查無足夠資料…」整句穿得過去,於是一份剛說自己沒有依據
+        #   的答案還會照樣付 `_extract_claims` ＋ `_reflect_and_fix` 至少兩次 LLM 呼叫去稽核它,
+        #   而稽核對象裡沒有任何可稽核的東西。這與引用尾巴那次（`_compose_answer_tail`）是**同一個
+        #   守門寫錯**,那次只改了尾巴、這四道漏改。
+        #   ⚠ 危險方向不是漏判而是**判過頭**：真的有依據的答案被當成拒答 → 四道 validator 全部
+        #   跳過 → 一致性/期別/數字溯源的保護一次消失。`looks_like_refusal` 的 150 字上限就是
+        #   擋這件事的（長的誠實答案不算拒答）,誤報對照見 verify_answer_validators 閘門⑬b/⑭d。
         # 確定性一致性稽核（零 LLM 成本的偵測,只有真的抓到才花一次重生成）。放在 reflect 之前,
         # 讓 reflect 稽核的是已調和過的版本。
-        if not answer.startswith("I don't have enough"):
+        if not rq.looks_like_refusal(answer):
             answer = _consistency_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
                                                 web_extra=web_extra)
         # 確定性期別稽核（零 LLM 偵測）：答案自稱「最新一季」卻引用了較舊的期別 → 重生成一次。
         # 放在一致性之後、reflect 之前：期別改對可能連帶換掉數字，要讓 reflect 稽核最終版本。
-        if not answer.startswith("I don't have enough"):
+        if not rq.looks_like_refusal(answer):
             answer = _period_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
                                            web_extra=web_extra)
-        if state.get("enable_reflection", True) and not answer.startswith("I don't have enough"):
+        if state.get("enable_reflection", True) and not rq.looks_like_refusal(answer):
             answer = _reflect_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
                                       web_extra=web_extra)
         # 數字溯源（零 LLM 偵測）**放最後**：這是唯一會看 reflect 重生成結果的檢查。
         # 100 題乾跑誤報 0 題（見 find_untraceable_numbers 的兩條排除規則），所以放進主線不會
         # 擾動既有基準；真的觸發才花一次重生成。
-        if not answer.startswith("I don't have enough"):
+        if not rq.looks_like_refusal(answer):
             answer = _number_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
                                            web_extra=web_extra)
     except Exception as e:

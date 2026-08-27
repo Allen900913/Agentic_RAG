@@ -12,7 +12,7 @@
 舊的 `_get_latest_10q_periods` 用 `report_period_code` 字串比大小取 max，10-K 是 4 位年份、
 10-Q 是 6 位 yyyymm，混在一起比會**時對時錯**。閘門② 就是把這件事釘死成可重跑的斷言。
 
-## 七道閘門
+## 八道閘門
 
 ⚠ 這張表 2026-08-27 漂移過一次：閘門⑥ 那天加了，標題還寫著「五道」。改這支請一併改表。
 
@@ -25,6 +25,7 @@
 | ⑤ | `range` → 跳過 collapse 的接線 | B 的損害唯一的解法；斷了就回到趨勢題期別數 −38% |
 | ⑥ | Tier 1 的 label-year 命中資格 | 那半個 OR **只能放寬命中、不能自己構成命中**；否則 Tier 1 假命中會把 Tier 2 的降級與揭露語一起關掉 |
 | ⑦ | 實體解析的**接線** | LLM 只在 regex 沉默時被叫、只補不覆寫、輸出過封閉集合、失敗回空。⚠ 這裡不量**準不準**（那含 LLM、非零噪音），準確度在 [`probe_ticker_resolution.py`](probe_ticker_resolution.py) |
+| ⑧ | 期間路由讀的是**已解出的 ticker** | 兩條管線在同一次 `retrieve()` 裡都要「這是哪家公司」，而答案 ⑦ 已經算好擺在呼叫端手上。⚠ 判別力在 **⑧g 的接線鎖**：⑧a~⑧f 全是手餵的 filters，呼叫端的引數哪天被重構掉，它們照樣全綠 |
 
 ⚠ **閘門② 在單年 collection 上幾乎沒有判別力**（每組最多 2~3 份 filing，撞不到編碼長度
 不同的配對）。跑在 `us_stock_rag_edgar_mdna` 上看到「0 對判反」是**測資不足**不是系統健康
@@ -361,6 +362,80 @@ def gate7_ticker_resolution():
        sorted(rq._KB_TICKERS))
 
 
+def gate8_period_reads_resolved_ticker(client):
+    print("\n── 閘門⑧ 期間路由讀的是**已解出的 ticker**，不是自己重跑 regex ──")
+    # 病灶（2026-08-28）：同一次 `retrieve()` 裡有兩條管線都需要「這是哪家公司」。
+    #   A `parse_query_filters()` → regex ＋（沉默時）LLM 實體解析 → 解得出 AWS = AMZN
+    #   B `_resolve_period_filter_llm()` → **自己重跑一次 regex** → 看不到 AWS → 不路由
+    # 也就是說答案早就算好擺在呼叫端手上,B 卻只用了比較弱的那半個來源。這道鎖的是接線。
+    f = rq._resolve_period_filter_llm
+    latest = {"period_ref": "latest", "fiscal_year": None, "granularity": "quarter"}
+    lad = rq._get_period_ladder(client)
+    amzn = rq.ladder_pick(lad, "AMZN", kind="10-Q")
+    msft = rq.ladder_pick(lad, "MSFT", kind="10-Q")
+
+    # ⑧a 真陽性：query 裡沒有任何**字面**公司名,ticker 只存在於已解出的 filters 裡
+    Q_AWS = "AWS 最新一季的營收成長率是多少？"
+    ck("⑧a 前提：這個 query 的 regex 確實抽不到 ticker（不然這道在測別的東西）",
+       rq._find_all_ticker_aliases(Q_AWS.lower(), Q_AWS), [])
+    fx = [{"field": "ticker", "value": "AMZN", "polarity": "include"}]
+    if amzn:
+        ck("⑧a 帶著已解出的 ticker → 路由到該公司最新 10-Q",
+           (f(Q_AWS, client, latest, fx) or {}).get("value"), amzn["period_code"])
+    # ⚠ 這條是**修法有作用**的證明（＝真陽性對照）。少了它,一個把 filters 參數整個忽略的
+    #   實作也會讓 ⑧b~⑧f 全綠。
+    ck("⑧a 對照：不傳 filters（＝修法之前）→ 仍然路由不到,回 None",
+       f(Q_AWS, client, latest), None)
+
+    # ⑧b **誤報對照**：regex 抽得到時,行為必須逐字不變。危險方向是「順手改壞既有路由」。
+    Q_MS = "Microsoft 最新一季的營收成長率是多少？"
+    # ⚠ 這裡刻意不叫 `parse_query_filters()`（那含 LLM,本檔是零 LLM 閘門）。regex 抽得到時
+    #   它的 ticker 就是 `_extract_structural_filters` 抽的那一個,`_append_llm_ticker` 只補不覆寫。
+    fx_ms = rq._extract_structural_filters(Q_MS)
+    ck("⑧b 誤報對照：regex 抽得到 → 傳 filters 與不傳的結果**逐字相同**",
+       f(Q_MS, client, latest, fx_ms), f(Q_MS, client, latest))
+    if msft:
+        ck("⑧b 而且那個結果仍然是對的（MSFT 最新 10-Q）",
+           (f(Q_MS, client, latest, fx_ms) or {}).get("value"), msft["period_code"])
+
+    # ⑧c~⑧e 三條「不猜」的界線。危險方向全部相同：**鎖到別人的財報**——答案會帶著正當的
+    #   引用一起錯,那比「不鎖、退回 Tier 3」更糟。
+    ck("⑧c 多公司（MatchAny）→ None（flat AND 寫不出 per-ticker 的 OR-of-ANDs）",
+       f(Q_AWS, client, latest,
+         [{"field": "ticker", "value": ["AMZN", "MSFT"], "polarity": "include"}]), None)
+    ck("⑧d exclude 的 ticker 不算鎖定（『不要 AAPL』讀成『鎖定 AAPL』是反向錯誤）",
+       f(Q_AWS, client, latest,
+         [{"field": "ticker", "value": "AAPL", "polarity": "exclude"}]), None)
+    ck("⑧e 兩條互相矛盾的 include ticker → None,不挑第一個",
+       f(Q_AWS, client, latest,
+         [{"field": "ticker", "value": "AMZN", "polarity": "include"},
+          {"field": "ticker", "value": "MSFT", "polarity": "include"}]), None)
+    ck("⑧e 對照：同一個 ticker 出現兩次 → 仍然算恰好一家",
+       rq._sole_ticker([{"field": "ticker", "value": "AMZN", "polarity": "include"},
+                        {"field": "ticker", "value": "AMZN", "polarity": "include"}], ""), "AMZN")
+    ck("⑧e 對照：filters 裡沒有 ticker → 退回 regex（語意等同修法之前）",
+       rq._sole_ticker([{"field": "fiscal_year", "value": "2026", "polarity": "include"}], Q_MS),
+       "MSFT")
+    ck("⑧e 對照：filters=None → 退回 regex", rq._sole_ticker(None, Q_MS), "MSFT")
+
+    # ⑧f 多了 filters 不代表可以開始注入——只有 latest 該產生 filter（同閘門④ 的界線）
+    for ref in ("absolute", "range", "none"):
+        ck(f"⑧f period_ref={ref} → 即使 filters 給了 ticker 也不注入",
+           f(Q_AWS, client, {"period_ref": ref, "fiscal_year": 2026, "granularity": "quarter"},
+             fx), None)
+
+    # ⑧g **接線鎖**：⑧a~⑧f 全部是拿手餵的 filters 在測。哪天有人重構掉呼叫端那個引數,
+    #   上面每一條照樣全綠而生產又回到「兩條管線各自認公司」。所以要驗生產碼真的傳了。
+    #   （同閘門⑤⑥c 的作法：抄寫會漂移,驗原始碼。）
+    src = Path(rq.__file__).read_text(encoding="utf-8")
+    ck("⑧g 生產碼的 retrieve() 真的把 detected_filters 傳給期間路由",
+       "_resolve_period_filter_llm(query, client, _period_intent, detected_filters)" in src, True)
+    # ⑧h 舊路徑刻意**不接**：`RQ_PERIOD_INTENT_LLM=0` 的用途是「逐字退回修法之前」做 A/B,
+    #    接上實體解析就不再是乾淨的對照臂。這條鎖的是「別好心順手把它也改了」。
+    ck("⑧h 對照：舊路徑 `_resolve_latest_quarter_filter` 維持只吃 (query, client)",
+       "_resolve_latest_quarter_filter(query, client)" in src, True)
+
+
 def main() -> int:
     client = rq.make_qdrant_client()
     print(f"collection = {rq.COLLECTION_NAME}")
@@ -371,6 +446,7 @@ def main() -> int:
     gate5_collapse_skip()
     gate6_tier1_label_year(client)
     gate7_ticker_resolution()
+    gate8_period_reads_resolved_ticker(client)
     print(f"\nPASS {_P}  FAIL {_F}")
     print("GATE: " + ("PASS" if _F == 0 else "FAIL"))
     return 1 if _F else 0

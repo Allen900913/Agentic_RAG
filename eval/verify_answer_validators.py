@@ -982,6 +982,99 @@ def gate13_refusal_no_citation_tail() -> None:
             len(ar.rq._CITE_MARK.sub("", _refusal + _notice).strip()) >= ar.rq.REFUSAL_MAX_CHARS)
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# 閘門⑭：Synthesize 的四道 validator 守門也要用同一個拒答判準
+#
+# 病灶（2026-08-28）：⑬ 修的是引用尾巴,但 `_node_synthesize` 裡**還有四道守門**寫著
+# `answer.startswith("I don't have enough")`——一致性／期別／reflect／數字溯源。那是英文字面、
+# 只認開頭,而 Writer 講中文 → 中文拒答整句穿得過去,於是一份剛說自己沒有依據的答案還會
+# 照樣付 `_extract_claims` ＋ `_reflect_and_fix` **至少兩次 LLM 呼叫**去稽核它,而稽核對象裡
+# 沒有任何可稽核的東西。⑬ 那次只改了尾巴、這四道漏改——**同一個守門寫錯,兩個消費端**。
+#
+# ⚠ 判別力分佈與 ⑬ 一樣但後果不同：
+#   · ⑭a 是**接線鎖**,而且必須逐個 validator 驗。改三道漏一道的話,⑭b~⑭e 全部照樣綠
+#     （它們測的是判準本身,不是誰在用它）。所以這裡用 AST 走訪、不是字串 grep。
+#   · ⑭d 是**誤報對照＝危險方向**：判過頭 ＝ 真的有依據的答案被當成拒答 → 四道 validator
+#     一次全部跳過 → 一致性／期別／數字溯源的保護同時消失。這比漏判嚴重得多。
+# ══════════════════════════════════════════════════════════════════════════════
+
+_GUARDED_VALIDATORS = ("_consistency_check_and_fix", "_period_check_and_fix",
+                       "_reflect_and_fix", "_number_check_and_fix")
+
+
+def gate14_synthesize_refusal_guards() -> None:
+    print("\n[⑭] Synthesize 四道 validator 的拒答守門")
+    import ast
+    from pathlib import Path
+
+    src = Path(ar.__file__).read_text(encoding="utf-8")
+    fn = next((n for n in ast.walk(ast.parse(src))
+               if isinstance(n, ast.FunctionDef) and n.name == "_node_synthesize"), None)
+    _assert("⑭a 前提：找得到 `_node_synthesize`（找不到的話下面全部是假性通過）", fn is not None)
+    if fn is None:
+        return
+
+    fn_src = ast.unparse(fn)
+    _assert("⑭a 舊的英文字面守門已從 `_node_synthesize` 移除",
+            "startswith('I don" not in fn_src and 'startswith("I don' not in fn_src)
+
+    # 逐個 validator 驗它**確實**被 looks_like_refusal 守著。改三道漏一道要在這裡叫。
+    guarded: set[str] = set()
+    called: set[str] = set()
+    for node in ast.walk(fn):
+        if isinstance(node, ast.Call):
+            nm = getattr(node.func, "id", None) or getattr(node.func, "attr", None)
+            if nm in _GUARDED_VALIDATORS:
+                called.add(nm)
+        if isinstance(node, ast.If) and "looks_like_refusal" in ast.unparse(node.test):
+            for sub in ast.walk(ast.Module(body=node.body, type_ignores=[])):
+                if isinstance(sub, ast.Call):
+                    nm = getattr(sub.func, "id", None) or getattr(sub.func, "attr", None)
+                    if nm in _GUARDED_VALIDATORS:
+                        guarded.add(nm)
+    _assert(f"⑭a 前提：四道 validator 都還在被呼叫（實際 {sorted(called)}）",
+            called == set(_GUARDED_VALIDATORS), f"缺 {sorted(set(_GUARDED_VALIDATORS) - called)}")
+    for nm in _GUARDED_VALIDATORS:
+        _assert(f"⑭a `{nm}` 由 `rq.looks_like_refusal` 守門", nm in guarded,
+                "這一道沒有被守到 → 拒答仍會付它的 LLM 呼叫")
+
+    # ⑭b 回歸鎖：舊守門唯一擋得住的那句,新判準也要擋得住（同 ⑬a 末條）
+    _assert("⑭b 回歸鎖：英文預設拒答仍判為拒答", ar.rq.looks_like_refusal(_REFUSAL_EN))
+
+    # ⑭c 真陽性：舊守門漏、新守門擋得住。**兩個方向都要斷言**才證明這次修法真的改了行為
+    for label, ans in (("中文拒答", _REFUSAL_ZH),
+                       ("中文拒答（自帶 inline 引用）", _REFUSAL_ZH_CITED)):
+        _assert(f"⑭c 前提：{label} 是舊守門漏掉的（不然這條沒在測修法）",
+                not ans.startswith("I don't have enough"))
+        _assert(f"⑭c {label} → 新守門擋得住（省掉至少兩次 LLM 呼叫）",
+                ar.rq.looks_like_refusal(ans))
+
+    # ⑭d **誤報對照＝危險方向**：有依據的答案被判成拒答 → 四道 validator 一次全部跳過
+    for label, ans in (("完全正常的答案", _NORMAL),
+                       ("部分作答＋其中一項未揭露", _PARTIAL),
+                       ("寫得長的誠實答案（只有 2023–2025、未包含 2022）", _HONEST_LONG)):
+        _assert(f"⑭d 誤報對照：{label} → **不**判為拒答（validator 必須照跑）",
+                not ar.rq.looks_like_refusal(ans), repr(ans)[:120])
+
+    # ⑭e 新舊判準唯一的分歧方向,鎖住它是刻意的：舊守門只認開頭,一份「以拒答句開頭、後面
+    #    寫了實質內容」的答案舊版會**跳過四道 validator**,新版會照跑。方向是更安全那一邊。
+    #    ⚠ 這裡的「實質內容」必須真的超過 `REFUSAL_MAX_CHARS`。第一版寫得太短（本體約 130 字）
+    #      而**它本來就該被判成拒答**——那是量尺錯不是系統壞（同 CLAUDE.md「FAIL 先問是不是
+    #      量尺錯」）。短的混合答案新舊判準一致,分歧只出現在**長**的那種。
+    _mixed = (_REFUSAL_EN + " 不過根據提供的參考資料仍可回答其中一部分：Tesla 2026 財年第二季"
+              "總營收為 $22,496 百萬【TSLA_10Q_202606.html, chunk #3】，較去年同期成長，"
+              "毛利率為 17.2%【TSLA_10Q_202606.html, chunk #5】。能源儲存部署量與汽車部門的"
+              "交付結構在該季報的 MD&A 中亦有揭露，可據以判斷毛利率變化的主要來源。"
+              "至於分車型的交付均價，這份文件沒有拆分到那個層級，需要另外查閱投資人簡報。")
+    _assert("⑭e 前提：這種答案舊守門會判成拒答（＝舊版會跳過四道 validator）",
+            _mixed.startswith("I don't have enough"))
+    _assert("⑭e 前提：而且它真的是實質答案（本體超過 REFUSAL_MAX_CHARS）",
+            len(ar.rq._CITE_MARK.sub("", _mixed).strip()) >= ar.rq.REFUSAL_MAX_CHARS,
+            f"本體長度={len(ar.rq._CITE_MARK.sub('', _mixed).strip())}")
+    _assert("⑭e 以拒答句開頭但有實質內容 → 新守門**不**判為拒答,validator 照跑",
+            not ar.rq.looks_like_refusal(_mixed))
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -1005,6 +1098,7 @@ def main() -> int:
     gate11_basis_disclosure()
     gate12_ratio_intent_llm()
     gate13_refusal_no_citation_tail()
+    gate14_synthesize_refusal_guards()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")
