@@ -71,7 +71,10 @@ def enabled() -> bool:
 
 # 所有呼叫端註冊的 kind＝我們自己的碼定義的**封閉集合**，所以列清單正當（同 VALID_*_ITEMS
 # 的理由）。新增接點時要一起加進來——沒加會在 strict 名單裡被判成拼錯而報錯，那是刻意的。
-_KNOWN_KINDS = {"plan", "translate_en", "check", "ratio"}
+_KNOWN_KINDS = {"plan", "translate_en", "check", "ratio", "period_intent", "ticker"}
+# ⚠ 2026-08-28：`period_intent` 是 2026-08-19 加的接點，**當時漏了註冊**（`ticker` 一起補上）。
+# 症狀是靜默的：bare `strict` 照樣涵蓋它（走 `{"*"}`），只有 `RAG_REPLAY_MODE=strict:period_intent`
+# 會被當成拼錯而報錯——也就是說「想單獨對它嚴格」是唯一會現形的用法，而那正是最少人走的路。
 
 
 def _strict_kinds() -> Optional[set[str]]:

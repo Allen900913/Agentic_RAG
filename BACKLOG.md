@@ -150,7 +150,9 @@
 - ~~**【現生產缺陷】絕對年份 filter 會命中「標著那一年、卻不含那一年數字」的 filing**（2026-08-27，收益探針 `bh-07` 抓到，回頭在生產 collection 上實測複現）~~ → **2026-08-27 當天修掉**，見 [`CHANGELOG.md`](CHANGELOG.md) 同日。
   修法是 `rq.tier1_hit_is_qualified`：**label-year 那半個 OR 只能放寬命中、不能自己構成命中**。依據是實測 77 份 filing（`multiyear`，`mdna` 的超集）——**10-K 的 `fiscal_year` 與 `report_label_year` 永遠相等（21/21），會分歧的只有 10-Q**（15/56），所以那半個 OR 的全部效果就是放行「曆年標籤符合、財年不符」的季報。生產上的作用對象只有兩組 `(ticker, year)`（`MSFT 2025`／`NVDA 2025`），blast radius 可枚舉。
   ⚠ **留下的代價**：曆年語意的年份查詢（「Microsoft 2025 年的季報」）現在也會降級到 Tier 2。實測**內容沒變差**（前三名仍是 `MSFT_10Q_202512`／`202603`），變的是多了一句揭露語。揭露語本身已改成講「所詢問**財年**」以免自相矛盾（`actual` 裡會出現曆年標籤 2025）。要更好得讓 `parse_query_filters` 講出「這個年份是財年還是曆年」——那是動 LLM prompt、會動到 replay 基準，**目前判斷不值得**。
-- **【多年語料 ④】`AWS` 沒有被解析成 AMZN**（2026-08-27，收益探針 `bh-14` 抓到）。「AWS 在 2022 年的淨銷售額」抽不到 ticker → Tier 3 退回無 filter → top-5 是 META／MSFT／TSLA 的 IncomeStatement 跨公司污染。**這是實體解析不是期別問題**，與上一條（絕對年份 filter）修在不同地方，別併成一個「多年語料的損害」數字。⚠ 修法**不要走硬編碼別名表**（`AWS→AMZN`、`Azure→MSFT`…那是 O(n) 的開始，見 CLAUDE.md〈LLM 與 Python 的分工〉）；ticker 抽取本來就在 LLM 那一側，該補的是 prompt 裡「產品／子公司名也要映回母公司 ticker」這條規則。
+- ~~**【多年語料 ④】`AWS` 沒有被解析成 AMZN**~~ → **2026-08-28 修掉**，見 [`CHANGELOG.md`](CHANGELOG.md) 同日。修法是新增一個 LLM 實體解析節點 `rq.resolve_tickers_llm`，**只在 `_COMPANY_TICKER` 這張 regex 表沉默時才被叫**。端到端複現：top-5 從 4 家公司混雜變成 5/5 AMZN、且撈到 FY2022 數字真正所在的 `AMZN_10K_2023`。
+  ⚠ **我在這一條裡寫錯過一句話**：原本寫「ticker 抽取本來就在 LLM 那一側，該補的是 prompt」。**不是**——`QUERY_FILTER_SYSTEM_PROMPT` 只抽 filing_type／fiscal_year／fiscal_period，ticker 從頭到尾只有那張表在做。所以那是「新增一個 LLM 節點」不是「補一條規則」，代價與風險都不同。
+  ⚠ **留下的極限（查清楚後決定不做）**：`_resolve_period_filter_llm`／`_resolve_latest_quarter_filter` 這兩條期別路由仍然只吃 regex 的 ticker（它們的簽章沒有 `model_name`，且各自有「單一公司才路由」的閘門）。後果是「AWS 最新一季的營收」解得出 AMZN 的 ticker filter、卻不會走最新季路由——**那是維持現狀不是新的壞掉**。復活條件：哪天期別路由本身要動時一起改，不值得為它單獨動一條生產熱路徑。
 
 ---
 

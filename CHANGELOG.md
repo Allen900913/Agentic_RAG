@@ -13,6 +13,73 @@
 
 ---
 
+## 2026-08-28 — 產品名解析成母公司（AWS → AMZN）；順手鎖住「拒答還是會帶尾巴」
+
+### ① `AWS` 沒有被解析成 AMZN（BACKLOG〈多年語料 ④〉）
+
+「AWS 在 2022 年的淨銷售額」抽不到 ticker → 沒有 hard filter → Tier 3 退回無 filter。
+端到端複現（`RQ_TICKER_LLM` 開／關兩臂，同一支 `rq.retrieve`）：
+
+| | top-5 來源 | 公司數 |
+|---|---|---|
+| 修法前 | `AMZN_Fundamentals`／`META_IncomeStatement`／`TSLA_IncomeStatement`／`MSFT_IncomeStatement`／`AMZN_IncomeStatement` | **4** |
+| 修法後 | `AMZN_10K_2023`／`AMZN_10K_2024`／`AMZN_10Q_202406`／`AMZN_10Q_202509`／`AMZN_10Q_202503` | **1** |
+
+修法後不只乾淨，還撈到 FY2022 淨銷售額**真正所在**的 `AMZN_10K_2023`。
+
+**修法：新增 LLM 實體解析節點 `rq.resolve_tickers_llm`，只在 `_COMPANY_TICKER` 這張 regex 表
+沉默時才被叫。** 不加 `"aws": "AMZN"` 是因為那是 O(n) 的開始——實測 20 個一般人會用的產品／
+子公司問法，**18 個抽不到**（Azure／iPhone／YouTube／Instagram／Reality Labs／CUDA／Model Y／
+Xbox／LinkedIn／GeForce／Prime／WhatsApp／Bing／Waymo／App Store／Kindle／Superchargers…）。
+
+⚠ **BACKLOG 上那條記錄本身寫錯過**：原本寫「ticker 抽取本來就在 LLM 那一側，該補的是 prompt」。
+**不是**——`QUERY_FILTER_SYSTEM_PROMPT` 只抽 filing_type／fiscal_year／fiscal_period，ticker
+從頭到尾只有那張 regex 表在做。所以這是「新增一個 LLM 節點」不是「補一條既有 prompt 的規則」。
+
+⚠ **只在 regex 沉默時叫，理由不是省錢是精度**：regex 命中的是字面公司名，高精度，LLM 沒有理由
+推翻它。這跟 ratio 意圖那次（詞表必須真的退位）**不是同一個形狀**——那裡詞表會在 LLM 表過態
+之後蓋回去，這裡詞表沉默時才問 LLM，詞表不可能覆寫 LLM。
+
+**量法（兩支，職責分開）**
+- 接線 → `eval/verify_period_intent_routing.py` **閘門⑦**（53 → **69 項**，零 LLM）。判別力在
+  ⑦b 的誤報對照：regex 抽得到時 LLM 必須**一次都不叫**；寫成「都叫再合併」那兩條照樣會過。
+- 準確度 → 新增 `eval/probe_ticker_resolution.py`（含 LLM、非零噪音）。**只有這一支在量它**：
+  eval_set 65 題**全部**由 regex 解出 ticker，所以這個修法**在既有跑分上量不到任何差異**。
+
+`--repeat 3` 實測：
+
+| 臂 | 結果 |
+|---|---|
+| 知名產品 20 題 | **60/60**，指錯公司 0 |
+| **10-K 分部名 6 題** | 15/18（`Wearables, Home and Accessories` 0/3，一律回空） |
+| 陰性對照 8 題 | 24/24 全回空，**誤指 0** |
+
+⚠ 陽性臂 100% 是「稽核回 0 筆先當壞消息查」的情形，所以做了兩件事才敢信：①零 LLM 變異測試
+（「一律回空」只有陽性臂抓得到、「一律猜 MSFT」兩臂同時叫、「一律全回七家」同上）②加一層
+**10-K 分部名**的難題臂——它立刻找出一個真的解不出來的（`Wearables, Home and Accessories`），
+而且失敗方向是**安全的那一邊**（回空＝退回修法前，不是鎖到別家）。
+
+⚠ **這個修法沒有解的一半**：`_resolve_period_filter_llm`／`_resolve_latest_quarter_filter` 仍只吃
+regex 的 ticker，所以「AWS 最新一季的營收」解得出 ticker filter、卻不會走最新季路由。
+**那是維持現狀不是新的壞掉**，理由與復活條件記在 BACKLOG。
+
+順手修 `llm_replay._KNOWN_KINDS`：`period_intent` 是 2026-08-19 加的接點但**當時漏了註冊**
+（`ticker` 一起補）。症狀很安靜——bare `strict` 照樣涵蓋它，只有 `RAG_REPLAY_MODE=strict:period_intent`
+會被當成拼錯而報錯，也就是「想單獨對它嚴格」是唯一會現形的用法。
+
+### ② 閘門⑬e：拒答**仍然**會帶尾巴，`looks_like_refusal` 的切尾巴不可以拿掉
+
+昨天做完「拒答不附引用清單」之後，很容易得出「那 `strip_evidence_tail` 就多餘了」——**錯**。
+`_compose_answer_tail` 只管 📚 那一塊；`_node_synthesize` 在 collected/web 皆空時走的是另一條路：
+拒答 ＋ `_format_unresolved_freshness_notice`（live 才有），**不經過它**。實測那條路產出的答案
+不切尾巴就**判不出是拒答**（長度閘被 metadata 撐爆）。
+
+那個 ⚠ 尾巴是**該留的**（「答不出來，因為 KB 只到 2026-06-12」是有用的揭露），所以該留的也是
+strip。閘門⑬e 拿生產那兩個函式現場組一次把它鎖住（149 → **152 項**），含「前提：警語真的會被
+接上」與「不切尾巴就會漏判」兩條反向斷言。
+
+---
+
 ## 2026-08-27 — 拒答不再附假的引用清單；judge 的回歸套件修好（壞了一個月）
 
 ### ① 拒答不得附「📚 引用來源」

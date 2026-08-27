@@ -805,6 +805,127 @@ def resolve_period_intent(query: str, model_name: str = DEFAULT_MODEL) -> dict:
     return out
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# 實體解析（2026-08-28）：產品／子公司／品牌名 → 母公司 ticker
+#
+# **病灶**（多年語料收益探針 `bh-14` 抓到）：「AWS 在 2022 年的淨銷售額」抽不到 ticker →
+# 沒有 ticker hard filter → Tier 3 退回無 filter → top-5 是 META／MSFT／TSLA 的
+# IncomeStatement 跨公司污染。
+#
+# **為什麼不是往 `_COMPANY_TICKER` 加一筆 `"aws": "AMZN"`**：那是 O(n) 的開始。實測 20 個
+# 一般人會用的產品／子公司問法，**18 個抽不到**（Azure／iPhone／YouTube／Instagram／
+# Reality Labs／CUDA／Model Y／Xbox／LinkedIn／GeForce／Prime／WhatsApp／Bing／Waymo／
+# App Store／Kindle／Superchargers…），而這種名字每季都在長。硬編碼詞表在做感知＝換個
+# 措辭就漏，見 CLAUDE.md〈LLM 與 Python 的分工〉。
+#
+# ⚠ **這件事我在 BACKLOG 裡寫錯過**：原本寫「ticker 抽取本來就在 LLM 那一側，該補的是
+# prompt 裡的規則」。**不是**——`QUERY_FILTER_SYSTEM_PROMPT` 只抽 filing_type／fiscal_year／
+# fiscal_period，**ticker 從頭到尾只有 `_COMPANY_TICKER` 這張表在做**。所以這裡是「新增一個
+# LLM 判斷」，不是「補一條既有 prompt 的規則」，代價與風險都不一樣。
+#
+# **分工照 CLAUDE.md**：「這個產品是誰家的」沒有唯一機械答案、而且是**開放集合**（新產品
+# 每季都在出）→ LLM；「這個 ticker 在不在 KB 裡」是**格式定義的封閉集合** → Python 驗
+# （`_KB_TICKERS` 由 `_COMPANY_TICKER` 導出，不另抄一份）。
+#
+# **只在 regex 抽不到時才叫**，理由不是省錢是精度：regex 命中的是字面公司名，那是高精度的，
+# LLM 沒有理由推翻它。⚠ 這跟 ratio 意圖那次（詞表必須真的退位）**不是同一個形狀**：那裡
+# 詞表會在 LLM 表過態之後還蓋回去；這裡詞表沉默時才問 LLM，詞表不可能覆寫 LLM 的答案。
+#
+# ⚠ **這個修法在既有跑分上量不到任何差異**：eval_set 65 題**全部**由 regex 解出 ticker
+# （實測），這條路一次都不會觸發。那是預期不是缺陷——要量它得靠 `eval/probe_ticker_resolution.py`。
+#
+# ⚠ **不對稱的錯誤**：判不出來 ＝ 退回今天的行為（無 filter、跨公司污染）＝ 只是沒改善；
+#   判成**錯的公司** ＝ hard filter 鎖到別家的財報 ＝ **比今天更糟**。所以 prompt 明講
+#   「不確定就回空」、輸出過封閉集合，probe 的判讀也照這個不對稱來看。
+# ══════════════════════════════════════════════════════════════════════════════
+
+# 封閉集合：KB 裡真的有 filing 的 ticker。由 `_COMPANY_TICKER` 導出而非另列一份，
+# 免得哪天加減公司時兩邊漂移。
+_KB_TICKERS: tuple[str, ...] = tuple(sorted(set(_COMPANY_TICKER.values())))
+
+TICKER_RESOLUTION_SYSTEM_PROMPT = """\
+You are an entity-resolution assistant for a financial RAG system. Its knowledge base \
+contains SEC filings for exactly these seven companies:
+
+  AAPL (Apple), AMZN (Amazon), GOOGL (Alphabet/Google), META (Meta/Facebook), \
+MSFT (Microsoft), NVDA (NVIDIA), TSLA (Tesla)
+
+The question you are given does NOT name any of the seven literally. Decide whether it \
+is nonetheless ABOUT one or more of them — because it names a product, brand, service, \
+subsidiary, business segment, platform, chip, executive or other entity that BELONGS TO \
+one of them.
+
+Output ONLY this JSON object:
+{"tickers": ["<TICKER>", ...]}
+
+Rules:
+- Map the named entity to the ticker of the company that OWNS it TODAY.
+- List every one of the seven the question is about; order does not matter.
+- Return {"tickers": []} when the question is not about any of them. That includes: \
+it is about some OTHER company (a competitor, supplier, customer or private company), \
+it is a general industry / market / macro question, or you are simply not sure. \
+An empty list is the correct and safe answer — GUESSING IS NOT. A wrong company here \
+makes the system retrieve another company's financial statements.
+- Only ever output tickers from the seven listed above. Never invent one.
+- Output ONLY the JSON object — no markdown fences, no explanation.
+"""
+
+
+def resolve_tickers_llm(query: str, model_name: str = DEFAULT_MODEL) -> list[str]:
+    """LLM 實體解析：問題提到的產品／子公司屬於哪幾家 KB 公司。判不出來一律回 `[]`。
+
+    失敗（LLM 掛掉／解析不出／吐了 KB 以外的 ticker）一律回 `[]` ＝ 退回本函式存在之前的
+    行為（沒有 ticker filter），**不讓實體解析成為單點故障**。"""
+    import json
+    import re as _re
+
+    q = (query or "").strip()
+    if not q:
+        return []
+    _hit = _replay.get("ticker", q)
+    if _hit is not _replay.MISS:
+        return list(_hit)
+    try:
+        raw = call_llm([{"role": "system", "content": TICKER_RESOLUTION_SYSTEM_PROMPT},
+                        {"role": "user", "content": q}], model_name)
+        raw = _re.sub(r"^```(?:json)?|```$", "", raw.strip(), flags=_re.MULTILINE).strip()
+        parsed = json.loads(raw)
+        got = parsed.get("tickers") if isinstance(parsed, dict) else None
+        if not isinstance(got, list):
+            return []
+        # 封閉集合過濾 ＋ 去重保序。⚠ 不做任何「看起來像」的模糊比對：LLM 吐了集合外的
+        # 東西就是丟掉，不要試著猜它想講哪一家。
+        out: list[str] = []
+        for t in got:
+            t = str(t).strip().upper()
+            if t in _KB_TICKERS and t not in out:
+                out.append(t)
+    except Exception as e:
+        print(f"WARN  - ticker resolution failed ({e!r}); no ticker filter")
+        return []
+    _replay.put("ticker", q, out)
+    return out
+
+
+def _append_llm_ticker(filters: list[dict], query: str, model_name: str) -> list[dict]:
+    """regex 抽不到 ticker 時補一次 LLM 實體解析；抽得到就**完全不呼叫 LLM**。
+
+    ⚠ 只補、不覆寫（理由見本節上方註解）。⚠ env `RQ_TICKER_LLM=0` 可整個關掉做 A/B。"""
+    if any(f.get("field") == "ticker" for f in filters):
+        return filters
+    if os.getenv("RQ_TICKER_LLM", "1").strip().lower() in ("0", "off", "false", "no"):
+        return filters
+    tickers = resolve_tickers_llm(query, model_name)
+    if not tickers:
+        return filters
+    print(f"DEBUG - ticker resolution (LLM): {tickers}")
+    # 單一 → 字串、多個 → list，與 `_extract_structural_filters` 同一套形狀
+    # （`build_qdrant_filter` 靠這個區分 MatchValue / MatchAny）。
+    return filters + [{"field": "ticker",
+                       "value": tickers[0] if len(tickers) == 1 else tickers,
+                       "polarity": "include"}]
+
+
 def _resolve_period_filter_llm(query: str, client, intent: dict) -> dict | None:
     """`period_ref` → 具體的 `report_period_code` 硬 filter（確定性，零 LLM）。
 
@@ -932,7 +1053,7 @@ def parse_query_filters(query: str, model_name: str = DEFAULT_MODEL) -> list[dic
     import re as _re
 
     if not _FILING_HINT_RE.search(query or ""):
-        return _extract_structural_filters(query)
+        return _append_llm_ticker(_extract_structural_filters(query), query, model_name)
 
     try:
         raw = call_llm(
@@ -948,7 +1069,7 @@ def parse_query_filters(query: str, model_name: str = DEFAULT_MODEL) -> list[dic
         # LLM 掛掉（429/逾時/解析錯）時，至少保住不需 LLM 的 deterministic filter
         # （yyyymm 期碼 + ticker），而不是完全不過濾。
         print(f"WARN  - query-filter parsing failed ({e!r}); falling back to deterministic filter")
-        return _extract_structural_filters(query)
+        return _append_llm_ticker(_extract_structural_filters(query), query, model_name)
 
     filters = parsed.get("filters", []) if isinstance(parsed, dict) else []
     cleaned = []
@@ -968,7 +1089,9 @@ def parse_query_filters(query: str, model_name: str = DEFAULT_MODEL) -> list[dic
     for sf in _extract_structural_filters(query):
         if sf["field"] not in existing_fields:
             cleaned.append(sf)
-    return cleaned
+    # ⚠ 三個 return 都要接上實體解析，漏一個就是「有些路徑解得出 AWS、有些解不出」。
+    #   （這正是 web_search 那次的教訓：只改了觸發、漏改時效警語那一道。）
+    return _append_llm_ticker(cleaned, query, model_name)
 
 
 # ══════════════════════════════════════════════════════════════════════════════

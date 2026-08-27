@@ -1,14 +1,20 @@
-"""驗收期間意圖路由（零 LLM、零網路，只讀 Qdrant 的 payload，秒級）。
+"""驗收 query-understanding → Qdrant filter 這條路的 Python 半邊（零 LLM、零網路，秒級）。
 
 **這支測什麼**：`period_ref`（LLM 判的）→ 具體期碼 filter（Python 算的）這條路上，
-**Python 那一半**的每一個確定性決策。LLM 判得準不準是另一回事，量法見
-`docs/EVAL.md`〈期間意圖解析〉的 57 題交叉表——那個不可能寫成零噪音斷言。
+**Python 那一半**的每一個確定性決策；2026-08-28 起也含**實體解析**（產品名 → ticker）的接線
+——那也是「LLM 判、Python 收斂成 filter」的同一個形狀，同一份 `parse_query_filters` 出口。
+
+**LLM 判得準不準一律不在這裡量**（那含 LLM、非零噪音，寫不成斷言）：期間意圖看
+`docs/EVAL.md`〈期間意圖解析〉的 57 題交叉表，實體解析看
+[`eval/probe_ticker_resolution.py`](probe_ticker_resolution.py)。
 
 **為什麼需要這支**：整條路的價值全押在「期別誰新誰舊」這個序上，而那個序**踩過坑**：
 舊的 `_get_latest_10q_periods` 用 `report_period_code` 字串比大小取 max，10-K 是 4 位年份、
 10-Q 是 6 位 yyyymm，混在一起比會**時對時錯**。閘門② 就是把這件事釘死成可重跑的斷言。
 
-## 五道閘門
+## 七道閘門
+
+⚠ 這張表 2026-08-27 漂移過一次：閘門⑥ 那天加了，標題還寫著「五道」。改這支請一併改表。
 
 | # | 測什麼 | 為什麼是它 |
 |---|---|---|
@@ -17,6 +23,8 @@
 | ③ | `ladder_pick` 真值表 | 挑不到必須回 None，**不可退而求其次**（挑錯期別比不挑更糟：答案會帶著引用一起錯） |
 | ④ | `period_ref` → filter 對應 | 只有 `latest` 該產生 filter；`range` 產生 filter 會讓趨勢題直接答不出來 |
 | ⑤ | `range` → 跳過 collapse 的接線 | B 的損害唯一的解法；斷了就回到趨勢題期別數 −38% |
+| ⑥ | Tier 1 的 label-year 命中資格 | 那半個 OR **只能放寬命中、不能自己構成命中**；否則 Tier 1 假命中會把 Tier 2 的降級與揭露語一起關掉 |
+| ⑦ | 實體解析的**接線** | LLM 只在 regex 沉默時被叫、只補不覆寫、輸出過封閉集合、失敗回空。⚠ 這裡不量**準不準**（那含 LLM、非零噪音），準確度在 [`probe_ticker_resolution.py`](probe_ticker_resolution.py) |
 
 ⚠ **閘門② 在單年 collection 上幾乎沒有判別力**（每組最多 2~3 份 filing，撞不到編碼長度
 不同的配對）。跑在 `us_stock_rag_edgar_mdna` 上看到「0 對判反」是**測資不足**不是系統健康
@@ -272,6 +280,87 @@ def gate6_tier1_label_year(client):
                                  "polarity": "include"}], [_P0(fiscal_year="2026")]), "")
 
 
+def gate7_ticker_resolution():
+    print("\n── 閘門⑦ 實體解析：LLM 只在 regex 沉默時被叫，且只補不覆寫 ──")
+    # 病灶：`AWS 在 2022 年的淨銷售額` 抽不到 ticker → 無 hard filter → Tier 3 跨公司污染。
+    # ⚠ 這道**全部零 LLM**：把 `resolve_tickers_llm` 換成計數樁，量的是**接線**不是準確度。
+    #   準確度是含 LLM、非零噪音的，那支在 `eval/probe_ticker_resolution.py`。
+    calls: list[str] = []
+
+    def stub(q, model_name=None):
+        calls.append(q)
+        return {"AWS 在 2022 年的淨銷售額": ["AMZN"],
+                "AWS 跟 Azure 誰成長比較快": ["AMZN", "MSFT"],
+                "這一季景氣好嗎": []}.get(q, [])
+
+    _orig = rq.resolve_tickers_llm
+    rq.resolve_tickers_llm = stub
+    try:
+        def tick(q):
+            calls.clear()
+            fs = rq.parse_query_filters(q)
+            return ([f["value"] for f in fs if f["field"] == "ticker"] or [None])[0], len(calls)
+
+        # ⑦a 陽性：regex 沉默 → LLM 被叫、結果變成 ticker filter
+        ck("⑦a 產品名 → 解出母公司 ticker，且 LLM 被叫 1 次",
+           tick("AWS 在 2022 年的淨銷售額"), ("AMZN", 1))
+        ck("⑦a 多家 → list（`build_qdrant_filter` 靠形狀分 MatchValue/MatchAny）",
+           tick("AWS 跟 Azure 誰成長比較快"), (["AMZN", "MSFT"], 1))
+
+        # ⑦b **誤報對照（判別力在這裡）**：regex 抽得到就**完全不呼叫 LLM**。
+        #    寫成「都叫、再合併」的話這兩條照樣會過，而每個 query 都會多燒一次 LLM，
+        #    且 LLM 有機會推翻字面公司名——那是比省錢更重要的理由。
+        ck("⑦b 字面公司名 → LLM 一次都不叫（regex 已高精度命中）",
+           tick("Amazon 2022 年的淨銷售額"), ("AMZN", 0))
+        ck("⑦b 中文別名同理", tick("亞馬遜 2022 年的淨銷售額"), ("AMZN", 0))
+
+        # ⑦c LLM 說「不是任何一家」→ 必須真的沒有 ticker filter（不可退而求其次猜一家）
+        ck("⑦c LLM 回空 → 沒有 ticker filter", tick("這一季景氣好嗎"), (None, 1))
+
+        # ⑦d kill switch：關掉之後行為必須逐字退回本修法之前
+        import os
+        os.environ["RQ_TICKER_LLM"] = "0"
+        try:
+            ck("⑦d RQ_TICKER_LLM=0 → 不叫 LLM、也不產生 ticker filter",
+               tick("AWS 在 2022 年的淨銷售額"), (None, 0))
+        finally:
+            os.environ.pop("RQ_TICKER_LLM", None)
+    finally:
+        rq.resolve_tickers_llm = _orig
+
+    # ⑦e 封閉集合：LLM 吐 KB 以外的東西一律丟掉，**不做模糊比對**。
+    #    危險方向是「猜」——鎖到錯的公司比不鎖更糟（答案會帶著引用一起錯）。
+    _orig_call = rq.call_llm
+    try:
+        for label, raw, want in [
+            ("正常輸出", '{"tickers": ["AMZN"]}', ["AMZN"]),
+            ("KB 以外的 ticker（AMD）整個丟掉", '{"tickers": ["AMD", "NVDA"]}', ["NVDA"]),
+            ("公司名不是 ticker → 丟掉，不要猜它想講誰", '{"tickers": ["Amazon"]}', []),
+            ("小寫照收（大小寫正規化）", '{"tickers": ["amzn"]}', ["AMZN"]),
+            ("重複去重保序", '{"tickers": ["MSFT", "AMZN", "MSFT"]}', ["MSFT", "AMZN"]),
+            ("解不出 JSON → 回空（不是回 None、不是丟例外）", 'sorry I cannot', []),
+            ("tickers 不是 list → 回空", '{"tickers": "AMZN"}', []),
+        ]:
+            rq.call_llm = lambda *a, _r=raw, **k: _r
+            ck(f"⑦e {label}", rq.resolve_tickers_llm("x"), want)
+        # LLM 整個掛掉 → 回空，不可讓實體解析變成單點故障
+        def _boom(*a, **k):
+            raise RuntimeError("nim 504")
+        rq.call_llm = _boom
+        ck("⑦e LLM 拋例外 → 回空（不是單點故障）", rq.resolve_tickers_llm("x"), [])
+    finally:
+        rq.call_llm = _orig_call
+
+    # ⑦f 封閉集合的**單一來源**：`_KB_TICKERS` 必須由 `_COMPANY_TICKER` 導出。
+    #     另抄一份的話，哪天加減公司兩邊會漂移（本 repo 已經因為抄寫吃過三次虧）。
+    ck("⑦f _KB_TICKERS 就是 _COMPANY_TICKER 的值域",
+       set(rq._KB_TICKERS), set(rq._COMPANY_TICKER.values()))
+    # 而且它要真的對得上 KB：prompt 裡列的七家是照這個集合寫的
+    ck("⑦f prompt 列的七家與 _KB_TICKERS 一致",
+       sorted(t for t in rq._KB_TICKERS if t in rq.TICKER_RESOLUTION_SYSTEM_PROMPT),
+       sorted(rq._KB_TICKERS))
+
+
 def main() -> int:
     client = rq.make_qdrant_client()
     print(f"collection = {rq.COLLECTION_NAME}")
@@ -281,6 +370,7 @@ def main() -> int:
     gate4_period_ref_to_filter(client)
     gate5_collapse_skip()
     gate6_tier1_label_year(client)
+    gate7_ticker_resolution()
     print(f"\nPASS {_P}  FAIL {_F}")
     print("GATE: " + ("PASS" if _F == 0 else "FAIL"))
     return 1 if _F else 0

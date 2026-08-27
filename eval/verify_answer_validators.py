@@ -963,6 +963,24 @@ def gate13_refusal_no_citation_tail() -> None:
     _assert("⑬d eval 端的 looks_like_refusal 就是 rq 的那一個（不是複本）",
             _ejg.looks_like_refusal is ar.rq.looks_like_refusal)
 
+    # ⑬e **拒答仍然會帶尾巴 → `looks_like_refusal` 的切尾巴不可以拿掉。**
+    # ⑬a 之後很容易得出「拒答已經不附尾巴了，那個 strip 是多餘的」——**錯**。
+    # `_compose_answer_tail` 只管 📚 那一塊；`_node_synthesize` 在 collected/web 皆空時走的是
+    # 另一條路：拒答 ＋ `_format_unresolved_freshness_notice`（live 才有），**不經過它**。
+    # 那個 ⚠ 尾巴是**該留的**（「答不出來，因為 KB 只到 X」是有用的揭露），所以要留的是尾巴，
+    # 該留的也是 strip。這裡拿生產那兩個函式現場組一次，不是抄字串。
+    _live_todos = [{"status": "done", "web_used": False,
+                    "freshness_gaps": [{"ticker": "NVDA", "cutoff": "2026-06-12",
+                                        "as_of": "2026-08-28", "doc_type": "realtime"}]}]
+    _refusal = "I don't have enough information in my knowledge base to answer this."
+    _notice = ar._format_unresolved_freshness_notice(_live_todos)
+    _assert("⑬e 前提：live 拒答確實會被接上時效警語（沒有這個，下面兩條就沒在測東西）",
+            _notice.startswith("\n\n---\n⚠"), repr(_notice[:60]))
+    _assert("⑬e 拒答＋時效警語 → 仍判為拒答（＝strip_evidence_tail 有在作用）",
+            ar.rq.looks_like_refusal(_refusal + _notice))
+    _assert("⑬e 反向證明：不切尾巴就會漏判（長度閘被 metadata 撐爆）",
+            len(ar.rq._CITE_MARK.sub("", _refusal + _notice).strip()) >= ar.rq.REFUSAL_MAX_CHARS)
+
 
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
