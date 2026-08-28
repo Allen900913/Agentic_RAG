@@ -77,6 +77,15 @@ _KNOWN_KINDS = {"plan", "translate_en", "check", "ratio", "period_intent", "tick
 # 會被當成拼錯而報錯——也就是說「想單獨對它嚴格」是唯一會現形的用法，而那正是最少人走的路。
 
 
+class ReplayCacheMiss(BaseException):
+    """strict 模式下 cache miss。
+
+    ⚠ **繼承 `BaseException` 是刻意的**，理由與 `web_replay.FixtureMiss` 同一條：
+    這個例外的意思是「這次測量無效」，不是「這個操作失敗了、換條路走」。舊版拋裸
+    `RuntimeError`，會被下游任何一個 `except Exception` 接成優雅降級，於是 strict 模式
+    **靜默失效**——而 strict 存在的唯一理由就是「fixture 不完整要當場知道」。"""
+
+
 def _strict_kinds() -> Optional[set[str]]:
     """回傳 None＝非 strict；`{"*"}`＝全部 kind 嚴格；其餘＝只對指名的 kind 嚴格。
 
@@ -136,7 +145,7 @@ def get(kind: str, key: str) -> Any:
             return c[key]
     _STATS["miss"] += 1
     if _is_strict(kind):
-        raise RuntimeError(
+        raise ReplayCacheMiss(
             f"replay cache miss（strict 模式）: kind={kind} key={key!r}。"
             f"fixture 不完整,先在非 strict 模式跑一次補齊。"
             f"（若這是跨 collection A/B,kind=check 的 miss 是合法的——改用 "

@@ -1075,6 +1075,368 @@ def gate14_synthesize_refusal_guards() -> None:
             not ar.rq.looks_like_refusal(_mixed))
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# 閘門⑮：期間降級揭露（Tier 2 fallback）必須從檢索層一路走到 Generator
+#
+# 病灶（2026-08-28 修）：`_retrieve_chunks` 寫的是 `chunks, _note = rq.retrieve(...)`——
+# `rq.retrieve` 在 Tier 1 嚴格 filter 落空、降級 Tier 2 時產生的那句「知識庫沒有 X 在所詢問
+# 財年（Y）的資料，以下回答改用最接近的可得期間（Z）」**被直接丟掉**。單管線兩個消費端都有
+# （CLI print／SSE 顯示 ＋ 注入 generator prompt），agentic 兩半都沒有 → 「系統會不會揭露」
+# 在所有 agentic 評測上**結構性恆為 0**，量到的 0 是在覆述一行程式碼。
+#
+# ⚠ 判別力全在**接線**，不在揭露句本身（那句話是 `rq._build_fallback_note` 產的，單管線早就
+#   在用、也早就被閘門測過）。所以這一道刻意做成三段各自獨立的鎖：
+#   · ⑮a 產生點：`_retrieve_chunks` 不准再把第二個回傳值丟掉（AST，抓得到 `_note` 那個形狀）
+#   · ⑮b 消費點：`_write_final_answer` 的**每一個**呼叫點都要帶 `period_note=`——validator 的
+#     重生成會換掉 `extra_user`，漏一處就等於「揭露只活在第一次生成」（web_extra 踩過這個坑）
+#   · ⑮d/⑮e 活體：state → synthesize → Generator 真的把**值**帶過去，不是只寫了關鍵字
+# ⚠ **⑮c 是誤報對照＝這次改動不該動到的東西**：period_note 為空時 user prompt 與 system
+#   message 都必須逐字不變，否則 65 題既有基準會整批漂移（而且是無聲的）。
+# ══════════════════════════════════════════════════════════════════════════════
+
+_PERIOD_NOTE_CONSUMERS = ("_validate_and_fix_citations", "_consistency_check_and_fix",
+                          "_period_check_and_fix", "_reflect_and_fix", "_number_check_and_fix")
+
+
+def gate15_period_fallback_disclosure() -> None:
+    print("\n[⑮] 期間降級揭露：檢索層 → state → Generator 的接線")
+    import ast
+    from pathlib import Path as _Path
+
+    src = _Path(ar.__file__).read_text(encoding="utf-8")
+    tree = ast.parse(src)
+    funcs = {n.name: n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+
+    # ── ⑮a 產生點：`_retrieve_chunks` 不准丟掉 `rq.retrieve` 的第二個回傳值
+    rc = funcs.get("_retrieve_chunks")
+    _assert("⑮a 前提：找得到 `_retrieve_chunks`（找不到的話下面全是假性通過）", rc is not None)
+    if rc is None:
+        return
+    note_names: list[str] = []
+    for node in ast.walk(rc):
+        if isinstance(node, ast.Assign) and isinstance(node.value, ast.Call):
+            fname = ast.unparse(node.value.func)
+            if fname.endswith("retrieve") and isinstance(node.targets[0], ast.Tuple):
+                elts = node.targets[0].elts
+                if len(elts) >= 2 and isinstance(elts[1], ast.Name):
+                    note_names.append(elts[1].id)
+    _assert("⑮a 前提：`_retrieve_chunks` 裡有解包 `rq.retrieve` 的兩個回傳值",
+            len(note_names) == 1, f"找到 {note_names}")
+    if len(note_names) == 1:
+        nm = note_names[0]
+        # 舊病灶的字面形狀：拋棄名（`_` / `_note`）。這一條就是在抓那一行。
+        _assert("⑮a 第二個回傳值不是拋棄名（舊碼是 `chunks, _note = ...`）",
+                not nm.startswith("_"), f"目前是 {nm!r}")
+        # 光是「有名字」不夠——名字沒被用到跟丟掉是同一件事。
+        used = sum(1 for n in ast.walk(rc) if isinstance(n, ast.Name)
+                   and n.id == nm and isinstance(n.ctx, ast.Load))
+        _assert(f"⑮a 第二個回傳值 {nm!r} 在函式體裡真的被使用（不是命名了就不管）",
+                used >= 1, f"Load 次數={used}")
+        _assert("⑮a 它被收進 run state（五個呼叫點共用一個收集點，逐個回傳會有人漏接）",
+                "period_notes" in ast.unparse(rc))
+
+    # ── ⑮b 消費點：每一個 `_write_final_answer` 呼叫都要帶 period_note
+    #    ⚠ 這裡不能只驗 synthesize 那一個：validator 的重生成各自呼叫一次，漏一處的症狀是
+    #      「揭露只活在第一次生成」——只要 validator 觸發過一次就整段消失，而且不會報錯。
+    missing: list[str] = []
+    seen_callers: set[str] = set()
+    for fname, fn in funcs.items():
+        for node in ast.walk(fn):
+            if not isinstance(node, ast.Call):
+                continue
+            if (getattr(node.func, "id", None) or getattr(node.func, "attr", None)) != "_write_final_answer":
+                continue
+            seen_callers.add(fname)
+            if not any(kw.arg == "period_note" for kw in node.keywords):
+                missing.append(f"{fname}:{node.lineno}")
+    _assert("⑮b 前提：五道 validator ＋ synthesize 都還在呼叫 `_write_final_answer`",
+            set(_PERIOD_NOTE_CONSUMERS + ("_node_synthesize",)) <= seen_callers,
+            f"缺 {sorted(set(_PERIOD_NOTE_CONSUMERS + ('_node_synthesize',)) - seen_callers)}")
+    _assert("⑮b 每一個 `_write_final_answer` 呼叫都帶了 `period_note=`（漏一處＝揭露只活到第一次重寫）",
+            not missing, f"沒帶的：{missing}")
+    # 五道 validator 內部還會再過一次 citation 稽核，那一條路也要帶（同一個理由）
+    revalidate_missing = [
+        f"{fname}:{node.lineno}"
+        for fname in _PERIOD_NOTE_CONSUMERS[1:] for node in ast.walk(funcs[fname])
+        if isinstance(node, ast.Call)
+        and (getattr(node.func, "id", None) or getattr(node.func, "attr", None)) == "_validate_and_fix_citations"
+        and not any(kw.arg == "period_note" for kw in node.keywords)
+    ]
+    _assert("⑮b validator 內部回頭呼叫 citation 稽核時也帶著 `period_note=`",
+            not revalidate_missing, f"沒帶的：{revalidate_missing}")
+
+    # ── ⑮c 誤報對照：沒有揭露時，prompt 必須逐字不變（否則 65 題基準會無聲漂移）
+    _c = [{"source": "MSFT_10K_2026.html", "chunk_index": 3, "content": "Revenue increased 18%."}]
+    _assert("⑮c 空揭露 → user prompt 與「完全不傳這個參數」逐字相同",
+            ar.rq.build_user_prompt("Q", _c, "") == ar.rq.build_user_prompt("Q", _c))
+
+    seen: dict[str, str] = {}
+    _orig_llm = ar.rq.call_llm
+
+    def _spy(messages, model_name, temperature=0.0, **kw):
+        seen["system"], seen["user"] = messages[0]["content"], messages[1]["content"]
+        return "測試答案【MSFT_10K_2026.html, chunk #3】"
+
+    note = ar.rq._build_fallback_note(          # ⚠ 用**生產的建構路徑**產這句話，不是自己編一句
+        [{"field": "fiscal_year", "polarity": "include", "value": "2021"},
+         {"field": "ticker", "polarity": "include", "value": "MSFT"}],
+        [type("P", (), {"payload": {"fiscal_year": "2026", "report_period_code": "2026"}})()],
+    )
+    _assert("⑮c 前提：生產的 `_build_fallback_note` 對「問了 KB 沒有的財年」真的產得出揭露句",
+            bool(note), f"note={note!r}")
+    try:
+        ar.rq.call_llm = _spy
+        ar._write_final_answer("Q", _c, "m", period_note=note)
+        with_sys, with_user = seen["system"], seen["user"]
+        ar._write_final_answer("Q", _c, "m")
+        without_sys, without_user = seen["system"], seen["user"]
+    finally:
+        ar.rq.call_llm = _orig_llm
+    _assert("⑮c system message 逐字不變（揭露是這一題的檢索事實，不是契約修訂）",
+            with_sys == without_sys)
+    _assert("⑮d 揭露句真的出現在送給 Generator 的 user prompt 裡",
+            bool(note) and note in with_user)
+    _assert("⑮d 且走的是 `build_user_prompt` 的既有模板（與單管線同一個位置、同一句指示）",
+            "資料期間提示" in with_user and "資料期間提示" not in without_user)
+
+    # ── ⑮e 端到端接線（值真的從 state 流到 Generator，不是只寫了關鍵字）
+    #    ⚠ 這條與 ⑮b 不可互相取代：⑮b 驗「呼叫點寫了 period_note=」，它照樣可能傳一個永遠是空的
+    #      區域變數；⑮e 驗「state 裡的值真的到得了」。⑧g／⑭a 是同一個教訓。
+    _N1, _N2 = "揭露句甲", "揭露句乙"
+    _orig = {k: getattr(ar, k) for k in
+             ("_write_final_answer", "_validate_and_fix_citations", "_consistency_check_and_fix",
+              "_period_check_and_fix", "_reflect_and_fix", "_number_check_and_fix", "_run_one_todo")}
+    got: dict[str, str] = {}
+    try:
+        def _fake_write(query, chunks, model_name, extra_user="", web_extra="", period_note=""):
+            got["period_note"] = period_note
+            return "答案【MSFT_10K_2026.html, chunk #3】"
+        ar._write_final_answer = _fake_write
+        for _k in _PERIOD_NOTE_CONSUMERS:
+            setattr(ar, _k, lambda *a, **k: a[1])
+        out = ar._node_synthesize({"query": "Q", "collected": _c, "web_notes": [],
+                                   "period_notes": [_N1, _N2], "todos": [],
+                                   "freshness_mode": ar.FRESHNESS_SNAPSHOT})
+        _assert("⑮e synthesize 把 state['period_notes'] 全部交給 Generator",
+                got.get("period_note") == f"{_N1}\n{_N2}", f"實際={got.get('period_note')!r}")
+        _assert("⑮e 揭露**不**塞進答案文字（顯示由呼叫端負責，答案文字不動＝既有結果檔可比）",
+                _N1 not in out.get("answer", ""))
+
+        # execute 這一段：`_run_one_todo` 的 period_notes 要併進 state，且跨子問題去重保序
+        def _fake_todo(todo, freshness_mode, verbose):
+            return {"id": todo["id"], "summary": "s", "web_used": False, "web_notes": [],
+                    "picked": [], "freshness_gaps": [],
+                    "period_notes": [_N1] if todo["id"] == 0 else [_N1, _N2]}
+        ar._run_one_todo = _fake_todo
+        st = ar._node_execute({
+            "query": "Q", "freshness_mode": ar.FRESHNESS_SNAPSHOT, "collected": [],
+            "web_notes": [], "period_notes": [], "iterations": 0,
+            "todos": [{"id": i, "task": f"子問題{i}", "temporal_scope": "", "status": "pending",
+                       "result": "", "web_used": False, "freshness_gaps": [], "period_notes": []}
+                      for i in (0, 1)],
+        })
+        _assert("⑮e execute 把子問題的 period_notes 併進 state，且跨子問題去重保序",
+                st.get("period_notes") == [_N1, _N2], f"實際={st.get('period_notes')!r}")
+        _assert("⑮e 每個 todo 也各自留著自己的 period_notes（供逐子問題診斷）",
+                [t.get("period_notes") for t in st["todos"]] == [[_N1], [_N1, _N2]])
+    finally:
+        for k, v in _orig.items():
+            setattr(ar, k, v)
+
+    # ── ⑮f 歸因：揭露句只能來自「承載使用者意圖」的 query（2026-08-28，col-10 實測）
+    #    ⚠ 這是 ⑮ 裡唯一在問「這句話**該不該說**」的一格，⑮a~⑮e 全部只問「有沒有接上」。
+    #      沒有它，一個把 Grader 補救改寫的假前提照樣往外送的實作會全綠——而實測就是那樣上線的：
+    #      使用者問「微軟每年能自由運用的現金大概有多少？」、Planner 分解成「Microsoft 每年的自由
+    #      現金流大概是多少」（**兩者都沒有年份、沒有 10-K**），揭露句卻寫「知識庫沒有「MSFT 10-K」
+    #      在所詢問財年（2022）的資料」。那個 2022 只可能來自 Grader 的 targeted rewrite。
+    _kwonly = [a.arg for a in rc.args.kwonlyargs]
+    _nodefault = [a.arg for a, d in zip(rc.args.kwonlyargs, rc.args.kw_defaults) if d is None]
+    _assert("⑮f1 `_retrieve_chunks` 有 keyword-only 參數 `attributable`",
+            "attributable" in _kwonly, f"kwonly={_kwonly}")
+    _assert("⑮f1 且它**沒有預設值**（有預設＝日後新增的呼叫點會靜默沿用可歸因，col-10 復活）",
+            "attributable" in _nodefault, f"無預設的={_nodefault}")
+
+    # ⑮f2 逐個呼叫點驗（同 ⑮b／⑭a 的形狀：改三處漏一處要叫得出來）
+    _calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)
+              and ast.unparse(n.func).endswith("_retrieve_chunks")]
+    _assert("⑮f2 前提：找得到 `_retrieve_chunks` 的呼叫點（找不到＝下面全是假性通過）",
+            len(_calls) >= 4, f"共 {len(_calls)} 處")
+    _no_kw = [ast.unparse(c)[:70] for c in _calls
+              if not any(k.arg == "attributable" for k in c.keywords)]
+    _assert("⑮f2 每一個呼叫點都明確傳了 `attributable=`（漏一處＝那條路仍會吐假前提）",
+            not _no_kw, f"漏掉：{_no_kw}")
+
+    # ⑮f3 判別力所在：補救迴圈那一處**不可以是常數**。
+    #     `attributable=True` 寫死在迴圈裡，f1/f2/f4 照樣全綠，而 col-10 原封不動地回來。
+    _loop = [c for c in _calls if c.args and ast.unparse(c.args[0]) == "active_query"]
+    _assert("⑮f3 前提：找得到確定性補救迴圈的檢索呼叫（第一個引數是 active_query）",
+            len(_loop) == 1, f"找到 {len(_loop)} 處")
+    if len(_loop) == 1:
+        _v = next(k.value for k in _loop[0].keywords if k.arg == "attributable")
+        _assert("⑮f3 補救迴圈的 `attributable` 是輪次條件而非常數（寫死 True＝col-10 復活）",
+                not isinstance(_v, ast.Constant), f"實際={ast.unparse(_v)}")
+        _assert("⑮f3 且那個條件讀的是輪次變數 `rnd`",
+                "rnd" in ast.unparse(_v), f"實際={ast.unparse(_v)}")
+
+    # ⑮f4 行為（不是接線）：只驗接線的話，一個「一律丟棄」的實作也會全綠 → 兩個方向都要驗。
+    #     `_get_models` 一併換樁：這支閘門要維持秒級，不能為了兩條斷言載入 BGE-M3 ＋ reranker。
+    _o4 = {"retrieve": ar.rq.retrieve, "get_models": ar._get_models}
+
+    def _stub4(query, *a, **kw):
+        return ([], f"知識庫沒有「T」在所詢問財年（{query}）的資料，以下回答改用最接近的可得期間（2026）。")
+
+    try:
+        ar.rq.retrieve = _stub4
+        ar._get_models = lambda: (None, None, None)
+        ar._reset_run_pool()
+        ar._retrieve_chunks("UNATTR", attributable=False)
+        _unattr = list(ar._current_run_state().period_notes)
+        ar._retrieve_chunks("ATTR", attributable=True)
+        _attr = list(ar._current_run_state().period_notes)
+    finally:
+        ar.rq.retrieve = _o4["retrieve"]
+        ar._get_models = _o4["get_models"]
+    _assert("⑮f4 不可歸因的揭露句不得進 run state（col-10 的直接斷言）",
+            _unattr == [], f"實際={_unattr}")
+    _assert("⑮f4 誤報對照：可歸因的揭露句仍然進得去（否則是把功能關掉，不是修好）",
+            len(_attr) == 1 and "ATTR" in _attr[0], f"實際={_attr}")
+
+    # ⑮f5 端到端（零 LLM、零 Qdrant）：跑**真的** `_run_executor_deterministic`，只換掉 LLM 與檢索。
+    #     ⚠ 與 f3／f4 不可互相取代：f4 直接呼叫 `_retrieve_chunks`，證不到「補救迴圈真的傳了 False」；
+    #       f3 只讀 AST，看不出 `rnd` 的語意被改掉（例如迴圈改成從 1 起算）。f5 是唯一同時踩到兩者的。
+    _o5 = {k: getattr(ar, k) for k in ("_check_sufficiency", "_fallback_local_summary", "_get_models")}
+    _o5r = ar.rq.retrieve
+    _seen: list[str] = []
+
+    def _stub5(query, *a, **kw):
+        _seen.append(query)
+        return ([], f"NOTE::{query}")
+
+    def _stub_check(subquery, pool, temporal_scope="", freshness_mode="", *a, **kw):
+        # 第一輪判不足，並給一個「憑空加了年份與 filing type」的 targeted rewrite＝col-10 的形狀
+        if len(_seen) <= 1:
+            return {"sufficient": False, "missing": "缺年份",
+                    "new_query": "Microsoft FY2022 free cash flow 10-K",
+                    "relevant_ids": [], "realtime_need": "none"}
+        return {"sufficient": True, "missing": "", "new_query": "",
+                "relevant_ids": [], "realtime_need": "none"}
+
+    _task = "Microsoft 每年的自由現金流大概是多少"
+    try:
+        ar.rq.retrieve = _stub5
+        ar._get_models = lambda: (None, None, None)
+        ar._check_sufficiency = _stub_check
+        ar._fallback_local_summary = lambda task, chunks, period_note="": "摘要"
+        _pn = ar._run_executor_deterministic(_task, "", ar.FRESHNESS_SNAPSHOT, 0, False,
+                                            attributable=True)[3]
+    finally:
+        ar.rq.retrieve = _o5r
+        for k, v in _o5.items():
+            setattr(ar, k, v)
+    _assert("⑮f5 前提：樁真的驅動了兩輪（第一輪 Planner 原句、第二輪 Grader 改寫）",
+            len(_seen) == 2 and "FY2022" in _seen[1], f"實際={_seen}")
+    _assert("⑮f5 只有 Planner 子問題那一輪的揭露句逸出，Grader 改寫那輪的被丟掉",
+            _pn == [f"NOTE::{_task}"], f"實際={_pn}")
+
+    # ── ⑮g 歸因掛在 todo 的出身上，不是從輪次推（2026-08-28）
+    #    ⚠ ⑮f 只擋得住「Grader 在同一個子問題內改寫」。**replanner 另外加一個 todo** 時，那個
+    #      todo 的 rnd 0 照樣是「第一輪」→ `attributable=(rnd == 0)` 為真 → col-10 的假前提從
+    #      另一扇門原封不動地回來，而 ⑮f 全綠（它驗的條件確實還在）。這一格就是那扇門。
+    #      實測 replanner 會生出「改用網路搜尋查…」→「即時網路搜尋…」這種同義待辦串，
+    #      裡面夾帶的年份／filing type 都是機器腦補的（見 agentic_rag_v2.py `_node_replan`）。
+    _appends = []          # (所在函式, dict 節點)
+    for _fname in ("_node_plan", "_node_replan"):
+        _fn = funcs.get(_fname)
+        if _fn is None:
+            continue
+        for _n in ast.walk(_fn):
+            if (isinstance(_n, ast.Call) and isinstance(_n.func, ast.Attribute)
+                    and _n.func.attr == "append" and _n.args
+                    and isinstance(_n.args[0], ast.Dict)):
+                _appends.append((_fname, _n.args[0]))
+    _assert("⑮g 前提：`_node_plan`／`_node_replan` 各找得到一個建 todo 的 dict",
+            sorted(f for f, _ in _appends) == ["_node_plan", "_node_replan"],
+            f"找到 {[f for f, _ in _appends]}")
+
+    def _dict_const(d, key):
+        for k, v in zip(d.keys, d.values):
+            if isinstance(k, ast.Constant) and k.value == key:
+                return v
+        return None
+
+    _vals = {}
+    for _fname, _d in _appends:
+        _v = _dict_const(_d, "attributable")
+        _vals[_fname] = (_v.value if isinstance(_v, ast.Constant) else
+                         (ast.unparse(_v) if _v is not None else None))
+    _assert("⑮g1 Planner 建的 todo 標 `attributable: True`（分解是使用者意圖的重述）",
+            _vals.get("_node_plan") is True, f"實際={_vals.get('_node_plan')!r}")
+    _assert("⑮g2 Replanner 建的 todo 標 `attributable: False`（機器對 missing 的反應）",
+            _vals.get("_node_replan") is False, f"實際={_vals.get('_node_replan')!r}")
+
+    # ⑮g3 三個 executor 入口的 `attributable` 都必須是**必填** keyword-only。
+    #     ⚠ 只要有一個給了預設值，那條路就會靜默沿用它，而 g1/g2 照樣全綠。
+    for _fname in ("_run_executor", "_run_executor_react", "_run_executor_deterministic"):
+        _fn = funcs.get(_fname)
+        _names = [a.arg for a in _fn.args.kwonlyargs] if _fn else []
+        _nodef = [a.arg for a, d in zip(_fn.args.kwonlyargs, _fn.args.kw_defaults)
+                  if d is None] if _fn else []
+        _assert(f"⑮g3 `{_fname}` 的 `attributable` 是必填 keyword-only（無預設）",
+                "attributable" in _nodef, f"kwonly={_names} 無預設={_nodef}")
+
+    # ⑮g4 `_run_one_todo` 必須用下標讀，不能 `.get(..., True)`——給預設＝新的 todo 建立點
+    #     會靜默沿用「可歸因」，那正是這一格要防的東西。
+    _rot = funcs.get("_run_one_todo")
+    _rot_src = ast.unparse(_rot) if _rot else ""
+    _assert("⑮g4 `_run_one_todo` 用 `todo['attributable']` 下標讀（漏設要當場 KeyError）",
+            "todo['attributable']" in _rot_src and "'attributable'," not in _rot_src.replace(
+                "todo['attributable']", ""),
+            f"片段={[l for l in _rot_src.splitlines() if 'attributable' in l]}")
+
+    # ⑮g5 值流：不是「寫了關鍵字」而是「值真的從 todo 走到 executor」（同 ⑮e／⑧g 的教訓）
+    _seen_attr: list = []
+    _o6 = {"_run_executor": ar._run_executor}
+    try:
+        ar._run_executor = (lambda task, scope, fm, idx, verbose, *, attributable:
+                            (_seen_attr.append(attributable), ("摘要", [], "none", []))[1])
+        for _flag in (True, False):
+            ar._reset_run_pool()
+            ar._run_one_todo({"id": 0, "task": "某個沒有公司名的子問題", "temporal_scope": "",
+                              "attributable": _flag, "freshness_gaps": [], "period_notes": [],
+                              "web_used": False, "status": "pending", "result": ""},
+                             ar.FRESHNESS_SNAPSHOT, False)
+    finally:
+        for k, v in _o6.items():
+            setattr(ar, k, v)
+    _assert("⑮g5 todo 的 `attributable` 真的流到 executor（不是只寫了關鍵字）",
+            _seen_attr == [True, False], f"實際={_seen_attr}")
+
+    # ⑮g6 行為 ＋ 誤報對照：replan 出身的 todo，連第一輪的揭露句都不得逸出；
+    #     Planner 出身的仍然要逸出（否則就是把功能關掉而不是修好）。
+    _o7 = {k: getattr(ar, k) for k in
+           ("_check_sufficiency", "_fallback_local_summary", "_get_models")}
+    _o7r = ar.rq.retrieve
+    _out: dict = {}
+    try:
+        ar.rq.retrieve = lambda q, *a, **kw: ([], f"NOTE::{q}")
+        ar._get_models = lambda: (None, None, None)
+        ar._check_sufficiency = lambda sq, pool, ts="", fm="", *a, **kw: {
+            "sufficient": True, "missing": "", "new_query": "",
+            "relevant_ids": [], "realtime_need": "none"}
+        ar._fallback_local_summary = lambda task, chunks, period_note="": "摘要"
+        for _flag in (True, False):
+            _out[_flag] = ar._run_executor_deterministic(
+                "某個子問題", "", ar.FRESHNESS_SNAPSHOT, 0, False, attributable=_flag)[3]
+    finally:
+        ar.rq.retrieve = _o7r
+        for k, v in _o7.items():
+            setattr(ar, k, v)
+    _assert("⑮g6 replan 出身的 todo：第一輪的揭露句也不得逸出",
+            _out.get(False) == [], f"實際={_out.get(False)}")
+    _assert("⑮g6 誤報對照：Planner 出身的 todo 第一輪仍然逸出（沒有被整個關掉）",
+            _out.get(True) == ["NOTE::某個子問題"], f"實際={_out.get(True)}")
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -1099,6 +1461,7 @@ def main() -> int:
     gate12_ratio_intent_llm()
     gate13_refusal_no_citation_tail()
     gate14_synthesize_refusal_guards()
+    gate15_period_fallback_disclosure()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")

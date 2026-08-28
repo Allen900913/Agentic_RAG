@@ -17,6 +17,201 @@
 
 ## 2026-08-28
 
+### 補上 `relevant_ids` 的量尺（新檔），順便推翻自己的假設
+
+`relevant_ids` 決定「這個子問題把哪些 chunk 交給 Generator」（`_run_one_todo`：有圈選就只收
+圈選的，沒圈選才退回 rerank top-k 全收）。它比 `new_query` 更靠近答案，而在此之前
+**完全沒有量尺**——`grep relevant_ids eval/*.py` 的每一筆命中都是測試樁裡的 `"relevant_ids": []`。
+
+新增 [`eval/probe_relevant_ids.py`](eval/probe_relevant_ids.py)。四個指標不可合併：
+`gold 全滅`（危險）／合成混池的 `誤選他家`（陰性對照）／`圈選率`（**1.00 ＝ 等於沒過濾**）／`空圈選`。
+
+**第一版有兩個洞，都在自己身上，記在這裡因為它們是判讀前提**：
+1. **公司層的陰性對照在自然候選池裡不存在**：ticker hard filter 在上游就把沒點名的公司濾掉了，
+   八題的「未點名公司 chunk 數」全是 **0** ＝ 那條斷言零判別力。
+   → 這本身是關於 `relevant_ids` 的發現：**它在「排除別家公司」上的邊際價值接近零**，
+     真正的工作是同一家公司內的主題相關性。陰性對照改用**合成**混池（兩半都走生產路徑）。
+2. **「gold 檔的部分 chunk 沒被圈選」不是缺陷**：gold 只到檔名，排除同檔裡離題的 chunk 正是
+   這個欄位該做的事。第一版把它當危險指標，量出「4 題危險」——**那是量尺的錯不是系統的錯**。
+   改成只留 `gold 全滅`（進了候選卻一個都沒被圈選）這個不含糊的形狀。
+
+**修正後的讀數（8 題 × 3 輪）**：`gold 全滅` **0 題**（6 題可量、2 題 N/A）、`誤選他家` **0 題**
+（sem-01 混入 1 筆、mix-01 混入 2 筆，陰性對照確實有東西可選）、圈選率 1.00 的題 **0/8**、
+平均圈選率 **0.53**、空圈選 **0/24**。
+→ **`relevant_ids` 確實在工作，且在檔名層量不到損害。** 先前「它是最該先拆的耦合」這個假設
+**沒有證據支持**，據此撤回。
+
+**但接起了兩條原本分開的 BACKLOG**：`mix-01`／`mix-03` 的圈選率都是 0.33（5 取 ~1.65），
+而 agentic 在 lexical 只承接 1.93~2.06 chunk——**低承接數很可能就是這個欄位造成的**。
+而「那有沒有害」需要 chunk 層 gold 才分得出來，那正是〈量尺缺口〉裡已登錄的那條。
+**先有 chunk 層 gold，才談得上要不要動 `relevant_ids`。**
+
+### `realtime_need` 對「近期動態」措辭的誤判（prompt 修法）
+
+`probe_realtime_need.py` 量到的危險錯誤：「NVIDIA 最近有什麼新進展？」**0/3** 判成 `none`
+（穩定地錯；這題刻意不含「新聞／消息」字樣＝措辭泛化的形狀）、「蘋果最近有什麼消息？」**1/3**。
+判成 `none` 的代價是 `_stale_for_realtime` 第一行就 return → 不叫 web → **拿 10-K 回答
+「最近有什麼消息」且零揭露**。
+
+**病灶不在架構在 prompt**：`_CHECKER_LIVE_RECENCY_BLOCK` 從頭到尾沒有一句告訴模型
+「候選片段全是 10-K／10-Q **不構成**填 `none` 的理由」，而它前面剛讀完一整段「KB 天花板到了
+就判 sufficient=true」。加三條規則（**只動 live 專屬區塊**，snapshot 的 Checker prompt 逐字不變，
+由 `verify_web_gate_isolation.py` 的 byte-identical 斷言把關）：
+
+1. 這個欄位只看子問題在問什麼，**與候選片段裡有什麼無關**。
+2. ⚠ 例外，防判過頭：「最新一季」「上一季」指**財報期別**不是 wall clock → 仍填 `none`。
+3. 判不出來填 `days` 不填 `none`（填錯 `days` 多搜一次；填錯 `none` 是拿舊資料冒充現況）。
+
+**結果（`--repeat 5`）**：兩題實時題 **0/3 → 5/5**、**1/3 → 5/5**；intraday 兩題 5/5；
+**四題陰性對照一格不動（全 `none`、0/5 叫 web）**；跨輪不穩定從 1 題 → 0 題。
+陰性對照不動這一格是關鍵——沒有它，「一律回 days」也會拿滿分。
+
+⚠ **這不等於那條 BACKLOG 關閉了**。改的是分類器在**一個措辭族**上的準確度，不是「KB 補不了
+就去 web」由單一 LLM 欄位守著這件事。換一種沒測過的措辭仍可能失手。
+⚠ 這支量的是 Grader **單獨**的分類（固定池上呼叫 `_check_sufficiency`），**不是端到端**。
+
+### 歸因改掛在 todo 的出身上（堵住 col-10 的第二扇門）
+
+⑮f 用 `attributable=(rnd == 0)` 判歸因，那**只擋得住「Grader 在同一個子問題內改寫」**。
+Replanner 另外加一個 todo 時，那個 todo 的 rnd 0 照樣是「第一輪」→ 條件為真 → 機器腦補的年份
+又會被說成「所詢問財年」，而 ⑮f **全綠**（它驗的條件確實還在）。
+
+實測 replanner 就是會生出這種待辦串：`'改用網路搜尋查…'` → `'即時網路搜尋…'` →
+`'使用即時金融網站…'`（見 `agentic_rag_v2.py` 的 `QUERY_WEB_BUDGET` 上方註解），本次 web-02／
+web-04 的 trace 也各出現兩個。
+
+**修法**：歸因掛在 todo 的**出身**，不從輪次推。
+`_node_plan` 建的 todo → `attributable: True`（Planner 的分解是使用者意圖的重述）；
+`_node_replan` 建的 → `attributable: False`（機器對 Grader `missing` 的反應）。
+`_run_one_todo` 用 **`todo["attributable"]` 下標讀**（不是 `.get(..., True)`——給預設＝新的建立點
+會靜默沿用可歸因）。三個 executor 入口的 `attributable` 一律必填 keyword-only。
+補救迴圈的條件變成 `attributable and rnd == 0`：**兩個都要成立**。
+
+**閘門 ⑮g（10 項，198 → 208 全 PASS）**，5/5 變異全被抓到：replan 標 True→g2；
+`.get(..., True)`→g4；executor 給預設值→g3；迴圈退回只看輪次→g6；plan 標 False（把功能關掉
+冒充修好）→g1。⑮g6 的兩個方向缺一不可。
+
+⚠ 必填參數第二次逼出自造替身：`verify_web_gate_isolation.py` 三處、`verify_answer_validators.py`
+一處的 `_run_executor_deterministic(...)` 呼叫都要補參數。**這是要的效果。**
+⚠ 補這些呼叫點時踩到一個 anchor 陷阱：8 空格縮排的那一行是 12 空格那行的**子字串**，
+`str.count`/`replace` 會一次吃掉兩處。多行替換一律連前一行一起當錨點。
+
+### replay 的 miss 改成「大聲炸」：把契約換成型別
+
+承上一條的體檢。`web-02` 的 FAIL 之所以無法歸因，是因為三件事疊在一起：`_tavily_search` 對
+`FixtureMiss` **故意 re-raise**（正確）→ 上一層 `_run_executor_deterministic` 的 `except Exception`
+把它接成「降級」（連該子問題已建好的池一起丟）→ 結果檔不記 error。於是「fixture 沒涵蓋」與
+「系統沒打 web」在外觀上**完全相同**，而量尺只看得到後者。
+
+**修法**：`web_replay.FixtureMiss`／`RecordError`、`llm_replay.ReplayCacheMiss`（原本是裸
+`RuntimeError`）一律改成繼承 **`BaseException`**。判準與 `SystemExit`／`KeyboardInterrupt` 同一條
+——「這不是可以就地處理的錯誤，這是『這次測量無效，停下來』」。
+
+**為什麼不是逐個加 re-raise**：全碼庫有 16 個 `except Exception`。契約是 O(n) 的，漏一個就破功、
+而且破得靜默（這次就是漏了）。移出 `Exception` 階層是語言層面的保證，新增 catch-all 也不會破。
+⚠ 通則寫進 [`docs/EVAL.md`](docs/EVAL.md) §4.5：**「絕不可被吞掉」要寫成型別，不要寫成契約。**
+
+**閘門⑦（9 項，79 → 88 全 PASS）**，4/4 變異全抓到：`FixtureMiss` 改回 `RuntimeError`→⑦a＋⑦c；
+`ReplayCacheMiss` 改回→⑦a；executor 的 catch 擴大成 `BaseException`→⑦c；`_tavily_search` 拿掉
+re-raise→⑦e。**⑦d 的誤報對照不可省**：只驗「FixtureMiss 會傳播」的話，一個把整個 try/except
+拿掉的實作也會通過——那等於把 executor 的容錯關掉。
+
+**端到端驗證**：空 fixture 跑 `web-02`，從「安靜產出 `n_web_calls: 0` 的結果檔、exit=0」變成
+「traceback ＋ 印出闖禍的 query ＋ exit=1」。
+
+⚠ 寫 ⑦e 時自己踩了本檔 L48 註解記載的同一個坑：`verify_web_gate_isolation.py` 在 **import 時**
+就把 `ar._tavily_search` 換成 stub（絕不連網的保證），所以要測真身一律用 `_REAL_TAVILY_SEARCH`。
+那行註解寫著「2026-08-13 實際踩到」——這是第二次。
+
+### 期間降級揭露只在「可歸因」時才逸出（修 col-10 的假前提）
+
+上一條接線上線後，65 題裡只有 `col-10` 觸發揭露，而那一句是**假的**：使用者問「微軟每年能自由
+運用的現金大概有多少？」，Planner 分解成「Microsoft 每年的自由現金流大概是多少」（**兩者都沒有
+年份、沒有 10-K**），揭露句卻寫「知識庫沒有「MSFT 10-K」在**所詢問財年（2022）**的資料」。
+那個 2022 只可能來自 Grader 的 targeted rewrite。
+
+`「所詢問」`這個措辭在單管線永遠成立（query 就是使用者原句），在 agentic 不成立——送進
+`rq.retrieve()` 的 query 至少被機器改寫過一次。**分界線不是輪次而是意圖歸屬**：Planner 的分解是
+使用者意圖的重述（可歸因）；Grader 的 targeted rewrite 被 `_CHECKER_PROMPT` **明令**去加使用者
+沒說過的具體詞（「用更具體的關鍵字 / 實體 / 財報標準術語」），ReAct 的 `rag_search` 同理。
+
+**修法**：`_retrieve_chunks(query, *, attributable)`，**必填、無預設**（有預設＝日後新增的呼叫點會
+靜默沿用可歸因）。四個呼叫點逐一表態，確定性補救迴圈傳 `attributable=(rnd == 0)`。不可歸因的 note
+**丟棄而不是改措辭**——那個期間約束本來就不是使用者問的，講出來只是噪音。
+
+**閘門 ⑮f（11 項，187 → 198 全 PASS）**，5/5 變異全被抓到，且分別由不同斷言抓到：
+`attributable` 給預設值→f1；迴圈寫死 `True`→f3＋f5；拿掉閘門／反向一律丟棄→f4 的兩個方向；
+漏傳一個呼叫點→f2。**f4 的誤報對照不可省**：只驗接線的話，一個「一律丟棄」的實作也會全綠。
+
+⚠ 連帶：`verify_web_gate_isolation.py` 自造的 `_fake_retrieve(q)` 樁吃不到新參數而 TypeError，
+已改成 `(q, *, attributable=True)`。**必填參數的代價就是這個**——它會逼出所有自造替身，那正是
+要的效果（樁悄悄與生產簽名分家，是量尺失效的常見形狀）。
+
+### live web 量尺的體檢：它是 flaky 的，而且原因有三層
+
+起因是 `eval/web_claims.json` 的 `_meta.collection` 還寫著前生產 `us_stock_rag_edgar_mdna`。
+本來只打算重錄 fixture，先做了一個零網路的對照（`mdna` vs `multiyear` 各重放一次）——**結論
+推翻了前提**：
+
+| | web-02 | web-04 |
+|---|---|---|
+| mdna / multiyear / mdna / multiyear / 單題重跑 | PASS,FAIL,FAIL,FAIL,**PASS** | FAIL,FAIL,FAIL,**PASS** |
+
+同一份碼、同一個 collection，PASS/FAIL 會翻面。**這把量尺自稱「零噪音」，但那個性質是從斷言
+形式推來的，而斷言的輸入（web 到底有沒有觸發）是 LLM 決定的。** 三層成因：
+
+1. **fixture 的 key 含 LLM 生成的英文 query 字串。** 實測 Grader 這次吐 `NVIDIA current stock
+   price August 15 2026`，fixture 裡只有 `NVDA current stock price today` 與
+   `NVIDIA current stock price live quote` → `FixtureMiss`。**重錄只會換一組會再度 miss 的 key。**
+2. **刻意的大聲失敗被上一層吞掉。** `_tavily_search` 對 `FixtureMiss` 是**故意 re-raise** 的
+   （不讓「fixture 沒涵蓋」被靜默當成「web 不可用」），但確定性 executor 的 `except Exception`
+   接走它變成「降級」，**連同該子問題已建好的池一起丟**，結果檔又不記 error → 量尺把
+   「fixture 沒涵蓋」報成「系統沒打 web」。
+3. **`realtime_need` 對新聞措辭真的會判錯**（這一層是真缺陷，不是量尺問題）。
+   `probe_realtime_need.py --repeat 3`：「NVIDIA 最近有什麼新進展？」**0/3**（穩定地錯）、
+   「蘋果最近有什麼消息？」**1/3**；intraday 兩題 3/3 全對，四題陰性對照 3/3 全對。
+
+**順手撿到兩個工具缺陷**：① `record_web_fixture.py --mode replay` **不是唯讀**——`llm_replay` 的
+`atexit` 無條件寫回、`web_replay.note_meta()` 又在 mode 檢查之前呼叫，第一次跑就改掉了兩個版控
+fixture（已復原）。防護是 `RAG_REPLAY_MODE=strict`，但這支沒設。**任何共用同一份 cache 的 A/B，
+第一臂的 miss 都會變成第二臂的 hit**（實測 hit 23→32）。② fixture 裡錄著一筆 Tavily query 是
+`"I'm unable to browse the web, so I can't retrieve the latest Tesla news for that period."`
+——模型的拒答句被當成搜尋詞送出去了。
+
+### agentic 接回期間降級揭露（BACKLOG「agentic 沒有揭露通道」）
+
+`_retrieve_chunks` 寫的是 `chunks, _note = rq.retrieve(...)`——Tier 2 降級時那句「知識庫沒有 X 在
+所詢問財年（Y）的資料，以下回答改用最接近的可得期間（Z）」**被直接丟掉**。單管線兩個消費端都有
+（CLI／SSE 顯示 ＋ 注入 generator prompt），agentic 兩半都沒有 → 「系統會不會揭露」在所有 agentic
+評測上**結構性恆為 0**。這條在產品線走單管線時不影響出貨，改用 agentic 為主之後就是實害。
+
+**接線**：`_retrieve_chunks` 收下 note → `_RunState.period_notes`（**五個呼叫點共用一個收集點**：
+ReAct 工具、確定性迴圈、兩處例外降級、graph 崩潰降級，逐個回傳必有人漏接）→ executor 第四個回傳值
+→ `_node_execute` 跨子問題去重保序併進 state → Synthesize 走 `rq.build_user_prompt` 的**第三參數**
+注入 Generator。**顯示**那一半由 `run_agentic` 回傳 `period_notes`、CLI 印 `⚠️`——與
+`run_single_query` 同一個通道。設計理由（兩個獨立通道、為何不機械式附加）見
+[`docs/AGENTIC.md`](docs/AGENTIC.md) A11。
+
+⚠ **`period_note` 與 `web_extra` 同一個理由必須跟著每一次重生成走**：validator 重生成會換掉
+`extra_user`，寫在那裡的話揭露只活到第一次生成（web_extra 踩過這個坑）。所以五道 validator ＋
+它們內部回頭呼叫的 citation 稽核全部要帶，共 16 個接點。
+
+**實測（生產 collection，零 LLM 生成）**：「Microsoft 在 2021 財年的營收是多少？」→ 揭露句產生並
+出現在 user prompt；陰性對照「Microsoft 最新一季的營收」→ Tier 1 命中、**無揭露**（不會變成每題
+都掛一句的背景噪音）。
+
+**量尺**：新增閘門⑮，`verify_answer_validators` 170 → **187**。**變異測試 5/5 全抓到**，其中最重要的
+是 **M3「關鍵字有寫、但傳的值永遠是空的」——⑮b 全綠、只有 ⑮e 叫得出來**（⑮b 驗呼叫點寫了
+`period_note=`，⑮e 驗**值**真的從 state 流到 Generator）。這是 ⑧g／⑭a 那個教訓的第三次。
+
+⚠ **既有基準的移動範圍是可枚舉的**：⑮c 鎖住「system message 逐字不變」與「空揭露時 user prompt
+與不傳這個參數逐字相同」→ **只有真的觸發 Tier 2 降級的題**答案文字會變；揭露刻意**不併進 answer
+字串**，所以結果檔的答案本體格式不動。四道確定性閘門（85／187／17／79）全 PASS。
+
+**觀察，沒有動**：`rq._build_fallback_note` 的「最接近的可得期間」會把該公司**全部**期碼列出來
+（實測 11 個），讀起來很吵。那是單管線共用的既有措辭，動它會同時改變單管線的使用者可見句，
+另案再議。
+
 ### 兩條接線：期間路由讀得到已解出的 ticker；四道 validator 守門換掉英文字面
 
 起點是盤點「LLM 到底用在哪些地方」——全碼庫 `call_llm` 共 **15 個呼叫點**，單發管線一題 **3~4 次**、

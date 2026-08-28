@@ -65,7 +65,7 @@ DEFAULT_OUTPUT = Path("experiments/agentic/generation_judge.json")
 
 
 def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
-                         sub_queries: list) -> dict:
+                         sub_queries: list, period_notes: list | None = None) -> dict:
     """把 agentic 輸出攤平成 generation_judge.json 的 record schema。
     RAGAS 只讀 id/category/query/answer/contexts；其餘欄位補上以對齊 schema、方便複查。"""
     # ⚠ 2026-08-11 修：`contexts` 與 `sources` 必須**同一次過濾**、逐位對齊。原本 contexts 濾掉
@@ -102,6 +102,11 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
         # agentic 專屬（額外資訊，不影響 RAGAS）。
         "agentic_sub_queries": sub_queries,
         "agentic_n_chunks": len(chunks),
+        # 期間降級揭露（2026-08-28）：`rq.retrieve` 降級 Tier 2 時產生、已注入 Generator prompt。
+        # ⚠ **落盤的理由是可量測性**：在接回來之前，「系統會不會揭露」在所有 agentic 評測上
+        # 結構性恆為 0（note 在 `_retrieve_chunks` 就被丟掉了），量到的 0 是在覆述一行程式碼。
+        # 落在結果檔裡，日後要斷言「該揭露的有揭露」才有東西可讀。
+        "agentic_period_notes": list(period_notes or []),
     }
 
 
@@ -223,7 +228,8 @@ def main() -> None:
                 run_kwargs["freshness_mode"] = args.freshness_mode
             out = ar.run_agentic(q["query"], **run_kwargs)
             rec = _record_from_agentic(q, out["answer"], out.get("chunks", []),
-                                       out.get("sub_queries", []))
+                                       out.get("sub_queries", []),
+                                       out.get("period_notes", []))
             records_by_id[q["id"]] = rec
             print(f"    ✓ {time.time()-t0:.0f}s | sub_queries={len(out.get('sub_queries', []))} "
                   f"| chunks={rec['agentic_n_chunks']} | answer_len={len(out['answer'])} "

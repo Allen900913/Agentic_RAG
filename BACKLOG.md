@@ -25,6 +25,23 @@
 - **lexical 的缺口在 chunk 層，而 gold 只到檔名。** agentic 在 lexical 平均只承接 **1.93 個 chunk**（全類最低），而 lexical 正是 `context_recall` 唯一明顯輸單發的類別（−0.078）；但**檔案層命中 12/15 與單發完全相同** → 病灶是「同一個檔裡收太少／收錯 chunk」，不是撈錯檔。
   **卡點＝量尺**：要驗證得先有 chunk 層 gold，而 `eval_set.json` 的 `relevant` 只到檔名。
   附帶事實：`lex-03`／`lex-07`／`lex-14` 三題**兩條管線都撈不到 gold**，那是檢索層問題不是 agentic 問題。
+  **2026-08-28 找到很可能的機制**（`probe_relevant_ids.py --repeat 3`）：Grader 的 `relevant_ids` 平均只圈選 **0.53** 的候選，而 `mix-01`／`mix-03` 都是 **0.33**（5 取 ~1.65）——**低承接數很可能就是這個欄位造成的**，不是檢索少撈。
+  ⚠ **但「那有沒有害」正好被這條缺口本身擋住**：同一次量測顯示「gold 檔整個被排除」0 題、合成混池「誤選他家」0 題、圈選率 1.00 的題 0/8 → 在**檔名層**看不出任何損害。要分辨「它濾掉的是離題 chunk（正確）還是答案所在的 chunk（危險）」，**只能靠 chunk 層 gold**。
+  → 這兩條原本分開的條目其實是同一件事：**先有 chunk 層 gold，才談得上要不要動 `relevant_ids`。**
+
+- **live 路徑的量尺（`check_web_claims`，5 條）是 flaky 的，不能當閘門用。**
+  實測 5 次跑分（2 個 collection × 有無 cache 污染 ＋ 1 次單題重跑）：`web-02` 的判定序列是 PASS,FAIL,FAIL,FAIL,PASS，`web-04` 是 FAIL,FAIL,FAIL,PASS。**同碼同 collection 會翻面。**
+  根因不在斷言而在**輸入**：fixture 的 key 含 LLM 生成的英文 query 字串，每輪都可能不同 → `FixtureMiss` → 確定性 executor 的 `except Exception` 把它降級成「沒打 web」。
+  ⚠ **重錄 fixture 不是解法**：只會換一組會再度 miss 的 key。
+  **後半已於 2026-08-28 修掉**：`FixtureMiss`／`RecordError`／`ReplayCacheMiss` 移出 `Exception` 階層 → 任何 `except Exception` 都抓不到 → fixture miss 現在**當場炸、exit=1**，不會再被量尺報成「系統沒打 web」（閘門⑦，9 項，4/4 變異全抓到）。
+  **剩下的那一半**：query 字面仍然綁死。實測同一題 web-02 在四輪裡生出四個不同的英文 query（`NVDA current stock price today` / `NVIDIA current stock price live quote` / `NVIDIA current stock price August 15 2026` / `NVIDIA NVDA latest share price June 2026`）。
+  **方向**：讓 replay 的比對不綁 query 字面（按子問題 index，或對 query 做正規化／近似比對）。
+  **在修好之前**：這 5 條只能當「跑幾次看趨勢」的 probe，判讀一律 ≥3 輪、看逐題 k/n。**好消息是失敗現在會自己現形**——不再需要人去分辨 FAIL 是系統還是量尺。
+
+- **`llm_replay.py` 沒有唯讀模式，A/B 兩臂共用一份 cache 會單向污染。**
+  `atexit` 無條件把 miss 現場算出的結果寫回 → **第一臂的 miss 變成第二臂的 hit**（實測 hit 23→32，兩臂結果因此不可比）。現有防護只有 `RAG_REPLAY_MODE=strict`（miss 就報錯），而 `record_web_fixture.py --mode replay` 沒設它——那支的「replay」對 Tavily 成立、對 LLM 不成立。
+  **權宜做法**：每一臂用自己的 cache 副本（`--replay-cache <副本>`），跑完丟掉。
+  **卡點**：正解是加一個唯讀旗標，但要先確認沒有哪個既有流程依賴「跑一輪順便補快取」。
 
 ---
 
@@ -51,15 +68,39 @@
 
 - **一致性 validator 的重寫路徑**：偵測 4/4 精準，但重寫實測 **2 好 1 壞**（`col-11` 修掉矛盾卻把總營收誤標成雲端營收，且三層驗證全過）。選項：改成**只偵測不重寫**（把矛盾標記給使用者看）以拿掉那個 1 壞。
 
+- **Grader 的責任剝離（評判／重寫／圈選／時效分類拆成不同呼叫）要不要做。**
+  現況：`_check_sufficiency` **一次 LLM 呼叫**吐 `{sufficient, missing, new_query, relevant_ids}`，
+  live 再加 `realtime_need`；下游四個消費端全部吃它（下一輪檢索 query、送 Tavily 的 query、
+  哪些 chunk 進承接池、要不要打 web）。
+  **2026-08-28 逐項查過，結論是現在不做**——當初主張要拆的三個理由各自被自己的量測削弱：
+  ① `realtime_need` 誤判 → **是 prompt 問題不是架構問題**。只改 live 專屬區塊三句話後，
+     「NVIDIA 最近有什麼新進展？」0/3 → **5/5**、「蘋果最近有什麼消息？」1/3 → **5/5**，
+     四題陰性對照一格不動。成本幾小時，拆架構是幾天而且拆完仍要寫這幾句話。
+  ② 「`relevant_ids` 才是真防波堤、最該先拆」→ **沒有證據，假設撤回**。
+     `probe_relevant_ids.py` 8 題×3 輪：`gold 全滅` **0 題**、合成混池 `誤選他家` **0 題**、
+     圈選率 1.00 的題 **0/8**（平均 0.53、空圈選 0/24）。它確實在工作，且檔名層量不到損害。
+  ③ `new_query` 讓機器腦補的年份被說成「所詢問」→ **已由閘門 ⑮f／⑮g 從歸因面結構性堵掉**
+     （歸因掛在 todo 的出身 ＋ 輪次），不必動改寫的歸屬就解決了。
+  ⚠ **仍然站得住的理由只剩可觀測性**：一次呼叫吐五個欄位時，失手了不知道是哪一個。但 08-28 的
+    兩次診斷都靠 `AGENTIC_TRACE=true` 在同一個 session 內分辨出來，所以收益目前是「省診斷時間」，
+    不是「否則查不出來」。
+  ⚠ **反對的證據要一起記**：把 query 改寫權交給**有 agency 的節點**實測更差——乾淨 decomposition
+    的 gold-chunk 覆蓋 **35/75** vs 真實 ReAct **16/75**（見 `_run_executor_deterministic` docstring）。
+    而把改寫路由給 Replanner 會直接餵養已記載的子問題爆炸級聯（`QUERY_WEB_BUDGET` 上方註解：
+    「改用網路搜尋查…」→「即時網路搜尋…」→「使用即時金融網站…」，實測 7 次 web／近一小時一題）。
+  **復活條件（任一成立就重新評估）**：
+  · `realtime_need`／`sufficient` 在**另一個沒測過的措辭族**上再失手一次 → 打地鼠開始了，
+    那才是「責任壓太多在同一次呼叫上」的證據；
+  · chunk 層 gold 建起來後，`probe_relevant_ids` 量到「被濾掉的是答案所在的 chunk」；
+  · 子問題爆炸級聯在生產再現。
+  **真要做時的形狀**：拆成**獨立的單一職責 rewriter 呼叫**，**不是**把改寫還給 Planner／Replanner
+  （理由就是上面那個 35/75 vs 16/75）。
+
 - **`find_claim_conflicts` R2 放寬**（`len(seg_changes) >= 2` → ≥1）。卡點：要先量誤報率——「總計 < 某部門」在另一部門衰退時是**合法的**。
 
 ---
 
 ## 已知缺陷（查清楚了、還沒修）
-
-- **agentic 沒有揭露通道。** `agentic_rag_v2._retrieve_chunks()` 寫的是 `chunks, _note = rq.retrieve(...)`——**Tier 2 的期間缺口揭露語被丟掉**。單管線（`rag_query.py` CLI／`api_server.py`）兩邊都有（SSE 顯示 ＋ 注入 generator prompt），而**產品線走的是單管線**，所以目前不影響出貨行為。
-  但它讓「系統會不會揭露」在**所有 agentic 評測上結構性恆為 0**——量到的 0 是在覆述一行程式碼。
-  修法：把 note 帶進 `_retrieve_chunks` 的回傳、併進該子問題的 summary。**卡點：動它會改變既有 agentic 基準的答案文字，要與一次正當的重跑綁在一起。**
 
 - **多公司題沒有期別保護。** `_resolve_period_filter_llm` 遇到兩家以上直接回 None，因為 `build_qdrant_filter` 吃 flat AND list、**結構上寫不出 per-ticker 的 OR-of-ANDs**（`MatchAny` 是全域 OR，會讓 A 公司的舊季通過 B 公司的期碼）。正確結構是 `should=[ must=[ticker==AAPL, period==202606 or empty], must=[ticker==MSFT, period==202603 or empty] ]`。
   **卡點是表達力**，要先讓 `build_qdrant_filter` 多接受一種 per-ticker 群組型別。
@@ -68,6 +109,9 @@
   **收斂後的修法**：補位時若本次檢索帶 `routed_latest` 意圖，優先挑該公司**最新期碼的 10-Q**。⚠ `eval_set` 量不到（0 題）——這是產品修正不是分數修正，驗收用 probe 的 `missing_rate 0.353 → ?`。
 
 - **`realtime_need="none"` 會短路整段時效日期算術。** `REALTIME_STALE_DAYS["none"] is None` → `_stale_for_realtime` 第一行就 return → `_kb_ceiling_date()`／`kb_unfixable`／天花板比對**整段不執行，連 `as_of` 都沒讀到**。等於「KB 補不了就去 web」被一個三分類的 LLM 欄位單點守住，而 Grader 對「某季營收」填 `none` 是照 prompt 做對的。
+  **2026-08-28 量到了危險的那一半**（`probe_realtime_need.py`，生產 collection）：「NVIDIA 最近有什麼新進展？」**0/3** 判成 `none`（穩定地錯，而它刻意不含「新聞／消息」字樣＝措辭泛化的形狀）、「蘋果最近有什麼消息？」**1/3**。intraday 兩題與四題陰性對照全對 → **病灶只在「近期動態」這個措辭族，不是整個分類器**。
+  **同日改 prompt（只動 live 專屬區塊）後 `--repeat 5`：兩題都 5/5，四題陰性對照一格不動、跨輪不穩定 0 題。** 加的三條規則：① 候選片段全是財報**不構成**填 `none` 的理由（「財報答不答得了」與「問題需要多新」是兩件事）② 「最新一季／上一季」指**財報期別**不是 wall clock，仍然填 `none`（這條是保護陰性對照的，少了它會判過頭）③ 判不出來填 `days` 不填 `none`（代價不對稱）。
+  ⚠ **這條沒有因此關閉。** 修的是分類器在一個措辭族上的準確度，**不是那個單點依賴**——「KB 補不了就去 web」仍然由一個三分類的 LLM 欄位單獨守著，換一種沒測過的措辭仍可能失手。要移除單點依賴得動架構（把 `realtime_need` 從 Grader 那一次呼叫裡拆出來），而那要先有 §量尺缺口 裡說的前提。
   **為什麼沒修：目前測不出來。** KB 裡沒有任何一家的 filing 天花板超出申報週期，這條路徑在現有資料上永遠不會觸發，改了也沒有陽性案例——那就是又一個「聽起來合理」的機制假設。
   **復活條件**：① 有一題的 KB 天花板真的落後於申報週期（換 as-of 或補一家新公司都行）；② 先寫出能證偽它的真值表（`period_ref` × 天花板 × as_of），加進 `verify_web_gate_isolation.py` 閘門⑤。
   ⚠ 不要用詞表判「這題是不是相對期間指稱」。可行方向是 Grader 加一個與 `realtime_need` **正交**的 `period_ref` 欄位，但**只能加在 live block**：動到 snapshot 的 Checker prompt 會破壞 eval 基準逐字不變。

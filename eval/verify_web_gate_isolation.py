@@ -497,7 +497,10 @@ def _check_web_result_hygiene() -> int:
     # 全程零 LLM 零網路：把 Grader／檢索／摘要／web 都換成 stub，只量「檢索被呼叫幾次」。
     n_retrieve = {"n": 0}
 
-    def _fake_retrieve(q):
+    # ⚠ 必須吃 `attributable`（2026-08-28 起 `_retrieve_chunks` 的必填 keyword-only 參數）。
+    #   這支只數呼叫次數，歸因與否不影響它要量的東西；「每個呼叫點都傳了」由
+    #   `verify_answer_validators.py` 的 ⑮f2 守。
+    def _fake_retrieve(q, *, attributable=True):
         n_retrieve["n"] += 1
         return [{"source": "AAPL_Fundamentals_20260612.txt", "chunk_index": 0, "text": "x",
                  "rerank_score": 1.0, "raw_rerank_score": 1.0}]
@@ -511,7 +514,8 @@ def _check_web_result_hygiene() -> int:
     ar._fallback_local_summary = lambda task, chunks: "stub"
     ar._tavily_search = lambda q, need="none": "（stub）"
     try:
-        ar._run_executor_deterministic("蘋果的即時市值", "", ar.FRESHNESS_LIVE, 0, False)
+        ar._run_executor_deterministic("蘋果的即時市值", "", ar.FRESHNESS_LIVE, 0, False,
+                                       attributable=True)
     finally:
         (ar._retrieve_chunks, ar._check_sufficiency,
          ar._fallback_local_summary, ar._tavily_search) = saved
@@ -529,11 +533,111 @@ def _check_web_result_hygiene() -> int:
     ar._fallback_local_summary = lambda task, chunks: "stub"
     ar._tavily_search = lambda q, need="none": "（stub）"
     try:
-        ar._run_executor_deterministic("蘋果的營收", "", ar.FRESHNESS_SNAPSHOT, 0, False)
+        ar._run_executor_deterministic("蘋果的營收", "", ar.FRESHNESS_SNAPSHOT, 0, False,
+                                       attributable=True)
     finally:
         (ar._retrieve_chunks, ar._check_sufficiency,
          ar._fallback_local_summary, ar._tavily_search) = saved
     _assert(f"一般不足仍跑滿改寫（實得 {n_retrieve['n']}）", n_retrieve["n"] == ar.MAX_REWRITES + 1)
+    return fail
+
+
+def _check_replay_miss_is_loud() -> int:
+    """閘門⑦：replay 的 miss 不准被任何 `except Exception` 吞掉（2026-08-28）。
+
+    **為什麼是結構性而非契約**：舊版靠「呼叫端記得 re-raise」。`_tavily_search` 記得了，
+    但上一層 `_run_executor_deterministic` 的 `except Exception` 照樣接走 → 印一行
+    「降級」就繼續跑 → 量尺把「fixture 沒涵蓋」報成「系統沒打 web」。全碼庫 16 個
+    `except Exception`，只要有一個沒加 re-raise 就破功。
+
+    ⚠ **誤報對照（⑦d）不可省**：只驗「FixtureMiss 會傳播」的話，一個把整個 try/except
+      拿掉的實作也會通過——那等於把 executor 的容錯關掉。所以要同時驗「一般例外仍然被降級接住」。
+    """
+    import llm_replay as _lr
+    import web_replay as _wr
+
+    results: list[tuple[str, bool, str]] = []
+
+    # ── ⑦a/⑦b 型別：不在 Exception 階層裡，但仍是 BaseException ────────────────
+    for nm, exc in (("web_replay.FixtureMiss", _wr.FixtureMiss),
+                    ("web_replay.RecordError", _wr.RecordError),
+                    ("llm_replay.ReplayCacheMiss", _lr.ReplayCacheMiss)):
+        results.append((f"⑦a {nm} 不是 Exception 子類", not issubclass(exc, Exception),
+                        "`except Exception` 抓不到" if not issubclass(exc, Exception)
+                        else "**會被通用處理吞掉**"))
+        results.append((f"⑦b {nm} 仍是 BaseException 子類", issubclass(exc, BaseException), ""))
+
+    # ── ⑦c 行為：executor 內部丟 FixtureMiss 必須傳播出來 ─────────────────────
+    def _mk_stubs(boom):
+        calls = {"n": 0}
+
+        def _fake_retrieve(q, *, attributable=True):
+            calls["n"] += 1
+            if calls["n"] == 1 and boom is not None:
+                raise boom("stub")
+            return [{"source": "AAPL_Fundamentals_20260612.txt", "chunk_index": 0, "text": "x",
+                     "rerank_score": 1.0, "raw_rerank_score": 1.0}]
+
+        def _fake_check(subquery, pool, temporal_scope="", freshness_mode=ar.FRESHNESS_SNAPSHOT):
+            return {"sufficient": True, "missing": "", "new_query": "",
+                    "relevant_ids": [], "realtime_need": "none", "kb_unfixable": False}
+        return _fake_retrieve, _fake_check
+
+    def _run(boom):
+        """回傳 (傳播出來的例外型別 or None)。"""
+        fr, fc = _mk_stubs(boom)
+        saved = (ar._retrieve_chunks, ar._check_sufficiency,
+                 ar._fallback_local_summary, ar._tavily_search)
+        ar._retrieve_chunks, ar._check_sufficiency = fr, fc
+        ar._fallback_local_summary = lambda task, chunks, period_note="": "stub"
+        ar._tavily_search = lambda q, need="none": "（stub）"
+        try:
+            # ⑦c/⑦d 測的是例外傳播，跟歸因無關；給 True 是為了與生產最常見的路徑一致。
+            ar._run_executor_deterministic("蘋果的營收", "", ar.FRESHNESS_SNAPSHOT, 0, False,
+                                           attributable=True)
+            return None
+        except BaseException as e:          # noqa: BLE001 - 要的就是抓到什麼型別
+            return type(e)
+        finally:
+            (ar._retrieve_chunks, ar._check_sufficiency,
+             ar._fallback_local_summary, ar._tavily_search) = saved
+
+    got = _run(_wr.FixtureMiss)
+    results.append(("⑦c FixtureMiss 從 executor 傳播出來（不被降級吞掉）",
+                    got is _wr.FixtureMiss, f"實得 {got}"))
+
+    got = _run(RuntimeError)
+    results.append(("⑦d 誤報對照：一般例外仍然被降級接住（容錯沒被關掉）",
+                    got is None, f"實得 {got}"))
+
+    # ── ⑦e `_tavily_search` 這一層（原始契約仍然成立）──────────────────────────
+    # ⚠ 兩個都不能省，兩個都是自己踩出來的：
+    #   ① 必須用 `_REAL_TAVILY_SEARCH`——本檔在 import 時就把 `ar._tavily_search` 換成
+    #      「絕不連網」的 stub，直接叫它只會拿到 stub 的回傳（這正是本檔 L48 註解記的
+    #      2026-08-13 那個坑，閘門④ 已經踩過一次）。
+    #   ② 必須自己開 `ENABLE_WEB_SEARCH`——真身第一行就是 `if not ENABLE_WEB_SEARCH: return`。
+    _saved_raw, _saved_en = ar._tavily_raw, ar.ENABLE_WEB_SEARCH
+    try:
+        def _boom(q):
+            raise _wr.FixtureMiss("stub")
+        ar._tavily_raw, ar.ENABLE_WEB_SEARCH = _boom, True
+        try:
+            _REAL_TAVILY_SEARCH("q")
+            got = None
+        except BaseException as e:          # noqa: BLE001
+            got = type(e)
+    finally:
+        ar._tavily_raw, ar.ENABLE_WEB_SEARCH = _saved_raw, _saved_en
+    results.append(("⑦e _tavily_search 不把 FixtureMiss 降級成「查無結果」",
+                    got is _wr.FixtureMiss, f"實得 {got}"))
+
+    print()
+    print(f"  {'replay miss 必須大聲炸':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
     return fail
 
 
@@ -564,6 +668,7 @@ def main() -> int:
     fail += _check_domain_allowlist()
     fail += _check_recency_gate()
     fail += _check_web_result_hygiene()
+    fail += _check_replay_miss_is_loud()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0

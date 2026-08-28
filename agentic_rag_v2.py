@@ -1749,6 +1749,17 @@ _CHECKER_LIVE_RECENCY_BLOCK = """
 - "none"：問特定財報期間或不隨時間變動的事實——某季營收、財報風險因素、跨公司比較、歷史數字。
   子問題已明確指定期間(FY2026、2026 年第三季、10-K 提到…)一律填 "none"。
 
+⚠ 這個欄位**只看子問題在問什麼**,與「候選片段裡有什麼」無關(2026-08-28 補,實測見下):
+- 候選片段全是 10-K／10-Q,**不構成**填 "none" 的理由。「財報答不答得了這個問題」與「這個問題
+  需要多新的資料」是兩件不同的事——「這家公司最近怎麼樣」用去年的年報回答,那個答案是**錯的**,
+  不只是舊的。
+- 判準是「使用者期待的時間點」:問句指向**當下或最近一段時間**(而不是某個財報期間)→ 至少 "days"。
+  **不要因為找不到那麼新的資料就改填 "none"**——「找不到」是 sufficient 要處理的事,不是這一欄。
+- ⚠ 例外(不要判過頭):「最新一季」「上一季」「最近一個財年」指的是**財報期別**(由 filing 定義),
+  不是 wall clock → 仍然填 "none"。
+- 判不出來時填 "days" 而不是 "none"。兩種錯的代價不對稱:填錯 "days" 只是多搜一次;填錯 "none"
+  會讓答案**拿舊資料冒充現況且零揭露**。
+
 JSON 因此多一個欄位:
 {"sufficient": …, "missing": …, "new_query": …, "relevant_ids": […], "realtime_need": "intraday"|"days"|"none"}"""
 
@@ -1832,7 +1843,7 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
     return out
 
 
-def _retrieve_chunks(query: str) -> list[dict]:
+def _retrieve_chunks(query: str, *, attributable: bool) -> list[dict]:
     """Retriever 節點的核心:跑一次生產 rq.retrieve,組態固定 enable_rewrite=False + full_translate_en=True。
       · enable_rewrite=False(P0-5):Checker 已提供針對「缺什麼」的 targeted rewrite(active_query),
         不讓 rq 二次無差別改寫稀釋其意圖;且 rag_query sem-11 已證 multi-variant rewrite 對 cross-lingual 無效。
@@ -1843,17 +1854,44 @@ def _retrieve_chunks(query: str) -> list[dict]:
         這推翻先前 translate_query_en=False 的保留結論——舊消融只量到 file-level recall(已飽和),
         沒量到 chunk 內排序這層;且舊模式是 max(原句,英譯)雙 query,這裡改為單一英文 query 更徹底。
         query 理解 hard filter 與答案生成仍用原始中文(語言無關 / 使用者要中文答)。
-    補救迭代與首輪用完全相同組態,唯一差別是 active_query 已被 Checker 改寫(補救的主力施力點)。"""
+    補救迭代與首輪用完全相同組態,唯一差別是 active_query 已被 Checker 改寫(補救的主力施力點)。
+
+    ⚠ **第二個回傳值(期間降級揭露)必須收下,不可以丟掉**(2026-08-28 修)：`rq.retrieve` 在 Tier 1
+    嚴格 filter 落空、降級到 Tier 2 時會產生一句「知識庫沒有 X 在所詢問財年(Y)的資料,以下回答改用
+    最接近的可得期間(Z)」。單管線兩個消費端都有(CLI `print` / SSE 顯示 ＋ 注入 generator prompt),
+    而這裡舊寫法是 `chunks, _note = ...` **直接丟棄** → agentic 這條路上「系統會不會揭露」
+    結構性恆為 0,量到的 0 是在覆述一行程式碼。收進 run state 的理由見 `_RunState` docstring:
+    這個函式有五個呼叫點(ReAct 工具、確定性迴圈、兩處例外降級),逐個回傳會有人漏接。
+
+    ⚠ **`attributable` 是必填的,不給預設值**(2026-08-28 修 col-10)：揭露句的字面是「知識庫沒有
+    X 在**所詢問**財年(Y)的資料」,而那個 Y 是從**這一次 retrieve 的 query**解析出來的 filter。
+    在單管線那永遠成立(query 就是使用者原句),在 agentic 不成立——query 可能已被機器改寫兩次。
+    實測 col-10:使用者問「微軟每年能自由運用的現金大概有多少?」、Planner 分解成「Microsoft 每年的
+    自由現金流大概是多少」,**兩者都沒有年份也沒有 10-K**,而揭露句卻說「MSFT 10-K 在所詢問財年
+    (2022)」——那個 2022 是 Grader 補救改寫加進去的。
+    分界線不是輪次而是**意圖歸屬**:Planner 的分解是使用者意圖的重述(可歸因);Grader 的 targeted
+    rewrite 被 `_CHECKER_PROMPT` **明令**去加使用者沒說過的具體詞(「換措辭或用更具體的關鍵字 /
+    實體 / 財報標準術語」),ReAct 的 `rag_search` 同理(不可歸因)。
+    不可歸因的 note 直接丟棄而不是改措辭:那個期間約束本來就不是使用者問的,講出來只是噪音。"""
     bge_m3, rerank_model, client = _get_models()
     with _RETRIEVE_LOCK:
         with _quiet():   # 靜音 retrieve 的 DEBUG print
-            chunks, _note = rq.retrieve(
+            chunks, period_note = rq.retrieve(
                 query, bge_m3, rerank_model, client,
                 top_k=rq.RERANK_INPUT_N,   # 多取一些進池(池會重排,advance 時只收 top-k)
                 model_name=RETRIEVAL_MODEL,
                 enable_rewrite=False,
                 full_translate_en=True,   # 檢索中間層一律英文(見上方 docstring)
             )
+    if period_note and not attributable:
+        # 期間約束來自機器改寫、不是使用者問的 → 丟棄(理由見 docstring)。仍然印 trace:
+        # 「揭露句被產出但被丟掉」與「根本沒產出」是兩件事,診斷時要分得開。
+        _trace(f"retrieve: 期間降級揭露(不可歸因,丟棄) → {period_note}")
+    elif period_note:
+        notes = _current_run_state().period_notes
+        if period_note not in notes:   # 同一子問題的補救輪次會重複產生同一句,去重但保序
+            notes.append(period_note)
+            _trace(f"retrieve: 期間降級揭露 → {period_note}")
     return chunks or []
 
 
@@ -1902,19 +1940,26 @@ _WEB_SOURCE_AMENDMENT = """
 
 
 def _write_final_answer(query: str, chunks: list[dict], model_name: str, extra_user: str = "",
-                        web_extra: str = "") -> str:
+                        web_extra: str = "", period_note: str = "") -> str:
     """單次 Generator 呼叫:把 chunks 全文塞進生產生成契約產出答案。extra_user 夾帶糾錯指示(重生成用)。
 
     `web_extra`(網路搜尋區塊)刻意獨立於 `extra_user`:它要同時進 **system**(修訂引用契約 + 補時間契約)
     與 **user**(內容本身),且必須跟著**每一次重生成**走。web_extra 為空時 system message 與 2026-08-13
     以前**逐字相同**——eval 的 web_notes 恆為空,所以既有基準一個都不會動到(由
     `eval/verify_web_gate_isolation.py` 的 byte-identical 斷言長期把關)。
+
+    `period_note`(期間降級揭露)沿用 `rq.build_user_prompt` 的第三參數,**與單管線同一個模板、
+    同一個位置**——它不是新的措辭,是把單管線早就有的東西接到 agentic 上(見 `_retrieve_chunks`)。
+    ⚠ 它跟 `web_extra` 一樣**必須跟著每一次重生成走**：validator 的重生成會換掉 `extra_user`,
+    寫在那裡的話揭露只活在第一次生成,任何一次重寫都會讓它消失(web_extra 踩過這個坑)。
+    ⚠ 只進 **user** 不進 system:它是這一題的檢索事實,不是契約修訂——所以 system message 逐字不變。
+    period_note 為空時 `build_user_prompt` 的 `note_section` 是空字串 → user prompt 也逐字不變。
     """
     system = rq.SYSTEM_PROMPT + _ZH_ANSWER_DIRECTIVE
     if web_extra:
         # 用 _get_as_of_date() 而非 date.today():AGENTIC_AS_OF_DATE 要能固定 wall clock 供回歸測試。
         system += _WEB_SOURCE_AMENDMENT + "\n\n" + _build_temporal_contract(FRESHNESS_LIVE)
-    user_prompt = rq.build_user_prompt(query, chunks) + web_extra + extra_user
+    user_prompt = rq.build_user_prompt(query, chunks, period_note) + web_extra + extra_user
     messages = [
         {"role": "system", "content": system},
         {"role": "user", "content": user_prompt},
@@ -1980,7 +2025,7 @@ def _repair_reference_citations(answer: str, allowed_chunks: list[dict]) -> tupl
 
 def _validate_and_fix_citations(query: str, answer: str, allowed_chunks: list[dict],
                                  model_name: str, verbose: bool = False,
-                                 web_extra: str = "") -> str:
+                                 web_extra: str = "", period_note: str = "") -> str:
     """確定性 citation 稽核 + 有界重試。回傳(盡量)合格的答案。
 
     `web_extra`＝synthesize 組出來的網路搜尋補充區塊（含 `[web: 網址]` 標註規則）。
@@ -2023,7 +2068,8 @@ def _validate_and_fix_citations(query: str, answer: str, allowed_chunks: list[di
         suffix = ("\n\n⚠ 引用檢查未通過，請修正後重寫整份答案（內容依據不變，只改引用）：\n"
                   + "\n".join(problems))
         revised = _write_final_answer(query, allowed_chunks, model_name,
-                                      extra_user=suffix, web_extra=web_extra)
+                                      extra_user=suffix, web_extra=web_extra,
+                                      period_note=period_note)
         if revised and revised.strip():
             answer = revised
     return answer
@@ -2501,7 +2547,7 @@ _CONSIST_REVISE_SUFFIX = """
 
 
 def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                               verbose: bool = False, web_extra: str = "") -> str:
+                               verbose: bool = False, web_extra: str = "", period_note: str = "") -> str:
     """一致性稽核 → 有衝突則帶問題重生成一次 → 再過 citation 稽核。無衝突原樣回傳。
 
     `web_extra` 只在**重生成**時帶回（見 `_validate_and_fix_citations` 的說明）。
@@ -2535,10 +2581,10 @@ def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], mode
     _trace(f"consistency: 發現 {len(found)} 組互斥數值,重生成一次")
     revised = _write_final_answer(query, chunks, model_name,
                                   extra_user=_CONSIST_REVISE_SUFFIX.format(issues=issues),
-                                  web_extra=web_extra)
+                                  web_extra=web_extra, period_note=period_note)
     if revised and revised.strip():
         return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
-                                           web_extra=web_extra)
+                                           web_extra=web_extra, period_note=period_note)
     return answer
 
 
@@ -2705,7 +2751,7 @@ _NUMBER_REVISE_SUFFIX = """
 
 
 def _number_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                          verbose: bool = False, web_extra: str = "") -> str:
+                          verbose: bool = False, web_extra: str = "", period_note: str = "") -> str:
     """數字溯源稽核 → 有找不到出處的數字則帶問題重生成一次 → 再過 citation 稽核。
 
     **放在 reflect 之後**：那正是缺口所在（reflect 的重生成引入的幻覺沒有任何人再看）。
@@ -2721,15 +2767,15 @@ def _number_check_and_fix(query: str, answer: str, chunks: list[dict], model_nam
     _trace(f"number: {len(found)} 個數字找不到出處,重生成一次")
     revised = _write_final_answer(query, chunks, model_name,
                                   extra_user=_NUMBER_REVISE_SUFFIX.format(issues=issues),
-                                  web_extra=web_extra)
+                                  web_extra=web_extra, period_note=period_note)
     if revised and revised.strip():
         return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
-                                           web_extra=web_extra)
+                                           web_extra=web_extra, period_note=period_note)
     return answer
 
 
 def _period_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                          verbose: bool = False, web_extra: str = "") -> str:
+                          verbose: bool = False, web_extra: str = "", period_note: str = "") -> str:
     """期別稽核 → 有落差則帶問題重生成一次 → 再過 citation 稽核。無落差原樣回傳。
 
     與 `_consistency_check_and_fix` 分開而不合併成一次重生成：兩者的修訂指示語意完全不同
@@ -2747,10 +2793,10 @@ def _period_check_and_fix(query: str, answer: str, chunks: list[dict], model_nam
     _trace(f"period: 發現 {len(found)} 組期別落差,重生成一次")
     revised = _write_final_answer(query, chunks, model_name,
                                   extra_user=_PERIOD_REVISE_SUFFIX.format(issues=issues),
-                                  web_extra=web_extra)
+                                  web_extra=web_extra, period_note=period_note)
     if revised and revised.strip():
         return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
-                                           web_extra=web_extra)
+                                           web_extra=web_extra, period_note=period_note)
     return answer
 
 
@@ -2816,7 +2862,7 @@ _REFLECT_REVISE_SUFFIX = """
 
 
 def _reflect_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                     verbose: bool = False, web_extra: str = "") -> str:
+                     verbose: bool = False, web_extra: str = "", period_note: str = "") -> str:
     """Reflection 節點的核心:稽核幻覺→有則帶問題重生成一次→再過 citation 稽核。無幻覺原樣回傳。
 
     ⚠ 2026-08-13：`web_extra` 要進 **`sources_text`**，不只進重生成。這一層是拿「答案」對
@@ -2842,11 +2888,11 @@ def _reflect_and_fix(query: str, answer: str, chunks: list[dict], model_name: st
     _trace(f"reflect: 發現幻覺,重生成一次 → {issues[:80]!r}")
     revised = _write_final_answer(query, chunks, model_name,
                                   extra_user=_REFLECT_REVISE_SUFFIX.format(issues=issues),
-                                  web_extra=web_extra)
+                                  web_extra=web_extra, period_note=period_note)
     if revised and revised.strip():
         # 重生成後再過 citation 稽核,確保修正時沒引入捏造引用
         return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
-                                           web_extra=web_extra)
+                                           web_extra=web_extra, period_note=period_note)
     return answer
 
 
@@ -2874,12 +2920,17 @@ from langchain_core.tools import tool
 
 
 class _RunState:
-    """一個子問題的 run-scoped 狀態：檢索池、web 筆記、Grader 圈選的相關 id、工具呼叫次數。"""
-    __slots__ = ("pool", "web_notes", "relevant_ids", "rag_calls", "web_calls")
+    """一個子問題的 run-scoped 狀態：檢索池、web 筆記、期間降級揭露、Grader 圈選的相關 id、工具呼叫次數。
+
+    `period_notes` 與 `web_notes` 是同一個形狀、同一個理由：兩者都是「只有檢索層知道、
+    Generator 看不到」的事實，而產生它的地方（`_retrieve_chunks` / `_tavily_search`）分散在
+    ReAct 工具、確定性迴圈與兩處例外降級路徑上——收在 run state 才不會有哪個呼叫點漏接。"""
+    __slots__ = ("pool", "web_notes", "period_notes", "relevant_ids", "rag_calls", "web_calls")
 
     def __init__(self) -> None:
         self.pool: list[dict] = []
         self.web_notes: list[str] = []
+        self.period_notes: list[str] = []
         self.relevant_ids: set[str] = set()
         self.rag_calls = 0
         self.web_calls = 0
@@ -3041,6 +3092,9 @@ def _tavily_search(query: str, need: str = "none") -> str:
         # 絕不降級：fixture 沒涵蓋／寫不進去都要大聲炸，否則會被下面的通用處理吞成
         # 「查無結果」，整輪 replay 實驗在無 fixture 下跑完、或錄出一份安靜少幾筆的 fixture，
         # 兩種都是事後分不出來的失敗。
+        # ⚠ 2026-08-28 起這兩個型別已移出 `Exception` 階層，所以這一段**在語意上是多餘的**。
+        #   保留是刻意的：它讓「這裡不准降級」在讀碼時看得見，而且萬一哪天基底類別被改回去，
+        #   最重要的這一個呼叫點仍然守得住。真正的保證在型別本身 ＋ 閘門⑦。
         raise
     except _NoTavilyKey:
         return "（web search 不可用：未設定 TAVILY_API_KEY）"
@@ -3060,7 +3114,7 @@ def rag_search(query: str) -> str:
                 f"目前池中已有 {len(state.pool)} 個候選、最高 rerank 已到頂——請**不要再搜尋**，"
                 f"直接根據已檢索到的內容回報事實 / 作答。）")
     state.rag_calls += 1
-    chunks = _retrieve_chunks(query)
+    chunks = _retrieve_chunks(query, attributable=False)   # Agent A 自行改寫的 query,非使用者意圖
     merged = _merge_chunks(state.pool, chunks)
     state.pool.clear()
     state.pool.extend(merged)
@@ -3177,7 +3231,7 @@ def _mechanical_summary(task: str, chunks: list[dict]) -> str:
     return f"（子問題「{task}」的生成步驟發生錯誤，以下為檢索到的原始片段）\n" + "\n".join(lines)
 
 
-def _fallback_local_summary(task: str, chunks: list[dict]) -> str:
+def _fallback_local_summary(task: str, chunks: list[dict], period_note: str = "") -> str:
     """subagent 崩潰 / 沒吐摘要時的降級：直接把池裡 top chunk 走生產生成契約產一段局部摘要。
     **這是安全網本身，不能又依賴同一個可能故障的 LLM API 而沒有退路**——包 try/except，
     若 _write_final_answer 也失敗（見實測：NVIDIA 端連續 504 時，降級呼叫一樣會炸），
@@ -3185,14 +3239,15 @@ def _fallback_local_summary(task: str, chunks: list[dict]) -> str:
     if not chunks:
         return f"（子問題「{task}」在知識庫中查無足夠資料）"
     try:
-        return _write_final_answer(task, chunks, GEN_MODEL)
+        return _write_final_answer(task, chunks, GEN_MODEL, period_note=period_note)
     except Exception as e:
         _trace(f"_fallback_local_summary 也失敗（{e!r}）→ 退回零 LLM 機械式摘要")
         return _mechanical_summary(task, chunks)
 
 
 def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
-                        subq_index: int, verbose: bool) -> tuple[str, list[str]]:
+                        subq_index: int, verbose: bool, *,
+                        attributable: bool) -> tuple[str, list[str], str, list[str]]:
     """[舊行為，AGENTIC_REACT_EXECUTOR=true 才用] Executor 核心：Agent A（ReAct 檢索員）⇄ Grader 的訊息
     傳遞迴圈。先純檢索（system prompt 鎖生成）→ Grader 評分 → 不夠餵糾正訊息續搜（有界 MAX_REWRITES）→
     夠了發「解除限制、生成摘要」觸發訊息 → A 產出局部摘要 → 跳出。回傳 (summary, web_notes)。
@@ -3241,17 +3296,19 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
         _trace(f"execute[{subq_index}] subagent 崩潰 → 降級單次檢索+生成：{e!r}")
         if not state.pool:
             with _quiet():
-                state.pool.extend(_merge_chunks([], _retrieve_chunks(task)))
+                state.pool.extend(_merge_chunks([], _retrieve_chunks(task, attributable=attributable)))
         summary = _fallback_local_summary(task, state.pool[:WRITER_MAX_CHUNKS])
 
     if not (summary or "").strip():
         # react 跑完但沒吐摘要（弱腦跳過）→ 降級用池裡的 chunk 生成
         summary = _fallback_local_summary(task, state.pool[:WRITER_MAX_CHUNKS])
-    return summary, list(state.web_notes), (verdict or {}).get("realtime_need", "none")
+    return (summary, list(state.web_notes), (verdict or {}).get("realtime_need", "none"),
+            list(state.period_notes))
 
 
 def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: str,
-                                subq_index: int, verbose: bool) -> tuple[str, list[str], str]:
+                                subq_index: int, verbose: bool, *,
+                                attributable: bool) -> tuple[str, list[str], str, list[str]]:
     """[預設] Executor 核心（deterministic，2026-07-29 修）：**planner 子問題原封不動直接檢索**，不讓
     Agent A(ReAct) 自行改寫 query。流程：直接 retrieve → Grader 評分 → 不夠則用 Grader 的 targeted
     new_query 再 retrieve（併池、只加不減）→ 有界 MAX_REWRITES → 走生產契約產局部摘要。
@@ -3265,7 +3322,10 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
     verdict = {"sufficient": False, "missing": "", "new_query": ""}
     try:
         for rnd in range(MAX_REWRITES + 1):
-            chunks = _retrieve_chunks(active_query)            # planner/Grader 的 query 直接檢索（無 ReAct 改寫）
+            # 兩個條件都要成立：① 這個 todo 本身出自 Planner（不是 replan 加的）
+            # ② 還沒被 Grader 改寫過（rnd 0）。任何一個不成立，這一輪產生的揭露句都不該
+            # 說「所詢問」——它問的不是使用者問的東西。
+            chunks = _retrieve_chunks(active_query, attributable=(attributable and rnd == 0))
             merged = _merge_chunks(list(state.pool), chunks)    # 併池：只加不減，補救輪不洗掉先前好 chunk
             state.pool.clear()
             state.pool.extend(merged)
@@ -3318,21 +3378,26 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
         _trace(f"execute[{subq_index}] deterministic executor 例外 → 降級：{e!r}")
         if not state.pool:
             with _quiet():
-                state.pool.extend(_merge_chunks([], _retrieve_chunks(task)))
+                state.pool.extend(_merge_chunks([], _retrieve_chunks(task, attributable=attributable)))
 
     summary = _fallback_local_summary(task, state.pool[:WRITER_MAX_CHUNKS])  # 走生產契約單次生成（內含 try/except 保底）
-    return summary, web_notes, verdict.get("realtime_need", "none")
+    return summary, web_notes, verdict.get("realtime_need", "none"), list(state.period_notes)
 
 
 def _run_executor(task: str, temporal_scope: str, freshness_mode: str,
-                  subq_index: int, verbose: bool) -> tuple[str, list[str], str]:
+                  subq_index: int, verbose: bool, *,
+                  attributable: bool) -> tuple[str, list[str], str, list[str]]:
     """Dispatcher：預設 deterministic（planner 子問題直接檢索）；AGENTIC_REACT_EXECUTOR=true 回舊 ReAct。
 
     第三個回傳值是 Grader 最後一次的 `realtime_need`——`_run_one_todo` 要靠它判「這個子問題
-    需不需要即時資料」，那是時效警語的新判準（見 `_unmet_realtime_gaps`）。"""
+    需不需要即時資料」，那是時效警語的新判準（見 `_unmet_realtime_gaps`）。
+    第四個是這個子問題檢索時發生的**期間降級揭露**（見 `_retrieve_chunks`），最終由 Synthesize
+    注入 Generator prompt——與單管線 `run_single_query` 的 `fallback_note` 是同一個東西。"""
     if USE_REACT_EXECUTOR:
-        return _run_executor_react(task, temporal_scope, freshness_mode, subq_index, verbose)
-    return _run_executor_deterministic(task, temporal_scope, freshness_mode, subq_index, verbose)
+        return _run_executor_react(task, temporal_scope, freshness_mode, subq_index, verbose,
+                                   attributable=attributable)
+    return _run_executor_deterministic(task, temporal_scope, freshness_mode, subq_index, verbose,
+                                      attributable=attributable)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -3347,6 +3412,7 @@ class SupervisorState(TypedDict, total=False):
     todos: list[dict]          # 待辦清單（另含 temporal_scope/freshness_gaps/web_used）
     collected: list[dict]      # 跨待辦收集的 KB chunk 聯集（Synthesize 的 citation allowlist 來源）
     web_notes: list[str]       # web_search 的網路結果（另標，不進 chunk allowlist）
+    period_notes: list[str]    # 期間降級揭露（Tier 2 fallback；注入 Generator prompt，見 _retrieve_chunks）
     iterations: int            # execute↔replan 已迭代幾次（防無限迴圈）
     sufficient: bool           # Replanner 判定證據已足、可提前收斂
     answer: str                # 最終答案（未附引用清單；附錄在 run_agentic 收尾加）
@@ -3379,14 +3445,19 @@ def _node_plan(state: SupervisorState) -> dict:
             "id": i,
             "task": subquery,
             "temporal_scope": scope,
+            # Planner 的分解是**使用者意圖的重述** → 由它產生的期間降級揭露可以說「所詢問財年」。
+            # 對照 `_node_replan` 那一個（見該處註解）。判準與 `_retrieve_chunks` 的 docstring 同一條。
+            "attributable": True,
             "ratio_fields": rfields[i] if i < len(rfields) else None,
             "freshness_gaps": [],      # 執行完才知道用了誰的新聞 → 由 _node_execute 回填
+            "period_notes": [],        # 同上：檢索降級到 Tier 2 才會有，由 _node_execute 回填
             "web_used": False,
             "status": "pending",
             "result": "",
         })
     _trace(f"plan: {len(todos)} todos → {[t['task'] for t in todos]}")
-    return {"todos": todos, "collected": [], "web_notes": [], "iterations": 0, "sufficient": False}
+    return {"todos": todos, "collected": [], "web_notes": [], "period_notes": [],
+            "iterations": 0, "sufficient": False}
 
 
 def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
@@ -3394,8 +3465,12 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
     迴圈 + commit 篩選，回傳這個子問題的完整結果。不觸碰任何跨子問題共用的可變狀態，讓 wave 執行
     可以安全平行呼叫（已用 ThreadPoolExecutor 實測驗證 contextvars 在 submit() 下天生隔離）。"""
     task = todo["task"]
-    summary, web_notes, realtime_need = _run_executor(
+    summary, web_notes, realtime_need, period_notes = _run_executor(
         task, todo.get("temporal_scope", ""), freshness_mode, todo["id"], verbose,
+        # ⚠ 刻意用 `todo["attributable"]` 而不是 `.get(..., True)`：漏設要當場 KeyError。
+        #   給預設值＝新的 todo 建立點會靜默沿用「可歸因」，那正是這次要防的東西。
+        #   兩個建立點都設了這個欄位，由 `verify_answer_validators.py` 閘門 ⑮g 把關。
+        attributable=todo["attributable"],
     )
     # executor 剛跑完、還在同一個 thread/context 內，_current_run_state() 拿到的就是這個子問題
     # 剛剛用的那份 run state。優先用 Grader 圈選的 relevant_ids 過濾（見 _check_sufficiency）：
@@ -3428,7 +3503,8 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
     else:
         gaps = []
     return {"id": todo["id"], "summary": summary, "web_used": bool(web_notes),
-            "web_notes": web_notes, "picked": picked, "freshness_gaps": gaps}
+            "web_notes": web_notes, "picked": picked, "freshness_gaps": gaps,
+            "period_notes": period_notes}
 
 
 def _node_execute(state: SupervisorState) -> dict:
@@ -3485,23 +3561,32 @@ def _node_execute(state: SupervisorState) -> dict:
                 results[i] = {"id": todos[i]["id"],
                               "summary": f"（子問題「{todos[i]['task']}」執行時發生未預期錯誤）",
                               "web_used": False, "web_notes": [], "picked": [],
-                              "freshness_gaps": []}
+                              "freshness_gaps": [], "period_notes": []}
 
     collected = state.get("collected", [])
     web = list(state.get("web_notes", []))
+    periods = list(state.get("period_notes", []))
     for i in pending_idxs:   # 依原始順序合併（thread 完成順序不影響結果，只影響合併時機）
         r = results[i]
         todos[i]["result"] = r["summary"]
         todos[i]["web_used"] = r["web_used"]
         todos[i]["freshness_gaps"] = r.get("freshness_gaps", [])
+        todos[i]["period_notes"] = r.get("period_notes", [])
         todos[i]["status"] = "done"
         collected = _merge_chunks(collected, r["picked"])
         web += r["web_notes"]
+        # 去重跨子問題：多個子問題問同一家同一年，`rq._build_fallback_note` 會產生逐字相同的句子，
+        # 而這句話最終要整篇只講一次（同 `_format_unresolved_freshness_notice` 的教訓：
+        # 逐待辦算、整篇印一次的東西，措辭與去重都要在合併這一層處理好）。
+        for n in r.get("period_notes", []):
+            if n not in periods:
+                periods.append(n)
     # 保留舊語意：MAX_ITERS 是「總子問題執行次數」上限，不是「總波次」上限，避免分波後這個防線變寬鬆。
     iters = state.get("iterations", 0) + len(pending_idxs)
     _trace(f"execute wave: {len(pending_idxs)} todos ({[todos[i]['id'] for i in pending_idxs]}) done → "
-           f"collected={len(collected)}")
-    return {"todos": todos, "collected": collected, "web_notes": web, "iterations": iters}
+           f"collected={len(collected)} period_notes={len(periods)}")
+    return {"todos": todos, "collected": collected, "web_notes": web,
+            "period_notes": periods, "iterations": iters}
 
 
 def _node_replan(state: SupervisorState) -> dict:
@@ -3545,7 +3630,14 @@ def _node_replan(state: SupervisorState) -> dict:
                     "id": next_id,
                     "task": task,
                     "temporal_scope": scope,
+                    # ⚠ **False，且這一格是刻意與 `_node_plan` 相反的**（2026-08-28）：replan 加的
+                    # 待辦是機器對 Grader `missing` 的反應，不是使用者說過的話。實測 replanner 會生出
+                    # 「改用網路搜尋查…」→「即時網路搜尋…」→「使用即時金融網站…」這種同義待辦串，
+                    # 裡面夾帶的年份／filing type 都是腦補的。若標成 True，col-10 的假前提會換一扇門回來
+                    # ——而閘門 ⑮f 抓不到（它驗的是 `rnd == 0` 這個條件還在，條件確實還在）。
+                    "attributable": False,
                     "freshness_gaps": [],   # 同上：執行完由 _node_execute 回填
+                    "period_notes": [],
                     "web_used": False,
                     "status": "pending",
                     "result": "",
@@ -3596,6 +3688,12 @@ def _node_synthesize(state: SupervisorState) -> dict:
     if web_notes:
         web_extra = ("\n\n=== 網路搜尋結果（即時檢索，已通過來源白名單；引用請用 [web: 網址]）===\n"
                      + "\n\n".join(web_notes))
+    # 期間降級揭露：`rq.retrieve` 在 Tier 1 落空、降級 Tier 2 時產生（見 `_retrieve_chunks`）。
+    # 走 `rq.build_user_prompt` 的第三參數 → 與單管線**同一個模板、同一個位置**，不另立措辭。
+    # ⚠ 整篇只講一次，所以在 `_node_execute` 合併時就已跨子問題去重；這裡只負責串接。
+    period_note = "\n".join(state.get("period_notes", []) or [])
+    if period_note:
+        _trace(f"synthesize: 期間降級揭露 {len(state.get('period_notes', []))} 筆 → 注入 Generator")
     extra = ""
     # 有待辦查無足夠佐證（局部結果是降級的「查無」標記）→ 提示 Writer 明說查無、勿臆測
     unmet = [t["task"] for t in state.get("todos", [])
@@ -3609,9 +3707,9 @@ def _node_synthesize(state: SupervisorState) -> dict:
     # 至少保留真實 chunk 內容 + citation。
     try:
         answer = _write_final_answer(state["query"], chunks, GEN_MODEL, extra_user=extra,
-                                     web_extra=web_extra)
+                                     web_extra=web_extra, period_note=period_note)
         answer = _validate_and_fix_citations(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
-                                             web_extra=web_extra)
+                                             web_extra=web_extra, period_note=period_note)
         # ⚠ 以下四道守門共用同一個判準 `rq.looks_like_refusal`（2026-08-28 從
         #   `answer.startswith("I don't have enough")` 換過來）。舊守門是**英文字面、只認開頭**,
         #   而 Writer 講中文——「知識庫中查無足夠資料…」整句穿得過去,於是一份剛說自己沒有依據
@@ -3625,21 +3723,21 @@ def _node_synthesize(state: SupervisorState) -> dict:
         # 讓 reflect 稽核的是已調和過的版本。
         if not rq.looks_like_refusal(answer):
             answer = _consistency_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
-                                                web_extra=web_extra)
+                                                web_extra=web_extra, period_note=period_note)
         # 確定性期別稽核（零 LLM 偵測）：答案自稱「最新一季」卻引用了較舊的期別 → 重生成一次。
         # 放在一致性之後、reflect 之前：期別改對可能連帶換掉數字，要讓 reflect 稽核最終版本。
         if not rq.looks_like_refusal(answer):
             answer = _period_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
-                                           web_extra=web_extra)
+                                           web_extra=web_extra, period_note=period_note)
         if state.get("enable_reflection", True) and not rq.looks_like_refusal(answer):
             answer = _reflect_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
-                                      web_extra=web_extra)
+                                      web_extra=web_extra, period_note=period_note)
         # 數字溯源（零 LLM 偵測）**放最後**：這是唯一會看 reflect 重生成結果的檢查。
         # 100 題乾跑誤報 0 題（見 find_untraceable_numbers 的兩條排除規則），所以放進主線不會
         # 擾動既有基準；真的觸發才花一次重生成。
         if not rq.looks_like_refusal(answer):
             answer = _number_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
-                                           web_extra=web_extra)
+                                           web_extra=web_extra, period_note=period_note)
     except Exception as e:
         _trace(f"synthesize: 最終生成失敗（{e!r}）→ 退回零 LLM 機械式摘要")
         answer = _mechanical_summary(state["query"], chunks) if chunks else \
@@ -3725,10 +3823,11 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
         _trace(f"run_agentic: graph.invoke 崩潰（{e!r}）→ 降級走一次生產單發檢索+生成")
         bge_m3, rerank_model, client = _get_models()
         with _quiet():
-            chunks_fb, _note = rq.retrieve(query, bge_m3, rerank_model, client,
-                                           top_k=WRITER_MAX_CHUNKS, model_name=RETRIEVAL_MODEL,
-                                           enable_rewrite=False, full_translate_en=True)
-        answer_fb = _fallback_local_summary(query, chunks_fb)
+            chunks_fb, note_fb = rq.retrieve(query, bge_m3, rerank_model, client,
+                                             top_k=WRITER_MAX_CHUNKS, model_name=RETRIEVAL_MODEL,
+                                             enable_rewrite=False, full_translate_en=True)
+        # 降級路徑不經過 graph，期間降級揭露要在這裡自己接（否則這條路又回到「無揭露」）。
+        answer_fb = _fallback_local_summary(query, chunks_fb, period_note=note_fb)
         if freshness_mode == FRESHNESS_LIVE:
             # 降級路徑同樣看**實際用到的 chunk**（`chunks_fb` 就是這次的全部依據），
             # 不再用詞表猜問法——與正常路徑同一套判準。
@@ -3736,7 +3835,8 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
                 "status": "done", "web_used": False,
                 "freshness_gaps": _news_freshness_gaps(chunks_fb, _get_as_of_date()),
             }])
-        return {"answer": answer_fb, "chunks": chunks_fb, "sub_queries": [query], "messages": []}
+        return {"answer": answer_fb, "chunks": chunks_fb, "sub_queries": [query], "messages": [],
+                "period_notes": [note_fb] if note_fb else []}
 
     answer = (final.get("answer") or
               "I don't have enough information in my knowledge base to answer this.")
@@ -3761,6 +3861,11 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
         "chunks": collected,
         "sub_queries": sub_queries,
         "messages": [],   # 舊回傳鍵,本版不再有 agent message 列表,保留空 list 供相容
+        # 期間降級揭露：**已注入 Generator prompt**（見 `_write_final_answer`），這裡另外回傳一份
+        # 供呼叫端**顯示給使用者**——與單管線 `run_single_query` 的 `print(f"⚠️  {fallback_note}")`
+        # 是同一個消費端。⚠ 刻意不併進 `answer` 字串：那會動到既有結果檔的答案文字，而顯示這件事
+        # 由呼叫端負責（CLI 印、SSE 送事件），跟「注入生成」是兩個獨立的通道。
+        "period_notes": final.get("period_notes", []),
     }
 
 
@@ -3801,6 +3906,10 @@ def main() -> None:
         out = run_agentic(args.query, verbose=args.verbose, enable_coverage_validator=validator_on,
                           freshness_mode=args.freshness_mode)
         print("\n" + "═" * 60)
+        # 期間降級揭露：與單管線 `run_single_query` 的 `print(f"⚠️  {fallback_note}")` 同一個通道。
+        # 它已經注入過 Generator prompt，這裡是**顯示**那一半——舊版 agentic 兩半都沒有。
+        for note in out.get("period_notes", []):
+            print(f"⚠️  {note}")
         print("💡 Final Answer:\n")
         print(out["answer"])
         print(f"\n🧩 Sub-queries: {out['sub_queries']}")
@@ -3818,6 +3927,8 @@ def main() -> None:
             break
         out = run_agentic(q, verbose=args.verbose, enable_coverage_validator=validator_on,
                           freshness_mode=args.freshness_mode)
+        for note in out.get("period_notes", []):
+            print(f"\n⚠️  {note}")
         print("\n💡 Final Answer:\n")
         print(out["answer"])
         print(f"\n🧩 Sub-queries: {out['sub_queries']}")

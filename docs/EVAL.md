@@ -232,6 +232,53 @@ reference 誤寫「來源未揭露」但語料白紙黑字有，**系統答對�
 
 ---
 
+### 4.5 live 量尺：斷言是零噪音的，輸入不是（2026-08-28）
+
+`eval/web_claims.json` 的 `_meta` 自稱「判準是逐條斷言，零噪音」。**那個性質是從斷言的形式推來
+的，沒有被量過。** 實際量了之後：
+
+| 跑法 | web-02 | web-04 |
+|---|---|---|
+| mdna（cache 被污染） | PASS | FAIL |
+| mdna（乾淨） | FAIL | FAIL |
+| multiyear（cache 被污染） | FAIL | FAIL |
+| multiyear（乾淨） | FAIL | **PASS** |
+| multiyear 單題重跑 | **PASS** | — |
+
+**同一份碼、同一個 collection，判定會翻面。** 教訓與 §4.2「量尺與被測物耦合」是同一族但形狀不同：
+斷言本身確實是確定性的比對，**但餵給它的那一格（`n_web_calls`）是 LLM 決定的**。
+→ **通則：判斷一把量尺是不是零噪音，要看它讀的欄位怎麼產生的，不是看它怎麼比對。**
+
+三層成因，只有第三層是系統缺陷：
+
+1. **fixture key 綁死 LLM 生成的 query 字面**（量尺問題）。Grader 的 targeted rewrite 每輪不同，
+   實測吐出 `NVIDIA current stock price August 15 2026`，而 fixture 只錄了
+   `NVDA current stock price today` / `NVIDIA current stock price live quote` → `FixtureMiss`。
+   ⚠ **重錄 fixture 解決不了**：只是換一組會再度 miss 的 key。
+2. **刻意的大聲失敗被 catch-all 吞掉**（量尺問題，**2026-08-28 已修**）。`_tavily_search` 對
+   `FixtureMiss` 是故意 re-raise 的，但確定性 executor 的 `except Exception` 把它接成「降級」，
+   連該子問題已建好的池一起丟，且結果檔不記 error → 外觀與「系統沒打 web」**完全無法區分**。
+   這是 CLAUDE.md〈web_search 四條規則〉最後一條（診斷成本在觀測性）的第三次應驗：
+   `AGENTIC_TRACE=true` 一開就看見了，不開則永遠在猜。
+
+   **修法與一條通則**：把這三個例外（`FixtureMiss`／`RecordError`／`llm_replay.ReplayCacheMiss`）
+   移出 `Exception` 階層，改繼承 `BaseException`。判準與 `SystemExit`／`KeyboardInterrupt`
+   同一條——**「這不是可以就地處理的錯誤，這是『這次測量無效，停下來』」**。
+   → **通則：一個「絕不可被吞掉」的保證，不要寫成契約（呼叫端記得 re-raise），要寫成型別。**
+   契約是 O(n) 的：全碼庫 16 個 `except Exception`，漏一個就破功，而且破得靜默。
+   驗收：閘門⑦ 9 項，4/4 變異全抓到（改回 `RuntimeError`／把 catch 擴大成 `BaseException`／
+   拿掉 re-raise 各自被不同斷言抓到）；空 fixture 跑 web-02 從「產出 0 次 web 的結果檔、exit=0」
+   變成「traceback ＋ 印出闖禍的 query ＋ exit=1」。
+3. **`realtime_need` 對「近期動態」措辭真的會判錯**（系統缺陷，**同日已改善**）。
+   `probe_realtime_need`：「NVIDIA 最近有什麼新進展？」0/3 → **5/5**、「蘋果最近有什麼消息？」1/3 → **5/5**，四題陰性對照一格不動。
+   ⚠ **判讀限制**：這支量的是 Grader **單獨**的分類（固定池上呼叫 `_check_sufficiency`），不是端到端。端到端會不會真的打 web 還受 fixture key 那一層影響（見上面第 1 點），兩者不可互相推論。
+   ⚠ 而且改善的是**準確度不是結構**：「KB 補不了就去 web」仍由一個三分類 LLM 欄位單點守著。
+   → **通則：一個 LLM 分類欄位失手時，先問「是 prompt 沒講清楚，還是架構把太多責任壓在它身上」。**
+   這次是前者（prompt 從頭到尾沒說「候選全是財報不構成填 none 的理由」），成本是幾小時；
+   若當成後者去拆架構，成本是幾天，而且拆完仍然要回來寫這幾句話。
+
+---
+
 ## 五、多年語料：損害與收益兩半
 
 KB 原本只有**一年**（21 份），所以「答錯期別」結構上幾乎不可能發生——**過去所有評測分數都是在這個保護傘下拿到的**。2026-08-19 補到 **77 份**壓測，2026-08-27 升生產。

@@ -56,17 +56,31 @@ _MISS = object()
 MISS = _MISS
 
 
-class FixtureMiss(RuntimeError):
+# ⚠ **繼承 `BaseException` 而不是 `Exception`，這是刻意的**（2026-08-28）。
+#
+# 舊版繼承 `RuntimeError`，靠的是一條契約：「呼叫端必須先 `except FixtureMiss: raise`
+# 再接通用處理」。`_tavily_search` 確實照做了，**但那不夠**——它 re-raise 之後，上一層
+# `_run_executor_deterministic` 的 `except Exception` 又把它接走，印一行「例外 → 降級」
+# 就繼續跑，結果檔還不記 error。於是 `web-02` 的 fixture miss 被量尺報成「系統沒打 web」，
+# 而那兩件事在外觀上完全無法區分（2026-08-28 實測，見 docs/EVAL.md §4.5）。
+#
+# 全碼庫有 16 個 `except Exception`，逐個加 re-raise 是 O(n) 而且下次新增一個就破功。
+# 移出 `Exception` 階層是**結構性**的：`except Exception` 在語言層面就抓不到。
+# 判準與 `SystemExit`／`KeyboardInterrupt` 同一條——「這不是可以就地處理的錯誤，
+# 這是『這次測量無效，停下來』」。
+# 由 `eval/verify_web_gate_isolation.py` 閘門⑦ 把關（含誤報對照：一般例外仍要被降級接住）。
+
+
+class FixtureMiss(BaseException):
     """replay 模式下 fixture 沒涵蓋這個請求。
 
-    **刻意是獨立型別**：`_tavily_search` 對所有例外都做優雅降級（回一句說明字串、絕不 raise），
-    那對生產是對的，但會把「fixture 沒涵蓋」吞成「web 查無結果」——整輪 replay 實驗在無
-    fixture 下跑完、事後分不出來。呼叫端必須先 `except FixtureMiss: raise` 再接通用處理。"""
+    整輪 replay 實驗在無 fixture 下跑完、事後分不出來，是這條路最貴的失敗模式：
+    它不會報錯、只會讓每一格斷言都變成「系統沒打 web」。"""
 
 
-class RecordError(RuntimeError):
-    """錄製時寫不進 fixture。同 `FixtureMiss` 的理由必須是獨立型別並由呼叫端 re-raise
-    ——被優雅降級吞掉的話，會得到一份**安靜地少了幾筆**的 fixture。"""
+class RecordError(BaseException):
+    """錄製時寫不進 fixture。同 `FixtureMiss` 的理由——被吞掉的話，會得到一份
+    **安靜地少了幾筆**的 fixture，而少的那幾筆正是下次 replay 會 miss 的那幾筆。"""
 
 
 def enabled() -> bool:
