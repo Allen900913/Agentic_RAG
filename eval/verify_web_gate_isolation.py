@@ -641,6 +641,166 @@ def _check_replay_miss_is_loud() -> int:
     return fail
 
 
+def _check_replan_is_replayed() -> int:
+    """閘門⑧：replan 的決策要進重放快取，且 key 不含自由文字結果（2026-08-29）。
+
+    **為什麼**：`_node_replan` 曾是全碼庫**唯一沒被錄下來的 LLM 呼叫**。它每輪重抽 → 生出
+    措辭不同的 todo → 那個 todo 的 `check` key 是新的 → `new_query` 新 → 英譯新 →
+    Tavily key 新 → `FixtureMiss`。實測 web-04 單輪 `hit=6 miss=7`，而重錄 fixture 治不好
+    （key 空間本來就無界，源頭沒釘死就會一直生新的）。
+
+    ⚠ **判別力全在誤報對照**（⑧d~⑧g）：只驗「⑧c 快取會命中」的話，一個「key 是常數」的
+      實作也會滿分——而那會讓**所有** replan 決策互相蓋掉。所以每一個「應該要 miss」的
+      維度都要各有一條：task 變、freshness_mode 變、query 變、status 變。
+    """
+    import ast
+    import inspect
+    import llm_replay as _lr
+
+    results: list[tuple[str, bool, str]] = []
+
+    results.append(("⑧a 'replan' 已註冊進 llm_replay._KNOWN_KINDS",
+                    "replan" in _lr._KNOWN_KINDS,
+                    "沒註冊 → RAG_REPLAY_MODE=strict:replan 會被判成拼錯,strict 靜默失效"))
+
+    # ── ⑧b AST：get 與 put 都在 _node_replan 裡，kind 字面必須是 'replan' ──────────
+    tree = ast.parse(inspect.getsource(ar._node_replan))
+    seen = {"get": set(), "put": set()}
+    for node in ast.walk(tree):
+        if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                and node.func.attr in seen and isinstance(node.func.value, ast.Name)
+                and node.func.value.id == "_replay" and node.args
+                and isinstance(node.args[0], ast.Constant)):
+            seen[node.func.attr].add(node.args[0].value)
+    results.append(("⑧b _node_replan 同時有 _replay.get/put('replan')",
+                    seen["get"] == {"replan"} and seen["put"] == {"replan"},
+                    f"實得 get={sorted(seen['get'])} put={sorted(seen['put'])}"))
+
+    # ── 行為測試共用：跑兩次 _node_replan，數第二次還有沒有真的叫 LLM ────────────────
+    def _todo(tid, task, status="done", result=""):
+        return {"id": tid, "task": task, "status": status, "result": result,
+                "temporal_scope": "", "attributable": True, "freshness_gaps": [],
+                "period_notes": [], "web_used": False}
+
+    def _twice(state_a, state_b):
+        calls = {"n": 0}
+
+        def _fake_llm(messages, model_name, temperature=0.0):
+            calls["n"] += 1
+            return '{"sufficient": false, "add": [], "drop": []}'
+
+        saved = (_lr._CACHE, _lr.enabled, _lr._DIRTY,
+                 ar.rq.call_llm, ar._build_temporal_contract)
+        # 純記憶體：_PATH 仍是 None → _flush() 的守衛會擋掉落盤，這支不碰檔案系統。
+        _lr._CACHE, _lr.enabled = {}, (lambda: True)
+        ar.rq.call_llm = _fake_llm
+        ar._build_temporal_contract = lambda mode: "(stub)"
+        try:
+            ar._node_replan(state_a)
+            n1 = calls["n"]
+            ar._node_replan(state_b)
+            return n1, calls["n"] - n1
+        finally:
+            (_lr._CACHE, _lr.enabled, _lr._DIRTY,
+             ar.rq.call_llm, ar._build_temporal_contract) = saved
+
+    BASE = [_todo(0, "Tesla 最近的重大新聞是什麼")]
+
+    def _st(todos, q="Tesla 最近有什麼重要消息？", mode=ar.FRESHNESS_LIVE):
+        return {"query": q, "freshness_mode": mode, "todos": todos, "collected": []}
+
+    # ⑧c 只有 result 不同 → 必須命中（result 是 executor 生成的摘要，每輪都不一樣）
+    n1, n2 = _twice(_st([_todo(0, "Tesla 最近的重大新聞是什麼", result="摘要甲 …")]),
+                    _st([_todo(0, "Tesla 最近的重大新聞是什麼", result="完全不同的摘要乙 …")]))
+    results.append(("⑧c 只有 result 不同 → 第二次命中快取（不再叫 LLM）",
+                    n1 == 1 and n2 == 0,
+                    f"第一次 {n1} 次、第二次 {n2} 次 LLM（納入 result 會讓快取永不命中）"))
+
+    # ── ⑧d~⑧g 誤報對照：每一個「應該要 miss」的維度各一條 ──────────────────────
+    for tag, sa, sb, why in (
+        ("⑧d task 不同 → 必須 miss", _st(BASE),
+         _st([_todo(0, "Tesla 的營收是多少")]), "不同待辦清單共用決策"),
+        ("⑧e freshness_mode 不同 → 必須 miss", _st(BASE),
+         _st(BASE, mode=ar.FRESHNESS_SNAPSHOT), "snapshot 與 live 的決策互蓋"),
+        ("⑧f 原始問題不同 → 必須 miss", _st(BASE),
+         _st(BASE, q="Apple 最近有什麼消息？"), "不同問題共用決策"),
+        ("⑧g status 不同 → 必須 miss", _st(BASE),
+         _st([_todo(0, "Tesla 最近的重大新聞是什麼", status="pending")]),
+         "「做完了沒」這個層級的進展分不出來"),
+    ):
+        n1, n2 = _twice(sa, sb)
+        results.append((tag, n1 == 1 and n2 == 1, f"第二次 {n2} 次 LLM（key 太粗＝{why}）"))
+
+    print()
+    print(f"  {'replan 必須可重放（key 不含自由文字結果）':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
+def _check_fixture_binding_is_preserved() -> int:
+    """閘門⑨：fixture 的環境綁定不准被 replay 改寫，且開跑前要被檢查（2026-08-29）。
+
+    **被一次三週的靜默失效逼出來的。** `note_meta()` 舊版無條件寫 `_meta`，於是**每一次
+    replay 都把綁定改成當下的環境**——那一格記的不再是「錄在什麼條件下」而是「上次誰跑過」。
+    後果不是欄位不準，是**證據自己抹掉自己**：2026-08-27 生產從 `..._mdna` 換到
+    `..._multiyear` 之後，fixture 每跑一次就自動宣稱綁在新 collection 上，於是
+    「fixture 對不上 collection」三週都沒有任何跡象，外觀只是「LLM 不穩」。
+
+    ⚠ **誤報對照（⑨b）不可省**：只驗「replay 不寫」的話，一個 `note_meta` 直接 `return` 的
+      實作也會通過——那樣連 record 都不寫，fixture 從此沒有綁定可查。
+    """
+    import web_replay as _wr
+
+    results: list[tuple[str, bool, str]] = []
+
+    def _note_with(mode: str) -> dict:
+        saved = (_wr._CACHE, _wr._DIRTY, os.environ.get("RAG_WEB_REPLAY_MODE"),
+                 os.environ.get("RAG_WEB_REPLAY"))
+        _wr._CACHE = {"responses": {}, "_meta": {"collection": "ORIGINAL"}}
+        os.environ["RAG_WEB_REPLAY_MODE"] = mode
+        os.environ["RAG_WEB_REPLAY"] = "(記憶體,_PATH 是 None 所以不落盤)"
+        try:
+            _wr.note_meta(collection="OVERWRITTEN")
+            return dict(_wr._CACHE.get("_meta") or {})
+        finally:
+            _wr._CACHE, _wr._DIRTY = saved[0], saved[1]
+            for k, v in (("RAG_WEB_REPLAY_MODE", saved[2]), ("RAG_WEB_REPLAY", saved[3])):
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
+
+    got = _note_with("replay")
+    results.append(("⑨a replay 模式不得改寫 fixture 的 _meta",
+                    got.get("collection") == "ORIGINAL",
+                    f"實得 {got.get('collection')!r}（綁定被 replay 覆寫＝證據自我抹除）"))
+    got = _note_with("record")
+    results.append(("⑨b 誤報對照：record 模式仍然要寫得進去",
+                    got.get("collection") == "OVERWRITTEN",
+                    f"實得 {got.get('collection')!r}（連 record 都不寫＝從此沒有綁定可查）"))
+
+    # ⑨c 開跑前真的有比對這一格（讀 record_web_fixture 的原始碼，零執行）
+    src = (Path(__file__).parent / "record_web_fixture.py").read_text(encoding="utf-8")
+    has_check = ('_meta.get("collection")' in src or '.get("collection")' in src)         and "ABORT" in src and "COLLECTION_NAME" in src
+    results.append(("⑨c record_web_fixture 開跑前比對 fixture 綁的 collection",
+                    has_check, "沒有比對 → _meta 記了但沒人讀＝記錄不等於檢查"))
+    results.append(("⑨d 同上，as-of 也要比對（它決定 kb_unfixable）",
+                    'as_of' in src and 'args.as_of' in src and "ABORT" in src, ""))
+
+    print()
+    print(f"  {'fixture 綁定不可自我抹除':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
 def main() -> int:
     print(f"  {'情境':<24}{'Q1':>6}{'Q2':>6}{'Q3':>6}{'Q4':>6}{'呼叫':>6}   判定")
     print("  " + "-" * 68)
@@ -669,6 +829,8 @@ def main() -> int:
     fail += _check_recency_gate()
     fail += _check_web_result_hygiene()
     fail += _check_replay_miss_is_loud()
+    fail += _check_replan_is_replayed()
+    fail += _check_fixture_binding_is_preserved()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0

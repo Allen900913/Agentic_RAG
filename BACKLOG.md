@@ -65,6 +65,39 @@
 任一情況在題庫裡出現、或有人把 Fundamentals 的版面改掉 → 重新評估。
 造這三種題**不能加進 `eval_set.json`**（分母不可變），要走獨立斷言集。
 
+## ⚠ `eval/web_fixture.json` 已經不可重放，必須重錄（2026-08-29 查清）
+
+**這份 fixture 是 live web 那條路唯一的自動化證據，而它從 2026-08-19 起就對不上系統了。**
+症狀先前被當成「LLM 不穩」：同一題五輪 PASS/FAIL 亂跳（web-02 {P,F,F,F,P}／web-04 {F,F,F,P}）。
+逐層查下去是**三個獨立成因疊在一起**，由重到輕：
+
+1. **fixture 錄在「KB 還有新聞」的時代 → 結構性不可重放。** 它 as-of **2026-08-15**，而 KB 於
+   **2026-08-19** 拔除新聞。快取裡的 `check` key 逐字引用 `TSLA_News_20260721_01.txt`、
+   `GOOGL_News_20260721_01.txt`、`NVDA_News_20260519_01.txt`——**那些 chunk 現在任何 collection
+   裡都不存在**。這一項換 collection 也救不回來。
+2. **`_meta` 的綁定被每一次 replay 覆寫（已修）。** `note_meta()` 舊版無條件寫 → 那一格記的是
+   「上次誰跑過」不是「錄在什麼條件下」。所以 2026-08-27 生產從 `..._mdna` 換到 `..._multiyear`
+   之後，fixture 每跑一次就自動宣稱綁在新 collection 上，**不一致這件事自己把自己抹掉了**。
+3. **`replan` 沒進重放快取（已修）。** 即使前兩項修好，replan 每輪重抽仍會生出措辭不同的 todo
+   → 新的 `check` key → 新的 `new_query` → 新的英譯 → 新的 Tavily key。快取裡直接看得到爆炸的
+   原始證據：`改用網路搜尋查…最新新聞`／`…的重要消息`／`…（2026-07-22至2026-08-15）`／
+   `使用網路搜尋查找…` 五個近義待辦。
+
+**已經做完的**：②③ 都修了，並各配一道閘門（⑨／⑧）；`--mode replay` 預設對
+`plan,replan,translate_en,check` 嚴格；開跑前比對 fixture 綁的 collection 與 as-of。
+現在跑會**當場 exit=2 並說清楚原因**，不再安靜跑出一個假數字。
+
+**還沒做的（要你決定）**：重錄一份綁**現在這個 collection**、**新的 as-of** 的 fixture。
+· 成本：連網 ＋ 燒 Tavily 與 LLM 額度，5 題。
+· ⚠ 重錄後 [`eval/web_claims.json`](eval/web_claims.json) 的斷言**要逐條重新確認**——它們斷言的是
+  「答案裡的報價在 fixture 原始內容裡逐字出現」，換一份 fixture 就換一組數字。
+· ⚠ 重錄時 `--mode record` 會連網，**別在同一次動到 `web_fixture_news37.json`**（那份 as-of
+  2026-08-20，是另一組斷言）。
+· 重錄後這裡的 strict 可以從 `strict:plan,replan,translate_en,check` 收緊成 bare `strict`
+  （`period_intent`／`ticker`／`ratio` 三個接點比舊 fixture 新，現在放寬是為了避開假陽性）。
+
+⚠ **在重錄之前，`check_web_claims.py` 的任何結果都不能當證據。**
+
 ## 待決的決策
 
 - **rubric 這條線要正式退役，還是把 rubric 補回 `eval_set.json`？**

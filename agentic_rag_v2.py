@@ -3599,11 +3599,37 @@ def _node_replan(state: SupervisorState) -> dict:
         lines.append(f"- id={t['id']} [{t['status']}] {t['task']}" + (f"\n    局部結果:{res}" if res else ""))
     user = f"原始問題:{state['query']}\n\n目前待辦清單:\n" + "\n".join(lines)
     freshness_mode = state.get("freshness_mode", FRESHNESS_LIVE)
-    system_prompt = _REPLANNER_PROMPT + "\n\n" + _build_temporal_contract(freshness_mode)
-    messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user}]
-    with _quiet():
-        raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
-    data = _loads_json_lenient(raw)
+    # 重放快取（見 llm_replay）：未設 RAG_REPLAY_CACHE 時完全 no-op。
+    # ⚠ **2026-08-29 補上——這是全碼庫唯一沒被錄下來的 LLM 呼叫**，而它正是「web fixture 的
+    #   key 無界」那條鏈的源頭：replan 每輪重抽 → 生出措辭不同的 todo → 那個 todo 的 `check`
+    #   key 是新的 → `new_query` 是新的 → 英譯是新的 → Tavily key 是新的 → `FixtureMiss`。
+    #   實測 web-04 單輪 `hit=6 miss=7`,而且在非 strict 下是**靜默**掉回真 LLM。
+    #   重錄 fixture 不會解決這件事——key 空間本來就無界,源頭沒釘死就會一直生出新的。
+    # key 刻意**不含**兩樣東西：
+    #   ① system prompt——它內嵌 `_build_temporal_contract()` 的 KB Coverage Snapshot,隨
+    #      collection 變動,納入會讓跨 collection A/B 全部 miss（與 `_plan_subqueries` 同一個理由）。
+    #   ② 各待辦的 `result` 自由文字——那是 executor 生成的摘要,每輪都不一樣,納入等於快取
+    #      永不命中（＝這個修法歸零）。
+    # ⚠ **代價要講清楚**：②意味著「同一份待辦清單、不同的局部結果」會共用同一個決策。
+    #   這是 **fixture 用的重放**,不是通用函式快取——目的就是把待辦清單釘死好讓 web fixture
+    #   打得到（同 llm_replay docstring：「固定下來的是某一次抽樣的結果,不是正確答案」）。
+    #   `status` 有入 key,所以「做完了沒」這個層級的進展仍然分得開。
+    _rk = "|".join([freshness_mode, state["query"]]
+                   + [f"{t['id']}:{t['status']}:{t['task']}" for t in todos])
+    _hit = _replay.get("replan", _rk)
+    if _hit is not _replay.MISS:
+        data = _hit
+        _trace(f"replan(replay): sufficient={(data or {}).get('sufficient')} "
+               f"add={len((data or {}).get('add') or [])} drop={(data or {}).get('drop') or []}")
+    else:
+        system_prompt = _REPLANNER_PROMPT + "\n\n" + _build_temporal_contract(freshness_mode)
+        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user}]
+        with _quiet():
+            raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
+        data = _loads_json_lenient(raw)
+        # 解析失敗（data is None）也照錄：那代表「這一輪 replan 什麼都沒做」,是個穩定的結果,
+        # 重放時要重現同一件事。不錄的話一次暫時性的解析失敗會讓整輪不可重現。
+        _replay.put("replan", _rk, data)
 
     # multi_hop 保護：還沒跑的依賴型第二跳(帶未解「該公司」代名詞)是回答原始問題的必要一跳,
     # 不能被機率性 replanner 誤 drop、也不能因 hop-1 一做完就被判 sufficient 跳過。此時強制續跑。

@@ -5,6 +5,43 @@
 
 ## 2026-08-29
 
+### live 量尺三週的靜默失效：查清成因、修掉兩個、第三個要重錄 fixture
+
+先前把「同一題五輪 PASS/FAIL 亂跳」歸因為「fixture key 綁死 LLM 生成的 query 字面」。
+**那只是最後一環。** 逐層查下去是三個獨立成因：
+
+1. **fixture 錄在「KB 還有新聞」的時代（2026-08-15），而新聞於 2026-08-19 拔除。**
+   快取裡的 `check` key 逐字引用 `TSLA_News_20260721_01.txt` 等 chunk——**現在任何 collection
+   裡都不存在**。這一項**修不了，只能重錄**（見 [`BACKLOG.md`](BACKLOG.md)）。
+2. **`note_meta()` 每次 replay 都覆寫 `_meta` 的環境綁定** → 那一格記的是「上次誰跑過」。
+   於是 2026-08-27 生產換 collection 之後，fixture 每跑一次就自動宣稱綁在新的上，
+   **不一致自己抹掉自己**，三週沒有任何跡象。→ 改成只在 record 模式寫。
+3. **`replan` 是全碼庫唯一沒進重放快取的 LLM 呼叫。** 它每輪重抽 → 新 todo 措辭 → 新 `check`
+   key → 新 `new_query` → 新英譯 → 新 Tavily key → `FixtureMiss`。→ 加上快取。
+
+**改了什麼**
+· `_node_replan` 走 `_replay.get/put("replan", ...)`；`_KNOWN_KINDS` 加 `replan`。
+  key ＝ `freshness_mode | query | [id:status:task]`，**刻意不含** ① system prompt（內嵌隨
+  collection 變動的 coverage，同 `plan` 的理由）② 各待辦的 `result` 自由文字（每輪都不同，
+  納入等於快取永不命中）。⚠ 代價：同一份待辦清單、不同局部結果會共用決策——這是 **fixture
+  用的重放不是通用函式快取**。`status` 有入 key，所以「做完了沒」仍分得開。
+· `web_replay.note_meta()` 只在 record 模式寫。
+· `record_web_fixture.py --mode replay` **預設 `RAG_REPLAY_MODE=strict:plan,replan,translate_en,check`**
+  （這四個恰好構成決定 Tavily query 的那條鏈；另外三個接點比舊 fixture 新，全開會假陽性），
+  並在開跑前比對 fixture 綁的 `collection` 與 `as_of`，不合就 exit=2。`--lenient-replay` 放寬。
+
+**閘門 ⑧（7 項）＋ ⑨（4 項），90 → 101 全 PASS**；⑧ 的 **5/5 變異全被抓到**
+（M1 未註冊／M2 key 改常數／M3 result 納入 key／M4 拿掉 put／M5 key 拿掉 status）。
+兩支的判別力都在誤報對照：⑧d~⑧g 是四個「應該要 miss」的維度，⑨b 擋的是「連 record 都不寫」。
+
+⚠ **CLAUDE.md 的閘門數先前漂移**：寫 88，實測基準是 90。已改成 101。
+
+⚠ **變異測試腳本自己踩了兩個坑，記在這裡因為下次還會踩**：
+① `Path.write_text()` 在 Windows 把 LF 換成 CRLF → 整個 `agentic_rag_v2.py` 變成 7904 行 diff。
+   一律 `open(..., newline='')`。
+② 逾時被砍時 `finally` 不會跑 → 一個變異殘留在檔案裡（`_replay.put` 被換成 `pass`）。
+   改用 `atexit` 全域還原表，並在跑完後用 `git diff --stat` 確認。
+
 ### 補上 multi_hop「哪一家最高」的斷言（新檔），再一次推翻自己的假設
 
 先前主張「比大小沒有 Python 在做 ＝ multi_hop 最大的暴露面」。查證屬實（全碼庫零比較器，

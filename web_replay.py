@@ -172,8 +172,16 @@ def put(key: str, value: Any) -> None:
 def note_meta(**kv) -> None:
     """把「這份 fixture 錄在什麼條件下」寫進檔案。
     as-of 日期與 collection 都會影響 `kb_unfixable` 的判斷（它要拿 KB 天花板跟今天比），
-    所以 fixture 不是只有 web 回應——它綁定一組環境。"""
-    if not enabled():
+    所以 fixture 不是只有 web 回應——它綁定一組環境。
+
+    ⚠ **只有 record 模式才寫（2026-08-29 修）**。舊行為是無條件寫，於是**每一次 replay 都把
+      綁定改寫成當下的環境**——`_meta` 這格記的不再是「錄在什麼條件下」，而是「上次誰跑過」。
+      後果不是欄位不準而已，是**證據自己抹掉自己**：生產 2026-08-27 從 `..._mdna` 換成
+      `..._multiyear` 之後，這份 fixture 每被跑一次就自動宣稱自己綁在新 collection 上，
+      於是「fixture 與 collection 不合」這件事**三週都沒有任何跡象**（實測：候選 chunk 變 →
+      `check` 的 key 變 → 送 Tavily 的 query 變 → fixture 必然打不到，外觀是「LLM 不穩」）。
+      這一格由 `eval/record_web_fixture.py` 的綁定檢查消費，寫壞它等於把那道檢查關掉。"""
+    if not enabled() or not recording():
         return
     global _DIRTY
     with _LOCK:

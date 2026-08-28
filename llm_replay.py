@@ -71,10 +71,14 @@ def enabled() -> bool:
 
 # 所有呼叫端註冊的 kind＝我們自己的碼定義的**封閉集合**，所以列清單正當（同 VALID_*_ITEMS
 # 的理由）。新增接點時要一起加進來——沒加會在 strict 名單裡被判成拼錯而報錯，那是刻意的。
-_KNOWN_KINDS = {"plan", "translate_en", "check", "ratio", "period_intent", "ticker"}
+_KNOWN_KINDS = {"plan", "translate_en", "check", "ratio", "period_intent", "ticker", "replan"}
 # ⚠ 2026-08-28：`period_intent` 是 2026-08-19 加的接點，**當時漏了註冊**（`ticker` 一起補上）。
 # 症狀是靜默的：bare `strict` 照樣涵蓋它（走 `{"*"}`），只有 `RAG_REPLAY_MODE=strict:period_intent`
 # 會被當成拼錯而報錯——也就是說「想單獨對它嚴格」是唯一會現形的用法，而那正是最少人走的路。
+# ⚠ 2026-08-29：`replan` 是**最後一個沒被錄的 LLM 呼叫**，而它是「web fixture key 無界」那條鏈
+# 的源頭（replan 重抽 → 新 todo 措辭 → 新 check key → 新 new_query → 新英譯 → 新 Tavily key）。
+# 漏掉它的症狀不是 miss 報錯，而是**整條下游的 fixture 一路 miss**，外觀跟「系統沒打 web」一樣。
+# 這一格由 `eval/verify_web_gate_isolation.py` 閘門 ⑧ 把關（含「key 不得含自由文字結果」的值測試）。
 
 
 class ReplayCacheMiss(BaseException):
