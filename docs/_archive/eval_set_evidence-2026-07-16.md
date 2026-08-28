@@ -1,4 +1,8 @@
-# eval_set.json Gold 驗證紀錄（2026-07-16）
+# eval_set.json Gold 驗證紀錄（2026-07-16）— **已封存**
+
+> ⚠ **這是歷史記錄，不要拿它當現況。** 它描述的是 **100 題**時代的題庫（`lex-25`~`lex-34`、`col-14`~`col-25`、`sem-16`~`sem-25` 等題號在現行 **65 題**裡已不存在），語料路徑 `data/unstructure_processed/` 也已改成 `data/edgar_processed/`，行號全部漂移。
+>
+> **仍然適用的維護規則已收進 [`../../eval/README.md`](../../eval/README.md) §3**（快照漂移、10 倍單位錯、false-negative gold、概念型舉例要 grep 有源、跑分前先掃污染）。保留本檔是因為它記載了**當初怎麼查證**，那個方法本身還有參考價值。
 
 本文件記錄 eval set 從 61 題擴充到 100 題（lexical/mixed/semantic/colloquial 各 25 題）時的逐題查證：每個 checkpoint 都以 grep / 逐字比對確認在 `data/unstructure_processed/` 語料中真實存在（labeling granularity 與 eval 一致：source file 層級）。驗證方法：數字型 checkpoint 逐字核對 Fundamentals / IncomeStatement / 10-Q 原文；概念型 checkpoint 用關鍵詞 grep 確認至少一個 relevant 檔案含有對應內容。
 

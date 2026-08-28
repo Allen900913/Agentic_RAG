@@ -1,1065 +1,610 @@
 # CHANGELOG
 
-紀錄本專案每次有意義的程式修改（架構調整、參數變更、新增功能、放棄的實驗）。
-新條目加在最上面。每筆條目只留「改了什麼、關鍵數字、結論」，診斷過程與推導細節見 git log，不重述。
+紀錄本專案每次有意義的程式修改（架構調整、參數變更、新增功能、放棄的實驗）。新條目加在最上面。
+**每筆條目只留「改了什麼、關鍵數字、結論」**，診斷過程與推導細節見 `docs/` 與 git log，不重述。
 
-> `agentic_rag.py`（deepagents 多智能體實驗性入口）的修改紀錄獨立在 [`CHANGELOG_AGENTIC.md`](CHANGELOG_AGENTIC.md)。
+> **這裡不是現況。** 要知道「現在是什麼狀態」看 [`CLAUDE.md`](CLAUDE.md) 開頭的〈現況快照〉。
+> **已試無效總表**在 [`docs/EVAL.md`](docs/EVAL.md)（改動前先查那裡）。
+> **已知問題／已接受的極限**在 [`BACKLOG.md`](BACKLOG.md)。
+> agentic 的早期演進（deepagents → LangGraph，模組已刪）在 [`CHANGELOG_AGENTIC.md`](CHANGELOG_AGENTIC.md)。
 
----
-
-> **已試無效總表**搬到 [`docs/EVAL.md`](docs/EVAL.md)（改動前先查那裡，避免重踩）。
-> **已知問題／已接受的極限**搬到 [`BACKLOG.md`](BACKLOG.md)。
-> 本檔只放日期式變更記錄。
-
----
-
-## 2026-08-28（下午）— 兩條接線：期間路由讀得到已解出的 ticker；四道 validator 守門換掉英文字面
-
-起點是使用者盤點「我的 LLM 到底用在哪些地方」。全碼庫 `call_llm` 共 **15 個呼叫點**
-（`rag_query.py` 8、`agentic_rag_v2.py` 7），單發管線一題 **3~4 次**、agentic 一題 **50~60 次**
-（每個子問題內部各跑一次完整 `rq.retrieve`，查詢理解層因此被乘上子問題數）。盤點順帶照出
-兩個缺陷，**兩個都是接線問題，零額外 LLM 呼叫、零 prompt 改動**。
-
-### ① 同一次 `retrieve()` 裡，兩條管線對「這是哪家公司」給出不同答案
-
-`parse_query_filters()` 先跑，產出裡已經有 `{"field":"ticker","value":"AMZN"}`（含 regex 沉默時
-LLM 補的產品名）。三十行之後 `_resolve_period_filter_llm()` 需要同一個答案，卻**自己重跑一次
-regex** → 看不到 AWS → `len(tickers) != 1` → 不路由。**答案早就擺在呼叫端手上，它只用了比較
-弱的那半個來源。**
-
-修法：新增 `rq._sole_ticker(filters, query)`，優先讀 `filters`、`None` 時才退回 regex；呼叫端
-把 `detected_filters` 傳進去。端到端（`top_k=5`）：
-
-| | 期間路由 | top-5 |
-|---|---|---|
-| 「AWS 最新一季的營收成長率」修法前 | ✗ 沒觸發 | — |
-| 同題修法後 | `report_period_code=202606` | **5/5 `AMZN_10Q_202606`** |
-| 「Microsoft 最新一季…」（陰性對照） | `report_period_code=202603` | 逐字不變 |
-
-⚠ 舊路徑 `_resolve_latest_quarter_filter` **刻意不接**：`RQ_PERIOD_INTENT_LLM=0` 的用途就是
-「逐字退回修法之前」做 A/B，接上去就不再是乾淨的對照臂。
-
-### ② Synthesize 還有四道守門寫著 `answer.startswith("I don't have enough")`
-
-2026-08-27 修引用尾巴時只改了尾巴，`_node_synthesize` 裡的
-`_consistency_check_and_fix`／`_period_check_and_fix`／`_reflect_and_fix`／`_number_check_and_fix`
-四道漏改。舊守門是**英文字面、只認開頭**而 Writer 講中文 → 中文拒答整句穿得過去 → 一份剛說
-自己沒有依據的答案，還會付 `_extract_claims` ＋ `_reflect_and_fix` **至少兩次 LLM 呼叫**去稽核
-一個沒有東西可稽核的對象。四道全部換成 `rq.looks_like_refusal`。
-
-⚠ **危險方向不是漏判而是判過頭**：真的有依據的答案被當成拒答 → 四道 validator 一次全部跳過。
-`REFUSAL_MAX_CHARS` 的 150 字上限就是擋這件事的。
-
-### 量尺
-
-| 閘門 | 前 | 後 |
-|---|---|---|
-| `verify_period_intent_routing.py` | 69 | **85**（新增⑧ 期間路由讀已解出的 ticker） |
-| `verify_answer_validators.py` | 152 | **170**（新增⑭ Synthesize 四道守門） |
-
-兩道的判別力都在**接線鎖**，各自做過零 LLM 變異測試：
-- ⑧g：把呼叫端的 `detected_filters` 引數拿掉 → **FAIL**（⑧a~⑧f 全是手餵 filters，少了 ⑧g 會全綠）
-- ⑭a：四道守門只改三道 → **FAIL 2 條**，逐個 validator 走 AST 驗，不是字串 grep
-
-⚠ **⑭e 第一版是我自己的量尺錯**：fixture 本體只有約 130 字、還在 150 字閘之下，於是它
-**本來就該**被判成拒答。照 CLAUDE.md「FAIL 先問是不是量尺錯」查出來，把 fixture 寫成真正
-超過閘值的實質答案才是對的測資。
+⚠ **三個「跨此日不可直接比分數」的斷點**：
+> **2026-08-09** `strip_citation_footer` 開始剝 inline 引用標記（佔答案本文 25% 字元）。
+> **2026-08-19** 題庫 100 → 63 → 65（`GOLD_BASELINE` 與 `NOISE` 兩組常數同時失效，已於 08-20 重量）。
+> **2026-08-25** `SYSTEM_PROMPT` Rule 8 加 NUMERIC FIDELITY（所有入口共用）。
 
 ---
 
-## 2026-08-28 — 產品名解析成母公司（AWS → AMZN）；順手鎖住「拒答還是會帶尾巴」
+## 2026-08-28
 
-### ① `AWS` 沒有被解析成 AMZN（BACKLOG〈多年語料 ④〉）
+### 兩條接線：期間路由讀得到已解出的 ticker；四道 validator 守門換掉英文字面
 
-「AWS 在 2022 年的淨銷售額」抽不到 ticker → 沒有 hard filter → Tier 3 退回無 filter。
-端到端複現（`RQ_TICKER_LLM` 開／關兩臂，同一支 `rq.retrieve`）：
+起點是盤點「LLM 到底用在哪些地方」——全碼庫 `call_llm` 共 **15 個呼叫點**，單發管線一題 **3~4 次**、
+agentic 一題 **50~60 次**（每個子問題內部各跑一次完整 `rq.retrieve`）。盤點照出兩個缺陷，
+**兩個都是接線問題，零額外 LLM 呼叫、零 prompt 改動**。
 
-| | top-5 來源 | 公司數 |
-|---|---|---|
-| 修法前 | `AMZN_Fundamentals`／`META_IncomeStatement`／`TSLA_IncomeStatement`／`MSFT_IncomeStatement`／`AMZN_IncomeStatement` | **4** |
-| 修法後 | `AMZN_10K_2023`／`AMZN_10K_2024`／`AMZN_10Q_202406`／`AMZN_10Q_202509`／`AMZN_10Q_202503` | **1** |
+**① 同一次 `retrieve()` 裡，兩條管線對「這是哪家公司」給出不同答案。**
+`parse_query_filters()` 的產出已含 ticker（regex ＋ 沉默時 LLM 補的產品名），三十行後
+`_resolve_period_filter_llm()` 卻**自己重跑一次 regex** → 看不到 AWS → 不路由。
+修法：新增 `rq._sole_ticker(filters, query)`，呼叫端把 `detected_filters` 傳進去。
+端到端：「AWS 最新一季」從沒觸發 → 路由到 `202606`、top-5 **5/5 `AMZN_10Q_202606`**；
+Microsoft 那題（陰性對照）逐字不變。
+⚠ 舊路徑 `_resolve_latest_quarter_filter` **刻意不接**——它是 `RQ_PERIOD_INTENT_LLM=0` 的乾淨對照臂。
 
-修法後不只乾淨，還撈到 FY2022 淨銷售額**真正所在**的 `AMZN_10K_2023`。
+**② `_node_synthesize` 還有四道守門寫著 `answer.startswith("I don't have enough")`。**
+08-27 修引用尾巴時只改了尾巴，一致性／期別／reflect／數字溯源四道漏改。舊守門是英文字面、
+只認開頭，而 Writer 講中文 → 中文拒答穿得過去 → 白付 `_extract_claims` ＋ `_reflect_and_fix`
+**至少兩次 LLM 呼叫**去稽核一個沒有東西可稽核的對象。四道全換成 `rq.looks_like_refusal`。
+⚠ **危險方向不是漏判而是判過頭**：有依據的答案被當成拒答 → 四道 validator 一次全部跳過。
 
-**修法：新增 LLM 實體解析節點 `rq.resolve_tickers_llm`，只在 `_COMPANY_TICKER` 這張 regex 表
-沉默時才被叫。** 不加 `"aws": "AMZN"` 是因為那是 O(n) 的開始——實測 20 個一般人會用的產品／
-子公司問法，**18 個抽不到**（Azure／iPhone／YouTube／Instagram／Reality Labs／CUDA／Model Y／
-Xbox／LinkedIn／GeForce／Prime／WhatsApp／Bing／Waymo／App Store／Kindle／Superchargers…）。
+**量尺**：`verify_period_intent_routing` 69 → **85**（新增⑧）、`verify_answer_validators` 152 → **170**（新增⑭）。
+兩道的判別力都在**接線鎖**，各自做過零 LLM 變異測試：拿掉呼叫端引數 → 只有 ⑧g 叫；
+四道守門只改三道 → ⑭a **FAIL 2 條**（逐個 validator 走 AST 驗，不是字串 grep）。
+⚠ **⑭e 第一版是量尺自己錯**：fixture 本體約 130 字、還在 `REFUSAL_MAX_CHARS` 之下，**本來就該**判成拒答。
 
-⚠ **BACKLOG 上那條記錄本身寫錯過**：原本寫「ticker 抽取本來就在 LLM 那一側，該補的是 prompt」。
-**不是**——`QUERY_FILTER_SYSTEM_PROMPT` 只抽 filing_type／fiscal_year／fiscal_period，ticker
-從頭到尾只有那張 regex 表在做。所以這是「新增一個 LLM 節點」不是「補一條既有 prompt 的規則」。
+### 產品名解析成母公司（AWS → AMZN）
 
-⚠ **只在 regex 沉默時叫，理由不是省錢是精度**：regex 命中的是字面公司名，高精度，LLM 沒有理由
+「AWS 在 2022 年的淨銷售額」抽不到 ticker → 無 hard filter → Tier 3 跨公司污染
+（top-5 是 4 家公司的 IncomeStatement）。修法：新增 LLM 實體解析節點 `rq.resolve_tickers_llm`，
+**只在 `_COMPANY_TICKER` 這張 regex 表沉默時才被叫**。修後 top-5 **5/5 AMZN**，且撈到 FY2022
+數字**真正所在**的 `AMZN_10K_2023`。
+
+不加一筆 `"aws": "AMZN"` 的理由是實測的：20 個一般人會用的產品／子公司問法**18 個抽不到**
+（Azure／iPhone／YouTube／Reality Labs／CUDA／Model Y／Xbox／LinkedIn／Prime／Waymo…），
+而這種名字每季都在長。
+⚠ **只在 regex 沉默時叫，理由不是省錢是精度**：regex 命中的是字面公司名、高精度，LLM 沒有理由
 推翻它。這跟 ratio 意圖那次（詞表必須真的退位）**不是同一個形狀**——那裡詞表會在 LLM 表過態
-之後蓋回去，這裡詞表沉默時才問 LLM，詞表不可能覆寫 LLM。
+之後蓋回去，這裡詞表沉默時才問 LLM。
+⚠ **BACKLOG 上那條記錄本身寫錯過**：原本寫「ticker 抽取本來就在 LLM 那一側，該補 prompt」。
+**不是**——`QUERY_FILTER_SYSTEM_PROMPT` 只抽 filing_type／fiscal_year／fiscal_period。
 
-**量法（兩支，職責分開）**
-- 接線 → `eval/verify_period_intent_routing.py` **閘門⑦**（53 → **69 項**，零 LLM）。判別力在
-  ⑦b 的誤報對照：regex 抽得到時 LLM 必須**一次都不叫**；寫成「都叫再合併」那兩條照樣會過。
-- 準確度 → 新增 `eval/probe_ticker_resolution.py`（含 LLM、非零噪音）。**只有這一支在量它**：
-  eval_set 65 題**全部**由 regex 解出 ticker，所以這個修法**在既有跑分上量不到任何差異**。
+**量法兩支，職責分開**：接線 → 閘門⑦（53 → 69 項，零 LLM），判別力在誤報對照
+「regex 抽得到時 LLM 必須一次都不叫」；準確度 → 新增 `eval/probe_ticker_resolution.py`
+（**只有這一支在量它**：eval_set 65 題全部由 regex 解出 ticker，這修法在既有跑分上量不到差異）。
+`--repeat 3`：知名產品 60/60、**10-K 分部名 15/18**、陰性對照 24/24 全回空、**指錯 0**。
+⚠ 陽性臂 100% 是「回 0 筆先當壞消息查」的情形，所以做了兩件事才敢信：①零 LLM 變異測試
+（「一律回空」只有陽性臂抓得到、「一律猜 MSFT」兩臂同時叫）②加一層 10-K 分部名的難題臂，
+它立刻找出一個真的解不出來的，而且失敗方向是**安全的那一邊**（回空 ≠ 鎖到別家）。
 
-`--repeat 3` 實測：
+順手補 `llm_replay._KNOWN_KINDS` 漏註冊的 `period_intent`（08-19 加的接點）。症狀很安靜：
+bare `strict` 照樣涵蓋它，只有 `strict:period_intent` 會被當成拼錯而報錯。
 
-| 臂 | 結果 |
-|---|---|
-| 知名產品 20 題 | **60/60**，指錯公司 0 |
-| **10-K 分部名 6 題** | 15/18（`Wearables, Home and Accessories` 0/3，一律回空） |
-| 陰性對照 8 題 | 24/24 全回空，**誤指 0** |
+### 閘門⑬e：拒答**仍然**會帶尾巴，`looks_like_refusal` 的切尾巴不可以拿掉
 
-⚠ 陽性臂 100% 是「稽核回 0 筆先當壞消息查」的情形，所以做了兩件事才敢信：①零 LLM 變異測試
-（「一律回空」只有陽性臂抓得到、「一律猜 MSFT」兩臂同時叫、「一律全回七家」同上）②加一層
-**10-K 分部名**的難題臂——它立刻找出一個真的解不出來的（`Wearables, Home and Accessories`），
-而且失敗方向是**安全的那一邊**（回空＝退回修法前，不是鎖到別家）。
-
-⚠ **這個修法沒有解的一半**：`_resolve_period_filter_llm`／`_resolve_latest_quarter_filter` 仍只吃
-regex 的 ticker，所以「AWS 最新一季的營收」解得出 ticker filter、卻不會走最新季路由。
-**那是維持現狀不是新的壞掉**，理由與復活條件記在 BACKLOG。
-
-順手修 `llm_replay._KNOWN_KINDS`：`period_intent` 是 2026-08-19 加的接點但**當時漏了註冊**
-（`ticker` 一起補）。症狀很安靜——bare `strict` 照樣涵蓋它，只有 `RAG_REPLAY_MODE=strict:period_intent`
-會被當成拼錯而報錯，也就是「想單獨對它嚴格」是唯一會現形的用法。
-
-### ② 閘門⑬e：拒答**仍然**會帶尾巴，`looks_like_refusal` 的切尾巴不可以拿掉
-
-昨天做完「拒答不附引用清單」之後，很容易得出「那 `strip_evidence_tail` 就多餘了」——**錯**。
-`_compose_answer_tail` 只管 📚 那一塊；`_node_synthesize` 在 collected/web 皆空時走的是另一條路：
-拒答 ＋ `_format_unresolved_freshness_notice`（live 才有），**不經過它**。實測那條路產出的答案
-不切尾巴就**判不出是拒答**（長度閘被 metadata 撐爆）。
-
-那個 ⚠ 尾巴是**該留的**（「答不出來，因為 KB 只到 2026-06-12」是有用的揭露），所以該留的也是
-strip。閘門⑬e 拿生產那兩個函式現場組一次把它鎖住（149 → **152 項**），含「前提：警語真的會被
-接上」與「不切尾巴就會漏判」兩條反向斷言。
+`_compose_answer_tail` 只管 📚 那一塊；`_node_synthesize` 在 collected/web 皆空時走的是另一條路
+（拒答 ＋ 時效警語，live 才有），**不經過它**。實測那條路的答案不切尾巴就**判不出是拒答**。
+那個 ⚠ 尾巴是**該留的**，所以該留的也是 strip。（149 → 152 項）
 
 ---
 
-## 2026-08-27 — 拒答不再附假的引用清單；judge 的回歸套件修好（壞了一個月）
+## 2026-08-27
 
-### ① 拒答不得附「📚 引用來源」
+### 拒答不再附假的引用清單
 
-`agentic_rag_v2` 在答案尾端機械式附一段「📚 引用來源（Generator 實際依據的 chunk）」。
-守門原本寫成 `answer.startswith("I don't have enough")`——**只擋得住 graph 崩潰時那句英文預設值**。
-模型自己用中文寫的拒答（「我沒有足夠的資訊來回答…」）一路通過，於是那句 provenance 宣稱
-印在一份**剛宣告自己沒有依據**的答案底下。**實測既有結果檔 4175 份答案／59 份拒答，21 份是這樣出貨的。**
+`agentic_rag_v2` 在答案尾端機械式附「📚 引用來源（Generator 實際依據的 chunk）」，而守門原本是
+`answer.startswith("I don't have enough")`——**只擋得住 graph 崩潰時那句英文預設值**。模型自己
+用中文寫的拒答一路通過，於是那句 provenance 宣稱印在一份**剛宣告自己沒有依據**的答案底下。
+**實測既有結果檔 4175 份答案／59 份拒答，21 份是這樣出貨的。**
 
-- 判準改用 `rq.looks_like_refusal`。該函式與 `REFUSAL_MARKERS`／`REFUSAL_MAX_CHARS`
-  **從 `eval/eval_generation_llm_judge.py` 搬進 `rag_query.py`**——生產也要用它，而生產不可以
-  import `eval/`。eval 端改成轉出（`looks_like_refusal = rq.looks_like_refusal`），兩條 import 路徑都不變。
-- 尾巴組裝抽成純函式 `_compose_answer_tail(answer, writer_chunks, unmet)`。**抽它不是為了好看**，
-  是為了讓閘門能零 LLM 直接測**生產那條判斷**，而不是去 inspect `run_agentic` 的原始碼字串
-  （抄寫必然漂移）。`unmet` 揭露跟著拒答一起關掉是**維持舊行為**，兩者本來就在同一個 if 底下。
-- `eval/verify_answer_validators.py` 加**閘門⑬**（138 → **149 項**）。
-  ⚠ 判別力**不在陽性那幾條**（「一律不附」也會全過），在 ⑬b 的**誤報對照**——拒答判過頭＝
-  把真的有依據的答案的 provenance 砍掉，那才是危險方向。雙向變異測試實測：
-  換回舊守門 → ⑬a 掛 3 條；換成「一律不附」→ ⑬b 掛 4 條。
-  ⑬b 那三種近似形狀裡最重要的是**寫得長的誠實答案**（「只有 2023–2025、未包含 2022」），
-  那正是多年語料 before 臂 18/18 的形狀，也正是前一次量尺翻車的地方。
+- 判準改用 `rq.looks_like_refusal`。該函式**從 `eval/` 搬進 `rag_query.py`**——生產也要用它，而
+  生產不可以 import `eval/`；eval 端改成轉出，兩條 import 路徑都不變。
+- 尾巴組裝抽成純函式 `_compose_answer_tail`。**抽它不是為了好看**，是為了讓閘門能零 LLM 直接測
+  生產那條判斷，而不是去 inspect 原始碼字串（抄寫必然漂移）。
+- 閘門⑬（138 → 149 項）。⚠ 判別力**不在陽性那幾條**（「一律不附」也會全過），在 ⑬b 的**誤報對照**
+  ——拒答判過頭＝把有依據答案的 provenance 砍掉。雙向變異：換回舊守門 → ⑬a 掛 3 條；
+  換成「一律不附」→ ⑬b 掛 4 條。三種近似形狀裡最重要的是**寫得長的誠實答案**。
+- ⚠ **不會移動既有分數**：所有消費端本來就會切尾巴，這次只是讓那塊 metadata 一開始就不要產生。
 
-⚠ **不會移動既有分數**：所有消費端本來就會切尾巴（`looks_like_refusal`、`check_number_defects.FOOTER`、
-RAGAS 的 footer strip），這次只是讓那塊 metadata 一開始就不要產生。
+### `eval/judge_regression.py` 修好（壞了一個月）
 
-### ② `eval/judge_regression.py` 修好
+病灶：2026-07-23 移除自製 Hallucination Rate／Answer Relevance 時 judge 的簽章少了兩個參數，
+本檔沒跟上 → `TypeError` 一跑就炸。連同 11 題身上的死資料與已下架的預設 judge model 一起清掉。
 
-`TypeError: evaluate_correctness_with_feedback() got an unexpected keyword argument 'hall_result'`。
-病灶：**2026-07-23 移除自製 Hallucination Rate／Answer Relevance** 時 judge 的簽章少了
-`hall_result`／`relevance_score`，本檔沒跟上。`fatal_hallucination` 現在由 must_not_include 命中在
-Python 端推導（`compute_correctness`），judge 不再需要那份輸入 → 兩個參數與 11 題身上的
-`hall_result` 死資料一併刪除，過期的預設 `--judge-model qwen/qwen3-32b`（2026-07-12 已下架）
-改成跟隨 `DEFAULT_JUDGE_MODEL`。
-
-⚠ **真正的教訓不是那個 TypeError，是「要燒 LLM 才跑得動的東西平常沒人跑」**。所以加了
+⚠ **真正的教訓不是那個 TypeError，是「要燒 LLM 才跑得動的東西平常沒人跑」。** 所以加了
 **零 LLM 的 `--dry-run` 接線檢查**：AST 從 `run_case` 自己的原始碼讀出實際送出的 kwargs 比對
-judge 簽章（不另抄常數，抄寫正是本次病灶）、每題 `expect` 的 checkpoint id 不得越界
-（`*_forbidden` 寫個不存在的 id 會**永遠成立**＝量尺無聲死掉）、整套要同時有正例與反例、
-`compute_correctness` 三態。變異測試：把 `hall_result=` 塞回去 → 叫；把 `mn0` 改成 `mn7` → 叫。
+judge 簽章（不另抄常數，**抄寫正是本次病灶**）、每題 `expect` 的 checkpoint id 不得越界
+（寫個不存在的 id 會**永遠成立**＝量尺無聲死掉）、整套要同時有正例與反例。
 
-⚠ **這支不是零噪音的閘門，單輪總分完全不可比**。修好後同一份碼、同一個模型連跑三個單輪：
-**10/11、9/11、11/11**，而兩輪 `--repeat 3` 之間**也不一致**
-（`col01_true_fabrication_negative` 一輪 1/3、另一輪 3/3）。當天 9 次觀測合起來：
+⚠ **這支不是零噪音，單輪總分完全不可比**：同一份碼三個單輪 **10/11、9/11、11/11**，而兩輪
+`--repeat 3` 之間**也不一致**。九次觀測攤開才看得出只有 `sem03_true_fabrication_negative` 是
+**1/9**（其餘掉分都是 7/9 的雜訊）。判定改成報**逐題 k/n**，**退出碼只認「全掛」**——把時好時壞
+也弄成紅燈，這支就會再次被當成壞掉而沒人跑。
+⚠ **「≥2 輪」那條規則在這裡不夠用，我被同一批資料修正了兩次**（先把單輪 FAIL 當真陽性；接著
+據一輪 `--repeat 3` 寫下「兩個捏造反例方向一致」，第二輪就推翻）。**n=3 對這支還是不夠。**
 
-| | k/9 |
-|---|---|
-| 8 題 | 9/9 |
-| `col01_true_fabrication_negative` | 7/9（雜訊等級） |
-| `lex12_fiscal_calendar` | 7/9（財年措辭，已知系統性 bug 家族） |
-| `sem03_true_fabrication_negative` | **1/9** ← 只有這一題是真的 |
+修的過程照出兩件更重要的事（已進 BACKLOG）：rubric 這條線**沒有活的消費端**；FABRICATION SCOPE
+要 judge 判「未在來源出現」而 **judge 拿不到來源**。`sem03` 因此標成 `known_limitation`
+（失敗記 **N/A 不記 FAIL**）——那是**唯一能讓失敗不算失敗**的旗標，所以 `--dry-run` 每次都印出
+有幾題帶著它。
 
-出貨當下的 `--repeat 3`：全過 9、全掛 0、時好時壞 1、已知極限 1。判定改成 `--repeat`
-報**逐題 k/n**，**退出碼只認「全掛」**——把時好時壞也弄成紅燈，這支就會再次被當成壞掉而沒人跑。
+### 多年語料**升生產**：`mdna` → `multiyear`，並翻開期間意圖 LLM
 
-⚠ **「≥2 輪」那條規則在這一次不夠用，我被同一批資料修正了兩次**：第一個單輪看到 10/11 時
-差點把那個 FAIL 當真陽性（第三輪它自己過了）；接著一輪 `--repeat 3` 給出 col01 1/3，我據此
-寫下「兩個捏造反例方向一致、不是誇張的數字才抓得到」——**第二輪 3/3 把那句話推翻**。
-九次攤開才看得出 col01 是雜訊、只有 `sem03` 真的掉到底。**n=3 對這支還是不夠。**
+決策的兩半證據（收益／損害）都補齊之後才做。**一起做的四件事**（換 collection 與翻 A
+**不可分兩次**：多年語料上線而 A 沒開，當期題會退步——收益探針 control 臂 4/4 → 3/4）：
+`COLLECTION_NAME` → `us_stock_rag_edgar_multiyear`（21 → 77 份、13,022 chunks）／
+`RQ_PERIOD_INTENT_LLM` 預設翻開／四題萬用字元 gold **釘死**／文件同步。
 
-**修的過程照出兩件更重要的事**（都已進 [`BACKLOG.md`](BACKLOG.md)，不在這裡重述）：
-rubric 這條線**目前沒有活的消費端**（`eval_set.json` 65 題全無 rubric，結果檔 `correctness` 全 null）；
-FABRICATION SCOPE 那條規則要求 judge 判「未在來源出現」，而 **judge 從頭到尾拿不到來源**，
-於是只能靠合理性判——`col01` 的「市佔率 92%」離譜到光看答案就站不住（7/9），
-`sem03` 的「管理層預期 45% CAGR」不會（**1/9**）。
-`sem03_true_fabrication_negative` 因此標成 `known_limitation`：失敗記 **N/A 不記 FAIL**，
-並附復活條件。⚠ 那個旗標是**唯一能讓失敗不算失敗**的地方，所以 `--dry-run` 每次都會把
-「幾題帶著它、是哪幾題」印出來——不讓它變成安靜消音失敗的角落。
+**驗收（零噪音，兩輪）**：單年 8/0/0、8/0/0；多年 **7/1/0**、8/0/0。
+**r1 的那個 FAIL 不是升生產造成的**，三個獨立證據：① 那題的頭條數字在**兩個 collection 上都在跳**
+② 它引的五個 chunk **全部在單年 KB 裡** ③ 這條主張的註記早就記過同一個失效。
+⚠ **只跑 r1 就收工的話**，這裡會寫成「升生產讓指標從 8/0 掉到 7/1」，然後花半天追一個不存在的干擾。
 
----
-
-## 2026-08-27 — 生成端的收益（BACKLOG ②）：擔心的那件事沒有發生，量尺被推翻三次
-
-新增 [`eval/check_historical_generation.py`](eval/check_historical_generation.py)（零 LLM、
-三態、selftest 12 條）。收益題庫在兩個 collection 上各跑一次 agentic
-（before ＝ 舊生產 `mdna`＋A 關，after ＝ 新生產 `multiyear`＋A 開）。完整分析見
-[`docs/EVAL.md`](docs/EVAL.md)〈多年語料在生成端買到了什麼〉。
-
-| | before（單年） | after（多年） |
-|---|---|---|
-| 答對 | **0/18** | **16/18** |
-| 承認問到的期間不可得（誠實） | **18/18** | 2/18 |
-| **拿別年份硬答且沒交代** | **0** | **0** |
-| control 答對 | 4/4 | 4/4 |
-
-**危險態兩臂都是 0。** 檢索層那 33 席「同節別期」**沒有兌現成生成層的實害**——單年 KB 面對
-歷史題會明說缺哪一年、還交代有哪幾年。收益探針輸出裡原本那句「那是有引用、看起來很有根據的
-錯答」是**推論不是量測**，已就地更正。
-
-**量尺被自己的資料推翻三次，每次都是「答對了卻被判成危險態」**：
-① 拿 `looks_like_refusal()` 判誠實——那個函式問的是「整份答案都不作答」還帶 150 字上限，
-而這裡最典型的誠實答案是**長的**（要解釋有哪幾年），一整片模範答案被判成危險態。
-② 詞表漏英文拒答與「未**披露**」「無法**給出**」。
-③ `bh-19` 的 `literal` 是英文片語，中文答案永遠不會逐字含它 → 新增 `answer_literals`
-把「前提檢查／gold 定位」與「答案比對」兩個職責拆開。
-
-**最重要的副產品：值不存在 ≠ 事實不存在。** `bh-07`／`bh-16` **在單年 KB 其實答得出來**
-——`MSFT_10K_2026` 的補充未審計表帶著**重述後**的 `219,790`／`87,464`，而前提檢查比對的是原始值
-`211,915`／`105,362`。10-K 會因為改分部結構／會計政策重述前一年數字。兩題已標 `void`，
-檢索層數字同步更正：**兌現率 0.900 → 0.944**（17/18）、同節別期席位 35 → 33。
-⚠ **抓到它們的不是前提檢查，是生成端這一輪**（單年臂把它們答出來了）→ 新增收益題之後兩支都要跑。
-
-**順帶修掉一個、記下兩個既有問題**：
-- 修：`looks_like_refusal` 的長度閘把答案尾端的 `---
-📚 引用來源…` 也數進去 → 實測 66 份
-  agentic 結果檔／2975 份答案，拒答**少算 8 筆（35 → 43，19%）**。「證據尾巴」的正式定義
-  收攏成 `rq.strip_evidence_tail()`（repo 裡原本有**四份**各自的定義，其餘三份沒動——動 RAGAS
-  那份會移動分數）。⚠ 更正一句說過頭的話：那不是「系統性為 False」，是少算 19%。
-- 記：`agentic_rag_v2._retrieve_chunks()` 把 `rq.retrieve` 的 note 丟掉 → **agentic 沒有揭露
-  通道**（產品線走的單管線有，所以不影響出貨）。
-- 記：`eval/judge_regression.py` **既有壞掉**跑不起來（已用 `git stash` 退掉當天改動確認錯誤
-  相同）→ judge 目前沒有回歸保護。
-
----
-
-## 2026-08-27 — 多年語料**升生產**：`mdna` → `multiyear`，並翻開期間意圖 LLM
-
-決策的兩半證據都在同一天補齊之後才做（收益見〈多年語料買到了什麼〉、損害見〈階段 4〉）。
-
-**一起做的四件事**（`RQ_PERIOD_INTENT_LLM` 與換 collection **不可分兩次**：多年語料上線而 A
-沒開，當期題會退步——收益探針 control 臂 gold@5 4/4 → 3/4、同節別期席位 0 → 7）：
-- `rag_query.COLLECTION_NAME` → `us_stock_rag_edgar_multiyear`（21 → 77 份 filing、13,022 chunks）
-- `RQ_PERIOD_INTENT_LLM` 預設翻成**開**（`=0` 可關掉做 A/B）
-- `sem-03`／`sem-04`／`col-02`／`col-03` 的萬用字元 gold **釘死**成單年 KB 裡實際含答案的那幾份
-  （與 `period_probe_baseline.json` 同一條規則）。實查證實 2024／2025 那幾份**同樣含那些關鍵字**
-  ——那正是萬用字元會失去判別力的證據，不是留著它的理由。
-- README／CLAUDE.md 的 collection 現況同步（README 原本還停在更早退役的 `..._exp4`）
-
-**驗收（零噪音，兩輪；⚠ 這個指標規定 ≥2 輪，單輪會給出相反結論——這次就發生了）**：
-
-| | 單年 `mdna` r1 | `mdna` r2 | 多年 r1 | 多年 r2 |
-|---|---|---|---|---|
-| `check_number_defects` | 8/0/0 | 8/0/0 | **7/1/0** | **8/0/0** |
-
-**r1 的那個 FAIL 不是升生產造成的**，三個獨立證據：① 它是 `col-11`，而穩定性表顯示這題的頭條
-數字在**兩個 collection 上都在跳**（19% / 29% / 18% / 29%）② 它引的五個 chunk **全部在單年 KB
-裡**，沒有任何一份是新增的舊年度 filing ③ 這條主張的 `metric_design` 註記早就記過同一個失效
-在 `mdna` 的 r2 上發生過。
-
-**新增的舊 filing 真的有在用**：多年 r1 引用的 217 個 chunk 有 **45 個（20.7%）**來自新增的舊
-年度 filing，涉及 **23/65 題**。不是「加了沒人用」。
-
-**閘門**：`verify_period_intent_routing` 53、`verify_answer_validators` 138、
-`verify_cross_period_collapse` 17、`verify_web_gate_isolation` 全綠；ingest 側
-`verify_table_captions` 硬缺陷 0、`verify_segment_split` 三判準全 0。
-**閘門② 從此才有判別力**：期碼字串比大小判反的配對 **0 → 31/385**（單年語料上它一直是測資不足）。
+**新增的舊 filing 真的有在用**：多年 r1 引用的 217 個 chunk 有 **45 個（20.7%）**來自新增的舊年度
+filing，涉及 **23/65 題**。
+**閘門②從此才有判別力**：期碼字串比大小判反的配對 **0 → 31/385**（單年語料上它一直是測資不足）。
 ⚠ `verify_chunk_grounding` 的 `MSFT_10K_2024.html#158`（1/1009＝0.1%）**帶著上線**——修它要重跑
-三小時 ingest，而升生產不需要重跑，它自己的復活條件並沒有被觸發。BACKLOG 原本把它列成升生產
-前置條件，那是寫錯的，已更正。
+三小時 ingest，而升生產不需要重跑。BACKLOG 原本把它列成前置條件，那是寫錯的。
 
-**兩個順手根除的靜默漂移**：
-- `run_agentic_on_evalset.py` 的 `DEFAULT_COLLECTION` **寫死成 2026-08-13 就退役的 `..._period`**
-  → 不帶 `--collection` 的每一次跑都跑在退役底座上，零警告。改成跟著 `rq.COLLECTION_NAME`。
-  同檔 docstring 的「90 題」也是舊的（現為 65）。
-- CLAUDE.md 寫著 agentic 的 RETRIEVAL 是 `gpt-oss-20b`，碼上 2026-08-14 就換成 `120b` 了。
+**兩個順手根除的靜默漂移**：`run_agentic_on_evalset.py` 的 `DEFAULT_COLLECTION` **寫死成已退役的
+`..._period`** → 不帶 `--collection` 的每一次跑都跑在退役底座上，零警告；CLAUDE.md 寫著 agentic 的
+RETRIEVAL 是 `20b`，碼上 08-14 就換成 `120b` 了。
 
-**還沒解的**：期別探針 gold 偏袒 B 這件事只解了一半（萬用字元釘死了，chunk 粒度重寫沒做）。
-升生產不靠 `gold@k`，但那個偏袒現在跑在生產 collection 上，復活條件已改寫成「下一次要用
-`gold@k` 的差值做決定時」。生成層的收益仍然沒量（BACKLOG【多年語料 ②】）。
+### 多年語料的**收益**量尺與**生成端**驗證
 
----
+新增 `eval/probe_historical_benefit.py`（檢索層）＋ `eval/check_historical_generation.py`（生成層），
+都是零 LLM 判定。完整分析見 [`docs/EVAL.md`](docs/EVAL.md)〈多年語料：損害與收益兩半〉。
 
-## 2026-08-27 — `anchored_pct` 量尺第六次失效：切片把百分比 token 剖半
-
-升生產驗收時 `mix-09` 判 N/A——而答案是**對的**（「大中華區（Greater China）…成長 **22 %**」、
-引用正確）。根因：`anchored_pcts` 舊寫法**先把 text 切成 seg、再在 seg 上找百分比**，切口會把
-一個 token 剖半：
-- 往右切掉 `%` → 漏抓（`mix-09`，**答對了卻安靜地判 N/A**）
-- 往左切進數字中間更糟 → `122%` 被讀成 `22%`，**憑空生出一個不存在的值**
-
-改成**先在全文找完所有百分比，再用「數字起點是否落在 ±window 內」過濾**。窗口語意一字不變，
-token 永遠完整。docstring 裡「實測對窗口不敏感」那句同時更正（它只對當時那三條主張成立）。
-
-新增 `--selftest`（4 條雙向鎖）。⚠ **第一版的回歸鎖是假的**：直接抄 `mix-09` 原句當測資，
-**舊碼也會過**——真實答案用的是窄空格 U+202F，手打成一般空格字元數就變了，邊界不落在同一個
-位置。改成精確構造（填充字元數是算出來的）之後，舊碼在兩條上都 FAIL，鎖才真的鎖得住。
-
-重評既有結果檔：兩個 `mdna` 基準**分毫未動**（8/0/0），多年 r1 由 6/1/1 → **7/1/0**。
-
----
-
-## 2026-08-27 — 修掉「Tier 1 命中 ≠ 答得了」：label-year 那半個 OR 會冒充財年命中
-
-同日的收益探針在 `bh-07` 上抓到、**回頭在生產 collection 複現**的缺陷。完整推導與實測表格見
-[`docs/EVAL.md`](docs/EVAL.md)〈Tier 1「命中」不等於「答得了」〉。
-
-**病灶**：`fiscal_year` 的 strict filter 是與 `report_label_year` 的雙座標系 OR。掃 77 份
-filing（`multiyear`，`mdna` 的超集）：**10-K 的兩個欄位永遠相等（21/21），會分歧的只有
-10-Q（15/56）** → 那半個 OR 的**全部效果**就是放行「曆年標籤是 V、財年不是 V」的季報。
-當它是 Tier 1 唯一的命中理由時，**Tier 2 的降級與揭露語會一起被關掉**。
-
-生產實測（`us_stock_rag_edgar_mdna`）：問「Microsoft 在 2025 財年的營收是多少？」→ top-5
-**五席全是 `MSFT_10Q_202512`**（FY2026 Q2、`report_label_year=2025`）、`note` 是空字串，而含
-FY2025 三年欄的 `MSFT_10K_2026` 被 `fiscal_year=2025` 擋在外面。
-
-**修法**：新增 `rq.tier1_hit_is_qualified()` —— **label-year 只能放寬命中，不能自己構成命中**。
-Tier 1 撈到之後再問「有沒有任何一點的 `fiscal_year` 真的等於問的年份」，沒有就當落空、降級
-Tier 2。⚠ `fiscal_year` 為空的點（News/Fundamentals，`relax_empty_fields` 刻意放行的 col-15
-那條路）**算合格**，否則是誤殺。
-
-**blast radius 可枚舉**：離線算出「只有 label 命得到」的 `(ticker, year)` 在生產語料上**只有
-`MSFT 2025` 與 `NVDA 2025` 兩組**（多年語料上是 `MSFT 2023`／`NVDA 2023`）。**65 題題庫一題都
-不受影響**——提到年份的 6 題全都有 `fiscal_year` 對得上的 filing。**那正是它從沒被抓到的原因。**
-
-| 查詢（mdna，top-5） | 前 | 後 |
+| | 單年 | 多年 |
 |---|---|---|
-| Microsoft **FY2025** 營收 | 5/5 `MSFT_10Q_202512`，note 空 | Tier 2；**3 席 `MSFT_10K_2026`** ＋ 揭露語 |
-| NVIDIA **FY2025** 營收 | 同型（`NVDA_10Q_202510`） | Tier 2；`NVDA_10K_2026` ＋ 揭露語 |
-| NVIDIA FY2026／Microsoft 最新財年／Apple `202606` | Tier 1 | **不變** |
-| Microsoft **2025 年**的季報（曆年語意） | Tier 1，無揭露語 | Tier 2；**前三名內容不變**，多一句揭露語 |
+| historical gold@5（檢索） | 0/18（**定義使然**） | **17/18**（兌現率 0.944） |
+| historical 答對（生成） | **0/18** | **16/18** |
+| historical 誠實承認（生成） | **18/18** | 2/18 |
+| **拿別年份硬答且沒交代** | **0** | **0** |
+| control（當期陰性對照） | 4/4 | 4/4 |
 
-**順手修掉一個自相矛盾**：降級揭露語的 `actual` 是從 payload 收的，會收到 `report_label_year`
-→ 舊措辭是「沒有**期間**（2025）的資料，改用最接近的可得期間（…, **2025**）」。改成「所詢問
-**財年**（2025）」。⚠ 這句同時是使用者可見句與注入 generator 的事實。缺陷本來就在，是這次修法
-把更多查詢趕進這條路才被看見。
+- **收益是語料買到的、不是修法買到的**（A 開關 historical 完全一樣）；**當期題的損害才是 A 擋掉的**。
+- **擔心的那件事沒有發生**：檢索層那 33 席「同節別期」**沒有兌現成生成層的實害**。
+  ⚠ 收益探針輸出裡原本那句「那是有引用、看起來很有根據的錯答」是**推論不是量測**，已就地更正。
+- ⚠ **量尺被自己的資料推翻三次**，每次都是「答對了卻被判成危險態」：① 拿 `looks_like_refusal()`
+  判誠實（那函式問的是「整份都不作答」還帶 150 字上限，而最典型的誠實答案是**長的**）
+  ② 詞表漏英文與兩個中文措辭 ③ `literal` 是英文片語 → 拆成 `literal`（前提檢查）＋ `answer_literals`（答案比對）。
+- ⚠ **最重要的副產品：值不存在 ≠ 事實不存在。** 兩題**在單年 KB 其實答得出來**——10-K 的補充表
+  帶著**重述後**的值，而前提檢查比對的是原始值。兩題標 `void`。**抓到它們的不是前提檢查，是生成端
+  那一輪** → 新增收益題之後兩支都要跑。
 
-**閘門**：[`eval/verify_period_intent_routing.py`](eval/verify_period_intent_routing.py) 新增
-閘門⑥，**39 → 53 項**。判別力在 **⑥b**（掃真實 payload 鎖住「10-K 恆等」與「至少一份 10-Q
-不等」——⑥a 那 8 條全是合成 payload，ingest 一改就會集體失去意義）。變異測試：把
-`tier1_hit_is_qualified` 換成恆真（＝修法前）→ ⑥a **2 條 FAIL**。
-其餘確定性閘門重跑全綠（`verify_answer_validators` 138、`verify_web_gate_isolation`、
-`verify_cross_period_collapse` 17）。
+**造題階段就被自己的前提檢查擋下兩次**：① BACKLOG 原本舉的例子錯了（10-K 損益表自帶三年、MD&A
+自帶兩年 → **收益區從 T-3 才開始**，拿 T-1／T-2 造題會憑空灌水）② 兩個候選題**兩個 collection
+都找不到** → 語料裡根本沒有的東西，不算收益。
 
----
+順帶修：`looks_like_refusal` 的長度閘把證據尾巴數進去 → 拒答**少算 8 筆（19%）**。「證據尾巴」的
+正式定義收攏成 `rq.strip_evidence_tail()`（repo 裡原本有四份）。
 
-## 2026-08-27 — 多年語料的**收益**量尺：補完缺的那一半，順手照出一個現生產的錯
+### 修掉「Tier 1 命中 ≠ 答得了」：label-year 那半個 OR 會冒充財年命中
 
-階段 4 停在「量到的每一格都是損害，沒有量尺在量收益」。這次補上那把尺並跑完三臂。
-完整分析見 [`docs/EVAL.md`](docs/EVAL.md)〈多年語料買到了什麼〉。
+收益探針在 `bh-07` 抓到、**回頭在生產 collection 複現**的缺陷。掃 77 份 filing：**10-K 的
+`fiscal_year` 與 `report_label_year` 永遠相等（21/21），會分歧的只有 10-Q（15/56）** → 那半個 OR
+的**全部效果**就是放行「曆年標籤是 V、財年不是 V」的季報，而當它是 Tier 1 唯一的命中理由時，
+**Tier 2 的降級與揭露語會一起被關掉**。
 
-**新增**（零 LLM 判定、只讀 Qdrant ＋ reranker）：
-- [`eval/probe_historical_benefit.py`](eval/probe_historical_benefit.py) — 三個子命令：
-  跑一臂／`--compare` 兩臂／`--selftest`（literal 比對器的 10 條雙向自測，**10/10 PASS**）。
-- [`eval/period_probe_benefit_queries.json`](eval/period_probe_benefit_queries.json) — 24 題
-  （historical 20 ＋ **control 4**）。**不併進 `eval_set.json`**：那 20 題在單年 collection 上
-  必然全滅，混進主題庫會把量尺本身弄壞，而且分母會第三次變動。
+生產實測：問「Microsoft 在 2025 財年的營收」→ top-5 **五席全是 `MSFT_10Q_202512`**、note 空字串，
+含 FY2025 三年欄的年報被擋在外面。**這題當時就是錯的**，只是 65 題裡沒有一題是這個形狀。
 
-**gold 不寫死檔名**，由 `literal` 在 collection 裡確定性定位 → 「gold 是哪幾份」與前提檢查
-「這個事實在單年 KB 到底在不在」**是同一個操作**。造題時它擋掉兩件事：
-- 例子錯了：BACKLOG 原本舉的「Apple FY2024 總營收」**單年 KB 本來就答得出來**（10-K 損益表
-  自帶三年、MD&A 自帶兩年）→ **收益區從 T-3 才開始**，拿 T-1／T-2 造題會憑空灌水。
-- 兩個候選題（`TSLA 1,313,851`、`GOOGL 1,431,802`）**兩個 collection 都找不到** → 語料裡根本
-  沒有的東西，不算收益。
+**修法**：`rq.tier1_hit_is_qualified()` —— **label-year 只能放寬命中，不能自己構成命中**。
+⚠ `fiscal_year` 為空的點（News/Fundamentals）**算合格**，否則是誤殺。
+**blast radius 可枚舉**：生產語料上只有兩組 `(ticker, year)`；**65 題一題都不受影響**——
+**那正是它從沒被抓到的原因**。
+**留下的代價**：曆年語意的年份查詢也降級到 Tier 2，內容不變、多一句揭露語。順手修掉那句話的
+**自相矛盾**（「沒有期間 2025…改用最接近的（…2025）」→ 改講「所詢問**財年**」）。
+⚠ 這句同時是使用者可見句與注入 generator 的事實。
 
-**量到的（top-5，英譯釘死在 replay cache，三臂共用）：**
+**閘門⑥（39 → 53 項）**，判別力在 **⑥b**（掃真實 payload 鎖住「10-K 恆等」與「至少一份 10-Q 不等」
+——⑥a 全是合成 payload，ingest 一改就會集體失去意義）。
 
-| | 單年 `mdna` | 多年＋A | 多年（A 關） |
-|---|---|---|---|
-| historical gold@5 | 0/20（**定義使然**） | **18/20** | 18/20 |
-| historical 同節別期席位 | **35/100** | 10/100 | 10/100 |
-| control gold@5 | 4/4 | **4/4** | **3/4** |
-| control 同節別期席位 | 0 | 0 | **7** |
+### `anchored_pct` 量尺第六次失效：切片把百分比 token 剖半
 
-- **收益是語料買到的、不是修法買到的**：historical 那幾列 A 開關完全一樣，兌現率 **0.900**。
-- **當期題的損害才是 A 擋掉的** → 獨立佐證了「升生產與翻 A 別分兩次做」。
-- **單年 KB 對歷史題不是空手**：20 題有 15 題的 top-5 至少一席是「同一節、別的年份」，10 題的
-  top-1 就是。**那是有引用、看起來很有根據的錯答**，比拒答難發現。
-
-**兩個 FAIL 的成因不同，都不是「年份太多」**（分開報，不合併成一個損害率）：
-- `bh-07`：`fiscal_year` 的硬 filter 是與 `report_label_year` 的**雙座標系 OR** → Tier 1 命中
-  一份**標著那一年、卻不含那一年年度數字**的 10-Q，含答案的年報反而被擋掉。
-  **命中比落空更糟**：落空會降級到 Tier 2「丟年份、保 ticker」，`bh-01`~`bh-05` 全靠它救回來。
-- `bh-14`：「AWS」沒被解析成 AMZN → 無 ticker filter → Tier 3 退回無 filter → 跨公司污染。
-  **這是實體解析不是期別問題。**
-
-**⚠ 回頭查證把 `bh-07` 從「多年語料的發現」變成「現生產的錯」**：在
-`us_stock_rag_edgar_mdna` 上問「Microsoft 在 2025 財年的營收是多少？」→ top-5 **五席全是
-`MSFT_10Q_202512`**（FY2026 Q2、`report_label_year=2025`），含 FY2025 三年表的 `MSFT_10K_2026`
-被擋掉。**這題今天就是錯的**，只是 65 題題庫裡沒有一題是這個形狀。多年語料沒有製造這個缺陷，
-只是多給了一個會踩到的位置。→ **量尺沒叫，不代表系統沒壞。**
-
-**還缺的沒有補**：以上全是**檢索層**。「單年 KB 遇到歷史題會拒答，還是拿那 35 席的別年份
-硬答」是生成端的問題，要花 LLM ＋ 標準答案，已記進 [`BACKLOG.md`](BACKLOG.md)。
+`mix-09` 判 N/A 而答案是**對的**。根因：舊寫法**先切 seg 再找百分比**，切口會把 token 剖半——
+往右切掉 `%` 就漏抓，往左切進數字中間更糟（`122%` 被讀成 `22%`，**憑空生出一個不存在的值**）。
+改成**先在全文找完所有百分比，再用「數字起點是否落在 ±window 內」過濾**，窗口語意一字不變。
+⚠ **第一版的回歸鎖是假的**：直接抄原句當測資，**舊碼也會過**（真實答案用的是窄空格 U+202F，
+手打成一般空格字元數就變了）。改成精確構造之後舊碼才在兩條上 FAIL。
 
 ---
 
-## 2026-08-26 — 多年語料壓測階段 4：修法定案 ＋ 兩個量測基礎的更正 ＋ 一個從沒被發現的 bug
+## 2026-08-26 — 多年語料壓測階段 4：修法定案
 
-計畫 `.claude/plans/indexed-foraging-wolf.md` 的階段 4（「依量到的結果決定修法」）。
-**四條修法定案：A 已實作預設關（翻轉條件＝升生產同一次）、B 預設開、C 不做、D 不做。**
-完整數字與推導見 [`docs/EVAL.md`](docs/EVAL.md)〈階段 4〉。
+**四條修法定案：A 已實作（翻轉條件＝升生產同一次）、B 預設開、C 不做、D 不做。**
 
-**開跑前先發現量測基礎不能用，兩個獨立原因：**
-- collection 換過版（壓測跑在含新聞的 13,120 點上，現在是零新聞的 13,022 點；用存下的候選池
-  重算，當時 **top-5 有 29 席是 News**）。
-- 題庫分母從 **49 變 45**（`col-15`／`mh-07`／`mi-01`／`mi-14` 已不在現行 65 題）。舊資料已
-  限縮到 45 題共同集重新聚合當作合法 before——**分母變動不是改善**。
+**開跑前先發現量測基礎不能用，兩個獨立原因**：① collection 換過版（壓測跑在含新聞的 13,120 點上，
+現在是零新聞的 13,022 點；用存下的候選池重算，**當時 top-5 有 29 席是 News**）② 題庫分母從
+**49 變 45**。舊資料已限縮到 45 題共同集重新聚合當作合法 before——**分母變動不是改善**。
 
-**C 不做的理由是可證的，不是判斷**：`k2_newest` 殘留的 48 席排擠，離線用探針自己的
-`_section_key` 重算與記錄**完全吻合**，而組內相異 filing 數的分佈是 `{2: 48}`——每一席都是
-`keep=2` 刻意允許的第二席，**沒有任何一組 >2 ＝ collapse 零漏抓**。再用 `crowding_seats`
-追 C 就是「收益指標與規則同定義」那個套套邏輯。
+**C 不做的理由是可證的，不是判斷**：`k2_newest` 殘留的 48 席排擠，離線重算與記錄**完全吻合**，
+而組內相異 filing 數的分佈是 `{2: 48}`——每一席都是 `keep=2` **刻意允許**的第二席，
+**沒有任何一組 >2 ＝ collapse 零漏抓**。再用 `crowding_seats` 追 C 就是「收益指標與規則同定義」
+那個套套邏輯。
 
-**bug：`probe_temporal_interference.py --trend` 從來沒寫出過 JSON。**
-`cmd_trend` 印完表就 `NameError: name 'off' is not defined`（`off`／`on` 是早期兩臂版本的殘留，
-現行函式算的是五臂的 `out`）。也就是說 2026-08-19 的趨勢結論是從 stdout 讀的，沒有落盤證據。
-修完重跑，數字逐格相同（零 LLM 判定、確定性）。
+**bug：`probe_temporal_interference.py --trend` 從來沒寫出過 JSON**（`cmd_trend` 印完表就
+`NameError`，是早期兩臂版本的殘留）。也就是說 08-19 的趨勢結論是從 stdout 讀的、沒有落盤證據。
+修完重跑，數字逐格相同。
 
-**README 的 Qdrant 啟動段與實況四點全不符**（容器名 `qdrant_hnsw`→`qdrant`、image 沒釘版、
-bind mount 不是 named volume、缺 restart policy），已一併更正，並補上「容器起來 ≠ 可以連」
-那段——恢復 shard 期間 client 會拿到 `RemoteProtocolError`，**那不是壞掉是還沒好**。
-
-⚠ **升生產的決定還缺一半證據**：上面每一格量的都是**損害**（多年＋A＋B 相對單年是 45 題掉 2 題、
-錯期率 0.000 → 0.044）。**沒有任何量尺在量多年語料買到了什麼**——缺的量尺見 BACKLOG。
+**README 的 Qdrant 啟動段與實況四點全不符**（容器名、image 沒釘版、bind mount、缺 restart policy），
+已更正並補上「容器起來 ≠ 可以連」——恢復 shard 期間 client 會拿到 `RemoteProtocolError`，
+**那不是壞掉是還沒好**。
 
 ---
 
 ## 2026-08-25 — ratio 意圖交給 LLM（詞表退位成 fallback）＋ 生成端禁止四捨五入
 
-一次收掉 2026-08-21 留下的 BACKLOG 殘留①②。兩個改動獨立，但**都動到 prompt**，
-所以跑分基準一起搬走；驗收判準在本條末尾，**寫在跑 65 題之前**。
+**兩個改動獨立，但都動到 prompt，所以跑分基準一起搬走；驗收判準寫在跑 65 題之前。**
 
-### ① ratio 意圖：`_RATIO_INTENT_RE` 詞表 → LLM 判定（殘留①）
+**① ratio 意圖：`_RATIO_INTENT_RE` 詞表 → LLM 判定。**
+`_ensure_ratio_source_coverage` **整個機制**掛在一條正則後面。實測 Planner 把子問題寫成
+「微軟的雲端服務最近成長得快不快？」時，詞表為 False → 補撈**根本沒被執行**，看起來像隨機退步，
+其實是觸發面有洞。
+改法：`_classify_ratio_fields()` 在 `_node_plan` 一次 call 判完整批子問題。**LLM 只被允許從封閉
+欄位集合裡挑**——「想知道哪個量」交 LLM、「那個量叫什麼欄位」是封閉集合。
+⚠ **為什麼不擴 `_PLANNER_PROMPT`**：planner 的輸出格式一改，**子問題拆解本身就會漂 → 65 題每一題
+的檢索池跟著變**，等於把被測項和基準一起搬走。多付一次輕量 call 換 planner prompt 逐字不變。
+⚠ **fallback（解析失敗 → 退回詞表）會遮住 LLM 的失手**，端到端跑分看不出差別 → 準確度只能直接量
+（`probe_ratio_intent.py`，3 輪全穩 13/14：口語臂 3/4 而**詞表 0/4**、陰性 6/6 零浪費）。
+**閘門⑫（14 項，124 → 138）**。⚠ 判別力**不在口語陽性那條，在「LLM 說空」那幾條**：把覆寫寫成
+`if fields:`（而非 `if fields is not None:`）會讓空 list 掉回詞表 → **詞表仍然是實際做決定的人，
+而端到端跑分完全看不出差別**。
+⚠ 陽性那句**逐字取自實測的子問題**：第一版我自己改寫措辭，含「營收成長」→ 詞表認得 → 當場 FAIL。
+**那是量尺錯不是系統壞。**
 
-`_ensure_ratio_source_coverage`（含 08-21 那次的確定性補撈）**整個機制**掛在一條正則後面。
-`col-11` 三輪實測：Planner 把子問題寫成「微軟的雲端服務最近成長得快不快？」時，
-`_is_ratio_intent` 為 False → 補撈**根本沒被執行**，看起來像隨機退步，其實是觸發面有洞。
+**② 生成端禁止四捨五入**（`rq.SYSTEM_PROMPT` Rule 8 加 NUMERIC FIDELITY）。
+動機：答案**引了** `MSFT_Fundamentals #0`、眼前就是 `18.30%`，卻寫成「約 18% 左右」——引用是真的、
+數字看起來也對，**兩個口徑就這樣消失了**。
+**加在 Rule 8 而不是新開 Rule 14**：Rule 8 本來就是「每個數字都要能追溯」，而捨入正是那條追溯性
+的失效方式。⚠ **這條動的是每一題的基準**，跑分不可跨這一天直接比。
+新量尺 `check_rounding_fidelity.py`。⚠ **第一版判準太粗，錯的方向是漏抓**：整篇 contexts 比對時
+「約 18%」被同一題 10-K 的「increased 18%」放行——**有來源，但不是那一句掛的那個來源**。改成
+**逐引用**歸屬之後，真陽性抓到、粗版的兩筆誤報同時消失（**靈敏度與誤報率同方向改善**）。
+⚠ **統計效力很低**：改動前三個封存檔的發生率是 0／0／1 題（共 195 題）。
 
-**改法**：`agentic_rag_v2._classify_ratio_fields()` 在 `_node_plan` 一次 call 判完整批子問題，
-結果掛在 `todo["ratio_fields"]`，`_run_one_todo` 與 `_basis_disclosure_notice` 都改吃它。
-- **LLM 只被允許從 `_RATIO_FIELD_ENUM` 那四個欄位名裡挑**，挑到集合外一律丟掉——
-  「想知道哪個量」交 LLM，「那個量叫什麼欄位」是封閉集合，照 CLAUDE.md 的分工切。
-- **意圖與欄位合成同一個訊號**（`_has_ratio_intent` ＝ 有沒有挑到欄位）。舊碼允許
-  「意圖為真、欄位為空」，而那個組合會讓保底退回「挑分數最高的 Fundamentals」——正是
-  mi-05／lex-17 的真因。走 LLM 這條路不再有那個縫。
-- ⚠ **為什麼不擴 `_PLANNER_PROMPT`**（BACKLOG 原本寫的是「加在既有 call 上」）：
-  planner 的輸出格式從 `["字串"]` 變成物件陣列，**子問題拆解本身就會漂 → 65 題每一題的
-  檢索池跟著變**，等於把被測項和基準一起搬走。多付一次輕量 call 換 planner prompt 逐字不變，
-  是這裡唯一划算的交易。`llm_replay` 新增 `ratio` kind。⚠ 既有 fixture（`eval/replay_cache.json`、`eval/web_replay_llm_news37.json`）**沒有 ratio 條目**，重放時會 miss → 真的打一次 LLM 並回寫。非 ratio 題一律判成 `[]`、不改變檢索路徑，所以 `check_web_claims.py` 那批不受影響；但「replay 完全不打 LLM」這個性質對新 kind 不成立，第一次重放會把它補齊。碼上沒有任何地方開 `RAG_REPLAY_MODE=strict`，所以不會硬失敗。
-- ⚠ **fallback（解析失敗 → 退回詞表）會遮住 LLM 的失手**，端到端跑分看不出差別。
-  所以分類準不準只能直接量：[`eval/probe_ratio_intent.py`](eval/probe_ratio_intent.py)
-  （含 LLM、非閘門，14 題含 4 題口語臂／4 題正式臂／6 題陰性對照）。
-  **實測 3 輪全穩、13/14**：口語臂 3/4（詞表 0/4）、正式臂 4/4（詞表 4/4）、陰性 6/6（零浪費錯誤）。
-  唯一的危險錯誤是「NVIDIA 賣一顆晶片的成本佔比高不高？」判成非 ratio（成本佔比 ＝ 毛利率的補數，
-  繞了兩層）——**不打算靠往 prompt 塞這個措辭來修**，那是同一個詞表反射換一層而已。
-
-**閘門⑫**（[`eval/verify_answer_validators.py`](eval/verify_answer_validators.py)，14 項，總數 124 → 138）。
-⚠ 判別力**不在口語陽性那條，在「LLM 說空」那幾條**：把覆寫寫成 `if fields:`（而非
-`if fields is not None:`）會讓「判定不是 ratio 題」的空 list 掉回詞表 → 詞表仍然是實際做決定的人，
-而**端到端跑分完全看不出差別**（詞表判對的題本來就會過）。四個變異 M1~M4 各被抓到 4/3/1/1 條。
-⚠ 陽性那句**逐字取自 BACKLOG 記的實測子問題**：第一版我自己改寫成「營收成長得快不快」，
-含「營收成長」→ 詞表認得 → 當場 FAIL。**那是量尺錯不是系統壞**，兩個方向的查證成本都是一次 grep。
-
-### ② 生成端禁止四捨五入（Rule 8 加 NUMERIC FIDELITY；殘留②）
-
-**動機**（BACKLOG 殘留②，四輪實測 2 次發生）：`lex-17` 的答案**引了**
-`MSFT_Fundamentals #0`，眼前就是 `Revenue Growth (YoY): 18.30%`，卻寫成
-「全年與最近的 TTM 都在約 **18%** 左右【…#0】」——引用是真的、數字看起來也對，
-**兩個口徑就這樣消失了**（TTM 18.30% 與財年 18% 是不同的數）。
-
-**改法**：`rq.SYSTEM_PROMPT` Rule 8 尾端加一段 NUMERIC FIDELITY，要求逐位照抄來源數字，
-禁止用約值取代精確值，並明講「可以在精確值**之後**補約值，不可以取而代之」。
-- **加在 Rule 8 而不是新開 Rule 14**：Rule 8 本來就是「每個數字都要能追溯到引用的 chunk」，
-  而捨入正是那條追溯性的失效方式（18% 追溯不到 18.30%）。另開 14 還要動
-  `SYSTEM_PROMPT_EVIDENCE_FIRST`（它自己有一條 14、內文兩處寫著「rules 1-13」），
-  換來的是三處可能漂移的編號。
-- ⚠ **這條動的是每一題的基準**：SYSTEM_PROMPT 是所有入口共用的，跑分不可跨這一天直接比。
-
-**新量尺 [`eval/check_rounding_fidelity.py`](eval/check_rounding_fidelity.py)**（零 LLM、零網路、
-只讀結果檔）＝這條 prompt 規則唯一能被證偽的方式。判準是三個條件同時成立：來源有帶小數的值 Y、
-答案寫了 Y 的捨入版 X、且答案沒給 Y 而 X 也不在來源裡。
-
-⚠ **第一版判準太粗，而且錯的方向是漏抓**：整篇 contexts 比對時，`lex-17` 那句「約 18%」被
-同一題 10-K 的「increased 18%」放行——**`18%` 有來源，但不是那一句掛的那個來源**。
-改成**逐引用**歸屬（答案切成「一段主張＋它自己掛的引用」，只跟那幾個 chunk 比）之後：
-真陽性 `lex-17` 抓到了，粗版在 `sem-05` 的兩筆誤報同時消失。**靈敏度與誤報率是同方向改善的**，
-因為粗版兩邊都在拿錯的東西比。自測 8 條（3 陽性 ＋ 5 誤報對照）雙向全過，陽性① 是回歸鎖。
-
-⚠ **這支的統計效力很低**：改動前三個封存結果檔的發生率是 0／0／1 題（共 195 題）。
-**「改完之後是 0」幾乎不構成證據**——事件率本來就約每輪 1 題。要當成有效驗收，得累積更多輪，
-或去找一批必然觸發的題目（gold 是 Fundamentals 比率、且 10-K 有相近整數值的那種）。
-
-**預先寫死的驗收判準**（在跑 65 題**之前**寫下，見本次提交）：
-| 判準 | 通過條件 | 噪音 |
-|---|---|---|
-| 主（零噪音）| `check_number_defects` 兩輪，不得掉任何一條在三個封存基準裡 ≥2 輪 PASS 的主張；`lex-17 require_chunk` 必須維持 PASS | 無 |
-| 次（零噪音）| `check_rounding_fidelity` 不得增加（但見上面的效力警告）| 無 |
-| 參考（有噪音）| RAGAS 六指標對照基準，**且必須與基準在同一批判分裡跑**（見 2026-08-21 的假警報）| `NOISE` 表 |
-| 閘門 | `verify_answer_validators.py` 138 項全綠、`verify_web_gate_isolation.py` 全綠 | 無 |
-
-### 跑完之後：逐條對回上面的判準
-
-| 判準 | 結果 |
-|---|---|
-| 主（零噪音）| **兩輪都 PASS 8／FAIL 0／N/A 0**。五條「≥2 輪 PASS 的基準主張」全守住；`lex-17` 那兩條**在三個基準輪裡 0/3** 的主張轉成 **2/2 PASS**。基準是 5/3、5/3、4/4 |
-| 次（零噪音）| `check_rounding_fidelity`：r1 = 0 筆、**r2 = 1 筆**（`lex-17`，18.30% → 18%）。改動前是 1/3 個封存檔。**分不開** |
-| 參考（RAGAS，新臂與基準同一批重新判分）| recall +.019（門檻 .017）／precision +.040（.046 內）／faithfulness **+.067**（.010）／relevancy +.010（.004）／nv +.008／**correctness −.006（.012 內）**。五正一平，四項超過門檻 |
-| 閘門 | `verify_answer_validators.py` 138／138、`verify_web_gate_isolation.py` 全綠 |
-
-**歸因：改善來自檢索／意圖那半，不是生成端規則。** `require_chunk` 從 1/3 → 2/2 ＝ `18.30%` 這個值
-先進得了池、進得了 commit 集合，後面兩條主張才有東西可引。而生成端**照樣捨**：r2 的 `lex-17`
-開場句是「年增率**約在 18% 左右**【MSFT_Fundamentals #0】」，掛的正是 TTM 那個 chunk。
-
-⚠ **同一份答案同時做對和做錯**：r2 的條列裡有正確的 `18.30%（TTM）`，開場句卻是約值。
-`require_text` 掃全篇，看不出這件事——**兩個量尺各自都對，合起來會讓人以為捨入被修好了**。
-會抓到它的只有逐引用的 `check_rounding_fidelity`。這是「一題多條主張」之外的另一個形狀：
-**同一條主張在同一份答案裡有兩個互相矛盾的證據，而聚合式判準只看得到其中一個**。
-
-⚠ `faithfulness +.067` 很可能有一半是這次的 prompt 規則（照抄來源數字＝更忠實），但
-**單一臂分不開兩個改動**，不當作那條規則有效的證據（它的直接量尺說沒效）。
-
+**跑完之後逐條對回預先寫死的判準**：主判準（零噪音）**兩輪都 PASS 8／FAIL 0**，`lex-17` 那兩條
+**在三個基準輪裡 0/3** 的主張轉成 **2/2 PASS**；次判準 r1=0、r2=1 筆，**分不開**；
+RAGAS 五正一平、四項超過門檻。
+**歸因：改善來自檢索／意圖那半，不是生成端規則**——`require_chunk` 從 1/3 → 2/2 ＝ 值先進得了池，
+後面兩條主張才有東西可引。而生成端**照樣捨**。
+⚠ **同一份答案同時做對和做錯**：條列裡有正確的 `18.30%（TTM）`，開場句卻是約值。`require_text`
+掃全篇看不出這件事——**兩個量尺各自都對，合起來會讓人以為捨入被修好了**。
 
 ---
 
 ## 2026-08-21 — lex-17 的兩個真因都在「我修的那一層下面」；after 臂是 null result
 
-**預先寫死的判準沒過**：`lex-17` 三條主張要**同時**轉 PASS 才算修法有效。after 臂
-（`experiments/agentic/gj_mdna_65q_after.json`）跑出 **PASS 5／FAIL 3，與 before 臂逐條相同**，
-且 `require_chunk` 的訊息從「同檔撈到 #1」變成「該檔完全沒被撈到」＝**更壞**。
-→ 照判準記為 null result，不算部分成功。
+**預先寫死的判準沒過**：三條主張要**同時**轉 PASS 才算有效，實際 **PASS 5／FAIL 3，與 before 臂逐條
+相同**，且 `require_chunk` 的訊息從「同檔撈到 #1」變成「該檔完全沒被撈到」＝**更壞**。
+→ 照判準記為 **null result**，不算部分成功。
+⚠ 一個很好聽但錯的解讀隨手可得：「Fundamentals 從 #1 變成不出現，是修法正確地拒絕了零比率的
+chunk，所以其實是進步。」前半句是真的，後半句不是——使用者拿到的答案沒有變好。
+**能自圓其說的敘事和有效的修法，在數字上長得一樣。**
 
-逐層印出來之後，找到兩個各自獨立、都在前一天修法**下面一層**的真因：
+**真因 A：保底掃的池，本來就沒有那個 chunk。** 生產組態是英譯 query，實測
+`MSFT_Fundamentals #0` **連 RRF 的 20 個候選都沒進**（中文原句反而撈得到，rank 7）。
+名字叫「保底」，實作卻是「希望它剛好在池裡」。
+→ 新增 `_fetch_fundamentals_with_field()`：池裡沒有時**直接查 Qdrant**。「哪個 chunk 含這個欄位」
+有唯一正確答案 → 交給 Python，不靠相似度。⚠ 分數用 cross-encoder **真的重算**，不塞常數
+（那個數字會印給使用者看）。⚠ 沒有動 `RRF_TOP_N_PRIMARY`——不為一題改全域召回。
 
-**真因 A：保底掃的池，本來就沒有那個 chunk。**
-`_ensure_ratio_source_coverage` 只在 `run_state.pool` 裡找，而 pool ＝ Qdrant server-side RRF
-回傳的 `RRF_TOP_N_PRIMARY`(=20) 個候選。生產組態是 `full_translate_en=True`，實測英譯句
-`"How is Microsoft's revenue growth rate performing?"` 之下，**`MSFT_Fundamentals #0` 連候選名單
-都沒進**（進來的是零比率的 `#1`，RRF rank 5）；中文原句反而撈得到 `#0`（rank 7）。
-名字叫「保底」，實作卻是「希望它剛好在池裡」。前一天的修法（改成挑「含該欄位」的）方向對，
-但在池裡沒有 `#0` 的情況下，效果只是**正確地拒絕補一個沒用的 `#1`** → Fundamentals 整個消失。
-→ 新增 `_fetch_fundamentals_with_field()`：池裡沒有時**直接查 Qdrant**（`ticker` ＋
-`period_basis="TTM"` 兩個都有索引，全庫 22 筆）。「哪個 chunk 含 Revenue Growth 欄位」有唯一
-正確答案 → 照〈LLM 與 Python 的分工〉交給 Python，不靠相似度。
-⚠ 分數用 cross-encoder **真的重算**，不塞常數——那個數字會印在引用區塊給使用者看。
-⚠ 沒有動 `RRF_TOP_N_PRIMARY`：碼上註明 sweep 過 20 > 40，不為一題改全域召回。
+**真因 B：validator 讀的欄位，生產從來沒供給過。** `_basis_disclosure_notice` 判
+`chunk["period_basis"]`，而 `rq.retrieve()` **沒把這個欄位放進 chunk dict** → validator 在線上
+**結構性永遠不觸發**。而閘門⑪ 全綠，是因為那 8 條斷言都拿測試自己造的 dict 餵進去。
+**量尺與被測物耦合，同型第六次，而且是最難自己發現的一種形狀。**
+→ payload→chunk 的建構抽成 `rq._payload_to_chunk()`（唯一建構點），補上該欄位。
 
-**真因 B：validator 讀的欄位，生產從來沒供給過。**
-`_basis_disclosure_notice` 判 `chunk["period_basis"]`，但 `rq.retrieve()` 建 chunk dict 時
-**沒有帶這個欄位**（payload 有、還建了索引，就是沒帶出來）→ 該 validator 在線上
-**結構性永遠不觸發**。而閘門⑪ 全綠，是因為那 8 條斷言都拿測試自己造的
-`{"period_basis": ...}` 餵進去。**量尺與被測物耦合，同型第五次。**
-→ payload→chunk 的建構抽成 `rq._payload_to_chunk()`（唯一建構點），補上 `period_basis`。
+**量尺跟著修**（89 → **117** 項）：⑩b 確定性補撈（含「欄位不存在 → 回 None，**不可退而求其次**」
+與「分數必須真的算出來」兩條誤報對照）、⑪b **拿真實 payload 餵生產建構子**。
+**變異測試三發全中且判別力落在對的斷言上**：建構子不帶 `period_basis` → ⑪ 那 8 條**照樣全 PASS**、
+只有 ⑪b 叫。
 
-**量尺跟著修**（`eval/verify_answer_validators.py` 89 → **117** 項）：
-- ⑩b 確定性補撈：含「欄位不存在 → 回 `None`，**不可退而求其次**」與「分數必須真的算出來」兩條誤報對照；reranker 用樁替代，仍是零模型載入。
-- ⑪b 生產建構子對照：拿**真實 payload 餵 `rq._payload_to_chunk`**，不自己造 dict。
-- **變異測試三發全中且判別力落在對的斷言上**：M1（建構子不帶 `period_basis`）→ ⑪ 那 8 條**照樣全 PASS**、只有 ⑪b 的 3 條叫；M2（補撈不看欄位）→ ⑩b 5 條叫；M3（補撈整個移除）→ ⑩b 4 條叫。
-
-**端到端實測**（`experiments/agentic/gj_lex17_smoke.json`）：`lex-17` 三條全 PASS，答案引到
-`MSFT_Fundamentals_20260612.txt #0` 並明列 **TTM 18.30%**，且每個數字都標了所屬期間；
-口徑警語**沒有**印出來——沉默條件③ 正確生效（引用裡已經有 TTM 就不需要警語）。
-⚠ 殘留兩點，都不算修好：① 開頭第一句仍以 10-K 財年 **18%** 當結論，gold 是 TTM 18.3%；
-② `anchored_pct` 這條是靠昨天加的 `expect_text` 析取才 PASS 的（anchor 抓到的仍是 18%），
-**它現在和 `require_text` 幾乎重複，名字說的事情已經不再量了**。
+---
 
 ## 2026-08-20
 
 ### live web 取代 KB 新聞：②內容這一半量完——可信，但抓到一個 live 專屬的引用缺陷
 
-**完整判讀見 [`docs/EVAL.md`](docs/EVAL.md)〈live web 取代 KB 新聞：②內容這一半也量完了〉。**
+錄 `eval/web_fixture_news37.json`（37 題 ＋ 3 題陰性對照、**86 筆 Tavily 原始回應**、as-of 08-20）
+＋ `web_claims_news37.json`（40 條性質斷言）。⚠ **驗收不對照新聞 gold**：那批 gold 是「6 月的新聞
+說了什麼」，live web 回答「現在的網路說什麼」——**是兩個不同的問題**。
+**結果 PASS 35／FAIL 5**：觸發 web 35/37、引用 web 33/37、引用主機 100% 在白名單、
+**地區子網域 0 次**、陰性對照 0/3。
 
-- 錄 `eval/web_fixture_news37.json`（37 題 ＋ 3 題陰性對照、**86 筆 Tavily 原始回應**、as-of 2026-08-20）。**新檔**，不碰綁 as-of 2026-08-15 的舊 fixture；`record_web_fixture.py` 加 ABORT 擋住寫錯檔。
-- 新增 `eval/web_claims_news37.json`（40 條性質斷言）。⚠ **驗收不對照新聞 gold**：那批 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答「現在的網路說什麼」——是兩個不同的問題。
-- `check_web_claims.py` 新增 `no_fabricated_citations` 斷言。
-- **結果 PASS 35／FAIL 5／N-A 0**：觸發 web 35/37、引用 web 33/37、引用主機 100% 在白名單、**地區子網域 0 次**、陰性對照 0/3 打 web。
+**5 個 FAIL 全是同一個 live 專屬缺陷**：答案含 `【Reference 7, chunk #15】`——不是檔名、不是網址。
+⚠ 不是「多一個壞引用」——**那 5 題的有效 KB 引用是 0**，整份答案沒有任何可追溯的出處，
+答案裡卻有大量財報數字。snapshot 路徑 **0/100**。
+舊行為：validator 判它捏造 → 丟回重寫 → 重試上限用完 → **原樣 return**。而該處 trace 寫「走機械式
+收尾」，**程式裡從來沒有**——**註解描述了一個不存在的行為，比沒有註解更糟**。
 
-### 修：live 路徑會出貨指向不存在來源的引用（`【Reference 7, chunk #15】`）
+**修法**：`Reference N` 的編號**是我們自己編的**，所以 `N → allowed_chunks[N-1]` 是**確定性映射**，
+屬於 Python 那一半。**兩個守門條件才是重點**：①序號越界 → 不動 ②`chunk #M` 與第 N 筆不一致 → 不動。
+⚠ 危險方向**不是漏修**（漏修＝維持現狀），而是**把「無法追溯」變成「看起來可追溯的錯引用」**。
+條件② 另有一個副作用：**它讓「排序假設」不必被證明**——兩半一致時那筆修補是被資料自己確認過的。
 
-5/37 題，**snapshot 路徑 0/100**。⚠ 不是「多一個壞引用」——**那 5 題的有效 KB 引用是 0**，整份答案沒有任何可追溯的財報出處，答案裡卻有大量財報數字。
-**舊行為**：validator 判它捏造 → 丟回重寫 → `CITATION_VALIDATOR_MAX_RETRIES = 1` 用完 → `break` → **原樣 `return answer`**。而該處 trace 寫「走機械式收尾」，**程式裡從來沒有**——註解描述了一個不存在的行為，已一併改成照實說。
+**閘門⑨ 12 項**（77 → 89）。三向變異：機制恆不作用 → 7 條 FAIL；拿掉一致性守門 → **誤報對照精準
+FAIL 1 條**；拿掉範圍守門 → 當場 IndexError。⚠ 變異③ 順帶證實 `Reference 0` 是三條裡最危險的：
+Python 的 `[-1]` 是合法索引，少了守門它會**安靜地**指到最後一筆。**會吵的那種比較安全。**
+⚠ 5 題裡只有 2 題模型仍吐序號引用（兩題都完整還原、守門擋下 0 筆），**另外 3 題這一輪沒吐，
+它們的 PASS 不算在修法頭上**。
+⚠ **閘門⑨ 的端到端斷言第一版讀 `experiments/`**，把修好的 replay 併回去就 `dirty=0` 而 FAIL——
+量尺與被測物耦合，**同一天第三次同型事故**。已改成把修法前的 20 筆逐字凍結進測試檔。
 
-- 新增 `_repair_reference_citations`：`Reference N` 的編號**是我們自己編的**（`rq.build_user_prompt` 排成 `[Reference i+1: source, chunk #idx]`），所以 `N → allowed_chunks[N-1]` 是**確定性映射**，屬於 Python 那一半，不必再問 LLM。在 `_validate_and_fix_citations` 的迴圈開頭先跑，能還原的就不浪費一次 LLM 重寫。
-- **兩個守門條件**（＝這次設計的重點）：①`N` 超出候選範圍 → 不動；②引用裡的 `chunk #M` 與第 N 筆的 `chunk_index` 不一致 → 不動。⚠ 修補的危險方向**不是漏修**（漏修＝維持現狀），而是**把「無法追溯」變成「看起來可追溯的錯引用」**。條件② 另有一個副作用：它讓「排序假設」不必被證明——兩半一致時，那筆修補是**被資料自己確認過的**。
-- **閘門⑨ 12 項**，`verify_answer_validators` 77 → **89/89**。三向變異測試：機制恆不作用 → 7 條 FAIL；拿掉一致性守門 → **誤報對照精準 FAIL 1 條**；拿掉範圍守門 → 當場 IndexError。⚠ 變異③ 順帶證實 `Reference 0` 是三條裡最危險的：Python 的 `[-1]` 是合法索引，少了守門它會**安靜地**指到最後一筆（其他越界值反而會當場炸）。
-- 真實答案上的修補率：**還原 16 筆、5 題有 3 題完全清乾淨**。⚠ 這是**下界**——量的時候用結果檔的 `sources` 當代理排序，那是跨子問題聯集，與 Generator 實際看到的清單不同；生產路徑用的是手上真正的 `allowed_chunks`。
-- **端到端（帶 trace 的 replay，零網路）**：5 題裡 2 題模型仍吐序號引用，`還原 12 筆`／`還原 3 筆`、**守門擋下 0 筆**，事後掃描 5 題全部零假引用。⚠ 另外 3 題這一輪模型沒吐，**它們的 PASS 不算在修法頭上**；先前 `check_web_claims` 的 PASS 40 是「修法＋重新生成」兩個變因同時動，單看證明不了事。
-- ⚠ 真實 `allowed_chunks` 排序下守門條件 **0/15 擋下** → 先前「14 筆有 4 筆對不上」確實是代理排序的假象。
-- ⚠ **閘門⑨ 的端到端斷言第一版讀 `experiments/`，把修好的 replay 併回去就 `dirty=0` 而 FAIL**——量尺與被測物耦合。已改成把修法前的 20 筆序號引用**逐字凍結進測試檔**（同閘門② 早就寫下的規則）。⚠ 這是同一天第三次同型事故，見 docs/EVAL.md。
+### 量尺重建（65 題）：兩組常數是分開失效的，也要分開修好
 
+題庫 100 → 65 讓 `GOLD_BASELINE` 與 `NOISE` 同時失效。⚠ **gold 重量完就宣告「量尺修好了」是最
+自然、也最危險的講法**——那會讓下一個人拿一個沒有效的噪音門檻去判斷顯著性。
+新 gold 上限（n=65）：correctness **.972**（舊 .989）／recall .788／precision .843／nv .969／
+faith .659／relevancy .871。**最大的變化是 correctness——gold 在 65 題上沒那麼容易拿滿分**，
+所以「距上限還有多少」在新舊之間不可直接比。
+噪音**新測到的值沒有直接採用**，改**取新舊較大值**：`context_precision` 新測 .005 看起來小了十倍，
+但舊值 .046 的成因寫在碼上（最高排名那個判定翻面整題就 1.0→0.0），這次剛好沒翻不代表它不會翻。
+**門檻取大只會要求更多證據，錯的方向是安全的那一邊。**
+
+---
 
 ## 2026-08-19
 
-### 新增 `eval/probe_news_web_routing.py`：把「live web 能不能取代 KB 新聞」拆成便宜的一半先做
-
-**完整判讀見 [`docs/EVAL.md`](docs/EVAL.md)〈live web 能不能取代 KB 新聞〉。**
-
-該問題拆成 ①**會不會**打 web（只燒 LLM）與 ②打回來**夠不夠**（連網燒 Tavily）。**① 是 ② 的必要條件**，所以先做 ①。零網路的作法是把 `_tavily_search` 換成計數樁、其餘管線原封不動。
-
-- **結果：路由不是瓶頸。** 37 題冷凍題庫觸發 web ≥35/37，其中 **multi_intent 15/15**（最危險的形狀「財報半讓 Grader 判夠而整題不打 web」沒有發生）；strict 陰性對照 0/6。
-- 兩題沒觸發都不是路由壞掉（KB 真的有相關內容且答案有揭露），且**其中一題重跑就會觸發**→「2 題不叫 web」是單輪觀察不是穩定行為。
-- **順帶完成 `_unmet_realtime_gaps` 的第一次端到端驗證**：樁回空字串恰好就是它針對的形狀（打了 web 但搜不到 → 回頭用財報生成），實測兩題都印出時效警語。其中「NVIDIA 現在值多少錢」的答案本體是 6/12 的市值快照講成「目前的市值」——警語把它接住了。
-- ⚠ **陰性對照修正**：「現在市值／現在股價」**不可以**當陰性對照。第一版把 `col-08` 放進去，它打 web 被記成「浪費」，但 `eval/web_claims.json` 的 `web-01` 對同型問題的斷言正是 `web_calls_gte: 1`——**同一件事在兩支腳本裡有相反的期望**。已拆成 `CONTROL_STRICT`（斷言 0 次）／`CONTROL_LOOSE`（只觀察）。
-- ⚠ **57% 打滿 web 預算這個數字是樁造成的，不可外推**；它只能支撐一個結論：**② 的成本上界是 111 次 Tavily 呼叫**。
-
-### 量尺補回兩條（`lex-16`／`lex-17`）；`mi-05` 的缺陷**沒有**被拔除新聞修好
-
-**完整經過見 [`docs/EVAL.md`](docs/EVAL.md)〈量尺補回兩條〉。**
-
-拆題庫讓 `check_number_defects` 從 6 條掉到 4 條，而搬走的兩條**一 PASS 一 FAIL**。把它們**去掉新聞子句、只留財報半**補回母檔：
-
-- `eval_set.json` 63 → **65 題**（lexical 15 → 17）。`lex-16` 承自 `mi-04`、`lex-17` **逐字沿用 `mi-05` 原題前半、其餘一字不改**（讓新聞子句成為唯一變因）。
-- `reference_answers.json` 同步生成兩題。⚠ 首次生成**靜默落成英文**（其餘 63 題是繁中）——`gen_reference_answers.py` 沒有 `--match-lang-from` 就會這樣，已重生成。`lex-17` 的 reference 另有一處人工校正：自動版把 TTM 寫成「最近一個會計年度」，而這題的判別力整個在口徑上。
-- `number_claims.json` 4 → **7 條**：`lex-16`（anchored_pct 16.6）、`lex-17` 拆成 `require_chunk`（#0 進池，`known_defect`）＋ `anchored_pct`（18.3 且口徑為 TTM）——**進池 ≠ 有用它**。
-
-**結果：拿掉新聞子句沒有修好 `mi-05`。** 兩次端到端 **r1 PASS／r2 FAIL**，r2 逐字就是原症狀（同檔撈到 `#1`、答案改用 10-K 財年 18%）。⚠ **我一度只憑 r1 全 PASS 就宣告「根因是新聞污染、已被推翻」並改了三份文件**，r2 立刻打臉；而 `mi-05` 自己在 2026-08-12 就記過「部分取決於 Plan 產生的子問題」。→ **這 7 條主張的判讀一律要跑 ≥2 輪**（同一份 collection：r1 PASS 7／FAIL 0，r2 PASS 4／FAIL 3）。
-
-**真的被拔除新聞修好的是 `mix-07`**：2/2 從 `I don't have enough information` 翻成答出 $29.5B，而它記載的根因本來就是「Plan 把財報事實譯成新聞查詢 → 候選池全是 News chunk → 拒答」。**這是拔除新聞唯一一個零噪音量到的直接收益。**
-
-**順帶修掉兩個量尺缺口（都是 r2 逼出來的）**：
-- `col-11` 的 anchor 寫死 `Microsoft Cloud|整體雲端`，而某輪答案用「雲端營收」→ 答對了卻判 **N/A**。這是 `check_number_defects` 的**第五次失效**，且與前四次不同——前四次是判反，這次是**護欄安靜地停止量測**。
-- 兩條主張補 `expect_text` 當第二判準，因為 `expect_pct` 的 ±1pt 容差擋不住「數值接近但口徑不同」的錯值：`col-11` 補金額 `545 億／$54.5B`、`lex-17` 補字面 `18.3`（10-K 的 `18%` 差 0.3，原本會 PASS）。⚠ `lex-17` **刻意不加 forbid**：兩個口徑並陳並標注清楚是好答案。
-
-### 新增 R4：web ↔ 財報數值衝突要求「並陳」而不是「裁決」
-
-**完整設計與判斷理由見 [`docs/AGENTIC.md`](docs/AGENTIC.md) A10。**
-
-- `_ground_source_type` 現在也吃 `web_extra`（來源型別 `"web"`，**刻意不列入 `AUTHORITATIVE_TYPES`**）。順帶修掉 `if not chunks: return` 這個洞——「候選池空、只有 web」**正是 live 路徑的常見形狀**，原本整個跳過 grounding。
-- 新增 `find_unreconciled_web_conflicts`（R4）：同格互斥值、一邊只在 web、另一邊在財報 → 要求兩個都講、各自標出處與時點。**兩邊都已標出處就沉默。**
-- ⚠ **刻意不擴充 R3**：R3 判「一邊為錯」，套到 web 會讓系統系統性報舊數字（web 可以合法地比 filing 新）。`_consistency_check_and_fix` 的舊 docstring 已寫下「把 web 併進去會改變 R3 的語意」——那句是對的，只是結論該是「新增一條動作不同的規則」。
-- **閘門⑧ 15 項**，`verify_answer_validators` 62 → **77/77**。雙向變異測試：拿掉機制 → 2 條 FAIL；拿掉「已標出處就沉默」→ 誤報對照 FAIL。
-
-### 修：時效警語在 KB 拔除新聞後整個死掉
-
-**完整診斷見 [`docs/EVAL.md`](docs/EVAL.md)〈後續：時效警語一度整個死掉〉。**
-
-拔除新聞時把 `_news_freshness_gaps` 標成「閒置但保留」，**低估了後果**——它是缺口的唯一來源，
-於是 `_format_unresolved_freshness_notice` 永遠回空字串。實測：即時題 → Grader 判不足 →
-打 web → **預算用完或搜不到** → 答案用財報 chunk 生成 → **零時效揭露**。
-
-- 新增 `_unmet_realtime_gaps`：判準改成「子問題需要即時資料（`realtime_need != none`）」。`realtime_need` 從 executor 傳出（新增第三個回傳值），`web_used` 的過濾沿用既有邏輯**不重複判斷**。
-- 警語措辭分流：realtime 缺口講「知識庫本來就沒有這種資料」，news 缺口維持原文；`doc_type` 進 dedup key，兩種缺口不互相蓋掉。
-- **閘門⑤b 10 條 ＋ 變異測試**：打斷機制 → 7 條乾淨 FAIL；還原 → **62/62 PASS**（原 52）。⚠ 含「財報題 → 零缺口」的陰性對照——少了它，警語會印在每道財報題底下。
-
-### 修：財報被誤用來證明「候選池夠新」，讓 `kb_unfixable` 早退失效
-
-**完整診斷見 [`docs/EVAL.md`](docs/EVAL.md)〈「永不過期」被誤用成「能證明夠新」〉。**
-
-確認「證據後置」設計後的第一步是**量 Grader 有沒有照設計運作**（零 LLM、真實檢索池）。
-結果 6 個即時類問題**有 4 個時效改判不觸發**，含「微軟現在的股價是多少？」這種 intraday 題。
-
-⚠ **實際代價比第一版宣稱的小，已更正**：後續對照（舊行為 vs 新行為，同池同 Grader）顯示這
-4 題**在舊碼下 web 一樣會被叫**——Grader 自己就判 `sufficient=False`。我第一版把「時效改判
-沒觸發」報成了「web 不會被叫」，那是兩件事。真正的代價是 **`kb_unfixable` 恆為 False → 每個
-子問題白燒 `MAX_REWRITES=2` 輪改寫才走 web**（那正是 `kb_unfixable` 被造出來要防的死迴圈），
-以及**第二道防線被靜默關閉**（LLM 若判錯 `sufficient=True`，就沒有東西接得住）。
-
-- **根因**：`_source_newest_date` 把 10-K 的 4 碼財年戳算成該年 12/31（`MSFT_10K_2026` → **2026-12-31，未來**），而 `_stale_for_realtime` 取全池 `max(dates)` → 財報不只是棄權，是**替整個池子背書說夠新**。
-- **⚠ 4 題裡只有 1 題是拔除新聞造成的**，另 3 題（含最危險的 intraday 股價題）從來沒被 `looks_like_news_query` 攔過 ＝ **既有的洞，只是一直沒人量**。
-- **修法**：新增 `_is_freshness_evidence()`——只有 8 碼真實日曆日期算時效證據，4/6 碼財報期間**不算證據也不算過期**。`_kb_ceiling_date` 套用同一套資格判準。無合格證據 → 哨符 `NO_REALTIME_SOURCE(-1)`，Grader 訊息分流。
-- ⚠ **這推翻了一個先前刻意的成本判斷**（「誤判新鮮只是維持現狀」）——那句話在 KB 有新聞時成立，KB 只剩財報後「維持現狀」＝拿 10-K 回答今天股價。`none`（財報期間數字）不受影響，維持永不過期。
-- **閘門⑤ 改寫**：三條舊斷言換成新語意，並新增**回歸鎖**（未來日期的 10-K 不得蓋過真實日期來源——這條在新舊實作之間有判別力）與**誤報對照**（池裡有 1 天前的來源 → 不判過期，沒有它「一律判過期」也會全綠）。
-
-**修後實測**：6/6 即時題 `kb_unfixable=True`（直接跳過改寫走 web）、2/2 財報題不觸發改判。
-
-**同時新增 [`eval/probe_realtime_need.py`](eval/probe_realtime_need.py)**（LLM 側唯一量尺）：
-8 題 × 3 輪，`realtime_need` **8/8 正確、零跨輪抖動、危險錯誤 0**。其中「NVIDIA 最近有什麼
-新進展？」**不含任何新聞字樣**——那正是被拆掉的 `looks_like_news_query` 詞表會漏的形狀
-（實測 18 個措辭漏 10 個），LLM 判準接住了。這是「詞表換 LLM 判斷」這個決定的第一組正面證據。
-⚠ 也因此得知：**這條路的主防線是 Grader 的 LLM 判斷，時效改判是第二道**。第二道的價值無法在
-「LLM 判對」的題上量到——要量它得構造 LLM 會判錯的題，目前沒有。
-
 ### KB 拔除新聞：只留「記錄」，把「流」交給 live web
 
-**完整理由、資料實況與三個量尺變動見 [`docs/EVAL.md`](docs/EVAL.md)〈KB 拔除新聞〉。**
+**資料層**：`News` 加進 `RAW_EXCLUDE_DIRS`（**整條規則的單一開關**）；`fetch_data.py` 的
+`--skip-news` → **`--with-news`（預設不抓）**；兩個 collection 各刪 98 個 news chunk
+（**歷史對照臂刻意不動**）。
+**程式層**：移除 `doc_type=news` 硬 filter 注入、news 題的 ticker 改寫、相關守衛。
+`looks_like_news_query` 保留但**退出所有生產判斷**。Planner prompt 拿掉「市場事件可拆 news 子問題」
+的例外。`find_authority_conflicts`（R3）與 `_news_freshness_gaps` 標記為**永久閒置但刻意保留**
+——它們治的病是「KB 新聞數字壓過財報」，病源消失，**閒置是對的不是退化**。
 
-**資料層**
-- [`data_update_edgar.py`](data_update_edgar.py)：`News` 加進 `RAW_EXCLUDE_DIRS`（**整條規則的單一開關**）。掃描從 38 個 .txt 降到 14 個（只剩 Fundamentals/IncomeStatement）。
-- [`fetch_data.py`](fetch_data.py)：`--skip-news` → **`--with-news`（預設不抓）**。
-- Qdrant：`us_stock_rag_edgar_mdna` 3925 → **3827**、`us_stock_rag_edgar_multiyear` 13120 → **13022**（各刪 98 個 news chunk）。**歷史對照臂刻意不動**。
+**成效**：複合題的 top-5 從「5 個 news chunk、filing gold 不在候選池」變成 filing gold 排名 1、2。
+這類題是拔除前**最大的殘留檢索失敗**。
 
-**程式層**
-- [`rag_query.py`](rag_query.py)：移除 `doc_type=news` 硬 filter 注入、news 題的 `ticker→mentioned_tickers` 改寫、`_resolve_latest_quarter_filter` 的「新聞題不搶」守衛、撈不到 news 的 WARN。`looks_like_news_query` 保留但**退出所有生產判斷**（只剩診斷探針當分類標籤用）。
-- [`agentic_rag_v2.py`](agentic_rag_v2.py)：Planner prompt 拿掉「市場事件可拆 news 子問題」的例外（向量庫已無新聞，那樣寫只會撈到空的）；`find_authority_conflicts`（R3 財報優先）與 `_news_freshness_gaps` 標記為**永久閒置但刻意保留**——它們治的病是「KB 新聞數字壓過財報」，病源消失，閒置是對的。
+**量尺三個變動（⚠ 跨今日的分數一律不可直接比）**：題庫 100 → 63（37 題冷凍，**冷凍不是刪除**）；
+`check_number_defects` 6 → 4 條（⚠ **不是改善是組成變動**，搬走的兩條一 PASS 一 FAIL）；
+閘門④ 一度 FAIL 3 項——**那是量尺失去判別力不是機制壞掉**，改成**自帶合成 coverage**（不刪斷言），
+從此不與 KB 內容耦合，**比原本更好**。
 
-**成效（實測）**：`mi-01`「NVIDIA 最新財報…加上新聞中…」的 top-5 從「5 個 news chunk、filing gold 不在候選池」變成 `NVDA_10Q_202604#42／#14` 排名 1、2。這類複合題是拔除前**最大的殘留檢索失敗**（3/49）。
+### 修：財報被誤用來證明「候選池夠新」
 
-**量尺（⚠ 跨今日的分數一律不可直接比）**
-- `eval_set.json` **100 → 63 題**；37 題（gold 含 `*_News_*.txt`）連同 reference/claims 搬到 `eval/*_news.json` **冷凍**。冷凍不是刪除——那是日後驗收「live web 能否取代 KB 新聞」唯一的現成題庫。
-- `check_number_defects` 6 → 4 條，**PASS 4／FAIL 2 → PASS 3／FAIL 1**。⚠ **不是改善是組成變動**；且 `mi-05` 的缺陷（`MSFT_Fundamentals#0` 沒進候選池）**根本不是新聞造成的，它只是離開了量尺**（記進 BACKLOG）。
-- [`eval/verify_answer_validators.py`](eval/verify_answer_validators.py) 閘門④ 一度 FAIL 3 項——`_news_freshness_gaps` 的 cutoff 讀真實 KB coverage，KB 沒新聞就算不出缺口。**那是量尺失去判別力不是機制壞掉**：改成**自帶合成 coverage**（不刪斷言），52/52 綠，且從此不與 KB 內容耦合。
+確認「證據後置」設計後的第一步是**量 Grader 有沒有照設計運作**（零 LLM、真實檢索池）。
+結果 6 個即時類問題**有 4 個時效改判不觸發**，含 intraday 股價題。
+**根因**：`_source_newest_date` 把 10-K 的 4 碼財年戳算成該年 12/31（`MSFT_10K_2026` → **未來日期**），
+而 `_stale_for_realtime` 取全池 `max(dates)` → **財報不只是棄權，是替整個池子背書說夠新**。
+⚠ **4 題裡只有 1 題是拔除新聞造成的**，另 3 題**從來沒被詞表攔過 ＝ 既有的洞，只是一直沒人量**。
+⚠ **實際代價比第一版宣稱的小，已更正**：那 4 題**在舊碼下 web 一樣會被叫**（Grader 自己就判不足）。
+我第一版把「時效改判沒觸發」報成「web 不會被叫」，那是兩件事。真正的代價是 `kb_unfixable` 恆為
+False → 白燒改寫輪，以及**第二道防線被靜默關閉**。
+**修法**：`_is_freshness_evidence()`——只有 8 碼真實日曆日期算證據，4/6 碼財報期間**不算證據也不算
+過期**。`_kb_ceiling_date` 套用同一套資格判準。
+⚠ **這推翻了一個先前刻意的成本判斷**（「誤判新鮮只是維持現狀」）——那句話在 KB 有新聞時成立，
+KB 只剩財報後「維持現狀」＝拿 10-K 回答今天股價。
+**閘門⑤ 新增回歸鎖**（未來日期的 10-K 不得蓋過真實日期來源——**這條在新舊實作之間有判別力**）
+**與誤報對照**（池裡有 1 天前的來源 → 不判過期，沒有它「一律判過期」也會全綠）。
+同時新增 `eval/probe_realtime_need.py`（LLM 側唯一量尺）：8 題 × 3 輪，**8/8 正確、零抖動**。
+其中一題**不含任何新聞字樣**——那正是被拆掉的詞表會漏的形狀，LLM 判準接住了。
+⚠ 也因此得知：**主防線是 Grader 的 LLM 判斷，時效改判是第二道**，而第二道的價值無法在「LLM 判對」
+的題上量到。
 
-**閘門複驗**：`verify_cross_period_collapse` 17/17、`verify_period_intent_routing` 39/39、`verify_answer_validators` 52/52、`verify_web_gate_isolation` PASS。
+### 時效警語一度整個死掉（同日補回）
 
-
-### 期別探針 gold 的人工複審（零程式判定，逐題讀 filing 原文）
-
-不採信任何聚合腳本的輸出，把 49 題 filing gold 逐題調出原文人工看。**修法的收益是真的，
-但量尺有兩處要講清楚，且撤回一條先前的宣稱。**
-
-- **撤回**：`docs/EVAL.md` 原寫「`keep=1` 新增 3 個沉默失效」——那 3 題（`mix-07`／`lex-12`／
-  `mix-10`）人工讀原文後**全是量尺假陽性**（更新的一季逐字有同一句 Wiz 段落／被路由到 news）。
-  `keep=2` 的決定不變，但只剩「趨勢題 −38%」這一條獨立證據支撐。
-- **新記**：**46/49 的 gold 就是該公司最新那一份**，而 B 的規則正是「留最新」→ `gold@k`
-  結構上偏袒 B。引用 B 的增益數字時必須同時講這句。
-- **確認為真缺陷**：`mix-15`（`TSLA_10Q_202406` 說「2024 年至第二季 844,000 輛」vs gold
-  「2026 年 860 千輛」，差 2%、差兩年）、`sem-05`（Anthropic 投資 2023 是 12.5 億、2025 是 148 億）。
-- **確認為量尺假陽性**：`mix-10`（「higher net sales of Pro models」四季逐字都有）、
-  `col-07`（「minority market share」三年逐字都在）。
-- **兩把想取代人工的聚合尺都失敗**，且都是本 repo 記過的老坑：句子重現率被章節樣板稀釋、
-  數字比對被單位換算誤殺（答案 `569.94` 億 vs filing `56,994` 百萬，49 題誤報 23 題）。
-
-同時確認 **append-only 在 gold 層面成立**：14 組 `(ticker, form)` 逐一比對，沒有任何一份比
-`period_probe_baseline.json` 快照更新的 filing 進來 → 「最新一季」類 gold 的指稱未被新資料改變。
-
-詳見 [`docs/EVAL.md`](docs/EVAL.md)〈期別探針的 gold 人工複審〉；剩餘極限記在
-[`BACKLOG.md`](BACKLOG.md)〈已接受的極限〉。
-
+拔除新聞時把 `_news_freshness_gaps` 標成「閒置但保留」，**低估了後果**——它是缺口的唯一來源，
+於是警語永遠回空字串。實測：即時題 → 打 web → **預算用完或搜不到** → 用財報生成 → **零揭露**。
+新增 `_unmet_realtime_gaps`，判準改成「子問題需要即時資料」。**閘門⑤b 10 條 ＋ 變異測試**：
+打斷機制 → 7 條乾淨 FAIL。⚠ 含「財報題 → 零缺口」的**陰性對照**——少了它，警語會印在每道財報題底下。
 
 ### 檢索層兩條期別修法：跨期 field collapsing（B）＋ 期間意圖解析（A）
 
-承同日〈多年語料壓力測試〉量到的兩個病灶。**完整分析與四次自我否決見
-[`docs/EVAL.md`](docs/EVAL.md)〈跨期 field collapsing 與期間意圖解析〉。**
+**B**（`_collapse_cross_period_sections`，**翻預設為開**）：同一 `(ticker, filing_type, item_id)`
+最多讓 `keep=2` 份 filing 佔位，組內留**財年最新**的。是搜尋引擎的標準原語（Solr `CollapsingQParser`／
+ES `collapse`），**不是 MMR**——MMR 靠 embedding 相似度且帶 λ 超參數，而本專案量尺已飽和、
+**沒有能調 λ 的尺**。
+敢翻預設的理由：**單年上逐題完全 no-op（0/49 題有變化）**，多年上改 23/49 題。
+**資料還不需要時不作用、需要時自己生效。**
+順手補了 `retrieve()` 回傳 chunk 的四個欄位——**這個缺口先前逼三個下游各自再掃一次 Qdrant**。
 
-**B — 跨期 field collapsing**（[`rag_query.py`](rag_query.py) `_collapse_cross_period_sections`，
-**已翻預設為開啟**，`RAG_CROSS_PERIOD_COLLAPSE=0` 可關）
-同一 `(ticker, filing_type, item_id)` 最多讓 `keep=2` 份 filing 佔位，組內留**財年最新**的。
-是搜尋引擎的標準原語（Solr `CollapsingQParser`／ES `collapse`），**不是 MMR**——MMR 靠 embedding
-相似度且帶 λ 超參數，而本專案量尺已飽和、沒有能調 λ 的尺。
-- 敢翻預設的理由：**單年生產 collection 上逐題完全 no-op（0/49 題 top-5 有任何變化）**，
-  多年上改 23/49 題。資料還不需要時不作用，需要時自己生效。
-- 順手補了 `retrieve()` 回傳 chunk 的 `item_id`／`filing_type`／`period_code`／`fiscal_rank`
-  四欄——**這個缺口先前逼三個下游各自再掃一次 Qdrant**（agentic 期別 validator、
-  `_scan_kb_coverage`、`probe_temporal_interference`）。
+**A**（`resolve_period_intent` ＋ `ladder_pick`，當時預設仍關）：「這題問的是哪個期間」交 LLM，
+「那是哪個期碼」交 Python 從 ladder 算。
+**ladder 用 payload 的 `(fiscal_year, fiscal_period)` 排序，不用期碼字串比大小**：實測 385 個配對
+有 **31 對（8.1%）判反**。
+**`period_ref=range` 反過來保護 B**：趨勢題整個跳過 collapse——這是 collapse 那個損害唯一的正解。
 
-**A — 期間意圖解析**（`resolve_period_intent` ＋ `_get_period_ladder`／`ladder_pick`，
-env `RQ_PERIOD_INTENT_LLM=1` 啟用，**預設仍關**）
-「這題問的是哪個期間」交 LLM（`period_ref: latest|absolute|range|none` ＋ `fiscal_year`
-＋ `granularity`），「那是哪個期碼」交 Python 從 ladder 算——照 CLAUDE.md 的 LLM/Python 分工。
-- **ladder 用 payload 的 `(fiscal_year, fiscal_period)` 排序，不用期碼字串比大小**：
-  10-K 是 4 位年份、10-Q 是 6 位 yyyymm，混比會時對時錯，**實測 385 個配對有 31 對（8.1%）判反**
-  （例：`AAPL_10K_2025`(2025) 實際比 `AAPL_10Q_202506`(202506) 新，字串比大小卻說反）。
-- **`period_ref=range` 反過來保護 B**：趨勢題整個跳過 collapse。8/8 趨勢題判對，
-  而 collapse 對它們的損害是 `keep=1` −38%／`keep=2` −6% —— 這是那個損害唯一的正解。
-- 解決了三條確定性路徑都表達不出來的**複合指稱**：`mix-15`「Tesla **2026 年至今**」
-  → `{latest, fiscal_year:2026, granularity:quarter}`，gold rank 6 → 1。
+**成效（多年，49 題）**：gold@5 0.837 → **0.898**、錯期率 0.082 → **0.041**、排擠率 0.278 → **0.188**；
+`explicit` 類錯期率 0.333 → **0**。逐題**變好 3 題、變差 0 題**。
+**新增閘門** `verify_cross_period_collapse` 17/17、`verify_period_intent_routing` 39/39。
+後者的閘門② 帶自我檢查：印出「期碼字串比大小判反幾對」，一對都沒有就明說**那是測資不足不是系統健康**。
+**新增陰性對照** `period_probe_trend_queries.json` 8 題——eval_set 裡**沒有任何一題**是這個形狀。
 
-**單年生產 collection 上兩者都不動任何東西**（A+B 逐題變好 0、變差 0）→ 這是 B 敢翻預設
-的理由，也是 **A 不翻**的理由：A 在目前資料上買不到東西卻要付每次 retrieve 1.54s。
-A 的翻預設條件寫在 [`BACKLOG.md`](BACKLOG.md)。
+### 多年語料壓力測試：KB 21 → 77 份 filing
 
-**成效（`us_stock_rag_edgar_multiyear`，49 題）**：gold@5 0.837 → **0.898**、錯期率
-0.082 → **0.041**、排擠率 0.278 → **0.188**；`explicit` 類錯期率 0.333 → **0**。
-逐題比對**變好 3 題、變差 0 題**。
+往回補兩年灌進獨立的 `us_stock_rag_edgar_multiyear`，**生產 collection 一個位元組都沒動**。
+新增 `probe_temporal_interference.py`（三個**互相獨立**的指標＋兩臂，分組鍵用 payload 的 `item_id`
+所以「同一節、不同年份」是確定性認出來的）＋ `period_probe_baseline.json`（灌資料前的凍結快照
+——eval_set 有 4 題 gold 是萬用字元，照當下 manifest 展開會讓它們**撈到哪一年都算命中**）。
+`fetch_data.py` 加 `--annuals N` 與 **append-only 跳過**（實測既有 21 份 md5 全數未變）。
 
-**新增閘門**：[`eval/verify_cross_period_collapse.py`](eval/verify_cross_period_collapse.py)
-17/17（零 LLM、零 Qdrant）、[`eval/verify_period_intent_routing.py`](eval/verify_period_intent_routing.py)
-39/39（零 LLM，只讀 payload）。後者的閘門② 帶自我檢查：印出「期碼字串比大小判反幾對」，
-一對都沒有就明說**那是測資不足不是系統健康**。
-**新增陰性對照**：[`eval/period_probe_trend_queries.json`](eval/period_probe_trend_queries.json)
-8 題本來就需要多期的趨勢題——eval_set 的 100 題裡**沒有任何一題**是這個形狀。
+**結果**：① **競爭密度上升最多的那一類完全沒退步**（`relative` 兄弟密度 1.90→7.52，指標一格沒動
+——硬 filter 全吸收）② **硬 filter 的價值放大約 10 倍**（關掉路由，單年只值 0.048 錯期率，多年是
+**0.476**）→ 那條路由從「可有可無的優化」變成「不能拔的命脈」，而它**靠硬編碼詞表觸發**
+③ **真正壞掉的是「問題沒提期間」那 25 題**（排擠率 0.080 → **0.480**）④ **F1 遠大於 F2**
+（68 個浪費席位 vs 4 題錯期）→ 病灶是**多樣性不是期別選擇**。
 
-### 多年語料壓力測試：KB 21 → 77 份 filing，量出期別干擾的真實形狀
+### 量尺補回兩條（`lex-16`／`lex-17`）；`mi-05` 的缺陷**沒有**被拔除新聞修好
 
-`BACKLOG.md` 記了很久的「**復活條件：KB 納入第二個年度的 filing 時**」達成並執行。
-往回補兩年（每家 3×10-K ＋ 8×10-Q，橫跨 ~2.5 年，13,120 chunks）灌進獨立的
-`us_stock_rag_edgar_multiyear`，**生產 collection 一個位元組都沒動**。
+把搬走的兩題**去掉新聞子句、只留財報半**補回母檔（63 → **65 題**），讓新聞子句成為唯一變因。
+**結果：沒有修好。** 兩次端到端 r1 PASS／r2 FAIL，r2 逐字就是原症狀。
+⚠ **我一度只憑 r1 全 PASS 就宣告「根因是新聞污染」並改了三份文件**，r2 立刻打臉；而該缺陷自己的
+記載早就寫過「部分取決於 Plan 產生的子問題」。→ **這些主張的判讀一律要跑 ≥2 輪**（同一份
+collection：r1 PASS 7／FAIL 0，r2 PASS 4／FAIL 3）。
+**真的被拔除新聞修好的是 `mix-07`**（2/2 從拒答翻成答出 $29.5B）——**那是拔除新聞唯一一個零噪音
+量到的直接收益**。
+順帶修掉兩個量尺缺口（都是 r2 逼出來的）：`col-11` 的 anchor 措辭寫死（**第五次失效**，且與前四次
+不同——**護欄安靜地停止量測**）；兩條主張補 `expect_text` 當第二判準。
+⚠ `lex-17` **刻意不加 forbid**：兩個口徑並陳並標注清楚是好答案。
 
-**做了什麼**
-- [`eval/probe_temporal_interference.py`](eval/probe_temporal_interference.py)（新增）：三個
-  **互相獨立**的指標（F1 排擠／F2 錯選／gold rank 連續量）＋ 兩臂。分組鍵用 payload 的
-  `item_id`，所以「同一節、不同年份」是確定性認出來的，不必用字串相似度猜。
-- [`eval/period_probe_baseline.json`](eval/period_probe_baseline.json)（新增）：灌舊資料前的
-  21 份 filing 凍結快照。eval_set 有 4 題 gold 是萬用字元（`MSFT_10K_*.html` 等），照當下
-  manifest 展開會讓它們「撈到哪一年都算命中」＝**量尺在最需要判別力的地方失去判別力**。
-  對照快照展開，`eval_set.json` **一個字都不用改**。
-- [`fetch_data.py`](fetch_data.py)：加 `--annuals N`；加 **append-only 跳過**（`_already_local`）
-  ——`latest(N)` 一定會把既有那幾份一起撈回來，照原行為會覆寫。實測既有 21 份 md5 **全數未變**。
+### 新增 R4：web ↔ 財報數值衝突要求「並陳」而不是「裁決」
 
-**結果（完整分析見 [`docs/EVAL.md`](docs/EVAL.md)〈多年語料的期別干擾〉）**
-- **競爭密度上升最多的那一類完全沒退步**：`relative`（最新一季）兄弟密度 1.90→7.52，
-  gold@5 與錯期率**一格都沒動**——`_resolve_latest_quarter_filter` 的硬 filter 全吸收了。
-- **硬 filter 的價值放大約 10 倍**：關掉路由，單年只值 0.048 錯期率，多年是 **0.476**。
-  那條路由從「可有可無的優化」變成「不能拔的命脈」，而它**靠硬編碼詞表觸發**。
-- **真正壞掉的是「問題沒提期間」那 25 題**：排擠率 0.080 → **0.480**，沒有任何 filter 保護。
-- **F1 遠大於 F2**（68 個浪費席位 vs 4 題錯期）→ 病灶是**多樣性不是期別選擇**。
+`_ground_source_type` 現在也吃 `web_extra`（型別 `"web"`，**刻意不列入權威來源**）。順帶修掉
+`if not chunks: return` 這個洞——「候選池空、只有 web」**正是 live 路徑的常見形狀**。
+⚠ **刻意不擴充 R3**：R3 判「一邊為錯」，套到 web 會讓系統**系統性報舊數字**（web 可以合法地比
+filing 新）。R3 的舊 docstring 已寫下「把 web 併進去會改變 R3 的語意」——那句是對的，只是結論該是
+「新增一條動作不同的規則」。
+⚠ R4 的動作在誤報下**也正確**（要求把兩個值連同時點講清楚，對不同期間的兩個值本來就對），
+所以會出事的方向是**話太多**不是漏抓。
 
-**驗收**：`verify_table_captions` PASS（`missing_on_big` 0）、`verify_segment_split` PASS
-（判準②③⑤ 全 0）、`verify_chunk_grounding` **FAIL 1 筆**（`MSFT_10K_2024.html#158`，
-1/1009；生產 collection 同一道閘門 0 筆 → 新資料帶出來的、與本次改動無關，已記進 BACKLOG）。
-兩輪探針 `RAG_REPLAY_CACHE` **hit 65 / miss 0**，Δ 裡沒有 LLM 抽樣噪音。
+### 新增 `eval/probe_news_web_routing.py`：先做便宜的那一半
 
-## 2026-08-18
+「live web 能不能取代 KB 新聞」拆成 ①**會不會**打 web（只燒 LLM）與 ②打回來**夠不夠**（連網燒
+Tavily）。**① 是 ② 的必要條件**。零網路的作法是把 `_tavily_search` 換成計數樁、其餘管線原封不動。
+**結果：路由不是瓶頸**（37 題觸發 web ≥35/37，其中 multi_intent **15/15**——最危險的形狀
+「財報半讓 Grader 判夠而整題不打 web」沒有發生；strict 陰性對照 0/6）。
+⚠ **陰性對照修正**：「現在市值／現在股價」**不可以**當陰性對照——同一件事在兩支腳本裡有相反的
+期望。已拆成 `CONTROL_STRICT`／`CONTROL_LOOSE`。
+⚠ **57% 打滿 web 預算這個數字是樁造成的，不可外推**；它只能支撐「② 的成本上界」。
 
-### Groq 讓 `llama-3.3-70b-versatile` 退役 → 表格摘要換 `openai/gpt-oss-20b`
+---
 
-**怎麼發現的**：不是稽核抓到的，是**重建當下 log 裡每張表都在 404**。2026-08-16 Groq 讓
-`llama-3.3-70b-versatile` 退役並把 Llama 全系列下架（現存 chat 模型只剩 gpt-oss 系列、
-`qwen/qwen3.6-27b`、`groq/compound`）。`_llm_summarize_table` 對非 429 錯誤是 `print WARN`
-後 `return ""` → **整條表格摘要路靜默歸零**，正是 [`eval/verify_table_captions.py`](eval/verify_table_captions.py)
-`missing_on_big` 閘門設計要抓的那種降級。多年語料重建剛跑到第 10 份 filing 就攔下來重跑。
+## 2026-08-18 — Groq 讓 `llama-3.3-70b-versatile` 退役 → 表格摘要換 `openai/gpt-oss-20b`
 
-**功能依賴只有一處**：[`unstructured_components.py`](unstructured_components.py) `TABLE_SUMMARY_MODEL`。
-`eval/eval_chunk_recall.py`、`eval/eval_two_stage.py` 的實際預設是 `rq.DEFAULT_MODEL`（NVIDIA NIM），
-只有 docstring 示例寫著死掉的模型名 → 一起改掉，免得把人導向 404。
+**怎麼發現的**：不是稽核抓到的，是**重建當下 log 裡每張表都在 404**。`_llm_summarize_table` 對非
+429 錯誤是 `print WARN` 後 `return ""` → **整條表格摘要路靜默歸零**，正是
+`verify_table_captions.py` 的 `missing_on_big` 閘門設計要抓的那種降級。
 
-**⚠ Groq 官方建議的替代品 `gpt-oss-120b` 正是本專案 2026-08-11 測過並否決的模型。**
-但當初的否決理由是「reasoning token 吃光 completion 額度 → content 空字串」——那是**預算
-問題不是能力問題**，可以驗。bake-off 刻意把「重現既有失敗」放進矩陣：
+⚠ **Groq 官方建議的替代品 `gpt-oss-120b` 正是本專案 2026-08-11 測過並否決的模型**，但當初的否決
+理由是「reasoning token 吃光 completion 額度 → content 空字串」——那是**預算問題不是能力問題**，
+可以驗。bake-off 刻意把「重現既有失敗」放進矩陣：
 
 | 組態 | 空/錯 | 重複全等 | 平均字元 |
 |---|---|---|---|
 | `gpt-oss-120b` @200 | **10/10 全空** | — | 0 |
-| `gpt-oss-120b` @700（14 表×3） | 0/42 | 6/14 | 150 |
+| `gpt-oss-120b` @700 | 0/42 | 6/14 | 150 |
 | **`gpt-oss-20b` @700 `effort=low`** | 0/42 | **12/14** | 164 |
 | `qwen/qwen3.6-27b` @700 | 0/10 | 5/5 | 2709（`<think>` 直接吐進 content，不可用） |
 
-@200 全空**完美重現既有記載** → 根因確認是 completion 預算，於是 `TABLE_SUMMARY_MAX_TOKENS`
-200 → 700，並新增 `TABLE_SUMMARY_REASONING_EFFORT`（預設 `low`，空字串則不帶該參數）。
+@200 全空**完美重現既有記載** → 根因確認是 completion 預算，`TABLE_SUMMARY_MAX_TOKENS` 200 → 700。
+**選 20b 的判準是輸出穩定性，不是模型大小**——因為 caption 變異是「重建不會逐字重現」的成因之一。
+⚠ **第一輪 bake-off 的結論不可信、被自己推翻**：取樣排序後 5 張全落在 exhibit index（垃圾表區），
+不代表真正會走 LLM 這條路的表。round 2 改成跨 7 家 × 兩種 form 的 14 張**財務**表。
 
-**選 20b 的判準是輸出穩定性，不是模型大小**——與當初選 llama-70b 的判準一致（「對同一張表
-三次輸出全等」），因為 caption 變異是 CLAUDE.md〈重建不會逐字重現舊 collection〉第 ② 條的
-成因之一。代價是 20b 有 6/42 超過 system prompt 要求的 30 詞（120b 是 0/42）；長度不是正確性
-問題，用它換穩定性划算。生產路徑實測 4/4 有輸出、句子完整。
-
-⚠ **第一輪 bake-off 的結論不可信、被自己推翻**：取樣排序後 5 張全落在 `AAPL_10K` 的 exhibit
-index（BACKLOG 列為已接受極限的垃圾表區），不代表真正會走 LLM 這條路的表。round 2 改成跨
-7 家 × 兩種 form 的 14 張**財務**表、3 次重複，上表是 round 2 的數字。
+---
 
 ## 2026-08-15
 
 ### 數字溯源稽核（`find_untraceable_numbers`）：一道**沒有實測正例**的防線
 
-答案裡「不可能被換算」形態的數字（兩位小數的報價／市值），必須在 chunk 全文或 `web_notes` 裡溯得回來源。零 LLM 偵測，抓到才花一次重生成。**放在 reflect 之後**——那是驗證鏈唯一沒人看守的位置：`_validate_and_fix_citations` 的 `_CITE_RE` 要求 `, chunk #N`（`[web: url]` 不算引用），而任何 validator 的重生成之後就只剩它了。
+答案裡「不可能被換算」形態的數字（兩位小數的報價／市值），必須在 chunk 全文或 `web_notes` 裡溯得
+回來源。零 LLM 偵測，抓到才花一次重生成。**放在 reflect 之後**——那是驗證鏈唯一沒人看守的位置。
+⚠ **這項沒有實測正例**，陽性靠變異注入；價值在那組**誤報對照**（億／兆換算、四捨五入、千分位差異），
+靠它們才有 100 題乾跑誤報 0 題。
+⚠ 宣稱詞辨識那組是回歸鎖：第一版詞表窮舉措辭，**同一次迭代內就漏掉自己重生成寫出的措辭**。
 
-⚠ **要說清楚它的證據狀態**：它原本是為了封 `web-02` 的「$196.82 憑空生成」而寫的，而那個 FAIL 後來查明是量尺誤報（見下）。所以**目前零實測正例**，留下的理由是結構性的，陽性測試全是變異注入。
+### 期別稽核：答案自稱「最新一季」卻引用了較舊的期別
 
-**真正的工作量在排除誤報**，兩條規則是量出來的，不是想出來的——100 題既有答案乾跑：
+**一次誤診值得先寫下來**：第一份根因分析每一步都對，結論卻錯（把一個真的機制問題當成這題的成因）。
+把 coverage 印出來才發現 KB 一點都不缺，按那個修法會把一題 KB 明明答得出來的問題送上網。
+**先把要判斷的東西印出來，再猜成因。**
 
-| 版本 | 誤報 | 誤報形狀 |
-|---|---|---|
-| 逐字比對 | **11/100** | `153.69 億美元（$15,369 million）`——**億換算值**，來源寫的是 `15,369` |
-| ＋排除後接 `億／兆／萬` | 1/100 | `31.33` ← 來源 `P/E Ratio Trailing: 31.325687`，**正確四捨五入** |
-| ＋捨入到兩位比對 | **0/100** | — |
+**真正的缺陷**：某公司最新一季**沒有獨立的 10-Q**（被包進 10-K），而系統把「最新一季」解析成
+「候選裡最新的那份 **10-Q**」而不是「證據集合裡最新的**期別**」。
 
-捨入容忍不是放水：`196.92`／`31.43` 這種鄰近錯值仍判 FAIL（閘門⑦ 有斷言）。
+**三個設計決定**：① **判準看答案不看問題**（答案寫出「最新一季」時它就是在做一個宣稱，而「你引的
+是不是證據裡最新的一期」是純比對）② **排序不能用 `_source_newest_date()`**（NVDA 財年 1 月底結束，
+`10K_2026` 其實比 `10Q_202604`(FY2027 Q1) 舊）③ **每家要比兩輪**（只比「全期別最新」會漏，而且是
+**修好第一輪之後重生成的答案自己暴露的**）。
+⚠ **宣稱詞辨識：窮舉清單在同一次迭代內就漏了兩個**——修正後重生成的答案寫的是「最新**單季**」與
+「最新公布的**季報**」，**validator 對自己造成的新問題視而不見**。改成「錨詞＋5 字內期別詞，中間
+不許有數字」。**詞表能用的前提是「錨詞 + 結構」而不是「列舉實例」。**
 
-### 同日續：三輪判讀 ＋ 第三個修法（沉默條件③）
+### live web 的可重現評測：把不確定性切開，而不是硬定 gold
 
-**65 題 after2 臂**（`gj_mdna_65q_after2.json`）：`require_chunk` **PASS**（`#0` 進池，
-r1 是撈到 `#1`）——**修法 A 生效，且是確定性可歸因的那一條**。
-另兩條 lex-17 主張仍 FAIL，且 `mix-03`／`col-11` 各掉一條 → 表面上 PASS 4／FAIL 4（r1 是 5／3）。
+新增 `web_replay.py`（Tavily 原始回應的錄／放）＋ `eval/web_claims.json` 逐條斷言。
+**切法**：確定性的部分（白名單／去重／日期算術／預算）已由零 LLM 閘門蓋住，**不重測**；
+fixture 的價值在**解鎖含 LLM 的端到端路徑**。
+**四個設計上的坑**（每一個都會讓 fixture 失效而不自知）：① 必須錄**原始回應**不是處理後的字串
+（否則等於把要測的六道一起 mock 掉）② `get()`／`put()` **兩邊都要 deepcopy**（少了 `get()` 那邊
+更嚴重：兩次重放走不同程式路徑）③ 只錄 web 不夠，要連 `llm_replay` 一起錄 ④ **斷言不能寫死成
+某一次錄製的答案**——fixture 是一個**值空間**。
+**驗收**：兩次獨立取樣都 5/5 PASS，注入六種變異 **6/6 全被抓到**。
+⚠ **「斷言零噪音」不等於「結果零噪音」**：`5/5 PASS` 的正確讀法是「**這一次取樣**沒問題」。
+⚠ **而且斷言的 FAIL 也可能是量尺錯**：某次 FAIL 說「$196.82 是憑空生成」——**是誤報**，
+fixture 裡有 `196.8165`，答案是**正確地四捨五入**。我拿那個 FAIL 當真陽性，寫了一整條 BACKLOG、
+一段 CHANGELOG、一節 docs 才發現。→ **「稽核回 0 筆先當壞消息查」需要一個鏡像條款：稽核回報
+FAIL，也要先問「是不是量尺錯」。**
 
-**照「≥2 輪才判讀」重跑之後，那兩條都不是退步**：
+### 兩個被自己的探針證偽的假設
 
-| 題 | r1 | after2 | r2 | 判讀 |
-|---|---|---|---|---|
-| `mix-03` | PASS | FAIL | **PASS** | 震盪，非退步 |
-| `col-11` | PASS | FAIL | FAIL | **ratio 意圖為假 → 我的碼路徑不可達**（見下） |
-| `lex-17` `require_chunk` | FAIL | **PASS** | **PASS** | 修法 A 生效 2/2 |
-
-`col-11` 的成敗完全跟著 **Planner 子問題措辭**走：r1 被改寫成「成長**率**是多少」→
-`_is_ratio_intent` 為真 → 撈進 Fundamentals → PASS；after2／r2 保留口語的「成長得快不快？」
-→ 為假 → 整條 ratio 路徑**沒有被執行**。→ 新殘留已記進 [`BACKLOG.md`](BACKLOG.md)：
-**整個 ratio 機制卡在硬編碼詞表後面，口語問法繞過它**；⚠ 修法**不是把措辭加進詞表**。
-
-**修法 C：`_basis_disclosure_notice` 的沉默條件③ 原本是錯的，而且是被自己要抓的行為解除武裝。**
-補撈修好之後，答案確實引到 `MSFT_Fundamentals #0`（眼前就是 `Revenue Growth (YoY): 18.30%`），
-卻寫成「全年與最近的 **TTM** 都在約 **18%** 左右【…chunk #0】」——把 TTM 四捨五入再與 10-K 財年
-18% 併成同一個說法。舊條件③「引用裡有 TTM chunk 就沉默」**正好在該叫的那一刻把警語關掉**。
-→ 判準改成**值有沒有出現在答案裡**（`_ttm_field_values` ＋ `_value_stated`，確定性字串比對，
-`18.30`／`18.3` 同值、`118.3` 不算）；有值時警語**直接把值講出來**（逐字取自答案自己引用的
-那個 chunk ＝ 仍可追溯，同 R4「並陳不裁決」）。函式簽章多一個 `answer` 參數。
-量尺 117 → **124**（⑪c 七項，陽性逐字凍結自 `after2`）；變異三發全中且**兩個方向都有**：
-M4（退回舊條件③）／M5（`_value_stated` 恆真＝漏印）各 4 條、M6（恆假＝話太多）3 條。
-⚠ **它只保證「會揭露」，不保證模型不再四捨五入**——那是生成端行為，已記進 BACKLOG 殘留②。
-
-**端到端**（`gj_notice_e2e.json`）：`lex-17` 三條全 PASS，答案並列 FY2026 18% 與
-TTM 18.30% 且各自標明口徑，警語正確**沉默**——那一輪跑到的是誤報方向的對照（值有講出來）。
-
----
-
-### 期別稽核：抓「答案自稱最新一季，卻引用了較舊的期別」
-
-**病灶（web-03，一次誤診之後才找到）**：「Microsoft 最新一季的 Azure 營收成長率」答 40%【`MSFT_10Q_202603`】，還標了「截至 2026 年 3 月 31 日的三個月」。數字沒錯、期間也標了——但 MSFT 最新一季是 **Q4 FY2026（4–6 月），沒有獨立 10-Q，包在 10-K 裡**，而 `MSFT_10K_2026 #129`（`Azure and other cloud services revenue grew 41%`）**就在同一份證據集合裡、rerank rank 4**，完全沒被用到。
-
-**先記一次誤診**：第一版結論是「`realtime_need` 判 `none` → `REALTIME_STALE_DAYS["none"] is None` → `_stale_for_realtime()` 第一行就 return，整段日期算術連 `as_of` 都沒讀到 → 該讓相對期間指稱獨立觸發 web」。短路那件事**機制上是真的**（見 BACKLOG），但 **web-03 不是它的證據**——按那個修法會把一題 KB 明明答得出來的問題送上網。差別是把 coverage 印出來才發現的（`MSFT_10K_2026` 的 stamp 是**財年**不是日曆期末）。
-
-**修法**：Synthesize 加第三道確定性 validator [`find_stale_period_claims`](agentic_rag_v2.py)（零 LLM，只做 `(fiscal_year, fiscal_period)` 比大小），抓到就帶著落差重生成一次，沿用一致性稽核那條路徑。
-
-| 設計決定 | 為什麼 |
-|---|---|
-| **判準看答案不看問題** | 判「使用者是不是在問最新一期」要嘛加詞表（換措辭就漏）、要嘛動 Grader prompt（破壞 snapshot 逐字不變的 eval 隔離）。但**答案寫出「最新一季」時它就是在做一個宣稱**，「你引的是不是證據裡最新的一期」是純比對 → 驗證答案自己的宣稱，不是猜意圖。誤報風險低（問 FY2025 時答案不會寫「最新一季」），漏判只是維持現狀 |
-| **排序用 `(fiscal_year, fiscal_period)`，不用 `_source_newest_date`** | 後者把 `TICKER_10K_YYYY` 一律算成該年 12/31（刻意高估）。NVDA 財年 1 月底結束 → `NVDA_10K_2026`(→12/31) 會被判得比真正更新的 `NVDA_10Q_202604`(FY2027 Q1) 還新，**排序直接反轉**。期別欄位靠擴充 `_scan_kb_coverage` 的同一次 scroll 建表——`rq.retrieve()` 回傳的 chunk dict 沒有這些欄位，而改共用的 retrieve 投影影響面太大 |
-| **每家比兩輪（全期別 ＋ 只比 10-Q）** | 只比全期別會漏。實跑印證：修好第一輪之後**重生成的答案自己暴露殘留缺口**——它照指示引了 10-K 並說明「全年 41%、未拆單季」，卻拿 `MSFT_10Q_202512`（FY2026 Q2, 39%）當「最新單季」，而 FY2026 Q3 就在證據裡。「最新一季」問的是最新的**季**，10-K 過關不代表季別選對 |
-
-**宣稱詞辨識的第一版是窮舉清單，同一次迭代內就漏了兩個**：修正後重生成的答案寫的是「最新**單季**」與「最新公布的**季報**」，兩個都不在清單裡 → validator 對自己造成的新問題視而不見。改成「錨詞（最新／最近）＋ 5 字內期別詞，中間不許有數字」（數字那條讓「最新的 2026 年財報」這種**絕對期間**不誤觸）。
-
-**時效警語同步改成看結果**：`_build_todo_temporal_scope` 原本用 `bool(_RELATIVE_TIME_RE.search(task)) and rq.looks_like_news_query(task)` 兩個詞表串聯決定要不要產生時效缺口——「Microsoft 最新一季的 Azure 營收成長率」過得了前者（有「最新」）卻過不了後者（不是新聞措辭）→ **一句時效警語都不會印**。改成 [`_news_freshness_gaps`](agentic_rag_v2.py)：看**這個子問題實際 commit 了誰的新聞 chunk**，零詞表且更準（問法像新聞但答案全靠財報時，舊版會印一句無關的警語）。`_RELATIVE_TIME_RE` 已從碼上刪除。⚠ 2026-08-13 宣稱「兩道詞表閘門全數移除」時只改了 web 觸發那道，警語這道漏改而文件已寫成全移除，**漂移了兩天**。
-
-**驗收**：新增 [`eval/verify_answer_validators.py`](eval/verify_answer_validators.py)（零 LLM、零網路，只讀 Qdrant coverage，秒級）六道閘門 **42 項全 PASS**，其中 **10 條是陰性對照**。變異注入 3/3 抓到——把 `_fiscal_rank` 換回 `_source_newest_date` 排序 → NVDA 那條立刻誤報。既有 [`verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py) 79 項回歸 PASS。
-
-⚠ **陽性案例逐字凍結在測試檔裡，不讀 `experiments/`**。第一版是去讀結果檔的——那份會被修好，一修好陽性就消失，**閘門會隨著修法生效而自己失去判別力**。「現況是乾淨的」是相反方向的斷言，由閘門⑥ 逐題另外檢查（5/5）。
-
-**同一輪跑分的 `web-02` FAIL 是量尺誤報，不是系統缺陷**（撤回一次錯誤判定）：斷言說「2026 年的平均股價為 $196.82」是憑空生成，但 fixture 的 macrotrends 表格裡就有 `| 2026 | 196.8165 | ... |`——**答案是正確地四捨五入**。成因是 `numbers_must_be_in_fixture` 只做逐字比對。已補上捨入容忍（`_number_seen`），5/5 恢復 PASS，且 `196.92`／`31.43` 這種鄰近錯值仍判 False。
-> **這補的是既有規則的鏡像面**：CLAUDE.md 寫的是「稽核回傳 **0 筆問題**先當壞消息查」，這次踩到的是反過來那一半——**稽核回報 FAIL 也要先問「是不是量尺錯」**。我拿它當真陽性寫了一條 BACKLOG、一段 CHANGELOG、一節 docs 才發現，查證成本只有一次 `grep`。
-
----
-
-### live web 路徑從「零實驗支撐」變成可重現：`web_replay` ＋ 逐條斷言
-
-**起點**：Tavily 整合、白名單＋本地複核、URL 抽發布日、時效分層、去重、單域名上限、query 級預算、`kb_unfixable`、system message 放行條款——整套機制在 eval 裡**執行次數是 0**（snapshot 恆關），唯一的「量測」是 n=1 實跑軼事。
-
-**解法是把不確定性切開**，不是硬定 gold：
-- **確定性的部分**（白名單／去重／日期算術／預算）已由 [`verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py) 六道閘門 79 項斷言涵蓋，零 LLM 零網路秒級 → **不重測**。
-- **含 LLM 的部分**（Generator 到底有沒有引用 web 數字、KB 舊值與 web 新值衝突時有沒有並陳並標時點、web 有沒有被無差別觸發）以前沒有任何測試 → 新增 [`web_replay.py`](web_replay.py) 錄 Tavily **原始回應** ＋ 既有的 `AGENTIC_AS_OF_DATE` 鎖死「今天」，外部世界變成靜態的之後寫斷言。
-
-| 新檔 | 作用 |
-|---|---|
-| [`web_replay.py`](web_replay.py) | Tavily 原始回應錄／放；未設 `RAG_WEB_REPLAY` 完全 no-op |
-| [`eval/record_web_fixture.py`](eval/record_web_fixture.py) | 5 題（含 1 個陰性對照），`--mode record\|replay` |
-| [`eval/web_claims.json`](eval/web_claims.json) ＋ [`eval/check_web_claims.py`](eval/check_web_claims.py) | 逐條斷言，PASS／FAIL／**N-A** 三態 |
-
-**結果**：**兩次獨立取樣（錄製那輪、重放那輪，LLM 挑了不同來源與不同事實）同一組斷言都 5/5 PASS**；注入 6 種變異（拔掉 web 引用／換成地區子網域／陰性對照被觸發／拿掉 KB 舊值日期／股價竄改／只竄改其中一個）**6/6 全被抓到**——全綠先當壞消息查過了。
-
-**四個踩到的坑**：
-1. **錄的層級**：必須錄 `TavilyClient.search()` 的原始回應，不能錄 `_tavily_search()` 的回傳字串——後者是跑完 `_host_allowed` 複核／去重／抽日期／過時過濾／截斷之後的成品，錄在那裡等於把要測的六道一起 mock 掉。
-2. **兩邊都要 deepcopy**：`_dedupe_web_results` 就地寫 `r["_pub_date"]`（`agentic_rag_v2.py:584`）。`put()` 少 deepcopy → 落盤 `TypeError`，首次錄製**安靜掉了第 8 筆**（atexit 的例外不影響 exit code）；**`get()` 少 deepcopy 更嚴重**——重放第二次時日期已被上一次塞好 → `_url_published_date` 那段根本不執行，兩次重放走不同程式路徑。序列化失敗已從 atexit 提前到 `put()` 當場炸（`RecordError`，且不被優雅降級吞掉，同 `FixtureMiss`）。
-3. **驗收腳本第一版自己誤報三題 FAIL**：正則只認 ASCII `[web:]`，而 `gpt-oss-120b` 吐的是**全形**`【web:】`（docs/AGENTIC.md A5 早有記載）。
-4. **斷言不能寫死成某一次錄製的答案**：錄製時 LLM 引 stockanalysis 的 `$4.46 兆`、重放時引 finance.yahoo 的 `$4.45 兆`，**兩個都在 fixture 裡都對**。fixture 是一個**值空間**。改成只測「不論它挑哪個都必須成立」的性質後才穩。
-
-**只錄 web 不夠**：pipeline 送給 Tavily 的 query 由 Planner／Grader 的 LLM 輸出決定，而 MoE 溫度 0 不固定路由（plan 實測 48% 重跑不同）→ 重放會生出不同 web query 而 miss。錄製腳本同時開 `RAG_REPLAY_CACHE` 把 plan／translate_en／check 一起釘死才閉環。
-
-**順帶量到一個真缺口（`web-03`）**：「Microsoft 最新一季 Azure 成長率」答成 40%【`MSFT_10Q_202603`】。⚠ **這一段的第一版診斷是錯的**（原寫「KB 最新 10-Q 是 202603，5 個月前的資料被當成最新一季，該去查 web」）：MSFT 在 KB 的天花板是 `MSFT_10K_2026`（FY2026，涵蓋到 2026-06-30），距 as-of 只有 46 天，**KB 一點都不缺資料，web 對這題本來就不該觸發**。真正的缺陷與修法見下一節。
+① 「Grader 前確定性去重」——**沒有東西可以去重**（近重複 13/341＝3.8%、完全相同 chunk id **0**）。
+② 「Grader 保留率 49.3% ＝ 資訊瓶頸」——**它砍的是冗餘不是 gold**（檔案層命中 95/100 vs 單發
+97/100）。⚠ 但檔案層量尺已飽和，**不能推論 chunk 層也無損失**——真缺口是 lexical 的 chunk 層
+（agentic 平均只承接 1.93 個 chunk，全類最低），見 BACKLOG。
 
 ---
 
 ## 2026-08-14
 
-### 檢索側 LLM 20b vs 120b：等價，而且「用小模型求快」是假的
+### 檢索側 LLM 換模型（20b vs 120b）：候選會動，gold 不動
 
-**起點**：兩條管線的檢索側模型不同（單發 120b／agentic 20b），兩邊都沒有對照支撐，而它同時是單發 vs agentic 對照的未控制變因。
-
-**新增 [`eval/ablate_retrieval_model.py`](eval/ablate_retrieval_model.py)**（兩 stage，n=100）：stage 1 錄下兩模型的 `parse_query_filters` JSON 與 `translate_query_to_english` 字串（各跑 2 次）；stage 2 把那些輸出 monkeypatch 進真實檢索器比最終 top-k——**stage 2 零 LLM**，同一份輸入重跑結果一樣。噪音底線取「同模型的第二次跑」。
-
-| | 120b#0 | 120b#1 | 20b#0 |
-|---|---|---|---|
-| gold recall@5 | 0.8479 | 0.8465 | 0.8459 |
-| 至少命中一個 gold | 0.96 | 0.96 | 0.96 |
-| 完全撈不到 gold 的題 | col-07/lex-03/lex-07/lex-14 | 同左 | 同左 |
-| 平均單次耗時（n=200） | **1.76s** | — | **3.57s** |
-| 與 120b#0 的 chunk 集合相同 | — | 85/100 | 72/100 |
-
-**結論**：候選池確實被換掉（Jaccard 0.897 < 噪音 0.947），但**換掉的全是無關 chunk**——gold recall 差 0.0020、噪音 0.0014，逐題兩邊各只掉 1 題。**兩個模型在檢索側等價**。
-
-**但方向是反的**：20b 在 NIM 上慢一倍，`agentic_rag_v2.py` 那句「用小模型求快」前提為假（註解已改）。該做的是把 agentic 升 120b，不是把單發降 20b。待定案，見 [`BACKLOG.md`](BACKLOG.md)。
-
-**順帶關掉一條判讀限制**：[`docs/EVAL.md`](docs/EVAL.md)〈分類別抵銷效應〉的判讀限制② 有兩個未控制變因，這次排除掉其中一個（不是靠對齊，是量到它沒有作用）。
-
-**方法論**（三條寫進 [`docs/EVAL.md`](docs/EVAL.md)）：①**字串比對對翻譯沒有判別力**——86/100 跨模型不同，但 68 題是同模型自己跑兩次就不同；②`parse_query_filters` 有 **91/100 題被效率 gate 擋在 LLM 之前**，不先算這個會把「gate 擋掉」誤讀成「模型一樣好」；③A/B 兩臂的 LLM 輸出要先錄下再釘死。
-
-### 「最新一季」硬路由的兩個覆蓋面問題：都是資料層決定的，不是偷懶
-
-掃 collection（3925 chunks）查清 [`BACKLOG.md`](BACKLOG.md) 那條的破口② ③：
-
-- **只覆蓋 10-Q**：`report_period_code` 在 10-K 是 4 位年份（`2025`/`2026`）、10-Q 是 6 位 yyyymm，**News 98 ＋ Fundamentals 81 chunks 全是 NONE**。所以 News/Fundamentals 是沒有欄位可 filter（也正是 `routed_latest` 要放寬成「值相符 OR 欄位為空」的原因）；10-K 則是**每家只有 1 份、病灶結構上不存在**。⚠ 地雷：`len(code) < 6` 那行不能只是拿掉——期碼是字串比大小，`'2026' > '202510'` 為真。
-- **限單一公司**：**eval_set 有 0 題受影響**（16 題通過前六道閘門的全是單一公司）→ 這個破口是推理出來的、不是量出來的。同時**更正 BACKLOG 記的修法**：`MatchAny` 是全域 OR，AAPL 最新 `202606`／MSFT 最新 `202603` 會讓 AAPL 自己的舊季 `202603` 通過；正確結構是 OR-of-ANDs，而卡點是 `build_qdrant_filter` 吃 flat list、結構上寫不出「每家配每家」。
+新增 `eval/ablate_retrieval_model.py`（兩 stage：錄下 query understanding 輸出 → 釘死送進真實
+檢索器，stage 2 **零 LLM**）。
+**結論**：候選池確實被換掉（Jaccard 0.897 < 噪音 0.947），但**換掉的全是無關 chunk**
+——gold recall 差 0.0020、噪音 0.0014。**兩個模型在檢索側等價。**
+**但方向是反的**：20b 在 NIM 上**慢一倍**（3.57s vs 1.76s），「用小模型求快」前提為假。
+**三條方法論**：① **字串比對對翻譯沒有判別力**（86/100 跨模型不同，但 68 題是同模型跑兩次就不同）
+② `parse_query_filters` 有 **91/100 題被效率 gate 擋在 LLM 之前**，不先算這個會把「gate 擋掉」
+誤讀成「模型一樣好」③ A/B 兩臂的 LLM 輸出要先錄下再釘死。
 
 ### 多公司期別 probe：損害是真的，但期別 filter 修不到——病灶是席位競爭
 
-**新增 [`eval/probe_multi_company_period.py`](eval/probe_multi_company_period.py)**（零 LLM、三臂、8 題人工構造多公司題，期碼從 source 檔名解）。刻意挑最新期碼**不同**的公司配對（AAPL `202606`／MSFT `202603`／NVDA `202604`），因為那正是 `MatchAny` 會漏的情境。
+新增 `eval/probe_multi_company_period.py`（零 LLM、三臂、8 題人工構造題）。
 
 | arm | 錯期率 | 缺最新季的公司 | 缺失率 |
 |---|---|---|---|
-| `single_on`（陰性對照，生產） | 0.000 | 0/16 | 0.000 |
-| `single_off`（**陽性對照**，`RQ_LATEST_QUARTER_ROUTING=0`） | 0.577 | 1/16 | 0.062 |
+| `single_on`（陰性對照） | 0.000 | 0/16 | 0.000 |
+| `single_off`（**陽性對照**） | 0.577 | 1/16 | 0.062 |
 | `multi`（被測項） | 0.429 | **6/17** | **0.353** |
 
-**損害成立**（0.353 vs 0.062），**但機制不是期別**：6 件損害逐件拆開，**kind A（同一家的舊季擠掉新季）＝ 0、kind B（那家公司連一個 10-Q 都沒進 top-5）＝ 6**。每個出現的舊季 chunk，那家公司的最新季**也**在 top-5 裡。→ OR-of-ANDs 直接修不到任何一件。
+**損害成立，但機制不是期別**：6 件損害逐件拆開，**kind A（同家舊季擠掉新季）＝0、kind B（那家公司
+連一個 10-Q 都沒進 top-5）＝6** → OR-of-ANDs 直接修不到任何一件。
+**對照組解釋了為什麼單公司題看不出來**：`single_off` 錯期率 0.577 卻只有 6.2% 缺失（5 格全給一家，
+留得住）；`multi` 錯期率較低反而 35.3% 缺失。**席位稀釋放大 5.7 倍。**
+**損害範圍只在單發管線**：agentic 的 Planner 把 8 題拆成 17 個子問題、**17/17 只剩一家公司**
+→ 這個破口在 agentic 上結構上不存在，是 **Planner 在上游消掉的，不是 Grader 補救的**。
+而 `api_server.py` 直接呼叫 `rq.retrieve()` → **使用者實際在用的 web UI 就是有損害的那條路。**
+**兩條方法論**：① 腳本第一版只看聚合 `missing_rate` → 吐出「值得做 OR-of-ANDs」，**是錯的**。
+**成因分類要寫進量尺本身，不能靠事後人工看。** ② **量一個破口之前先確認它在哪條管線上發作。**
 
-**真病灶**：top-5 分給 2~3 家，一家壟斷。`_ensure_ticker_coverage` 有保底但補的是**該家最高分 chunk、不管 doc_type 也不管期別**（實測補進 `AAPL_News`、`TSLA_Fundamentals`）。
-
-**對照組解釋了為什麼單公司題看不出來**：`single_off` 錯期率 0.577 卻只有 6.2% 缺失（5 格全給一家，留得住）；`multi` 錯期率較低（0.429）反而 35.3% 缺失。**席位稀釋放大 5.7 倍**。
-
-**損害範圍只在單發管線**（追加實測，8 題 → 17 個子問題）：agentic 的 Planner 把每一題都拆成單公司子問題，**17/17 只剩一家公司、17/17 路由都會觸發** → 這個破口在 agentic 上結構上不存在。是 **Planner 在上游消掉的，不是 Grader 補救的**——Grader 連上場機會都沒有。而 [`api_server.py`](api_server.py) 直接呼叫 `rq.retrieve()`、不 import agentic → **使用者實際在用的 web UI 就是有損害的那條路，且沒有第二輪**。
-
-**方法論（兩條）**：
-- 腳本第一版的判定邏輯只看聚合 `missing_rate` → 吐出「值得做 OR-of-ANDs」，**是錯的**。加上 kind A/B 分解後才看得出該修的是別的地方。**聚合指標說「有損害」不等於知道該修哪裡**——成因分類要寫進量尺本身，不能靠事後人工看。
-- **量一個破口之前先確認它在哪條管線上發作**。probe 跑的是 `rq.retrieve()`＝單發路徑；沒有先驗 Planner 的拆解行為，就會把「單發管線的缺陷」誤報成「檢索層的通用缺陷」，並且對 agentic 做無用的修改。
-
-### web 這條路的九個缺陷：主因是自己把摘要截掉，不是日期把關
-
-**起點**：08-13 修通 web 之後，「蘋果的即時市值是多少？」仍答錯——說「已達 $5 兆」，而更新的 7/31 值 $4.54T 反被當舊。原以為是缺日期把關；加了逐則印摘要的 trace 之後看到的是**六個獨立缺陷**（驗收時又冒出三個），而且真正的主因是最不起眼的那個。設計理由與量測見 [`docs/AGENTIC.md`](docs/AGENTIC.md) A7。
+### web 這條路的九個缺陷：主因是自己把摘要截掉
 
 | # | 缺陷 | 修法 |
 |---|---|---|
 | D1 | **`content[:300]` 把數字截掉**（主因） | `WEB_CONTENT_CHARS=1200` ＋ `search_depth="advanced"` |
 | D2 | 單一域名壟斷全部名額 | `TAVILY_PER_DOMAIN_CAP=2`，先撈 12 則再篩 |
-| D3 | 無日期 → 六年前的文章與今天並列 | `_url_published_date` 抽日期、`WEB_STALE_DAYS` 濾明顯過時、日期標進 prompt |
-| D4 | **web 呼叫次數無上界**（實跑 7 次） | `QUERY_WEB_BUDGET`（query 級）＋ `kb_unfixable` 提早跳出必敗重試 |
-| D5 | 同頁多變體各佔一個名額（`/amp/`、`new.`、`http://`） | `_normalize_url` 去重 |
+| D3 | 無日期 → 六年前的文章與今天並列 | 抽網址日期、濾過時、**日期標進 prompt** |
+| D4 | **web 呼叫次數無上界**（實跑 7 次） | `QUERY_WEB_BUDGET`（query 級）＋ `kb_unfixable` 提早跳出 |
+| D5 | 同頁多變體各佔一個名額 | `_normalize_url` 去重 |
 | D6 | 地區子網域＝**別的市場的報價** | `_host_allowed`：本地端只認 exact ＋ `www.` |
 
-**D1 的決定性證據**：trace 印出的 macrotrends 摘要是 `Apple market cap as of Augus` ——完整原文是 `as of August 07, 2026 is $4572.79B`。Tavily 的 content 實測 596~1982 字，數字排在站台樣板文字後面，**300 字正好切在數字前一個字**。資料一直都在，是自己丟掉的。「撈到了卻截掉」與「根本沒撈到」在舊 trace 裡長得一模一樣。
+**D1 的決定性證據**：trace 印出的摘要是 `Apple market cap as of Augus`，完整原文是
+`as of August 07, 2026 is $4572.79B`。數字排在站台樣板文字後面，**300 字正好切在數字前一個字**。
+**「撈到了卻截掉」與「根本沒撈到」在舊 trace 裡長得一模一樣。**
+**D4 的根因不是 replanner 失控，是計數器放錯層**（記在每個子問題會歸零的 state 上）。
+**Tavily 能力實測**：只有 `topic="news"` 回發布日且日期過濾真的生效，但 news 模式**拿不到數據頁**
+——而即時報價題要的正是數據頁。故走預設 topic ＋ 網址推日期。
+**一個被自己推翻的修法**：用字串相似度認同義待辦，**實測分離度是負的**（正向最低 jaccard 0.04、
+負向最高 0.50）→ **整段撤掉，改成不判語意、只封成本**。
 
-**D4 的根因不是 replanner 失控，是計數器放錯層**：`WEB_SEARCH_MAX_CALLS` 記在 `_RunState`，而 `_RunState` **每個子問題歸零**，所以「上限 3 次」真實語意是「每個子問題 3 次」；確定性執行層更是直接呼叫 `_tavily_search`，連那個計數器都沒經過。
+**驗收（同一題）**：答案從「已達 $5 兆」變成「約 $4.57 兆」（並正確標出 $5T 是盤中高點）；
+子問題 7 → 4、KB 檢索 21 → 4 次、web call 7 → 3 次。
 
-**Tavily 能力實測**（決定架構的那組數字）：只有 `topic="news"` 回 `published_date` 且 `days=N` 真的生效，但 news 模式**拿不到數據頁**（macrotrends／stockanalysis／companiesmarketcap 全消失）——而即時報價題要的正是數據頁。`start_date`／`time_range` 在預設 topic 被靜默忽略。故走預設 topic ＋ 網址推日期。
-
-**一個被自己推翻的修法**：D4 原本打算用「字元 bigram 相似度」認出 replanner 生的同義待辦。實測分離度是負的——正向（同一需求）最低 jaccard **0.04**，負向（不同需求）最高 **0.50**，最糟的負向正是「即時**市值**」vs「即時**本益比**」。那等於用字串比對做語意感知，與被拿掉的 `_RELATIVE_TIME_RE` 是同一個病，**整段撤掉**改成不判語意、只封成本。
-
-**驗收（「蘋果的即時市值是多少？」同一題）**：
-
-| | 修法前 | 修法後 |
-|---|---|---|
-| 答案 | 「已達 **$5 兆**」（7/28 當最新） | **「約 $4.57 兆」**（8/7 macrotrends），$5T 正確標為 7/28 **盤中**高點、收在 $4.98T |
-| 子問題數 | 7 | 4 |
-| KB 檢索 | 21 次 | 4 次 |
-| web call | 7 次 | **3 次**（預算封頂）|
-
-**同日追加（驗收時發現的第七個缺陷）**：日期標進 prompt 之後，「特斯拉今天股價」把一則 **22 天前**的 WSJ 報導當成「最新可得」，反把未標日期的即時行情頁降為次要。日期機制沒壞，錯的是修訂條款寫的「以標示日期最新的來源為準」——**對「當下數值」類問題這個偏好是反的**。修法：修訂條款按問題類型分岔（當下數值 → 未標日期的行情頁優先；近期發展 → 日期最新者為準），並把 `WEB_STALE_DAYS["intraday"]` 從 90 天收到 **7 天**。
-
-**第八個（同批驗收找到）**：時效警語與答案自相矛盾——Azure 那題主體引用了 CNBC 與 `sec.gov` EX-99.1，底下卻印「Web 未提供可用補充」。成因是 scope 錯配：缺口逐**待辦**算，警語整**篇**只印一次。改成依「本次跑分有沒有用到 web」分岔措辭。順帶記錄該題其實是**改善**：08-13 答 40%（KB 的 FY26 Q3），現在答 **43%**（FY26 Q4），兩個獨立來源互證且其一是 SEC 原始揭露。
-
-**第九個**：web 結果混進 **OCC 選擇權合約頁**（`finance.yahoo.com/quote/TSLA260814C00257500` ＝ 8/14 到期、履約價 $257.50 的買權），一次跑分佔走 3 個名額，而頁上的價格是**權利金不是股價**。與「地區子網域」同一類——**拿到的是別的標的**。OCC 代號是標準化格式（`{代號}{YYMMDD}{C|P}{8 位履約價}`），屬格式定義的封閉集合，用樣式排除正當。負向控制含 `quote/TSLA`、`quote/AAPL/key-statistics` 等一般報價頁不得誤殺。
-
-閘門擴充到**六道 79 項斷言**，新增的 28 項全部零 LLM／零網路，其中兩項是行為斷言（stub 掉 Grader／檢索，量「KB 補不了時只檢索 1 次」與負向控制「一般不足仍跑滿改寫」）。
-
-**第十個缺陷（同日追加）：`kb_unfixable` 會誤殺。** D4 那個「提早跳出必敗重試」的旗標，第一版只看 `_stale_for_realtime()`，而它量的是**候選池**最新那筆——候選池是語意檢索的結果，**池子裡最新是 62 天前不代表 collection 沒有 3 天前的**，很可能只是這輪措辭沒命中。那種不足改寫真的有救，卻被當成沒救跳過。修法：新增 `_kb_ceiling_date()`，從 `_scan_kb_coverage()` 已算好的 coverage map 取「這些 ticker 在整個 collection 最新到哪一天」——那是**與 query 無關**的量，拿它再比一次就能把「檢索沒撈到」和「KB 根本沒有」分開。天花板也過期才標 `unfixable`；掃不到 coverage 則保守維持原行為。判斷邏輯抽成 `_classify_staleness()`，**唯一理由是可測**（內嵌在 LLM 回傳處理裡的分支，閘門碰不到＝從沒被證偽過）。新增 6 項真值表斷言，其中「天花板夠新 → 不得標 unfixable」在舊碼下必 FAIL。
+**同日追加三個**：⑦ 修訂條款的排序規則**原本是反的**（對「當下數值」類問題，未標日期的行情頁才是
+今天的值）→ 分岔並把 `WEB_STALE_DAYS["intraday"]` 90 → **7** ⑧ 時效警語與答案自相矛盾（缺口逐
+**待辦**算、警語整**篇**只印一次）——**警語與答案互相矛盾比沒有警語更糟** ⑨ web 結果混進 OCC
+選擇權合約頁（頁上的價格是**權利金不是股價**）→ 用標準格式排除，屬格式定義的封閉集合。
+**第十個**：`kb_unfixable` 會誤殺——它只看**候選池**最新那筆，而**池子裡最新是 62 天前不代表
+collection 沒有 3 天前的**。修法是引入與 query 無關的 `_kb_ceiling_date()`。判斷抽成
+`_classify_staleness()`，**唯一理由是可測**。
 
 ### 單發 vs agentic 全量對照：整體「沒有顯著改善」，但那是抵銷出來的
 
-第一次把兩條管線放在同一條件下量。兩臂同 collection（`us_stock_rag_edgar_mdna`）、同 100 題、`freshness_mode=snapshot`、web 全程關閉，各跑一次 RAGAS，**n=100 且 0 NaN**。結果檔 `experiments/ragas_ARM_{single,agentic}_mdna.json`。
-
-| metric | 單發 | agentic | 差值 | 判定（噪音 0.067） |
-|---|---|---|---|---|
-| context_recall | 0.711 | 0.767 | +0.055 | 噪音內 |
-| context_precision | 0.772 | 0.835 | +0.063 | 噪音內 |
-| nv_context_relevance | 0.860 | **0.963** | **+0.103** | **超過噪音** |
-| faithfulness | 0.838 | 0.794 | −0.044 | 噪音內 |
-| answer_relevancy | 0.678 | **0.822** | **+0.144** | **超過噪音** |
-| answer_correctness | 0.616 | 0.658 | +0.042 | 噪音內 |
-
-**agentic 贏在檢索相關性，但 `answer_correctness` +0.042 過不了門檻——不能宣稱它讓答案更正確。**
-
-**真正的發現是分類別抵銷**：`context_recall` 整體只有 +0.055，是因為 multi_hop **+0.267**、multi_intent **+0.184**、colloquial +0.142 的領先，被 lexical **−0.078**、semantic **−0.073** 抵銷。機制與架構預期一致——agentic 拆子問題各自檢索，**需要多份不同證據的題受益**（multi_hop 要串接、multi_intent 要同時撈財報與新聞），**單一精確詞查找的題被拆解引入雜訊**（lexical 單發已 0.911，本來就沒有發揮空間）。⚠ 分類別 n=10~15，個別差值的門檻約 0.17~0.21，**除 multi_hop 外個別都不顯著**；有證據力的是跨兩個指標一致的排序模式。完整判讀限制見 [`docs/EVAL.md`](docs/EVAL.md)〈分類別抵銷效應〉。
-
-同時燒掉三筆成本，都已寫進 `docs/EVAL.md`：①`--from-results` 吃多個檔是**拼接同一臂**（同 id 取平均）不是 A/B，兩臂丟一起得到的平均值正好落在歷史噪音帶、看起來毫無異常——**燒掉 2h49m**，旗標 help 已補警語；②NaN 補完前 `context_precision` 差值是 +0.067 剛好卡在門檻上，補完才確定在噪音內；③背景跑分要 `python -u`，否則 stdout 被緩衝、完全看不到進度。
+兩臂同 collection、同 100 題、web 全關，n=100 且 0 NaN。
+`nv_context_relevance` **+0.103**、`answer_relevancy` **+0.144** 超過噪音；其餘四項在噪音內
+——**agentic 贏在檢索相關性，但不能宣稱它讓答案更正確**。
+**真正的發現是分類別抵銷**：`context_recall` 整體只有 +0.055，是因為 multi_hop **+0.267**、
+multi_intent **+0.184** 的領先被 lexical **−0.078**、semantic **−0.073** 抵銷。
+⚠ 分類別 n=10~15、門檻約 0.17~0.21，**除 multi_hop 外個別都不顯著**；有證據力的是**跨兩個指標
+一致的排序模式**。
+同時燒掉三筆成本：① `--from-results` 吃多個檔是**拼接同一臂**（同 id 取平均）不是 A/B，兩臂丟一起
+得到的平均正好落在歷史噪音帶、**看起來毫無異常——燒掉 2h49m** ② NaN 補完前差值剛好卡在門檻上
+③ 背景跑分要 `python -u`。
 
 ---
 
@@ -1067,161 +612,93 @@ TTM 18.30% 且各自標明口徑，警語正確**沉默**——那一輪跑到�
 
 ### live／web 這條路修通：三個阻塞點、來源白名單、Grader 時效判準
 
-**起點**：生產模式四題時效題，web_search **0/4 觸發**。拆下去是三個獨立阻塞點，不是一個 bug。設計理由與完整證據見 [`docs/AGENTIC.md`](docs/AGENTIC.md) A6。
+**起點**：生產模式四題時效題，web_search **0/4 觸發**。拆下去是三個獨立阻塞點，不是一個 bug。
 
 | # | 阻塞點 | 修法 |
 |---|---|---|
-| ① | 兩道硬編碼詞表閘門（`rq.looks_like_news_query`、`_RELATIVE_TIME_RE`）擋在 web 補救判斷式上 | 都拿掉。18 個真實時效措辭實測**漏 10 個** |
-| ② | `rq.SYSTEM_PROMPT` Rule 1/2/8 讓 web 內容不可引用＝不可用 | 有 web 時才在 **system message** 附加 `_WEB_SOURCE_AMENDMENT` ＋ 補上 Generator 一直漏接的 `_build_temporal_contract` |
-| ③ | Grader 只問「有沒有這個欄位」不問「夠不多新」 | 新增 `realtime_need` 三態（LLM 判）＋ `_source_newest_date`／`_stale_for_realtime`（Python 算），**只降不升** |
+| ① | 兩道硬編碼詞表閘門擋在 web 補救判斷式上 | 都拿掉。18 個真實時效措辭實測**漏 10 個** |
+| ② | `SYSTEM_PROMPT` Rule 1/2/8 讓 web 內容不可引用＝不可用 | 有 web 時才在 **system message** 附加放行條款 ＋ 補上 Generator 一直漏接的時間契約 |
+| ③ | Grader 只問「有沒有這個欄位」不問「夠不夠新」 | `realtime_need` 三態（LLM 判）＋ 來源日期（Python 算），**只降不升** |
 
-**② 的決定性證據**：接好管線（web 資料確實進 prompt）後三次跑分**仍全數退回 6 月快照 $4,962.16B**，其中一次寧可拿舊市值除股數捏造「每股 $204」——違反 Rule 8「Never invent」只為守住「traceable to a cited chunk」。**缺的不是格式，是許可**；且修訂必須在 system message（user message 版本已實測無效）。
-
-**③ 的證據**：「Apple 現在的本益比」**正規式是有過的**，`sufficient=True` 擋下 → 拿掉詞表只修一半。coverage 知識反而把 Grader 推向判「夠」（`_CHECKER_PROMPT` 的防空轉條款明文如此），故**刻意不改那段 prompt**，改在 Python 層改判。
-
-**新增來源白名單** `WEB_ALLOWED_DOMAINS`（原始揭露方 ＋ 有編輯流程的財經媒體，不收論壇／意見文）。**濾空明確回報查無、不退回全網**。實測未餓死結果（每次仍 ~2KB）。
-
-**驗收（8 題 live，今天＝08-13）**：
-
-| | 修法前 | 修法後 |
-|---|---|---|
-| 「特斯拉今天股價漲跌」 | 「今天下跌 2.96%」← 三週前新聞、零揭露 | **「上漲 2.02%，收於 $334.11，截至 2026-08-13」**【web】 |
-| 「Apple 現在的本益比」 | 35.83（6/12 快照，無時點） | 財報 35.83（截至 6-12）＋ **即時 34.67**【web】並列 |
-| 「Azure 最新一季成長」（過度觸發控制） | 0 web、答 40% 正確 | **0 web、1 輪、答 40% 正確** |
-
-**eval 不受影響**：`_CHECKER_LIVE_RECENCY_BLOCK` 只在 live 附加、replay cache key 在 live 加 `|| live` 分流、時效改判整段包在 `if _live`。新增 [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py)：**五道閘門 22 項斷言**（零 LLM／零網路／零 Qdrant），含兩項 byte-identical 斷言。
-
-**未解決**（見 [`BACKLOG.md`](BACKLOG.md)）：web 打了但資料沒進答案（蘋果即時市值 7 次 web／18 次時效改判仍用 6/12 值）；成本上升（前漏網三題 1~7 輪 → 21 輪）。
-
-**量測教訓**：八題各跑一次時有兩題看似明顯退步，**各補跑 2 次後兩個都被推翻**。答案品質的 run-to-run 變異大於單次測試的解析度，web 又多疊一層 Tavily 隨機性。
+**② 的決定性證據**：接好管線後三次跑分**仍全數退回舊快照**，其中一次寧可拿舊市值除股數捏造
+「每股 $204」——**違反「Never invent」只為守住「traceable to a cited chunk」。缺的不是格式，是許可**；
+且修訂必須在 system message（user message 版本已實測無效）。
+**③ 的證據**：「Apple 現在的本益比」**正規式是有過的**，`sufficient=True` 擋下 → 拿掉詞表只修一半。
+coverage 知識反而把 Grader 推向判「夠」，故**刻意不改那段 prompt**，改在 Python 層改判。
+**新增來源白名單**（原始揭露方 ＋ 有編輯流程的財經媒體）。**濾空明確回報查無、不退回全網。**
+新增 `eval/verify_web_gate_isolation.py`（五道閘門 22 項，含兩項 **byte-identical** 斷言）。
+**量測教訓**：八題各跑一次時有兩題看似明顯退步，**各補跑 2 次後兩個都被推翻**。
 
 ### `us_stock_rag_edgar_mdna` 升生產；切塊這條路確認到頂
 
-**改動**：[`rag_query.py`](rag_query.py) `COLLECTION_NAME` 預設 `us_stock_rag_edgar_period` → `us_stock_rag_edgar_mdna`。
+小標層收窄到 `_MDNA_ITEMS` 白名單後重建（3925 chunks、零 429），三道 ingest 閘門全綠，
+`check_number_defects` PASS 4／FAIL 2。semantic `context_recall` 0.497 → **0.593**。
+⚠ 單類別 n=15 的誤差棒約 0.17，**+0.096 不足以宣稱效果成立**，只能說方向與預測機制一致。
 
-**mdna 驗收鏈（`b6db628`，小標層收窄到 `_MDNA_ITEMS` 白名單）**：
+**「改用最簡單的 collection」假設被同源對照證偽**：用**今天的 code ＋ 同一份 replay fixture**
+重跑 `period` 全量，兩臂唯一差異只剩 collection → `period` 把**分部層級**的數字當成公司整體
+（拼自三個 chunk），`mdna` 給出單一 chunk 的正確值。**小標層的價值由 `mix-03` 證實。**
+⚠ **舊結果檔不是合法對照臂**：某個 08-08 的檔早於三個相關 commit 且當時沒有 replay cache，
+用它比較會得到**三個假結論**，對齊 code 後全部翻掉。**以後拿舊結果檔當對照臂，一律先查 code drift。**
 
-| 關卡 | 結果 |
-|---|---|
-| 重建（`--rebuild --rcts-fallback`） | 21 filings、3925 chunks、零 429 |
-| `verify_segment_split` 判準③／⑤ | 0 ／ 46→0 |
-| `verify_table_captions` 硬缺陷 | 0（`footer_caption` 4，非閘門） |
-| `verify_chunk_grounding` | `groundable_not_grounded` 0、`unreachable` 17 |
-| agentic 全量 100 題 | 100/100，零 `[WARN]` |
-| `check_number_defects` | **PASS 4／FAIL 2**（`mix-03`／`mix-09`／`col-11`／`mi-04` PASS；`mi-05`／`mix-07` FAIL，兩者皆為已知缺陷） |
-
-RAGAS：semantic `context_recall` 0.497（ground2）→ **0.593**；`_overall` 0.743 → **0.770**。⚠ 單類別 n=15 的誤差棒約 0.17，**+0.096 不足以宣稱效果成立**，只能說方向與預測機制一致。
-
-### 「改用最簡單的 collection」假設被同源對照證偽
-
-**問題**：既然各臂 RAGAS 都在噪音內，是否該直接用層數最少的 `period`（3699 chunks）？
-
-**做法**：用**今天的 code ＋ 同一份 `replay_cache.json`** 重跑 `period` 全量 100 題（`gj_period_full100_20260813.json`），兩臂唯一差異只剩 collection。**不跑 RAGAS**——檢索指標已飽和，跑了拿不到資訊。
-
-**結果 `period` P3 F3 vs `mdna` P4 F2，差在 `mix-03`**：
-
-```
-mdna  ：營業利益增加 64 億美元、成長 20%    ← 單一 chunk #63（正確）
-period：營業利益成長 24%、增加約 27 億美元  ← 拼自 #111 + #109 + #108
-```
-
-`period` 把**分部層級**的數字當成公司整體。這正是小標層要防的失效模式：沒有小標邊界，「公司整體合計」與「分部門明細」落進同一片沒有範圍標記的文字，LLM 分不清數字的作用域。**小標層（收窄後）的價值由 `mix-03` 證實。**
-
-⚠ **`gj_v2_period_full100_20260808.json` 不是合法對照臂**——它早於 `agentic_rag_v2.py` 的 `3396d55`（期間接地）與 `2f93309`（重放快取＋R3 財報優先來源接地），且當時沒有 replay cache。用它比較會得到**三個假結論**，對齊 code 後全部翻掉：`col-11`／`mi-04` 的 N/A（其實是 anchor 措辭沒對上，數字本來就對）、`mix-07` 的 PASS（今天是 FAIL，與 ground2／mdna 一致）。**以後拿舊結果檔當對照臂，一律先查 code drift。**
-
-### 量尺飽和（詳見 [`docs/EVAL.md`](docs/EVAL.md)〈量尺飽和〉）
-
-六個 RAGAS 指標**五個已達或超過 gold 上限**（`context_recall` 上限 0.766／實測 0.770）。按檢索成敗分桶：`recall`=1.0 的 44 題 correctness 0.684、`recall`<0.5 的 12 題 0.543——**全修好只值 +0.024，低於 0.067 噪音底線**。08-06 之後十二次全量跑分全部落在 recall 0.73~0.77、correctness 0.62~0.66。**切塊／ingest 這條路不要再改了。**
+**量尺飽和**：六個指標**五個已達或超過 gold 上限**；按檢索成敗分桶，**全修好只值 +0.024，低於
+0.067 噪音底線**。**切塊／ingest 這條路不要再改了。**
 
 ---
 
 ## 2026-08-12
 
 ### 幅度接地判準下移到 `_merge_small_chunks`（section 層修法被實測推翻）
-**背景**：2026-08-11 的幅度接地（`_merge_unquantified_sections`）下在 **section 層**。重建 `us_stock_rag_edgar_ground` 後 `verify_segment_split.py` 判準⑤ 全綠（46→0），但 **mix-09 只有 1/3 PASS，還輸給完全沒有小標層的 `period`（2/3）**。
 
-**真因**：section 層併好之後，**SemanticChunker 會再切開**。AAPL `Segment Operating Performance` 的 2251 字元 section 被切成 1030 + 593——幅度表格留在前半、`Greater China net sales increased …` 落在後半。實測 `ground` 裡**沒有任何 chunk 同時含那句話與 `18,816`**（`period` 的 #65 有，因為它沒有小標層、整段是一個 3112 字元 chunk）。
+**背景**：08-11 的幅度接地下在 **section 層**，重建後閘門判準⑤ 全綠（46→0），但 `mix-09` 只有
+1/3 PASS，**還輸給完全沒有小標層的 `period`（2/3）**。
+**真因**：section 層併好之後，**SemanticChunker 會再切開**——幅度表格留在前半、解釋句落在後半。
+**修法**：判準下移到 `_merge_small_chunks`（跑在 SemanticChunker 之後，是**最後一個會改變邊界的
+步驟**），並傳入 token 長度函式（呼叫端的 RCTS 補切在它之後，合併若推過門檻會被切回去）。
+⚠ **section 層那一層保留，兩者互補不重複。**
+⚠ **第一版單元測試是我自己寫壞的**——前一塊只給 65 字元，觸發了既有的「首塊過短往後併」，
+與新判準無關；改用語料裡真實的 482 字元無數字 chunk 才是有效測試。
 
-**修法**：判準下移到 [`_merge_small_chunks`](data_update_edgar.py)，它跑在 SemanticChunker 之後，是**最後一個會改變邊界的步驟**。並傳入 `token_len_fn`/`max_tokens`——呼叫端的 RCTS 補切在它之後，合併若推過門檻就會被切回去。
-⚠ **section 層那一層保留，兩者互補不重複**：`head` 的 Greater China 孤兒自成一個 section，同硬邊界內沒有前一塊可併；section 層先把它併進母節，chunk 層才有東西可併。
-
-**確定性單元測試 6/6**（用 `ground` 實際的 #60/#61）：正案例合併且解釋＋數字同在／只用長度判準時不合併／前一塊無數字時不併（＋加上數字後會併的對照）／超過 RCTS 門檻時不併（＋門檻放寬後會併的對照）。⚠ 第一版測試③ 是**我自己寫壞的**——前一塊只給 65 字元，觸發了既有的「首塊過短往後併」，與新判準無關；改用語料裡真實的 482 字元無數字 chunk 才是有效測試。
-
-**新增 [`eval/verify_chunk_grounding.py`](eval/verify_chunk_grounding.py)**：chunk 層閘門，三態 `groundable_not_grounded`（唯一閘門）／`unreachable`／`blocked_by_cap`。含與 `data_update_edgar.py` 的**常數一致性斷言**（讀原始碼文字、不 import，避免 >120s 相依）——常數兩份會漂移，漂移的話閘門會安靜地量錯並回報全綠。
-
-**`us_stock_rag_edgar_ground2` 驗收（21/21、4174 chunks、零 429／零 error）**：
-
-| 閘門 | `ground` | `ground2` |
-|---|---|---|
-| `verify_chunk_grounding` 漏接數 | 3（FAIL） | **0（PASS）** |
-| chunk 層孤兒率 | 8.0%（22/274） | **6.3%（17/270）**，殘餘全是 `unreachable` |
-| mix-09 機制（解釋＋數字同 chunk） | 沒有 | **#60（2315 字元）有** |
-| `verify_table_captions` 硬缺陷 | 0 | **0** |
-| `verify_segment_split` ②③⑤ | 0/0/46→0 | **0/0/46→0** |
-| rerank >2048 token 的 chunk | 2 | **2（未惡化）** |
-
-**四條斷言（每條 3 run，與封存基準對照）**：
-
-| 主張 | `period` (3) | `head` (1) | `ground` (3) | **`ground2` (3)** |
-|---|---|---|---|---|
-| mix-09 | 2/3 | 0/1 | 1/3 | **3/3** |
-| mix-07 | 2/3 | 0/1 | 3/3 | **3/3** |
-| mix-03 | 1/3 | 1/1 | 2/3 | **2/3** |
-| mi-05 | 0/3 | 0/1 | 1/3 | **1/3** |
-
-**mix-09 全勝，且贏過原本最好的 `period`**。殘餘兩個 FAIL 都不在本次改動的層：mix-03 剩下那個是生成層挑錯運算元（拿 Productivity 的 36 億當合併總計），mi-05 是檢索層撈錯 chunk。
+**新增 `eval/verify_chunk_grounding.py`**（chunk 層閘門）。含與 ingest 的**常數一致性斷言**
+（讀原始碼文字、不 import）——常數兩份會漂移，漂移的話閘門會**安靜地量錯並回報全綠**。
 
 **兩個必須記住的教訓**：
 1. **修法要下在「最後一個會改變邊界」的層**，否則下游會把它切回去。
-2. **驗收閘門要與缺陷同層**。判準⑤ 量 section 層（刻意不跑 SemanticChunker 才能便宜地隨手跑），所以它**結構上看不到** chunk 層——它全綠的同時缺陷還在。「規則生效」與「缺陷消失」是兩個判準。
+2. **驗收閘門要與缺陷同層。** 判準⑤ 量 section 層，所以它**結構上看不到** chunk 層——它全綠的同時
+   缺陷還在。**「規則生效」與「缺陷消失」是兩個判準。**
 
-### 全量 100 題 ＋ RAGAS：「沒崩壞」閘門過關，並解開了 head-vs-period 的懸案
-`gj_ground2_full100_20260812`（掛共用 replay fixture，與 `gj_v2_period_replay1` **plan 相同 92/100**——未 blocked 時實測只有 34/100）。六個整體指標**全部落在噪音內**（recall −0.027 vs 門檻 0.029、correctness −0.018 vs 0.019、precision +0.023 vs 0.046），±0.05 粗閘門 PASS。
+### 全量 100 題 ＋ RAGAS：解開了 head-vs-period 的懸案
 
-**但分類別有一個真訊號**：semantic 的 recall −0.190、correctness −0.110（n=15 的類別門檻約 ±0.075）。三臂對照證明**它不是幅度接地造成的，是通用小標層**：
-
-| | `period`（無小標層） | `head`（有小標層） | `ground2`（小標層＋chunk 層接地） |
-|---|---|---|---|
-| semantic recall | 0.687 | **0.509** | 0.497 |
-| semantic correctness | 0.680 | **0.554** | 0.570 |
-| 整體 recall | 0.770 | 0.731 | **0.743** |
-| 整體 correctness | 0.662 | 0.630 | **0.644** |
-
-`head` 早就是 −0.178／−0.126；`ground2` 與 `head` 的差距（recall −0.012、correctness **+0.016**）遠在類別噪音內。**而 `ground2` 在每一項整體指標上都優於 `head`**——幅度接地把小標層的代價回收了約三分之一。
-
-**這解開了 BACKLOG 的懸案**「head 的 correctness −0.032／recall −0.039，非 AAPL 的 42 題退步沒有已證實的解釋」：**semantic 15 題就貢獻了整體 recall 缺口的 ~68%、correctness 缺口的 ~59%**。機制是**小標層把 chunk 切小 → 每個撈到的 chunk 帶的證據變少**：semantic 的證據量 −31.6%（全類最大），chunk 數卻幾乎沒變（58→56）。
-
-**下一個槓桿（未做）**：`use_heading = item_name not in _TABLE_DOMINATED_ITEMS` ＝ **小標層套在所有散文 item 上**，但它的用途（mix-03 分部/合併混淆）只存在於 MD&A。實測 semantic 撈到的 52 個 filing chunk 有 **43 個（83%）來自非 MD&A**（Item 1 Business 25、Item 1A 7、Part II Item 1A 6），其中 `Item_1` 中位長度僅 1320 字元。把 `use_heading` 收窄到 `_MDNA_ITEMS` 應可同時保住 mix-03 與 semantic——見 `BACKLOG.md`。
+六個整體指標**全部落在噪音內**，但分類別有一個真訊號：semantic recall −0.190、correctness −0.110。
+三臂對照證明**它不是幅度接地造成的，是通用小標層**（`head` 早就是 −0.178／−0.126）。
+**這解開了 BACKLOG 的懸案**：**semantic 15 題就貢獻了整體 recall 缺口的 ~68%、correctness 缺口的
+~59%**，機制是**小標層把 chunk 切小 → 每個撈到的 chunk 帶的證據變少**（semantic 的證據量 −31.6%，
+chunk 數卻幾乎沒變）。
+→ **下一個槓桿**：小標層的用途（分部/合併混淆）只存在於 MD&A，而 semantic 撈到的 chunk 有 **83%
+來自非 MD&A**。把 `use_heading` 收窄到 `_MDNA_ITEMS` 應可同時保住兩者（08-13 已做）。
 
 ### mix-03 改用 `require_text`：`forbid` 對它結構上不安全
-ground2 r3 的答案**每個數字都對**（先給合併總計 64 億／20%，再逐部門分解 Intelligent Cloud 27 億／24%），卻因 `forbid_text` 命中 27 億被判 FAIL。**正確的分部分解必然包含分部的值**，所以 `forbid_pct: 24` 與 `forbid_text: 27 億` 兩個都不安全，不是換值就好（同 col-11 教訓）。改由「合併總計的**金額**在不在」承擔判別力。跨 10 個 run 逐格比對：**只有那一格從 FAIL 翻成 PASS，其餘 9 格不變**。
+
+某輪答案**每個數字都對**（先給合併總計、再逐部門分解），卻因 `forbid_text` 命中分部值被判 FAIL。
+**正確的分部分解必然包含分部的值**，所以 forbid 不是換值就好。改由「合併總計的**金額**在不在」
+承擔判別力。跨 10 個 run 逐格比對：**只有那一格從 FAIL 翻成 PASS，其餘 9 格不變。**
 
 ---
 
 ## 2026-08-11
 
 ### 數字缺陷量尺加兩個斷言型別：`require_text`／`require_chunk`
-**動機**：mi-05 與 mix-07 兩個已確診缺陷**在既有工具下都判不出來**，只會落進 N/A（＝無法比對），等於它們不在零噪音回歸網裡。病根是**斷言型別只有一種**（`anchored_pct`），而這兩個缺陷的判別訊號不在「anchor 附近的百分比」那一層。
 
-**新增**（`eval/check_number_defects.py`，claims 用 `kind` 欄位分派，預設 `anchored_pct` 故既有 4 條零改動）：
-- `require_text`：答案本文必須匹配 `expect_text`。給 mix-07（Plan 把財報事實譯成新聞查詢→拒答；拒答文本零百分比，`anchored_pcts` 判不出來）。
-- `require_chunk`：檢索池 `sources` 必須含指定 `source`+`chunk_index`。給 mi-05（同檔撈到錯 chunk，答案層無論填 expect 或 forbid 都是陷阱）。FAIL 訊息區分「同檔撈到別的 index」（真缺陷）與「該檔完全沒撈到」（可能是重編號）。
+**動機**：兩個已確診缺陷**在既有工具下都判不出來**，只會落進 N/A，等於它們不在零噪音回歸網裡。
+病根是**斷言型別只有一種**（`anchored_pct`），而這兩個缺陷的判別訊號不在那一層。
+- `require_text`：答案本文必須匹配（給「拒答文本零百分比」那種缺陷）。
+- `require_chunk`：檢索池必須含指定 `source`+`chunk_index`（給「同檔撈到錯 chunk」那種）。
+  FAIL 訊息區分「同檔撈到別的 index」（真缺陷）與「該檔完全沒撈到」（可能是重編號）。
 
-**為什麼搶在重建之前做**：封存結果檔是**已知答案的測試資料**，重建後那批 ground truth 就沒了。若那時新斷言回報 0 問題，分不清是修好了還是斷言壞了（CLAUDE.md：「稽核腳本回傳 0 筆問題先當壞消息查」）。
-
-**判別力雙向驗證**（四個封存檔：period full100／replay1／replay2、head full100）：
-
-| 主張 | 結果 | 說明 |
-|---|---|---|
-| mi-05 `require_chunk` | **4/4 FAIL** | 全部「同檔撈到 #[1] ← 撈錯 chunk」 |
-| mix-07 `require_text` | **2 PASS / 2 FAIL** | 兩個答對、兩個拒答 |
-| 正對照（斷言改指實際撈到的 #1／拒答文本必含的 `Wiz`） | **PASS** | 證明 FAIL 來自被斷言的內容，不是機制壞掉 |
-| 既有 mix-03／mix-09／col-11／mi-04 | **逐格未變** | col-11 3 PASS+1 N/A、mi-04 2 PASS+2 N/A，護欄零誤報 |
-| `_validate_claims` 負向測試 | **6/6 擋下** | kind 打錯字、require_chunks 空、缺 chunk_index、缺 expect_text、anchored_pct 缺 anchor、known_defect 缺 forbid |
-
-⚠ `require_text`／`require_chunk` 的 `known_defect` **不強制 forbid**（`anchored_pct` 仍強制）：那條規則的前提是「正解與干擾值並陳也會 PASS」，存在性斷言沒有並陳問題，缺席就是 FAIL。
-
-**附帶修一個潛在錯位**（`eval/run_agentic_on_evalset.py`）：`contexts` 濾掉空內容、`sources` 沒濾 → 兩個 list 可能錯位一格，下游用 `sources[i]` 配 `contexts[i]` 會歸錯來源。改成同一次過濾。**實測 14 個結果檔、1400 筆記錄零錯位＝從未實際發生**，純護欄，歷史結論不受影響。
+**為什麼搶在重建之前做**：封存結果檔是**已知答案的測試資料**，重建後那批 ground truth 就沒了。
+若那時新斷言回報 0 問題，**分不清是修好了還是斷言壞了**。
+**判別力雙向驗證**（四個封存檔）：`require_chunk` 4/4 FAIL、`require_text` 2 PASS / 2 FAIL、
+正對照 PASS、既有四條逐格未變。
 
 ---
 
@@ -1318,7 +795,7 @@ ground2 r3 的答案**每個數字都對**（先給合併總計 64 億／20%，�
 
 - **100 題 baseline 首跑**：overall correctness 0.776（與舊 61 題基準不可比較，題集已變）。
 - **修復 2 題 rubric 缺陷**（sem-18/col-17 Tesla 能源分部錯設 critical）；**新發現 3 類 bug**：judge 中文「億」單位換算誤判（sem-23）、生成層「億/billion」誤譯（sem-17，新類型）、2 個真實 RECALL 缺口（年度加總句未進池）。
-- **eval_set 全量 gold 驗證 + 擴充至 100 題**（各類別 25 題）：發現 2 題整題超綱（sem-06/col-09「Apple Silicon」語料 0 命中，已替換）、3 題快照漂移缺陷（`*_Fundamentals_*` glob 匹配多份快照、數值不同，已放寬 rubric）。逐題證據見 [`eval/eval_set_evidence.md`](eval/eval_set_evidence.md)。
+- **eval_set 全量 gold 驗證 + 擴充至 100 題**（各類別 25 題）：發現 2 題整題超綱（sem-06/col-09「Apple Silicon」語料 0 命中，已替換）、3 題快照漂移缺陷（`*_Fundamentals_*` glob 匹配多份快照、數值不同，已放寬 rubric）。逐題證據見 [`docs/_archive/eval_set_evidence-2026-07-16.md`](docs/_archive/eval_set_evidence-2026-07-16.md)（**已封存**：那份記錄的題號屬於 100 題時代，多數已不在現行 65 題裡；仍然適用的維護規則已收進 [`eval/README.md`](eval/README.md)）。
 
 ---
 
