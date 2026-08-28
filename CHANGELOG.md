@@ -3,6 +3,42 @@
 紀錄本專案每次有意義的程式修改（架構調整、參數變更、新增功能、放棄的實驗）。新條目加在最上面。
 **每筆條目只留「改了什麼、關鍵數字、結論」**，診斷過程與推導細節見 `docs/` 與 git log，不重述。
 
+## 2026-08-29
+
+### 補上 multi_hop「哪一家最高」的斷言（新檔），再一次推翻自己的假設
+
+先前主張「比大小沒有 Python 在做 ＝ multi_hop 最大的暴露面」。查證屬實（全碼庫零比較器，
+而比錯了 Synthesize 五道 validator 一道都不會響），**但量下去沒有損害**。
+
+新增 [`eval/check_comparison_claims.py`](eval/check_comparison_claims.py) ＋ `comparison_claims.json`
+（零 LLM、零網路、零 Qdrant，只讀既有結果檔 → **成本幾乎為零**）。三態不可合併：
+`wrong_winner`（值都在眼前還挑錯）／`unfounded`（某家的值不在 contexts 卻仍宣告贏家）／`N/A`。
+真值刻意**從 record 自己的 `contexts` 算**，不重跑檢索也不查 gold——否則 FAIL 會混進「檢索沒撈到」。
+
+**讀數**：現行架構 8 輪 × 5 題 **40/40 PASS**；擴到全部 67 個結果檔（335 筆）**`wrong_winner` 仍是 0**。
+`unfounded` 6 筆全部出自舊 ReAct 世代的 `gj_v2_multihop*`，其中兩筆是真的答錯
+（宣稱 MSFT／真值 AMZN、宣稱 NVDA／真值 META，且四家的值一個都不在 contexts 裡）
+——與 2026-07-29 ReAct 執行層退役的理由一致。
+
+**⚠ 量尺自己先出了兩次錯，記在這裡因為它們是判讀前提**：
+1. **第一版在 40 筆裡誤報 2 筆 FAIL**，兩筆答案其實都是對的。成因是「離錨點最近的公司提及」
+   這條規則遇到兩個真實句型會失手：① 題目重述清單緊接最高級（「是 A、B、C、D 四家公司中規模最大的」
+   → 挑到清單最後一個）② 及物比較動詞（「NVIDIA 領先於 Meta 與 Alphabet」→ 錨點後面接的是**輸家**）。
+   → 依 CLAUDE.md〈稽核回報 FAIL，先問是不是量尺錯〉逐字看了原文才發現。
+   兩個句型已**逐字凍結成 selftest ⑧⑨**，並各配一個誤報對照（⑪ 同句型但宣稱換錯家 → 仍須 FAIL）。
+2. **列舉偵測寫成 `body[p1+1:p2]`**（只跳過一個字元而不是整個公司名）→ 那道規則**從頭到尾沒生效**，
+   是 selftest ⑧ 把它逼出來的。`_company_positions` 因此改回傳 `(起, 迄, ticker)`。
+   → 這正是「機制宣稱要先有能證偽它的確定性測試」：沒有 ⑧，這條規則會以「已實作」的姿態躺著不作用。
+
+**結論**：不補 Python 比較器。**但適用範圍很窄**——現有語料每一題差距都很大、單位一致、值全都在，
+**接近值／缺值／跨單位一次都沒測到**。復活條件記在 [`BACKLOG.md`](BACKLOG.md)。
+
+⚠ 附帶事實（另一個方向的證據）：`_PLANNER_PROMPT` **完全沒有提到依賴型第二跳**，
+而 10 次實跑的拆解裡帶「該公司」的子問題出現 **0 次**——Planner 一律把 multi_hop **攤平成笛卡兒積**。
+於是 `_is_dependent_hop`／`_resolve_hop_entity`／`_fill_dependent_hop`／replan 的 `has_pending_dependent`
+這一整套在這批題目上是**死碼**。⚠ `_resolve_hop_entity` 用**眾數**挑公司，而問題問的是「最大的那家」
+——四家各出現一次時眾數是任意的。目前不會被觸發，但改 Planner prompt 就會上線。
+
 > **這裡不是現況。** 要知道「現在是什麼狀態」看 [`CLAUDE.md`](CLAUDE.md) 開頭的〈現況快照〉。
 > **已試無效總表**在 [`docs/EVAL.md`](docs/EVAL.md)（改動前先查那裡）。
 > **已知問題／已接受的極限**在 [`BACKLOG.md`](BACKLOG.md)。

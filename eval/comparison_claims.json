@@ -1,0 +1,46 @@
+{
+  "_meta": {
+    "purpose": "多實體比較題的逐條斷言：『哪一家最高/最大』這個結論，Python 從答案自己引用的 chunk 算得出來嗎。",
+    "consumer": "eval/check_comparison_claims.py",
+    "field_source": "Fundamentals chunk 的固定版面（`欄位名 : 值`），見 data/edgar_processed/Fundamentals/*.txt",
+    "verified_by": "逐題比對 eval/eval_set.json 的題目字面 + eval/reference_answers.json 的參考答案（2026-08-29 人工）",
+    "warning": "compare_field 是**題目問的那個欄位**，不是答案用的那個。兩者不同正是要抓的缺陷之一。"
+  },
+  "claims": [
+    {
+      "id": "mh-01",
+      "companies": ["AMZN", "MSFT", "GOOGL", "META"],
+      "compare_field": "Revenue (TTM)",
+      "direction": "max",
+      "verified": "題目字面『TTM 總營收規模最大』→ Revenue (TTM)，不是 Revenue Growth。reference 確認 Amazon 742.78B。⚠ 我第一次從亂碼 console 讀成『增幅』而誤判為缺陷，逐字重讀後更正。"
+    },
+    {
+      "id": "mh-02",
+      "companies": ["META", "NVDA", "MSFT"],
+      "compare_field": "Gross Margin",
+      "direction": "max",
+      "verified": "題目字面『TTM 毛利率最高』→ Gross Margin（**不是** Profit Margin）。reference 確認 Meta 81.94%。若誤填 Profit Margin，真值會變成 NVDA 62.97% → 這一格填錯會製造假缺陷。"
+    },
+    {
+      "id": "mh-03",
+      "companies": ["NVDA", "META", "GOOGL"],
+      "compare_field": "Revenue Growth (YoY)",
+      "direction": "max",
+      "verified": "題目字面『最近一年營收年增率（YoY revenue growth）最高』。reference 確認 NVIDIA 85.20%。"
+    },
+    {
+      "id": "mh-04",
+      "companies": ["MSFT", "GOOGL", "AAPL"],
+      "compare_field": "Operating Margin",
+      "direction": "max",
+      "verified": "題目字面『TTM 營業利益率（operating margin）最高』。reference 確認 Microsoft 46.33%。"
+    },
+    {
+      "id": "mh-05",
+      "companies": ["GOOGL", "MSFT", "AMZN"],
+      "compare_field": "Net Income",
+      "direction": "max",
+      "verified": "題目字面『TTM 淨利（net income）最高』。reference 確認 Alphabet 160.21B（MSFT 125.22B、AMZN 90.8B）。"
+    }
+  ]
+}

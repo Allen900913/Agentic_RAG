@@ -45,6 +45,26 @@
 
 ---
 
+## 觀察：multi_hop 的「比大小」目前沒有 Python 在做（量過了，沒有損害）
+
+`agentic_rag_v2.py` 裡所有 `max()` 都在比日期或 rerank 分數，**沒有一行在比「哪家公司的指標大」**。
+六個子問題各自撈回 chunk → `_fair_select` 挑一批 → 由 Generator 自己讀著數字比。
+這違反 CLAUDE.md〈LLM 與 Python 的分工〉的「比對／算術給 Python」，而且**比錯了五道 validator 全綠**。
+
+**2026-08-29 量了（`check_comparison_claims.py`，零 LLM／零網路，只讀既有結果檔）**：
+· 現行架構 8 輪 × 5 題 = **40/40 PASS**，`wrong_winner` 0、`unfounded` 0。
+· 擴到全部 67 個結果檔（335 筆）：**`wrong_winner` 仍然 0**；`unfounded` 6 筆，
+  **全部出自舊 ReAct 世代**的 `gj_v2_multihop*`（其中兩筆答案確實是錯的：宣稱 MSFT 而真值 AMZN、
+  宣稱 NVDA 而真值 META，而且四家的值一個都不在 contexts 裡）。與 ReAct 執行層退役的理由一致。
+→ **「這是最大暴露面」這個假設沒有證據支持，據此撤回。** 不補 Python 比較器。
+
+**⚠ 但這個結論的適用範圍很窄，復活條件寫在這裡**：
+現有語料**每一題的差距都很大**（NVDA 85.2% vs META 33.1%、GOOGL 160.21B vs MSFT 125.22B），
+而且值全部來自**同一種 chunk、同一個版面、同一個單位**。**三種真正危險的情況一次都沒測到**：
+① 接近值（差 1% 以內）② 某家的值缺席 ③ 跨單位（$XB vs $XM）。
+任一情況在題庫裡出現、或有人把 Fundamentals 的版面改掉 → 重新評估。
+造這三種題**不能加進 `eval_set.json`**（分母不可變），要走獨立斷言集。
+
 ## 待決的決策
 
 - **rubric 這條線要正式退役，還是把 rubric 補回 `eval_set.json`？**

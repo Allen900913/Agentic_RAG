@@ -46,6 +46,17 @@
 !period_probe_benefit_queries.json
 !web_replay_llm.json
 
+# ── 2026-08-29 補：**第四次**。上一段的警告就寫在正上方，然後同一件事又發生了 ───────
+#   · comparison_claims.json  multi_hop「哪一家最高」的逐條斷言。每一條的 compare_field
+#     是**人工逐字比對題目與 reference 才定下來的**（mh-02 問的是毛利率不是淨利率，填錯這一格
+#     真值會從 META 變成 NVDA ＝ 製造假缺陷），腳本重現不了。
+#   · number_claims.json      早於 `*.json` 規則就被追蹤，所以沒被吃掉——但它從來不在白名單裡，
+#     一旦被 `git rm --cached` 過就再也加不回來。補上，讓白名單與實際追蹤的檔案一致。
+# ⚠ 這條規則已經沉默吃掉新檔四次。**新增 eval 輸入檔的同一次改動就要加白名單**，
+#   不要等到 `git add` 報錯才想起來（它報錯是幸運，忘了 add 才是真正的失效模式）。
+!comparison_claims.json
+!number_claims.json
+
 # ── web fixture：**體積大但仍然入版控**，這是刻意的例外 ────────────────────────────
 # 它不是「跑分輸出」而是**錄下來的外部世界**：重錄要連網、燒 Tavily 額度，而且**錄不回同一份**
 # （網路內容每天在變）。fixture 綁定一組環境（as-of 日期 + collection），是那批斷言唯一的依據；
