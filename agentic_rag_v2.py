@@ -474,11 +474,89 @@ def _url_published_date(url: str) -> date | None:
     return None
 
 
-def _web_result_date(r: dict) -> date | None:
-    """一則 web 結果的日期：優先用 API 的 `published_date`,沒有才退回網址推斷。
+# 內容裡的日期**只在發布／報價時間標記旁邊**才算數（2026-08-29）。
+#
+# 為什麼需要這一層：2026-09-01 實跑一次真 Tavily（`What is NVIDIA's current share price?`）：
+#   **12 則結果的 `published_date` 全部是 None**，網址是 `/quote/NVDA` 也推不出日期
+#   → 每一則都印「（未標示日期）」，而同一行內容寫著 `REAL TIME 11:49 AM EDT 08/31/26`。
+#   後果是連鎖的：`_dedupe_web_results` 的過時過濾整個失效（抽不出日期一律保留），
+#   同一個池子裡 08/18、08/28、08/31 三個不同日期的價格沒有任何東西替它們排序。
+#
+# ⚠ **為什麼不是「找出任何日期」**：同一頁裡有大量**不是發布日**的日期——分析師評等日
+#   （`Latest Rating Date 8/25/2026`）、**未來的**財報日與除息日（`Nov 17, 2026`／`Sep 10, 2026`）、
+#   歷史表格列（`Dec 1, 2018`）。抓錯的方向是不對稱的：抓到**太新**的日期會讓過期頁冒充新鮮
+#   並替整池背書，那正是 CLAUDE.md〈只有真實日曆日期能證明候選池夠新〉在防的事。
+#   所以判準是**標記相鄰**＋**未來日期一律丟棄**，而且**不確定就回 None**（維持現狀，不猜）。
+_CONTENT_DATE_MARKER = re.compile(
+    r"(?:at\s+close|after\s+hours|pre[- ]?market|real\s?time|as\s+of|published(?:\s+on)?|"
+    r"updated(?:\s+on)?|last\s+updated|posted(?:\s+on)?)\b", re.IGNORECASE)
+# ⚠ 判準是**在第一個表格／區段邊界處截斷**，不是「窗口夠窄」。這是變異測試逼出來的：
+#   `Pre-Market: 9:06:53 AM EDT [...] | Dec 8, 2025 |` 的 `Pre-Market` 後面**沒有日期**，
+#   沒有邊界截斷就會收編隔壁表格的日期。那個例子剛好無害（誤收的比較舊，被 max 蓋掉），
+#   但誤收到比較**新**的就是危險方向——頁面會冒充新鮮（閘門 ⑩n 就是那個形狀）。
+# ⚠ **窗口不可以太窄**：24 會把 `| Aug 25, 2026` 截成 `| Aug 2` 而**合成出一個不存在的日期**
+#   （Aug 2）。截半個 token 比截掉整個 token 危險。48 ＋ 邊界截斷則不會截在 token 中間。
+#   實際需要的距離很短：`At close: August 31`＝1、`AT CLOSE 4:00 PM EDT 08/28/26`＝13。
+_MARKER_WINDOW = 48
+_SECTION_BREAK = re.compile(r"[|\[\]#]")   # 表格欄位／`[...]` 省略段／標題，日期跨過去就不是這個標記的
+
+_MONTHS = {m: i for i, m in enumerate(
+    ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"), start=1)}
+_CONTENT_DATE_PATTERNS = (
+    # `August 31 at 4:00` / `Aug 28, 2026`：**年份可省**（報價頁最常見的形狀）
+    re.compile(r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})"
+               r"(?:\s*,?\s*(20\d{2}))?\b", re.IGNORECASE),
+    re.compile(r"\b(\d{1,2})/(\d{1,2})/(\d{2}|20\d{2})\b"),      # 08/31/26、08/31/2026
+    re.compile(r"\b(20\d{2})-(\d{2})-(\d{2})\b"),                # ISO
+)
+
+
+def _content_published_date(content: str, as_of: date) -> date | None:
+    """從 web 結果的內容抽發布／報價日。**只認標記相鄰的日期，且丟棄未來日期。**
+
+    年份省略時（`At close: August 31`）補上「**不晚於 as_of 的最近一次**」——絕不外推到未來。
+    多個候選取 **max**：報價頁把最新一次收盤排在最前面，新聞頁的 `Updated` 也晚於 `Published`。
+    一個都不合格 → None（與加這層之前完全相同的行為）。
+    """
+    text = content or ""
+    cands: list[date] = []
+    for m in _CONTENT_DATE_MARKER.finditer(text):
+        window = text[m.end():m.end() + _MARKER_WINDOW]
+        brk = _SECTION_BREAK.search(window)     # 跨過表格／區段邊界的日期不算這個標記的
+        if brk:
+            window = window[:brk.start()]
+        for pat in _CONTENT_DATE_PATTERNS:
+            hit = pat.search(window)
+            if not hit:
+                continue
+            g = hit.groups()
+            try:
+                if pat is _CONTENT_DATE_PATTERNS[0]:
+                    mo, day = _MONTHS[g[0][:3].lower()], int(g[1])
+                    yr = int(g[2]) if g[2] else as_of.year
+                    d = date(yr, mo, day)
+                    if not g[2] and d > as_of:      # 沒寫年份且落在未來 → 是去年的同一天
+                        d = date(yr - 1, mo, day)
+                elif pat is _CONTENT_DATE_PATTERNS[1]:
+                    yr = int(g[2])
+                    d = date(yr + 2000 if yr < 100 else yr, int(g[0]), int(g[1]))
+                else:
+                    d = date(int(g[0]), int(g[1]), int(g[2]))
+            except (ValueError, KeyError):
+                continue
+            if d <= as_of:          # ⚠ 未來日期一律丟棄：財報日／除息日不是發布日
+                cands.append(d)
+            break                   # 這個標記已經有解，換下一個標記
+    return max(cands) if cands else None
+
+
+def _web_result_date(r: dict, as_of: date | None = None) -> date | None:
+    """一則 web 結果的日期：`published_date` → 網址推斷 → **內容裡的標記相鄰日期**。
     ⚠ 實測（2026-08-13）：只有 `topic="news"` 會回 `published_date`,而 news 模式**拿不到數據頁**
       （macrotrends／stockanalysis／companiesmarketcap 全消失）,即時報價題要的正是數據頁。
-      所以生產走預設 topic ＋ 網址推斷；這裡仍先讀 `published_date`,將來若改 topic 不必再動這裡。"""
+      所以生產走預設 topic ＋ 網址推斷；這裡仍先讀 `published_date`,將來若改 topic 不必再動這裡。
+    ⚠ 第三段是 2026-08-29 補的,理由見 `_content_published_date` 上方——在那之前
+      真 Tavily 的報價題**12/12 全部印「未標示日期」**,過時過濾等於沒有。"""
     raw = (r.get("published_date") or "").strip()
     if raw:
         for fmt in ("%a, %d %b %Y %H:%M:%S %Z", "%a, %d %b %Y %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"):
@@ -492,7 +570,8 @@ def _web_result_date(r: dict) -> date | None:
                 return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
             except ValueError:
                 pass
-    return _url_published_date(r.get("url") or "")
+    return (_url_published_date(r.get("url") or "")
+            or _content_published_date(r.get("content") or "", as_of or _get_as_of_date()))
 
 
 def _normalize_url(url: str) -> str:
@@ -577,7 +656,7 @@ def _dedupe_web_results(results: list[dict], need: str, as_of: date) -> tuple[li
         if per_domain.get(dom, 0) >= TAVILY_PER_DOMAIN_CAP:
             stats["domain_cap"] += 1
             continue
-        d = _web_result_date(r)
+        d = _web_result_date(r, as_of)
         if d:
             stats["dated"] += 1
             if limit is not None and (as_of - d).days > limit:

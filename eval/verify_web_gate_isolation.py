@@ -35,6 +35,7 @@ import io
 import json
 import os
 import sys
+from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -902,6 +903,103 @@ def _check_fixture_binding_is_preserved() -> int:
     return fail
 
 
+def _check_content_date_extraction() -> int:
+    """閘門⑩：web 結果的日期要抽得到，**而且不可以抽錯成太新的**（2026-08-29）。
+
+    測資是 **2026-09-01 一次真 Tavily 呼叫的逐字內容**（`What is NVIDIA's current share price?`）。
+    那次呼叫的發現：**12 則結果的 `published_date` 全部是 None**、網址是 `/quote/NVDA` 也推不出
+    日期 → 每一則都印「（未標示日期）」，而內容裡明明寫著 `REAL TIME 11:49 AM EDT 08/31/26`。
+    過時過濾（`_dedupe_web_results` 第③道）因此**整個失效**。
+
+    ⚠ **危險方向是不對稱的**：抽到**太新**的日期會讓過期頁冒充新鮮並替整池背書；抽不到只是
+      維持現狀。所以誤報對照（⑩e~⑩i）比陽性斷言重要——同一頁裡有分析師評等日、**未來的**
+      財報日與除息日、歷史表格列，全都不是發布日。
+    """
+    AS_OF = date(2026, 9, 1)
+
+    # ── 逐字凍結：2026-09-01 真實回應 ────────────────────────────────────────
+    YAHOO_QUOTE = ("Selected editionUS English 220.78 +3.23 (+1.48%) At close: August 31 at "
+                   "4:00:01 PM EDT 220.16 -0.62 (-0.28%) Overnight: 9:53:29 PM EDT")
+    WSJ = ("NVIDIA Corp.NVDA (U.S.: Nasdaq) AT CLOSE 4:00 PM EDT 08/28/26 217.55USD "
+           "-10.43-4.57% Volume195,116,417 ...Read more")
+    YAHOO_STATS = ("NasdaqGS - Nasdaq Real Time Price USD # NVIDIA Corporation (NVDA) "
+                   "217.55 -10.43 (-4.57%) At close: August 28 at 4:00:00 PM EDT "
+                   "217.89 +0.34 (+0.16%) After hours: August 28 at 7:59:59 PM EDT")
+    YAHOO_HIST = ("NasdaqGS - Nasdaq Real Time Price USD # NVIDIA Corporation (NVDA) "
+                  "219.74 -5.27 (-2.34%) At close: August 18 at 4:00:00 PM EDT "
+                  "221.20 +1.46 (+0.66%) Pre-Market: 9:06:53 AM EDT [...] | Dec 8, 2025 |")
+    ANALYST = ("## Analyst Insights ### Analyst Price Targets 180.00 323.42 Average 220.78 "
+               "Latest Rating Date 8/25/2026 Analyst Raymond James Rating Action Maintains "
+               "Earnings Date Nov 17, 2026 Ex-Dividend Date Sep 10, 2026")
+    OLD_TABLE = ("| Date | Open | High | Low | Close | Adj Close | Volume | "
+                 "| Dec 1, 2018 | 4.32 | 4.37 | 3.11 | 3.34 | 3.31")
+
+    cases = [
+        ("⑩a yahoo 報價頁『At close: August 31』（省略年份）", YAHOO_QUOTE, date(2026, 8, 31)),
+        ("⑩b wsj『AT CLOSE 4:00 PM EDT 08/28/26』（兩位數年）", WSJ, date(2026, 8, 28)),
+        ("⑩c 同頁多個標記 → 取最新（After hours 也是 8/28）", YAHOO_STATS, date(2026, 8, 28)),
+        ("⑩d 標記日期 8/18 勝過表格裡的 Dec 8, 2025（後者無標記）", YAHOO_HIST, date(2026, 8, 18)),
+        ("⑩e 誤報對照：評等日／**未來的**財報日除息日 → 一個都不可抽", ANALYST, None),
+        ("⑩f 誤報對照：歷史表格列（無標記）→ 不可抽", OLD_TABLE, None),
+        ("⑩g 誤報對照：完全沒有標記 → None（維持加這層之前的行為）",
+         "NVDA 219.52 Previous Close 217.55 Volume 195,116,417", None),
+        ("⑩h 誤報對照：標記旁邊就是未來日期 → 仍然丟棄",
+         "As of Nov 17, 2026 the company will report earnings.", None),
+        ("⑩i 省略年份且落在未來 → 補成去年同日，**絕不外推到未來**",
+         "At close: December 30 at 4:00:00 PM EDT 219.52", date(2025, 12, 30)),
+        # ⑩m 新聞頁的形狀：Published 早於 Updated → 必須取 Updated（max 不是 min）。
+        # 沒有這一條，一個「取最舊」的實作在 ⑩a~⑩i 上會全綠——那會讓改過的新聞被當成舊的丟掉。
+        ("⑩m 新聞頁 Published/Updated 並存 → 取較新的那個",
+         "Published on Aug 20, 2026 by staff. Last updated Aug 30, 2026 with new details.",
+         date(2026, 8, 30)),
+        # ⑩n **危險方向**：沒有日期的標記（`Pre-Market:` 後面只有時間）不可以收編隔壁表格裡
+        #    **比較新**的日期。這一條是變異測試逼出來的——原本 48 字元的窗會讓它收編，而
+        #    ⑩d 之所以還是綠的只是因為誤收的那個剛好比較舊、被 max 蓋過去（僥倖不是保證）。
+        ("⑩n 危險方向：無日期的標記不可收編隔壁表格中**更新**的日期",
+         "At close: August 18 at 4:00:00 PM EDT 221.20 Pre-Market: 9:06:53 AM EDT "
+         "| Aug 25, 2026 | 230.00 |", date(2026, 8, 18)),
+        # ⑩o 沒有區段邊界可截時，窗口是唯一的護欄：標記後面隔著一整段散文的日期不算它的。
+        # ⚠ 這一條測的是「窗口存在」，**不是** 48 這個數值——48 vs 24 沒有任何斷言分得出來
+        #   （變異測試實測），所以那個數值是判斷不是量出來的，不要當成有證據支持。
+        ("⑩o 沒有邊界可截時，隔著一整段散文的日期不算這個標記的",
+         "As of the date of this report the company has continued to expand its "
+         "operations across several regions and on Aug 25, 2026 announced a new plan.",
+         None),
+    ]
+    results: list[tuple[str, bool, str]] = []
+    for name, content, want in cases:
+        got = ar._content_published_date(content, AS_OF)
+        results.append((name, got == want, f"預期 {want} 實得 {got}"))
+
+    # ── ⑩j/⑩k 接線：光抽得到不夠，過時過濾要真的用得到它（值測試）────────────
+    def _kept(need):
+        rs = [{"url": "https://finance.yahoo.com/quote/NVDA/history", "title": "t",
+               "content": YAHOO_HIST, "published_date": None}]
+        kept, stats = ar._dedupe_web_results(rs, need, AS_OF)
+        return kept, stats
+
+    kept_i, stats_i = _kept("intraday")     # limit=7 天，8/18 距 9/1 是 14 天 → 該被濾掉
+    kept_d, stats_d = _kept("days")         # limit=180 天 → 不該被濾掉
+    results.append(("⑩j 接線：intraday 下 8/18 的頁被過時濾掉（14 天 > 7）",
+                    kept_i == [] and stats_i["stale"] == 1,
+                    f"實得 kept={len(kept_i)} stale={stats_i['stale']}（抽得到但沒接上＝白做）"))
+    results.append(("⑩k 誤報對照：同一則在 need=days（180 天）不可被濾掉",
+                    len(kept_d) == 1 and stats_d["stale"] == 0,
+                    f"實得 kept={len(kept_d)} stale={stats_d['stale']}（濾過頭＝新聞題沒東西可用）"))
+    results.append(("⑩l 接線：_pub_date 真的被寫進結果（prompt 的『發布日』靠它）",
+                    bool(kept_d) and kept_d[0].get("_pub_date") == date(2026, 8, 18),
+                    f"實得 {kept_d[0].get('_pub_date') if kept_d else None}"))
+
+    print()
+    print(f"  {'web 結果的日期抽取（危險方向＝抽到太新的）':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
 def main() -> int:
     print(f"  {'情境':<24}{'Q1':>6}{'Q2':>6}{'Q3':>6}{'Q4':>6}{'呼叫':>6}   判定")
     print("  " + "-" * 68)
@@ -932,6 +1030,7 @@ def main() -> int:
     fail += _check_replay_miss_is_loud()
     fail += _check_replan_is_replayed()
     fail += _check_fixture_binding_is_preserved()
+    fail += _check_content_date_extraction()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0
