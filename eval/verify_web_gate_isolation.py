@@ -32,6 +32,7 @@
 from __future__ import annotations
 
 import io
+import json
 import os
 import sys
 from pathlib import Path
@@ -730,6 +731,106 @@ def _check_replan_is_replayed() -> int:
     ):
         n1, n2 = _twice(sa, sb)
         results.append((tag, n1 == 1 and n2 == 1, f"第二次 {n2} 次 LLM（key 太粗＝{why}）"))
+
+    # ⑧h web_used 是第五個「合法改變決策」的維度（2026-08-29 起它會改變 prompt 內容）
+    n1, n2 = _twice(_st([_todo(0, "Tesla 最近的重大新聞是什麼")]),
+                    _st([dict(_todo(0, "Tesla 最近的重大新聞是什麼"), web_used=True)]))
+    results.append(("⑧h web_used 不同 → 必須 miss",
+                    n1 == 1 and n2 == 1,
+                    f"第二次 {n2} 次 LLM（「已打過 web」與「還沒打」共用決策"
+                    f"＝把 _REPLANNER_LIVE_BLOCK 的修法抵銷掉）"))
+
+    # ── ⑧i snapshot 的 replanner system prompt 逐字不變（＝65 題基準沒被動到的證明）──
+    #    同閘門③ 對 Generator system message 的作法：live 專屬的段落只准出現在 live。
+    def _sys_prompt_for(mode):
+        got = {}
+
+        def _cap_llm(messages, model_name, temperature=0.0):
+            got["sys"] = messages[0]["content"]
+            return '{"sufficient": false, "add": [], "drop": []}'
+
+        saved = (_lr._CACHE, _lr.enabled, ar.rq.call_llm, ar._build_temporal_contract)
+        _lr._CACHE, _lr.enabled = {}, (lambda: False)   # 關快取,強制走真正的 prompt 組裝
+        ar.rq.call_llm = _cap_llm
+        ar._build_temporal_contract = lambda m: "(contract stub)"
+        try:
+            ar._node_replan(_st([_todo(0, "任意待辦", result="任意結果")], mode=mode))
+            return got.get("sys", "")
+        finally:
+            (_lr._CACHE, _lr.enabled, ar.rq.call_llm, ar._build_temporal_contract) = saved
+
+    _snap, _live_p = _sys_prompt_for(ar.FRESHNESS_SNAPSHOT), _sys_prompt_for(ar.FRESHNESS_LIVE)
+    results.append(("⑧i snapshot 的 replanner prompt 不含 live 專屬段（基準不動）",
+                    ar._REPLANNER_LIVE_BLOCK not in _snap
+                    and _snap.startswith(ar._REPLANNER_PROMPT)
+                    and _snap.endswith("(contract stub)")
+                    # 長度剛好＝原 prompt ＋ 兩個換行 ＋ contract：中間塞不下任何東西
+                    and len(_snap) == len(ar._REPLANNER_PROMPT) + len("(contract stub)") + 2,
+                    "snapshot 的 prompt 被動到 → 65 題基準跨這次改動不可比"))
+    results.append(("⑧j 誤報對照：live 的 replanner prompt 必須含那一段",
+                    ar._REPLANNER_LIVE_BLOCK in _live_p,
+                    "live 也沒加＝這個修法根本沒生效,而 ⑧i 照樣會綠"))
+
+    # ── ⑧k~⑧o 徒勞的 web 重試要被擋，而**新聞題不可以被擋**（2026-08-29）────────────
+    def _td(**kv):
+        base = {"id": 0, "task": "t", "status": "done", "result": "", "web_used": False,
+                "realtime_need": "none"}
+        base.update(kv)
+        return base
+
+    for tag, todos_, want, why in (
+        ("⑧k intraday ＋ 已打過 web → 判定徒勞", [_td(web_used=True, realtime_need="intraday")],
+         True, "實測 12/12 個這種待辦貢獻 0，664 秒全白燒"),
+        ("⑧l 誤報對照：days（新聞）＋ 已打過 web → **不可**判徒勞",
+         [_td(web_used=True, realtime_need="days")], False,
+         "第一版用 prompt 寫『搜過就收斂』，把新聞題 4 個有貢獻的待辦一起殺掉了"),
+        ("⑧m 誤報對照：intraday 但還沒打過 web → **不可**判徒勞",
+         [_td(web_used=False, realtime_need="intraday")], False, "第一次都不准搜＝時效能力歸零"),
+        ("⑧n 誤報對照：none（財報題）→ 不可判徒勞",
+         [_td(web_used=True, realtime_need="none")], False, ""),
+    ):
+        got = ar._web_retry_is_pointless(todos_)
+        results.append((tag, got is want, f"實得 {got}（{why}）"))
+
+    # ⑧o 接線：光有判準不夠，`_node_replan` 要真的據此拒絕（值測試，不是驗「有呼叫」）
+    def _replan_adds(todos_, add_list):
+        saved = (_lr._CACHE, _lr.enabled, ar.rq.call_llm, ar._build_temporal_contract)
+        _lr._CACHE, _lr.enabled = {}, (lambda: False)
+        ar.rq.call_llm = lambda m, mn, temperature=0.0: json.dumps(
+            {"sufficient": False, "add": add_list, "drop": []})
+        ar._build_temporal_contract = lambda mode: "(stub)"
+        try:
+            out = ar._node_replan({"query": "q", "freshness_mode": ar.FRESHNESS_LIVE,
+                                   "todos": todos_, "collected": []})
+            return [t["task"] for t in out["todos"] if t["id"] != 0]
+        finally:
+            (_lr._CACHE, _lr.enabled, ar.rq.call_llm, ar._build_temporal_contract) = saved
+
+    _saved_web = ar.ENABLE_WEB_SEARCH
+    ar.ENABLE_WEB_SEARCH = True
+    try:
+        blocked = _replan_adds([_td(web_used=True, realtime_need="intraday")],
+                               ["改用網路搜尋查 NVIDIA 現在的股價"])
+        # ⚠ 這一格是 2026-08-29 實測抓到的漏洞：`_WEB_TODO_RE` 是 `網路|上網|web search|internet`，
+        #   而 replan 實際生出的是「在 Yahoo Finance 上查詢…」「使用 NASDAQ 官方網站…」
+        #   ——**一個都不匹配**。所以守衛不可以用待辦文字當前置條件。
+        blocked_site = _replan_adds([_td(web_used=True, realtime_need="intraday")],
+                                    ["在 Yahoo Finance 上查詢 NVDA 當前股價",
+                                     "使用NASDAQ官方網站或API查詢NVDA即時股價"])
+        kept = _replan_adds([_td(web_used=True, realtime_need="days")],
+                            ["改用網路搜尋查 Tesla 最近的重大新聞"])
+        kept2 = _replan_adds([_td(web_used=False, realtime_need="intraday")],
+                             ["改用網路搜尋查 NVIDIA 現在的股價"])
+    finally:
+        ar.ENABLE_WEB_SEARCH = _saved_web
+    results.append(("⑧o 接線：intraday 的 web 重試真的被 _node_replan 拒絕",
+                    blocked == [], f"實得 {blocked}（判準存在但沒接上＝完全沒作用）"))
+    results.append(("⑧p **不含「網路」二字**的站名措辭也要被拒（詞表漏洞）",
+                    blocked_site == [], f"實得 {blocked_site}（_WEB_TODO_RE 匹配不到站名）"))
+    results.append(("⑧q 誤報對照：新聞題（days）的 web 待辦仍然加得進去",
+                    len(kept) == 1, f"實得 {kept}（連新聞題一起擋＝把功能關掉冒充修好）"))
+    results.append(("⑧r 誤報對照：intraday 但還沒搜過 → 第一次仍加得進去",
+                    len(kept2) == 1, f"實得 {kept2}（第一次都不准搜＝時效能力歸零）"))
 
     print()
     print(f"  {'replan 必須可重放（key 不含自由文字結果）':<52}{'判定':>8}")

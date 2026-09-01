@@ -3430,6 +3430,55 @@ _REPLANNER_PROMPT = f"""你是美股情報 RAG 的動態重規劃器。給你「
 只輸出一個 JSON 物件，不要任何其他文字：
 {{"sufficient": true 或 false, "add": ["新待辦字串", ...], "drop": [待辦id 數字, ...]}}"""
 
+# live 專屬追加段（2026-08-29）。**刻意只在 live 追加**：snapshot 的 replanner prompt 因此
+# 逐字不變，65 題基準不被動到（同 `_CHECKER_LIVE_RECENCY_BLOCK` 的作法）。
+#
+# 為什麼加這一段：`web_used` **一直就在 todo dict 上**（`_node_execute` 回填），只是從來沒有
+# 放進 prompt——replan 因此不知道「這個待辦已經打過 web 了」，於是針對同一個資訊需求再加一個
+# 同義的 web 待辦。`probe_replan_contribution.py`（6 題 × 2 輪）量到的代價：
+#   · intraday 兩題：**12 個 replan 待辦、664 秒、獨有且被引用的 chunk = 0**（12/12 全零）。
+#     實際生出來的是 `改用網路搜尋查 NVIDIA 現在的股價` →`使用網路搜尋取得…最新股價`
+#     →`…今日股價` →`…（例如 Yahoo Finance）` →`…於 Bloomberg` →`…（例如 MarketWatch）`
+#     ——**它在列舉網站**。web-02 單輪 431.9 秒，而答案引用 0 個 chunk。
+#   · 新聞題（web-04）：4 個 replan 待辦貢獻 6 個獨有且被引用的 chunk，**比 planner 自己的 4 個多**。
+# → 所以不是關掉 replan，是**只擋「同義的 web 重試」這一種**。
+_REPLANNER_LIVE_BLOCK = """
+⚠ 待辦若標了 [已用過網路搜尋]，代表它**已經打過網路搜尋並拿到結果了**。**指定不同網站**
+（「…例如 Yahoo Finance」「…於 Bloomberg」「…例如 MarketWatch」）**不算新待辦**——搜尋引擎
+已經跨站搜過了，換一個網站名只是同一個搜尋的換句話說。
+仍然可以加**真正不同**的待辦：換一個資訊來源類型（例如改去某份 10-Q／10-K 找）、補一個還沒
+問過的面向、或加上原本沒有的具體時間範圍。"""
+
+
+def _web_retry_is_pointless(todos: list[dict]) -> bool:
+    """已經有待辦判定需要 **intraday** 資料且**已經打過 web** → 再加 web 待辦是必然徒勞。
+
+    **為什麼這一條交給 Python 不交給 prompt**（CLAUDE.md〈LLM 與 Python 的分工〉：比對／定位
+    給 Python）：「這個子問題已經打過 web 了嗎」「Grader 判它要多新」都是**查表**，沒有判斷成分。
+
+    **為什麼判準是 `intraday` 而不是「打過 web 就不准再打」**：2026-08-29 實測（6 題×2 輪，
+    `probe_replan_contribution.py`）兩者差很多：
+      · intraday（web-01／web-02）：**12 個 replan 待辦、664 秒、獨有且被引用的 chunk ＝ 0**。
+        KB 結構上不可能有即時報價,再搜幾次都一樣——它實際生出的是在**列舉網站**。
+      · 新聞（web-04）：**4 個 replan 待辦貢獻 6 個獨有且被引用的 chunk**，比 planner 自己的 4 個多。
+        新聞題的 KB 裡真的還有東西可找,改寫 query 會撈到不同 chunk。
+    ⚠ **第一版用 prompt 寫「已經搜過就 sufficient: true 收斂」，結果 replan 在 12 輪裡全部
+      不出手——連新聞題那 4 個有貢獻的也一起殺掉了**。那是「把功能關掉冒充修好」，
+      由 `probe_replan_contribution.py` 的新聞那一列當場抓到。所以判準必須窄到 `intraday`。
+
+    ⚠ **第二版在呼叫端加了 `_is_web_todo(task)` 前置條件，被詞表漏掉。** web-02 實測生出
+      「使用NASDAQ官方**網站**或API查詢NVDA即時股價」「在 **Yahoo Finance** 上查詢 NVDA 當前股價」
+      「在 **Bloomberg** 上查詢…」「在 **MarketWatch** 上…」「在 **Reuters** 上…」「在 **CNBC** 上…」
+      ——六個待辦、503 秒、答案引用 0 個 chunk，而 `_WEB_TODO_RE`（`網路|上網|web search|internet`）
+      **一個都不匹配**（「網站」不是「網路」，站名更不用說）。這正是 CLAUDE.md〈硬編碼詞表是警訊〉
+      說的形狀：用字串比對做感知，換個措辭就漏。
+      → 所以呼叫端**不再看待辦文字**：`intraday` ＋ 已搜過 web 時，追加**任何**待辦都拒絕。
+        依據是 before ＋ after2 兩臂合計 **18 個 intraday replan 待辦、獨有且被引用的 chunk ＝ 0**。
+      ⚠ `_WEB_TODO_RE` 的洞**沒有因此修好**，它還守著 snapshot 的 web todo 拒絕路徑（成本問題，
+        不是隔離問題——隔離只靠 `freshness_mode` 與 `ENABLE_WEB_SEARCH`）。見 BACKLOG。
+    """
+    return any(t.get("web_used") and t.get("realtime_need") == "intraday" for t in todos)
+
 
 def _node_plan(state: SupervisorState) -> dict:
     freshness_mode = state.get("freshness_mode", FRESHNESS_LIVE)
@@ -3504,6 +3553,9 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
         gaps = []
     return {"id": todo["id"], "summary": summary, "web_used": bool(web_notes),
             "web_notes": web_notes, "picked": picked, "freshness_gaps": gaps,
+            # ⚠ 2026-08-29 帶出來：`_node_replan` 要靠它擋掉「intraday 且已打過 web」之後的
+            #   同義 web 重試（見那裡的 `_web_retry_is_pointless`）。在此之前它算完就被丟掉。
+            "realtime_need": realtime_need,
             "period_notes": period_notes}
 
 
@@ -3570,6 +3622,7 @@ def _node_execute(state: SupervisorState) -> dict:
         r = results[i]
         todos[i]["result"] = r["summary"]
         todos[i]["web_used"] = r["web_used"]
+        todos[i]["realtime_need"] = r.get("realtime_need", "none")
         todos[i]["freshness_gaps"] = r.get("freshness_gaps", [])
         todos[i]["period_notes"] = r.get("period_notes", [])
         todos[i]["status"] = "done"
@@ -3592,13 +3645,19 @@ def _node_execute(state: SupervisorState) -> dict:
 def _node_replan(state: SupervisorState) -> dict:
     """Replanner：依已完成待辦的局部結果動態增刪清單（新增 web 待辦 / drop 多餘 / 提前收斂）。"""
     todos = [dict(t) for t in state["todos"]]
+    freshness_mode = state.get("freshness_mode", FRESHNESS_LIVE)
+    _live = freshness_mode == FRESHNESS_LIVE
     lines = []
     for t in todos:
         res = t.get("result", "") or ""
         res = (res[:200] + "…") if len(res) > 200 else res
-        lines.append(f"- id={t['id']} [{t['status']}] {t['task']}" + (f"\n    局部結果:{res}" if res else ""))
+        # ⚠ `web_used` 一直就在 todo dict 上，只是從來沒進過 prompt（理由與代價見
+        #   `_REPLANNER_LIVE_BLOCK` 上方）。snapshot 不會有 web_used=True,所以那邊的
+        #   prompt bytes 不受影響。
+        flag = " [已用過網路搜尋]" if (_live and t.get("web_used")) else ""
+        lines.append(f"- id={t['id']} [{t['status']}]{flag} {t['task']}"
+                     + (f"\n    局部結果:{res}" if res else ""))
     user = f"原始問題:{state['query']}\n\n目前待辦清單:\n" + "\n".join(lines)
-    freshness_mode = state.get("freshness_mode", FRESHNESS_LIVE)
     # 重放快取（見 llm_replay）：未設 RAG_REPLAY_CACHE 時完全 no-op。
     # ⚠ **2026-08-29 補上——這是全碼庫唯一沒被錄下來的 LLM 呼叫**，而它正是「web fixture 的
     #   key 無界」那條鏈的源頭：replan 每輪重抽 → 生出措辭不同的 todo → 那個 todo 的 `check`
@@ -3614,15 +3673,21 @@ def _node_replan(state: SupervisorState) -> dict:
     #   這是 **fixture 用的重放**,不是通用函式快取——目的就是把待辦清單釘死好讓 web fixture
     #   打得到（同 llm_replay docstring：「固定下來的是某一次抽樣的結果,不是正確答案」）。
     #   `status` 有入 key,所以「做完了沒」這個層級的進展仍然分得開。
+    # ⚠ `web_used` **必須入 key**：它現在會改變送進 prompt 的內容（見 `_REPLANNER_LIVE_BLOCK`）,
+    #   不入 key 就會讓「已打過 web」與「還沒打」共用同一個決策——那正好把這個修法抵銷掉。
+    #   原則同 `check` 的 key 含候選 chunk id：**凡是合法改變決策的東西都要入 key**。
     _rk = "|".join([freshness_mode, state["query"]]
-                   + [f"{t['id']}:{t['status']}:{t['task']}" for t in todos])
+                   + [f"{t['id']}:{t['status']}:{int(bool(t.get('web_used')))}:{t['task']}"
+                      for t in todos])
     _hit = _replay.get("replan", _rk)
     if _hit is not _replay.MISS:
         data = _hit
         _trace(f"replan(replay): sufficient={(data or {}).get('sufficient')} "
                f"add={len((data or {}).get('add') or [])} drop={(data or {}).get('drop') or []}")
     else:
-        system_prompt = _REPLANNER_PROMPT + "\n\n" + _build_temporal_contract(freshness_mode)
+        # live 才追加那一段；snapshot 的 replanner prompt 因此**逐字不變**（65 題基準不動）。
+        system_prompt = (_REPLANNER_PROMPT + (_REPLANNER_LIVE_BLOCK if _live else "")
+                         + "\n\n" + _build_temporal_contract(freshness_mode))
         messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user}]
         with _quiet():
             raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
@@ -3650,6 +3715,12 @@ def _node_replan(state: SupervisorState) -> dict:
                 # Prompt 是機率性約束；snapshot / --no-web 再用 Python 硬擋 web todo。
                 if _is_web_todo(task) and (freshness_mode == FRESHNESS_SNAPSHOT or not ENABLE_WEB_SEARCH):
                     _trace(f"replan: 拒絕不符合時間模式的 web todo → {task!r}")
+                    continue
+                # intraday 且已打過 web → 追加任何待辦都必然徒勞（實測 18/18 零貢獻）。
+                # ⚠ **刻意不加 `_is_web_todo(task)` 這個前置條件**，理由見該函式 docstring：
+                #   那個詞表漏掉「在 Yahoo Finance 上查詢…」這一整族措辭。
+                if _web_retry_is_pointless(todos):
+                    _trace(f"replan: 拒絕徒勞的追加待辦（intraday 且已搜過 web）→ {task!r}")
                     continue
                 scope = _build_todo_temporal_scope(task, freshness_mode)
                 todos.append({

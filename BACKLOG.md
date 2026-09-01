@@ -98,6 +98,29 @@
 
 ⚠ **在重錄之前，`check_web_claims.py` 的任何結果都不能當證據。**
 
+## `_WEB_TODO_RE` 的詞表漏洞（查清楚了，刻意沒修）
+
+`_WEB_TODO_RE = re.compile(r"網路|上網|web\s*search|internet")`。2026-08-29 實測 replan 生出的
+web 待辦有一整族**它匹配不到**：
+
+    在 Yahoo Finance 上查詢 NVDA 當前股價
+    在 Bloomberg 上查詢 NVDA 當前股價
+    在 MarketWatch / Reuters / CNBC 上查詢 NVDA 當前股價
+    使用NASDAQ官方網站或API查詢NVDA即時股價        ← 「網站」不是「網路」
+
+**沒修的理由**：它現在只剩一個消費端——`_node_replan` 在 snapshot／`--no-web` 時拒絕 web 待辦。
+那是**成本**問題不是隔離問題（`verify_web_gate_isolation` 閘門① 證明隔離只靠 `freshness_mode`
+與 `ENABLE_WEB_SEARCH` 兩個獨立條件，詞表**不是**隔離機制）。漏掉的代價是 snapshot 多跑一個
+註定撈不到東西的待辦，不是資料外洩。
+
+⚠ **不要用「加幾個詞」修它**（`網站|Yahoo|Bloomberg|…`）——那正是 CLAUDE.md〈硬編碼詞表是警訊〉
+說的 O(n) 開始，而且站名清單天生無界。真要修就改成 LLM 判定，**但要先看那條警告**：
+「改成 LLM 之後，判別力來自『LLM 說不是就必須不是』——若空答案會掉回詞表，詞表仍然是實際
+做決定的人，而端到端跑分看不出任何差別」。
+
+**復活條件**：這個詞表出現第二個消費端、或 snapshot 的成本變成問題。
+（`_web_retry_is_pointless` **刻意不使用它**，就是為了不繼承這個洞。）
+
 ## 待決的決策
 
 - **rubric 這條線要正式退役，還是把 rubric 補回 `eval_set.json`？**
