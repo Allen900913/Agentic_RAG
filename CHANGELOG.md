@@ -5,6 +5,38 @@
 
 ## 2026-09-03
 
+### 套件化的端到端驗收：兩輪 fixture 重放，與重構前無法區分
+
+閘門是零 LLM 的**結構**驗證，覆蓋不到「答案品質有沒有變」。所以補跑
+`record_web_fixture --mode replay`（零網路、bare strict、唯讀）兩輪 ＋ `check_web_claims`。
+
+**先定基準再跑，避免事後解釋。** 重構前 10 輪逐輪判定拉出來：
+· `web-02`／`03`／`04`／`05` — **10/10 全 PASS**，一次都沒浮動。
+· `web-01` — r1~r3 跑在重錄前的壞 fixture（必 FAIL）；重錄後 r5~r11 是 **4 PASS / 3 FAIL**。
+→ 判準：**web-02~05 任一輪 FAIL ＝ 回歸**；**web-01 單輪 FAIL 不帶訊號**（它本來就 ~57% 浮動，
+  成因是取樣變異，見上面 `web_ignored` 那條）；**任何 `FixtureMiss`／`ReplayCacheMiss` ＝ 回歸**。
+
+**結果（r12／r13，重構後）**：
+
+| 指標 | 重構前 | 重構後 |
+|---|---|---|
+| replay cache | `hit=36 miss=0` | `hit=36 miss=0`（兩輪都是） |
+| 每題 web 呼叫（01~05） | `1／3／0／3／0`（r7~r11 五輪全同） | `1／3／0／3／0`（兩輪都是） |
+| `check_web_claims` | web-02~05 恆 PASS | **5/5 PASS**（兩輪，含浮動的 web-01） |
+
+**`hit=36 miss=0` 在 bare strict 下是這次最強的一條**：它代表重構後管線送出的**每一個中間
+產物**（plan／replan／英譯／Grader／ratio／期間意圖／ticker）與重構前**逐字相同**——
+任何一個 key 變了都會當場 `ReplayCacheMiss` 而不是靜默給出不同答案。
+
+⚠ **反向證據不可省**：r12／r13 兩輪答案**逐字 0/5 相同**，與重構前 r7／r9／r11 也是
+0/5、0/5、1/5。**判定穩定的同時文字一直在變**——只看「全 PASS」會把「量尺死了」
+誤讀成「系統穩」，這個坑 `check_web_claims` 自己踩過一次。
+
+⚠ **這兩輪不證明什麼**：5 題、跑的是 live web 路徑。切塊、期別排序、多公司題、
+multi_hop 都不在裡面——那些靠的是四道閘門的 522 項。
+
+---
+
 ### agentic_rag_v2.py 套件化：4549 行單檔 → agentic_rag_version/ 四個模組
 
 **分層是單向的**：`retrieval` 664 → `validators` 1560 → `tools` 294 → `graph` 1287，
