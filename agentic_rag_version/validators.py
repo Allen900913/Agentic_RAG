@@ -1,34 +1,525 @@
-"""agentic_rag_version.validators — 答案的**確定性偵測器**（零 LLM）。
-
-這裡只有「看得出不對」，沒有「把它改對」。補救（`*_check_and_fix`，會重生成）
-留在 `__init__`——那是刻意的接縫，理由有二：
-  ① 四個補救函式都呼叫 `_write_final_answer`，而那是 eval 會 monkeypatch 的名字，
-     依本次重構的規則必須留在 `__init__`（見 verify_web_gate_isolation 閘門⑬）。
-  ② 偵測是零 LLM、可逐條斷言的；補救不是。把兩者放同一個檔會讓「這個模組能不能
-     零成本重跑」這件事變得要逐函式判斷。
-
-住在這裡的偵測器（都被 verify_answer_validators 的 239 項直接吃）：
-  · citation      `_extract_citations` / `_repair_reference_citations`
-  · 期別          `_chunk_period` / `_ground_period_from_source` / `find_stale_period_claims`
-  · 衝突          `find_claim_conflicts` / `find_authority_conflicts`
-  · R4 web↔財報   `find_unreconciled_web_conflicts`（**要求並陳不裁決**）
-  · R5 並陳時點   `find_undated_dual_sourcing`
-  · R6 web 未採用 `web_fetched_but_uncited_notice`（**是揭露不是重生成**）
-  · 數字溯源      `find_untraceable_numbers`
-
-⚠ **本模組不得定義任何被 eval monkeypatch 的名字**。唯一用到的是 `_get_kb_coverage`，
-  走 `_pkg.` 在呼叫時解析。
 """
+兩層，方向相反但同一件事：
+  · **來源資格**（原 freshness）：日期抽取／過時判定／白名單與子網域／去重／財報期別排序。
+    問的是「這份**來源**夠不夠新、可不可信」。
+  · **答案偵測**（零 LLM）：citation／期別／衝突／R4 並陳不裁決／R5 時點／R6 web 未採用／
+    數字溯源，以及缺口與對應的揭露句。問的是「這份**答案**有沒有超出證據」。
+
+補救（`*_check_and_fix`，會重生成）**不在這裡**，留在 `__init__`：
+  ① 它們呼叫 `_write_final_answer`，那是 eval 會 monkeypatch 的名字；
+  ② 偵測零 LLM、可逐條斷言，補救不是。混在一起會讓「這個模組能不能零成本重跑」
+     變成要逐函式判斷。
+
+⚠ `_is_freshness_evidence` 與 `_stale_for_realtime` **必須共用同一套資格判準**——10-K 的
+  4 碼財年戳、10-Q 的 6 碼期別戳是**財報期間不是發布日**，不算過期、但也不算證據。
+  混淆會讓財報替整池背書說「夠新」。
+
+⚠ 揭露句都以 `
+
+---
+⚠` 開頭，那個邊界前綴命中 `rq.EVIDENCE_TAIL_RE`，於是每個呼叫
+  `strip_evidence_tail` 的消費端都看不到它——這是它們**安全**的原因（機械式附加不會改變
+  任何量尺的判定），也是閘門⑱f 唯一該驗的不變量。
+"""
+
 from __future__ import annotations
 
+from datetime import date
+from datetime import date, datetime
+from urllib.parse import urlparse
+import calendar
+import os
 import re
 
 import rag_query as rq
 
-import agentic_rag_version as _pkg   # ⚠ 循環 import 刻意：`_pkg.<name>` 呼叫時才解析，
-                                     #   eval 打在套件上的 monkeypatch 才蓋得到。
-from .freshness import _fiscal_label, _fiscal_rank
+import agentic_rag_version as _pkg
+# ⚠ **循環 import 是刻意的**：`_pkg.<name>` 在**呼叫時**才解析，於是 eval 打在
+#   套件物件上的 monkeypatch 蓋得到。子模組**不得裸用**被 patch 的名字，也不得
+#   `from .x import` 它們（那會壓一份當時的物件）——守門是閘門⑬。
 
+from .retrieval import _BACKREF_RE, _TICKER_CANON, _has_ratio_intent, _resolve_ratio_fields
+from .retrieval import _COVERAGE_SOURCE_RE, _format_kb_coverage, _mentioned_tickers, _source_coverage_parts
+from .tracing import _trace
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# ── 原 freshness.py（2026-09-03 合併）
+# ────────────────────────────────────────────────────────────────────────────
+
+TAVILY_MAX_RESULTS = 5            # 最終塞進 prompt 的則數
+TAVILY_FETCH_RESULTS = 12         # 先多撈,再去重／限域名／濾過期,剩下的取前 TAVILY_MAX_RESULTS 則
+TAVILY_PER_DOMAIN_CAP = 2         # 單一域名最多佔幾個名額（見 _dedupe_web_results 的理由）
+
+
+
+
+# web 來源白名單（2026-08-13 新增）。**這是授權清單，不是感知用的詞表**——它不試圖理解內容，
+# 只決定「哪些來源准進來」，性質同 VALID_*_ITEMS，列清單正當（見 CLAUDE.md〈LLM 與 Python 的分工〉）。
+#
+# 為什麼非做不可：在此之前 `_tavily_search` 是全網無過濾，而同一批改動放行了「web 數字可被引用」。
+# 「可引用」＋「來源不設限」才是真正危險的組合；先前只是因為 web 資料根本進不了答案而被遮住。
+#
+# 選法：只收「原始揭露方」與「有編輯流程的財經媒體」，不收論壇、內容農場、個人分析（Seeking Alpha
+# 一類意見文與事實混排，只看 `WEB_CONTENT_CHARS` 那段摘要分不出來）。分兩類純粹是為了讓後人知道各自在守什麼。
+# ⚠⚠ **這份清單必須完全公司無關（O(1)）**，不得再出現任何一家公司的 IR 主機名。
+#
+# 為什麼（2026-08-13 兩次事故，都出在「某家公司專屬的條目」）：
+#   ① 寫 `apple.com`／`microsoft.com`（本意是 IR）→ Tavily 連子網域一起收 → 「蘋果的即時市值」
+#      35 筆結果有 33 筆是 apps.apple.com 的《股市》App 頁、support.apple.com 的「在 iPhone 上
+#      查看股市」、podcasts.apple.com 的節目，**零筆財經資料**，5 個名額全被佔滿。
+#   ② 改成精確主機名（investor.apple.com…）雖然修掉①，但清單隨公司數 O(n) 成長，
+#      **每加一家就是一次重複①的機會**（granularity 猜錯就靜默壞掉，且白名單仍會回 ~2KB
+#      看起來很健康——這是「稽核回傳有東西也可能是壞消息」的一例）。
+#
+# 統一入口是 `sec.gov`：它涵蓋所有上市公司的 10-K/10-Q/8-K，而重大新聞稿本來就以 8-K 的
+# EX-99 附件形式在裡面。實測佐證——`ir.tesla.com` 那次命中的網址路徑裡就有 `/sec/`，
+# 那本來就是一份 SEC 文件、只是鏡像在 IR 站上。
+# 代價：失去活動行事曆與未以 8-K 提交的新聞稿。若日後實測確認缺這類內容，再**帶著證據**單獨加回。
+#
+# ⚠ web fallback **不負責抓最新 10-Q**。filing 一律走 fetch_data.py → data_update_edgar.py
+# 的 ingest 管線（見 CLAUDE.md〈抓取與處理分離〉）；讓 web 撈財報會繞過切塊六層、期間標籤與
+# chunk 引用。KB 落後一季的正解是重跑 ingest。
+_WEB_DOMAINS_PRIMARY = [        # 原始揭露／交易所級數據（全市場，非單一公司）
+    "sec.gov", "nasdaq.com", "nyse.com",
+    "stockanalysis.com", "companiesmarketcap.com", "macrotrends.net",
+]
+_WEB_DOMAINS_PRESS = [          # 有編輯流程的財經新聞
+    "reuters.com", "apnews.com", "bloomberg.com", "wsj.com", "ft.com",
+    "cnbc.com", "barrons.com", "finance.yahoo.com", "marketwatch.com",
+]
+WEB_ALLOWED_DOMAINS = _WEB_DOMAINS_PRIMARY + _WEB_DOMAINS_PRESS
+
+
+def _domain_admits(entry: str, host: str) -> bool:
+    """Tavily `include_domains` 的比對語意：**一筆 entry 會連子網域一起收**。
+
+    把這條語意寫成可執行的形式,是因為 2026-08-13 的白名單事故就出在它:憑直覺以為
+    `apple.com` 只收官網,實際上 `apps.apple.com`／`support.apple.com` 全被收進來。
+    `eval/verify_web_gate_isolation.py` 用它斷言那些消費端主機**不得**被放行。
+    ⚠ 這是對 Tavily 行為的**建模**,不是 Tavily 的實作;若哪天它改了比對規則,這裡要跟著改。
+    """
+    host = (host or "").lower().strip().lstrip(".")
+    entry = (entry or "").lower().strip().lstrip(".")
+    if not host or not entry:
+        return False
+    return host == entry or host.endswith("." + entry)
+
+
+REALTIME_STALE_DAYS = {
+    "intraday": int(os.getenv("AGENTIC_STALE_DAYS_INTRADAY", "1")),   # 即時報價、今日漲跌、當前市值
+    "days": int(os.getenv("AGENTIC_STALE_DAYS_RECENT", "7")),         # 近期新聞、最新進展
+    "none": None,                                                     # 財報期間數字 → 永不過期
+}
+
+
+def _domain_of(url: str) -> str:
+    """從網址取域名（去掉 www.）。純顯示用，失敗回原字串前段——絕不因為 log 而讓查詢炸掉。"""
+    try:
+        host = urlparse(url or "").netloc.lower()
+        return host[4:] if host.startswith("www.") else (host or (url or "")[:28])
+    except Exception:
+        return (url or "")[:28]
+
+
+# web 結果的「明顯過時」門檻（天）。**刻意比 REALTIME_STALE_DAYS 寬得多**,兩者做的是不同的事:
+#   REALTIME_STALE_DAYS 判「KB 夠不夠新到可以不上網」——嚴格,寧可多上網一次。
+#   WEB_STALE_DAYS     判「這則網頁是不是歷史文章」——寬鬆,因為即時題也需要幾天內的脈絡報導,
+#                       用 1 天砍會把有用的近期報導一起砍光,只剩沒有日期的數據頁。
+# 實測要擋的是 `cnbc.com/2020/08/19/apple-reaches-2-trillion-market-cap`（六年前）被當成現值,
+# 那種東西超出任何合理門檻,不需要把門檻壓到天級。抽不出日期的一律**保留**(數據頁沒有日期,
+# 而數據頁正是即時題最需要的)——濾掉「日期不明」等於濾掉正確答案。
+WEB_STALE_DAYS = {
+    # ⚠ intraday 原本設 90,實測太寬：「特斯拉今天股價」放進一則 **22 天前**的 WSJ 報導
+    #   （$319.69 / −14.52%）,模型就把它當成「最新可得」寫進答案,反而把未標日期的即時
+    #   行情頁（$327.51）降為次要。問當下數值時,**任何有日期的舊報導都不可能是答案**,
+    #   留著只會製造更好聽的錯誤。7 天與 REALTIME_STALE_DAYS["days"] 同級,仍容得下脈絡報導。
+    "intraday": int(os.getenv("AGENTIC_WEB_STALE_INTRADAY", "7")),
+    "days": int(os.getenv("AGENTIC_WEB_STALE_RECENT", "180")),
+    "none": None,   # 問特定財報期間 → 歷史文章本來就正當,不濾
+}
+
+# 網址裡的日期。**確定性、公司無關、格式定義**——屬於「比對／定位給 Python」那一側。
+_URL_DATE_PATTERNS = (
+    # `/2020/08/19/`（CNBC 式）與 `-2026-08-11/`（Reuters／AP 式，日期在網址結尾）都收
+    (re.compile(r"[/-](20\d{2})[/-](\d{1,2})[/-](\d{1,2})(?:[/-]|$)"), (1, 2, 3)),
+    (re.compile(r"[/-](\d{1,2})-(\d{1,2})-(20\d{2})(?:[/-]|$)"), (3, 1, 2)),      # -07-28-2026（wsj livecoverage）
+    (re.compile(r"[/-](20\d{2})(\d{2})(\d{2})(?:[/-]|$)"), (1, 2, 3)),            # -20260728-
+    (re.compile(r"/(20\d{2})[/-](\d{1,2})(?:[/-]|$)"), (1, 2, 0)),                # /2020/08/ → 當月 1 日
+)
+
+
+def _url_published_date(url: str) -> date | None:
+    """從網址推發布日。抽不到回 None（**不是缺陷**：數據頁本來就沒有日期）。
+    取第一個成功的樣式；日期不合法（月份 13、日 32）就當抽不到,不 raise。"""
+    for pat, (yi, mi, di) in _URL_DATE_PATTERNS:
+        m = pat.search(url or "")
+        if not m:
+            continue
+        try:
+            return date(int(m.group(yi)), int(m.group(mi)), int(m.group(di)) if di else 1)
+        except (ValueError, IndexError):
+            continue
+    return None
+
+
+# 內容裡的日期**只在發布／報價時間標記旁邊**才算數（2026-08-29）。
+#
+# 為什麼需要這一層：2026-09-01 實跑一次真 Tavily（`What is NVIDIA's current share price?`）：
+#   **12 則結果的 `published_date` 全部是 None**，網址是 `/quote/NVDA` 也推不出日期
+#   → 每一則都印「（未標示日期）」，而同一行內容寫著 `REAL TIME 11:49 AM EDT 08/31/26`。
+#   後果是連鎖的：`_dedupe_web_results` 的過時過濾整個失效（抽不出日期一律保留），
+#   同一個池子裡 08/18、08/28、08/31 三個不同日期的價格沒有任何東西替它們排序。
+#
+# ⚠ **為什麼不是「找出任何日期」**：同一頁裡有大量**不是發布日**的日期——分析師評等日
+#   （`Latest Rating Date 8/25/2026`）、**未來的**財報日與除息日（`Nov 17, 2026`／`Sep 10, 2026`）、
+#   歷史表格列（`Dec 1, 2018`）。抓錯的方向是不對稱的：抓到**太新**的日期會讓過期頁冒充新鮮
+#   並替整池背書，那正是 CLAUDE.md〈只有真實日曆日期能證明候選池夠新〉在防的事。
+#   所以判準是**標記相鄰**＋**未來日期一律丟棄**，而且**不確定就回 None**（維持現狀，不猜）。
+_CONTENT_DATE_MARKER = re.compile(
+    r"(?:at\s+close|after\s+hours|pre[- ]?market|real\s?time|as\s+of|published(?:\s+on)?|"
+    r"updated(?:\s+on)?|last\s+updated|posted(?:\s+on)?)\b", re.IGNORECASE)
+# ⚠ 判準是**在第一個表格／區段邊界處截斷**，不是「窗口夠窄」。這是變異測試逼出來的：
+#   `Pre-Market: 9:06:53 AM EDT [...] | Dec 8, 2025 |` 的 `Pre-Market` 後面**沒有日期**，
+#   沒有邊界截斷就會收編隔壁表格的日期。那個例子剛好無害（誤收的比較舊，被 max 蓋掉），
+#   但誤收到比較**新**的就是危險方向——頁面會冒充新鮮（閘門 ⑩n 就是那個形狀）。
+# ⚠ **窗口不可以太窄**：24 會把 `| Aug 25, 2026` 截成 `| Aug 2` 而**合成出一個不存在的日期**
+#   （Aug 2）。截半個 token 比截掉整個 token 危險。48 ＋ 邊界截斷則不會截在 token 中間。
+#   實際需要的距離很短：`At close: August 31`＝1、`AT CLOSE 4:00 PM EDT 08/28/26`＝13。
+_MARKER_WINDOW = 48
+_SECTION_BREAK = re.compile(r"[|\[\]#]")   # 表格欄位／`[...]` 省略段／標題，日期跨過去就不是這個標記的
+
+_MONTHS = {m: i for i, m in enumerate(
+    ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"), start=1)}
+_CONTENT_DATE_PATTERNS = (
+    # `August 31 at 4:00` / `Aug 28, 2026`：**年份可省**（報價頁最常見的形狀）
+    re.compile(r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})"
+               r"(?:\s*,?\s*(20\d{2}))?\b", re.IGNORECASE),
+    re.compile(r"\b(\d{1,2})/(\d{1,2})/(\d{2}|20\d{2})\b"),      # 08/31/26、08/31/2026
+    re.compile(r"\b(20\d{2})-(\d{2})-(\d{2})\b"),                # ISO
+)
+
+
+def _content_published_date(content: str, as_of: date) -> date | None:
+    """從 web 結果的內容抽發布／報價日。**只認標記相鄰的日期，且丟棄未來日期。**
+
+    年份省略時（`At close: August 31`）補上「**不晚於 as_of 的最近一次**」——絕不外推到未來。
+    多個候選取 **max**：報價頁把最新一次收盤排在最前面，新聞頁的 `Updated` 也晚於 `Published`。
+    一個都不合格 → None（與加這層之前完全相同的行為）。
+    """
+    text = content or ""
+    cands: list[date] = []
+    for m in _CONTENT_DATE_MARKER.finditer(text):
+        window = text[m.end():m.end() + _MARKER_WINDOW]
+        brk = _SECTION_BREAK.search(window)     # 跨過表格／區段邊界的日期不算這個標記的
+        if brk:
+            window = window[:brk.start()]
+        for pat in _CONTENT_DATE_PATTERNS:
+            hit = pat.search(window)
+            if not hit:
+                continue
+            g = hit.groups()
+            try:
+                if pat is _CONTENT_DATE_PATTERNS[0]:
+                    mo, day = _MONTHS[g[0][:3].lower()], int(g[1])
+                    yr = int(g[2]) if g[2] else as_of.year
+                    d = date(yr, mo, day)
+                    if not g[2] and d > as_of:      # 沒寫年份且落在未來 → 是去年的同一天
+                        d = date(yr - 1, mo, day)
+                elif pat is _CONTENT_DATE_PATTERNS[1]:
+                    yr = int(g[2])
+                    d = date(yr + 2000 if yr < 100 else yr, int(g[0]), int(g[1]))
+                else:
+                    d = date(int(g[0]), int(g[1]), int(g[2]))
+            except (ValueError, KeyError):
+                continue
+            if d <= as_of:          # ⚠ 未來日期一律丟棄：財報日／除息日不是發布日
+                cands.append(d)
+            break                   # 這個標記已經有解，換下一個標記
+    return max(cands) if cands else None
+
+
+def _web_result_date(r: dict, as_of: date | None = None) -> date | None:
+    """一則 web 結果的日期：`published_date` → 網址推斷 → **內容裡的標記相鄰日期**。
+    ⚠ 實測（2026-08-13）：只有 `topic="news"` 會回 `published_date`,而 news 模式**拿不到數據頁**
+      （macrotrends／stockanalysis／companiesmarketcap 全消失）,即時報價題要的正是數據頁。
+      所以生產走預設 topic ＋ 網址推斷；這裡仍先讀 `published_date`,將來若改 topic 不必再動這裡。
+    ⚠ 第三段是 2026-08-29 補的,理由見 `_content_published_date` 上方——在那之前
+      真 Tavily 的報價題**12/12 全部印「未標示日期」**,過時過濾等於沒有。"""
+    raw = (r.get("published_date") or "").strip()
+    if raw:
+        for fmt in ("%a, %d %b %Y %H:%M:%S %Z", "%a, %d %b %Y %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"):
+            try:
+                return datetime.strptime(raw, fmt).date()
+            except ValueError:
+                continue
+        m = re.search(r"(20\d{2})-(\d{2})-(\d{2})", raw)   # 任何帶 ISO 日期的變體
+        if m:
+            try:
+                return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+            except ValueError:
+                pass
+    return (_url_published_date(r.get("url") or "")
+            or _content_published_date(r.get("content") or "", as_of or _get_as_of_date()))
+
+
+def _normalize_url(url: str) -> str:
+    """去重用的正規化鍵：拿掉協定／www.／amp 路徑段／query／結尾斜線,子網域前綴 `new.`／`m.` 也去掉。
+    要擋的是同一頁的多種寫法佔掉多個名額——實測同一次搜尋同時回了
+    `cnbc.com/2020/…` 與 `cnbc.com/amp/2020/…`、`www.macrotrends.net/…` 與 `new.macrotrends.net/…`。"""
+    try:
+        p = urlparse(url or "")
+        host = (p.netloc or "").lower()
+        for pre in ("www.", "new.", "m.", "amp."):
+            if host.startswith(pre):
+                host = host[len(pre):]
+        path = re.sub(r"/amp(?=/|$)", "", (p.path or "").lower()).rstrip("/")
+        return host + path
+    except Exception:
+        return (url or "").lower()
+
+
+# 衍生性商品頁的網址樣式。**OCC 選擇權代號是標準化格式**（`{代號}{YYMMDD}{C|P}{8 位履約價}`,
+# 例 `TSLA260814C00257500` ＝ 2026-08-14 到期、履約價 $257.50 的買權），屬於格式定義的封閉集合,
+# 用樣式排除正當（同 CLAUDE.md 對 `VALID_*_ITEMS` 的例外）。
+# 為什麼要擋：它與「外國掛牌」同一類——**拿到的是別的標的**。選擇權頁上的價格是權利金,
+# 被當成股價就是數量級的錯。實測「特斯拉今天股價」一次跑分有 3 個名額被選擇權合約頁佔走。
+_DERIVATIVE_URL_RE = re.compile(r"/[A-Z]{1,6}\d{6}[CP]\d{6,8}(?:[/?]|$)")
+
+
+def _is_derivative_page(url: str) -> bool:
+    """網址看起來是選擇權／衍生性商品合約頁？只認 OCC 標準格式,認不出就回 False（保守側）。"""
+    return bool(_DERIVATIVE_URL_RE.search(url or ""))
+
+
+def _host_allowed(host: str) -> bool:
+    """**本地端**的白名單複核：只認 entry 本身或它的 `www.` 形式，**不認任意子網域**。
+
+    為什麼要在 Tavily 的 `include_domains` 之外再擋一層：Tavily 的比對是子網域包含式的
+    （`_domain_admits` 模型化了這件事），而**地區子網域拿到的是別的市場的報價**——
+      `ca.finance.yahoo.com/quote/TSLA.NE`（加拿大 NEO）、`finance.yahoo.com/quote/TL0.SG`（新加坡）、
+      `cn.wsj.com`（實測給出多年前的 Apple／MSFT 市值對比,直接害答案說市值「下降」）。
+    這與 2026-08-13 `apple.com` 收進 `apps.apple.com` 是同一個缺陷類,只是換一家。
+    白名單本身已是精確主機名,所以「exact ＋ www」不會誤殺（`www.sec.gov`／`www.reuters.com` 都過）。
+    ⚠ 這擋的是**子網域**；同一主機下的外國掛牌路徑（`stockanalysis.com/quote/bvl/AAPL`）擋不到,
+      見 BACKLOG〈web 外國掛牌〉。"""
+    host = (host or "").lower().strip().lstrip(".")
+    if host.startswith("www."):
+        host = host[4:]
+    return host in {e.lower().lstrip(".") for e in WEB_ALLOWED_DOMAINS}
+
+
+def _dedupe_web_results(results: list[dict], need: str, as_of: date) -> tuple[list[dict], dict]:
+    """對 Tavily 原始結果做三道**確定性**過濾,回傳 (保留的結果, 統計)。順序即 Tavily 的相關性排序。
+      ⓪ 本地端白名單複核（`_host_allowed`，擋地區子網域）＋ 衍生性商品頁排除（`_is_derivative_page`）
+      ① 同頁去重（`_normalize_url`）
+      ② 單域名上限 `TAVILY_PER_DOMAIN_CAP`——實測 `companiesmarketcap.com` 用五種幣別變體
+         （$USD／A$AUD／C$CAD／€EUR…）**吃掉全部 5 個名額**,五則內容一模一樣且都不含 Apple 數字,
+         等於整次 web 搜尋作廢。這是通用現象（同站多變體頁),不是某一家的問題。
+      ③ 明顯過時（`WEB_STALE_DAYS`）；抽不出日期一律保留。
+    三道都不看內容、不看公司名,純結構。"""
+    limit = WEB_STALE_DAYS.get(need)
+    kept: list[dict] = []
+    seen: set[str] = set()
+    per_domain: dict[str, int] = {}
+    stats = {"dup": 0, "domain_cap": 0, "stale": 0, "dated": 0, "off_host": 0, "derivative": 0}
+    for r in results:
+        url = (r.get("url") or "").strip()
+        key = _normalize_url(url)
+        if not url or key in seen:
+            stats["dup"] += 1
+            continue
+        try:
+            host = urlparse(url).netloc.lower()
+        except Exception:
+            host = ""
+        if not _host_allowed(host):
+            stats["off_host"] += 1
+            _trace(f"    web ✗ 非白名單主機（多為地區子網域）{host} {url[:60]}")
+            continue
+        if _is_derivative_page(url):
+            stats["derivative"] += 1
+            _trace(f"    web ✗ 衍生性商品合約頁（非該股票）{url[:70]}")
+            continue
+        dom = _domain_of(url)
+        if per_domain.get(dom, 0) >= TAVILY_PER_DOMAIN_CAP:
+            stats["domain_cap"] += 1
+            continue
+        d = _web_result_date(r, as_of)
+        if d:
+            stats["dated"] += 1
+            if limit is not None and (as_of - d).days > limit:
+                stats["stale"] += 1
+                _trace(f"    web ✗ 過時 {(as_of - d).days} 天（>{limit}）{_domain_of(url)} {url[:60]}")
+                continue
+        seen.add(key)
+        per_domain[dom] = per_domain.get(dom, 0) + 1
+        r["_pub_date"] = d
+        kept.append(r)
+        if len(kept) >= TAVILY_MAX_RESULTS:
+            break
+    return kept, stats
+
+
+def _source_newest_date(source: str) -> date | None:
+    """從來源檔名推它「最新可能」的日期。`TICKER_KIND_STAMP`，stamp 為 4/6/8 碼。
+
+    刻意取**該期間的最後一天**（4 碼→12/31、6 碼→月底、8 碼→當天）：寧可高估新鮮度也不要誤判過期。
+    誤判過期會叫 web 白跑一趟，誤判新鮮只是維持現狀，前者才是我們要避免的成本。
+    ⚠ 10-K/10-Q 的 stamp 是**財報期間**不是發布日，所以 `NVDA_10K_2026` 會被算成 2026-12-31＝
+    永遠不過期。這是刻意的：財報數字本來就不該因為 wall clock 走了就被判為需要上網補。
+    """
+    m = _COVERAGE_SOURCE_RE.match(source or "")
+    if not m:
+        return None
+    stamp = m.group("stamp")
+    try:
+        if len(stamp) == 8:
+            return date(int(stamp[:4]), int(stamp[4:6]), int(stamp[6:8]))
+        if len(stamp) == 6:
+            y, mo = int(stamp[:4]), int(stamp[4:6])
+            return date(y, mo, calendar.monthrange(y, mo)[1])
+        if len(stamp) == 4:
+            return date(int(stamp), 12, 31)
+    except ValueError:
+        return None
+    return None
+
+
+# 「這一筆來源能不能證明候選池夠新」＝ stamp 是不是**真實日曆日期**（8 碼）。
+# 10-K 的 4 碼／10-Q 的 6 碼是**財報期間**不是發布日：`MSFT_10K_2026` 會被
+# `_source_newest_date` 算成 2026-12-31，那是未來。
+NO_REALTIME_SOURCE = -1        # `_stale_for_realtime` 的哨符，見該函式 docstring
+
+
+def _is_freshness_evidence(source: str) -> bool:
+    """這一筆來源可否作為「候選池夠新」的證據（只有 8 碼真實日期算數）。"""
+    m = _COVERAGE_SOURCE_RE.match(source or "")
+    return bool(m) and len(m.group("stamp")) == 8
+
+
+def _stale_for_realtime(need: str, chunks: list[dict], as_of: date) -> int | None:
+    """候選裡**最新**的來源距今幾天算過期？
+
+    回傳：天數（過期）／`NO_REALTIME_SOURCE`(-1，池裡沒有任何能證明新鮮度的來源)／
+    None（夠新／`need="none"` 無此需求）。
+
+    用最新那一筆而非全部：只要池裡有一筆夠新就不該叫 web。
+
+    ⚠ **2026-08-19 推翻了一個先前刻意的決定**，理由是 KB 拔除新聞後成本算式反轉了：
+      舊行為是「財報永不過期」＋ 全池取 `max(dates)`。那讓財報不只是**棄權**，而是
+      **替整個候選池背書說夠新**——「永不過期」與「能證明夠新」被混成同一件事。
+      新聞還在時無害（池裡有真日期的新聞 chunk 壓著）；新聞拔掉後財報成了唯一日期來源，
+      於是 `MSFT_10K_2026`(→2026-12-31，未來) 讓「微軟現在的股價是多少？」**判不出過期、
+      web 不會被叫**。實測 6 題有 4 題如此，含兩題 intraday。
+      ⚠ 其中 3 題**與拔除新聞無關**（從來沒被 `looks_like_news_query` 攔過）＝ 既有的洞。
+      舊註解寫「誤判過期只是叫 web 白跑一趟，誤判新鮮只是維持現狀，前者才是要避免的」——
+      **那句話在 KB 有新聞時成立**。現在「維持現狀」＝ 拿 10-K 回答今天股價，成本大得多。
+    """
+    limit = REALTIME_STALE_DAYS.get(need)
+    if limit is None:
+        return None            # need="none"：財報數字不因 wall clock 走了就要上網補
+    dates = [d for d in (_source_newest_date(c.get("source") or "") for c in chunks
+                         if _is_freshness_evidence(c.get("source") or "")) if d and d <= as_of]
+    if not dates:
+        # 池裡沒有任何真實日期來源（現在的 KB：只有 Fundamentals 有）→ 無法證明夠新。
+        # 對 intraday／days 來說「證明不了夠新」就該上網，不是維持原判。
+        return NO_REALTIME_SOURCE
+    age = (as_of - max(dates)).days
+    return age if age > limit else None
+
+
+# ── 財報期別排序（跨 10-K/10-Q，只在同一家公司內比較）────────────────────────────
+#
+# ⚠ **不能用 `_source_newest_date()` 做這件事**。它把 `TICKER_10K_YYYY` 一律算成該年 12/31
+#   （刻意高估新鮮度，見它的 docstring），而各家財年結束月份不同：
+#     NVDA 財年 1 月底結束 → `NVDA_10K_2026`(→2026-12-31) 會被算得比真正更新的
+#     `NVDA_10Q_202604`(FY2027 Q1) 還新，**排序直接反轉**。
+#   payload 的 (fiscal_year, fiscal_period) 才是精確的（2026-08-15 實測）：
+#     MSFT_10K_2026 = (2026, FY) > MSFT_10Q_202603 = (2026, Q3)   ← web-03 要抓的就是這組
+#     NVDA_10K_2026 = (2026, FY) < NVDA_10Q_202604 = (2027, Q1)   ← 不能誤報成這組
+#
+# FY 排在 Q4 之後：10-K 涵蓋整個財年，是那一年的最後一期。
+# Q1~Q4/FY 是**格式定義的封閉集合**（SEC 就這幾種），列清單正當——見 CLAUDE.md〈硬編碼詞表〉的例外。
+_FISCAL_PERIOD_ORDER = {"Q1": 1, "Q2": 2, "Q3": 3, "Q4": 4, "FY": 5}
+_FISCAL_PERIOD_LABEL = {v: k for k, v in _FISCAL_PERIOD_ORDER.items()}
+
+
+def _fiscal_rank(source: str) -> tuple[int, int] | None:
+    """source → (fiscal_year, 期別序)，可直接比大小。
+
+    非財報檔、或期別欄位缺漏 → 回 None，代表**不參與比較**（寧可漏判也不製造誤報）。
+    """
+    rec = (_pkg._get_kb_coverage().get("sources") or {}).get(source)
+    if not rec:
+        return None
+    order = _FISCAL_PERIOD_ORDER.get(str(rec.get("fiscal_period") or "").upper().strip())
+    year = re.sub(r"\D", "", str(rec.get("fiscal_year") or ""))
+    if order is None or len(year) != 4:
+        return None
+    return int(year), order
+
+
+def _fiscal_label(rank: tuple[int, int]) -> str:
+    return f"FY{rank[0]} {_FISCAL_PERIOD_LABEL.get(rank[1], '?')}"
+
+
+def _kb_ceiling_date(chunks: list[dict]) -> date | None:
+    """這些 ticker 在**整個 collection** 裡最新能提供到哪一天（與本次檢索撈到什麼無關）。
+
+    ⚠ 存在理由：`_stale_for_realtime()` 量的是**候選池**裡最新那筆,而候選池是語意檢索的結果
+      ——池子裡最新是 60 天前,不代表 collection 沒有 3 天前的,很可能只是這輪措辭沒命中。
+      兩者一比就能把兩種不足分開：**檢索沒撈到**（改寫有救）vs **KB 根本沒有**（改寫沒救）。
+      少了這個天花板,前者會被誤判成後者,白白跳過還有救的改寫。
+
+    刻意與 `_stale_for_realtime()` 共用 `_source_newest_date()`：兩邊的日期必須是同一套算法,
+    否則比出來的大小沒有意義。
+    """
+    cov = _pkg._get_kb_coverage()
+    if not cov.get("available"):
+        return None                      # 掃不到 → 無法證明「還有更新的」,不主張可修
+    tickers = {str(c.get("ticker") or "").upper().strip() for c in chunks}
+    tickers.discard("")
+    # ⚠ 與 `_stale_for_realtime` 共用**同一套資格判準**（`_is_freshness_evidence`）：
+    #   兩邊若一邊算財報、一邊不算，比出來的大小沒有意義（見本函式 docstring）。
+    dates = [d
+             for t in tickers
+             for record in (cov.get("tickers", {}).get(t) or {}).values()
+             for src in (str(record.get("source") or ""),)
+             if _is_freshness_evidence(src)
+             for d in (_source_newest_date(src),)
+             if d]
+    return max(dates) if dates else None
+
+
+def _classify_staleness(need: str, chunks: list[dict],
+                        as_of: date) -> tuple[int | None, bool]:
+    """回傳 (候選池最新來源過期幾天 or None, 這種不足 KB 補不補得了)。
+
+    抽成獨立函式是為了**讓閘門能零 LLM 測到這個判斷**——它原本內嵌在 `_check_sufficiency()`
+    的 LLM 回傳處理裡,測不到就等於沒有被證偽過。
+    """
+    stale_days = _stale_for_realtime(need, chunks, as_of)
+    if stale_days is None:
+        return None, False
+    limit = REALTIME_STALE_DAYS.get(need)
+    ceiling = _kb_ceiling_date(chunks)
+    # 天花板本身也過期 → 再怎麼改寫都是同一批檔案,沒救；天花板夠新 → 是這次沒撈到,還有救
+    unfixable = ceiling is None or limit is None or (as_of - ceiling).days > limit
+    return stale_days, unfixable
+
+
+def _get_as_of_date() -> date:
+    """live 模式的『今天』。AGENTIC_AS_OF_DATE 讓 eval/回歸測試可固定 wall clock。"""
+    override = (os.getenv("AGENTIC_AS_OF_DATE") or "").strip()
+    if override:
+        return date.fromisoformat(override)
+    return datetime.now().astimezone().date()
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# ── 原 validators.py（2026-09-03 合併）
+# ────────────────────────────────────────────────────────────────────────────
 
 # 生產 citation 格式 [filename, chunk #N]：確定性 validator 用它抽引用比對 allowlist。
 # 同時吃全形括號【】與全形逗號，：（gpt-oss-120b 生成中文會把 [] 轉全形，只認 ASCII 會 false-negative）。
@@ -781,3 +1272,296 @@ _DUAL_SOURCE_REVISE_SUFFIX = """
 
 以下是問題:
 {issues}"""
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# ── 原 gaps.py（2026-09-03 合併）
+# ────────────────────────────────────────────────────────────────────────────
+
+FRESHNESS_SNAPSHOT = "snapshot"
+
+
+def _is_dependent_hop(task: str) -> bool:
+    """依賴型第二跳：帶未解回指代名詞(該公司…)且句中沒點名任何具體公司。這種子問題要等
+    第一跳辨識出公司、回填實體後才能正確檢索。已含具體公司名 → 不算未解(planner 已自行填好)。"""
+    if not _BACKREF_RE.search(task or ""):
+        return False
+    return not _mentioned_tickers(task)
+
+
+def _resolve_hop_entity(todos: list[dict], collected: list[dict]) -> str | None:
+    """從已完成待辦推出「第一跳辨識出的公司」正規名,供第二跳回填『該公司』。純確定性:
+    先看非依賴型 done 待辦的局部結果文字命中的 ticker(眾數),再退回已 commit chunk 的 owner ticker。"""
+    from collections import Counter
+    cnt: Counter = Counter()
+    for t in todos:
+        if t.get("status") == "done" and not _is_dependent_hop(t.get("task", "")):
+            res = t.get("result", "") or ""
+            for tk in rq._find_all_ticker_aliases(res.lower(), res):
+                cnt[tk] += 1
+    if not cnt:   # summary 沒明確命中 → 退回 commit chunk 的 owner ticker
+        for c in collected:
+            tk = c.get("ticker") or (c.get("payload") or {}).get("ticker")
+            if tk:
+                cnt[tk] += 1
+    if not cnt:
+        return None
+    top_ticker = cnt.most_common(1)[0][0]
+    return _TICKER_CANON.get(top_ticker, top_ticker)
+
+
+def _fill_dependent_hop(task: str, entity: str) -> str:
+    """把第二跳子問題裡的『該公司…』回指代名詞換成解出的具體公司名。"""
+    return _BACKREF_RE.sub(entity, task)
+
+
+def _build_temporal_contract(freshness_mode: str) -> str:
+    coverage_text = _format_kb_coverage(_pkg._get_kb_coverage())
+    if freshness_mode == FRESHNESS_SNAPSHOT:
+        policy = """時間模式：snapshot（封閉知識庫評測）。
+- 「最近／最新」只表示下方 KB snapshot 中最新可用文件，不表示真實世界今天。
+- 只能使用 snapshot 或工具結果明確出現的期間；絕不靠模型記憶推算季度、年份或月份。
+- 不要因 KB 早於 wall clock 而新增 web 待辦或在答案加入 cutoff 警語。
+- 使用者明確指定期間時，必須尊重原期間，不得換成 KB 最新期間。"""
+    else:
+        web_state = "可用" if _pkg.ENABLE_WEB_SEARCH else "停用"
+        policy = f"""時間模式：live。今天是 {_get_as_of_date().isoformat()}，web search 目前{web_state}。
+- 「最近／最新」表示截至今天；今天與 KB cutoff 是兩條獨立時間軸，不得混為一談。
+- 只能使用 snapshot 或工具結果明確出現的期間；絕不靠模型記憶推算季度、年份或月份。
+- 若新聞問題要求截至今天且 KB cutoff 較舊，先查 KB，再只針對 cutoff 後的缺口決定是否用 web。
+- 使用者明確指定期間時，必須尊重原期間，不得換成 KB 最新期間。"""
+    return policy + "\n\n" + coverage_text
+
+
+def _build_todo_temporal_scope(task: str, freshness_mode: str) -> str:
+    """為單一 todo 產生精簡的 coverage 說明（餵給 Grader 的 `temporal_scope`）。
+
+    ⚠ 2026-08-15 起**不再回傳 freshness gap**。缺口改由執行完的實際結果算（`_news_freshness_gaps`），
+      理由見那支的 docstring。這裡回傳單一字串而不是留一個永遠是空 list 的第二欄——
+      留著等於是給下一個人一個會漂移的死欄位。
+    """
+    coverage = _pkg._get_kb_coverage()
+    scope_coverage = _format_kb_coverage(coverage, _mentioned_tickers(task) or None)
+    if freshness_mode == FRESHNESS_SNAPSHOT:
+        return ("snapshot 模式：『最近／最新』= KB 中最新可用資料；不要參照 wall clock，"
+                "不要加入 cutoff 警語。\n" + scope_coverage)
+    return (f"live 模式：今天是 {_get_as_of_date().isoformat()}。不得把今天誤認成 KB cutoff；"
+            "不得創造未出現在下方 snapshot 或工具結果中的期間。\n" + scope_coverage)
+
+
+def _news_freshness_gaps(chunks: list[dict], as_of: date) -> list[dict]:
+    """從**實際採用的 chunk** 算新聞時效缺口：用到了某家的 news、而該家 news cutoff 早於今天 → 一筆。
+
+    ⚠ **2026-08-19 起對 KB 恆回空集合**（KB 已不收新聞,沒有 `doc_type=news` 的 chunk）。
+    保留函式與 `eval/verify_answer_validators.py` 閘門④⑤ 的斷言,是為了「新聞復活時警語
+    立刻回來」——那些斷言餵的是合成 chunk,不讀 KB,所以現在仍有判別力。
+    ⚠ **但時效警語本身沒有跟著死**：它現在由 `_unmet_realtime_gaps` 供應（判準改成「這個
+    子問題需要即時資料、卻沒拿到 web 補充」）。兩種缺口併存,見 `_pkg._run_one_todo` 的接線。
+
+    ⚠ 2026-08-15 從「看問法」改成「看結果」。舊判準是兩個硬編碼詞表串聯：
+          `bool(_RELATIVE_TIME_RE.search(task)) and rq.looks_like_news_query(task)`
+      這正是 CLAUDE.md 明列的反模式（用字串比對做感知），而**漏網的代價是零揭露**：
+      「Microsoft 最新一季的 Azure 營收成長率」過得了 `_RELATIVE_TIME_RE`（有「最新」）卻過不了
+      `looks_like_news_query`（不是新聞措辭）→ 一句時效警語都不會印。
+      （2026-08-13 拿掉的是 **web 觸發**那兩道同名閘門；警語這道當時漏改，文件卻已寫成「全數移除」。）
+
+    改看結果之後判準是純比對、零詞表，而且更準：問法像新聞、答案其實全靠財報時，舊版會印一句
+    無關的新聞 cutoff 警語，新版不會。cutoff 取 **KB coverage 裡該 ticker 最新的一則新聞**
+    （警語講的是「KB 的新聞收到哪天」，不是「這次剛好引到哪一則」）。
+    """
+    if not chunks:
+        return []
+    cov = _pkg._get_kb_coverage()
+    if not cov.get("available"):
+        return []
+    used = {parts[0] for c in chunks
+            for parts in (_source_coverage_parts(str(c.get("source") or "")),)
+            if parts and parts[1] == "news"}
+    gaps: list[dict] = []
+    for ticker in sorted(used):
+        cutoff = _source_newest_date(
+            str(((cov.get("tickers", {}).get(ticker) or {}).get("news") or {}).get("source") or ""))
+        if cutoff and cutoff < as_of:
+            gaps.append({"ticker": ticker, "cutoff": cutoff.isoformat(),
+                         "as_of": as_of.isoformat(), "doc_type": "news"})
+    return gaps
+
+
+def _unmet_realtime_gaps(task: str, need: str, chunks: list[dict], as_of: date) -> list[dict]:
+    """這個子問題**需要即時資料**（Grader 判 `realtime_need != none`）→ 記一筆時效缺口。
+
+    ⚠ **2026-08-19 新增，補上 KB 拔除新聞後死掉的那道揭露。**
+      舊的唯一缺口來源 `_news_freshness_gaps` 的判準是「用了 KB 新聞、而那則新聞過期」。
+      KB 不收新聞之後那個判準**沒有指涉對象 → 恆回空集合 → 時效警語永遠不印**（實測）。
+      但風險沒有消失，只是換了位置：即時題 → Grader 正確判不足 → 去打 web →
+      **web 預算用完（`_pkg.QUERY_WEB_BUDGET`）或搜不到** → 答案回頭用財報 chunk 生成 → 零揭露。
+      那正是 CLAUDE.md 記著的「把三週前的數字講成『今天股價』」，只是來源從新聞換成了 10-K。
+
+    判準刻意**只看 Grader 的 `realtime_need`**，不看問法、不看候選內容：
+      · 「需不需要即時資料」有判斷成分 → LLM（已在 Grader 內，不多花一次呼叫）
+      · 「這次有沒有拿到 web」是確定性的 → `_format_unresolved_freshness_notice` 用 `web_used` 篩
+    兩者分屬 CLAUDE.md〈LLM 與 Python 的分工〉的兩邊，這裡不重複判斷。
+
+    ⚠ 本函式**不檢查 `web_used`**：那個過濾統一在 `_format_unresolved_freshness_notice`
+      裡做（它已經有「這個待辦用了 web 就跳過」的邏輯）。兩邊都做會在未來漂移。
+    """
+    if need not in ("intraday", "days"):
+        return []
+    ticker = next(iter(sorted(_mentioned_tickers(task))), "")
+    ceiling = _kb_ceiling_date(chunks) if chunks else None
+    return [{"ticker": ticker, "cutoff": ceiling.isoformat() if ceiling else "",
+             "as_of": as_of.isoformat(), "doc_type": "realtime", "need": need}]
+
+
+def _unfulfilled_web_route_gaps(route: str, web_notes: list[str], chunks: list[dict],
+                                as_of: date) -> list[dict]:
+    """**被路由到 web 的待辦卻一次 web 都沒拿到** → 記一筆時效缺口。確定性，零 LLM。
+
+    ⚠ **刻意不看 `realtime_need`**（`_unmet_realtime_gaps` 走的是那條路）。那個欄位是
+      Grader 的三分類 LLM 輸出，BACKLOG 記著它在一個措辭族上實測 0/3；而且它要 Grader
+      跑過才有值——`route=web` ＋ 預算用完時我們根本沒跑到 Grader，那條路必然沉默。
+      這裡的判準是**結構性**的：Planner 說這題要上網，而網路一次都沒查到。零判斷成分。
+
+    ⚠ 只在 live 才會被呼叫（見 `_pkg._run_one_todo`）。snapshot 下 `_effective_route` 已把
+      route 降級成 kb，這裡也不會有陽性——**eval 基準因此一格不動**（閘門⑪z5）。
+    """
+    if route not in ("web", "both") or web_notes:
+        return []
+    ceiling = _kb_ceiling_date(chunks) if chunks else None
+    return [{"ticker": "", "cutoff": ceiling.isoformat() if ceiling else "",
+             "as_of": as_of.isoformat(), "doc_type": "realtime", "need": "days"}]
+
+
+# ── 口徑揭露 validator（確定性，零 LLM）─────────────────────────────────────────
+# 治的病（2026-08-20 實測 lex-17）：使用者問「營收成長率」沒指定口徑 → 答案給 10-K 的財年 18%，
+# 而 gold 是 Fundamentals 的 TTM 18.30%。**數字不是假的，錯的是口徑，而且沒有任何揭露**——
+# 兩個值差 0.3pt，讀者無從分辨自己拿到的是哪一種。
+#
+# ⚠ **刻意做成 validator 而不是 prompt 指令**。理由是本檔已經寫過一次的教訓：
+#   「Prompt 是機率性約束；snapshot / --no-web 再用 Python 硬擋」。而這裡要判的兩件事
+#   **都是確定性的**——「答案引了哪些 chunk」是 regex，「那些 chunk 是什麼口徑」是 payload
+#   的 `period_basis` 欄位（實測全庫只有兩個值：fundamentals=TTM 22 筆／其餘 fiscal_year 3805 筆）。
+#   照 CLAUDE.md〈LLM 與 Python 的分工〉，這一半不該交給 LLM 去記得。
+#
+# ⚠ 措辭刻意**只陳述事實、不宣稱原因**。Gemini 版的建議是「由於缺乏最新 TTM 數據」，
+#   但那個因果**可能是假的**：KB 裡可能有 TTM chunk，只是這次沒被引用。斷言一個查不到的原因
+#   就是在製造新的不可信內容——同 R4 選「並陳」不選「裁決」的理由。
+_BASIS_NOTICE_MARK = "⚠ 口徑說明："
+# 「問題自己講明了絕對期別」＝ 使用者要的就是財報期間，這時講 TTM 是雜訊（話太多方向）。
+# 只認**格式化的字面訊號**（yyyymm 期碼、年份＋財年字樣），不做語意判斷。
+_EXPLICIT_FY_RE = re.compile(r"(?:19|20)\d{2}\s*(?:財年|财年|會計年度|会计年度|年度)"
+                             r"|(?:fiscal\s*year|FY)\s*(?:19|20)?\d{2}", re.IGNORECASE)
+
+
+# Fundamentals chunk 裡「欄位名 : 12.34%」的取值。⚠ 這不是感知，是**解析本專案自己 ingest
+# 產生的固定格式**（見 data/edgar_processed/Fundamentals/*.txt），屬於格式定義的封閉集合。
+_FUND_PCT_TMPL = r"{field}\s*(?:\([^)]*\))?\s*[:：]\s*(-?\d+(?:\.\d+)?)\s*%"
+
+
+def _ttm_field_values(cited_chunks: list[dict], fields: list[str]) -> dict[str, str]:
+    """引用到的 TTM chunk 裡，被問欄位各自的值（`{"Revenue Growth": "18.30"}`）。認不出就不放。"""
+    out: dict[str, str] = {}
+    for c in cited_chunks or []:
+        if (c.get("period_basis") or "") != "TTM":
+            continue
+        txt = c.get("content") or ""
+        for f in fields:
+            m = re.search(_FUND_PCT_TMPL.format(field=re.escape(f)), txt, re.IGNORECASE)
+            if m:
+                out.setdefault(f, m.group(1))
+    return out
+
+
+def _value_stated(answer: str, val: str) -> bool:
+    """答案裡有沒有真的講出這個值。`18.30` 與 `18.3` 視為同一個；`118.3` 不算（前後要有邊界）。"""
+    trimmed = val.rstrip("0").rstrip(".") if "." in val else val
+    return re.search(rf"(?<![\d.]){re.escape(trimmed)}0*(?![\d])", answer or "") is not None
+
+
+def _basis_disclosure_notice(task: str, cited_chunks: list[dict], answer: str = "",
+                             ratio_fields: list[str] | None = None) -> str:
+    """答案只引到財報期間口徑的數字、卻是在回答一個沒指定口徑的比率題 → 回傳揭露警語。
+
+    沉默條件（全部是「話太多」方向的誤報對照——這道護欄的失敗方向不是漏印，是變成背景噪音）：
+      ① 不是比率／成長率題（市值、EPS 這類單一來源指標沒有口徑歧義）
+      ② 問題自己指定了絕對期別（`2025 財年`、`FY2026`、yyyymm 期碼）——那時財報口徑正是要的
+      ③ **答案裡真的講出了那個 TTM 值**
+
+    ⚠ ③ 原本寫的是「引用裡有 TTM chunk」，**那是錯的，而且是被自己要抓的行為解除武裝**
+      （2026-08-21 實測，lex-17）：補撈修好之後，答案確實引到 `MSFT_Fundamentals #0`，
+      眼前就是 `Revenue Growth (YoY): 18.30%`，它卻寫成
+      「全年與最近的 **TTM** 都在約 **18%** 左右【…chunk #0】」——**把 TTM 四捨五入成 18%，
+      再與 10-K 的財年 18% 併成同一個說法**。引用是真的、數字看起來也對，兩個口徑就這樣消失了。
+      而舊條件③ 看到「有 TTM chunk 被引用」就沉默 → **護欄正好在該叫的那一刻關掉**。
+      → 判準改成看**值有沒有出現在答案裡**（確定性字串比對，見 `_value_stated`）。
+
+    ⚠ 有值的時候警語就**把值講出來**，不是只講「這不是 TTM」：值逐字取自**答案自己引用的
+      那個 chunk**，所以仍然可追溯；這是 R4 那條「要求並陳不裁決」的同一個做法。
+    """
+    if not _has_ratio_intent(ratio_fields, task):
+        return ""
+    if _EXPLICIT_FY_RE.search(task or "") or rq._PERIOD_CODE_RE.search(task or ""):
+        return ""
+
+    fields = _resolve_ratio_fields(ratio_fields, task)
+    ttm_vals = _ttm_field_values(cited_chunks, fields)
+    if ttm_vals:
+        missing = {f: v for f, v in ttm_vals.items() if not _value_stated(answer, v)}
+        if not missing:
+            return ""                  # 答案真的給了 TTM 值 → 不需要這段
+        detail = "、".join(f"{f} {v}%" for f, v in sorted(missing.items()))
+        return (chr(10) + chr(10) + "---" + chr(10) + _BASIS_NOTICE_MARK
+                + f"上文引用的 TTM（最近十二個月）口徑數值為 **{detail}**，"
+                  "與文中的財報期間（財年／單季）數字不是同一個口徑——"
+                  "兩者數值可能接近但不可互換。")
+
+    basis = {(c.get("period_basis") or "") for c in (cited_chunks or [])}
+    if "TTM" in basis:
+        return ""                      # 引到 TTM chunk 但認不出欄位值 → 維持沉默，不在看不懂時多話
+    if "fiscal_year" not in basis:
+        return ""                      # 沒引到任何財報期間 chunk（例如純 web 答案）→ 不是這條的守備範圍
+    return (chr(10) + chr(10) + "---" + chr(10) + _BASIS_NOTICE_MARK
+            + "以上比率／成長率取自財報期間口徑（財年或單季），"
+              "**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。")
+
+
+def _format_unresolved_freshness_notice(todos: list[dict]) -> str:
+    """只對 live 且 web 沒成功補到的新聞缺口產生機械式時效聲明；snapshot 永遠沒有 gap。
+
+    ⚠ 缺口是**逐待辦**算的，但這段警語**整篇答案只印一次**——所以措辭不能講成整篇的結論。
+      2026-08-14 實測：「Azure 最新一季成長率」的答案主體引用了 CNBC 與 sec.gov 兩個 web 來源，
+      底下卻印出「Web 未提供可用補充」，因為另外幾個沒查網的待辦各自帶著 gap。警語與答案互相矛盾
+      比沒有警語更糟（它會讓讀者不信任明明有出處的數字），故依「這一次跑分到底有沒有用到 web」分岔。"""
+    unique: dict[tuple[str, str, str], dict] = {}
+    any_web = False
+    for todo in todos or []:
+        if todo.get("status") != "done":
+            continue
+        if todo.get("web_used"):
+            any_web = True
+            continue
+        for gap in todo.get("freshness_gaps", []) or []:
+            # doc_type 入 key：news 缺口與 realtime 缺口措辭不同，混在一起會互相蓋掉
+            key = (gap.get("ticker", ""), gap.get("cutoff", ""),
+                   gap.get("as_of", ""), gap.get("doc_type", "news"))
+            unique[key] = gap
+    if not unique:
+        return ""
+    def _phrase(ticker: str, cutoff: str, as_of: str, doc_type: str) -> str:
+        who = ticker or "本次查詢"
+        if doc_type == "realtime":
+            # KB 只有財報 → 要講「知識庫本來就沒有這種資料」，不是「資料有點舊」
+            span = f"，知識庫最新期別截至 {cutoff}" if cutoff else "，知識庫僅含 SEC 財報與基本面"
+            return f"{who} 需要即時／近期資料{span}（查詢日 {as_of}）"
+        return f"{who} 新聞資料截至 {cutoff}（查詢日 {as_of}）"
+
+    details = "; ".join(_phrase(*k) for k in sorted(unique))
+    tail = ("；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。"
+            if any_web else
+            "；Web 未提供可用補充，因此以上內容不代表涵蓋至查詢日。")
+    return "\n\n---\n⚠ 資料時效：" + details + tail
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 純函式工具（片段截取 / chunk id / 池合併 / JSON 容錯）
+# ──────────────────────────────────────────────────────────────────────────────

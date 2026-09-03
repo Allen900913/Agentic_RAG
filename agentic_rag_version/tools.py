@@ -1,36 +1,42 @@
-"""agentic_rag_version.webtools — Tavily 呼叫與兩個給 subagent 用的 tool。
-
+"""
 ⚠ **白名單只是授權，不是過濾**：Tavily 的 `include_domains` 是**子網域包含式**比對，
   一筆 `finance.yahoo.com` 會連 `ca.`／`hk.` 一起收，而那些是**別的市場的報價**
   （同一天差 12%）。收到結果後還要用 `_host_allowed` 自己複核。這個坑踩過兩次。
 
-⚠ **錄／放刻意錄在 `TavilyClient.search()` 的原始回應**，不是 `_tavily_search()` 的
-  回傳字串——後者已跑完白名單複核／去重／抽日期／過時過濾／截斷，錄那裡等於把要測的
-  六道一起 mock 掉。
+⚠ **錄／放刻意錄在 `TavilyClient.search()` 的原始回應**，不是 `_tavily_search()` 的回傳
+  字串——後者已跑完白名單複核／去重／抽日期／過時過濾／截斷，錄那裡等於把要測的六道
+  一起 mock 掉。
 
-⚠ 本模組裡 `_tavily_search`／`_web_query_en` 的**呼叫**一律走 `_pkg.`：
+⚠ `_tavily_raw`／`_tavily_search`／`_web_query_en`／`ENABLE_WEB_SEARCH` 的引用一律走 `_pkg.`：
   eval 有 14 處 monkeypatch 打在套件上，裸用會讓「eval 絕不連網」失效（閘門⑬）。
 """
+
 from __future__ import annotations
 
+from contextvars import ContextVar
+import contextvars
 import json
 import os
 import re
 import threading
-import contextvars
-from contextvars import ContextVar
 
 from langchain_core.tools import tool
-
 import rag_query as rq
 import web_replay as _web_replay
-from .tracing import _trace
 
-import agentic_rag_version as _pkg   # ⚠ 循環 import 刻意：`_pkg.<name>` 在呼叫時
-                                     #   才解析，eval 打在套件上的 stub 才蓋得到。
-from .chunks import _chunk_id, _merge_chunks, _snippet
-from .freshness import TAVILY_FETCH_RESULTS, WEB_ALLOWED_DOMAINS, _dedupe_web_results, _get_as_of_date
-from .planning import CHECKER_MODEL, POOL_RETURN_K
+import agentic_rag_version as _pkg
+# ⚠ **循環 import 是刻意的**：`_pkg.<name>` 在**呼叫時**才解析，於是 eval 打在
+#   套件物件上的 monkeypatch 蓋得到。子模組**不得裸用**被 patch 的名字，也不得
+#   `from .x import` 它們（那會壓一份當時的物件）——守門是閘門⑬。
+
+from .retrieval import _chunk_id, _merge_chunks, _snippet
+from .tracing import _trace
+from .validators import TAVILY_FETCH_RESULTS, WEB_ALLOWED_DOMAINS, _dedupe_web_results, _get_as_of_date
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# ── 原 webtools.py（2026-09-03 合併）
+# ────────────────────────────────────────────────────────────────────────────
 
 # 每則保留的摘要字數。
 # ⚠ **原本是 300,那是 2026-08-13 「即時市值答不出來」的真正主因**（比日期把關、比白名單都嚴重）：
@@ -133,7 +139,7 @@ def _web_query_en(query: str) -> str:
     ⚠ 這只改善命中品質，**不是日期把關**——舊英文文章一樣進得來，那要另外解。
     """
     try:
-        en = rq.translate_query_to_english(query, CHECKER_MODEL)
+        en = rq.translate_query_to_english(query, _pkg.CHECKER_MODEL)
     except Exception as e:
         _trace(f"  web query 英譯失敗（{e!r}）→ 用原句")
         return query
@@ -251,7 +257,7 @@ def rag_search(query: str) -> str:
     state.pool.extend(merged)
     if not merged:
         return "（知識庫查無相關片段——若問題是近期新聞/最新事件，考慮改用 web_search）"
-    top = merged[:POOL_RETURN_K]
+    top = merged[:_pkg.POOL_RETURN_K]
     lines = [
         f"[{i}] rerank={c['rerank_score']:.3f} | id={_chunk_id(c)}\n    {_snippet(c['content'], query)}"
         for i, c in enumerate(top, start=1)

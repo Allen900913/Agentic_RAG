@@ -1,24 +1,371 @@
-"""agentic_rag_version.ratio — ratio 題的意圖判定與財務錨源保底。
-
-⚠ **判別力來自「LLM 說不是就必須不是」**：`_classify_ratio_fields` 判不出來時會退回詞表
-  `_RATIO_INTENT_RE`，於是詞表仍然是實際做決定的人，而端到端跑分看不出任何差別。
-  這條路的準確度**不能從結果檔推**——量它的是 `eval/probe_ratio_intent.py`。
-
-⚠ 失敗方向不對稱：ratio 題判成非 ratio ＝ 保底不執行、口徑警語不觸發 →
-  **拿財年數字冒充 TTM 且零揭露**；反向只是多撈一個 chunk。
 """
+三件事，都是「拿到候選之後怎麼處理」而不是「怎麼問 LLM」：
+  · chunk 操作   `_merge_chunks` / `_fair_select` / `_snippet` / `_chunk_id`
+  · KB 涵蓋      `_scan_kb_coverage`（掃 collection 不掃 `data/`——「碼上有哪些檔」與
+                 「collection 裡真的有什麼」是兩件事，後者才是檢索看得到的）
+  · ratio 意圖   欄位分類與財務錨源保底
+
+⚠ `_merge_chunks` / `_fair_select` 是**承接池的形狀**由誰決定的地方：Grader 有圈選就只收
+  圈選的，沒圈選才退回 rerank top-k 全收（量尺 `eval/probe_relevant_ids.py`）。
+
+⚠ ratio 的判別力來自「LLM 說不是就必須不是」：判不出來會退回詞表 `_RATIO_INTENT_RE`，
+  於是詞表仍是實際做決定的人，而端到端跑分看不出差別。量它的是 `eval/probe_ratio_intent.py`。
+
+⚠ `_snippet` 的視窗要**對齊查詢詞**而不是從頭截：數據頁的數字常排在站台樣板文字後面，
+  從頭截會正好切在數字前面——「撈到了卻被自己截掉」與「根本沒撈到」外觀相同。
+"""
+
 from __future__ import annotations
 
+from datetime import date, datetime
 import json
 import os
 import re
+import threading
 
-import rag_query as rq
 import llm_replay as _replay
+import rag_query as rq
+
+import agentic_rag_version as _pkg
+# ⚠ **循環 import 是刻意的**：`_pkg.<name>` 在**呼叫時**才解析，於是 eval 打在
+#   套件物件上的 monkeypatch 蓋得到。子模組**不得裸用**被 patch 的名字，也不得
+#   `from .x import` 它們（那會壓一份當時的物件）——守門是閘門⑬。
+
 from .tracing import _trace
 
-import agentic_rag_version as _pkg   # ⚠ 循環 import 刻意：`_pkg.<name>` 在呼叫時
-                                     #   才解析，eval 打在套件上的 stub 才蓋得到。
+
+_COVERAGE_SOURCE_RE = re.compile(
+    r"^(?P<ticker>[A-Z]+)_(?P<kind>10K|10Q|Fundamentals|News)_"
+    r"(?P<stamp>\d{4,8})(?:_|\.|$)",
+    re.IGNORECASE,
+)
+
+# ────────────────────────────────────────────────────────────────────────────
+# ── 原 chunks.py（2026-09-03 合併）
+# ────────────────────────────────────────────────────────────────────────────
+
+
+# ── 自適應生成預算（fix 2026-07-29，見 [[multi-intent-agentA-is-the-leak]]）────────
+# 固定 8-cap 對多 facet 題會 8÷N 稀釋（chunk 層級 probe：軸A 佔 v2 漏失 23/40）。改成隨 facet 數放大，
+# 單意圖題維持 ~base（不傷 lexical/colloquial 的 faithfulness），多 facet 才給更多名額（而非砍 facet）。
+#   budget(n) = min(BASE + PER_FACET*(n-1), CAP)   例：1→5, 2→7, 3→9, 4→11, 6→15（CAP=16）
+WRITER_BUDGET_BASE      = int(os.getenv("AGENTIC_WRITER_BUDGET_BASE", "5"))
+
+WRITER_BUDGET_PER_FACET = int(os.getenv("AGENTIC_WRITER_BUDGET_PER_FACET", "2"))
+
+WRITER_BUDGET_CAP       = int(os.getenv("AGENTIC_WRITER_BUDGET_CAP", "16"))
+
+_CJK_RUN_RE = re.compile(r"[㐀-鿿]+")
+
+
+def _query_terms(query: str) -> set[str]:
+    r"""把 query 拆成算 window 重疊分數用的 term 集合。
+    英數：抓 token（len>1）。中文：\w+ 會把「無空格中文整句」視為單一 term——除非 chunk 逐字連續
+    出現整句,否則 window score 恆 0、_snippet 退回前綴截斷（P0-3,子問題本就是純繁中,對每個 >400
+    字的 chunk 都咬到）。改對每段連續 CJK 抽 2-gram 當比對單位（粗但可用,不引第三方分詞;單字段落
+    才退成單字元）。"""
+    q = (query or "").lower()
+    terms = {w for w in re.findall(r"[a-z0-9]+", q) if len(w) > 1}
+    for run in _CJK_RUN_RE.findall(q):
+        if len(run) == 1:
+            terms.add(run)
+        else:
+            terms.update(run[i:i + 2] for i in range(len(run) - 1))
+    return terms
+
+
+def _best_window_start(text_lower: str, terms: set[str], n: int) -> tuple[int, int]:
+    """掃 text_lower 找 n 字視窗裡 query 詞彙命中次數最高的起點。回傳 (start, score)。"""
+    if len(text_lower) <= n:
+        return 0, sum(text_lower.count(t) for t in terms)
+    step = max(1, n // 4)
+    best_start, best_score = 0, -1
+    starts = list(range(0, len(text_lower) - n + 1, step))
+    if starts[-1] != len(text_lower) - n:
+        starts.append(len(text_lower) - n)
+    for start in starts:
+        window = text_lower[start:start + n]
+        score = sum(window.count(t) for t in terms)
+        if score > best_score:
+            best_start, best_score = start, score
+    return best_start, best_score
+
+
+def _snippet(text: str, query: str = "", n: int = 1200) -> str:
+    """query-aware 截片段：掃全文找跟 query 詞彙重疊最高的 ~n 字為中心取，避免只看前 n 字漏掉後段重點。
+    n=1200（2026-07-30 從 400 調升）：Grader 看的片段太短會漏掉關鍵數字——中文 query 對英文
+    Fundamentals 內容零詞彙命中時會退回前綴截斷 t[:n]，400 字剛好切在 header/overview，把
+    後段的 'Revenue (TTM): $742.78B / Gross Margin' 切掉，導致 Grader 明明有 chunk 卻誤判
+    insufficient、逼執行層漂移到錯口徑（見 mh-01 診斷）。Fundamentals chunk 最長 ~1421 字，
+    1200 足以讓短的 key-value chunk 全顯示。_mechanical_summary 仍顯式傳 n=200 不受影響。"""
+    t = " ".join((text or "").split())
+    if len(t) <= n:
+        return t
+    terms = _query_terms(query)
+    start, score = (0, -1) if not terms else _best_window_start(t.lower(), terms, n)
+    if score <= 0:
+        return t[:n] + "…"
+    window = t[start:start + n]
+    prefix = "…" if start > 0 else ""
+    suffix = "…" if start + n < len(t) else ""
+    return prefix + window + suffix
+
+
+def _chunk_id(c: dict) -> str:
+    """chunk 的可複製 id：'source#chunk_index'。"""
+    return f"{c['source']}#{c['chunk_index']}"
+
+
+def _merge_chunks(pool: list[dict], new: list[dict]) -> list[dict]:
+    """聯集去重（(source, chunk_index) 為 key，保留 raw_rerank_score 較高的），依 rerank 降序回傳。
+    讓「補救改寫重搜」只加候選、不洗掉先前找到的好 chunk（沿用舊版累積池語意，但改為顯式 state）。"""
+    by_key = {(c["source"], c["chunk_index"]): c for c in (pool or [])}
+    for c in new or []:
+        k = (c["source"], c["chunk_index"])
+        old = by_key.get(k)
+        if old is None or c["raw_rerank_score"] > old["raw_rerank_score"]:
+            by_key[k] = c
+    return sorted(by_key.values(), key=lambda x: x["raw_rerank_score"], reverse=True)
+
+
+def _fair_select(collected: list[dict], k: int) -> list[dict]:
+    """跨子問題公平取 top-k 餵 Generator（P0-1）。
+    collected 全域依 raw_rerank_score 排序後直接截斷有兩個病灶:① 高分子問題把其他子問題整段擠出
+    WRITER_MAX_CHUNKS;② cross-encoder 原始分數是「相對當次 query」的,跨子問題不可直接比（B 的
+    0.72 可能已是 B 的最佳答案,卻輸給 A 的第七名）。改成 round-robin:各子問題依自身 rerank 排序輪流
+    各取一個（保底代表性）,名額用不完再由高分遞補;最終仍依 rerank 排序,給 Generator 由強到弱的穩定
+    順序。單一子問題時退化成單純 top-k（collected 通常 ≤ k,直接原樣回傳）。"""
+    if len(collected) <= k:
+        return collected
+    buckets: dict[int, list[dict]] = {}
+    for c in sorted(collected, key=lambda x: x["raw_rerank_score"], reverse=True):
+        buckets.setdefault(c.get("_subq", 0), []).append(c)
+    order = sorted(buckets)
+    pos = {i: 0 for i in order}
+    picked: list[dict] = []
+    while len(picked) < k:
+        progressed = False
+        for i in order:
+            if pos[i] < len(buckets[i]):
+                picked.append(buckets[i][pos[i]])
+                pos[i] += 1
+                progressed = True
+                if len(picked) >= k:
+                    break
+        if not progressed:
+            break
+    return sorted(picked, key=lambda x: x["raw_rerank_score"], reverse=True)
+
+
+def _writer_budget(n_facets: int) -> int:
+    """自適應生成預算：facet 越多給越多名額（避免 8÷N 稀釋），單意圖維持 ~BASE。見上方常數說明。"""
+    n = max(1, int(n_facets or 1))
+    return min(WRITER_BUDGET_BASE + WRITER_BUDGET_PER_FACET * (n - 1), WRITER_BUDGET_CAP)
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# ── 原 coverage.py（2026-09-03 合併）
+# ────────────────────────────────────────────────────────────────────────────
+
+
+_coverage_lock = threading.Lock()
+
+# KB coverage 只依「Agent 實際連到的 Qdrant collection」計算；不能掃 data/ 目錄，因為檔案存在
+# 不代表已 ingest。cache 以 collection name 為界，eval 切 collection 時會自動重算。
+_kb_coverage: dict | None = None
+
+_kb_coverage_collection: str | None = None
+
+
+def _source_coverage_parts(source: str) -> tuple[str, str, str] | None:
+    """從既有命名規則取 (ticker, kind, stamp)；payload 缺日期的 News/Fundamentals 靠這裡補。"""
+    m = _COVERAGE_SOURCE_RE.match(source or "")
+    if not m:
+        return None
+    kind_raw = m.group("kind").lower()
+    kind = {"10q": "10-Q", "10k": "10-K",
+            "fundamentals": "fundamentals", "news": "news"}[kind_raw]
+    return m.group("ticker").upper(), kind, m.group("stamp")
+
+
+def _coverage_sort_key(record: dict) -> str:
+    """同一 doc_type 內用 YYYY / YYYYMM / YYYYMMDD 字串排序；右補 0 讓長度一致。"""
+    stamp = str(record.get("report_period_code") or record.get("date")
+                or record.get("fiscal_year") or "")
+    digits = re.sub(r"\D", "", stamp)
+    return digits.ljust(8, "0")
+
+
+def _scan_kb_coverage(client, collection_name: str) -> dict:
+    """掃 collection 的唯一 source，計算每個 ticker、每種文件類型的最新實際資料。"""
+    coverage = {
+        "available": False,
+        "collection": collection_name,
+        "sources_scanned": 0,
+        "tickers": {},
+        # source → 該檔的財報期別（只收 10-K/10-Q）。**沿用同一次 scroll**，不多掃一遍。
+        # 存在理由：`rq.retrieve()` 回傳的 chunk dict 只帶 source/chunk_index/ticker/chunk_type，
+        # **沒有 fiscal_year／fiscal_period**（2026-08-15 實測），而期別排序非有它不可
+        # （見 `_fiscal_rank`）。要嘛在這裡建表，要嘛去改全專案共用的 retrieve 投影——選前者。
+        "sources": {},
+    }
+    seen_sources: set[str] = set()
+    offset = None
+    try:
+        while True:
+            points, offset = client.scroll(
+                collection_name=collection_name,
+                limit=256,
+                offset=offset,
+                with_payload=[
+                    "ticker", "doc_type", "filing_type", "fiscal_year",
+                    "fiscal_period", "report_period_code", "source",
+                ],
+                with_vectors=False,
+            )
+            for point in points:
+                payload = point.payload or {}
+                source = str(payload.get("source") or "").strip()
+                if not source or source in seen_sources:
+                    continue
+                seen_sources.add(source)
+
+                source_parts = _source_coverage_parts(source)
+                ticker = str(payload.get("ticker") or
+                             (source_parts[0] if source_parts else "")).upper().strip()
+                if not ticker:
+                    continue
+
+                filing_type = str(payload.get("filing_type") or "").upper()
+                doc_type = str(payload.get("doc_type") or "").lower()
+                if filing_type in ("10-Q", "10-K"):
+                    kind = filing_type
+                elif doc_type in ("10-q", "10-k"):
+                    kind = doc_type.upper()
+                elif doc_type in ("news", "fundamentals"):
+                    kind = doc_type
+                elif source_parts:
+                    kind = source_parts[1]
+                else:
+                    continue
+
+                stamp_from_source = source_parts[2] if source_parts else ""
+                record = {"source": source}
+                if kind in ("10-Q", "10-K"):
+                    record.update({
+                        "report_period_code": str(payload.get("report_period_code")
+                                                  or stamp_from_source or ""),
+                        "fiscal_year": str(payload.get("fiscal_year") or ""),
+                        "fiscal_period": str(payload.get("fiscal_period") or ""),
+                    })
+                else:
+                    record["date"] = stamp_from_source
+
+                if not _coverage_sort_key(record).strip("0"):
+                    continue
+                if kind in ("10-Q", "10-K"):
+                    coverage["sources"][source] = {
+                        "ticker": ticker, "kind": kind,
+                        "fiscal_year": record["fiscal_year"],
+                        "fiscal_period": record["fiscal_period"],
+                    }
+                ticker_cov = coverage["tickers"].setdefault(ticker, {})
+                old = ticker_cov.get(kind)
+                if old is None or _coverage_sort_key(record) > _coverage_sort_key(old):
+                    ticker_cov[kind] = record
+
+            if offset is None:
+                break
+        coverage["available"] = True
+        coverage["sources_scanned"] = len(seen_sources)
+    except Exception as e:
+        coverage["error"] = repr(e)
+        _trace(f"coverage: 掃描 collection={collection_name!r} 失敗 → {e!r}")
+    return coverage
+
+
+def _get_kb_coverage() -> dict:
+    """Lazy coverage cache；rq.COLLECTION_NAME 改變時重算，避免 eval 誤用生產 snapshot。"""
+    global _kb_coverage, _kb_coverage_collection
+    collection = rq.COLLECTION_NAME
+    if _kb_coverage is not None and _kb_coverage_collection == collection:
+        return _kb_coverage
+    with _coverage_lock:
+        if _kb_coverage is not None and _kb_coverage_collection == collection:
+            return _kb_coverage
+        _bge, _rerank, client = _pkg._get_models()
+        _kb_coverage = _scan_kb_coverage(client, collection)
+        _kb_coverage_collection = collection
+        _trace(f"coverage: collection={collection!r}, "
+               f"sources={_kb_coverage.get('sources_scanned', 0)}, "
+               f"tickers={sorted(_kb_coverage.get('tickers', {}))}")
+        return _kb_coverage
+
+
+def _display_date(stamp: str) -> str:
+    digits = re.sub(r"\D", "", str(stamp or ""))
+    if len(digits) == 8:
+        return f"{digits[:4]}-{digits[4:6]}-{digits[6:]}"
+    return digits or "unknown"
+
+
+def _coverage_record_text(kind: str, record: dict) -> str:
+    if kind in ("10-Q", "10-K"):
+        period = record.get("report_period_code") or record.get("fiscal_year") or "unknown"
+        fiscal_period = record.get("fiscal_period") or ""
+        if fiscal_period.upper() == "FY":
+            fiscal_period = ""
+        fiscal = " ".join(x for x in (
+            f"FY{record.get('fiscal_year')}" if record.get("fiscal_year") else "",
+            fiscal_period,
+        ) if x)
+        label = f"{kind} period {period}"
+        if fiscal:
+            label += f" ({fiscal})"
+        return label
+    return f"{kind} through {_display_date(record.get('date', ''))}"
+
+
+def _format_kb_coverage(coverage: dict, tickers: set[str] | None = None) -> str:
+    if not coverage.get("available"):
+        return "KB Coverage Snapshot unavailable（不得因此猜測任何期間）。"
+    all_tickers = coverage.get("tickers", {})
+    names = sorted(tickers if tickers else all_tickers)
+    lines = [f"KB Coverage Snapshot（collection={coverage.get('collection')}）:"]
+    for ticker in names:
+        kinds = all_tickers.get(ticker, {})
+        if not kinds:
+            continue
+        parts = [_coverage_record_text(kind, kinds[kind])
+                 for kind in ("10-Q", "10-K", "fundamentals", "news") if kind in kinds]
+        lines.append(f"- {ticker}: " + "; ".join(parts))
+    if len(lines) == 1:
+        lines.append("- 查無對應 ticker 的 coverage；不得猜測期間。")
+    return "\n".join(lines)
+
+
+def _mentioned_tickers(text: str) -> set[str]:
+    """找出 task 中所有已知公司；不用 rq._detect_ticker，因為它只回第一個。"""
+    q = text or ""
+    q_lower = q.lower()
+    found: set[str] = set()
+    for alias, ticker in getattr(rq, "_COMPANY_TICKER", {}).items():
+        if re.search(r"[一-鿿]", alias):
+            if alias in q:
+                found.add(ticker)
+        elif re.search(r"\b" + re.escape(alias) + r"\b", q_lower):
+            found.add(ticker)
+    return found
+
+
+
+
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# ── 原 ratio.py（2026-09-03 合併）
+# ────────────────────────────────────────────────────────────────────────────
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 常數 / 模型選型（NVIDIA 目錄 id，實測見舊版 CHANGELOG 續八）

@@ -5,11 +5,18 @@
 
 ## 2026-09-03
 
-### agentic_rag_v2.py 套件化：4549 行單檔 → agentic_rag_version/ 11 個模組
+### agentic_rag_v2.py 套件化：4549 行單檔 → agentic_rag_version/ 四個模組
 
-`__init__.py` 剩 **1215 行**（門面 ＋ 生成／補救層）。其餘：validators 783／nodes 597／
-freshness 501／executor 374／planning 354／ratio 320／webtools 295／coverage 214／
-chunks 133／tracing 18／__main__ 13。CLI 變成 `python -m agentic_rag_version`。
+**分層是單向的**：`retrieval` 664 → `validators` 1560 → `tools` 294 → `graph` 1287，
+`__init__.py` 1206（門面 ＋ 生成／補救層）、`tracing` 18、`__main__` 13。
+CLI 變成 `python -m agentic_rag_version`。
+
+⚠ **中途拆成 11 個模組，被打回來重合併成 4 個，而那個回饋是對的。**
+我把「一個職責一個檔」當成目標，但那不是目標——**能不能一眼知道去哪找**才是。
+11 個檔的代價是跨模組 import 爆炸（`nodes.py` 一個檔就從 9 個模組拉東西），
+而那些邊界多數只是我切的，不是碼上本來就有的。
+合併只花了一輪，因為 **522 項閘門就是合併的驗收**——合錯了會當場叫（實測叫了兩次：
+`_COVERAGE_SOURCE_RE` 留了一行合併前的 import 造成真循環、⑬f 抓到 export 沒重生成）。
 
 **九步，每步都是獨立 commit ＋ 跑完四道閘門**。閘門從 85／238／17／172 走到
 **85／239／17／181**，全程 PASS——這 512 → 522 項就是這次重構唯一的驗收標準。
@@ -21,7 +28,7 @@ chunks 133／tracing 18／__main__ 13。CLI 變成 `python -m agentic_rag_versio
 stub 再也蓋不到 → `verify_web_gate_isolation` 保證的「eval 絕不連網」會**真的連網**，
 而閘門本身照樣全綠（它只數自己那個 stub 被叫幾次）。常數同病
 （`ENABLE_WEB_SEARCH`／`QUERY_WEB_BUDGET` 也被直接改寫）。
-→ 規則：子模組**不得裸用**那些名字（一律 `import agentic_rag_version as _pkg` 再
+→ 規則：**定義在哪個模組無所謂**；子模組**不得裸用**那些名字（一律 `import agentic_rag_version as _pkg` 再
 `_pkg.<name>`，**循環 import 是刻意的**——屬性在呼叫時才解析），且**不得 `from .x import`**
 它們。**定義在哪個模組無所謂**。守門是新的閘門⑬（9 項）。
 
