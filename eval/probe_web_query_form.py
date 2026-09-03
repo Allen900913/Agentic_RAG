@@ -54,7 +54,7 @@ _DEFAULT_FIXTURE = _ROOT / "eval" / "web_fixture_query_form.json"
 
 
 def _early_fixture_path() -> Path:
-    """在 import agentic_rag_v2 **之前**就要定案（`_web_replay` 在 import 時讀 env），
+    """在 import agentic_rag_version **之前**就要定案（`_web_replay` 在 import 時讀 env），
     所以這裡自己掃一次 argv，不能等 argparse。"""
     for i, a in enumerate(sys.argv):
         if a == "--fixture" and i + 1 < len(sys.argv):
@@ -68,7 +68,7 @@ FIXTURE = _early_fixture_path()
 os.environ["RAG_WEB_REPLAY"] = str(FIXTURE)
 os.environ.setdefault("RAG_WEB_REPLAY_MODE", "record")
 
-import agentic_rag_v2 as ar  # noqa: E402
+import agentic_rag_version as ar  # noqa: E402
 
 # 被問的那個量長什麼樣子。**刻意要求「標記 ＋ 值」同時出現在一個窗口內**：只找數字會被
 # 頁面上任何一個 `4.32T`（別家公司的市值、大盤數字）滿足 → 那是在錯的證據上放行。

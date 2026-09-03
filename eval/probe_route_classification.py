@@ -55,7 +55,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 _ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_ROOT))
 
-import agentic_rag_v2 as ar  # noqa: E402
+import agentic_rag_version as ar  # noqa: E402
 
 QUESTION_SET = _ROOT / "eval" / "news_routing_questions.json"
 _WEBBY = ("web", "both")

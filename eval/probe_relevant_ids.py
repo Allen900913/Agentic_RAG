@@ -1,7 +1,7 @@
 """量 Grader 的 `relevant_ids` 圈選（**含 LLM，非零噪音**）。
 
 **為什麼需要這一支**：`relevant_ids` 決定「這個子問題最後把哪些 chunk 交給 Generator」
-（見 `agentic_rag_v2._run_one_todo`：有圈選就只收圈選的，沒圈選才退回 rerank top-k 全收）。
+（見 `agentic_rag_version._run_one_todo`：有圈選就只收圈選的，沒圈選才退回 rerank top-k 全收）。
 它是**承接池的實際守門員**——比 `new_query` 更靠近答案。而它在 2026-08-28 之前完全沒有量尺：
 `grep relevant_ids eval/*.py` 的每一筆命中都是測試樁裡的 `"relevant_ids": []`。
 
@@ -55,7 +55,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import rag_query as rq          # noqa: E402
-import agentic_rag_v2 as ar     # noqa: E402
+import agentic_rag_version as ar     # noqa: E402
 
 # 預設題目：刻意涵蓋四種形態。
 #   · 單公司 × 撈得到 gold（sem-01 / mix-01 / mix-03 / col-05）

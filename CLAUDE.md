@@ -53,7 +53,7 @@ fetch_data.py ──► data/raw/{Filings,sec_local,Fundamentals}   （唯一對
 data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse → Qdrant   （零網路）
                                  │
                     ┌────────────┴────────────┐
-              rag_query.py                agentic_rag_v2.py
+              rag_query.py                agentic_rag_version/__init__.py
              （單發管線）                （LangGraph 多節點）
                     │                          │
             api_server.py ──► app.py     eval/run_agentic_on_evalset.py
@@ -160,7 +160,7 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 
 | 檔案 | 是什麼 |
 |---|---|
-| [`agentic_rag_v2.py`](agentic_rag_v2.py) | **現役 agentic 入口**。LangGraph：Plan → Execute（確定性檢索）→ Grade → Synthesize（生成 ＋ citation validator ＋ 一致性 validator ＋ 期別 validator ＋ 數字溯源 ＋ **並陳時點 validator** ＋ reflect ＋ **web 未採用揭露**）。模型分層 RETRIEVAL／CHECKER／GEN **三個都是 `gpt-oss-120b`**（env `AGENTIC_*_MODEL` 可覆蓋）。時間感知走 `freshness_mode`：`snapshot`（eval）／`live`（prod）。⚠ **Synthesize 的四道 validator 守門共用 `rq.looks_like_refusal`**，不要退回英文字面比對（中文拒答會穿過去、白燒兩次 LLM 稽核）。**節點設計理由與 validator 實測見 [`docs/AGENTIC.md`](docs/AGENTIC.md)** |
+| [`agentic_rag_version/__init__.py`](agentic_rag_version/__init__.py) | **現役 agentic 入口**。LangGraph：Plan → Execute（確定性檢索）→ Grade → Synthesize（生成 ＋ citation validator ＋ 一致性 validator ＋ 期別 validator ＋ 數字溯源 ＋ **並陳時點 validator** ＋ reflect ＋ **web 未採用揭露**）。模型分層 RETRIEVAL／CHECKER／GEN **三個都是 `gpt-oss-120b`**（env `AGENTIC_*_MODEL` 可覆蓋）。時間感知走 `freshness_mode`：`snapshot`（eval）／`live`（prod）。⚠ **Synthesize 的四道 validator 守門共用 `rq.looks_like_refusal`**，不要退回英文字面比對（中文拒答會穿過去、白燒兩次 LLM 稽核）。**節點設計理由與 validator 實測見 [`docs/AGENTIC.md`](docs/AGENTIC.md)** |
 
 **⚠ agentic 一題燒 50~60 次 LLM 呼叫**（單發管線 3~4 次）：每個子問題內部各跑一次完整 `rq.retrieve()`，所以查詢理解層被乘上子問題數。全碼庫 `call_llm` 共 15 個呼叫點。
 

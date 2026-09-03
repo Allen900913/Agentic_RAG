@@ -79,7 +79,7 @@ graph TB
     S1 --> S2["Query Understanding<br/>hard filter + query rewrite"]
     S2 --> RET
 
-    R -->|Agentic| A1["agentic_rag_v2.py<br/>LangGraph Supervisor"]
+    R -->|Agentic| A1["agentic_rag_version/__init__.py<br/>LangGraph Supervisor"]
     A1 --> A2["plan: 拆平行子問題"]
     A2 --> A3["execute: 確定性檢索<br/>＋_check_sufficiency 判足夠"]
     A3 -->|不足| A4["replan: 針對缺口補查"]
@@ -207,7 +207,7 @@ graph TB
 - **Tier cascade**：嚴格 filter 零結果時自動退到寬鬆 filter（拿掉年份留 ticker+type）→ 再退到無 filter，避免「猜錯條件」導致整題查不到東西。
   > ⚠ **「Tier 1 命中」不等於「答得了」**：`fiscal_year` 的 filter 曾與 `report_label_year` 做雙座標系 OR，於是問 FY2025 會命中一份「曆年標籤是 2025、財年其實是 2026」的季報，而真正含 FY2025 年度數字的年報反被擋掉。現在 label-year **只能放寬命中、不能自己構成命中**。
 
-### Agentic 管線（`agentic_rag_v2.py`）
+### Agentic 管線（`agentic_rag_version/__init__.py`）
 單管線對「一次要回答多件事」或「必須先查 A 才知道要查 B」的問題力有未逮，因此另建 LangGraph Supervisor 管線：
 
 | 節點 | 做什麼 | 模型 |
@@ -301,7 +301,7 @@ docker run -d --name qdrant --restart unless-stopped -p 6333:6333 -p 6334:6334 \
 
 | 變數 | 必填 | 用途 |
 |---|---|---|
-| `NVIDIA_API_KEY` | ✅ | `rag_query.py` / `agentic_rag_v2.py` 的預設 LLM（NVIDIA NIM `gpt-oss-120b`） |
+| `NVIDIA_API_KEY` | ✅ | `rag_query.py` / `agentic_rag_version/__init__.py` 的預設 LLM（NVIDIA NIM `gpt-oss-120b`） |
 | `SEC_IDENTITY` | ✅ | 格式 `Your Name your.email@example.com`，SEC EDGAR 公平存取政策要求 |
 | `QDRANT_URL` | 建議 | `http://localhost:6333`；留空則走 local embedded mode |
 | `GEMINI_API_KEY` | 選用 | 只有改用 `-m gemini-*` 模型時 |
@@ -323,8 +323,8 @@ python rag_query.py -q "Apple 目前有什麼有利或是不利的新聞？"
 python rag_query.py -q "NVIDIA 最新財報的毛利率是多少？" -m gemini-2.5-flash   # 改走 Gemini
 
 # ⑧ Agentic 管線（多步驟拆解 + 自我檢核，適合複合題 / 多跳題）
-python agentic_rag_v2.py -q "比較 NVIDIA 與 Tesla 最新一季的毛利率差距"
-python agentic_rag_v2.py -q "..." -v          # 印節點決策與中間輸出
+python -m agentic_rag_version -q "比較 NVIDIA 與 Tesla 最新一季的毛利率差距"
+python -m agentic_rag_version -q "..." -v          # 印節點決策與中間輸出
 
 # 互動式多輪對話
 python rag_query.py
@@ -396,7 +396,7 @@ streamlit run app.py
 python eval/gen_reference_answers.py
 
 # 2. 產生結果檔（agentic 版；單管線版改跑 eval_generation_llm_judge.py）
-python eval/run_agentic_on_evalset.py --module agentic_rag_v2
+python eval/run_agentic_on_evalset.py --module agentic_rag_version
 
 # 3. 切到 .venv-ragas 算指標
 .venv-ragas/Scripts/python.exe eval/eval_ragas_vs_rubric.py \

@@ -971,7 +971,7 @@ def main() -> None:
     parser.add_argument("--translate-query-en", action="store_true",
                         help="入口把 query 翻成英文一次，dense/sparse/rewrite/rerank 全部改用（解 cross-lingual 失真，見 CHANGELOG 2026-07-08）")
     parser.add_argument("--full-translate-en", action="store_true",
-                        help="檢索中間層一律用英文（dense+sparse recall + rerank 全英文），對齊 agentic_rag_v2 的 full_translate_en=True，做「單次檢索 vs agentic」公平對照用")
+                        help="檢索中間層一律用英文（dense+sparse recall + rerank 全英文），對齊 agentic_rag_version 的 full_translate_en=True，做「單次檢索 vs agentic」公平對照用")
     parser.add_argument("--compress", action="store_true",
                         help="檢索後句級抽取：生成前把每個 chunk 的相關句逐字抽出擺前面（見 CHANGELOG "
                              "2026-07-14）。預設關，維持既有 baseline 向後相容。")

@@ -11,7 +11,7 @@
 **① 是 ② 的必要條件**：一題若根本不會觸發 web，錄再多 fixture 也救不了它——那是路由問題
 不是內容問題。所以先用零 Tavily 的方式把 ① 量完，再決定要為哪些題花錢錄 fixture。
 
-**怎麼做到零網路**：把 `agentic_rag_v2._tavily_search` 換成計數樁（回空字串），其餘管線
+**怎麼做到零網路**：把 `agentic_rag_version._tavily_search` 換成計數樁（回空字串），其餘管線
 **原封不動**跑真的 Plan／檢索／Grade。這樣量到的「會不會打 web」與生產判斷式是同一條路，
 不是另外抄一份判斷（抄寫版本會漂移，見 `verify_web_gate_isolation.py` 閘門① 的教訓）。
 ⚠ 樁回空字串 ＝ 模擬「web 有打、但什麼都沒撈到」。所以本檔**不量答案品質**，只量路由。
@@ -81,7 +81,7 @@ def main(argv=None) -> int:
     os.environ.setdefault("AGENTIC_WEB_SEARCH", "true")   # 路由要開才量得到；Tavily 由樁攔住
 
     import rag_query as rq                      # noqa: E402
-    import agentic_rag_v2 as ar                 # noqa: E402
+    import agentic_rag_version as ar                 # noqa: E402
 
     if not ar.ENABLE_WEB_SEARCH:
         print("[ABORT] ENABLE_WEB_SEARCH 是關的 → 每一題都會是 0 次，量尺沒有判別力。")

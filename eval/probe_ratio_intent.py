@@ -1,7 +1,7 @@
 """量 ratio 意圖的 LLM 分類（**含 LLM，非零噪音，不是閘門**）。
 
 **這支測什麼**：2026-08-25 起，「這個子問題問的是不是 Fundamentals 的某個比率欄位」由
-`agentic_rag_v2._classify_ratio_fields` 判（詞表 `_RATIO_INTENT_RE` 退位成 LLM 失手時的
+`agentic_rag_version._classify_ratio_fields` 判（詞表 `_RATIO_INTENT_RE` 退位成 LLM 失手時的
 fallback）。分工判準見 CLAUDE.md〈LLM 與 Python 的分工〉：
 
 | 半 | 誰做 | 量尺 |
@@ -36,7 +36,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-import agentic_rag_v2 as ar     # noqa: E402
+import agentic_rag_version as ar     # noqa: E402
 
 # (子問題, 期望欄位集合, 為什麼)
 CASES: list[tuple[str, set[str], str]] = [

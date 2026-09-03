@@ -1,5 +1,9 @@
 """
-agentic_rag_v2.py — Supervisor + Subagent + RAG-as-Tool 版 agentic RAG（2026-07-26 重構）。
+agentic_rag_version — Supervisor + Subagent + RAG-as-Tool 版 agentic RAG。
+
+⚠ 2026-09-03 套件化：本檔原本是單一檔案 `agentic_rag_v2.py`（4549 行），已整個搬成
+`agentic_rag_version/__init__.py`，正在逐群拆成子模組。**搬移那一步刻意零語意變更**
+（同一個模組命名空間、同一份 globals），這樣四道閘門的 512 項就是搬移正確性的證明。
 
 與 agentic_rag_nv.py 的差異：nv 版是六節點固定 state machine（檢索是節點內的純函式呼叫）。本檔把它改成
 「Planner（Supervisor）→ Executor（兩個 agent）→ Replanner → loop → Synthesize」的多智能體編排，

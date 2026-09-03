@@ -56,7 +56,7 @@
 
 ## 觀察：multi_hop 的「比大小」目前沒有 Python 在做（量過了，沒有損害）
 
-`agentic_rag_v2.py` 裡所有 `max()` 都在比日期或 rerank 分數，**沒有一行在比「哪家公司的指標大」**。
+`agentic_rag_version/__init__.py` 裡所有 `max()` 都在比日期或 rerank 分數，**沒有一行在比「哪家公司的指標大」**。
 六個子問題各自撈回 chunk → `_fair_select` 挑一批 → 由 Generator 自己讀著數字比。
 這違反 CLAUDE.md〈LLM 與 Python 的分工〉的「比對／算術給 Python」，而且**比錯了五道 validator 全綠**。
 
@@ -136,7 +136,7 @@ _check_sufficiency        只裁決：sufficient/missing/new_query/relevant_ids
 ### 為什麼**不**做成兩個 LangGraph node（這是這份計畫最重要的取捨）
 
 retrieve↔grade 迴圈現在跑在 `_run_one_todo` **裡面**，而 `_node_execute` 用 ThreadPoolExecutor
-一個 wave **平行**跑多個子問題（`agentic_rag_v2.py:3681`）。拆成兩個 graph node，迴圈就變成
+一個 wave **平行**跑多個子問題（`agentic_rag_version/__init__.py:3681`）。拆成兩個 graph node，迴圈就變成
 graph 的邊 ＝ 單一控制流 → **5 個子問題序列化**，一題的秒數直接翻幾倍（除非另外用 Send
 重建 fan-out，那是大得多的改動）。
 
@@ -168,7 +168,7 @@ flow 16 題 → `web_grounded` 14／**`kb_only` 2**；record 7 題 → `kb_only`
 
 ### 逐檔逐函式
 
-**A. `agentic_rag_v2.py`**
+**A. `agentic_rag_version/__init__.py`**
 
 - **A1 `_PLANNER_PROMPT`（:1712）** 輸出格式 `["子問題"]` → `[{"task": …, "route": …}]`。
   **刪掉三段**——它們存在的唯一理由就是「沒有 route 欄位，只好叫 Plan 別在文字裡暗示來源」：

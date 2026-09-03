@@ -10,7 +10,7 @@
 閘門⑤ Grader 時效判準：snapshot 的 Checker prompt 逐字不變；日期算術真值表（零 LLM）。
 
 
-**這支在守什麼**：`agentic_rag_v2._run_executor_deterministic` 裡那個 web 補救判斷式，
+**這支在守什麼**：`agentic_rag_version._run_executor_deterministic` 裡那個 web 補救判斷式，
 必須滿足「生產打得到、eval 一次都不漏」。兩者是不同的護欄，很容易被誤當成同一個：
 
 | 條件 | 角色 |
@@ -41,7 +41,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
-import agentic_rag_v2 as ar  # noqa: E402
+import agentic_rag_version as ar  # noqa: E402
 
 LIVE = ar.FRESHNESS_LIVE
 SNAP = ar.FRESHNESS_SNAPSHOT
@@ -54,7 +54,7 @@ ar._tavily_search = lambda q: _calls.append(q) or "（stub，絕不連網）"
 
 
 def _gate(freshness: str, web_enabled: bool, sufficient: bool, task: str) -> bool:
-    """必須與 `agentic_rag_v2._run_executor_deterministic` 的 web 補救判斷式**逐字一致**。
+    """必須與 `agentic_rag_version._run_executor_deterministic` 的 web 補救判斷式**逐字一致**。
 
     ⚠ 這裡是抄寫、不是 import——判斷式寫在函式中段，無法單獨取用。
     兩份漂移的話這支會安靜地驗錯的東西，所以改動那一行時**務必同步改這裡**。

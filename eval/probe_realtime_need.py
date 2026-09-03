@@ -32,7 +32,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import rag_query as rq          # noqa: E402
-import agentic_rag_v2 as ar     # noqa: E402
+import agentic_rag_version as ar     # noqa: E402
 
 # (問題, 期望的 realtime_need, 為什麼)
 CASES = [

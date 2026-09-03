@@ -122,7 +122,7 @@ import sys
 from pathlib import Path
 
 # ⚠ `hasattr` 不是防禦性寫作的裝飾：本檔會被 `verify_answer_validators` 閘門⑱ 當函式庫
-#   import，而那時 `agentic_rag_v2` 已經把 `sys.stdout` 換成 `_ThreadLocalMuteStream`
+#   import，而那時 `agentic_rag_version` 已經把 `sys.stdout` 換成 `_ThreadLocalMuteStream`
 #   （沒有 `reconfigure`）→ import 當場炸。當腳本跑時它照樣生效。
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")   # 本檔輸出含 ⚠／全形，cp950 會炸
@@ -132,7 +132,7 @@ sys.path.insert(0, str(_ROOT))
 
 import rag_query as rq                                        # noqa: E402
 # 引用抽取用生產的**唯一定義點**：引用格式改了這支要跟著改，不要自己抄一份 regex。
-from agentic_rag_v2 import _extract_citations                 # noqa: E402
+from agentic_rag_version import _extract_citations                 # noqa: E402
 
 QUESTION_SET = _ROOT / "eval" / "news_routing_questions.json"
 STATES = ("web_grounded", "admits_gap", "kb_only", "ungrounded", "no_answer")

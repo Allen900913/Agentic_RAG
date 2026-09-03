@@ -1,7 +1,7 @@
 """多實體比較題的逐條斷言（**零 LLM、零網路、零 Qdrant**，只讀結果檔）。
 
 **為什麼需要這一支**：`multi_hop` 的 5 題全是「在 A、B、C 中，X 最高的是哪一家？」。
-2026-08-29 查過全碼庫：**沒有任何一行 Python 在做這個比較**（`agentic_rag_v2.py` 裡所有
+2026-08-29 查過全碼庫：**沒有任何一行 Python 在做這個比較**（`agentic_rag_version/__init__.py` 裡所有
 `max()` 都在比日期或 rerank 分數）。六個子問題各自撈回 chunk → `_fair_select` 挑一批 →
 **由 Generator 自己讀著數字比大小**。
 

@@ -1,6 +1,6 @@
 """run_agentic_on_evalset.py — 讓 agentic RAG 產出「與 chunking 實驗可並排比較」的結果檔。
 
-目的（2026-07-24）：把目前指定的 agentic 模組（預設 agentic_rag_v2）跑在**與單管線同一份題庫
+目的（2026-07-24）：把目前指定的 agentic 模組（預設 agentic_rag_version）跑在**與單管線同一份題庫
 ＋同一個 collection** 上，
 輸出**與 eval_generation_llm_judge.py 相同 schema** 的 generation_judge.json（含 answer +
 contexts），再丟進**原封不動的** eval_ragas_vs_rubric.py 跑同一套 RAGAS 六指標——agentic 就
@@ -147,7 +147,7 @@ def main() -> None:
             stream.reconfigure(encoding="utf-8", errors="replace")
 
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--module", default="agentic_rag_v2", help="要跑的 agentic 模組")
+    ap.add_argument("--module", default="agentic_rag_version", help="要跑的 agentic 模組")
     ap.add_argument("--collection", default=DEFAULT_COLLECTION,
                     help="Qdrant collection（預設＝生產的 rq.COLLECTION_NAME，與單次版對照必須同一個）")
     ap.add_argument("--eval-set", default=str(EVAL_SET))
@@ -158,7 +158,7 @@ def main() -> None:
     ap.add_argument("--no-validator", action="store_true",
                     help="關閉 agentic 的 Reflection 幻覺稽核（省一次 LLM 呼叫）")
     ap.add_argument("--no-web", action="store_true",
-                    help="關閉 agentic_rag_v2 的 web_search（Tavily）。eval 強烈建議加此旗標："
+                    help="關閉 agentic_rag_version 的 web_search（Tavily）。eval 強烈建議加此旗標："
                          "golden answer 是根據 KB 資料生成的，且網路搜尋結果不可重現，摻入會傷 correctness/"
                          "context_recall 並讓結果無法重現比較。對沒有 web_search 的模組（如 agentic_rag_nv）無作用。")
     ap.add_argument("--freshness-mode", choices=["snapshot", "live"], default="snapshot",

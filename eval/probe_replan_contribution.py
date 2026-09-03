@@ -67,7 +67,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-import agentic_rag_v2 as ar     # noqa: E402
+import agentic_rag_version as ar     # noqa: E402
 
 # 題目：兩組，刻意讓 replan 有機會出手／刻意讓它沒事可做。
 #   · LIVE 組＝已知會走 live 補救路徑的四題（取自 record_web_fixture.QUERIES）

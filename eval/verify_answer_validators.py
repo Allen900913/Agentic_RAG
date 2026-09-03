@@ -37,7 +37,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")   # 本檔輸出含 ↔／⚠／全形，Windows 預設 cp950 會在 gate8 當場炸
 
-import agentic_rag_v2 as ar   # noqa: E402
+import agentic_rag_version as ar   # noqa: E402
 
 _PASS = _FAIL = 0
 _FAILURES: list[str] = []
@@ -1352,7 +1352,7 @@ def gate15_period_fallback_disclosure() -> None:
     #      todo 的 rnd 0 照樣是「第一輪」→ `attributable=(rnd == 0)` 為真 → col-10 的假前提從
     #      另一扇門原封不動地回來，而 ⑮f 全綠（它驗的條件確實還在）。這一格就是那扇門。
     #      實測 replanner 會生出「改用網路搜尋查…」→「即時網路搜尋…」這種同義待辦串，
-    #      裡面夾帶的年份／filing type 都是機器腦補的（見 agentic_rag_v2.py `_node_replan`）。
+    #      裡面夾帶的年份／filing type 都是機器腦補的（見 agentic_rag_version/__init__.py `_node_replan`）。
     _appends = []          # (所在函式, dict 節點)
     for _fname in ("_node_plan", "_node_replan"):
         _fn = funcs.get(_fname)

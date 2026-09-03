@@ -113,7 +113,7 @@ def make_qdrant_client():
 # ── 答案尾端的「證據尾巴」──────────────────────────────────────────────────────
 # 生成器會在答案後面接一段 metadata（`---\n📚 引用來源…` 或 `---\n⚠ 口徑說明…`）。那是**呈現層**
 # 不是答案內容，任何「對答案本身做判斷」的地方都該先把它切掉。
-# ⚠ 這個概念在 repo 裡**已經各自長出四份定義**（`agentic_rag_v2` 的 producer、
+# ⚠ 這個概念在 repo 裡**已經各自長出四份定義**（`agentic_rag_version` 的 producer、
 # `eval/check_number_defects.FOOTER`、`eval/check_rounding_fidelity._TAIL_RE`、
 # `eval/eval_ragas_vs_rubric` 的 footer strip）。這裡是**唯一的正式定義**，新的消費端一律用它；
 # 既有那幾份的收攏見 BACKLOG（動 RAGAS 那份會移動分數，不可順手改）。
@@ -620,7 +620,7 @@ def _get_latest_10q_periods(client) -> dict:
 #
 # ⚠ **財年不等於曆年**：`NVDA_10K_2026` 是 FY2026 FY，而 `NVDA_10Q_202604` 是 **FY2027 Q1**
 # ——後者才新。同一個坑 agentic 端已經踩過並用 `_fiscal_rank` 修好（見
-# `agentic_rag_v2._fiscal_rank` 的 NVDA 反轉註解）；這裡是**同一套序**放在共用層，
+# `agentic_rag_version._fiscal_rank` 的 NVDA 反轉註解）；這裡是**同一套序**放在共用層，
 # 讓兩條管線不要各寫一份。
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -1692,7 +1692,7 @@ def _payload_to_chunk(payload: dict, rrf_score: float, raw_rerank: float) -> dic
     """Qdrant payload → 下游共用的 chunk dict。**這是唯一的建構點**（retrieve 與任何補撈路徑都走它）。
 
     ⚠ 為什麼抽成具名函式：2026-08-21 實測，`period_basis` 在 payload 裡、也建了索引，
-      但**沒有被帶進 chunk dict**，於是 `agentic_rag_v2._basis_disclosure_notice`
+      但**沒有被帶進 chunk dict**，於是 `agentic_rag_version._basis_disclosure_notice`
       在生產上結構性永遠不觸發。而它的閘門之所以全綠，是因為測試自己造 dict、
       親手寫上了 `period_basis`——量尺與被測物耦合，這是同類第五次。
       抽成函式之後，閘門可以拿**真實 payload 餵這個生產建構子**，
@@ -1707,7 +1707,7 @@ def _payload_to_chunk(payload: dict, rrf_score: float, raw_rerank: float) -> dic
         "chunk_type":       payload.get("chunk_type", "n/a"),
         # ↓ 期別三欄（2026-08-19 補）。加進來之前，任何需要「這個 chunk 是哪一節、哪一期」
         #   的下游都得自己再掃一次 Qdrant——實測被迫這麼做的有三處：
-        #   agentic_rag_v2 的期別 validator、`_scan_kb_coverage`、
+        #   agentic_rag_version 的期別 validator、`_scan_kb_coverage`、
         #   eval/probe_temporal_interference。payload 本來就有，只是沒帶出來。
         "item_id":          payload.get("item_id", ""),
         "filing_type":      payload.get("filing_type", ""),

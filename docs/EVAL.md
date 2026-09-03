@@ -718,7 +718,7 @@ KB 原本只有**一年**（21 份），所以「答錯期別」結構上幾乎�
 .venv/Scripts/python.exe eval/gen_reference_answers.py
 
 # ② 產生結果檔：agentic 版
-.venv/Scripts/python.exe eval/run_agentic_on_evalset.py --module agentic_rag_v2 \
+.venv/Scripts/python.exe eval/run_agentic_on_evalset.py --module agentic_rag_version \
     --freshness-mode snapshot --output experiments/agentic/<名稱>.json
 #    單管線版
 .venv/Scripts/python.exe eval/eval_generation_llm_judge.py --output experiments/<名稱>.json

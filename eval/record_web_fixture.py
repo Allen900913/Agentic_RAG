@@ -43,7 +43,7 @@ from pathlib import Path
 # ⚠ **這一行是被一次真實的付費長跑炸掉逼出來的**（2026-09-01）：web 內容含 ` `
 #   （窄不斷行空格），Windows 預設 cp950 編不出來 → **進度列印**當場 UnicodeEncodeError。
 #   炸點在答案算完之後，所以那一批的 LLM 與 Tavily 額度全燒完才把結果丟掉。
-#   必須早於 `import agentic_rag_v2`：它會把 sys.stdout 包起來並保存 `_real` 參考，
+#   必須早於 `import agentic_rag_version`：它會把 sys.stdout 包起來並保存 `_real` 參考，
 #   而 reconfigure 是**就地**改編碼，先改再被包住才生效。
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 sys.stderr.reconfigure(encoding="utf-8", errors="replace")
@@ -84,7 +84,7 @@ def main(argv=None) -> int:
                          "不完整、正在補錄的中途才用；驗收絕不要帶")
     args = ap.parse_args(argv)
 
-    # ⚠ 這幾個必須早於 import agentic_rag_v2
+    # ⚠ 這幾個必須早於 import agentic_rag_version
     os.environ["RAG_WEB_REPLAY"] = args.fixture
     os.environ["RAG_WEB_REPLAY_MODE"] = args.mode
     os.environ["RAG_REPLAY_CACHE"] = args.replay_cache
@@ -117,7 +117,7 @@ def main(argv=None) -> int:
     sys.path.insert(0, str(_ROOT))
     import rag_query as rq                      # noqa: E402
     import web_replay as _wr                    # noqa: E402
-    import agentic_rag_v2 as ar                 # noqa: E402
+    import agentic_rag_version as ar                 # noqa: E402
 
     if args.mode == "record" and not os.getenv("TAVILY_API_KEY"):
         print("[ABORT] 沒有 TAVILY_API_KEY，錄不到任何 web 回應。")
