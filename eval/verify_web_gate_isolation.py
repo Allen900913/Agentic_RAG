@@ -1523,12 +1523,36 @@ def _check_monkeypatch_reaches_callers() -> int:
         "ENABLE_WEB_SEARCH", "QUERY_WEB_BUDGET", "_build_temporal_contract",
         "_check_sufficiency", "_fallback_local_summary", "_get_kb_coverage",
         "_get_models", "_retrieve_chunks", "_run_executor", "_run_one_todo",
-        "_tavily_search", "_web_query_en", "_write_final_answer",
+        "_tavily_raw", "_tavily_search", "_web_query_en", "_write_final_answer",
     }
-    _assign = _re.compile(r"\b_?ar\.([A-Za-z_][A-Za-z_0-9]*)\s*=(?!=)")
+    # ⚠ **用 AST 不用 regex**（2026-09-03 被踩出來）：第一版是
+    #   `re.compile(r"\b_?ar\.(\w+)\s*=(?!=)")`，而 ⑦e 那行是**元組賦值**
+    #   `ar._tavily_raw, ar.ENABLE_WEB_SEARCH = _boom, True` —— regex 匹配不到，
+    #   於是 `_tavily_raw` 從來沒進過凍結清單；拆 webtools 時它被留成裸用，⑦e 當場 FAIL。
+    #   **「從腳本反推」的價值全繫於反推得完整**，而這正是它會漏的方式。
     found: set[str] = set()
     for p in sorted(_P(__file__).parent.glob("*.py")):
-        found |= set(_assign.findall(p.read_text(encoding="utf-8")))
+        try:
+            t = _ast.parse(p.read_text(encoding="utf-8"))
+        except (OSError, SyntaxError):
+            continue
+        for node in _ast.walk(t):
+            tgts = []
+            if isinstance(node, _ast.Assign):
+                tgts = list(node.targets)
+            elif isinstance(node, (_ast.AugAssign, _ast.AnnAssign)):
+                tgts = [node.target]
+            flat = []
+            while tgts:
+                x = tgts.pop()
+                if isinstance(x, (_ast.Tuple, _ast.List)):
+                    tgts += list(x.elts)
+                else:
+                    flat.append(x)
+            for x in flat:
+                if (isinstance(x, _ast.Attribute) and isinstance(x.value, _ast.Name)
+                        and x.value.id in ("ar", "_ar")):
+                    found.add(x.attr)
     missing = found - FROZEN
     _ck("⑬a 凍結清單涵蓋 eval 實際 patch 的每一個名字", not missing,
         f"清單漏了 {sorted(missing)}——拆分時不會被保護")
