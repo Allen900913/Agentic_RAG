@@ -161,6 +161,41 @@ from .validators import (   # noqa: E402
     _NUMBER_REVISE_SUFFIX,
     _DUAL_SOURCE_REVISE_SUFFIX,
 )
+from .planning import (   # noqa: E402
+    CHECKER_MODEL,
+    MAX_SUBQUERIES,
+    POOL_RETURN_K,
+    FRESHNESS_LIVE,
+    VALID_ROUTES,
+    _ROUTE_LEGACY_DEFAULT,
+    _ROUTE_UNCERTAIN_DEFAULT,
+    _loads_json_lenient,
+    _coerce_bool,
+    _PLANNER_PROMPT,
+    _parse_plan_output,
+    _plan_subqueries,
+    _CHECKER_PROMPT,
+    _CHECKER_LIVE_RECENCY_BLOCK,
+    _check_sufficiency,
+)
+from .gaps import (   # noqa: E402
+    FRESHNESS_SNAPSHOT,
+    _is_dependent_hop,
+    _resolve_hop_entity,
+    _fill_dependent_hop,
+    _build_temporal_contract,
+    _build_todo_temporal_scope,
+    _news_freshness_gaps,
+    _unmet_realtime_gaps,
+    _unfulfilled_web_route_gaps,
+    _BASIS_NOTICE_MARK,
+    _EXPLICIT_FY_RE,
+    _FUND_PCT_TMPL,
+    _ttm_field_values,
+    _value_stated,
+    _basis_disclosure_notice,
+    _format_unresolved_freshness_notice,
+)
 from .chunks import (   # noqa: E402
     WRITER_BUDGET_BASE,
     WRITER_BUDGET_PER_FACET,
@@ -288,15 +323,9 @@ rq.call_llm = _nvidia_call_llm
 # 代價：gpt-oss-120b 偶爾吐全形【】引用，靠下游 _validate_and_fix_citations 校正（已端到端驗證）。
 # 與 CHECKER_MODEL 同模型無妨（不同 prompt、不同任務）。benchmark 見 experiments/agentic/_bench_gen.txt。
 GEN_MODEL       = os.getenv("AGENTIC_GEN_MODEL", "openai/gpt-oss-120b")
-# CHECKER_MODEL：planner 拆解 / sufficiency 判斷 / reflection 幻覺稽核共用（要結構化 JSON 可靠 + 快）。
-# gpt-oss-120b：tool-call/結構化輸出快又合法、無下架風險。
-CHECKER_MODEL   = os.getenv("AGENTIC_CHECKER_MODEL", "openai/gpt-oss-120b")
 
 RERANK_GATE_TAU   = 0.5   # rerank_score(sigmoid) 門檻：僅供 trace/參考；夠不夠的最終判斷交給 Checker。
 MAX_REWRITES      = 2     # 每個子問題的補救改寫上限（防迴圈 / 省 token）。
-MAX_SUBQUERIES    = 7     # planner 拆解上限。設 7 讓 Magnificent Seven 等具名集合能逐一列滿(5 會被迫
-                          #   丟掉 2 家,news-13 就是這樣漏掉 NVDA);超過 7 的集合走 prompt 的「寬鬆 fallback」。
-POOL_RETURN_K     = int(os.getenv("AGENTIC_POOL_RETURN_K", "5"))   # 餵給 Checker 看的候選片段數（top-k by rerank）。env 可覆蓋供 ablation。
 COMMIT_TOP_K      = int(os.getenv("AGENTIC_COMMIT_TOP_K", str(rq.DEFAULT_TOP_K)))   # 每個子問題 advance 時收進 collected 的 top-k。env 可覆蓋供 ablation。
 WRITER_MAX_CHUNKS = 8     # 單發/fallback 路徑用的固定 chunk 上限（防 TPM 爆）；synthesize 改走自適應預算。
 # ── 執行層開關（fix 2026-07-29）──────────────────────────────────────────────────
@@ -338,11 +367,6 @@ WEB_SEARCH_MAX_CALLS = int(os.getenv("AGENTIC_WEB_SEARCH_MAX_CALLS", "3"))
 # 去重併池）已足以涵蓋 top-5，不傷品質。
 RAG_SEARCH_MAX_CALLS = int(os.getenv("AGENTIC_RAG_SEARCH_MAX_CALLS", "4"))
 
-# 「最近／最新」有兩種不同語意：
-#   live     = 截至真實今天；KB 落後且 web 無法補齊時要揭露 cutoff。
-#   snapshot = 封閉語料評測；「最新」只表示 collection 中最新可用資料，不拿 wall clock 製造缺口。
-FRESHNESS_LIVE = "live"
-FRESHNESS_SNAPSHOT = "snapshot"
 FRESHNESS_MODES = {FRESHNESS_LIVE, FRESHNESS_SNAPSHOT}
 
 # 預設是否開 Reflection（LLM 幻覺稽核）。eval 端 --no-validator 會把它關掉（沿用舊 CLI 參數名）。
@@ -455,18 +479,7 @@ def _get_models():
 #   它是「用硬編碼詞表做感知」的第三個死者（前兩個：`rq.looks_like_news_query`、
 #   `_RELATIVE_TIME_RE`）。要判「這個待辦該不該上網」請讀 `route` 欄位。
 
-# 路由：這個子問題該去哪裡拿資料。**封閉集合**——CLAUDE.md 說硬編碼詞表是警訊，
-# 而「格式定義的封閉集合」是那條規則明列的正當例外（同 `VALID_*_ITEMS`）。
-VALID_ROUTES = ("kb", "web", "both")
 
-# ⚠ **兩個預設值刻意不同，因為它們回答的是不同的問題**（判準見 `_parse_plan_output`）：
-#   · 舊格式的純字串 → `kb`：管的是**可重現性**。既有 fixture 是在「KB 先撈、web 當
-#     fallback」的世界錄的；落到 web/both 會讓每一份既有重放都憑空多打網路 ＝ 基準不再可比。
-#   · 新格式缺 route／填了非法值 → `both`：管的是**代價不對稱**（同 `realtime_need` 那條
-#     「判不出來填 days 不填 none」）。誤判成 kb 會讓新聞題**拿財報冒充新聞且零揭露**，
-#     那個失敗看不見；誤判成 both 只是多打一次網路。
-_ROUTE_LEGACY_DEFAULT = "kb"
-_ROUTE_UNCERTAIN_DEFAULT = "both"
 
 # 時效需求分級 → 容忍幾天（2026-08-13）。**分工**：「這題要多新」沒有唯一機械答案 → 交給 Grader
 # 判（`realtime_need` 欄位，只在 live 模式問）；「來源多舊」是確定性的 → 交給 Python 從檔名算。
@@ -477,591 +490,11 @@ _ROUTE_UNCERTAIN_DEFAULT = "both"
 
 
 
-def _is_dependent_hop(task: str) -> bool:
-    """依賴型第二跳：帶未解回指代名詞(該公司…)且句中沒點名任何具體公司。這種子問題要等
-    第一跳辨識出公司、回填實體後才能正確檢索。已含具體公司名 → 不算未解(planner 已自行填好)。"""
-    if not _BACKREF_RE.search(task or ""):
-        return False
-    return not _mentioned_tickers(task)
 
 
-def _resolve_hop_entity(todos: list[dict], collected: list[dict]) -> str | None:
-    """從已完成待辦推出「第一跳辨識出的公司」正規名,供第二跳回填『該公司』。純確定性:
-    先看非依賴型 done 待辦的局部結果文字命中的 ticker(眾數),再退回已 commit chunk 的 owner ticker。"""
-    from collections import Counter
-    cnt: Counter = Counter()
-    for t in todos:
-        if t.get("status") == "done" and not _is_dependent_hop(t.get("task", "")):
-            res = t.get("result", "") or ""
-            for tk in rq._find_all_ticker_aliases(res.lower(), res):
-                cnt[tk] += 1
-    if not cnt:   # summary 沒明確命中 → 退回 commit chunk 的 owner ticker
-        for c in collected:
-            tk = c.get("ticker") or (c.get("payload") or {}).get("ticker")
-            if tk:
-                cnt[tk] += 1
-    if not cnt:
-        return None
-    top_ticker = cnt.most_common(1)[0][0]
-    return _TICKER_CANON.get(top_ticker, top_ticker)
 
 
-def _fill_dependent_hop(task: str, entity: str) -> str:
-    """把第二跳子問題裡的『該公司…』回指代名詞換成解出的具體公司名。"""
-    return _BACKREF_RE.sub(entity, task)
 
-
-def _build_temporal_contract(freshness_mode: str) -> str:
-    coverage_text = _format_kb_coverage(_get_kb_coverage())
-    if freshness_mode == FRESHNESS_SNAPSHOT:
-        policy = """時間模式：snapshot（封閉知識庫評測）。
-- 「最近／最新」只表示下方 KB snapshot 中最新可用文件，不表示真實世界今天。
-- 只能使用 snapshot 或工具結果明確出現的期間；絕不靠模型記憶推算季度、年份或月份。
-- 不要因 KB 早於 wall clock 而新增 web 待辦或在答案加入 cutoff 警語。
-- 使用者明確指定期間時，必須尊重原期間，不得換成 KB 最新期間。"""
-    else:
-        web_state = "可用" if ENABLE_WEB_SEARCH else "停用"
-        policy = f"""時間模式：live。今天是 {_get_as_of_date().isoformat()}，web search 目前{web_state}。
-- 「最近／最新」表示截至今天；今天與 KB cutoff 是兩條獨立時間軸，不得混為一談。
-- 只能使用 snapshot 或工具結果明確出現的期間；絕不靠模型記憶推算季度、年份或月份。
-- 若新聞問題要求截至今天且 KB cutoff 較舊，先查 KB，再只針對 cutoff 後的缺口決定是否用 web。
-- 使用者明確指定期間時，必須尊重原期間，不得換成 KB 最新期間。"""
-    return policy + "\n\n" + coverage_text
-
-
-def _build_todo_temporal_scope(task: str, freshness_mode: str) -> str:
-    """為單一 todo 產生精簡的 coverage 說明（餵給 Grader 的 `temporal_scope`）。
-
-    ⚠ 2026-08-15 起**不再回傳 freshness gap**。缺口改由執行完的實際結果算（`_news_freshness_gaps`），
-      理由見那支的 docstring。這裡回傳單一字串而不是留一個永遠是空 list 的第二欄——
-      留著等於是給下一個人一個會漂移的死欄位。
-    """
-    coverage = _get_kb_coverage()
-    scope_coverage = _format_kb_coverage(coverage, _mentioned_tickers(task) or None)
-    if freshness_mode == FRESHNESS_SNAPSHOT:
-        return ("snapshot 模式：『最近／最新』= KB 中最新可用資料；不要參照 wall clock，"
-                "不要加入 cutoff 警語。\n" + scope_coverage)
-    return (f"live 模式：今天是 {_get_as_of_date().isoformat()}。不得把今天誤認成 KB cutoff；"
-            "不得創造未出現在下方 snapshot 或工具結果中的期間。\n" + scope_coverage)
-
-
-def _news_freshness_gaps(chunks: list[dict], as_of: date) -> list[dict]:
-    """從**實際採用的 chunk** 算新聞時效缺口：用到了某家的 news、而該家 news cutoff 早於今天 → 一筆。
-
-    ⚠ **2026-08-19 起對 KB 恆回空集合**（KB 已不收新聞,沒有 `doc_type=news` 的 chunk）。
-    保留函式與 `eval/verify_answer_validators.py` 閘門④⑤ 的斷言,是為了「新聞復活時警語
-    立刻回來」——那些斷言餵的是合成 chunk,不讀 KB,所以現在仍有判別力。
-    ⚠ **但時效警語本身沒有跟著死**：它現在由 `_unmet_realtime_gaps` 供應（判準改成「這個
-    子問題需要即時資料、卻沒拿到 web 補充」）。兩種缺口併存,見 `_run_one_todo` 的接線。
-
-    ⚠ 2026-08-15 從「看問法」改成「看結果」。舊判準是兩個硬編碼詞表串聯：
-          `bool(_RELATIVE_TIME_RE.search(task)) and rq.looks_like_news_query(task)`
-      這正是 CLAUDE.md 明列的反模式（用字串比對做感知），而**漏網的代價是零揭露**：
-      「Microsoft 最新一季的 Azure 營收成長率」過得了 `_RELATIVE_TIME_RE`（有「最新」）卻過不了
-      `looks_like_news_query`（不是新聞措辭）→ 一句時效警語都不會印。
-      （2026-08-13 拿掉的是 **web 觸發**那兩道同名閘門；警語這道當時漏改，文件卻已寫成「全數移除」。）
-
-    改看結果之後判準是純比對、零詞表，而且更準：問法像新聞、答案其實全靠財報時，舊版會印一句
-    無關的新聞 cutoff 警語，新版不會。cutoff 取 **KB coverage 裡該 ticker 最新的一則新聞**
-    （警語講的是「KB 的新聞收到哪天」，不是「這次剛好引到哪一則」）。
-    """
-    if not chunks:
-        return []
-    cov = _get_kb_coverage()
-    if not cov.get("available"):
-        return []
-    used = {parts[0] for c in chunks
-            for parts in (_source_coverage_parts(str(c.get("source") or "")),)
-            if parts and parts[1] == "news"}
-    gaps: list[dict] = []
-    for ticker in sorted(used):
-        cutoff = _source_newest_date(
-            str(((cov.get("tickers", {}).get(ticker) or {}).get("news") or {}).get("source") or ""))
-        if cutoff and cutoff < as_of:
-            gaps.append({"ticker": ticker, "cutoff": cutoff.isoformat(),
-                         "as_of": as_of.isoformat(), "doc_type": "news"})
-    return gaps
-
-
-def _unmet_realtime_gaps(task: str, need: str, chunks: list[dict], as_of: date) -> list[dict]:
-    """這個子問題**需要即時資料**（Grader 判 `realtime_need != none`）→ 記一筆時效缺口。
-
-    ⚠ **2026-08-19 新增，補上 KB 拔除新聞後死掉的那道揭露。**
-      舊的唯一缺口來源 `_news_freshness_gaps` 的判準是「用了 KB 新聞、而那則新聞過期」。
-      KB 不收新聞之後那個判準**沒有指涉對象 → 恆回空集合 → 時效警語永遠不印**（實測）。
-      但風險沒有消失，只是換了位置：即時題 → Grader 正確判不足 → 去打 web →
-      **web 預算用完（`QUERY_WEB_BUDGET`）或搜不到** → 答案回頭用財報 chunk 生成 → 零揭露。
-      那正是 CLAUDE.md 記著的「把三週前的數字講成『今天股價』」，只是來源從新聞換成了 10-K。
-
-    判準刻意**只看 Grader 的 `realtime_need`**，不看問法、不看候選內容：
-      · 「需不需要即時資料」有判斷成分 → LLM（已在 Grader 內，不多花一次呼叫）
-      · 「這次有沒有拿到 web」是確定性的 → `_format_unresolved_freshness_notice` 用 `web_used` 篩
-    兩者分屬 CLAUDE.md〈LLM 與 Python 的分工〉的兩邊，這裡不重複判斷。
-
-    ⚠ 本函式**不檢查 `web_used`**：那個過濾統一在 `_format_unresolved_freshness_notice`
-      裡做（它已經有「這個待辦用了 web 就跳過」的邏輯）。兩邊都做會在未來漂移。
-    """
-    if need not in ("intraday", "days"):
-        return []
-    ticker = next(iter(sorted(_mentioned_tickers(task))), "")
-    ceiling = _kb_ceiling_date(chunks) if chunks else None
-    return [{"ticker": ticker, "cutoff": ceiling.isoformat() if ceiling else "",
-             "as_of": as_of.isoformat(), "doc_type": "realtime", "need": need}]
-
-
-def _unfulfilled_web_route_gaps(route: str, web_notes: list[str], chunks: list[dict],
-                                as_of: date) -> list[dict]:
-    """**被路由到 web 的待辦卻一次 web 都沒拿到** → 記一筆時效缺口。確定性，零 LLM。
-
-    ⚠ **刻意不看 `realtime_need`**（`_unmet_realtime_gaps` 走的是那條路）。那個欄位是
-      Grader 的三分類 LLM 輸出，BACKLOG 記著它在一個措辭族上實測 0/3；而且它要 Grader
-      跑過才有值——`route=web` ＋ 預算用完時我們根本沒跑到 Grader，那條路必然沉默。
-      這裡的判準是**結構性**的：Planner 說這題要上網，而網路一次都沒查到。零判斷成分。
-
-    ⚠ 只在 live 才會被呼叫（見 `_run_one_todo`）。snapshot 下 `_effective_route` 已把
-      route 降級成 kb，這裡也不會有陽性——**eval 基準因此一格不動**（閘門⑪z5）。
-    """
-    if route not in ("web", "both") or web_notes:
-        return []
-    ceiling = _kb_ceiling_date(chunks) if chunks else None
-    return [{"ticker": "", "cutoff": ceiling.isoformat() if ceiling else "",
-             "as_of": as_of.isoformat(), "doc_type": "realtime", "need": "days"}]
-
-
-# ── 口徑揭露 validator（確定性，零 LLM）─────────────────────────────────────────
-# 治的病（2026-08-20 實測 lex-17）：使用者問「營收成長率」沒指定口徑 → 答案給 10-K 的財年 18%，
-# 而 gold 是 Fundamentals 的 TTM 18.30%。**數字不是假的，錯的是口徑，而且沒有任何揭露**——
-# 兩個值差 0.3pt，讀者無從分辨自己拿到的是哪一種。
-#
-# ⚠ **刻意做成 validator 而不是 prompt 指令**。理由是本檔已經寫過一次的教訓：
-#   「Prompt 是機率性約束；snapshot / --no-web 再用 Python 硬擋」。而這裡要判的兩件事
-#   **都是確定性的**——「答案引了哪些 chunk」是 regex，「那些 chunk 是什麼口徑」是 payload
-#   的 `period_basis` 欄位（實測全庫只有兩個值：fundamentals=TTM 22 筆／其餘 fiscal_year 3805 筆）。
-#   照 CLAUDE.md〈LLM 與 Python 的分工〉，這一半不該交給 LLM 去記得。
-#
-# ⚠ 措辭刻意**只陳述事實、不宣稱原因**。Gemini 版的建議是「由於缺乏最新 TTM 數據」，
-#   但那個因果**可能是假的**：KB 裡可能有 TTM chunk，只是這次沒被引用。斷言一個查不到的原因
-#   就是在製造新的不可信內容——同 R4 選「並陳」不選「裁決」的理由。
-_BASIS_NOTICE_MARK = "⚠ 口徑說明："
-# 「問題自己講明了絕對期別」＝ 使用者要的就是財報期間，這時講 TTM 是雜訊（話太多方向）。
-# 只認**格式化的字面訊號**（yyyymm 期碼、年份＋財年字樣），不做語意判斷。
-_EXPLICIT_FY_RE = re.compile(r"(?:19|20)\d{2}\s*(?:財年|财年|會計年度|会计年度|年度)"
-                             r"|(?:fiscal\s*year|FY)\s*(?:19|20)?\d{2}", re.IGNORECASE)
-
-
-# Fundamentals chunk 裡「欄位名 : 12.34%」的取值。⚠ 這不是感知，是**解析本專案自己 ingest
-# 產生的固定格式**（見 data/edgar_processed/Fundamentals/*.txt），屬於格式定義的封閉集合。
-_FUND_PCT_TMPL = r"{field}\s*(?:\([^)]*\))?\s*[:：]\s*(-?\d+(?:\.\d+)?)\s*%"
-
-
-def _ttm_field_values(cited_chunks: list[dict], fields: list[str]) -> dict[str, str]:
-    """引用到的 TTM chunk 裡，被問欄位各自的值（`{"Revenue Growth": "18.30"}`）。認不出就不放。"""
-    out: dict[str, str] = {}
-    for c in cited_chunks or []:
-        if (c.get("period_basis") or "") != "TTM":
-            continue
-        txt = c.get("content") or ""
-        for f in fields:
-            m = re.search(_FUND_PCT_TMPL.format(field=re.escape(f)), txt, re.IGNORECASE)
-            if m:
-                out.setdefault(f, m.group(1))
-    return out
-
-
-def _value_stated(answer: str, val: str) -> bool:
-    """答案裡有沒有真的講出這個值。`18.30` 與 `18.3` 視為同一個；`118.3` 不算（前後要有邊界）。"""
-    trimmed = val.rstrip("0").rstrip(".") if "." in val else val
-    return re.search(rf"(?<![\d.]){re.escape(trimmed)}0*(?![\d])", answer or "") is not None
-
-
-def _basis_disclosure_notice(task: str, cited_chunks: list[dict], answer: str = "",
-                             ratio_fields: list[str] | None = None) -> str:
-    """答案只引到財報期間口徑的數字、卻是在回答一個沒指定口徑的比率題 → 回傳揭露警語。
-
-    沉默條件（全部是「話太多」方向的誤報對照——這道護欄的失敗方向不是漏印，是變成背景噪音）：
-      ① 不是比率／成長率題（市值、EPS 這類單一來源指標沒有口徑歧義）
-      ② 問題自己指定了絕對期別（`2025 財年`、`FY2026`、yyyymm 期碼）——那時財報口徑正是要的
-      ③ **答案裡真的講出了那個 TTM 值**
-
-    ⚠ ③ 原本寫的是「引用裡有 TTM chunk」，**那是錯的，而且是被自己要抓的行為解除武裝**
-      （2026-08-21 實測，lex-17）：補撈修好之後，答案確實引到 `MSFT_Fundamentals #0`，
-      眼前就是 `Revenue Growth (YoY): 18.30%`，它卻寫成
-      「全年與最近的 **TTM** 都在約 **18%** 左右【…chunk #0】」——**把 TTM 四捨五入成 18%，
-      再與 10-K 的財年 18% 併成同一個說法**。引用是真的、數字看起來也對，兩個口徑就這樣消失了。
-      而舊條件③ 看到「有 TTM chunk 被引用」就沉默 → **護欄正好在該叫的那一刻關掉**。
-      → 判準改成看**值有沒有出現在答案裡**（確定性字串比對，見 `_value_stated`）。
-
-    ⚠ 有值的時候警語就**把值講出來**，不是只講「這不是 TTM」：值逐字取自**答案自己引用的
-      那個 chunk**，所以仍然可追溯；這是 R4 那條「要求並陳不裁決」的同一個做法。
-    """
-    if not _has_ratio_intent(ratio_fields, task):
-        return ""
-    if _EXPLICIT_FY_RE.search(task or "") or rq._PERIOD_CODE_RE.search(task or ""):
-        return ""
-
-    fields = _resolve_ratio_fields(ratio_fields, task)
-    ttm_vals = _ttm_field_values(cited_chunks, fields)
-    if ttm_vals:
-        missing = {f: v for f, v in ttm_vals.items() if not _value_stated(answer, v)}
-        if not missing:
-            return ""                  # 答案真的給了 TTM 值 → 不需要這段
-        detail = "、".join(f"{f} {v}%" for f, v in sorted(missing.items()))
-        return (chr(10) + chr(10) + "---" + chr(10) + _BASIS_NOTICE_MARK
-                + f"上文引用的 TTM（最近十二個月）口徑數值為 **{detail}**，"
-                  "與文中的財報期間（財年／單季）數字不是同一個口徑——"
-                  "兩者數值可能接近但不可互換。")
-
-    basis = {(c.get("period_basis") or "") for c in (cited_chunks or [])}
-    if "TTM" in basis:
-        return ""                      # 引到 TTM chunk 但認不出欄位值 → 維持沉默，不在看不懂時多話
-    if "fiscal_year" not in basis:
-        return ""                      # 沒引到任何財報期間 chunk（例如純 web 答案）→ 不是這條的守備範圍
-    return (chr(10) + chr(10) + "---" + chr(10) + _BASIS_NOTICE_MARK
-            + "以上比率／成長率取自財報期間口徑（財年或單季），"
-              "**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。")
-
-
-def _format_unresolved_freshness_notice(todos: list[dict]) -> str:
-    """只對 live 且 web 沒成功補到的新聞缺口產生機械式時效聲明；snapshot 永遠沒有 gap。
-
-    ⚠ 缺口是**逐待辦**算的，但這段警語**整篇答案只印一次**——所以措辭不能講成整篇的結論。
-      2026-08-14 實測：「Azure 最新一季成長率」的答案主體引用了 CNBC 與 sec.gov 兩個 web 來源，
-      底下卻印出「Web 未提供可用補充」，因為另外幾個沒查網的待辦各自帶著 gap。警語與答案互相矛盾
-      比沒有警語更糟（它會讓讀者不信任明明有出處的數字），故依「這一次跑分到底有沒有用到 web」分岔。"""
-    unique: dict[tuple[str, str, str], dict] = {}
-    any_web = False
-    for todo in todos or []:
-        if todo.get("status") != "done":
-            continue
-        if todo.get("web_used"):
-            any_web = True
-            continue
-        for gap in todo.get("freshness_gaps", []) or []:
-            # doc_type 入 key：news 缺口與 realtime 缺口措辭不同，混在一起會互相蓋掉
-            key = (gap.get("ticker", ""), gap.get("cutoff", ""),
-                   gap.get("as_of", ""), gap.get("doc_type", "news"))
-            unique[key] = gap
-    if not unique:
-        return ""
-    def _phrase(ticker: str, cutoff: str, as_of: str, doc_type: str) -> str:
-        who = ticker or "本次查詢"
-        if doc_type == "realtime":
-            # KB 只有財報 → 要講「知識庫本來就沒有這種資料」，不是「資料有點舊」
-            span = f"，知識庫最新期別截至 {cutoff}" if cutoff else "，知識庫僅含 SEC 財報與基本面"
-            return f"{who} 需要即時／近期資料{span}（查詢日 {as_of}）"
-        return f"{who} 新聞資料截至 {cutoff}（查詢日 {as_of}）"
-
-    details = "; ".join(_phrase(*k) for k in sorted(unique))
-    tail = ("；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。"
-            if any_web else
-            "；Web 未提供可用補充，因此以上內容不代表涵蓋至查詢日。")
-    return "\n\n---\n⚠ 資料時效：" + details + tail
-
-
-# ──────────────────────────────────────────────────────────────────────────────
-# 純函式工具（片段截取 / chunk id / 池合併 / JSON 容錯）
-# ──────────────────────────────────────────────────────────────────────────────
-
-
-
-
-
-def _loads_json_lenient(text: str):
-    """容錯 JSON 解析：剝 code fence，失敗則抓第一個 [...] 或 {...} 區塊再試。解不出回 None。
-    （不同模型序列化不穩定，延續舊版對 LLM 輸出一律容錯的精神。）"""
-    s = (text or "").strip()
-    s = re.sub(r"^```(?:json)?\s*|\s*```$", "", s, flags=re.MULTILINE).strip()
-    try:
-        return json.loads(s)
-    except (ValueError, TypeError):
-        pass
-    for open_c, close_c in (("[", "]"), ("{", "}")):
-        i, j = s.find(open_c), s.rfind(close_c)
-        if 0 <= i < j:
-            try:
-                return json.loads(s[i:j + 1])
-            except (ValueError, TypeError):
-                continue
-    return None
-
-
-def _coerce_bool(v) -> bool:
-    """把模型回的 sufficient 值轉成 bool。**不能用 bool()**：模型常把布林序列化成字串,而
-    bool('false')==True（任何非空字串都是 True）會讓判定 fail-open（P0-2:模型明明說 false 卻被讀成
-    夠）。原生 bool/數字照常,字串只認明確真值詞,其餘（含 'false'/'no'/'0'）一律 False。"""
-    if isinstance(v, bool):
-        return v
-    if isinstance(v, (int, float)):
-        return bool(v)
-    if isinstance(v, str):
-        return v.strip().lower() in ("true", "1", "yes", "y", "夠", "足夠", "充足")
-    return False
-
-
-# ──────────────────────────────────────────────────────────────────────────────
-# 節點用的 LLM 呼叫（Planner / Checker / Reflection）與檢索
-# ──────────────────────────────────────────────────────────────────────────────
-
-_PLANNER_PROMPT = f"""你是美股情報 RAG 的規劃器。把使用者問題拆成「彼此獨立、各自可單獨丟去向量庫檢索」的子問題。
-
-拆解原則:
-- 單一聚焦問題(只問一家公司的一個面向) → 原樣回傳,陣列只有一個元素。
-- 複合 / 跨公司比較 / 一句含多個提問 → 拆成多個原子子問題,每個只問一件事。
-- 【意圖保全】一句話裡每個獨立提問都要有對應子問題——包含口語、比喻、隱含的意圖。
-  例:「風頭被搶走」是一個「新聞 / 事件」意圖,和「這一季賺多少」的財報意圖是兩件不同的事,
-  兩個都要各自拆出來。寧可每個意圖各切一刀,也不要整句只回應其中一半、漏掉另一個提問。
-- 【隱含對照】「跟去年比」「成長多少」→ 拆出各年度 / 各實體的獨立子問題
-  (例:「Apple 的 FY2025 EPS 是多少」「Apple 的 FY2024 EPS 是多少」)。
-- 【集合詞】遇到群體稱呼(Magnificent Seven、FAANG、「這些公司」、「科技巨頭」、「你追蹤的 AI 股」…):
-  · 能明確且完整列出全部成員、且成員數不超過上限 → 逐一列滿「每一個」成員,絕不只列一部分。
-  · 成員數超過上限、或你不確定完整成員名單 → 「不要」猜一份殘缺清單;保留群體稱呼當「單一寬鬆
-    子問題」,讓檢索自己 fan-out(寧可粗,也不要漏掉任何一個成員)。
-- 【時間消歧】絕不依靠自身記憶推算或猜測季度、年份、月份。只有原問題明確指定、或下方
-  KB Coverage Snapshot 明確列出時,才能在子問題寫入具體期間。使用者指定的期間不得被「最新期間」
-  覆蓋;「最近新聞」也不得被改寫成最新財報季度。
-  ·【比率指標期間中性】毛利率/淨利率/營業利益率/獲利率/成長率/YoY 等「比率或成長率」指標,若原問題用
-    相對詞(目前/最新/現在/近一年/近期)問、且未自行點名某一季,子問題就**保持期間中性、絕不從 snapshot
-    釘具體季度**——寫「X 目前的毛利率」而非「X FY20XX QX 的毛利率」。這類指標的權威來源是 Fundamentals 的
-    TTM 預算值(無季度標記);一旦把子問題釘成某季,檢索會被季度導向 10-Q、把 TTM 來源整個濾出候選池,
-    導致答錯口徑(季度 vs TTM)。唯有原問題自己明講某一季(如「FY2026 Q2 毛利率」)才照寫那一季。
-- 【子問題文字保持來源中性】**來源由下面的 route 欄位決定,不要寫進子問題的文字裡**。
-  絕不在 task 裡自行加上「在新聞中 / 相關新聞內容 / 在財報中」等來源限定詞——照原問法寫
-  (「X 如何做 Y」「X 最近有什麼消息」),讓 route 去說它該往哪裡查。
-- 【路由 route】每個子問題除了 task,還要判一個 route:
-  · "kb"   ── 答案在 10-K / 10-Q / Fundamentals 裡:財報數字、比率、營收/獲利/成長率、
-              業務與策略與競爭與風險敘述、指定財報期間的事實、跨公司財務比較。
-              ⚠ 「最新一季」「上一季」「最近一個財年」屬於這一類——那是**財報期別**(由 filing
-              定義),不是 wall clock。
-              ⚠ **定性題也在這裡**:問「如何 / 為何 / 靠什麼 / 競爭優勢 / 護城河 / 商業模式 /
-              面臨哪些風險」的題目,答案寫在 10-K 的 business、competition、risk factors 與
-              MD&A 段落,**不是新聞**。**「監管」「反壟斷」「訴訟」「地緣政治」「供應鏈風險」
-              這些字本身不代表要上網**——公司自己在 10-K Item 1A 就逐條列著這些風險。
-              只有問句帶了時間動態(「最近有什麼進展」「最新裁決」「這週的消息」)才算 web。
-  · "web"  ── 知識庫**結構上沒有這種資料**:新聞、報導、分析師看法/目標價/評等、市場情緒與風評、
-              公司公告與事件。⚠ 向量庫裡**沒有任何新聞 chunk**,這類子問題送 kb 等於撈不到,
-              而模型會拿舊財報硬答且不會交代——那比答不出來更糟。
-  · "both" ── 兩邊都有而且都要講:知識庫有帶期間的舊值、外面有更新的值。典型是「目前的市值 /
-              現在的股價 / 現在的本益比」——Fundamentals 有快照值(帶日期),web 有當日值,
-              正確答案是**兩個都給並各標時點**,不是挑一個。
-  判不出來時填 "both",不要填 "kb":兩種錯的代價不對稱——填錯 both 只是多打一次網路,
-  填錯 kb 會讓答案拿舊資料冒充現況且零揭露。
-- 【檢索標的檢驗】每個子問題都必須指向一個「向量庫裡撈得到的離散事實」——具體的財報數字、
-  Fundamentals 的估值/比率欄位、或 10-K/10-Q 裡的一段具體業務/策略敘述。(向量庫裡沒有新聞。)子問題若只是要求「解讀 / 影響 / 意義 / 背景 /
-  綜合看法 / 透露什麼訊息 / 反映什麼
-  策略」,它**沒有自己的檢索標的**(答案要靠把上面撈到的事實做綜合,那是最後生成階段的工作),絕不可拆成獨立子問題:
-  · 「這則新聞對 X 股價/處境的影響是什麼」「這透露了 X 的什麼策略訊息」→ 併進「那則新聞的內容是什麼」子問題,
-    不要另外切一刀。撈的是同一個 chunk,多切只會撈回同一片段+噪音,傷準確率。
-  · 「市場對 X 的綜合看法 / 整體評價是什麼」這種泛化收束句,若原問題沒有明確點名要它 → **當作杜撰,直接刪掉**。
-  · 同一個新聞事件/分析師動作裡的多個面向(例:同一家投行「調升目標價」與「調升評等」)是**一則新聞**,合成一個子問題。
-- 【精簡優先】在**不違反上面「意圖保全」與「集合詞逐一列滿」**的前提下,用**最少**的子問題涵蓋所有意圖:
-  · 典型「財報數字 + 新聞事件」複合題就是 **2 個**子問題(一個問數字、一個問那則新聞);不要為了湊數而過度拆解。
-  · **同一公司同一面向不要拆成多個近義子問題**——例如同一則新聞事件拆成兩問、或把同一個指標換句話問兩次
-    (「毛利率是多少」vs「毛利率水準如何」)都算重複,合成一個即可。不同指標(毛利率 vs 淨利率)才算不同意圖。
-  · 只有「集合詞需逐一列舉成員」或「多實體/多年度比較」時,才可以超過 3 個(此時以意圖保全為準,不受精簡限制)。
-- 不要杜撰原問題沒有的意圖;不要拆過細。最多 {MAX_SUBQUERIES} 個。
-
-只輸出一個 JSON 陣列,元素是物件 {{"task": 繁體中文子問題, "route": "kb"|"web"|"both"}},
-不要任何其他文字。
-例:[{{"task":"Apple 的 FY2025 EPS 是多少","route":"kb"}},
-    {{"task":"Apple 最近有什麼跟 Siri 有關的消息","route":"web"}},
-    {{"task":"Apple 目前的市值是多少","route":"both"}}]"""
-
-
-def _parse_plan_output(data) -> list[dict]:
-    """把 Planner 的原始輸出正規化成 `[{"task": str, "route": str}]`。**純函式、零 LLM、零網路。**
-
-    **兩種格式都要吃得下**：
-      · `["子問題", …]`                       ← 2026-09-01 之前的格式，**既有 fixture 錄的全是這種**
-      · `[{"task": …, "route": …}, …]`        ← 新格式
-
-    ⚠ **相容舊格式不是好心，是必要條件**：`llm_replay` 的 `plan` 快取裡錄的全是字串陣列，
-      不吃就是所有既有重放當場失效（而 web fixture 的 key 是從 plan 一路推導出來的）。
-
-    ⚠ **兩個預設值刻意不同**（常數在 `_ROUTE_LEGACY_DEFAULT` / `_ROUTE_UNCERTAIN_DEFAULT`
-      上方有完整理由）：舊格式字串 → `kb`（可重現性）；新格式缺值／非法值 → `both`（代價不對稱）。
-
-    ⚠ **解析寬鬆、分派嚴格**：非法值在這裡就正規化掉，**不要原樣傳下去**——
-      `_dispatch_todo` 對非法 route 是當場炸的（閘門⑪f），一次 LLM 亂填會毀掉整個 query。
-    """
-    if not isinstance(data, list):
-        return []
-    out: list[dict] = []
-    for item in data:
-        if isinstance(item, str):
-            task, route = item.strip(), _ROUTE_LEGACY_DEFAULT
-        elif isinstance(item, dict):
-            task = str(item.get("task") or "").strip()
-            raw = str(item.get("route") or "").strip().lower()
-            route = raw if raw in VALID_ROUTES else _ROUTE_UNCERTAIN_DEFAULT
-        else:
-            continue                      # 數字/None/巢狀陣列 → 丟掉,不要 str() 成垃圾子問題
-        if task:
-            out.append({"task": task, "route": route})
-    return out
-
-
-def _plan_subqueries(query: str, freshness_mode: str) -> list[dict]:
-    """Planner 節點的核心：把問題拆成原子子問題。拆解失敗(解不出 JSON) → 退回單一問題,不讓規劃器失手就整個 run 掛。"""
-    # 重放快取（見 llm_replay）：未設 RAG_REPLAY_CACHE 時完全 no-op。key 刻意不含
-    # system_prompt——它內嵌隨 collection 變動的 KB Coverage Snapshot，納入 key 會讓
-    # 跨 collection A/B 全部 miss，正好毀掉這個快取唯一的用途。
-    _rk = f"{freshness_mode}|{query}"
-    _hit = _replay.get("plan", _rk)
-    if _hit is not _replay.MISS:
-        # ⚠ 命中也要走同一條正規化：舊快取錄的是 `list[str]`,直接回傳會讓下游拿到字串而不是
-        #   dict。**這條是既有 fixture 能不能繼續重放的唯一關口**（閘門⑪n）。
-        subs = _parse_plan_output(_hit)
-        _trace(f"plan(replay): {len(subs)} sub-queries → {subs}")
-        return subs
-    system_prompt = _PLANNER_PROMPT + "\n\n" + _build_temporal_contract(freshness_mode)
-    messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": query}]
-    with _quiet():
-        raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
-    data = _loads_json_lenient(raw)
-    subs = _parse_plan_output(data)
-    if not subs:
-        # 拆解失敗 → 退回單一問題。route 用 uncertain 的那個預設（拆都拆不出來時，
-        # 更沒有理由相信「這題 KB 一定有」）。
-        subs = [{"task": query.strip(), "route": _ROUTE_UNCERTAIN_DEFAULT}]
-    subs = subs[:MAX_SUBQUERIES]
-    _trace(f"plan: {len(subs)} sub-queries → {subs}")
-    _replay.put("plan", _rk, subs)
-    return subs
-
-
-_CHECKER_PROMPT = """你是嚴格的「資訊充足度評論家」。給你一個「子問題」、可能附上的「時間與資料邊界」,
-以及「檢索到的候選片段(含 rerank 分數與摘要)」,判斷這些片段**合起來**夠不夠回答子問題。
-
-- 夠(片段裡確實有回答子問題所需的具體事實 / 數字 / 敘述) → sufficient=true。
-- 不夠(離題、只沾到邊、缺關鍵數字或實體) → sufficient=false,並:
-  1. 具體指出「缺什麼」(哪個數據 / 實體 / 面向沒出現)。
-  2. 給一個「改寫後、更可能撈到那個缺漏資訊的新檢索 query」——換措辭或用更具體的關鍵字 / 實體 /
-     財報標準術語 / 英文,**不要照抄原句**(照抄通常撈到一模一樣的東西)。
-- 不論 sufficient 是 true 還是 false,都要從下面列出的候選片段中,把「跟子問題主題真正相關、可以拿來
-  當作答案依據」的片段挑出來,填進 relevant_ids(用片段的 "id=" 那串,不是 [數字] 編號)。跟子問題主題
-  無關或講的是別的實體/公司的候選(例如子問題問 A 公司,片段其實是 B 公司)**不要**列入——寧可少列,
-  也不要為了湊數把離題片段也算進去。
-
-⏱ KB 時間天花板(重要,避免無限空轉):「時間與資料邊界」會列出這個知識庫實際涵蓋到的最新期間
-(KB Coverage Snapshot)。若候選片段已經涵蓋到「該主題在 KB 中最新可得的資料」,則**即使子問題
-要求的期間比 KB 更新(那是知識庫本來就沒有的資料),也要判 sufficient=true**——收下 KB 最新可得
-資料即可。**絕對不要**因為「片段不是使用者要求的那個更新日期」而持續判不足、反覆要求換 query
-重搜:KB 沒有的期間,再怎麼搜都搜不到,那只會空轉撞牆。只有在片段確實離題、或缺少「coverage 範圍
-內、KB 應該要有卻沒撈到」的資料時,才判 sufficient=false。
-
-只輸出一個 JSON 物件,不要任何其他文字:
-{"sufficient": true 或 false, "missing": "缺什麼(夠則空字串)", "new_query": "改寫後的新 query(夠則空字串)",
- "relevant_ids": ["真正相關的候選 id", ...]}"""
-
-# ⚠ 只在 **live** 模式附加（2026-08-13）。snapshot（＝eval 走的路）的 Checker prompt 因此**逐字不變**,
-# 既有跑分基準一格都不動；由 `eval/verify_web_gate_isolation.py` 的 byte-identical 斷言長期把關。
-#
-# 為什麼要多這個欄位：實測 Grader 只問「有沒有這個欄位」,不問「這個值夠不夠新」。
-# 「Apple 現在的本益比」撈到 6/12 的 Fundamentals 就判 sufficient=true,結果答案把兩個月前的
-# 35.83 講成「現在的本益比」,完全沒有揭露時點。同一個病讓「蘋果的即時市值」「特斯拉今天股價」
-# 都拿三週到兩個月前的數字當即時值答。
-#
-# 只問「需要多新」,**不要**問「候選夠不夠新」——後者要比對日期,那是 Python 的活(見 _stale_for_realtime)。
-_CHECKER_LIVE_RECENCY_BLOCK = """
-
-⏱ 額外欄位 realtime_need（**只判斷子問題本身需要多新的資料**,不要去看候選片段的日期）:
-- "intraday"：問即時／當下的市場數值——股價、今天漲跌、當前市值、即時本益比、盤中報價。
-- "days"：問近期動態——最新消息、最近進展、近期發表,可容忍數天內的資料。
-- "none"：問特定財報期間或不隨時間變動的事實——某季營收、財報風險因素、跨公司比較、歷史數字。
-  子問題已明確指定期間(FY2026、2026 年第三季、10-K 提到…)一律填 "none"。
-
-⚠ 這個欄位**只看子問題在問什麼**,與「候選片段裡有什麼」無關(2026-08-28 補,實測見下):
-- 候選片段全是 10-K／10-Q,**不構成**填 "none" 的理由。「財報答不答得了這個問題」與「這個問題
-  需要多新的資料」是兩件不同的事——「這家公司最近怎麼樣」用去年的年報回答,那個答案是**錯的**,
-  不只是舊的。
-- 判準是「使用者期待的時間點」:問句指向**當下或最近一段時間**(而不是某個財報期間)→ 至少 "days"。
-  **不要因為找不到那麼新的資料就改填 "none"**——「找不到」是 sufficient 要處理的事,不是這一欄。
-- ⚠ 例外(不要判過頭):「最新一季」「上一季」「最近一個財年」指的是**財報期別**(由 filing 定義),
-  不是 wall clock → 仍然填 "none"。
-- 判不出來時填 "days" 而不是 "none"。兩種錯的代價不對稱:填錯 "days" 只是多搜一次;填錯 "none"
-  會讓答案**拿舊資料冒充現況且零揭露**。
-
-JSON 因此多一個欄位:
-{"sufficient": …, "missing": …, "new_query": …, "relevant_ids": […], "realtime_need": "intraday"|"days"|"none"}"""
-
-
-def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = "",
-                       freshness_mode: str = FRESHNESS_SNAPSHOT) -> dict:
-    """Sufficiency Checker 節點的核心:一次 LLM 呼叫吐出 {sufficient, missing, new_query, relevant_ids}。
-    temporal_scope(KB coverage + 時間政策)一併餵給 Grader,讓它能分辨「搜得不夠好」與「KB 天花板已到」
-    ——否則對『要求比 KB 更新期間』的題(如指定未來日期的新聞題)Grader 會一路判不足、逼 Agent 空轉
-    撞牆(實測:news 類多題因此跑滿 MAX_REWRITES、拖到 ~1 小時/題)。
-    relevant_ids:Grader 從「這次實際看到的候選」裡圈選出來的相關 chunk id,只接受出現在 shown_ids
-    的值(擋 LLM 憑空造 id)。_node_execute commit 進 collected 時用它過濾,不再是「rerank top-k 全收」
-    ——修 execute[1] 誤把不相關公司的高分 chunk 一起 commit 進 citation 的殘留雜訊。"""
-    if not pool:
-        return {"sufficient": False, "missing": "尚未檢索到任何候選片段", "new_query": subquery, "relevant_ids": []}
-    top = pool[:POOL_RETURN_K]
-    shown_ids = {_chunk_id(c) for c in top}
-    # 重放快取：key = 子問題 + 這次實際看到的候選 id（順序敏感）。候選變了就是合法 miss
-    # ——那正是被測改動造成的差異，不該用舊決策蓋掉。temporal_scope 不入 key（同 plan 的
-    # 理由：它隨 collection 變，納入會讓跨 collection A/B 全部 miss）。
-    # live 多問一個欄位、且會套時效改判 → key 必須分流,否則 live 的決策會蓋掉 snapshot 的快取
-    # （反之亦然）。snapshot 的 key 因此與 2026-08-13 以前逐字相同,既有 fixture 全部照舊命中。
-    _live = freshness_mode == FRESHNESS_LIVE
-    _rk = subquery + " || " + " ".join(_chunk_id(c) for c in top) + (" || live" if _live else "")
-    _hit = _replay.get("check", _rk)
-    if _hit is not _replay.MISS:
-        _trace(f"check(replay)[{subquery[:24]!r}] sufficient={_hit.get('sufficient')}")
-        return dict(_hit)
-    ctx = "\n".join(
-        f"[{i}] rerank={c['rerank_score']:.3f} | id={_chunk_id(c)}\n    {_snippet(c['content'], subquery)}"
-        for i, c in enumerate(top, start=1)
-    )
-    scope_block = f"時間與資料邊界:\n{temporal_scope}\n\n" if temporal_scope else ""
-    user = f"{scope_block}子問題:{subquery}\n\n檢索到的候選片段:\n{ctx}"
-    system = _CHECKER_PROMPT + (_CHECKER_LIVE_RECENCY_BLOCK if _live else "")
-    messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
-    with _quiet():
-        raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
-    data = _loads_json_lenient(raw)
-    if not isinstance(data, dict):
-        # 解不出 → 保守當「夠」(避免無限迴圈:池非空但 checker 壞掉時,寧可收下現有候選也不空轉)
-        # relevant_ids 也保守給全部(未圈選 = 無過濾訊號,退回舊行為,不誤濾成 0 筆)
-        _trace(f"check[{subquery[:24]!r}] ✗ 無法解析 JSON,保守收下現有候選")
-        return {"sufficient": True, "missing": "", "new_query": "", "relevant_ids": sorted(shown_ids)}
-    sufficient = _coerce_bool(data.get("sufficient", False))
-    missing = str(data.get("missing", "") or "").strip()
-    new_query = str(data.get("new_query", "") or "").strip()
-    raw_ids = data.get("relevant_ids", [])
-    relevant_ids = ([str(x).strip() for x in raw_ids
-                     if isinstance(x, str) and str(x).strip() in shown_ids]
-                    if isinstance(raw_ids, list) else [])
-    # live 時效改判：Grader 說「有這個欄位就夠」,但欄位可能是兩個月前的快照。只降不升
-    # ——只把 true 改成 false,絕不把 false 改成 true(不繞過 Grader 原本的離題判斷)。
-    need, kb_unfixable = "none", False
-    if _live:
-        need = str(data.get("realtime_need", "none") or "none").strip().lower()
-        if need not in REALTIME_STALE_DAYS:
-            need = "none"
-        stale_days, kb_unfixable = _classify_staleness(need, top, _get_as_of_date())
-        if stale_days is not None and sufficient:
-            sufficient = False
-            # ⚠ `kb_unfixable` 只在**整個 collection 的天花板**也過期時才成立（見 _classify_staleness）。
-            #   若天花板還夠新,代表是這次檢索沒撈到最新那筆 → 保留改寫機會,別跳過。
-            missing = ((f"候選中沒有任何能證明時效的來源（KB 只有財報期間資料，"
-                        f"財報期間不是發布日）,而本題需要 {need} 等級的即時性"
-                        f"（原判定：{missing or '足夠'}）")
-                       if stale_days == NO_REALTIME_SOURCE else
-                       (f"候選中最新來源已是 {stale_days} 天前的資料,而本題需要 {need} 等級的即時性"
-                        f"（原判定：{missing or '足夠'}）"))
-            new_query = new_query or subquery
-            _trace(f"check[{subquery[:24]!r}] 時效改判 sufficient=True→False "
-                   f"(need={need}, 最新來源 {stale_days} 天前, "
-                   f"{'KB 補不了' if kb_unfixable else 'KB 還有更新的 → 保留改寫'})")
-        else:
-            kb_unfixable = False   # 沒觸發改判就不帶旗標,避免污染執行層的早退判斷
-    _trace(f"check[{subquery[:24]!r}] sufficient={sufficient} missing={missing[:50]!r} "
-           f"new_query={new_query[:50]!r} relevant_ids={len(relevant_ids)}/{len(shown_ids)}")
-    out = {"sufficient": sufficient, "missing": missing, "new_query": new_query,
-           "relevant_ids": relevant_ids, "realtime_need": need, "kb_unfixable": kb_unfixable}
-    _replay.put("check", _rk, out)
-    return out
 
 
 def _retrieve_chunks(query: str, *, attributable: bool) -> list[dict]:
