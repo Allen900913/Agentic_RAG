@@ -1543,19 +1543,16 @@ def _check_monkeypatch_reaches_callers() -> int:
 
     # ── ⑬b 沒有任何子模組把被 patch 的名字綁成自己的 module-level global ──────────
     def _shadowers(names: set[str], mods) -> list[str]:
-        bad = []
-        for m in mods:
-            for n in names:
-                if n in vars(m):
-                    bad.append(f"{m.__name__}.{n}")
-        return bad
+        """子模組**用 import 複製**了一份被 patch 的綁定。
 
-    shadow = _shadowers(FROZEN, submods)
-    _ck(f"⑬b 子模組（{len(submods)} 個）都沒有遮蔽被 patch 的名字", not shadow,
-        f"遮蔽：{shadow[:4]}")
+        ⚠ 危險的是「複製」不是「定義」（2026-09-03 收窄）：`def _tavily_search` 住在哪個模組
+          都無所謂——eval 改的是 `ar._tavily_search`，只要沒人裸用（⑬c）、大家都走 `_pkg.`，
+          patch 就蓋得到。真正讓 stub 失效的是 `from .webtools import _tavily_search`：
+          那在呼叫端 globals 壓了一份**當時的**物件，之後 patch 再也動不到。
+          舊版連「定義」都算違規，代價是那 13 個名字全被釘在 `__init__`，檔案瘦不下去。
 
-    # ── ⑬c 子模組裡沒有「直接呼叫全域名字」的呼叫點（必須走套件物件）───────────────
-    def _direct_calls(names: set[str], mods) -> list[str]:
+        ⚠ 讀 AST 不讀 `vars(m)`：`vars` 分不出「這裡定義的」與「從別處 import 的」。
+        """
         bad = []
         for m in mods:
             try:
@@ -1563,13 +1560,45 @@ def _check_monkeypatch_reaches_callers() -> int:
             except (OSError, SyntaxError):
                 continue
             for node in _ast.walk(tree):
-                if (isinstance(node, _ast.Call) and isinstance(node.func, _ast.Name)
-                        and node.func.id in names):
-                    bad.append(f"{m.__name__}:{node.lineno} {node.func.id}()")
+                if isinstance(node, (_ast.Import, _ast.ImportFrom)):
+                    for a in node.names:
+                        nm = a.asname or a.name.split(".")[0]
+                        if nm in names:
+                            bad.append(f"{m.__name__}:{node.lineno} import {nm}")
+        return bad
+
+    def _importers_of(name: str, mods) -> set[str]:
+        return {b.split(":")[0] for b in _shadowers({name}, mods)}
+
+    shadow = _shadowers(FROZEN, submods)
+    _ck(f"⑬b 子模組（{len(submods)} 個）沒有 import 複製被 patch 的綁定", not shadow,
+        f"遮蔽：{shadow[:4]}")
+
+    # ── ⑬c 子模組裡沒有「直接呼叫全域名字」的呼叫點（必須走套件物件）───────────────
+    def _direct_calls(names: set[str], mods) -> list[str]:
+        """子模組裡**任何**裸引用被 patch 的名字。
+
+        ⚠ 2026-09-03 從「只看 `Call`」擴成「看所有 `Name` load」：**常數是 load 不是 call**，
+          `if ENABLE_WEB_SEARCH:` 舊版完全看不到。而常數的失效方式與函式一模一樣——
+          子模組 `from .config import ENABLE_WEB_SEARCH` 之後，eval 改的是另一份。
+          擴大之後，被 patch 的名字就**可以住進子模組**（只要沒人裸用），
+          `__init__` 才瘦得下去。
+        """
+        bad = []
+        for m in mods:
+            try:
+                tree = _ast.parse(_P(m.__file__).read_text(encoding="utf-8"))
+            except (OSError, SyntaxError):
+                continue
+            # 定義處本身（def/assign 的 Store）不算引用；只抓 Load。
+            for node in _ast.walk(tree):
+                if (isinstance(node, _ast.Name) and isinstance(node.ctx, _ast.Load)
+                        and node.id in names):
+                    bad.append(f"{m.__name__}:{node.lineno} {node.id}")
         return bad
 
     direct = _direct_calls(FROZEN, submods)
-    _ck("⑬c 子模組沒有直接呼叫被 patch 的名字（要走套件物件）", not direct,
+    _ck("⑬c 子模組沒有裸引用被 patch 的名字（要走套件物件；含常數讀取）", not direct,
         f"直呼：{direct[:4]}")
 
     # ── ⑬d 動態版：真的 patch 下去，沒有任何子模組還握著舊物件 ───────────────────
@@ -1578,8 +1607,10 @@ def _check_monkeypatch_reaches_callers() -> int:
     saved = getattr(ar, victim)
     try:
         setattr(ar, victim, sentinel)
+        # ⚠ 只看「用 import 複製了綁定」的模組——定義處自己那份不算，見 `_shadowers`。
+        _copiers = _importers_of(victim, submods)
         stale = [f"{m.__name__}.{victim}" for m in submods
-                 if victim in vars(m) and vars(m)[victim] is not sentinel]
+                 if m.__name__ in _copiers and vars(m).get(victim, sentinel) is not sentinel]
     finally:
         setattr(ar, victim, saved)
     _ck(f"⑬d patch `ar.{victim}` 之後沒有子模組握著舊物件", not stale, f"舊物件：{stale}")
@@ -1589,29 +1620,48 @@ def _check_monkeypatch_reaches_callers() -> int:
     import types as _types
     fake = _types.ModuleType(f"{ar.__name__}._fake_violation")
     fake.__file__ = str(_P(__file__).parent / "_fake_violation_probe.py")
-    fake._tavily_search = saved                     # ← 遮蔽：from .webtools import _tavily_search
-    fake.ENABLE_WEB_SEARCH = True                   # ← 常數也一樣會被遮蔽
-    caught_b = _shadowers(FROZEN, [fake])
-    _ck("⑬e1 誤報對照：遮蔽了就必須被 ⑬b 抓到", len(caught_b) == 2, f"只抓到 {caught_b}")
-
-    src = ("def go(q):\n"
+    fake._tavily_search = saved     # ← import 複製的那份：patch 之後它還握著舊物件
+    fake.ENABLE_WEB_SEARCH = True
+    probe = _P(fake.__file__)
+    src = ("from .webtools import _tavily_search\n"
+           "from .config import ENABLE_WEB_SEARCH\n"
+           "\n"
+           "def go(q):\n"
            "    _tavily_search(q)\n"
            "    return ENABLE_WEB_SEARCH\n")
-    probe = _P(fake.__file__)
     try:
         probe.write_text(src, encoding="utf-8")
+        caught_b = _shadowers(FROZEN, [fake])
+        _ck("⑬e1 誤報對照：import 複製綁定必須被 ⑬b 抓到", len(caught_b) == 2,
+            f"抓到 {caught_b}")
         caught_c = _direct_calls(FROZEN, [fake])
-        _ck("⑬e2 誤報對照：直接呼叫全域名字必須被 ⑬c 抓到", len(caught_c) == 1,
+        _ck("⑬e2 誤報對照：裸引用（函式呼叫＋常數讀取）必須被 ⑬c 抓到", len(caught_c) == 2,
             f"抓到 {caught_c}")
+        setattr(ar, victim, sentinel)
+        try:
+            caught_d = [f"{fake.__name__}.{victim}"
+                        if fake.__name__ in _importers_of(victim, [fake])
+                        and vars(fake).get(victim, sentinel) is not sentinel else None]
+            caught_d = [x for x in caught_d if x]
+        finally:
+            setattr(ar, victim, saved)
+        _ck("⑬e3 誤報對照：複製者握著舊物件必須被 ⑬d 抓到", len(caught_d) == 1,
+            f"抓到 {caught_d}")
+
+        # ⑬e4 **反向**誤報對照：定義處不得被誤報成違規，否則那 13 個名字會被永久釘在 __init__
+        defn = _types.ModuleType(f"{ar.__name__}._fake_definition")
+        defn.__file__ = str(_P(__file__).parent / "_fake_definition_probe.py")
+        dprobe = _P(defn.__file__)
+        dprobe.write_text('def _tavily_search(q, need="none"):\n    return ""\n',
+                          encoding="utf-8")
+        try:
+            _ck("⑬e4 反向誤報對照：**定義**被 patch 的名字不算違規",
+                not _shadowers(FROZEN, [defn]) and not _direct_calls(FROZEN, [defn]),
+                "定義處被誤報 → 那 13 個名字會被永久釘在 __init__")
+        finally:
+            dprobe.unlink(missing_ok=True)
     finally:
         probe.unlink(missing_ok=True)
-
-    setattr(ar, victim, sentinel)
-    try:
-        caught_d = [f"{fake.__name__}.{victim}"] if vars(fake)[victim] is not sentinel else []
-    finally:
-        setattr(ar, victim, saved)
-    _ck("⑬e3 誤報對照：握著舊物件必須被 ⑬d 抓到", len(caught_d) == 1, f"抓到 {caught_d}")
 
     # ── ⑬f 子模組定義的每個 top-level 名字都要能從套件上拿到 ────────────────────
     #   ⚠ **這條是被踩出來的**（2026-09-03 拆 validators 時）：`__init__` 的 re-export 清單
