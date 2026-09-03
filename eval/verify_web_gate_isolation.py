@@ -1613,6 +1613,33 @@ def _check_monkeypatch_reaches_callers() -> int:
         setattr(ar, victim, saved)
     _ck("⑬e3 誤報對照：握著舊物件必須被 ⑬d 抓到", len(caught_d) == 1, f"抓到 {caught_d}")
 
+    # ── ⑬f 子模組定義的每個 top-level 名字都要能從套件上拿到 ────────────────────
+    #   ⚠ **這條是被踩出來的**（2026-09-03 拆 validators 時）：`__init__` 的 re-export 清單
+    #     是手列的，漏了 `_WEB_UNCITED_MARK` → 閘門⑱ 當場 AttributeError。回頭用同樣方式
+    #     重算 `freshness`，發現**手列的 27 個裡漏了 9 個**——它們只是還沒被任何斷言碰到。
+    #     手列必漏，而漏掉的失敗方式是「有人用到才爆」，可能拖很久才現形。
+    unreachable = []
+    for m in submods:
+        try:
+            tree = _ast.parse(_P(m.__file__).read_text(encoding="utf-8"))
+        except (OSError, SyntaxError):
+            continue
+        imported = {a.asname or a.name for n in _ast.walk(tree)
+                    if isinstance(n, (_ast.Import, _ast.ImportFrom)) for a in n.names}
+        for n in tree.body:
+            names = []
+            if isinstance(n, _ast.FunctionDef):
+                names = [n.name]
+            elif isinstance(n, _ast.Assign):
+                names = [t.id for t in n.targets if isinstance(t, _ast.Name)]
+            for nm in names:
+                if nm in imported or nm.startswith("__"):
+                    continue
+                if not hasattr(ar, nm):
+                    unreachable.append(f"{m.__name__}.{nm}")
+    _ck("⑬f 子模組的 top-level 名字全部 re-export 得到（手列清單必漏）",
+        not unreachable, f"拿不到：{unreachable[:6]}")
+
     print()
     print(f"  {'套件化之後 monkeypatch 仍攔得住':<52}{'判定':>8}")
     print("  " + "-" * 68)
