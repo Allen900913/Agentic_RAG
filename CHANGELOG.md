@@ -3,6 +3,62 @@
 紀錄本專案每次有意義的程式修改（架構調整、參數變更、新增功能、放棄的實驗）。新條目加在最上面。
 **每筆條目只留「改了什麼、關鍵數字、結論」**，診斷過程與推導細節見 `docs/` 與 git log，不重述。
 
+## 2026-09-03
+
+### agentic_rag_v2.py 套件化：4549 行單檔 → agentic_rag_version/ 11 個模組
+
+`__init__.py` 剩 **1215 行**（門面 ＋ 生成／補救層）。其餘：validators 783／nodes 597／
+freshness 501／executor 374／planning 354／ratio 320／webtools 295／coverage 214／
+chunks 133／tracing 18／__main__ 13。CLI 變成 `python -m agentic_rag_version`。
+
+**九步，每步都是獨立 commit ＋ 跑完四道閘門**。閘門從 85／238／17／172 走到
+**85／239／17／181**，全程 PASS——這 512 → 522 項就是這次重構唯一的驗收標準。
+
+**這次重構真正的難點不是怎麼切，是兩個「切壞了外觀零差異」的耦合。**
+
+**① 14 處 `ar.<name> = stub` 的 monkeypatch。** eval 全靠它攔截，而那是改**套件物件**上的
+綁定。呼叫端一旦寫成 `from .webtools import _tavily_search`，名字就綁死在呼叫端 globals，
+stub 再也蓋不到 → `verify_web_gate_isolation` 保證的「eval 絕不連網」會**真的連網**，
+而閘門本身照樣全綠（它只數自己那個 stub 被叫幾次）。常數同病
+（`ENABLE_WEB_SEARCH`／`QUERY_WEB_BUDGET` 也被直接改寫）。
+→ 規則：子模組**不得裸用**那些名字（一律 `import agentic_rag_version as _pkg` 再
+`_pkg.<name>`，**循環 import 是刻意的**——屬性在呼叫時才解析），且**不得 `from .x import`**
+它們。**定義在哪個模組無所謂**。守門是新的閘門⑬（9 項）。
+
+**② 兩道閘門用 `ast.parse(Path(ar.__file__).read_text())` 找函式**（⑭a／⑮）。
+單檔時 `ar.__file__` 就是全部原始碼，套件化之後它只是 `__init__.py`。
+→ 改成掃**套件裡每一個模組**。**修法不該是「把函式搬回 `__init__` 遷就量尺」**，那是耦合。
+
+**踩出來的坑，一個都沒有是「切錯地方」，全部是量尺或工具的邊界**：
+
+· **⑬a 的反推漏了元組賦值。** 它用 regex `\b_?ar\.(\w+)\s*=(?!=)` 從 eval 腳本反推 patch
+  名單，而 ⑦e 那行是 `ar._tavily_raw, ar.ENABLE_WEB_SEARCH = _boom, True`——匹配不到，
+  於是 `_tavily_raw` 從來沒進過凍結清單，拆 webtools 時被留成裸用，**⑦e 當場 FAIL**。
+  改用 AST 展開 Tuple 目標（13 → 14 個名字）。
+  → **「從腳本反推」的價值全繫於反推得完整**，而這正是它會漏的方式。
+
+· **手列 export 必漏。** `__init__` 的 re-export 清單本來手列，漏了 `_WEB_UNCITED_MARK`
+  → 閘門⑱ AttributeError。回頭重算 `freshness`，發現**手列的 27 個裡漏了 9 個**——
+  它們只是還沒被任何斷言碰到。改成從各模組 AST 生成，加閘門⑬f 守它
+  （變異測試：拿掉一個 export 當場 FAIL）。
+
+· **`global` 宣告的模組級快取看不見。** 缺項偵測把函式內的 Store 也算成已綁定，
+  而 `global _kb_coverage` 正是這個形狀 → 兩道閘門 NameError 炸掉才現形。
+
+· **⑬b 第一版把「定義」也當違規**，代價是那 14 個名字被永久釘在 `__init__`、檔案瘦不下去。
+  收窄成只抓「用 import 複製綁定」，並補 **⑬e4 反向誤報對照**（定義處不得被誤報）。
+  四條誤報對照現在兩個方向都有守。
+
+· **⑬c 第一版只看 `Call`。** 常數是 `Name` load 不是 call，`if ENABLE_WEB_SEARCH:` 完全看不到。
+
+· **加「跨模組同名函式」斷言時第一版立刻誤報**：`ast.walk` 會撈進類別的 method，
+  於是每個 `__init__` 都算重複。收窄成只掃 `tree.body`。
+  ——「稽核回報 FAIL，先問是不是量尺錯」當場又生效一次。
+
+⚠ **CHANGELOG 的舊條目刻意不改名**：當時的檔名就是 `agentic_rag_v2.py`，改掉是竄改歷史。
+
+---
+
 ## 2026-09-02
 
 ### mixed 的答案側第一次量到；R6「web 未採用」揭露上線
