@@ -1005,14 +1005,66 @@ _GUARDED_VALIDATORS = ("_consistency_check_and_fix", "_period_check_and_fix",
                        "_reflect_and_fix", "_number_check_and_fix")
 
 
+def _pkg_funcdefs() -> dict:
+    """套件裡**每一個模組**的 top-level 函式 AST，name -> FunctionDef。
+
+    ⚠ **為什麼不是 `ast.parse(Path(ar.__file__).read_text())`**（2026-09-03 套件化時改）：
+      `agentic_rag_v2.py` 還是單一檔時，`ar.__file__` 就是全部原始碼；套件化之後它只是
+      `__init__.py`，**任何被拆進子模組的函式都會查無此人**。而這兩道閘門的前提斷言
+      （⑭a／⑮a）寫的是「找不到的話下面全部是假性通過」——也就是說，重構會讓它們
+      **大聲失敗**（這是好的），但修法不該是「把函式搬回 __init__ 遷就量尺」，
+      那是量尺與被測物耦合。改成掃整個套件，之後怎麼拆都不用再動這裡。
+
+    ⚠ 同名函式跨模組重複時**保留先掃到的並記在 `_DUP`**：靜默覆蓋會讓斷言驗到另一個
+      同名函式而完全看不出來。
+    """
+    import ast as _a
+    import pkgutil as _pk
+    import sys as _s
+    from pathlib import Path as _Pa
+
+    paths = [_Pa(ar.__file__)]
+    pkg = _s.modules[ar.__name__]
+    if hasattr(pkg, "__path__"):
+        for mi in _pk.iter_modules(list(pkg.__path__)):
+            m = _s.modules.get(f"{ar.__name__}.{mi.name}")
+            f = getattr(m, "__file__", None)
+            if f and _Pa(f) not in paths:
+                paths.append(_Pa(f))
+
+    out: dict = {}
+    _pkg_funcdefs._DUP = []
+    _pkg_funcdefs._TREES = []
+    for p in paths:
+        try:
+            tree = _a.parse(p.read_text(encoding="utf-8"))
+        except (OSError, SyntaxError):
+            continue
+        _pkg_funcdefs._TREES.append(tree)
+        # ⚠ 只收 **top-level** 函式，不用 `ast.walk`：walk 會把類別的 method 與巢狀
+        #   helper 一起撈進來，於是每個定義了 `__init__` 的類別都會被記成「跨模組同名」。
+        #   （這條是加了重複檢查之後**當場**被誤報出來的，量尺錯不是系統錯。）
+        for n in tree.body:
+            if isinstance(n, _a.FunctionDef):
+                if n.name in out:
+                    _pkg_funcdefs._DUP.append(f"{n.name}@{p.name}")
+                else:
+                    out[n.name] = n
+    _pkg_funcdefs._PATHS = paths
+    return out
+
+
 def gate14_synthesize_refusal_guards() -> None:
     print("\n[⑭] Synthesize 四道 validator 的拒答守門")
     import ast
     from pathlib import Path
 
-    src = Path(ar.__file__).read_text(encoding="utf-8")
-    fn = next((n for n in ast.walk(ast.parse(src))
-               if isinstance(n, ast.FunctionDef) and n.name == "_node_synthesize"), None)
+    _funcs = _pkg_funcdefs()
+    # ⚠ 跨模組同名函式：`_pkg_funcdefs` 保留先掃到的那個，於是後面每一條斷言都可能
+    #   驗到**另一個**同名函式而完全看不出來。拆分期間這是真實風險，所以當場擋掉。
+    _assert(f"⑭a 前提：套件裡沒有跨模組同名函式（掃了 {len(_pkg_funcdefs._PATHS)} 個模組）",
+            not _pkg_funcdefs._DUP, f"重複：{_pkg_funcdefs._DUP[:5]}")
+    fn = _funcs.get("_node_synthesize")
     _assert("⑭a 前提：找得到 `_node_synthesize`（找不到的話下面全部是假性通過）", fn is not None)
     if fn is None:
         return
@@ -1106,9 +1158,7 @@ def gate15_period_fallback_disclosure() -> None:
     import ast
     from pathlib import Path as _Path
 
-    src = _Path(ar.__file__).read_text(encoding="utf-8")
-    tree = ast.parse(src)
-    funcs = {n.name: n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+    funcs = _pkg_funcdefs()
 
     # ── ⑮a 產生點：`_retrieve_chunks` 不准丟掉 `rq.retrieve` 的第二個回傳值
     rc = funcs.get("_retrieve_chunks")
@@ -1263,7 +1313,8 @@ def gate15_period_fallback_disclosure() -> None:
     # ⚠ 2026-09-01：確定性補救迴圈改成經由 `_dispatch_todo` 叫檢索器（route 分派），
     #   所以「帶 attributable 的呼叫點」現在**兩種函式都算**。少了 `_dispatch_todo`
     #   這一半，⑮f3 會找不到迴圈那一處而變成前提失敗——那是錨點過期不是系統壞掉。
-    _calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)
+    # ⚠ 2026-09-03 套件化：呼叫點可能落在**任何**子模組，所以掃整個套件而不是單一 tree。
+    _calls = [n for _t in _pkg_funcdefs._TREES for n in ast.walk(_t) if isinstance(n, ast.Call)
               and (ast.unparse(n.func).endswith("_retrieve_chunks")
                    or ast.unparse(n.func).endswith("_dispatch_todo"))]
     _assert("⑮f2 前提：找得到 `_retrieve_chunks` 的呼叫點（找不到＝下面全是假性通過）",
