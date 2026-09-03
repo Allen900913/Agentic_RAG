@@ -1,0 +1,386 @@
+{
+  "meta": {
+    "as_of": "2026-08-20",
+    "collection": "us_stock_rag_edgar_mdna",
+    "fixture": "eval/web_fixture_news37.json",
+    "replay_cache": "eval/web_replay_llm_news37.json"
+  },
+  "records": [
+    {
+      "id": "news-03",
+      "query": "最近分析師對 Apple 股票有哪些利多的看法？",
+      "why": "news",
+      "answer": "分析師普遍對 Apple 持正面看法，因為公司營收與獲利持續強勁，加上 AI 佈局、可折疊 iPhone 計畫以及 Mac 銷售顯著提升，導致多位分析師上調目標價或給予買進評等【AAPL_Fundamentals_20260612.txt, chunk #0】。\n\n**主要利多觀點**  \n\n1. **營收與獲利成長**：Apple 近 12 個月營收 4,514.4 億美元（$451.44 billion），較前一年成長 16.60%；淨利 1,225.8 億美元（$122.58 billion），盈餘成長 21.80%，顯示公司基本面仍相當健康，為分析師看好股價的基礎【AAPL_Fundamentals_20260612.txt, chunk #0】。  \n\n2. **分析師上調目標價**  \n   - **Dan Ives（Wedbush）**將 12 個月目標價從 $350 提升至 **$400**，並給予「最看好」的評等，理由包括 AI 服務有望在財報中顯現、在中國的執行力、即將推出的全新 iPhone 設計，以及將 AI 轉化為持續性收入的潛力【web: https://finance.yahoo.com/markets/stocks/articles/veteran-analyst-resets-apple-stock-233700333.html】。  \n   - **Yahoo Finance 的分析師報告**給予 Apple 「維持」的買進評等，並維持既有目標價，顯示對公司前景持續正向【web: https://finance.yahoo.com/research/stock-forecast/AAPL】。  \n   - **StockAnalysis.com**列出分析師共識為「Buy」，目標價 **$322.28**（較前值上升 3.95%），並指出若 Apple 與 Nvidia 合作 AI、或推出可折疊 iPhone，股價有望再上漲【web: https://stockanalysis.com/stocks/aapl】。  \n\n3. **AI 相關正面預期**：CNBC 報導指出 Apple 今年將大量 AI 技術授權自 Google，並以較低的資本支出（約 110 億美元（$11 billion））推動 AI 應用，市場因此對 Apple 的 AI 佈局抱持樂觀，股價亦因相關消息上揚【web: https://www.cnbc.com/2026/07/30/apple-earnings-live-updates.html】。  \n\n4. **Mac 銷售強勁**：同一 CNBC 報導提到 MacBook Neo（低價位 Mac）及 MacBook Pro 銷售大幅提升，Mac 營收在本季「跳升近 29%」至 103.5 億美元（$10.35 billion），提升了投資人對 Apple 硬體需求的信心【web: https://www.cnbc.com/2026/07/30/apple-earnings-live-updates.html】。  \n\n5. **可折疊 iPhone 前景**：StockAnalysis.com 文章中提到分析師認為 Apple 若推出可折疊 iPhone，將為公司帶來新成長動能，並已將此因素納入上調目標價的考量【web: https://stockanalysis.com/stocks/aapl】。  \n\n**結論**：綜合財務表現的持續增長、分析師上調的目標價（$322.28、$400）以及對 AI、可折疊 iPhone 與 Mac 銷售的正面預期，近期分析師對 Apple 股票的看法以「利多」為主，普遍給予買進或維持買進的評等。\n\n---\n⚠ 資料時效：AAPL 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-20）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #22 (rerank=0.707)\n  - AAPL_10Q_202606.html #21 (rerank=0.702)\n  - AAPL_10Q_202606.html #16 (rerank=0.688)\n  - AAPL_10Q_202603.html #1 (rerank=0.643)\n  - AAPL_10Q_202606.html #1 (rerank=0.630)\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.622)\n  - AAPL_10Q_202603.html #20 (rerank=0.600)\n  - AAPL_10Q_202603.html #19 (rerank=0.591)\n  - AAPL_10Q_202606.html #33 (rerank=0.553)\n  - AAPL_10Q_202603.html #15 (rerank=0.542)\n  - AAPL_10Q_202606.html #0 (rerank=0.541)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "最近分析師對 Apple 股票的利多看法是什麼",
+        "改用網路搜尋查最近分析師對 Apple 股票的利多看法",
+        "改用網路搜尋查最近分析師對 Apple 股票的利多看法",
+        "改用網路搜尋查2026-08-20之前的分析師對 Apple 股票的利多看法",
+        "使用網路搜尋查2026-08-20最新的分析師對 Apple 股票的利多看法"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 21
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 16
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 21
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 33
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "news-07",
+      "query": "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？",
+      "why": "news",
+      "answer": "微軟最近在 AI 策略上宣布了多項新舉措——包括 2025 年十月與 2026 年四月延長與 OpenAI 的合作、推出自研的資安 AI 模型、成立投入 25 億美元、6 000 名工程師的 Frontier AI 事業部，以及 AI 相關營收與使用者快速成長，分析師普遍認為這提升了微軟的 AI 前景，因而提升了對公司股價的預期並上調目標價。  \n\n**最新策略動向**  \n1. **OpenAI 合作延長**：微軟在 2025 年十月與 2026 年四月再次延長與 OpenAI 的長期夥伴關係，持續以投資者身分取得收入分成，並保有 OpenAI 知識產權（模型與基礎設施）供自家產品整合使用【MSFT_10K_2026.html, chunk #112】、【MSFT_10Q_202603.html, chunk #50】、【MSFT_10Q_202512.html, chunk #52】。  \n2. **自研資安 AI 模型**：微軟於 2026 年 7 月公布首款可自動偵測程式碼風險的 AI 模型，結合 GitHub Copilot 與 Excel 中的第一方模型，聲稱在安全性測試上優於 Anthropic 等競爭對手【web: https://www.cnbc.com/2026/07/27/microsoft-touts-cost-saving-ai-model-for-cybersecurity.html】。  \n3. **Frontier AI 事業部**：在同月的投資者說明會中，微軟宣佈成立「Microsoft Frontier Company」，投入 25 億美元、6 000 名工程師，協助企業部署 AI 解決方案，直接回應 AI 基礎設施需求【web: https://finance.yahoo.com/markets/stocks/articles/investors-reacting-microsoft-msft-amid-181543565.html】。  \n4. **AI 營收與使用者規模**：根據最新季報，AI 事業的年度營收跑道已超過 370 億美元，較前一年成長 123%；AI 聊天機器人付費座位突破 3000 萬，Azure 雲端收入年增 40%【web: https://finance.yahoo.com/markets/stocks/articles/microsoft-corp-msft-q3-2026-071942784.html】。  \n\n**分析師的看法**  \n- **正面回應**：多位華爾街分析師在 2026 年 7 月的財報說明後表示，微軟的 AI 策略已獲得「信心提升」與「價格目標上調」的共識，認為 AI 與雲端的結合將持續驅動雙位數成長，尤其 Azure 首次突破 1000 億美元規模、AI 聊天機器人付費座位突破 3000 萬，皆被視為長期贏家的關鍵指標【web: https://www.cnbc.com/2026/07/30/analysts-react-to-microsofts-earnings-results-.html】。  \n- **風險提醒**：同時也有分析師指出，市場對微軟高度依賴 OpenAI 的擔憂仍在，尤其開源 AI 模型可能侵蝕前沿實驗室的市場份額，投資者對此風險保持警覺【web: https://www.cnbc.com/2026/07/27/microsoft-touts-cost-saving-ai-model-for-cybersecurity.html】。  \n- **整體評價**：Yahoo Finance 的專題報導認為，微軟的 AI 策略「鞏固了其長期贏家地位」，預測 2026 年將受惠於「廣泛的 AI 復甦」與「效率、安全與 AI 進步」三大驅動力，對公司估值持正向展望【web: https://finance.yahoo.com/news/microsoft-msft-ai-strategy-reinforces-220418792.html】。  \n\n**結論**：微軟近期透過延伸 OpenAI 合作、推出自研資安 AI、成立大型 Frontier AI 部門以及顯著提升 AI 營收與使用者規模，向市場展示了其在生成式 AI 與雲端結合的領先布局；分析師普遍解讀為正面訊號，提升了對微軟 AI 前景的信心並上調目標價，儘管仍提醒需關注 OpenAI 依賴度與 AI 成本的潛在風險。\n\n---\n⚠ 資料時效：MSFT 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-20）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10K_2026.html #60 (rerank=0.716)\n  - MSFT_10K_2026.html #112 (rerank=0.714)\n  - MSFT_10Q_202603.html #50 (rerank=0.714)\n  - MSFT_10K_2026.html #33 (rerank=0.710)\n  - MSFT_10K_2026.html #75 (rerank=0.698)\n  - MSFT_10Q_202512.html #52 (rerank=0.692)\n  - MSFT_10K_2026.html #32 (rerank=0.688)\n  - MSFT_10K_2026.html #110 (rerank=0.682)\n  - MSFT_10K_2026.html #82 (rerank=0.680)\n  - MSFT_10Q_202603.html #143 (rerank=0.666)\n  - MSFT_10K_2026.html #125 (rerank=0.658)",
+      "n_web_calls": 2,
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "微軟最近在 AI 策略上有什麼新消息",
+        "分析師對微軟 AI 策略新消息的看法是什麼",
+        "改用網路搜尋查找分析師對微軟 AI 策略新消息的看法",
+        "使用網路搜尋查找2026年8月20日前分析師對微軟 AI 策略最新的評論與評估",
+        "使用網路搜尋查找截至2026-08-20的分析師對微軟 AI 策略的最新評論與評估",
+        "改用網路搜尋查找2026年8月20日之後的分析師對微軟 AI 策略的最新評論與評估"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 60
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 50
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 33
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 52
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 32
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 110
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 82
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 143
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 125
+        }
+      ]
+    },
+    {
+      "id": "news-13",
+      "query": "最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？",
+      "why": "news",
+      "answer": "**Apple (AAPL)**：在 2026 年 8 月中旬的交易日收盤價在 $302 至 $313 之間波動，8 月 14 日收盤 $305.93；前一天（8 月 10 日）收盤 $308.26【web: https://finance.yahoo.com/quote/AAPL/history】。  \n\n**Microsoft (MSFT)**：8 月 10 日收盤 $506.06，較前一週的 $487‑$500 区间明显上扬；7 月 31 日收盤 $464.72，顯示近期已突破 $500 大關【web: https://finance.yahoo.com/quote/MSFT/history】。  \n\n**Amazon (AMZN)**：最新報導顯示其股價剛收於 **$240.13**，且過去一個月跌幅 **11.3%**【web: https://finance.yahoo.com/markets/stocks/articles/amazon-amzn-stock-recent-pullback-010920316.html】。  \n\n**Alphabet (GOOGL)**：目前的參考資料僅提供市值、P/E 等基本面數據（市值 43,629.8 億美元（$4,362.98 billion）、P/E 27.33）【GOOGL_Fundamentals_20260612.txt, chunk #0】；未包含即時股價資訊。  \n\n**Meta (META)**：參考文件僅列出資產負債表與現金流量表，未披露近期股價或價格變動【META_10Q_202606.html, chunk #2】【META_10Q_202606.html, chunk #1】。  \n\n**NVIDIA (NVDA)**：僅有公司基本面（市值 49,621.6 億美元（$4,962.16 billion）、P/E 31.33、營收 2,534.9 億美元（$253.49 billion））【NVDA_Fundamentals_20260612.txt, chunk #0】；未提供最新股價。  \n\n**Tesla (TSLA)**：同樣只有基本面資料（市值 14,991 億美元（$1,499.10 billion）、P/E 369.58、營收 978.8 億美元（$97.88 billion））【TSLA_Fundamentals_20260612.txt, chunk #0】；未見即時股價資訊。  \n\n**結論**：截至 2026 年 8 月，Apple、Microsoft 與 Amazon 的最新收盤價均有明顯波動或突破（Apple 在 $300 以上、Microsoft 首次突破 $500、Amazon 仍在 $240 左右且月跌 11.3%），而 Alphabet、Meta、NVIDIA 與 Tesla 的參考資料目前未提供即時股價數據，只能依靠其基本面指標作為參考。\n\n---\n⚠ 資料時效：GOOGL 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-20）; META 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-20）; NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-20）; TSLA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-20）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #1 (rerank=0.728)\n  - GOOGL_10Q_202606.html #1 (rerank=0.725)\n  - NVDA_10K_2026.html #118 (rerank=0.723)\n  - AAPL_10Q_202606.html #0 (rerank=0.723)\n  - AAPL_10Q_202606.html #20 (rerank=0.722)\n  - GOOGL_Fundamentals_20260612.txt #0 (rerank=0.720)\n  - META_10Q_202606.html #2 (rerank=0.720)\n  - META_10Q_202606.html #1 (rerank=0.720)\n  - GOOGL_10Q_202606.html #8 (rerank=0.713)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.708)\n  - MSFT_10K_2026.html #1 (rerank=0.706)\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.698)\n  - MSFT_10K_2026.html #2 (rerank=0.694)\n  - TSLA_Fundamentals_20260612.txt #0 (rerank=0.642)\n  - AMZN_10Q_202606.html #135 (rerank=0.628)\n  - AMZN_10Q_202603.html #43 (rerank=0.558)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "蘋果最近的股價有什麼值得注意的消息？",
+        "微軟最近的股價有什麼值得注意的消息？",
+        "亞馬遜最近的股價有什麼值得注意的消息？",
+        "Alphabet（谷歌）最近的股價有什麼值得注意的消息？",
+        "Meta 最近的股價有什麼值得注意的消息？",
+        "Nvidia 最近的股價有什麼值得注意的消息？",
+        "特斯拉最近的股價有什麼值得注意的消息？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 118
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 8
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 8
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 218
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 103
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 181
+        },
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 135
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 43
+        }
+      ]
+    },
+    {
+      "id": "mi-02",
+      "query": "NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？",
+      "why": "multi_intent",
+      "answer": "NVIDIA 目前的毛利率為 **74.14%（TTM）**，而黃仁勳最近表示公司已重新啟動 H200 處理器在中國的生產與銷售，這可能為未來營收帶來顯著的正向潛力。  \n\n**毛利率細節**  \n- 依 2026 年 6 月 12 日的最新財務概況，NVIDIA 的毛利率為 74.14%，毛利額為 1,879.5 億美元（$187.95 billion），營收為 2,534.9 億美元（$253.49 billion）（TTM）【NVDA_Fundamentals_20260612.txt, chunk #0】。  \n\n**黃仁勳對中國市場的最新談話**  \n- 在 WSJ 報導中，黃仁勳於 GTC 會議上宣佈「重新啟動」H200 AI 晶片的中國銷售，暗示公司正試圖恢復對中國市場的供應【web: https://www.wsj.com/tech/ai/nvidia-says-it-is-restarting-production-of-ai-chips-for-sale-in-china-eea7029e】。  \n- 同時，Yahoo 財經指出，NVIDIA 先前因美國政府對 H20 晶片的禁令，在 FY2026 第一期遭受 **45 億美元（$4.5 billion）** 的收入衝擊，且在第二季預計再失去約 **80 億美元（$8 billion）** 的潛在收入【web: https://finance.yahoo.com/news/nvidia-ceo-jensen-huang-touts-us-manufacturing-plans-warns-china-export-controls-threaten-us-chip-lead.html】。  \n- 2026 年 5 月 CNBC 采訪中，黃仁勳提到中國市場曾佔 NVIDIA 數據中心收入的 **至少五分之一**，但因出口管制已被「實質排除」【web: https://www.cnbc.com/2026/05/21/nvidia-jensen-huang-china-ai-chip-market-huawei.html】。  \n\n**對未來營收的潛在影響**  \n1. **恢復中國市場的收入基礎**：若 H200 或其他 AI 晶片能獲得出口許可並在中國銷售，過去佔約 20% 的數據中心收入有望部分回補，意味著每年可能新增數十億美元的營收。  \n2. **減少先前的損失**：根據 10‑K 第 86 段落，因 H20 需求下降，NVIDIA 在 FY2026 第一期已計提 **45 億美元（$4.5 billion）** 的庫存與採購成本【NVDA_10K_2026.html, chunk #86】；若中國銷售恢復，這筆衝擊有望被抵消或降低。  \n3. **關稅與授權成本**：美國政府對 H200 設有 **25%** 進口關稅，且可能要求授權費用，這將削減毛利空間，但即使扣除後的淨收入仍可能高於目前因禁令而失去的收入。  \n4. **競爭與市場份額**：黃仁勳的開放表態可能阻止競爭對手（如華為）在中國 AI 晶片市場取得更大份額，從而保護 NVIDIA 的長期市場領導地位。  \n\n綜合上述，NVIDIA 目前維持高達 74.14% 的毛利率，且若成功在中國重新銷售 AI 晶片，預計將為公司帶來 **數十億美元** 的營收增長，同時緩解因出口管制而產生的財務衝擊，儘管仍需面對關稅與授權費用的挑戰。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-20）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.722)\n  - NVDA_10Q_202604.html #44 (rerank=0.693)\n  - NVDA_10Q_202510.html #96 (rerank=0.669)\n  - NVDA_10K_2026.html #85 (rerank=0.600)\n  - NVDA_10K_2026.html #88 (rerank=0.598)\n  - NVDA_10K_2026.html #86 (rerank=0.556)\n  - NVDA_10K_2026.html #34 (rerank=0.543)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "NVIDIA 目前的毛利率是多少",
+        "黃仁勳最近談到在中國市場開放 AI 晶片銷售的內容及其對未來營收的潛在影響是什麼",
+        "使用網路搜尋最新黃仁勳關於向中國開放 AI 晶片銷售的談話及其對未來營收的潛在影響"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 96
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 85
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 88
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 86
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 34
+        }
+      ]
+    },
+    {
+      "id": "mi-07",
+      "query": "Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？",
+      "why": "multi_intent",
+      "answer": "Amazon 目前的毛利率為 **50.60%（TTM）**，而在歐洲投入逾 **100 億歐元**（約 116 億美元（$11.6 billion））的新投資計畫，顯示公司正以自動化、機器人與雲端基礎建設為核心，擴大歐洲履約與 AWS 能力，以驅動長期成長。  \n\n**毛利率表現**  \n- 依最新的公司基本面（TTM）資料，Amazon 的毛利率為 50.60%【AMZN_Fundamentals_20260612.txt, chunk #0】。  \n\n**歐洲 100 億歐元投資計畫的內容與策略**  \n- Amazon 宣布在歐洲投入 **€100 億（10 billion）**（約 116 億美元（$11.6 billion）），主要用於擴大倉儲機器人系統，包括具觸感的 Vulcan、托盤處理的 STARK，以及新一代的 Proteus 機器人，預計於 2027 年前在多個歐洲站點部署【web: https://finance.yahoo.com/sectors/technology/articles/amazon-unveils-ai-warehouse-robot-115033989.html】。  \n- 同時，該投資計畫還包括在歐洲新增 **25,000** 個履約中心工作機會，提升物流效率並讓員工專注於更高價值的工作，如庫存管理與品質控制【web: https://finance.yahoo.com/sectors/technology/articles/amazon-unveils-ai-warehouse-robot-115033989.html】。  \n- 另一篇報導指出，Amazon 透過此 €100 億（10 billion） 投資，將「現代化」其履約設施，部署可與員工對話的下一代機器人，並在英國曼徹斯特與伯明翰推出「Amazon Now」超快速配送服務，進一步擴大歐洲消費者體驗【web: https://finance.yahoo.com/markets/stocks/articles/amazon-com-inc-amzn-plots-032530521.html】。  \n\n**成長策略的解讀**  \n1. **自動化與機器人化**：大規模投資機器人技術，降低人力成本、提升拣貨速度，提升履約中心的產能與彈性。  \n2. **物流與最後一哩配送**：新增 25,000 名員工與「Amazon Now」服務，強化快速配送網路，提升客戶黏著度。  \n3. **雲端與 AI 基礎建設**：雖然新聞焦點在物流機器人，但投資金額亦涵蓋 AWS 在歐洲的擴張，與公司整體 2026 年約 2,000 億美元（$200 billion） 的 AI 與資料中心資本支出相呼應，顯示 Amazon 正以雲端與 AI 為長期營收增長的核心驅動力。  \n4. **市場佔有率與競爭壁壘**：透過先進機器人與自動化系統，Amazon 能在歐洲市場建立更高的營運效率與成本優勢，形成技術與規模雙重護城河，支撐未來的收入與毛利率持續穩定。  \n\n綜合來看，Amazon 以 **50.60% 的毛利率** 為基礎，透過 **逾 100 億歐元的歐洲自動化與雲端投資**，同步提升物流效率、擴大雲端服務與 AI 能力，展現以技術驅動、全球化布局的成長策略。\n\n---\n⚠ 資料時效：AMZN 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-20）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AMZN_Fundamentals_20260612.txt #0 (rerank=0.717)\n  - AMZN_10Q_202606.html #26 (rerank=0.679)\n  - AMZN_10Q_202606.html #94 (rerank=0.654)\n  - AMZN_10Q_202606.html #24 (rerank=0.644)\n  - AMZN_10Q_202606.html #2 (rerank=0.626)\n  - AMZN_10Q_202606.html #43 (rerank=0.623)\n  - AMZN_10Q_202606.html #57 (rerank=0.610)\n  - AMZN_10Q_202603.html #93 (rerank=0.610)\n  - AMZN_10K_2025.html #134 (rerank=0.609)\n  - AMZN_10Q_202606.html #74 (rerank=0.578)\n  - AMZN_10Q_202606.html #59 (rerank=0.533)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Amazon 目前的毛利率是多少",
+        "Amazon 在新聞中提到的歐洲逾 100 億歐元的最新投資計畫是什麼，並且它反映了什麼樣的成長策略",
+        "使用網路搜尋查找 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略",
+        "使用網路搜尋查找 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略",
+        "使用網路搜尋查找 Amazon 在歐洲的 100 億歐元以上投資計畫的最新細節與成長策略",
+        "使用網路搜尋查找 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略",
+        "使用網路搜尋查找 2026 年 Amazon 在歐洲的 100 億歐元以上投資計畫的最新細節與成長策略"
+      ],
+      "sources": [
+        {
+          "source": "AMZN_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 94
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 57
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 93
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 134
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 74
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 59
+        }
+      ]
+    }
+  ]
+}

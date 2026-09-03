@@ -1,0 +1,88 @@
+{
+ "_meta": {
+  "說明": "live web 路徑的逐條確定性斷言。搭配 eval/web_fixture.json（Tavily 原始回應）與 AGENTIC_AS_OF_DATE=2026-09-02 使用。",
+  "為什麼不用聚合指標": "這條路只有 5 題。本專案 RAGAS 的 MDE 在 n=100 是 0.067，n=5~10 換算約 0.17~0.21——任何分數都落在噪音裡、解讀不了。所以判準是逐條斷言（同 check_number_defects.py 的模式），零噪音。",
+  "斷言的設計原則": "只測『不論 LLM 挑 fixture 裡哪個來源、哪個事實都必須成立』的性質。第一版把值寫死成某一次錄製的答案（4.46 兆／stockanalysis.com），重放時 LLM 合法地挑了另一個來源（4.45 兆／finance.yahoo.com）就 FAIL——那是量尺 flaky，不是系統退步。fixture 是一個值空間，不是單一答案。",
+  "as_of": "2026-09-02",
+  "collection": "us_stock_rag_edgar_multiyear",
+  "維護": "重錄 fixture（值會變）或改 AGENTIC_AS_OF_DATE 都要回來確認一次。"
+ },
+ "claims": [
+  {
+   "id": "web-05",
+   "role": "陰性對照：web 不得被無差別觸發",
+   "why": "沒有這題，『web 有觸發』這個量尺就沒有判別力——只證明了 web 會打，沒證明它不會亂打。純歷史財報題（FY2025 全年營收）KB 一定有，不該動用 web。",
+   "assert": {
+    "web_calls_eq": 0,
+    "no_web_citation": true,
+    "must_contain_any": [
+     [
+      "416,161",
+      "4,161.61",
+      "416.16"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "web-01",
+   "role": "時效衝突並陳（find_authority_conflicts 的 web 盲區）",
+   "why": "KB 只有 2026-06-12 的快照市值 $4,342.02B，web 有更新的值。這正是 R3『財報優先』會判反的情境——正確行為不是選一個，是兩個都保留並各自標時點。這題是那條 BACKLOG 唯一可測的載體。⚠ 目前這個行為是 Generator 靠 prompt 做到的，validator 那條防線仍然是空的。",
+   "assert": {
+    "web_calls_gte": 1,
+    "must_cite_any_web": true,
+    "must_match": [
+     "2026\\s*[-/年]\\s*0?6\\s*[-/月]\\s*0?12",
+     "2026\\s*[-/年]\\s*0?9"
+    ],
+    "must_contain_any": [
+     [
+      "4,342",
+      "4.342",
+      "43,42"
+     ]
+    ]
+   },
+   "_assert_notes": {
+    "must_cite_any_web": "web 那半真的進了答案。",
+    "must_match KB 日期（2026-06-12）": "KB 那半仍在**而且帶著自己的時點**（＝並陳不是取代）。",
+    "must_match web 日期（2026-09）": "web 那半也帶著自己的時點。",
+    "⚠ 兩條都**刻意不綁數值也不綁日期寫法**": "同一份 fixture 三輪寫出三種形式：`（截至 2026-09-01）` / `此數據來自 2026 年 9 月 1 日的最新報告` / `依據 2026 年 6 月 12 日的…`。第一版綁市值數值（$4.4 兆）在重錄後就死了；第二版改綁 ISO 日期字面，**第二輪就誤報**。綁格式只是換一種綁法——同一個錯我犯了兩次，兩種真實寫法凍在這裡。",
+    "為什麼不用 numbers_must_be_in_fixture": "答案裡同時有 web 值與 KB 值，而 KB 值**本來就不在 fixture 裡** → 必然假 FAIL。",
+    "已知不穩（系統面，非量尺）": "r5/r6/r7 三輪 PASS/FAIL/PASS。r6 引用了 web 值卻**完全沒給時點**，還寫「兩者皆屬於同一時間段的不同來源」（六月 vs 九月）。這正是本條 `why` 早就寫著的：**這個行為是 Generator 靠 prompt 做到的，validator 那條防線仍然是空的**。"
+   }
+  },
+  {
+   "id": "web-02",
+   "role": "純即時報價（KB 結構上不可能有）",
+   "why": "股價不是財報內容，KB 永遠答不了。這題驗『KB 補不了時真的會走 web 並引用它』——也就是 rq.SYSTEM_PROMPT 的放行條款有沒有生效（Rule 1/2/8 曾讓模型寧可捏造推導值也不碰 web 數字）。同時驗地區子網域：fixture 的原始回應含 ca./sg./nz.finance.yahoo.com，答案絕不可引用它們（別的市場的報價，實測同一天差 12%）。",
+   "assert": {
+    "web_calls_gte": 1,
+    "must_cite_any_web": true,
+    "numbers_must_be_in_fixture": [
+     "\\b\\d{3}\\.\\d{2}\\b"
+    ]
+   }
+  },
+  {
+   "id": "web-04",
+   "role": "新聞時效 + 來源可追溯",
+   "why": "驗 web 內容真的進到答案且帶得出來源。⚠ 不斷言具體事實——錄製時 LLM 講 Q2 營收 $22.5B，重放時講 YTD 下跌 24%，兩個都在 fixture 裡、都正確。斷言具體事實等於在測 LLM 的抽樣。",
+   "assert": {
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "web-03",
+   "role": "第二個陰性對照：KB 涵蓋得到的期間題不得動用 web",
+   "why": "⚠ 這條的第一版是『已知缺口的回歸鎖』，寫著『KB 最新 10-Q 是 202603，5 個月前的資料被當成最新一季，該去查 web』——**診斷錯了**。MSFT 在 KB 的天花板是 MSFT_10K_2026（FY2026，涵蓋到 2026-06-30），距 as-of 只有 46 天，KB 不缺資料、web 本來就不該觸發。web 打 0 次是**對的行為**，不是缺口。真正的缺陷是『最新一季』被解析成候選裡最新的那份 10-Q 而非證據裡最新的期別，已於 2026-08-15 由 Synthesize 的期別 validator 修掉。",
+   "與 web-05 的分工": "web-05 是『純歷史財報題』（明確指定 FY2025），這題是『相對期間指稱』（最新一季）——後者更容易被誤判成需要即時資料。兩題一起才涵蓋得住 web 不該被觸發的兩種形狀。",
+   "期別正確性不在這裡測": "『答案有沒有引用最新期別』由 eval/verify_answer_validators.py 閘門⑥ 逐題檢查（零 LLM、零網路）。那是同一件事，只寫一個地方；在這裡再寫一次必然漂移。",
+   "assert": {
+    "web_calls_eq": 0,
+    "no_web_citation": true
+   }
+  }
+ ]
+}

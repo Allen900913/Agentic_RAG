@@ -1,0 +1,309 @@
+{
+  "_meta": {
+    "說明": "check_news_routing.py 的題目分類：把題目分成 flow / mixed / record 三類。這個檔只放『這題屬於哪一類』，不放標準答案——本量尺不比對 gold（理由見下）。",
+    "為什麼不比對 gold": "冷凍的 37 題 gold 是『2026 年 6 月的 KB 新聞說了什麼』，而這裡要問的是『答案有沒有拿財報冒充新聞』。兩者是不同的問題（同 web_claims_news37.json 的理由）。本量尺只讀答案自己的引用標記與措辭，零 LLM、零網路、零 Qdrant。",
+    "三類的判準": {
+      "flow": "正確性靠『夠新＋來源可信』判定，而 KB **依設計沒有這種資料**（data_update_edgar.RAW_EXCLUDE_DIRS 排除 News/）。所以拿財報回答＝拿別的東西冒充。危險態＝kb_only。",
+      "record": "正確性靠『期別對＋有引用＋數字可驗』判定，KB 一定有。**陰性對照**：沒有這一半，一個『全部題目都送 web』的實作也會在 flow 那半滿分。危險態＝over_routed。",
+      "mixed": "題目自己同時要求兩半（mi-* 的『加上新聞中…』、mh-06~10 的『新聞中…的是哪一家？該公司的 X 是多少』）。**本量尺對這一類判別力弱**：它只看『整份答案有沒有 web 引用』，分不出『新聞那一半是不是也用財報答的』。所以 mixed 只計數、不判定。"
+    },
+    "col-08 為什麼是 mixed 不是 record": "『NVIDIA 現在值多少錢（市值）』的 KB 側有 Fundamentals 的快照市值（2026-06-12），web 側有當日值——正確行為是**兩個都講並各標時點**（同 web_claims.json 的 web-01）。它既不是『KB 什麼都沒有』也不是『web 不該出手』，放進 record 當陰性對照會把正確的並陳判成過度路由。",
+    "維護": "新增題目時只需要決定 kind。⚠ 不要把這些題併進 eval_set.json（分母必須跨日期可比，見 CLAUDE.md）。",
+    "probe_only 是什麼": "帶 probe_only 的題目**只給 eval/probe_route_classification.py 用**，題目文字就地寫在這裡、刻意不進任何 eval set（加進去會改動分母，跨日期分數就比不了）。它們也**不進 check_news_routing.py 的分母**——那支只讀結果檔，而這些題從來不會被端到端跑。存在理由：兩次觀察到的路由誤判（sem-01 護城河、sem-06 監管風險）都是**定性財報敘述題**，而原本的 record 那半只有 2 題是這個形狀 → 那條尾巴在既有題庫上量不到。這 8 題把樣本集中到尾巴所在的地方，好讓『要不要改 prompt』這個決定有證據可依。⚠ 全部都是 10-K Item 1／1A／7 答得出來的題目（業務、競爭、風險因子、MD&A），正確 route 一律是 kb。"
+  },
+  "questions": [
+    {
+      "id": "news-01",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-02",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-03",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-04",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-05",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-06",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-07",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-08",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-09",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-10",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-11",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-12",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-13",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-14",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "news-15",
+      "kind": "flow",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "col-14",
+      "kind": "flow",
+      "source": "eval_set_news.json",
+      "why": "口語措辭的純新聞題（『最近跟哪家挖比特幣的公司搭上線』）。flow 這一類全是 news-* 會讓量尺只驗過一種措辭。"
+    },
+    {
+      "id": "mi-01",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-02",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-03",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-04",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-05",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-06",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-07",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-08",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-09",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-10",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-11",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-12",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-13",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-14",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mi-15",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mh-06",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mh-07",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mh-08",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mh-09",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "mh-10",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "col-15",
+      "kind": "mixed",
+      "source": "eval_set_news.json"
+    },
+    {
+      "id": "col-08",
+      "kind": "mixed",
+      "source": "eval_set.json",
+      "why": "現在市值：KB 有 2026-06-12 快照、web 有當日值 → 正確行為是並陳。見 _meta。"
+    },
+    {
+      "id": "lex-03",
+      "kind": "record",
+      "source": "eval_set.json"
+    },
+    {
+      "id": "lex-07",
+      "kind": "record",
+      "source": "eval_set.json"
+    },
+    {
+      "id": "sem-01",
+      "kind": "record",
+      "source": "eval_set.json"
+    },
+    {
+      "id": "sem-06",
+      "kind": "record",
+      "source": "eval_set.json"
+    },
+    {
+      "id": "mix-01",
+      "kind": "record",
+      "source": "eval_set.json",
+      "why": "『最新一季 Azure 營收成長率』帶『最新』字樣但答案在 10-Q 裡——刻意選它當陰性對照：如果路由把『最新』一律當 flow，這一題會現形。"
+    },
+    {
+      "id": "mix-11",
+      "kind": "record",
+      "source": "eval_set.json"
+    },
+    {
+      "id": "mh-03",
+      "kind": "record",
+      "source": "eval_set.json",
+      "why": "多公司比較但純財報。確保 record 這一半不是只有單公司單指標的簡單題。"
+    },
+    {
+      "id": "qual-01",
+      "kind": "record",
+      "source": "probe_only",
+      "probe_only": true,
+      "query": "Apple 的主要競爭對手有哪些，競爭壓力來自哪些面向？",
+      "why": "定性財報敘述題（10-K Item 1／1A／7）——已觀察到的路由誤判都在這一族"
+    },
+    {
+      "id": "qual-02",
+      "kind": "record",
+      "source": "probe_only",
+      "probe_only": true,
+      "query": "Meta 在隱私與資料保護方面面臨哪些監管風險？",
+      "why": "定性財報敘述題（10-K Item 1／1A／7）——已觀察到的路由誤判都在這一族"
+    },
+    {
+      "id": "qual-03",
+      "kind": "record",
+      "source": "probe_only",
+      "probe_only": true,
+      "query": "Tesla 的商業模式為什麼與傳統車廠不同？",
+      "why": "定性財報敘述題（10-K Item 1／1A／7）——已觀察到的路由誤判都在這一族"
+    },
+    {
+      "id": "qual-04",
+      "kind": "record",
+      "source": "probe_only",
+      "probe_only": true,
+      "query": "Microsoft 靠什麼維持在雲端市場的競爭優勢？",
+      "why": "定性財報敘述題（10-K Item 1／1A／7）——已觀察到的路由誤判都在這一族"
+    },
+    {
+      "id": "qual-05",
+      "kind": "record",
+      "source": "probe_only",
+      "probe_only": true,
+      "query": "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？",
+      "why": "定性財報敘述題（10-K Item 1／1A／7）——已觀察到的路由誤判都在這一族"
+    },
+    {
+      "id": "qual-06",
+      "kind": "record",
+      "source": "probe_only",
+      "probe_only": true,
+      "query": "NVIDIA 為何在供應鏈上高度依賴少數代工廠？這帶來什麼風險？",
+      "why": "定性財報敘述題（10-K Item 1／1A／7）——已觀察到的路由誤判都在這一族"
+    },
+    {
+      "id": "qual-07",
+      "kind": "record",
+      "source": "probe_only",
+      "probe_only": true,
+      "query": "Amazon 的營運利潤率為什麼會受履約成本影響？",
+      "why": "定性財報敘述題（10-K Item 1／1A／7）——已觀察到的路由誤判都在這一族"
+    },
+    {
+      "id": "qual-08",
+      "kind": "record",
+      "source": "probe_only",
+      "probe_only": true,
+      "query": "Apple 在中國市場面臨哪些地緣政治與法規風險？",
+      "why": "定性財報敘述題（10-K Item 1／1A／7）——已觀察到的路由誤判都在這一族"
+    }
+  ]
+}

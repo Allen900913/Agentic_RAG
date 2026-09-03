@@ -468,12 +468,28 @@ def _period_tag(filing, label: str) -> str:
     return datetime.now().strftime("%Y") if label == "10K" else datetime.now().strftime("%Y%m")
 
 
-def fetch_sec_filings(ticker: str, n_quarters: int = 2,
+def _already_local(entry: dict) -> bool:
+    """manifest 裡有這筆、**且**它的 .html 與 .nc 都還在本機 → 這份不必再抓。
+
+    存在理由（2026-08-18）：往回加抓舊年度時 `latest(N)` 一定會把既有的那幾份一起撈回來，
+    照原行為會重新下載並覆寫。accession_no 相同所以內容理論上一樣，但 CLAUDE.md 的可重現性
+    紀律是「不要為了順便更新去重抓 SEC」——**既有檔案一個位元組都不該被動到**，這樣切塊實驗
+    的差異才分得清是規則還是換版。順帶也省掉一半的 SEC 請求。
+    """
+    html = FILINGS_DIR / entry.get("html_file", "")
+    nc = SEC_LOCAL_DIR / entry.get("local_nc", "")
+    return bool(entry.get("html_file")) and html.exists() and nc.exists()
+
+
+def fetch_sec_filings(ticker: str, n_quarters: int = 2, n_annuals: int = 1,
                       manifest: list[dict] | None = None) -> int:
     """
     Fetch 10-K and 10-Q from SEC EDGAR.
-      - 10-K：抓最新一份
+      - 10-K：抓最新 n_annuals 份（預設 1）
       - 10-Q：抓最新 n_quarters 份（預設 2，即本季 + 前一季）
+
+    **append-only**：manifest 已記載且本機 .html/.nc 都在的 filing 直接跳過，不重抓不覆寫
+    （見 `_already_local`）。所以 `--quarters 8 --annuals 3` 只會補齊缺的那幾份。
     檔名以「財報真實會計期間」命名（見 _period_tag），避免同一份財報在不同
     抓取日產生不同檔名的重複問題。
 
@@ -492,6 +508,9 @@ def fetch_sec_filings(ticker: str, n_quarters: int = 2,
         return 0
 
     saved = 0
+    skipped = 0
+    # accession_no → manifest entry；用來判斷哪幾份已經在本機（append-only）
+    known = {e["accession_no"]: e for e in load_sec_manifest()}
 
     try:
         company = Company(ticker)
@@ -501,7 +520,7 @@ def fetch_sec_filings(ticker: str, n_quarters: int = 2,
 
     # (form_type, label, char_limit, 抓幾份)
     for form_type, label, char_limit, n_fetch in [
-        ("10-K", "10K", 60_000, 1),
+        ("10-K", "10K", 60_000, n_annuals),
         ("10-Q", "10Q", 40_000, n_quarters),
     ]:
         try:
@@ -517,6 +536,11 @@ def fetch_sec_filings(ticker: str, n_quarters: int = 2,
 
         for filing in filings:
             try:
+                acc = str(filing.accession_no)
+                if acc in known and _already_local(known[acc]):
+                    print(f"  = {known[acc]['html_file']}  [已在本機，跳過不重抓]")
+                    skipped += 1
+                    continue
                 date_tag = _period_tag(filing, label)
 
                 # ── 優先存 HTML（edgartools 標準格式）──────────────────────
@@ -570,7 +594,8 @@ def fetch_sec_filings(ticker: str, n_quarters: int = 2,
             except Exception as e:
                 print(f"  x {form_type} ({getattr(filing,'period_of_report','?')}) failed: {e}")
 
-    print(f"  [INFO] Saved {saved} SEC filing(s) for {ticker}")
+    print(f"  [INFO] Saved {saved} SEC filing(s) for {ticker}"
+          + (f"（另有 {skipped} 份已在本機、跳過）" if skipped else ""))
     return saved
 
 
@@ -718,15 +743,25 @@ def main() -> None:
 Examples:
   python fetch_data.py                        # NVDA MSFT AAPL
   python fetch_data.py --tickers NVDA TSLA    # custom tickers
-  python fetch_data.py --news-count 3         # 3 news per ticker
-  python fetch_data.py --skip-news            # skip news only
+  python fetch_data.py --quarters 8 --annuals 3   # 往回加舊年度（append-only，已在本機的會跳過）
+  python fetch_data.py --with-news            # 例外：重新抓新聞（預設**不抓**，見下）
         """,
     )
     parser.add_argument("--tickers", nargs="+", default=DEFAULT_TICKERS)
     parser.add_argument("--news-count", type=int, default=MAX_NEWS_PER_TICKER)
     parser.add_argument("--quarters", type=int, default=2,
                         help="抓最新幾季 10-Q（預設 2 = 本季 + 前一季）")
-    parser.add_argument("--skip-news", action="store_true")
+    parser.add_argument("--annuals", type=int, default=1,
+                        help="抓最新幾份 10-K（預設 1）。要往回加舊年度做期別壓力測試時調大；"
+                             "已在本機的 filing 會自動跳過，不重抓不覆寫")
+    # ⚠ 2026-08-19：新聞**預設不抓**（原本是 `--skip-news` 才跳過，現在反過來要 `--with-news`）。
+    # 理由：KB 已改成只收「有揭露義務、可引用、可驗證數字」的記錄（filing + Fundamentals），
+    # 新聞是「流」不是「記錄」——它沒有期別標籤、來源品質不受控（實測 28 條來源標記有 17 條
+    # 是本專案自己的 web 白名單會拒絕的站），且抓下來那一刻就開始過期。
+    # 「市場現在怎麼看」改由 agentic 的 live web 路徑供應。詳見 docs/EVAL.md〈KB 拔除新聞〉。
+    parser.add_argument("--with-news", action="store_true",
+                        help="重新抓取新聞（預設不抓）。⚠ 抓下來也不會進 KB——"
+                             "data_update_edgar.py 已不 ingest News 目錄")
     parser.add_argument("--skip-sec", action="store_true")
     parser.add_argument("--skip-fundamentals", action="store_true")
     args = parser.parse_args()
@@ -747,10 +782,11 @@ Examples:
         print(f" Processing: {ticker}")
         print("─" * 40)
 
-        if not args.skip_news:
+        if args.with_news:
             total_saved += fetch_news(ticker, args.news_count, seen_news_keys)
         if not args.skip_sec:
             total_saved += fetch_sec_filings(ticker, n_quarters=args.quarters,
+                                             n_annuals=args.annuals,
                                              manifest=sec_manifest)
         if not args.skip_fundamentals:
             total_saved += fetch_fundamentals(ticker)

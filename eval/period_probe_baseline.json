@@ -1,0 +1,159 @@
+{
+  "_meta": {
+    "這是什麼": "灌入舊年度 filing 之前，KB 裡 filing 的完整清單（21 份）。**這是 eval gold 的凍結快照，不是資料備份。**",
+    "存在理由": "eval/eval_set.json 有 4 題的 gold 是萬用字元（sem-03/sem-04/col-02 的 MSFT_10K_*.html、col-03 的 AMZN_10K_*.html+AMZN_10Q_*.html）。加入舊年度之後那些 pattern 會同時吃到多個年份 → 撈到哪一年都算命中，**量尺在最需要判別力的地方失去判別力**。把萬用字元對照這份快照展開，「gold」的意思就固定成「舊資料進來以前該撈到的那一份」，eval_set.json 一個字都不用改。",
+    "產生於": "2026-08-18（fetch_data.py 加抓舊年度之前）",
+    "維護": "⛔ 這份檔案**不可以**隨 manifest 一起更新——它的價值就在於凍結。要重生成只有一個正當理由：eval_set.json 的 gold 本身改了。",
+    "誰在用": "eval/probe_temporal_interference.py",
+    "filing 份數": 21
+  },
+  "filings": {
+    "AAPL_10K_2025.html": {
+      "ticker": "AAPL",
+      "kind": "10K",
+      "period_code": "2025",
+      "accession_no": "0000320193-25-000079",
+      "period_of_report": "2025-09-27"
+    },
+    "AAPL_10Q_202603.html": {
+      "ticker": "AAPL",
+      "kind": "10Q",
+      "period_code": "202603",
+      "accession_no": "0000320193-26-000013",
+      "period_of_report": "2026-03-28"
+    },
+    "AAPL_10Q_202606.html": {
+      "ticker": "AAPL",
+      "kind": "10Q",
+      "period_code": "202606",
+      "accession_no": "0000320193-26-000020",
+      "period_of_report": "2026-06-27"
+    },
+    "AMZN_10K_2025.html": {
+      "ticker": "AMZN",
+      "kind": "10K",
+      "period_code": "2025",
+      "accession_no": "0001018724-26-000004",
+      "period_of_report": "2025-12-31"
+    },
+    "AMZN_10Q_202603.html": {
+      "ticker": "AMZN",
+      "kind": "10Q",
+      "period_code": "202603",
+      "accession_no": "0001018724-26-000014",
+      "period_of_report": "2026-03-31"
+    },
+    "AMZN_10Q_202606.html": {
+      "ticker": "AMZN",
+      "kind": "10Q",
+      "period_code": "202606",
+      "accession_no": "0001018724-26-000026",
+      "period_of_report": "2026-06-30"
+    },
+    "GOOGL_10K_2025.html": {
+      "ticker": "GOOGL",
+      "kind": "10K",
+      "period_code": "2025",
+      "accession_no": "0001652044-26-000018",
+      "period_of_report": "2025-12-31"
+    },
+    "GOOGL_10Q_202603.html": {
+      "ticker": "GOOGL",
+      "kind": "10Q",
+      "period_code": "202603",
+      "accession_no": "0001652044-26-000048",
+      "period_of_report": "2026-03-31"
+    },
+    "GOOGL_10Q_202606.html": {
+      "ticker": "GOOGL",
+      "kind": "10Q",
+      "period_code": "202606",
+      "accession_no": "0001652044-26-000071",
+      "period_of_report": "2026-06-30"
+    },
+    "META_10K_2025.html": {
+      "ticker": "META",
+      "kind": "10K",
+      "period_code": "2025",
+      "accession_no": "0001628280-26-003942",
+      "period_of_report": "2025-12-31"
+    },
+    "META_10Q_202603.html": {
+      "ticker": "META",
+      "kind": "10Q",
+      "period_code": "202603",
+      "accession_no": "0001628280-26-028526",
+      "period_of_report": "2026-03-31"
+    },
+    "META_10Q_202606.html": {
+      "ticker": "META",
+      "kind": "10Q",
+      "period_code": "202606",
+      "accession_no": "0001628280-26-050705",
+      "period_of_report": "2026-06-30"
+    },
+    "MSFT_10K_2026.html": {
+      "ticker": "MSFT",
+      "kind": "10K",
+      "period_code": "2026",
+      "accession_no": "0001193125-26-323660",
+      "period_of_report": "2026-06-30"
+    },
+    "MSFT_10Q_202512.html": {
+      "ticker": "MSFT",
+      "kind": "10Q",
+      "period_code": "202512",
+      "accession_no": "0001193125-26-027207",
+      "period_of_report": "2025-12-31"
+    },
+    "MSFT_10Q_202603.html": {
+      "ticker": "MSFT",
+      "kind": "10Q",
+      "period_code": "202603",
+      "accession_no": "0001193125-26-191507",
+      "period_of_report": "2026-03-31"
+    },
+    "NVDA_10K_2026.html": {
+      "ticker": "NVDA",
+      "kind": "10K",
+      "period_code": "2026",
+      "accession_no": "0001045810-26-000021",
+      "period_of_report": "2026-01-25"
+    },
+    "NVDA_10Q_202510.html": {
+      "ticker": "NVDA",
+      "kind": "10Q",
+      "period_code": "202510",
+      "accession_no": "0001045810-25-000230",
+      "period_of_report": "2025-10-26"
+    },
+    "NVDA_10Q_202604.html": {
+      "ticker": "NVDA",
+      "kind": "10Q",
+      "period_code": "202604",
+      "accession_no": "0001045810-26-000052",
+      "period_of_report": "2026-04-26"
+    },
+    "TSLA_10K_2025.html": {
+      "ticker": "TSLA",
+      "kind": "10K",
+      "period_code": "2025",
+      "accession_no": "0001628280-26-003952",
+      "period_of_report": "2025-12-31"
+    },
+    "TSLA_10Q_202603.html": {
+      "ticker": "TSLA",
+      "kind": "10Q",
+      "period_code": "202603",
+      "accession_no": "0001628280-26-026673",
+      "period_of_report": "2026-03-31"
+    },
+    "TSLA_10Q_202606.html": {
+      "ticker": "TSLA",
+      "kind": "10Q",
+      "period_code": "202606",
+      "accession_no": "0001628280-26-049270",
+      "period_of_report": "2026-06-30"
+    }
+  }
+}

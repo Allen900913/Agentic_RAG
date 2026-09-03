@@ -1,0 +1,390 @@
+{
+  "_meta": {
+    "這是什麼": "2026-08-19 從 eval_set.json 搬出來的 37 題——它們的 gold 含 KB 已不再收錄的新聞語料。",
+    "為什麼不直接刪": "① 16 題只靠新聞、21 題是新聞＋財報複合（multi_intent 全 15 題），刪掉等於永久失去 multi_intent 這個題型；② 這批題正是日後驗收「live web 路徑能不能取代 KB 新聞」的唯一現成題庫——那是拔除新聞時就講好的下一步。",
+    "要怎麼用": "現在**不要**拿它跑分：eval 預設 freshness_mode=snapshot、web 是關的，跑了必然全滅，那不是證據。要用它必須先把 eval/web_fixture.json 錄到覆蓋這 37 題（現在只有 5 題），再以『web 開』對『KB 有新聞的舊 collection』作對照。",
+    "拆分方式": "relevant 含任一 *_News_*.txt 即搬走（16 題純新聞 + 21 題複合）。",
+    "產生於": "2026-08-19",
+    "母檔": "eval/eval_set.json",
+    "⚠ 其中兩題已有去新聞的後代": "mi-04 → lex-16、mi-05 → lex-17（2026-08-19 補回 eval/eval_set.json，只留財報半）。動機是量尺覆蓋：拆分讓 check_number_defects 掉了兩條主張。⚠ **不要把 mi-04／mi-05 整題搬回母檔**，那會與 lex-16／lex-17 重複計分；它們留在這裡是為了驗 multi_intent 這個題型（＝ live web 能不能接手新聞那一半）。⚠ mi-05 的檢索缺陷**在去掉新聞子句的 lex-17 上一樣會重現**（兩輪 1 PASS/1 FAIL），所以它不是新聞造成的，也沒有被拔除新聞修好——見 docs/EVAL.md〈量尺補回兩條〉。"
+  },
+  "queries": [
+    {
+      "id": "news-01",
+      "category": "news",
+      "query": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+      "relevant": [
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-02",
+      "category": "news",
+      "query": "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？",
+      "relevant": [
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-03",
+      "category": "news",
+      "query": "最近分析師對 Apple 股票有哪些利多的看法？",
+      "relevant": [
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-04",
+      "category": "news",
+      "query": "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？",
+      "relevant": [
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-05",
+      "category": "news",
+      "query": "關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？",
+      "relevant": [
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-06",
+      "category": "news",
+      "query": "NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？",
+      "relevant": [
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-07",
+      "category": "news",
+      "query": "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？",
+      "relevant": [
+        "MSFT_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-08",
+      "category": "news",
+      "query": "有沒有 Microsoft 參與 AI 資安合作的新聞？",
+      "relevant": [
+        "MSFT_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-09",
+      "category": "news",
+      "query": "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+      "relevant": [
+        "GOOGL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-10",
+      "category": "news",
+      "query": "最近有哪些關於 Meta 的利多分析與 AI 投資消息？",
+      "relevant": [
+        "META_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-11",
+      "category": "news",
+      "query": "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+      "relevant": [
+        "AMZN_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-12",
+      "category": "news",
+      "query": "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？",
+      "relevant": [
+        "TSLA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-13",
+      "category": "news",
+      "query": "最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？",
+      "relevant": [
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-14",
+      "category": "news",
+      "query": "新聞如何評價 Apple 服務業務的成長與獲利能力？",
+      "relevant": [
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "news-15",
+      "category": "news",
+      "query": "新聞報導 Apple 為什麼被視為值得長期持有的股票？",
+      "relevant": [
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-01",
+      "category": "multi_intent",
+      "query": "NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？",
+      "relevant": [
+        "NVDA_Fundamentals_*.txt",
+        "NVDA_IncomeStatement_*.txt",
+        "NVDA_10Q_202604.html",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-02",
+      "category": "multi_intent",
+      "query": "NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？",
+      "relevant": [
+        "NVDA_Fundamentals_*.txt",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-03",
+      "category": "multi_intent",
+      "query": "Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？",
+      "relevant": [
+        "AAPL_Fundamentals_*.txt",
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-04",
+      "category": "multi_intent",
+      "query": "Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？",
+      "relevant": [
+        "AAPL_Fundamentals_*.txt",
+        "AAPL_IncomeStatement_*.txt",
+        "AAPL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-05",
+      "category": "multi_intent",
+      "query": "Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？",
+      "relevant": [
+        "MSFT_Fundamentals_20260612.txt",
+        "MSFT_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-06",
+      "category": "multi_intent",
+      "query": "Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？",
+      "relevant": [
+        "MSFT_Fundamentals_*.txt",
+        "MSFT_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-07",
+      "category": "multi_intent",
+      "query": "Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？",
+      "relevant": [
+        "AMZN_Fundamentals_*.txt",
+        "AMZN_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-08",
+      "category": "multi_intent",
+      "query": "Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？",
+      "relevant": [
+        "AMZN_Fundamentals_*.txt",
+        "AMZN_IncomeStatement_*.txt",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-09",
+      "category": "multi_intent",
+      "query": "Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？",
+      "relevant": [
+        "GOOGL_Fundamentals_*.txt",
+        "GOOGL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-10",
+      "category": "multi_intent",
+      "query": "Alphabet 近一年的營收成長率是多少？加上新聞中 Navan 與 Google Gemini 的合作案例，反映出 Google 在 AI 生態系布局上的哪些進展？",
+      "relevant": [
+        "GOOGL_Fundamentals_*.txt",
+        "GOOGL_IncomeStatement_*.txt",
+        "GOOGL_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-11",
+      "category": "multi_intent",
+      "query": "Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？",
+      "relevant": [
+        "META_Fundamentals_*.txt",
+        "META_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-12",
+      "category": "multi_intent",
+      "query": "Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？",
+      "relevant": [
+        "META_Fundamentals_*.txt",
+        "META_IncomeStatement_*.txt",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-13",
+      "category": "multi_intent",
+      "query": "Tesla 目前的毛利率表現如何？加上新聞中 SpaceX 即將 IPO 讓 Tesla 關注度降溫的報導，這對 Tesla 目前的市場處境有何影響？",
+      "relevant": [
+        "TSLA_Fundamentals_20260612.txt",
+        "TSLA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mi-14",
+      "category": "multi_intent",
+      "query": "Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？",
+      "relevant": [
+        "TSLA_10Q_202606.html",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true,
+      "pin_chunks": [
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 77
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 75
+        }
+      ]
+    },
+    {
+      "id": "mi-15",
+      "category": "multi_intent",
+      "query": "NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？",
+      "relevant": [
+        "NVDA_Fundamentals_20260612.txt",
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "col-14",
+      "category": "colloquial",
+      "query": "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？",
+      "relevant": [
+        "NVDA_News_*.txt"
+      ],
+      "answerable": true,
+      "maps_to": "news-04"
+    },
+    {
+      "id": "col-15",
+      "category": "colloquial",
+      "query": "特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？",
+      "relevant": [
+        "TSLA_10Q_202606.html",
+        "TSLA_News_*.txt"
+      ],
+      "answerable": true,
+      "maps_to": "mi-13"
+    },
+    {
+      "id": "mh-06",
+      "category": "multi_hop",
+      "query": "新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？",
+      "relevant": [
+        "AAPL_News_*.txt",
+        "AAPL_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-07",
+      "category": "multi_hop",
+      "query": "新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？",
+      "relevant": [
+        "AMZN_News_*.txt",
+        "AMZN_10K_2025.html",
+        "AMZN_IncomeStatement_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-08",
+      "category": "multi_hop",
+      "query": "新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？",
+      "relevant": [
+        "GOOGL_News_*.txt",
+        "GOOGL_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-09",
+      "category": "multi_hop",
+      "query": "新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？",
+      "relevant": [
+        "GOOGL_News_20260612_02.txt",
+        "GOOGL_Fundamentals_20260612.txt"
+      ],
+      "answerable": true
+    },
+    {
+      "id": "mh-10",
+      "category": "multi_hop",
+      "query": "新聞中被 Morgan Stanley 特別稱許其 AI 護城河、同時大舉提高資本支出的是哪一家公司？該公司最新年度的淨利（net income）是多少？",
+      "relevant": [
+        "META_News_*.txt",
+        "META_IncomeStatement_20260612.txt"
+      ],
+      "answerable": true
+    }
+  ]
+}

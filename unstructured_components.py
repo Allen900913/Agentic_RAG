@@ -244,19 +244,40 @@ CAPTION_MIN_LETTERS = 3
 TABLE_SUMMARY_MAX_CHARS = 2500
 
 # 摘要模型（Groq，OpenAI 相容；用法與 fetch_data.py::_get_groq_client 一致）。
-# 2026-08-11 從 gemini-2.5-flash 換過來。**刻意選非推理的 70B，而不是更大的
-# openai/gpt-oss-120b**：一句話 caption 不需要 reasoning，而 reasoning token 與正文共用
-# completion 額度，正是下面那個缺陷的根源。實測 gpt-oss-120b 在 max_completion_tokens=200
-# ＋ reasoning_effort=medium 下 **content 直接是空字串**（200 token 全被 reasoning 吃掉），
-# 連 effort=low 都出現過三次全空——reasoning 長度自己有跑次變異。llama-3.3-70b-versatile
-# 對同一張表三次輸出全等、句子完整。
-TABLE_SUMMARY_MODEL = os.getenv("TABLE_SUMMARY_MODEL", "llama-3.3-70b-versatile")
+#
+# 沿革：gemini-2.5-flash →（2026-08-11）llama-3.3-70b-versatile →（2026-08-18）gpt-oss-20b。
+# **不是換得更好，是被迫換**：Groq 於 2026-08-16 讓 llama-3.3-70b-versatile 退役並把 Llama
+# 全系列下架，現存 chat 模型只剩 gpt-oss 系列、qwen3.6-27b、compound。
+#
+# ⚠ **Groq 官方建議的替代品是 gpt-oss-120b，而那正是這裡 2026-08-11 測過並否決的模型**。
+# 但當初的否決理由是「reasoning token 吃光 completion 額度 → content 空字串」，那是**預算
+# 問題不是能力問題**。2026-08-18 的 bake-off 把「重現既有失敗」也放進矩陣驗證了這一點：
+#
+#   組態                        空/錯    重複全等    平均字元
+#   gpt-oss-120b @200          10/10    —          0        ← 完美重現既有記載，根因確認
+#   gpt-oss-120b @700 (14 表×3) 0/42    6/14        150
+#   gpt-oss-20b  @700 low       0/42    **12/14**   164
+#   qwen3.6-27b  @700           0/10    5/5         2709     ← `<think>` 直接吐進 content，不可用
+#
+# 選 20b 的判準是**穩定性**，跟當初選 llama-70b 的判準一致（「對同一張表三次輸出全等」）：
+# caption 變異是 CLAUDE.md〈重建不會逐字重現舊 collection〉第 ② 條的成因之一，愈穩愈好。
+# 代價是 20b 有 6/42 的輸出超過 system prompt 要求的 30 詞（120b 是 0/42）——長度不是正確性
+# 問題，用穩定性換它划算。⚠ 第一輪 bake-off 的取樣全落在 AAPL_10K 的 exhibit index（垃圾表
+# 區），結論不可信；round 2 改成跨 7 家 × 兩種 form 的 14 張**財務**表才是上面這組數字。
+TABLE_SUMMARY_MODEL = os.getenv("TABLE_SUMMARY_MODEL", "openai/gpt-oss-20b")
 
-# 摘要生成的 token 上限。⚠ 別再設成 60：舊版走 gemini-2.5-flash，而 2.5-flash 預設開
-# thinking、thinking token 與正文**共用**這個額度，60 會讓正文剛開頭就撞頂。實測
-# `us_stock_rag_edgar_head` 走到這條路的 11 筆裡 10 筆被砍在 2~3 個字
-# （`This table details`／`This table presents`／`This table`），等於整條路沒有產出。
-TABLE_SUMMARY_MAX_TOKENS = 200
+# gpt-oss 是推理模型，reasoning token 與正文共用 completion 額度 → 必須壓低推理量。
+# 空字串表示不帶這個參數（換成非推理模型時用）。
+TABLE_SUMMARY_REASONING_EFFORT = os.getenv("TABLE_SUMMARY_REASONING_EFFORT", "low")
+
+# 摘要生成的 token 上限。**這個值必須跟著模型走**，它守的是「正文有沒有預算寫完」：
+#   · 60（gemini-2.5-flash 時代）→ thinking 與正文共用額度，正文剛開頭就撞頂。實測
+#     `us_stock_rag_edgar_head` 走到這條路的 11 筆裡 10 筆被砍在 2~3 個字
+#     （`This table details`／`This table presents`／`This table`），整條路等於沒有產出。
+#   · 200（llama-3.3-70b 時代）→ 非推理模型，200 綽綽有餘。
+#   · 700（gpt-oss-20b，2026-08-18）→ 推理模型，**200 會 100% 吐空字串**（bake-off 10/10）。
+# 換模型時先跑一次 bake-off 確認「空/錯 = 0」再定這個數，不要憑感覺調。
+TABLE_SUMMARY_MAX_TOKENS = 700
 
 # 生成 caption 時往前收多少個 element 當脈絡。比 TABLE_CAPTION_LOOKBACK 大，因為這裡不是
 # 「挑一個 caption」而是「給 LLM 看夠不夠判斷這是什麼表」，寧可多給幾段。
@@ -408,6 +429,9 @@ def _llm_summarize_table(markdown: str, context: str = "", item_id: str = "") ->
         parts.append(f"Text immediately preceding the table:\n{context}")
     parts.append(f"Table (Markdown):\n{body}")
 
+    # 推理模型才吃 reasoning_effort；設成空字串就不帶（見 TABLE_SUMMARY_REASONING_EFFORT）
+    extra = ({"reasoning_effort": TABLE_SUMMARY_REASONING_EFFORT}
+             if TABLE_SUMMARY_REASONING_EFFORT else {})
     for attempt in range(TABLE_SUMMARY_MAX_RETRIES):
         try:
             resp = client.chat.completions.create(
@@ -416,6 +440,7 @@ def _llm_summarize_table(markdown: str, context: str = "", item_id: str = "") ->
                 max_completion_tokens=TABLE_SUMMARY_MAX_TOKENS,
                 messages=[{"role": "system", "content": _TABLE_SUMMARY_SYSTEM},
                           {"role": "user", "content": "\n\n".join(parts)}],
+                **extra,
             )
             return (resp.choices[0].message.content or "").strip()
         except Exception as e:

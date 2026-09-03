@@ -1,0 +1,417 @@
+{
+ "_meta": {
+  "說明": "eval/eval_set_news.json 那 37 題在 live web 路徑上的性質斷言（＋3 題陰性對照）。搭配 eval/web_fixture_news37.json 與 AGENTIC_AS_OF_DATE=2026-08-20。",
+  "為什麼不用新聞 gold": "那 37 題的 gold 是 2026 年 6 月的新聞內容，live web 回答的是現在的網路內容——**是兩個不同的問題**。拿 web 答案對新聞 gold 打分會系統性低估，而低分的原因與 web 好不好無關，是題目綁在一個時點上。",
+  "為什麼沒有 numbers_must_be_in_fixture": "這批題**天生是混合的**（財報半＋新聞半），答案裡 KB 數字與 web 數字並存。實測 news-13 的 20 個「三位數兩位小數」有 7 個不在 fixture——逐一讀完全部是 Fundamentals 的市值／TTM 營收，不是幻覺。**沒有任何字面樣式能把兩種來源分開**，硬套只會製造假 FAIL（見 check_web_claims.py 對該斷言的警語）。要真的驗數字來源，需要系統逐數字標出處，那是另一件事。",
+  "as_of": "2026-08-20",
+  "collection": "us_stock_rag_edgar_mdna",
+  "維護": "重錄 fixture 或改 as-of 都要回來確認一次。",
+  "⚠ 這份結果檔的組成": "experiments/web_fixture_answers_news37_all.json 裡，news-03／news-07／news-13／mi-02／mi-07 這 5 題是 2026-08-20 修好 _repair_reference_citations 之後的 **replay 重跑**（零網路），其餘 35 題是原始錄製。⚠ **所以那 5 題從 FAIL 變 PASS 不是單變因實驗**——修法與『生成重跑』兩件事同時動了。機制是否真的觸發，由 verify_answer_validators 閘門⑨（零 LLM、三向變異測試）與帶 AGENTIC_TRACE 的重放各自佐證，不靠這個 PASS 40 下結論。"
+ },
+ "claims": [
+  {
+   "id": "sem-06",
+   "role": "陰性對照（sem-06）：期別明確指定的純財報題，web 不得被無差別觸發",
+   "why": "沒有這一組，37 題清一色『必須打 web』的斷言就沒有反向判別力——一個「一律打 web」的系統也會滿分。刻意挑期別寫死的題（FY2025／最新一季），wall clock 完全不影響答案。⚠ 不可用「現在市值／現在股價」當對照：那類問題在 KB 只有快照，web_claims.json 的 web-01 對同型問題的斷言正是 web_calls_gte 1。 ⚠ 這題是質性題（不含數字），刻意只斷言 web 行為不斷言內容。",
+   "assert": {
+    "web_calls_eq": 0,
+    "no_web_citation": true,
+    "no_fabricated_citations": true
+   }
+  },
+  {
+   "id": "mix-01",
+   "role": "陰性對照（mix-01）：期別明確指定的純財報題，web 不得被無差別觸發",
+   "why": "沒有這一組，37 題清一色『必須打 web』的斷言就沒有反向判別力——一個「一律打 web」的系統也會滿分。刻意挑期別寫死的題（FY2025／最新一季），wall clock 完全不影響答案。⚠ 不可用「現在市值／現在股價」當對照：那類問題在 KB 只有快照，web_claims.json 的 web-01 對同型問題的斷言正是 web_calls_gte 1。",
+   "assert": {
+    "web_calls_eq": 0,
+    "no_web_citation": true,
+    "no_fabricated_citations": true,
+    "must_contain_any": [
+     [
+      "40%"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "lex-07",
+   "role": "陰性對照（lex-07）：期別明確指定的純財報題，web 不得被無差別觸發",
+   "why": "沒有這一組，37 題清一色『必須打 web』的斷言就沒有反向判別力——一個「一律打 web」的系統也會滿分。刻意挑期別寫死的題（FY2025／最新一季），wall clock 完全不影響答案。⚠ 不可用「現在市值／現在股價」當對照：那類問題在 KB 只有快照，web_claims.json 的 web-01 對同型問題的斷言正是 web_calls_gte 1。",
+   "assert": {
+    "web_calls_eq": 0,
+    "no_web_citation": true,
+    "no_fabricated_citations": true,
+    "must_contain_any": [
+     [
+      "7.46"
+     ]
+    ]
+   }
+  },
+  {
+   "id": "news-01",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-02",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-03",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-04",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-05",
+   "role": "news：live web 路徑的性質斷言（**web 0 次**：KB 用財報就答完了，且答案有出處——不是路由壞掉）",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true
+   }
+  },
+  {
+   "id": "news-06",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-07",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-08",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-09",
+   "role": "news：live web 路徑的性質斷言（**web 0 次**：KB 用財報就答完了，且答案有出處——不是路由壞掉）",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true
+   }
+  },
+  {
+   "id": "news-10",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-11",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-12",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-13",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-14",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "news-15",
+   "role": "news：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-01",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-02",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-03",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-04",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-05",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-06",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-07",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-08",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-09",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-10",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-11",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-12",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-13",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-14",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mi-15",
+   "role": "multi_intent：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "col-14",
+   "role": "colloquial：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "col-15",
+   "role": "colloquial：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mh-06",
+   "role": "multi_hop：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mh-07",
+   "role": "multi_hop：live web 路徑的性質斷言（**打了 web 卻沒引用**：觀察，尚未判定是缺陷還是 web 真的沒撈到可用內容）",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。 ⚠ 這題刻意**不加** must_cite_any_web：web 有沒有撈到可用內容不在系統控制內，斷言它等於把外部世界寫進量尺。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1
+   }
+  },
+  {
+   "id": "mh-08",
+   "role": "multi_hop：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  },
+  {
+   "id": "mh-09",
+   "role": "multi_hop：live web 路徑的性質斷言（**打了 web 卻沒引用**：觀察，尚未判定是缺陷還是 web 真的沒撈到可用內容）",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。 ⚠ 這題刻意**不加** must_cite_any_web：web 有沒有撈到可用內容不在系統控制內，斷言它等於把外部世界寫進量尺。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1
+   }
+  },
+  {
+   "id": "mh-10",
+   "role": "multi_hop：live web 路徑的性質斷言",
+   "why": "驗收刻意**不比對新聞 gold**：那 37 題的 gold 是「2026 年 6 月的新聞說了什麼」，live web 回答的是「現在的網路說什麼」——是兩個不同的問題，比對會系統性低估且低分原因與 web 無關。所以只斷言**性質**：有沒有走到 web／引用主機在不在白名單且非地區子網域／引用長不長得像出處。",
+   "assert": {
+    "no_fabricated_citations": true,
+    "web_calls_gte": 1,
+    "must_cite_any_web": true
+   }
+  }
+ ]
+}

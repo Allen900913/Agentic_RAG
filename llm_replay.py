@@ -43,7 +43,28 @@ key），生成層 `GEN_TEMPERATURE=0.3` 與 RAGAS judge 也擋不住 → blocki
     RAG_REPLAY_CACHE=eval/replay_cache.json python eval/run_agentic_on_evalset.py ...
     RAG_REPLAY_MODE=strict                    # 所有 kind 的 cache miss 都直接報錯
     RAG_REPLAY_MODE=strict:plan,translate_en  # 只對這些 kind 嚴格（跨 collection A/B 用這個）
+    RAG_REPLAY_READONLY=1                     # 只讀不寫（A/B 兩臂共用同一份 fixture 時必開）
 未設 `RAG_REPLAY_CACHE` 時整個模組是 no-op，生產路徑完全不受影響。
+
+**唯讀模式（`RAG_REPLAY_READONLY`）：A/B 共用一份 fixture 時的單向污染**
+
+`atexit` 無條件回寫，於是**先跑那一臂的 miss 會變成後跑那一臂的 hit**。實測 hit 23→32，
+兩臂因此不可比——而外觀上兩臂都「掛了 fixture」，看不出任何異常。這條污染是**單向**的：
+它只讓後跑的那臂更穩定，所以永遠偏袒後跑的一方。
+
+唯讀模式下 `put()` 是 no-op（`_DIRTY` 也不會被設，所以連誤呼叫 `_flush()` 都寫不出去），
+miss 就讓它在兩臂**對稱地**變成噪音——那是誠實的噪音，不是偏袒誰的假穩定。
+
+⚠ **刻意是 opt-in，預設逐字不變**：有三個既有流程依賴「跑一輪順便補快取」——
+`eval/record_web_fixture.py --mode record`（它的產物就是快取本身）、
+`eval/probe_historical_benefit.py` 與 `eval/probe_temporal_interference.py`
+（兩支都會自動把 `RAG_REPLAY_CACHE` 指到 `eval/replay_cache.json` 並靠回寫補齊）。
+預設改成唯讀會讓那三支靜默地不再累積 fixture。
+
+⚠ **唯讀時 miss 必須照樣印出來**：非唯讀模式下唯一的 hit/miss 出口是 `_flush()` 那行
+`[replay] wrote ...`，而唯讀不寫檔就不會有那行 → **miss 會完全隱形**，那正是這個模組
+最不該有的失效形狀（fixture 沒涵蓋 vs 系統沒走那條路，外觀相同）。所以 `_flush()` 在
+唯讀模式改印一行 `[replay] read-only`。
 """
 from __future__ import annotations
 
@@ -58,7 +79,7 @@ _LOCK = threading.Lock()
 _CACHE: Optional[dict] = None
 _DIRTY = False
 _PATH: Optional[Path] = None
-_STATS = {"hit": 0, "miss": 0}
+_STATS = {"hit": 0, "miss": 0, "skipped_write": 0}
 _PENDING = 0
 _FLUSH_EVERY = int(os.getenv("RAG_REPLAY_FLUSH_EVERY", "20"))
 
@@ -69,9 +90,31 @@ def enabled() -> bool:
     return bool(os.getenv("RAG_REPLAY_CACHE", ""))
 
 
+def readonly() -> bool:
+    """只讀不寫（見 docstring〈唯讀模式〉）。**每次都重讀 env**，不快取成模組層常數——
+    測試要能在同一個 process 裡切換，而快取成常數的版本連測都測不到。"""
+    return os.getenv("RAG_REPLAY_READONLY", "").strip().lower() in ("1", "true", "yes", "on")
+
+
 # 所有呼叫端註冊的 kind＝我們自己的碼定義的**封閉集合**，所以列清單正當（同 VALID_*_ITEMS
 # 的理由）。新增接點時要一起加進來——沒加會在 strict 名單裡被判成拼錯而報錯，那是刻意的。
-_KNOWN_KINDS = {"plan", "translate_en", "check"}
+_KNOWN_KINDS = {"plan", "translate_en", "check", "ratio", "period_intent", "ticker", "replan"}
+# ⚠ 2026-08-28：`period_intent` 是 2026-08-19 加的接點，**當時漏了註冊**（`ticker` 一起補上）。
+# 症狀是靜默的：bare `strict` 照樣涵蓋它（走 `{"*"}`），只有 `RAG_REPLAY_MODE=strict:period_intent`
+# 會被當成拼錯而報錯——也就是說「想單獨對它嚴格」是唯一會現形的用法，而那正是最少人走的路。
+# ⚠ 2026-08-29：`replan` 是**最後一個沒被錄的 LLM 呼叫**，而它是「web fixture key 無界」那條鏈
+# 的源頭（replan 重抽 → 新 todo 措辭 → 新 check key → 新 new_query → 新英譯 → 新 Tavily key）。
+# 漏掉它的症狀不是 miss 報錯，而是**整條下游的 fixture 一路 miss**，外觀跟「系統沒打 web」一樣。
+# 這一格由 `eval/verify_web_gate_isolation.py` 閘門 ⑧ 把關（含「key 不得含自由文字結果」的值測試）。
+
+
+class ReplayCacheMiss(BaseException):
+    """strict 模式下 cache miss。
+
+    ⚠ **繼承 `BaseException` 是刻意的**，理由與 `web_replay.FixtureMiss` 同一條：
+    這個例外的意思是「這次測量無效」，不是「這個操作失敗了、換條路走」。舊版拋裸
+    `RuntimeError`，會被下游任何一個 `except Exception` 接成優雅降級，於是 strict 模式
+    **靜默失效**——而 strict 存在的唯一理由就是「fixture 不完整要當場知道」。"""
 
 
 def _strict_kinds() -> Optional[set[str]]:
@@ -133,7 +176,7 @@ def get(kind: str, key: str) -> Any:
             return c[key]
     _STATS["miss"] += 1
     if _is_strict(kind):
-        raise RuntimeError(
+        raise ReplayCacheMiss(
             f"replay cache miss（strict 模式）: kind={kind} key={key!r}。"
             f"fixture 不完整,先在非 strict 模式跑一次補齊。"
             f"（若這是跨 collection A/B,kind=check 的 miss 是合法的——改用 "
@@ -144,6 +187,11 @@ def get(kind: str, key: str) -> Any:
 def put(kind: str, key: str, value: Any) -> None:
     global _DIRTY, _PENDING
     if not enabled():
+        return
+    if readonly():
+        # ⚠ 在設 `_DIRTY` **之前**早退：這樣就算有人日後直接呼叫 `_flush()`，也寫不出去。
+        #   把判斷放在 `_flush()` 裡是不夠的——那是「守在出口」，這裡守的是入口。
+        _STATS["skipped_write"] += 1
         return
     with _LOCK:
         _load().setdefault(kind, {})[key] = value
@@ -164,6 +212,12 @@ def stats() -> dict:
 @atexit.register
 def _flush() -> None:
     global _PENDING
+    if readonly():
+        # 唯讀不寫檔 → 沒有 `[replay] wrote` 那行 → miss 會完全隱形。見 docstring。
+        if enabled():
+            print(f"[replay] read-only (hit={_STATS['hit']} miss={_STATS['miss']} "
+                  f"skipped_write={_STATS['skipped_write']}) — 未回寫 {_PATH}")
+        return
     # 只在有新內容時寫回；讀到一半就結束的 run 不會把檔案清空。
     if not (_DIRTY and _CACHE is not None and _PATH is not None):
         return

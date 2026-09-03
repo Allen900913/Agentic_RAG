@@ -16,6 +16,8 @@ __pycache__/
 # === Vector Database ===
 chroma_db/
 qdrant_db/
+qdrant_docker_storage/
+*.tgz
 *.db
 *.sqlite
 

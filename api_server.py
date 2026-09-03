@@ -4,9 +4,13 @@ api_server.py — FastAPI 後端，把 CLI 版 RAG（rag_query.py）包成一個
 為什麼需要這個 server（架構推導，不是選擇）：
   1. 模型暖機成本極高：BGE-M3 + bge-reranker-v2-m3 載入慢、常駐約 8–10GB RAM，
      不能每個 request 重載 → 啟動時載入一次、保持暖機（見 lifespan）。
-  2. Qdrant local 模式是單一持有者：QdrantClient(path=...) 會拿排他檔案鎖，
-     只有一個 process 能持有 → 這個 server 是 qdrant_db 的「唯一擁有者」。
-     ⚠ server 跑的時候，不能同時跑 rag_query.py / data_update.py / eval。
+  2. Qdrant 連線一律走 `rq.make_qdrant_client()`（依 `QDRANT_URL` 決定 server／local）。
+     ⚠ **不要在這裡自己 `QdrantClient(path=...)`**——2026-08-14 前這裡就是這樣寫死 local
+     模式、忽略 `QDRANT_URL`，而 `.env` 早已切到 Docker server：於是 server 會在不存在的
+     路徑上開一個**空的**本機 DB，`/health` 查 collection 報錯、`/chat` 每題都回
+     「知識庫裡沒有足夠資訊」——**沉默地壞**。全 repo 只有這一支漏改。
+     local 模式時 `QdrantClient(path=...)` 會拿排他檔案鎖（只有一個 process 能持有），
+     所以走 local 時 server 跑著就不能同時跑 rag_query.py / data_update.py / eval。
   3. 延遲高（CPU rerank 每題數分鐘）→ async + SSE 串流，並在出 token 前先
      回報「檢索中 / 重排中 / 生成中」狀態。
 
@@ -100,7 +104,6 @@ async def lifespan(app: FastAPI):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8", errors="replace")
 
-    from qdrant_client import QdrantClient
     from FlagEmbedding import BGEM3FlagModel
     from sentence_transformers import CrossEncoder
 
@@ -114,8 +117,16 @@ async def lifespan(app: FastAPI):
     app.state.bge_m3 = BGEM3FlagModel(rq.EMBEDDING_MODEL, use_fp16=True)
     print(f"[INFO] Loading reranker: {rq.RERANK_MODEL}")
     app.state.rerank_model = CrossEncoder(rq.RERANK_MODEL, max_length=rq.RERANK_MAX_LENGTH)
-    print(f"[INFO] Opening Qdrant (exclusive lock): {rq.QDRANT_PATH}")
-    app.state.client = QdrantClient(path=rq.QDRANT_PATH)
+    # 依 QDRANT_URL 決定 server／local（見檔頭②）。不要改回寫死 path。
+    app.state.client = rq.make_qdrant_client()
+    try:
+        _n = app.state.client.count(collection_name=collection, exact=True).count
+    except Exception as e:
+        # 開錯 Qdrant 是沉默故障（server 起得來、每題都答「沒有足夠資訊」）→ 啟動就吵。
+        raise RuntimeError(
+            f"collection '{collection}' 在這個 Qdrant 連線上不存在（{e!r}）。"
+            f"檢查 .env 的 QDRANT_URL／QDRANT_PATH 與 COLLECTION_NAME 是否一致。") from e
+    print(f"[INFO] Qdrant ready: collection={collection}  chunks={_n}")
     # 模型/Qdrant client 非執行緒安全且每題很重 → 序列化 /chat
     app.state.lock = asyncio.Lock()
     app.state.collection = collection

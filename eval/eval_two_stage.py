@@ -30,7 +30,7 @@ Usage:
   python eval/eval_two_stage.py
   python eval/eval_two_stage.py --limit 10            # 前 10 題試跑
   python eval/eval_two_stage.py --no-llm-judge        # 跳過 LLM judge（只量 file 層）
-  python eval/eval_two_stage.py --judge-model llama-3.3-70b-versatile
+  python eval/eval_two_stage.py --judge-model openai/gpt-oss-120b
   python eval/eval_two_stage.py --category semantic   # 只跑特定 category
 """
 

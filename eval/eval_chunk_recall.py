@@ -29,7 +29,7 @@ lex-13~21，沒有 checkpoint，只看 file-level + chunk precision）。
 Usage:
   python eval/eval_chunk_recall.py
   python eval/eval_chunk_recall.py --limit 10              # 先跑前 10 題試算 LLM 成本
-  python eval/eval_chunk_recall.py --judge-model llama-3.3-70b-versatile
+  python eval/eval_chunk_recall.py --judge-model openai/gpt-oss-120b
 """
 
 import argparse

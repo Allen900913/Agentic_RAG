@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "as_of": "2026-08-15",
+    "collection": "us_stock_rag_edgar_mdna",
+    "fixture": "eval/web_fixture.json",
+    "replay_cache": "eval/web_replay_llm.json"
+  },
+  "records": [
+    {
+      "id": "web-01",
+      "query": "Apple 目前的市值是多少？",
+      "why": "intraday；KB 結構上沒有即時市值",
+      "answer": "Apple 目前的市值大約是 **44,600 億美元（$4.46 兆）**（約 44,600 億美元（$4.46 trillion））【web: https://stockanalysis.com/stocks/aapl/market-cap】。\n\n- 依據 StockAnalysis.com，Apple 在 2026‑08‑14 的市值為 **44,600 億美元（$4.46 trillion）**，較前一年增長 28.83%【web: https://stockanalysis.com/stocks/aapl/market-cap】。  \n- Macrotrends 顯示截至 2026‑08‑13（亦有 2026‑08‑15 版本）Apple 的市值為 **44,550 億美元（$4.455 trillion）**【web: https://www.macrotrends.net/stocks/charts/AAPL/apple/market-cap】。  \n- 內部的公司基本面資料（截至 2026‑06‑12 的 TTM）列出市值 **43,420.2 億美元（$4,342.02 billion）**（即 43,420 億美元（$4.342 trillion））【Reference 1: AAPL_Fundamentals_20260612.txt, chunk #0】。\n\n因此，根據最新未標示日期的即時來源，Apple 的當前市值約為 **44,600 億美元（$4.46 trillion）**，與近期的其他資料（44,550 億美元（$4.455 trillion））相近，而較早的 2026‑06‑12 基本面數據則顯示略低的 43,420 億美元（$4.342 trillion）。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.719)",
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 目前的市值是多少？",
+        "改用網路搜尋查 Apple 目前的市值",
+        "改用網路搜尋查 Apple 目前的市值（最新）",
+        "使用網路搜尋取得 Apple 於 2026‑08‑15 的最新市值",
+        "使用網路搜尋查詢 Apple 於 2026‑08‑15 的即時市值",
+        "改用網路搜尋查 Apple 目前的市值（即時）",
+        "改用網路搜尋查 Apple 於 2026‑08‑15 的即時市值（最新）"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "web-02",
+      "query": "NVIDIA 現在的股價是多少？",
+      "why": "intraday；純即時報價",
+      "answer": "NVIDIA（NVDA）目前的股價大約在 **224 美元左右**；根據 Macrotrends 的資料，2026 年 8 月 12 日收盤價為 **$224.09**【web: https://www.macrotrends.net/stocks/charts/NVDA/nvidia/stock-price-history】。  \n\n其他即時報價平台也顯示相近價格：CNBC 報導的最新盤後價格為 **$224.97**【web: https://www.cnbc.com/quotes/NVDA】；MarketWatch 顯示的最新報價為 **$224.77**【web: https://www.marketwatch.com/investing/stock/nvda】。這些數據皆指向同一時間段（2026 年 8 月中旬）的市場行情，顯示 NVDA 的即時交易價格在 **$224 ~ $225** 之間。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #118 (rerank=0.727)\n  - NVDA_News_20260519_01.txt #2 (rerank=0.724)\n  - NVDA_10K_2026.html #10 (rerank=0.719)\n  - NVDA_News_20260519_01.txt #0 (rerank=0.710)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.706)\n  - NVDA_10K_2026.html #164 (rerank=0.691)\n  - NVDA_10K_2026.html #181 (rerank=0.686)\n  - NVDA_10Q_202510.html #25 (rerank=0.680)\n  - NVDA_10K_2026.html #1 (rerank=0.679)\n  - NVDA_10Q_202510.html #1 (rerank=0.672)\n  - NVDA_10Q_202604.html #14 (rerank=0.634)\n  - NVDA_10K_2026.html #165 (rerank=0.629)",
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 現在的股價是多少",
+        "改用網路搜尋查 NVIDIA 現在的股價",
+        "使用網路搜尋查 NVIDIA 現在的股價",
+        "使用網路搜尋查 NVIDIA 現在的即時股價",
+        "使用網路搜尋查 NVIDIA 現在的即時股價 (Yahoo Finance)",
+        "使用網路搜尋查 NVIDIA 現在的即時股價 (NASDAQ)",
+        "使用網路搜尋查 NVIDIA 現在的即時股價 (MarketWatch)"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 118
+        },
+        {
+          "source": "NVDA_News_20260519_01.txt",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 10
+        },
+        {
+          "source": "NVDA_News_20260519_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 181
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 165
+        }
+      ]
+    },
+    {
+      "id": "web-03",
+      "query": "Microsoft 最新一季的 Azure 營收成長率是多少？",
+      "why": "KB 有舊值、web 可能更新 → 權威衝突",
+      "answer": "Microsoft 在最新一季（截至 2026 年 3 月 31 日的三個月）Azure 及其他雲端服務營收成長率為 **40%**【MSFT_10Q_202603.html, chunk #69】。此數字同樣在同一季的九個月合併報告中被提及，顯示 Azure 及其他雲端服務營收同樣成長 40%【MSFT_10Q_202603.html, chunk #75】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202603.html #75 (rerank=0.730)\n  - MSFT_10Q_202603.html #49 (rerank=0.729)\n  - MSFT_10Q_202603.html #69 (rerank=0.729)\n  - MSFT_10K_2026.html #129 (rerank=0.725)\n  - MSFT_10K_2026.html #111 (rerank=0.725)\n  - MSFT_10Q_202512.html #71 (rerank=0.722)",
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Microsoft Azure 營收成長率是多少",
+        "Retrieve Azure revenue growth rate for Microsoft FY2026 Q3 (most recent quarter) from MSFT 10-Q FY2026 Q3",
+        "Search web for Microsoft Azure revenue growth rate for FY2026 Q4 (ended 2026-06-30)"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 49
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 69
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 129
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 111
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 71
+        }
+      ]
+    },
+    {
+      "id": "web-04",
+      "query": "Tesla 最近有什麼重要消息？",
+      "why": "新聞時效",
+      "answer": "Tesla 最近的關鍵消息包括 2026 年第二季財報顯示營收大幅成長、交付量創新高、資本支出激增，以及市場關注其自動駕駛機器人 Optimus 與可能與 SpaceX 合併的傳聞。  \n\n- **營收與獲利**：在 2026 年第二季（Q2 FY2026）營收較去年同期跳升 **26%**，達 **225 億美元（$22.5 billion）**，但淨利下降 **5%** 至 **11.1 億美元（$1.11 billion）**（每股 $0.32）【web: https://www.cnbc.com/2026/07/22/tesla-tsla-q2-2026-earnings-report.html】。  \n- **各事業部表現**：汽車部門營收 **205.2 億美元（$20.52 billion）**，年增 **23%**；能源（太陽能與電池儲能）營收 **31.4 億美元（$3.14 billion）**，年增 **13%**；服務與其他業務營收 **45.8 億美元（$4.58 billion）**，年增 **50%**【web: https://www.cnbc.com/2026/07/22/tesla-tsla-q2-2026-earnings-report.html】。  \n- **資本支出**：公司表示全年資本支出將超過 **250 億美元（$25 billion）**，第二季已投入 **58 億美元（$5.8 billion）**，導致本季自由現金流轉為負 **11 億美元（$1.1 billion）**【web: https://www.reuters.com/world/us/tesla-earnings-live-investors-await-q2-results-elon-musk-pivots-ai-powered-cars-2026-07-22】、【web: https://finance.yahoo.com/markets/stocks/articles/tesla-inc-tsla-q2-2026-050138649.html】。  \n- **交付量**：本季交付 **480,126 台車**，較去年同期成長 **25%**，創下歷史新高【web: https://finance.yahoo.com/markets/stocks/articles/tesla-inc-tsla-q2-2026-050138649.html】。  \n- **毛利率變化**：汽車毛利率（不含法規抵免）從 **19.2%** 下降至 **16.3%**（環比），能源毛利率從 **39.5%** 降至 **20.4%**，顯示成本壓力【web: https://finance.yahoo.com/markets/stocks/articles/tesla-inc-tsla-q2-2026-050138649.html】。  \n- **產品與技術焦點**：在 2026 年 7 月 20 日的 earnings review 影片中，分析師指出投資人將特別關注 **Optimus** 機器人與 **自動駕駛** 技術，認為這是未來「機器人計程車」的核心驅動力【TSLA_News_20260721_01.txt, chunk #2】。  \n- **交付表現意外**：同一影片中亦提到 Tesla 最近出現 **好於預期的交付量**，被形容為「突如其來」的正面驚喜【TSLA_News_20260721_01.txt, chunk #1】。  \n- **潛在合併傳聞**：影片主持人提到市場上有 **Tesla 可能與 SpaceX 合併** 的討論，雖未正式確認，但此訊息被視為投資人關注的焦點【TSLA_News_20260721_01.txt, chunk #0】。  \n- **供應鏈挑戰**：另一則新聞報導指出，供應高镍正極材料的韓國公司 L&F 與 Tesla 的合約被 **削減 99%**，從原本的 **38,300 億（3.83 trillion） won**（約 **26.7 億美元（$2.67 billion）**）降至 **0.0973 億（9.73 million） won**，主要因 Cybertruck 產能延遲【web: https://finance.yahoo.com/news/tesla-supplier-sees-99-cut-121442078.html】。  \n- **人事動態**：前 Tesla CFO Deepak Ahuja 於 2026 年 5 月加入由前 CTO JB Straubel 創立的電池回收公司 Redwood Materials，擔任財務長，顯示 Tesla 前高層仍在相關產業活躍【web: https://www.cnbc.com/2026/05/11/redwood-materials-deepak-ahuja-tesla-straubel.html】。  \n\n以上即為近期圍繞 Tesla 的主要新聞與財務動態。\n\n---\n⚠ 資料時效：TSLA 新聞資料截至 2026-07-21（查詢日 2026-08-15）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_News_20260721_01.txt #0 (rerank=0.546)\n  - TSLA_News_20260721_01.txt #1 (rerank=0.501)\n  - TSLA_News_20260721_01.txt #2 (rerank=0.501)",
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "Tesla 最近的重大新聞是什麼",
+        "改用網路搜尋查 Tesla 2026-07-22 至 2026-08-15 的最新新聞",
+        "改用網路搜尋查 Tesla 2026-07-22 至 2026-08-15 的最新新聞"
+      ],
+      "sources": [
+        {
+          "source": "TSLA_News_20260721_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "TSLA_News_20260721_01.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "TSLA_News_20260721_01.txt",
+          "chunk_index": 2
+        }
+      ]
+    },
+    {
+      "id": "web-05",
+      "query": "Apple 在 FY2025 全年的總營收是多少？",
+      "why": "陰性對照：純歷史財報，不該打 web",
+      "answer": "Apple 在 FY2025 全年的總營收為 **4,161.61 億美元（$416,161 million）**【AAPL_10K_2025.html, chunk #115】【AAPL_10K_2025.html, chunk #0】。  \n\n此金額來自 Apple 2025 年度 10‑K 報表中列示的「Net sales」總額，單位為百萬美元，代表全年度的營收總額。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10K_2025.html #115 (rerank=0.726)\n  - AAPL_10K_2025.html #0 (rerank=0.725)",
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Apple 在 FY2025 全年的總營收是多少？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 115
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 0
+        }
+      ]
+    }
+  ]
+}

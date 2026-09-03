@@ -168,12 +168,41 @@ _INLINE_CITATION = re.compile(r"\s*【[^】]*?\.(?:html|txt)[^】]*?】")
 #       依 gold_files 生成、與 agentic 實際撈到的 contexts 不同源。繼續往上推等於要求系統
 #       答得比標準答案還保守 → 這個指標**沒有可追空間**。
 #     · answer_relevancy 0.842 vs 系統 0.823 → 幾乎沒有空間。
-NOISE = {"context_recall": 0.013, "context_precision": 0.046, "nv_context_relevance": 0.008,
-         "context_relevance": 0.008, "faithfulness": 0.004, "answer_relevancy": 0.001,
-         "answer_correctness": 0.005}
-GOLD_BASELINE = {"answer_correctness": 0.989, "faithfulness": 0.656, "answer_relevancy": 0.842,
-                 "context_recall": 0.766, "context_precision": 0.822,
-                 "nv_context_relevance": 0.965, "context_relevance": 0.965}
+# 2026-08-20 在 **65 題**上重量一對（同一份結果檔 gj_mdna_65q_r1 餵給 judge 兩次，
+# experiments/ragas_system_65q_j{1,2}.json）。實測 |j1-j2|：
+#   recall .0170 / precision .0050 / nv .0040 / faith .0100 / relevancy .0040 / correctness .0070
+#
+# ⚠ **取新舊兩者的較大值當門檻，不是直接換成新值。** 兩個理由：
+#   ① **一對樣本只是噪音的一次抽樣，不是噪音的上界**。舊值 context_precision 0.046 的成因寫在
+#      上面那段註解裡——precision 對每個 context 做二元判定再依排名加權，**最高排名那個判定
+#      翻面整題就 1.0→0.0**。這次那一對剛好沒翻（.005），**不代表它不會翻**。
+#      把門檻從 .046 降到 .005 會讓一堆抽樣變異被誤讀成「顯著改善」。
+#   ② 噪音門檻取大只會讓我**要求更多證據**，永遠不會讓我少要求——錯的方向是安全的那一邊。
+#   → 想真的收斂 precision 的門檻，要多跑幾對，不是拿一對就改。
+#
+# 2026-08-21 **第二對**（同樣是 gj_mdna_65q_r1 餵給 judge 兩次，相隔一天；
+# experiments/agentic/ragas_65q_r1.json vs 前一輪的聚合值）。實測 |passA-passB|：
+#   recall .006 / precision .013 / nv .000 / faith .003 / relevancy .003 / **correctness .012**
+# → `answer_correctness` 的 **.007 被這一對推翻，改成 .012**（取兩對的較大值）。
+# ⚠ **這條常數差點害我誤判一次修法**：拿 after 臂去比**前一天那一輪**的 correctness 得到
+#   −.009，看起來「略高於 .007 門檻的下降」→ 我已經開始找機制了。把基準換成同期重跑的
+#   passB 之後，真實差值是 **+.003（噪音內）**。
+#   兩個教訓：① **跨輪比較 RAGAS 分數等於把 judge 噪音算進系統差異**——A/B 兩臂要在
+#   同一批判分裡比，或至少各自附一個同期基準；② 上面①「一對不是上界」那句話寫得很對，
+#   但寫下它的同一支腳本仍然用一對定了 correctness 的門檻。**寫下警告不等於服從警告。**
+NOISE = {"context_recall": 0.017, "context_precision": 0.046, "nv_context_relevance": 0.008,
+         "context_relevance": 0.008, "faithfulness": 0.010, "answer_relevancy": 0.004,
+         "answer_correctness": 0.012}
+# 2026-08-20 在 **65 題**上重量（experiments/ragas_gold_baseline_65q.json）。
+# 作法：把 reference_answers.json 原文當成系統答案，**contexts 沿用同一份 agentic 跑分結果**
+# （experiments/agentic/gj_mdna_65q_r1.json）→ 只換 answer 這一個變因。
+# ⚠ 舊的 n=100 常數保留在下方註解供對照，**不要再引用**：題目組成變了，分母與難度分佈都不同。
+#   舊值：correctness .989 / faith .656 / relevancy .842 / recall .766 / precision .822 / nv .965
+#   換算下來最大的變化是 **answer_correctness .989 → .972**——gold 在 65 題上沒有像在 100 題上
+#   那麼容易拿滿分，所以「距上限還有多少」這個判讀在新舊之間**不可直接比**。
+GOLD_BASELINE = {"answer_correctness": 0.972, "faithfulness": 0.659, "answer_relevancy": 0.871,
+                 "context_recall": 0.788, "context_precision": 0.843,
+                 "nv_context_relevance": 0.969, "context_relevance": 0.969}
 
 
 def _print_interpretation_guide(overall: dict, present: list[str]) -> None:
@@ -197,8 +226,14 @@ def _print_interpretation_guide(overall: dict, present: list[str]) -> None:
                 notes.append(f"距 gold 上限 {gold - v:+.3f}")
         print(f"  {m:<24}{v:>8.3f}{(f'{noise:.3f}' if noise else 'n/a'):>10}"
               f"{(f'{gold:.3f}' if gold else 'n/a'):>11}   {'；'.join(notes)}")
-    print("  ⚠ 這些常數綁定「NVIDIA gpt-oss-120b judge + 100 題 eval_set + 現行 reference」。")
+    print("  ⚠ 這些常數綁定「NVIDIA gpt-oss-120b judge + **100 題** eval_set + 當時的 reference」。")
     print("    換 judge 模型、換題庫、或大改 reference 之後必須重量,別沿用。")
+    print("  ✔ 2026-08-20：gold 上限與噪音門檻**都已在 65 題上重量**，可以引用。")
+    print("     ⚠ 噪音量了**兩對**（correctness 已因第二對從 .007 上調到 .012）。門檻取較大值——")
+    print("        ⛔ **不要拿本次分數去比別輪跑出來的聚合值**：實測同一份結果檔兩次判分，")
+    print("           correctness 就差 .012。跨輪比＝把 judge 噪音算進系統差異（2026-08-21 誤判過一次）。")
+    print("        尤其 context_precision：最高排名判定翻面整題就 1.0→0.0，這次剛好沒翻。")
+    print("     ⛔ 跨 2026-08-19 的分數一律不可直接比：題庫從 100 題變成 65 題，分母與難度分佈都不同。")
 
 
 def strip_citation_footer(text: str) -> str:
@@ -398,7 +433,12 @@ def main():
 
     ap = argparse.ArgumentParser(description="RAGAS 6-metric vs self-made 5-metric 對照")
     ap.add_argument("--from-results", nargs="+", required=True,
-                    help="一或多個結果檔（含 records[].answer/contexts/correctness）")
+                    help="一或多個結果檔（含 records[].answer/contexts/correctness）。"
+                         "⚠ 多個檔是**拼接同一臂**（同 id 的多筆會被平均，用於局部重跑後併回、"
+                         "或同一臂重跑多次消變異）——**不是 A/B 兩臂對照**。"
+                         "要比兩臂請各跑一次、各給一個 --output；"
+                         "把兩臂丟進同一次會得到兩臂的平均值，哪一邊都回答不了"
+                         "（2026-08-14 這樣燒掉 2h49m）。")
     ap.add_argument("--ragas-model", default=DEFAULT_RAGAS_MODEL)
     ap.add_argument("--categories", nargs="*", default=None,
                     help="只跑指定類別（semantic/lexical/mixed/colloquial/news/multi_intent）")

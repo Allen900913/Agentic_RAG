@@ -1,7 +1,7 @@
 """run_agentic_on_evalset.py — 讓 agentic RAG 產出「與 chunking 實驗可並排比較」的結果檔。
 
-目的（2026-07-24）：把目前指定的 agentic 模組（預設 agentic_rag_v2）跑在**與 Exp0-4 完全相同的
-90 題 + 相同 collection**，
+目的（2026-07-24）：把目前指定的 agentic 模組（預設 agentic_rag_v2）跑在**與單管線同一份題庫
+＋同一個 collection** 上，
 輸出**與 eval_generation_llm_judge.py 相同 schema** 的 generation_judge.json（含 answer +
 contexts），再丟進**原封不動的** eval_ragas_vs_rubric.py 跑同一套 RAGAS 六指標——agentic 就
 變成 Exp0-4 表格裡直接可加的一欄，公平可比。
@@ -11,9 +11,10 @@ rubric 自製判定，**不同題也不同法**，無法跟 Exp0-4 並排。本�
 answer/contexts」，評分交給 RAGAS（standalone、在 .venv-ragas 跑），兩者職責分離。
 
 公平性保證：
-  - 同題：讀 eval/eval_set.json 的 90 題（非 agentic 專屬題庫）。
-  - 同底座：--collection 預設 us_stock_rag_edgar_period（Exp4 chunking ＋ 期間章節硬邊界，
-    2026-08-09 起取代 exp4：期間標籤是修「口徑挑錯」的必要材料），agentic 與單次
+  - 同題：讀 eval/eval_set.json（**現為 65 題**，非 agentic 專屬題庫）。⚠ 題數變動過兩次（100 → 63 → 65，2026-08-19），**跨那天的分數不可直接比**，分母不同。
+  - 同底座：--collection **預設＝生產的 `rq.COLLECTION_NAME`**（會跟著 env `RAG_COLLECTION`
+    走）。⚠ 2026-08-27 以前這裡寫死 `us_stock_rag_edgar_period`，而那個 collection
+    2026-08-13 就退役了——不帶 `--collection` 的跑法會靜默跑在退役底座上。agentic 與單次
     版共用同一個 Qdrant collection + 同一個 reranker，唯一差別是「編排」（decomposition）。
   - 同測量：輸出 schema 對齊 generation_judge.json，交給同一個 eval_ragas_vs_rubric.py。
   - contexts = run_agentic 回傳的 collected（全 run 各子問題撈到的 chunk 聯集，正是衡量
@@ -55,12 +56,16 @@ import rag_query as rq
 from eval.eval_generation_llm_judge import looks_like_refusal
 
 EVAL_SET = Path("eval/eval_set.json")
-DEFAULT_COLLECTION = "us_stock_rag_edgar_period"
+# ⚠ 2026-08-27 改成跟著生產走。原本這裡寫死 `us_stock_rag_edgar_period`，而那個
+# collection 早在 2026-08-13 就退役（生產換成 `..._mdna`、2026-08-27 再換成
+# `..._multiyear`）——**沒帶 `--collection` 的每一次跑都跑在退役的底座上**，而且不會有
+# 任何警告。跟著 `rq.COLLECTION_NAME` 就再也不會漂移（它自己也吃 env `RAG_COLLECTION`）。
+DEFAULT_COLLECTION = rq.COLLECTION_NAME
 DEFAULT_OUTPUT = Path("experiments/agentic/generation_judge.json")
 
 
 def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
-                         sub_queries: list) -> dict:
+                         sub_queries: list, period_notes: list | None = None) -> dict:
     """把 agentic 輸出攤平成 generation_judge.json 的 record schema。
     RAGAS 只讀 id/category/query/answer/contexts；其餘欄位補上以對齊 schema、方便複查。"""
     # ⚠ 2026-08-11 修：`contexts` 與 `sources` 必須**同一次過濾**、逐位對齊。原本 contexts 濾掉
@@ -97,6 +102,11 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
         # agentic 專屬（額外資訊，不影響 RAGAS）。
         "agentic_sub_queries": sub_queries,
         "agentic_n_chunks": len(chunks),
+        # 期間降級揭露（2026-08-28）：`rq.retrieve` 降級 Tier 2 時產生、已注入 Generator prompt。
+        # ⚠ **落盤的理由是可量測性**：在接回來之前，「系統會不會揭露」在所有 agentic 評測上
+        # 結構性恆為 0（note 在 `_retrieve_chunks` 就被丟掉了），量到的 0 是在覆述一行程式碼。
+        # 落在結果檔裡，日後要斷言「該揭露的有揭露」才有東西可讀。
+        "agentic_period_notes": list(period_notes or []),
     }
 
 
@@ -139,7 +149,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--module", default="agentic_rag_v2", help="要跑的 agentic 模組")
     ap.add_argument("--collection", default=DEFAULT_COLLECTION,
-                    help="Qdrant collection（預設 us_stock_rag_edgar_period，與單次版對照必須同一個）")
+                    help="Qdrant collection（預設＝生產的 rq.COLLECTION_NAME，與單次版對照必須同一個）")
     ap.add_argument("--eval-set", default=str(EVAL_SET))
     ap.add_argument("--output", default=str(DEFAULT_OUTPUT))
     ap.add_argument("--limit", type=int, default=None, help="只跑前 N 題（smoke test）")
@@ -218,7 +228,8 @@ def main() -> None:
                 run_kwargs["freshness_mode"] = args.freshness_mode
             out = ar.run_agentic(q["query"], **run_kwargs)
             rec = _record_from_agentic(q, out["answer"], out.get("chunks", []),
-                                       out.get("sub_queries", []))
+                                       out.get("sub_queries", []),
+                                       out.get("period_notes", []))
             records_by_id[q["id"]] = rec
             print(f"    ✓ {time.time()-t0:.0f}s | sub_queries={len(out.get('sub_queries', []))} "
                   f"| chunks={rec['agentic_n_chunks']} | answer_len={len(out['answer'])} "

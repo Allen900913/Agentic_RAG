@@ -9,6 +9,7 @@
 
 | 想知道 | 看哪一份 |
 |---|---|
+| **現在的狀態**（生產 collection、題庫、閘門數、量尺狀態） | [`CLAUDE.md`](CLAUDE.md) 開頭的〈現況快照〉 |
 | 架構、全域規則、每個檔案負責什麼 | [`CLAUDE.md`](CLAUDE.md) |
 | 語料怎麼切塊、重建要注意什麼 | [`docs/INGEST.md`](docs/INGEST.md) |
 | 怎麼評測、哪些數字可以相信、**哪些做法已試無效** | [`docs/EVAL.md`](docs/EVAL.md) |
@@ -24,7 +25,7 @@
 本系統針對美股七大科技龍頭（**AAPL、MSFT、NVDA、AMZN、GOOGL、META、TSLA**）建構個人知識 RAG 系統，整合：
 - **SEC 官方財報**（10-K 年報、10-Q 季報），由 `edgartools` 直接呼叫 SEC EDGAR API 取得
 - **基本面財務數據**（P/E、EPS、毛利率、三大財務報表），由 `yfinance` 取得
-- **近期市場新聞**，由 `yfinance` 內建 news API 取得條目，並以 `curl_cffi` + `BeautifulSoup` 嘗試補抓全文
+- **近期市場新聞**（`--with-news` opt-in，**預設不抓、抓了也不進索引**，見下方〈KB 只收記錄〉）
 
 ### 選題理由
 美股科技龍頭財報、法說會實錄、產業分析報告均為公開資料，SEC EDGAR 提供免費 API 存取，`yfinance` 提供完整基本面數據，適合做為 RAG 系統的資料來源。這個領域對量化分析、投資研究有直接應用價值，問答結果對研究人員有真實使用意義。
@@ -32,10 +33,18 @@
 ### 資料規模
 | 類別 | 檔案數 | 說明 |
 |---|---|---|
-| SEC filing（10-K / 10-Q） | 21 | 每家 1 份 10-K ＋ 最近 2 份 10-Q，由 API 即時抓取 |
+| SEC filing（10-K / 10-Q） | **77** | 每家 3 份 10-K ＋ 8 份 10-Q，橫跨約 2.5 年，由 API 即時抓取 |
 | Fundamentals / IncomeStatement | 14 | 每家各 2 份 `.txt`，只保留最新快照 |
-| News | 24 | `.txt`，多日期並存（時間序列） |
-| **合計來源文件** | **59** | → 生產 collection `us_stock_rag_edgar_exp4` 約 **3,650 chunks** |
+| **合計進索引的來源文件** | **91** | → 生產 collection `us_stock_rag_edgar_multiyear` 共 **13,022 chunks** |
+| News | 24 | `.txt` 仍在磁碟上，但**不進索引**（見下） |
+
+> **KB 只收「記錄」，不收「流」**（2026-08-19）：新聞由 agentic 的 live web 路徑供應，不進
+> Qdrant。判準是「這份東西的正確性靠什麼判定」——記錄靠期別對＋有引用＋數字可驗，流靠夠新
+> ＋來源可信，本專案為期別正確性做的每一層對新聞沒有一項成立。
+>
+> **多年語料於 2026-08-27 升為生產**（單年 21 份 → 77 份）。決策是兩半證據都量過才做的：
+> 損害是 45 題掉 2 題、錯期率 0.000 → 0.044；收益是「只有舊年報答得出來」的歷史題
+> gold@5 從 0/20 變 18/20，而當期題的陰性對照不動。
 
 ---
 
@@ -46,13 +55,14 @@
 ```mermaid
 graph LR
     A1["SEC EDGAR API<br/>(edgartools)"] --> B["data_update_edgar.py"]
-    A2["data/raw/Fundamentals<br/>data/raw/News<br/>(.txt)"] --> B
+    A2["data/raw/Fundamentals<br/>(.txt)"] --> B
+    A3["data/raw/News<br/>(.txt)"] -. "RAW_EXCLUDE_DIRS<br/>不進索引" .-x B
     B --> C1["10-K/10-Q:<br/>SEC Item 邊界切段<br/>＋三大表原子保留<br/>＋表格抽取去重"]
     B --> C2[".txt:<br/>MD5 增量<br/>＋keep-latest"]
     C1 --> D["SemanticChunker (BGE-M3)<br/>＋RCTS fallback<br/>(>1200 token 補切)"]
     C2 --> D
     D --> E["BGE-M3 一次編碼<br/>產生 Dense + Sparse"]
-    E --> F[("Qdrant<br/>us_stock_rag_edgar_exp4<br/>dense 1024D cosine<br/>＋sparse lexical")]
+    E --> F[("Qdrant<br/>us_stock_rag_edgar_multiyear<br/>dense 1024D cosine<br/>＋sparse lexical")]
 
     style F fill:#dbeafe,stroke:#3b82f6
     style E fill:#fce7f3,stroke:#db2777
@@ -188,10 +198,14 @@ graph TB
 
 ### Query-Understanding Hard Filter
 - **動機**：財報問答常常隱含「限定期間 / 限定文件類型」（例如「上一季」「不要看年報」），若不做限制，reranker 可能選到答錯期間或錯誤公司的 chunk。
-- **做法**：檢索前用 LLM 抽取 `fiscal_year` / `fiscal_period` / `filing_type`（含 include/exclude 極性），轉成 Qdrant `must` / `must_not` filter；ticker 則用 regex 字典比對（`_COMPANY_TICKER`）。
+- **做法**：檢索前用 LLM 抽取 `fiscal_year` / `fiscal_period` / `filing_type`（含 include/exclude 極性），轉成 Qdrant `must` / `must_not` filter。
+- **公司（ticker）走兩段式**：字面公司名（含中文別名「輝達」「特斯拉」）用 regex 字典 `_COMPANY_TICKER`；**regex 沉默時**才叫一次 LLM 做實體解析（`resolve_tickers_llm`），把產品／子公司名對應到母公司（AWS → AMZN、Azure → MSFT）。
+  > **為什麼不是往字典加一筆 `"aws": "AMZN"`**：那是 O(n) 的開始。實測 20 個一般人會用的產品名有 18 個抽不到（Azure／iPhone／YouTube／Reality Labs／CUDA／Model Y／Xbox／LinkedIn…），而這種名字每季都在長。字典做的是**格式已知的字面比對**，實體解析是**開放集合的感知**，兩者該用不同工具。
+  > **只在 regex 沉默時才叫**，理由不是省錢是精度：regex 命中的是字面公司名，那是高精度的，沒有理由讓 LLM 有機會推翻它。
+- **期間意圖也交給 LLM**：「這題問的是哪個期間」（`latest` / `absolute` / `range` / `none`）沒有唯一機械答案 → LLM 判；「那個期間是哪個期碼」是確定性的 → Python 從 collection 的期別階梯算。
 - **口徑消歧義（`period_basis`）**：ingest 時就把每個 chunk 標上數字口徑——Fundamentals 是 **TTM**（滾動十二個月快照）、10-K/10-Q/IncomeStatement 是 **fiscal_year**（會計期間結算）。問「最近十二個月」時單向硬性導向 Fundamentals，避免抓到年度結算數字而口徑錯配。
 - **Tier cascade**：嚴格 filter 零結果時自動退到寬鬆 filter（拿掉年份留 ticker+type）→ 再退到無 filter，避免「猜錯條件」導致整題查不到東西。
-- **已知缺口**：`_COMPANY_TICKER` 只認英文公司名，中文口語問法（「輝達」「特斯拉」）配不到 word boundary，等於該題沒有 ticker 限制，可能讓 filter 跨公司污染候選池。修法（尚未實作）：把 ticker 一併交給同一次 LLM 呼叫抽取，而非只靠 regex。
+  > ⚠ **「Tier 1 命中」不等於「答得了」**：`fiscal_year` 的 filter 曾與 `report_label_year` 做雙座標系 OR，於是問 FY2025 會命中一份「曆年標籤是 2025、財年其實是 2026」的季報，而真正含 FY2025 年度數字的年報反被擋掉。現在 label-year **只能放寬命中、不能自己構成命中**。
 
 ### Agentic 管線（`agentic_rag_v2.py`）
 單管線對「一次要回答多件事」或「必須先查 A 才知道要查 B」的問題力有未逮，因此另建 LangGraph Supervisor 管線：
@@ -199,13 +213,13 @@ graph TB
 | 節點 | 做什麼 | 模型 |
 |---|---|---|
 | `plan` | 把問題拆成可平行處理的子問題 | `gpt-oss-120b` |
-| `execute` | **確定性**檢索（無 LLM 改寫），再由 `_check_sufficiency` 判斷證據是否足夠 | 檢索 `gpt-oss-20b`／判定 `gpt-oss-120b` |
+| `execute` | **確定性**檢索（無 LLM 改寫），再由 `_check_sufficiency` 判斷證據是否足夠 | 檢索／判定皆 `gpt-oss-120b` |
 | `replan` | 證據不足時針對缺口補查（多跳題的「查完 A 才知道要查 B」在此解決） | `gpt-oss-120b` |
 | `synthesize` | 單次生成 ＋ citation validator ＋ reflect | `gpt-oss-120b` |
 
 - **關鍵設計：Execute 不放 LLM 改寫**。早期版本讓 ReAct agent 自由改寫子查詢，實測是檢索品質退步的主因（agent 會把精確的子問題改成模糊的措辭）。改成確定性檢索後，複合問題的 context recall 明顯回升。
 - **時間感知雙軸 `freshness_mode`**：`snapshot`（eval 用，「最新」＝知識庫掃出來的最新資料，不看系統時鐘，確保評測可重現）／`live`（生產用，看實際日期）。
-- 完整變更史與診斷結論見 [`CHANGELOG_AGENTIC.md`](CHANGELOG_AGENTIC.md)。
+- 節點設計理由、validator 的實測與踩坑見 [`docs/AGENTIC.md`](docs/AGENTIC.md)；早期（deepagents → LangGraph）的演進史見 [`CHANGELOG_AGENTIC.md`](CHANGELOG_AGENTIC.md)。
 
 ### Prompt Engineering
 系統提示詞設計原則：
@@ -231,7 +245,7 @@ LLM 呼叫依用途拆成兩種溫度（受控實驗定案，詳見 [`CHANGELOG.
 - `--rebuild` 刪除整個 collection 重建，該 collection 的 MD5 快取一併作廢
 - 結果：重複執行不會累積重複 chunk 或過期快照
 
-> **重建不會逐字重現舊 collection**，有兩個正當差異：① `edgartools` 每次抓「最新 10-K ＋ 最近 2 份 10-Q」，SEC 一有新申報就換版 ② 無 caption 的大表格由 LLM 生成摘要，非確定性。判斷重建是否正常，看的是「扣掉換版文件與 LLM caption 後是否逐字相同」，不是總 chunk 數。
+> **重建不會逐字重現舊 collection**，有兩個正當差異：① SEC 一有新申報就換版 ② 無 caption 的大表格由 LLM 生成摘要，非確定性。判斷重建是否正常，看的是「扣掉換版文件與 LLM caption 後 **text chunk** 是否逐字相同」，不是總 chunk 數，也不要拿 table 當判準。
 
 ---
 
@@ -269,10 +283,13 @@ pip install -r requirements-ragas.txt
 **推薦：Docker Qdrant（支援多 process 併發存取）**
 
 ```bash
-docker run -d --name qdrant_hnsw -p 6333:6333 -v qdrant_storage:/qdrant/storage qdrant/qdrant
+docker run -d --name qdrant --restart unless-stopped -p 6333:6333 -p 6334:6334 \
+  -v ./qdrant_docker_storage:/qdrant/storage qdrant/qdrant:v1.19.0
 ```
 
 啟動後在 `.env` 設定 `QDRANT_URL=http://localhost:6333`。所有腳本都透過 `make_qdrant_client()` 自動偵測並走 server 模式。
+
+⚠ **容器起來 ≠ 可以連**：Qdrant 會逐個 collection 恢復 shard（本機 9 個 collection 實測約 **22 秒**）才開始 listen。那段期間 client 會拿到 `RemoteProtocolError: Server disconnected without sending a response`——**那不是壞掉，是還沒好**。先 `docker logs qdrant | tail` 看到 `Qdrant HTTP listening on 6333` 再連。
 
 **替代：Local embedded mode（單人快速實驗，不需 Docker）**
 
@@ -287,8 +304,8 @@ docker run -d --name qdrant_hnsw -p 6333:6333 -v qdrant_storage:/qdrant/storage 
 | `NVIDIA_API_KEY` | ✅ | `rag_query.py` / `agentic_rag_v2.py` 的預設 LLM（NVIDIA NIM `gpt-oss-120b`） |
 | `SEC_IDENTITY` | ✅ | 格式 `Your Name your.email@example.com`，SEC EDGAR 公平存取政策要求 |
 | `QDRANT_URL` | 建議 | `http://localhost:6333`；留空則走 local embedded mode |
-| `GEMINI_API_KEY` | 選用 | 改用 `-m gemini-*` 模型時，以及 ingest 對無 caption 的大表格生成摘要時 |
-| `GROQ_API_KEY` | 選用 | 只有 `fetch_data.py` 抓新聞會用 |
+| `GEMINI_API_KEY` | 選用 | 只有改用 `-m gemini-*` 模型時 |
+| `GROQ_API_KEY` | 建議 | **ingest 對無 caption 的大表格生成摘要**（`openai/gpt-oss-20b`）。缺它時大表格沒有 caption |
 
 ### 4-4. 完整執行流程
 
@@ -298,7 +315,7 @@ docker run -d --name qdrant_hnsw -p 6333:6333 -v qdrant_storage:/qdrant/storage 
 # ⑤ 啟動 Docker Qdrant                                → 見 4-2
 
 # ⑥ 全量重建索引 ── ⚠ --rcts-fallback 不可省（預設是關的）
-python data_update_edgar.py --rebuild --rcts-fallback --collection us_stock_rag_edgar_exp4
+python data_update_edgar.py --rebuild --rcts-fallback --collection us_stock_rag_edgar_multiyear
 
 # ⑦ 單管線問答（不加 -m 就用預設的 NVIDIA gpt-oss-120b）
 python rag_query.py -q "NVIDIA 最新財報的毛利率是多少？"
@@ -317,20 +334,24 @@ python rag_query.py
 
 | 目錄 | 內容 | ingest 行為 |
 |---|---|---|
-| `Filings/` | 10-K / 10-Q `.html` | 舊管線遺留；EDGAR 版改由 API 取得，**不讀這裡** |
+| `Filings/` | 10-K / 10-Q `.html`（primary document） | 供人眼查閱，**ingest 不讀這裡** |
+| `sec_local/` | `filings/{YYYYMMDD}/{accession}.nc` 完整申報檔 | **ingest 的 10-K/10-Q 唯一來源** |
 | `Fundamentals/` | Fundamentals + IncomeStatement `.txt` | 讀取，套 keep-latest |
-| `News/` | News `.txt` | 讀取，不去重（時間序列） |
+| `News/` | News `.txt` | **整個目錄排除**（`RAW_EXCLUDE_DIRS`） |
 | `_archive_stale/` | 過期快照 | **整個目錄排除** |
+
+掃描是**遞迴**的（`RAW_DIR.rglob`）：改回非遞迴的 `iterdir()` 會掃到 0 個檔案，而且**不報錯**，只是安靜地少 ingest 一批 `.txt`。
 
 人眼驗證用的傾印輸出在 `data/edgar_processed/`，鏡像同樣的三分類。
 
 ### 4-5. 可選：使用 fetch_data.py 擴充資料
 
 ```bash
-python fetch_data.py                              # 抓新聞、SEC 財報、基本面
-python fetch_data.py --tickers NVDA TSLA GOOGL    # 指定 ticker
-python fetch_data.py --news-count 3               # 只抓 3 篇新聞（加速測試）
-python fetch_data.py --skip-news --skip-sec       # 只抓基本面（最快）
+python fetch_data.py                                    # 抓 SEC 財報 + 基本面（新聞預設不抓）
+python fetch_data.py --tickers NVDA TSLA GOOGL          # 指定 ticker
+python fetch_data.py --annuals 3 --quarters 8           # 現行生產語料的份數
+python fetch_data.py --skip-sec                         # 只抓基本面（最快）
+python fetch_data.py --with-news --news-count 3         # 明確要新聞才會抓（仍不進索引）
 ```
 
 ### 4-6. 可選：Web 前端（Streamlit + FastAPI + SSE 串流）
@@ -359,10 +380,14 @@ streamlit run app.py
 
 | 項目 | 內容 |
 |---|---|
-| 題庫 | [`eval/eval_set.json`](eval/eval_set.json)，**100 題**：news / multi_intent / semantic / mixed / lexical / colloquial 各 15，＋ multi_hop 10 |
+| 題庫 | [`eval/eval_set.json`](eval/eval_set.json)，**65 題**：semantic 15／mixed 15／lexical 17／colloquial 13／multi_hop 5 |
+| 冷凍題庫 | [`eval/eval_set_news.json`](eval/eval_set_news.json) 37 題——2026-08-19 把新聞移出 KB 時一併冷凍。**現在不要拿它跑分**（eval 預設 web 是關的，跑了必然全滅，那不是證據） |
 | 參考答案 | `gen_reference_answers.py` 從黃金來源檔生成 → `reference_answers.json`（RAGAS 的 ground truth） |
-| 指標 | RAGAS 六項：context_recall、context_precision、nv_context_relevance、faithfulness、answer_relevancy、answer_correctness |
+| 聚合指標 | RAGAS 六項：context_recall、context_precision、nv_context_relevance、faithfulness、answer_relevancy、answer_correctness |
+| **零噪音指標** | `check_number_defects.py` 逐條斷言（PASS／FAIL／**N/A** 三態）＋ 一組確定性閘門（`verify_*.py`，零 LLM、秒級）。**「數字答對了沒有」用這些驗收，不是 RAGAS** |
 | 執行環境 | RAGAS 須跑在**獨立的 `.venv-ragas`**（`ragas==0.2.15` 綁 `langchain-core<0.4`，裝進生產 `.venv` 會把 langchain 降版、弄壞 agentic 管線與 SemanticChunker） |
+
+> ⚠ **這個專案的量測解析度比多數改動的效果粗一個數量級**：RAGAS 的 MDE（95%）換算成「要幾題從 0 修到 0.5」是 **4~7 題**，而典型 ingest 改動只動 2~5 題。所以看到聚合分數的差異時，**先問「這超過噪音嗎」再問「為什麼」**。判讀護欄（噪音門檻＋gold 上限）由 `eval_ragas_vs_rubric.py` 每次跑完自動印出。完整說明見 [`docs/EVAL.md`](docs/EVAL.md)。
 
 標準跑法（三步，reference 生成一次即可重用）：
 
@@ -386,9 +411,9 @@ python eval/run_agentic_on_evalset.py --module agentic_rag_v2
 
 | 來源名稱 | 類型 | 授權 / 合規依據 | 數量 |
 |---|---|---|---|
-| SEC EDGAR（10-K / 10-Q） | 官方財報 | 美國 SEC 公開資料，完全免費公開 | 每公司 3 份（1 年報 + 2 季報），共 21 |
+| SEC EDGAR（10-K / 10-Q） | 官方財報 | 美國 SEC 公開資料，完全免費公開 | 每公司 11 份（3 年報 + 8 季報），共 **77** |
 | Yahoo Finance（yfinance） | 基本面數據 | Yahoo Finance 公開服務條款，個人使用合規 | 每公司 2 份，共 14 |
-| Yahoo Finance News API + 公開新聞頁正文擷取 | 新聞文章 | 以 `yfinance` news API 取得條目，並擷取公開頁面可讀內容作為補充 | 共 24 篇 |
+| Yahoo Finance News API + 公開新聞頁正文擷取 | 新聞文章 | 以 `yfinance` news API 取得條目（`--with-news` opt-in） | 共 24 篇，**不進索引** |
 
 > ⚠️ 所有資料均來自公開管道，不含任何付費牆內容或重大非公開資訊（MNPI）。  
 > SEC EDGAR 的存取遵守其公平存取政策：`.env` 需提供 `SEC_IDENTITY`（真實姓名 + email），並限制請求頻率。
@@ -398,18 +423,19 @@ python eval/run_agentic_on_evalset.py --module agentic_rag_v2
 ## 7. 系統限制與未來改進
 
 ### 當前限制
-1. **中文口語 ticker 抽取缺口** — `_COMPANY_TICKER` 只認英文公司名，「輝達」「特斯拉」等中文口語問法配不到，該題等於沒有 ticker 硬性限制，可能跨公司污染候選池。
-2. **否定框架的檢索落差** — 「非龍頭」「不是最大的」這類否定框架問題，與語料裡的正面表述（"minority share"）存在框架落差，跨語言翻譯救不了，屬已知限制。
-3. **新聞來源以英文財經媒體為主** — `fetch_data.py` 依賴 Yahoo Finance news feed 與公開新聞頁面，中文財經媒體支援有限。
-4. **表格摘要非確定性** — 無 caption 的大表格靠 LLM 生成一行摘要，未固定 temperature 且有 output token 上限，導致重建索引時這部分無法逐字重現。
+1. **否定框架的檢索落差** — 「非龍頭」「不是最大的」這類否定框架問題，與語料裡的正面表述（"minority share"）存在框架落差，跨語言翻譯救不了，屬已知限制。
+2. **多公司題沒有期別保護** — `build_qdrant_filter` 吃 flat AND list，結構上寫不出「每家配每家的期碼」（per-ticker OR-of-ANDs）。實測損害是**席位競爭**（top-5 被一家壟斷，另一家整個擠掉）而非選錯期別，且只發生在單管線——agentic 的 planner 會在上游把多公司題拆成單公司子問題。
+3. **表格摘要非確定性** — 無 caption 的大表格靠 LLM 生成一行摘要，重建索引時這部分無法逐字重現（每份 filing 約 2~3 個 chunk；**text chunk 完全不受影響**）。
+4. **重述（restatement）無法區分** — 10-K 會重述前一年數字，於是同一個事實在新舊年報是兩個值，而 payload 沒有 `filing_date`（沒有 transaction time）。
 5. **CPU rerank 延遲** — cross-encoder 在 CPU 上每題數分鐘，互動體驗依賴 SSE 串流的階段回報來緩解。
 
 ### 未來改進方向
-1. **複雜度 router** — 依問題複雜度自動分派：簡單題走單管線（快），複雜題走 agentic（準）。設計已完成，待量測驗證後上線。
-2. **ticker 抽取併入 LLM** — 解決上述限制 1，把 ticker 與期間／文件類型一起在同一次 LLM 呼叫中抽取。
+1. **複雜度 router** — 依問題複雜度自動分派：簡單題走單管線（快），複雜題走 agentic（準）。**卡在量測**：目前的量尺分不出兩條管線在單一事實題上的差異。
+2. **chunk 層的 gold** — 現行 `eval_set.json` 的 `relevant` 只到檔名，而已知的殘留缺口（lexical 類「同一個檔裡收太少」）只在 chunk 層看得見。
 3. **BGE-M3 ColBERT multi-vector 三路融合** — 目前只用 dense + sparse 兩路，可再加 ColBERT 細粒度交互打分。
 4. **GraphRAG 知識圖譜** — 建立公司 → 產品 → 技術 → 競爭者的關係圖，提升多跳推理能力。
-5. **新聞定期自動更新** — 整合 RSS 解析，每日增量更新新聞語料。
+
+> 完整的待辦、卡點與**查清楚後決定不修的極限**（含各自的復活條件）見 [`BACKLOG.md`](BACKLOG.md)。
 
 ---
 
@@ -424,14 +450,14 @@ A：首次會自動從 HuggingFace 下載 `BAAI/bge-m3`（~2.3GB，含 dense + s
 **Q：Qdrant 要不要跑 Docker？**  
 A：推薦跑 Docker。最初設計是純 Python 嵌入式模式不需 Docker，但那是**排他檔案鎖**——同一時間只能有一個 process 開啟資料庫，互動查詢 / eval / API server 之間會互搶鎖而報錯。改跑 Docker 後三者可併發。單人單 process 快速實驗仍可把 `QDRANT_URL` 留空 fallback 回 local mode。
 
-**Q：`fetch_data.py` 抓新聞失敗（`curl_cffi` / HTML 解析失敗）？**  
-A：部分財經網站會阻擋全文抓取，可能出現 401/403、逾時，或頁面結構變動導致解析失敗。程式已內建 `try/except`；抓不到全文時自動退回 `yfinance` 提供的 snippet，不影響整體執行。也可用 `--skip-news` 跳過。
+**Q：為什麼新聞不進索引？**  
+A：判準是「這份東西的正確性靠什麼判定」。財報靠**期別對＋有引用＋數字可驗**，新聞靠**夠新＋來源可信**——本專案為期別正確性做的每一層（切塊六層、期別階梯、跨期 collapse、期間意圖、citation validator）對新聞**沒有一項成立**，新聞 chunk 連 `report_period_code` 都是 0% 覆蓋。實測它佔 2.5% 語料卻是最大的殘留檢索失敗來源。「市場現在怎麼看」改由 agentic 的 live web 路徑供應（有發布日、來源白名單、過時過濾）。`--with-news` 抓下來的檔案仍會留在磁碟上，只是不進 Qdrant。
 
 **Q：edgartools 連接 SEC EDGAR 超時？**  
 A：SEC EDGAR 會限速過於頻繁的請求，且要求 `SEC_IDENTITY` 提供真實聯絡資訊。若仍超時，用 `--tickers NVDA` 縮小範圍分批跑，或稍後重試。（`--skip-txt` 是跳過 `.txt` 那半邊，對 SEC 超時沒有幫助。）
 
 **Q：單管線和 agentic 該用哪個？**  
-A：單一事實查詢（「NVIDIA 最新毛利率」）用單管線即可，快且準。涉及多個子問題（「比較 A 和 B，再加上新聞面」）或需要多跳推理（「先查出誰是最大客戶，再查那家公司的財務」）時用 agentic。自動分派的 router 尚未上線，目前需手動選擇。
+A：單一事實查詢（「NVIDIA 最新毛利率」）用單管線即可，快且準——而且**便宜非常多**：單管線一題約 3~4 次 LLM 呼叫，agentic 是 50~60 次（每個子問題內部都跑一次完整檢索）。涉及多個子問題或需要多跳推理（「先查出誰是最大客戶，再查那家公司的財務」）時才用 agentic。自動分派的 router 尚未上線（卡在量測，見 [`BACKLOG.md`](BACKLOG.md)），目前需手動選擇。
 
 **Q：可以使用 pgvector / Milvus 而非 Qdrant 嗎？**  
 A：可以，但需重寫 DB 層。Qdrant 之所以被選中，是因為它在 hybrid retrieval（dense + sparse named vectors + server-side RRF）的支援最完整、API 最簡潔，且提供 local embedded mode 可選。pgvector 需要 PostgreSQL 容器；Milvus 需要 etcd + MinIO（或 Milvus Lite）。

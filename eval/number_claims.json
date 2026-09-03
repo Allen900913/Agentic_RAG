@@ -26,20 +26,6 @@
     "fix_verified": "⚠ **2026-08-12 重建 us_stock_rag_edgar_ground 後，機制主張被自己的檢查推翻**：chunk 層仍然沒有任何一個 chunk 同時含 `Greater China net sales increased` 與 `18,816`。逐 collection 掃 AAPL_10Q_202606.html 的結果——ground：#61（593 字元）只有解釋、#60（1030 字元）只有數字，**兩者同 chunk = 0 個**；head：#63（451 字元）只有解釋，同樣 0 個；period：#65（3112 字元）**兩者都有**。也就是說 period 反而是唯一在 chunk 層正確的，因為它沒有小標層、整個 Segment Operating Performance 是一個大 chunk。 幅度接地確實生效（孤兒段 451→593 字元、`verify_segment_split.py` 判準⑤ 46→0），但它**併在 section 層，SemanticChunker 隨後又在 chunk 層把表格與 Greater China 散文切開**。 **教訓：判準⑤ 過關是必要不充分——它量 section 層，缺陷在 chunk 層。**（先前這裡寫「接地後三者落在同一段（2251 字元）」在 section 層是真的，但那個 section 被切成 1030+593。）同 memory `verify-mechanism-before-claiming`。 ⚠ 另外本題**跨 run 本來就不穩定**（period 三個 run：22%／28%／22%），驗收要跑多個 run，單一 run PASS 不算修好。"
   },
   {
-    "id": "mi-05",
-    "kind": "require_chunk",
-    "claim": "MSFT 營收成長率（TTM 口徑）——Fundamentals #0 必須進候選池",
-    "require_chunks": [
-      { "source": "MSFT_Fundamentals_20260612.txt", "chunk_index": 0 }
-    ],
-    "status": "known_defect",
-    "why": "gold 沒錯、語料有、檔案也撈到了——撈到的是同一個檔的錯 chunk。`Revenue Growth (YoY): 18.30%` 在 #0（698 字元），四個 run 全部撈到 #1（Balance Sheet：Total Cash／Total Debt／Debt-Equity／Current Ratio，2045 字元）。4/4 完全一致＝不是抽樣變異，是檢索層對「營收成長率」這個 query 穩定挑錯 chunk。`Revenue Growth (YoY)` 這個字面就在 #0 裡，sparse/BM25 理應命中；懷疑與 #1 長三倍（rerank 對長 chunk 的偏好）有關，**未驗證，不是結論**。",
-    "verified": "2026-08-11 直接 scroll Qdrant 三個 collection（exp4／head／period）確認：Fundamentals 都是 3 個 chunk、#0 是 Company Overview 含 Revenue Growth (YoY)、#1 是 Balance Sheet、#2 是 Mayo Clinic 合作段。⚠ exp4 的 #0 寫成小數 `0.183`，head／period 是 `18.30%`——`migrate_fundamentals_pct.py` 只套用到後兩者。",
-    "metric_design": "⚠ **刻意不用 `anchored_pct`**——答案層在這題必然選錯判準：（a）`forbid_pct: 16/17` 不行，那些是**合法的財期數字**（10-Q 的季度／累計成長），只是口徑與 gold 的 TTM 不同（見 memory `period-basis-ttm-disambiguation`）；（b）`expect_pct: 18.3` 也不行，head 答的「約 18%（增加 501 億美元）」是 FY2026 10-K 的**財年**數字，數值恰好接近但是不同的量，±1pt 容差下會 PASS ＝ **用對的分數獎勵錯的理由**。真正的判別訊號是「撈到 #0 還是 #1」，所以斷言下在檢索層，與答案措辭無關。 ⚠ 本 kind 綁 chunk_index ＝ 綁切塊結果；Fundamentals 走獨立 doc_type 路徑，不受 2026-08-11 那三個 filing 側 ingest 修法影響（已用上面三個 collection 交叉確認索引穩定）。若日後改 Fundamentals 切塊，這條要重新對號。",
-    "fixed_by": null,
-    "fix_verified": "尚未修。2026-08-11 在三個封存結果檔上驗判別力：3/3 FAIL，訊息皆為「同檔撈到 #[1] ← 撈錯 chunk」。"
-  },
-  {
     "id": "mix-07",
     "kind": "require_text",
     "claim": "GOOGL 收購 Wiz 的金額（$29.5B）必須出現在答案裡",
@@ -54,21 +40,59 @@
   {
     "id": "col-11",
     "claim": "MSFT 最新一季 Microsoft Cloud 營收成長率",
-    "anchor": "Microsoft Cloud|整體雲端",
+    "anchor": "Microsoft Cloud|整體雲端|雲端營收|雲端服務",
     "window": 60,
     "expect_pct": 29.0,
     "status": "regression_guard",
     "why": "答案頭條挑 Azure 的 40%，被舊的『比第一個百分比』誤判成衝突。實際上答案的 Microsoft Cloud 29% 與 gold 一致 → 不是缺陷。登錄為回歸護欄，防止日後真的答錯。",
-    "verified": "2026-08-09 逐字比對答案與 gold：兩邊都是 Cloud 29% / Azure 40%"
+    "verified": "2026-08-09 逐字比對答案與 gold：兩邊都是 Cloud 29% / Azure 40%",
+    "metric_design": "⚠ **2026-08-19 放寬 anchor**（原 `Microsoft Cloud|整體雲端`）：同一天的 run 答對了（「雲端營收較去年同期大幅上升 29% 至 545 億美元」）卻判成 N/A——答案改用「雲端營收」這個措辭，anchor 就整條落空。這正是 anchored_pct 最危險的失效方式：**護欄不會叫，它只是安靜地停止量測**。放寬的判準是「同一個主張的其他合法中文寫法」，不是「把更多數字納進窗口」——expect 仍是 29、仍不設 forbid（Azure 40% 與 Microsoft Cloud 29% 正當並存，見 anchored_pcts docstring）。 ⚠ **同日再補 `expect_text`（金額）**：放寬 anchor 之後 r2 抓到一個真 FAIL（答案只講 Microsoft 365 Commercial／Consumer 的分項雲端收入，沒有 Microsoft Cloud 整體 29%），但那次是**險勝**——答案裡的 Consumer 雲端成長率恰好也是 29%，只要它落進 anchor 窗口就會**用對的分數獎勵錯的內容**。金額（545 億／$54.5B）只屬於 Microsoft Cloud 整體，是這題唯一不會撞的判準（同 mix-03 的作法）。已驗：兩個答對的 run（r1、full100）都含這個金額，答錯的 r2 沒有。",
+    "expect_text": "54\\.5\\s*billion|545\\s*億"
   },
   {
-    "id": "mi-04",
-    "claim": "AAPL 營收 YoY 成長率（非 LTM）",
-    "anchor": "YoY|年比年",
+    "id": "lex-16",
+    "claim": "AAPL 近一年整體營收成長率必須是 TTM／YoY 口徑的 16.6%",
+    "anchor": "YoY|年比年|TTM|過去一年|近一年",
     "window": 60,
     "expect_pct": 16.6,
     "status": "regression_guard",
-    "why": "答案同時給 LTM 12.8% 與 YoY 16.6% 並正確標注口徑，頭條是 12.8% 所以被舊比法誤判。登錄為護欄：關鍵是 YoY 這個口徑要對。",
-    "verified": "2026-08-10 逐字讀三個 run 的答案，皆同時給出兩個口徑且標注正確"
+    "why": "承自冷凍在 eval/eval_set_news.json 的 mi-04。2026-08-19 拆題庫時整條主張跟著搬走，量尺從 6 條掉到 4 條；本條是把**與新聞無關的財報半**接回 65 題母檔的 lex-16。 護的是**口徑**不是數值大小：同一個「營收成長率」在 Fundamentals 是 TTM、在 10-Q 是單季／累計，數值不同而三者都合法。anchor 刻意含 TTM／過去一年／近一年，是因為答案可能只寫其中一個口徑詞——只認 YoY 會在措辭一換就退化成 N/A（＝靜默失去判別力）。",
+    "verified": "2026-08-19 experiments/agentic/gj_mdna_claims6_r1.json 逐字讀：答案「Apple 在過去一年（TTM）的營收成長率為 16.60%」，gold（AAPL_Fundamentals_20260612.txt #0 的 Revenue Growth (YoY)）一致。"
+  },
+  {
+    "id": "lex-17",
+    "kind": "require_chunk",
+    "claim": "MSFT 營收成長率（TTM 口徑）——Fundamentals #0 必須進候選池",
+    "require_chunks": [
+      {
+        "source": "MSFT_Fundamentals_20260612.txt",
+        "chunk_index": 0
+      }
+    ],
+    "status": "known_defect",
+    "why": "承自冷凍在 eval/eval_set_news.json 的 mi-05：把原題**逐字沿用前半、只拿掉新聞子句**搬回 65 題母檔，讓新聞子句成為唯一變因。\n**結論：拿掉新聞子句並沒有修好它。** 2026-08-19 兩次端到端重跑 **1 PASS／1 FAIL**——FAIL 那次訊息正是 mi-05 的原症狀「同檔撈到 #[1] ← 撈錯 chunk」，答案跟著改用 10-K 的財年 18%（增加 501 億美元）。\n⚠ **我一度只憑 r1 就宣告「根因是新聞污染、已被推翻」，那是錯的**；r2 立刻打臉。這與 mi-05 記載在 2026-08-12 的更正一致：**它不是穩定行為，部分取決於 Plan 產生的子問題**（當時 ground／ground2 各 3 run 各有 1 次 PASS）。舊記載真正錯的只有「4/4 穩定」那個強度，以及那句已標明未驗證的「#1 長三倍造成 rerank 偏好」——後者到現在仍**未驗證，不要當結論**。\n同一批 run 裡 `mix-07` 倒是 2/2 從 FAIL 翻成 PASS（拒答 → 答出 $29.5B），它記載的根因本來就是新聞查詢污染——**那一題是真的被拔除新聞修好的**。",
+    "metric_design": "⚠ 綁 chunk_index ＝ 綁切塊結果；Fundamentals 走獨立 doc_type 路徑（3 chunk：#0 Company Overview 含 Revenue Growth (YoY)、#1 Balance Sheet、#2 合作段），改 Fundamentals 切塊要重新對號。",
+    "verified": "2026-08-19 gj_mdna_claims6_r1（PASS，sources=[MSFT_Fundamentals#0]）／gj_mdna_claims6_r2（FAIL，sources 含 MSFT_Fundamentals#1 而非 #0）。⚠ **單一 run 不可下結論**：r1 單獨看會得到「已修好」的相反結論。\n⚠ 另量到但**刻意沒登錄**的：單發檢索探針四種問法，#0 的 rank 是 5／1／沒進 top-5，最後那個是口語的「微軟的營收成長率是多少？」。沒登錄是因為 10-Q 的季度成長是合法的另一種口徑，判它錯等於用斷言獎勵一個沒有根據的偏好。見 BACKLOG。"
+  },
+  {
+    "id": "lex-17",
+    "claim": "MSFT 營收成長率的口徑必須是 TTM／YoY 的 18.3%，不可答成 10-K 財年的 18%",
+    "anchor": "YoY|年比年|TTM|年增",
+    "window": 60,
+    "expect_pct": 18.3,
+    "status": "regression_guard",
+    "why": "與上一條同題但斷在**答案層**：上一條只保證對的 chunk 進池，不保證答案用它。兩條一起才蓋住「撈到了卻答成 10-Q 的季度成長率」這個形狀。⚠ 刻意不設 forbid_pct——10-Q 的季度／累計成長率是合法值，禁掉會誤報。 ⚠ **補 `expect_text: 18\\.3`（字面精度）**：`expect_pct` 在 ±1pt 容差下**擋不住 10-K 的 18%**（|18 − 18.3| = 0.3），而那正是 mi-05 記載了很久的陷阱——「約 18%（增加 501 億美元）」是 FY2026 財年數字，**數值恰好接近但是不同的量**。2026-08-19 的 r2 就寫成這樣。字面 `18.3` 只有 Fundamentals 的 TTM 值有，且 `expect_text` 會在 anchor 未命中時接手判定（見 `_eval_anchored_pct`），所以這條主張不會退化成 N/A。",
+    "verified": "2026-08-19 gj_mdna_claims6_r1.json：答案「營收年增長率為 18.30%」，且明列 TTM 營收 $318.27B。",
+    "expect_text": "18\\.3",
+    "metric_design": "⚠ **狀態刻意留在 `regression_guard` 而不是 `known_defect`，雖然它也會間歇 FAIL**（同題 1/2）。`_validate_claims` 要求 known_defect 必須填 forbid，而這題的錯值（10-K 財年 18%、增加 501 億美元）**可以與正解正當並存**——一個同時給 TTM 與財年兩個口徑並標注清楚的答案是好答案。照 anchored_pcts docstring 的判準，這種情況不可用 forbid。缺陷本身由同題的 `require_chunk` 那條（`known_defect`）負責記帳，**判別訊號在檢索層、與答案措辭無關**，那也是 mi-05 當初選擇 require_chunk 的理由。"
+  },
+  {
+    "id": "lex-17",
+    "kind": "require_text",
+    "claim": "MSFT 營收成長率：要嘛給 TTM 的 18.3%，要嘛明講「這不是 TTM」——兩者缺一就是無揭露的口徑錯配",
+    "expect_text": "18\\.3|⚠ 口徑說明：",
+    "status": "known_defect",
+    "why": "⚠ **刻意寫成「A 或 B」而不是「必須有警語」**。Gemini 的建議是把警語字串寫死成必要條件，但那條斷言在檢索修好之後**必然 FAIL**——答案拿到 TTM 就不該印警語。真正該守的不變量是「**讀者不可能誤把財年數字當成 TTM**」，而那有兩種合格解：①答案直接給 TTM 18.30% ②答案給了財年數字但明講口徑。把兩者寫成 or，這條主張在修法前後都測得到東西，不會隨修法生效而失去判別力（同本專案量尺失效史的第五次教訓）。",
+    "verified": "2026-08-20 對現有結果檔實測雙向：gj_mdna_claims6_r1（答 18.30%）→ PASS；gj_mdna_claims6_r2（答 10-K 財年 18%、增加 501 億美元，且早於 validator）→ FAIL。⚠ r2 那次正是這條主張存在的理由：數字不假，錯的是口徑，而且零揭露。"
   }
 ]

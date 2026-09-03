@@ -119,7 +119,13 @@ SEC_MANIFEST    = RAW_DIR / "sec_manifest.json"
 # data/raw 的分類子目錄（2026-08-07 語料重整）：Filings / Fundamentals / News，外加
 # _archive_stale（刻意封存的過期快照，不 ingest）。掃描必須遞迴——重整後 data/raw 根目錄
 # 已經沒有任何檔案，沿用非遞迴的 iterdir() 會一個 .txt 都掃不到（靜默 ingest 0 筆）。
-RAW_EXCLUDE_DIRS = {"_archive_stale"}
+# ⚠ 2026-08-19：`News` 加進排除清單 ＝ **KB 不再收新聞語料**（`data/raw/News/` 的檔案留在磁碟
+# 上但不進 collection）。這一行是整條「拔除新聞」的**單一開關**，要復活就是把 "News" 拿掉。
+# 為什麼拔：KB 收的是「記錄」（有揭露義務、期別明確、可引用、數字可驗），新聞是「流」——
+# 沒有期別標籤（payload 的 report_period_code 覆蓋率 0%）、來源品質不受控、抓下來就開始過期。
+# 這個專案為期別正確性做的每一層（期別階梯／跨期 collapse／期間意圖）對新聞都結構性失效。
+# 「市場現在怎麼看」改由 agentic 的 live web 路徑供應。詳見 docs/EVAL.md〈KB 拔除新聞〉。
+RAW_EXCLUDE_DIRS = {"_archive_stale", "News"}
 
 # data/edgar_processed 的傾印輸出鏡像 data/raw 的三分類，方便逐類人眼對照。
 CATEGORY_FILINGS      = "Filings"
@@ -620,6 +626,10 @@ _MIN_SECTION_CHARS = 200
 # 'Page'／'/s/ PricewaterhouseCoopers LLP' 這類非標題。這些 Item 的表格本來就走
 # chunk_type=table 另一條路,散文殘渣不需要標題層。
 # 這是**格式定義的封閉集合**（SEC 表格結構固定）,列清單正當,同 VALID_*_ITEMS 的理由。
+# ⚠ 2026-08-12 起**已無使用點**：小標層改成 `_MDNA_ITEMS` 白名單（見 use_heading 那行），
+# 白名單天然涵蓋了這份黑名單想擋的東西。保留不刪的理由有二：① 下面那段註解記的是實測知識
+# （Item 8 抓到 150 個假標題、區間中位數 10 字元），刪掉就失傳；② 若收窄的驗收失敗要回退,
+# 這是回退目標。**復活條件**：`use_heading` 改回黑名單制時。
 _TABLE_DOMINATED_ITEMS = {"Item 6", "Item 8", "Item 15", "Part I, Item 1"}
 
 # 語意切塊的**下界**護欄。此前只有上界（RCTS_THRESHOLD=1200 token 補切）而沒有下界,
@@ -800,7 +810,7 @@ def _enable_local_storage() -> None:
     if not SEC_LOCAL_DIR.exists():
         raise RuntimeError(
             f"SEC 本機儲存不存在：{SEC_LOCAL_DIR}\n"
-            f"處理層不自己抓 SEC。請先跑：python fetch_data.py --tickers <...> --skip-news --skip-fundamentals")
+            f"處理層不自己抓 SEC。請先跑：python fetch_data.py --tickers <...> --skip-fundamentals")
     edgar.set_local_storage_path(SEC_LOCAL_DIR)
     edgar.use_local_storage(True)
     _install_offline_html_patch()
@@ -1124,8 +1134,17 @@ def _fetch_filing_records(ticker: str, form: str, filing, semantic_chunker,
             dump_lines.append(
                 f"[PERIOD] item={item_id} 依期間章節標題切成 {len(sections)} 段："
                 + " | ".join(lbl or "(標題前)" for lbl, _ in sections) + "\n")
-        # 表格／清單為主體的 Item 不套通用標題層（見 _TABLE_DOMINATED_ITEMS）。
-        use_heading = item_name not in _TABLE_DOMINATED_ITEMS
+        # 通用小標層**只套用在 MD&A**（2026-08-12 收窄；原本是「所有非表格主體的 Item」）。
+        # 這一層的用途是修 mix-03（把分部數字當成合併總計），而那個混淆**只存在於 MD&A**
+        # ——分部與合併總計並列是 MD&A 的固定寫法。套在 Item 1（Business）／Item 1A
+        # （Risk Factors）這些敘事 item 上只有代價沒有收益：把大段敘述切碎，每個 chunk 帶
+        # 的證據變少。三臂 RAGAS 的證據——semantic context_recall period 0.687 → head 0.509
+        # → ground2 0.497，而 semantic 撈到的 52 個 filing chunk 有 43 個（83%）來自非 MD&A
+        # （Item 1 Business 25、Item 1A 7、Part II Item 1A 6）,`Item_1` 中位長度僅 1320 字元。
+        # head 與 ground2 是兩個獨立 run 卻同樣掉 ~0.19，排除單次抽樣噪音＝機制性退步。
+        # ⚠ 這個收窄**碰不到 mix-03／mix-09 的路徑**：mix-03 在 `Part I, Item 2`、幅度接地
+        # （下一行）本來就 gate 在 `_MDNA_ITEMS`，兩者都在收窄後的範圍內。
+        use_heading = item_name in _MDNA_ITEMS
         for period_label, section_text in sections:
             # 期間章節之下再依通用小標切（第三層硬邊界，見 _split_by_subheading）。
             subsecs = (_split_by_subheading(section_text)
@@ -1456,7 +1475,7 @@ def main() -> None:
     # Fundamentals / IncomeStatement：沿用舊 partition_and_clean + build_chunk_records
     # （這兩種是 key:value 純文字，本來就沒有 HTML 表格可偵測，維持原行為）。
     if not args.skip_txt:
-        print("\n[INFO] Ingesting News/Fundamentals/IncomeStatement .txt ...")
+        print("\n[INFO] Ingesting Fundamentals/IncomeStatement .txt ...（News 已排除，見 RAW_EXCLUDE_DIRS）")
         # --rebuild 會重建 collection，舊快取對這個 collection 全部作廢，從空的開始記。
         all_hashes = _load_hashes()
         txt_hashes: dict = {} if args.rebuild else dict(all_hashes.get(args.collection, {}))
@@ -1477,7 +1496,7 @@ def main() -> None:
               f"（已排除 {'/'.join(sorted(RAW_EXCLUDE_DIRS))}）")
         # 去重守門（Item 2，2026-07-30）：Fundamentals / IncomeStatement 只保留每個 ticker 最新一份
         # 快照（如 0508/0519/0612 → 只留 0612），避免舊快照與最新版在檢索時互相競爭、放大版本漂移。
-        # News 不去重——多篇不同日期新聞是正當時間序列。
+        # （News 已不進 KB，這裡只剩 Fundamentals/IncomeStatement 的 keep-latest。）
         def _txt_stamp(p) -> str:
             m = re.search(r"_(\d{8})(?=[_.]|$)", p.stem)
             return m.group(1) if m else ""
@@ -1522,6 +1541,9 @@ def main() -> None:
                 continue
 
             if doc_type == "news":
+                # ⚠ 2026-08-19 起**這條路走不到**：News 目錄已在 RAW_EXCLUDE_DIRS 裡於掃描階段
+                # 排除。刻意保留分支與 `_build_news_records`，讓「復活新聞」是改一個集合、
+                # 不是重寫切塊邏輯。
                 text = filepath.read_text(encoding="utf-8", errors="replace").strip()
                 if not text:
                     print(f"  [SKIP] {filepath.name}: empty")
