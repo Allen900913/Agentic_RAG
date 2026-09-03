@@ -1,0 +1,2262 @@
+{
+ "plan": {
+  "live|NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？": [
+   {
+    "task": "NVIDIA 目前的營收成長率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "NVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展",
+    "route": "web"
+   }
+  ],
+  "live|NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？": [
+   {
+    "task": "NVIDIA 目前的毛利率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響",
+    "route": "web"
+   }
+  ],
+  "live|Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？": [
+   {
+    "task": "Apple 目前的毛利率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？",
+    "route": "web"
+   }
+  ],
+  "live|Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？": [
+   {
+    "task": "Apple 近一年營收成長率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？",
+    "route": "web"
+   }
+  ],
+  "live|Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？": [
+   {
+    "task": "Microsoft 目前的營收成長率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息",
+    "route": "web"
+   }
+  ],
+  "live|Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？": [
+   {
+    "task": "Microsoft 目前的淨利率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？",
+    "route": "web"
+   }
+  ],
+  "live|Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？": [
+   {
+    "task": "Amazon 目前的毛利率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略",
+    "route": "web"
+   }
+  ],
+  "live|Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？": [
+   {
+    "task": "Amazon 近一年的營收成長率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這透露了市場對 Amazon 的何種看法",
+    "route": "web"
+   }
+  ],
+  "live|Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？": [
+   {
+    "task": "Alphabet 目前的毛利率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼",
+    "route": "web"
+   }
+  ],
+  "live|Alphabet 近一年的營收成長率是多少？加上新聞中 Navan 與 Google Gemini 的合作案例，反映出 Google 在 AI 生態系布局上的哪些進展？": [
+   {
+    "task": "Alphabet 近一年的營收成長率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Navan 與 Google Gemini 的合作案例是什麼，並說明它反映出 Google 在 AI 生態系布局上的哪些進展",
+    "route": "web"
+   }
+  ],
+  "live|Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？": [
+   {
+    "task": "Meta 目前的毛利率如何",
+    "route": "kb"
+   },
+   {
+    "task": "Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資",
+    "route": "web"
+   }
+  ],
+  "live|Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？": [
+   {
+    "task": "Meta 近一年的營收成長率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼",
+    "route": "web"
+   }
+  ],
+  "live|Tesla 目前的毛利率表現如何？加上新聞中 SpaceX 即將 IPO 讓 Tesla 關注度降溫的報導，這對 Tesla 目前的市場處境有何影響？": [
+   {
+    "task": "Tesla 目前的毛利率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "SpaceX 即將 IPO 的報導對 Tesla 目前的市場處境有何影響",
+    "route": "web"
+   }
+  ],
+  "live|Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？": [
+   {
+    "task": "Tesla 汽車業務的毛利率近期變化趨勢是什麼",
+    "route": "kb"
+   },
+   {
+    "task": "Magnificent Seven 科技股近期全數下跌的新聞內容是什麼，且這對 Tesla 的股價表現透露了什麼",
+    "route": "web"
+   }
+  ],
+  "live|NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？": [
+   {
+    "task": "NVIDIA 目前的淨利率（profit margin）水準如何",
+    "route": "kb"
+   },
+   {
+    "task": "NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼",
+    "route": "web"
+   }
+  ],
+  "live|特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？": [
+   {
+    "task": "特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注",
+    "route": "web"
+   },
+   {
+    "task": "特斯拉本季的淨利是多少",
+    "route": "kb"
+   }
+  ],
+  "live|新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？": [
+   {
+    "task": "Evercore ISI 最近調升目標價與評等的是哪家公司",
+    "route": "web"
+   },
+   {
+    "task": "該公司目前的毛利率是多少",
+    "route": "kb"
+   }
+  ],
+  "live|新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？": [
+   {
+    "task": "哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫",
+    "route": "web"
+   },
+   {
+    "task": "該公司最新年度的總營收是多少",
+    "route": "kb"
+   }
+  ],
+  "live|新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？": [
+   {
+    "task": "新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？",
+    "route": "web"
+   },
+   {
+    "task": "該公司最近一年的營收年增率是多少？",
+    "route": "kb"
+   }
+  ],
+  "live|新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？": [
+   {
+    "task": "哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？",
+    "route": "web"
+   },
+   {
+    "task": "該公司目前的營業利益率（operating margin）是多少？",
+    "route": "kb"
+   }
+  ],
+  "live|新聞中被 Morgan Stanley 特別稱許其 AI 護城河、同時大舉提高資本支出的是哪一家公司？該公司最新年度的淨利（net income）是多少？": [
+   {
+    "task": "哪家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河，且大幅提高資本支出？",
+    "route": "web"
+   },
+   {
+    "task": "該公司最新年度的淨利（net income）是多少？",
+    "route": "kb"
+   }
+  ]
+ },
+ "ratio": {
+  "NVIDIA 目前的營收成長率是多少\nNVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展": [
+   [
+    "Revenue Growth"
+   ],
+   []
+  ],
+  "NVIDIA 目前的毛利率是多少\n黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響": [
+   [
+    "Gross Margin"
+   ],
+   [
+    "Revenue Growth"
+   ]
+  ],
+  "Apple 目前的毛利率是多少\nApple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？": [
+   [
+    "Gross Margin"
+   ],
+   []
+  ],
+  "Apple 近一年營收成長率是多少\nApple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？": [
+   [
+    "Revenue Growth"
+   ],
+   []
+  ],
+  "Microsoft 目前的營收成長率是多少\nMicrosoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息": [
+   [
+    "Revenue Growth"
+   ],
+   []
+  ],
+  "Microsoft 目前的淨利率是多少\nMicrosoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？": [
+   [
+    "Profit Margin"
+   ],
+   []
+  ],
+  "Amazon 目前的毛利率是多少\nAmazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略": [
+   [
+    "Gross Margin"
+   ],
+   []
+  ],
+  "Amazon 近一年的營收成長率是多少\n新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這透露了市場對 Amazon 的何種看法": [
+   [
+    "Revenue Growth"
+   ],
+   []
+  ],
+  "Alphabet 目前的毛利率是多少\n新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼": [
+   [
+    "Gross Margin"
+   ],
+   []
+  ],
+  "Alphabet 近一年的營收成長率是多少\nNavan 與 Google Gemini 的合作案例是什麼，並說明它反映出 Google 在 AI 生態系布局上的哪些進展": [
+   [
+    "Revenue Growth"
+   ],
+   []
+  ],
+  "Meta 目前的毛利率如何\nMorgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資": [
+   [
+    "Gross Margin"
+   ],
+   []
+  ],
+  "Meta 近一年的營收成長率是多少\n科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼": [
+   [
+    "Revenue Growth"
+   ],
+   []
+  ],
+  "Tesla 目前的毛利率是多少\nSpaceX 即將 IPO 的報導對 Tesla 目前的市場處境有何影響": [
+   [
+    "Gross Margin"
+   ],
+   []
+  ],
+  "Tesla 汽車業務的毛利率近期變化趨勢是什麼\nMagnificent Seven 科技股近期全數下跌的新聞內容是什麼，且這對 Tesla 的股價表現透露了什麼": [
+   [
+    "Gross Margin"
+   ],
+   []
+  ],
+  "NVIDIA 目前的淨利率（profit margin）水準如何\nNVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼": [
+   [
+    "Profit Margin"
+   ],
+   []
+  ],
+  "特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注\n特斯拉本季的淨利是多少": [
+   [],
+   []
+  ],
+  "Evercore ISI 最近調升目標價與評等的是哪家公司\n該公司目前的毛利率是多少": [
+   [],
+   [
+    "Gross Margin"
+   ]
+  ],
+  "哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫\n該公司最新年度的總營收是多少": [
+   [],
+   []
+  ],
+  "新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？\n該公司最近一年的營收年增率是多少？": [
+   [],
+   [
+    "Revenue Growth"
+   ]
+  ],
+  "哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？\n該公司目前的營業利益率（operating margin）是多少？": [
+   [],
+   [
+    "Operating Margin"
+   ]
+  ],
+  "哪家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河，且大幅提高資本支出？\n該公司最新年度的淨利（net income）是多少？": [
+   [],
+   []
+  ]
+ },
+ "translate_en": {
+  "NVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展": "What specific progress does the latest AI cloud partnership between NVIDIA and IREN demonstrate regarding the company's data center deployment",
+  "NVIDIA 目前的營收成長率是多少": "What is NVIDIA's current revenue growth rate?",
+  "在 NVIDIA 2026 FY Q1 10‑Q 中查找與 IREN AI 雲端合作的相關資訊": "Find information on the partnership with IREN AI cloud in NVIDIA’s FY2026 Q1 10-Q.",
+  "黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響": "Jensen Huang recently discussed opening AI chip sales in the Chinese market; what impact could this have on NVIDIA's future revenue?",
+  "NVIDIA 目前的毛利率是多少": "What is NVIDIA's current gross margin?",
+  "Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？": "Apple recently had Evercore ISI raise its price target and rating; how is the market collectively viewing the company?",
+  "Apple 目前的毛利率是多少": "What is Apple's current gross margin?",
+  "Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？": "What are the new Siri AI features announced by Apple at WWDC, and what is their significance for the company's future growth driver?",
+  "Apple 近一年營收成長率是多少": "What was Apple's revenue growth rate over the past year?",
+  "Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息": "Recent news on Microsoft's progress developing seven in-house AI models and what it reveals about the company's AI positioning.",
+  "Microsoft 目前的營收成長率是多少": "What is Microsoft's current revenue growth rate?",
+  "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？": "What is the latest update on Microsoft joining Anthropic's Mythos security program, and what does this reveal about the company's strategy in the AI security sector?",
+  "Microsoft 目前的淨利率是多少": "What is Microsoft's current net profit margin?",
+  "在 Microsoft 2026 年 10-K 中搜尋與 Anthropic Mythos 資安計畫相關的描述": "Search the Microsoft 2026 10-K for any discussion of the Anthropic Mythos security program.",
+  "Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略": "What is Amazon’s latest investment plan in Europe exceeding €10 billion, and what growth strategy does it reflect?",
+  "Amazon 目前的毛利率是多少": "What is Amazon's current gross margin?",
+  "查找 Amazon 2026 年度 10‑K 或 10‑Q 中有關歐洲超過 100 億歐元 投資計畫的說明": "Find Amazon's 2026 Form 10-K or 10-Q disclosure of its European investment plan exceeding €10 billion.",
+  "新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這透露了市場對 Amazon 的何種看法": "The news reports hedge funds sold large-cap tech stocks, including Amazon, ahead of the SpaceX IPO, indicating what market sentiment toward Amazon?",
+  "Amazon 近一年的營收成長率是多少": "What is Amazon's revenue growth rate over the past year?",
+  "新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼": "The news cites Alphabet’s over $85 billion fundraising plan and sharply higher capital expenditures; what does this indicate about its AI investment strategy?",
+  "Alphabet 目前的毛利率是多少": "What is Alphabet's current gross margin?",
+  "Navan 與 Google Gemini 的合作案例是什麼，並說明它反映出 Google 在 AI 生態系布局上的哪些進展": "What is the Navan-Google Gemini partnership, and what does it indicate about Google's progress in building its AI ecosystem?",
+  "Alphabet 近一年的營收成長率是多少": "What was Alphabet's revenue growth rate over the past year?",
+  "Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資": "What is Morgan Stanley’s assessment of Meta’s AI moat and capital expenditures, and how does the market overall view Meta’s AI investments?",
+  "Meta 目前的毛利率如何": "What is Meta's current gross margin?",
+  "科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼": "What does the report say about hedge funds dumping tech stocks ahead of the SpaceX IPO?",
+  "Meta 近一年的營收成長率是多少": "What is Meta's revenue growth rate over the past year?",
+  "SpaceX 即將 IPO 的報導對 Tesla 目前的市場處境有何影響": "How does the news of SpaceX’s upcoming IPO impact Tesla’s current market situation",
+  "Tesla 目前的毛利率是多少": "What is Tesla's current gross margin?",
+  "Magnificent Seven 科技股近期全數下跌的新聞內容是什麼，且這對 Tesla 的股價表現透露了什麼": "What is the news about the recent decline of all Magnificent Seven tech stocks, and what does it indicate for Tesla’s stock performance?",
+  "Tesla 汽車業務的毛利率近期變化趨勢是什麼": "What is the recent trend in Tesla's automotive gross margin?",
+  "NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼": "What recent news is there about Jensen Huang opening AI chip sales to the China market, and what does this reveal about the competitive positioning of NVIDIA’s AI chips?",
+  "NVIDIA 目前的淨利率（profit margin）水準如何": "What is NVIDIA's current profit margin?",
+  "特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注": "Has Tesla recently lost focus because Musk's other company is preparing for an IPO?",
+  "特斯拉本季的淨利是多少": "What is Tesla's net income for the quarter?",
+  "Evercore ISI 最近調升目標價與評等的是哪家公司": "Which company did Evercore ISI most recently raise its target price and rating for?",
+  "該公司目前的毛利率是多少": "What is the company's current gross margin?",
+  "查詢Apple最新的毛利率（截至最新可用的 10‑Q）": "Query Apple's latest gross margin (as of the most recent available 10-Q)",
+  "哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫": "Which company announced in the news a European investment plan exceeding €10 billion?",
+  "該公司最新年度的總營收是多少": "What was the company's total revenue for the most recent fiscal year?",
+  "取得NVIDIA最新財政年度的總營收": "Obtain NVIDIA's total revenue for the most recent fiscal year",
+  "新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？": "Which company announced a fundraising plan of over $85 billion and significantly increased capital expenditures?",
+  "該公司最近一年的營收年增率是多少？": "What was the company's revenue year-over-year growth rate for the most recent year?",
+  "查詢該公司最近一年的營收並計算年增率": "Retrieve the company's revenue for the most recent year and calculate the year-over-year growth rate",
+  "2026 年度 [公司名稱] 營收 total revenue 2025 2026 10-K": "2026 fiscal year total revenue for [Company Name] (2025-2026) per 10-K",
+  "取得Microsoft最近完整財政年度的營收數據並計算年增率": "Obtain Microsoft’s most recent full fiscal year revenue figures and calculate the year-over-year growth rate",
+  "哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？": "Which company was rated “Positive” by Moody’s on June 5, with a financing deal of $84.75 billion?",
+  "該公司目前的營業利益率（operating margin）是多少？": "What is the company's current operating margin?",
+  "取得Microsoft最新的營業利益率": "Retrieve Microsoft's latest operating profit margin",
+  "取得Microsoft的最新營業利益率": "Obtain Microsoft's latest operating margin",
+  "哪家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河，且大幅提高資本支出？": "Which company was praised by Morgan Stanley in the news for its AI moat and significantly increased its capital expenditures?",
+  "查詢 Nvidia 最新年度的淨利（net income）": "Query Nvidia's most recent fiscal year net income",
+  "NVIDIA最新年度的淨利（net income）是多少？": "What is NVIDIA's most recent annual net income?"
+ },
+ "period_intent": {
+  "NVIDIA 目前的營收成長率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "在 NVIDIA 2026 FY Q1 10‑Q 中查找與 IREN AI 雲端合作的相關資訊": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "NVIDIA 2026 FY Q1 10-Q IREN AI cloud partnership": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "NVIDIA 目前的毛利率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Apple 目前的毛利率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Apple 近一年營收成長率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Microsoft 目前的營收成長率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft 目前的淨利率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "在 Microsoft 2026 年 10-K 中搜尋與 Anthropic Mythos 資安計畫相關的描述": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Microsoft 2026 10-K Anthropic Mythos security initiative": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Microsoft 2026 10-K Anthropic Mythos security plan": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Amazon 目前的毛利率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "查找 Amazon 2026 年度 10‑K 或 10‑Q 中有關歐洲超過 100 億歐元 投資計畫的說明": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Amazon 2026 Form 10-K Europe investment over 10 billion euros": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Amazon 2026 10-K Europe investment over 10 billion euros site:sec.gov": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Amazon 近一年的營收成長率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Alphabet 目前的毛利率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Alphabet 近一年的營收成長率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Meta 目前的毛利率如何": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Meta 近一年的營收成長率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Tesla 目前的毛利率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Tesla 汽車業務的毛利率近期變化趨勢是什麼": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "NVIDIA 目前的淨利率（profit margin）水準如何": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "特斯拉本季的淨利是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "該公司目前的毛利率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "查詢Apple最新的毛利率（截至最新可用的 10‑Q）": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "Apple 2026 Q3 Form 10-Q gross margin percentage": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "該公司最新年度的總營收是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "取得NVIDIA最新財政年度的總營收": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "該公司最近一年的營收年增率是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "查詢該公司最近一年的營收並計算年增率": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "CompanyName total revenue FY2025 versus FY2026 percentage change": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "2026 年度 [公司名稱] 營收 total revenue 2025 2026 10-K": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "取得Microsoft最近完整財政年度的營收數據並計算年增率": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "該公司目前的營業利益率（operating margin）是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft operating margin percentage FY2026 Q3": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Microsoft operating margin FY2026 Q3 percentage": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "取得Microsoft最新的營業利益率": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "取得Microsoft的最新營業利益率": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "查詢 Nvidia 最新年度的淨利（net income）": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "NVIDIA最新年度的淨利（net income）是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  }
+ },
+ "check": {
+  "NVIDIA 目前的營收成長率是多少 || NVDA_Fundamentals_20260612.txt#0 NVDA_Fundamentals_20260612.txt#1 NVDA_10Q_202604.html#14 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#26 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "在 NVIDIA 2026 FY Q1 10‑Q 中查找與 IREN AI 雲端合作的相關資訊 || NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#26 NVDA_10Q_202504.html#27 NVDA_10Q_202504.html#37 NVDA_10Q_202604.html#34 || live": {
+   "sufficient": false,
+   "missing": "缺少任何提及 IREN AI 雲端合作的內容，包括合作的描述、條款或相關數據。",
+   "new_query": "NVIDIA 2026 FY Q1 10-Q IREN AI cloud partnership",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "在 NVIDIA 2026 FY Q1 10‑Q 中查找與 IREN AI 雲端合作的相關資訊 || NVDA_10Q_202504.html#27 NVDA_10Q_202604.html#26 NVDA_10Q_202604.html#14 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#0 || live": {
+   "sufficient": false,
+   "missing": "缺少任何提及 IREN AI 雲端合作的內容（合作描述、金額、合作範圍等）",
+   "new_query": "NVIDIA 2026 FY Q1 10-Q IREN AI cloud partnership",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 目前的毛利率是多少 || NVDA_Fundamentals_20260612.txt#0 NVDA_Fundamentals_20260612.txt#1 NVDA_10Q_202604.html#14 NVDA_10Q_202604.html#35 NVDA_10Q_202604.html#0 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 82 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "NVIDIA 目前的毛利率是多少",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "Apple 目前的毛利率是多少 || AAPL_10Q_202606.html#39 AAPL_10Q_202606.html#0 AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202606.html#15 AAPL_Fundamentals_20260612.txt#1 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 82 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Apple 目前的毛利率是多少",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "Apple 近一年營收成長率是多少 || AAPL_Fundamentals_20260612.txt#0 AAPL_10K_2025.html#109 AAPL_10K_2025.html#115 AAPL_10K_2025.html#0 AAPL_10K_2025.html#108 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Microsoft 目前的營收成長率是多少 || MSFT_Fundamentals_20260612.txt#0 MSFT_10Q_202603.html#73 MSFT_10Q_202603.html#68 MSFT_Fundamentals_20260612.txt#1 MSFT_10Q_202603.html#65 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 82 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Microsoft 目前的營收成長率是多少",
+   "relevant_ids": [
+    "MSFT_Fundamentals_20260612.txt#0",
+    "MSFT_10Q_202603.html#73",
+    "MSFT_10Q_202603.html#65"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "Microsoft 目前的淨利率是多少 || MSFT_Fundamentals_20260612.txt#0 MSFT_Fundamentals_20260612.txt#1 MSFT_10Q_202603.html#0 MSFT_10Q_202603.html#2 MSFT_10Q_202603.html#61 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 82 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Microsoft 目前的淨利率是多少",
+   "relevant_ids": [
+    "MSFT_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "在 Microsoft 2026 年 10-K 中搜尋與 Anthropic Mythos 資安計畫相關的描述 || MSFT_10K_2026.html#28 MSFT_10K_2026.html#33 MSFT_10K_2026.html#23 MSFT_10K_2026.html#101 MSFT_10K_2026.html#96 || live": {
+   "sufficient": false,
+   "missing": "缺少任何提及 Anthropic Mythos 資安計畫的描述或相關文字",
+   "new_query": "Microsoft 2026 10-K Anthropic Mythos security initiative",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "在 Microsoft 2026 年 10-K 中搜尋與 Anthropic Mythos 資安計畫相關的描述 || MSFT_10K_2026.html#96 MSFT_10K_2026.html#28 MSFT_10K_2026.html#33 MSFT_10K_2026.html#65 MSFT_10K_2026.html#238 || live": {
+   "sufficient": false,
+   "missing": "缺少任何提及 Anthropic Mythos 資安計畫的文字或描述",
+   "new_query": "Microsoft 2026 10-K Anthropic Mythos security plan",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "在 Microsoft 2026 年 10-K 中搜尋與 Anthropic Mythos 資安計畫相關的描述 || MSFT_10K_2026.html#28 MSFT_10K_2026.html#96 MSFT_10K_2026.html#240 MSFT_10K_2026.html#33 MSFT_10K_2026.html#25 || live": {
+   "sufficient": false,
+   "missing": "缺少任何提及 Anthropic Mythos 資安計畫的文字或描述，未找到相關的計畫名稱、內容或細節。",
+   "new_query": "Microsoft 2026 10-K Anthropic Mythos security plan",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Amazon 目前的毛利率是多少 || AMZN_Fundamentals_20260612.txt#0 AMZN_Fundamentals_20260612.txt#1 AMZN_10Q_202606.html#12 AMZN_IncomeStatement_20260612.txt#1 AMZN_10Q_202606.html#1 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 82 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Amazon 目前的毛利率是多少",
+   "relevant_ids": [
+    "AMZN_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "查找 Amazon 2026 年度 10‑K 或 10‑Q 中有關歐洲超過 100 億歐元 投資計畫的說明 || AMZN_Fundamentals_20260612.txt#0 AMZN_Fundamentals_20260612.txt#1 AMZN_IncomeStatement_20260612.txt#1 AMZN_IncomeStatement_20260612.txt#4 AMZN_IncomeStatement_20260612.txt#5 || live": {
+   "sufficient": false,
+   "missing": "缺少 Amazon 2026 年度 10‑K 或 10‑Q 中關於在歐洲投資超過 100 億歐元的具體說明或金額",
+   "new_query": "Amazon 2026 Form 10-K Europe investment over 10 billion euros",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查找 Amazon 2026 年度 10‑K 或 10‑Q 中有關歐洲超過 100 億歐元 投資計畫的說明 || AMZN_10K_2025.html#45 AMZN_10K_2024.html#44 AMZN_10K_2025.html#216 AMZN_10K_2025.html#50 AMZN_10K_2024.html#213 || live": {
+   "sufficient": false,
+   "missing": "缺少 Amazon 2026 年度 10‑K 或 10‑Q 中提及在歐洲的超過 100 億歐元 投資計畫的具體說明或數字",
+   "new_query": "Amazon 2026 10-K Europe investment over 10 billion euros site:sec.gov",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Amazon 近一年的營收成長率是多少 || AMZN_Fundamentals_20260612.txt#0 AMZN_10K_2025.html#24 AMZN_10K_2025.html#113 AMZN_10K_2025.html#0 AMZN_Fundamentals_20260612.txt#1 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_Fundamentals_20260612.txt#0",
+    "AMZN_10K_2025.html#24"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Alphabet 目前的毛利率是多少 || GOOGL_Fundamentals_20260612.txt#0 GOOGL_Fundamentals_20260612.txt#1 GOOGL_10Q_202606.html#1 GOOGL_10Q_202606.html#2 GOOGL_10Q_202606.html#37 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 82 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Alphabet 目前的毛利率是多少",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "Alphabet 近一年的營收成長率是多少 || GOOGL_Fundamentals_20260612.txt#0 GOOGL_10K_2025.html#282 GOOGL_10K_2025.html#268 GOOGL_10K_2025.html#272 GOOGL_10K_2025.html#298 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 82 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Alphabet 近一年的營收成長率是多少",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "Meta 目前的毛利率如何 || META_Fundamentals_20260612.txt#1 META_Fundamentals_20260612.txt#0 META_10Q_202606.html#1 META_10Q_202606.html#2 META_IncomeStatement_20260612.txt#6 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Meta 近一年的營收成長率是多少 || META_Fundamentals_20260612.txt#0 META_Fundamentals_20260612.txt#1 META_IncomeStatement_20260612.txt#4 META_10K_2025.html#2 META_10K_2025.html#0 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Tesla 目前的毛利率是多少 || TSLA_Fundamentals_20260612.txt#0 TSLA_Fundamentals_20260612.txt#1 TSLA_10Q_202606.html#71 TSLA_10Q_202606.html#1 TSLA_10Q_202606.html#0 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Tesla 汽車業務的毛利率近期變化趨勢是什麼 || TSLA_10K_2024.html#138 TSLA_10Q_202603.html#65 TSLA_10K_2023.html#140 TSLA_10Q_202409.html#69 TSLA_10Q_202406.html#66 || live": {
+   "sufficient": false,
+   "missing": "候選中沒有任何能證明時效的來源（KB 只有財報期間資料，財報期間不是發布日）,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Tesla 汽車業務的毛利率近期變化趨勢是什麼",
+   "relevant_ids": [
+    "TSLA_10Q_202603.html#65",
+    "TSLA_10Q_202409.html#69"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "NVIDIA 目前的淨利率（profit margin）水準如何 || NVDA_Fundamentals_20260612.txt#0 NVDA_Fundamentals_20260612.txt#1 NVDA_10Q_202604.html#14 NVDA_10Q_202604.html#35 NVDA_10Q_202604.html#0 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 82 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "NVIDIA 目前的淨利率（profit margin）水準如何",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "特斯拉本季的淨利是多少 || TSLA_10Q_202606.html#0 TSLA_10Q_202606.html#2 TSLA_10Q_202606.html#18 TSLA_10Q_202606.html#19 TSLA_10Q_202606.html#1 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "TSLA_10Q_202606.html#19"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "該公司目前的毛利率是多少 || AAPL_10K_2023.html#90 AAPL_10K_2024.html#83 AAPL_10Q_202512.html#37 AAPL_10K_2023.html#59 AAPL_10Q_202503.html#41 || live": {
+   "sufficient": false,
+   "missing": "候選中沒有任何能證明時效的來源（KB 只有財報期間資料，財報期間不是發布日）,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "該公司目前的毛利率是多少",
+   "relevant_ids": [
+    "AAPL_10Q_202512.html#37",
+    "AAPL_10K_2024.html#83"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "查詢Apple最新的毛利率（截至最新可用的 10‑Q） || AAPL_10Q_202606.html#39 AAPL_10Q_202606.html#0 AAPL_10Q_202606.html#15 AAPL_10Q_202606.html#21 AAPL_10Q_202606.html#17 || live": {
+   "sufficient": false,
+   "missing": "缺少 Apple 最新 10‑Q（2026 Q3）整體毛利率百分比的具體數值（如 50.1%），片段只提供毛利金額或未明確給出百分比。",
+   "new_query": "Apple 2026 Q3 Form 10-Q gross margin percentage",
+   "relevant_ids": [
+    "AAPL_10Q_202606.html#39",
+    "AAPL_10Q_202606.html#0",
+    "AAPL_10Q_202606.html#15"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢Apple最新的毛利率（截至最新可用的 10‑Q） || AAPL_10Q_202606.html#39 AAPL_10Q_202606.html#21 AAPL_10Q_202606.html#15 AAPL_10Q_202606.html#0 AAPL_10Q_202606.html#20 || live": {
+   "sufficient": false,
+   "missing": "缺少最新 10‑Q（2026 Q3）中披露的毛利率百分比數值，例如 49.9% 等具體百分比",
+   "new_query": "Apple 2026 Q3 Form 10-Q gross margin percentage",
+   "relevant_ids": [
+    "AAPL_10Q_202606.html#39",
+    "AAPL_10Q_202606.html#15",
+    "AAPL_10Q_202606.html#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "該公司最新年度的總營收是多少 || NVDA_IncomeStatement_20260612.txt#3 NVDA_10Q_202310.html#34 NVDA_10K_2024.html#210 NVDA_10K_2025.html#206 AAPL_IncomeStatement_20260612.txt#2 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2025.html#206"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "取得NVIDIA最新財政年度的總營收 || NVDA_10K_2026.html#203 NVDA_10K_2026.html#185 NVDA_10K_2026.html#0 NVDA_10K_2026.html#164 NVDA_10K_2026.html#202 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#203",
+    "NVDA_10K_2026.html#0",
+    "NVDA_10K_2026.html#164"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "該公司最近一年的營收年增率是多少？ || MSFT_10Q_202603.html#66 NVDA_10Q_202507.html#49 NVDA_10Q_202504.html#48 MSFT_10Q_202603.html#63 TSLA_10Q_202603.html#50 || live": {
+   "sufficient": false,
+   "missing": "缺少公司整體最近一年（全年度）營收的年增率百分比數值，或直接提供兩年總營收以計算該百分比的資訊。",
+   "new_query": "CompanyName total revenue FY2025 versus FY2026 percentage change",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#66",
+    "MSFT_10Q_202603.html#63",
+    "TSLA_10Q_202603.html#50",
+    "NVDA_10Q_202507.html#49",
+    "NVDA_10Q_202504.html#48"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢該公司最近一年的營收並計算年增率 || MSFT_10Q_202603.html#66 NVDA_10Q_202504.html#48 META_10K_2025.html#9 NVDA_10Q_202507.html#49 MSFT_10Q_202603.html#63 || live": {
+   "sufficient": false,
+   "missing": "缺少目標公司的完整年度營收數據（兩個連續年度的總營收）以計算年增率",
+   "new_query": "2026 年度 [公司名稱] 營收 total revenue 2025 2026 10-K",
+   "relevant_ids": [
+    "META_10K_2025.html#9"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "該公司最近一年的營收年增率是多少？ || MSFT_10K_2026.html#133 TSLA_10Q_202606.html#67 MSFT_10K_2025.html#133 META_10K_2025.html#199 MSFT_10K_2026.html#123 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#123"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢該公司最近一年的營收並計算年增率 || MSFT_10K_2026.html#172 NVDA_10K_2026.html#203 NVDA_10K_2026.html#126 NVDA_10K_2026.html#137 MSFT_10K_2026.html#173 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#172",
+    "NVDA_10K_2026.html#203",
+    "NVDA_10K_2026.html#126"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "取得Microsoft最近完整財政年度的營收數據並計算年增率 || MSFT_10K_2026.html#0 MSFT_10K_2026.html#127 MSFT_Fundamentals_20260612.txt#0 MSFT_10K_2026.html#2 MSFT_Fundamentals_20260612.txt#1 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#0",
+    "MSFT_10K_2026.html#127"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "該公司目前的營業利益率（operating margin）是多少？ || MSFT_10Q_202403.html#70 MSFT_10K_2024.html#147 NVDA_10Q_202507.html#48 MSFT_10Q_202503.html#66 MSFT_10Q_202403.html#103 || live": {
+   "sufficient": false,
+   "missing": "缺少 Microsoft（MSFT）最新的營業利益率（Operating margin）百分比數值，需直接的百分比而非僅有營收與營業收入需自行計算的資料。",
+   "new_query": "Microsoft operating margin percentage FY2026 Q3",
+   "relevant_ids": [
+    "MSFT_10Q_202403.html#70",
+    "MSFT_10K_2024.html#147",
+    "MSFT_10Q_202503.html#66",
+    "MSFT_10Q_202403.html#103"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "該公司目前的營業利益率（operating margin）是多少？ || MSFT_10Q_202603.html#0 MSFT_10Q_202603.html#63 MSFT_10Q_202603.html#74 MSFT_10Q_202603.html#66 MSFT_10Q_202603.html#68 || live": {
+   "sufficient": false,
+   "missing": "缺少直接給出的營業利益率（operating margin）百分比數值，例如 2026 年 Q3 的營業利益率",
+   "new_query": "Microsoft operating margin FY2026 Q3 percentage",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "取得Microsoft最新的營業利益率 || MSFT_10Q_202603.html#0 MSFT_Fundamentals_20260612.txt#0 MSFT_10Q_202603.html#74 MSFT_10Q_202603.html#68 MSFT_10Q_202603.html#63 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_Fundamentals_20260612.txt#0",
+    "MSFT_10Q_202603.html#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "取得Microsoft的最新營業利益率 || MSFT_10Q_202603.html#0 MSFT_Fundamentals_20260612.txt#0 MSFT_10Q_202603.html#68 MSFT_10Q_202603.html#74 MSFT_10Q_202603.html#63 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#0",
+    "MSFT_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢 Nvidia 最新年度的淨利（net income） || NVDA_10K_2026.html#164 NVDA_10K_2026.html#0 NVDA_10K_2026.html#2 NVDA_10K_2026.html#165 NVDA_10K_2026.html#202 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#164",
+    "NVDA_10K_2026.html#0",
+    "NVDA_10K_2026.html#2",
+    "NVDA_10K_2026.html#165"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA最新年度的淨利（net income）是多少？ || NVDA_10K_2026.html#0 NVDA_10K_2026.html#164 NVDA_10K_2026.html#165 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#166 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#0",
+    "NVDA_10K_2026.html#164",
+    "NVDA_10K_2026.html#165",
+    "NVDA_10K_2026.html#166"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  }
+ },
+ "replan": {
+  "live|NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？|0:done:0:kb:NVIDIA 目前的營收成長率是多少|1:done:1:web:NVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "在 NVIDIA 2026 FY Q1 10‑Q 中查找與 IREN AI 雲端合作的相關資訊",
+     "route": "kb"
+    },
+    {
+     "task": "查找 2026 年 6 月 12 日之後的新聞報導，特別是 2026 年 8 月以後，說明 NVIDIA 與 IREN 的最新 AI 雲端合作案及其在資料中心布局上的具體進展",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？|0:done:0:kb:NVIDIA 目前的營收成長率是多少|1:done:1:web:NVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展|2:done:0:kb:在 NVIDIA 2026 FY Q1 10‑Q 中查找與 IREN AI 雲端合作的相關資訊|3:done:0:web:查找 2026 年 6 月 12 日之後的新聞報導，特別是 2026 年 8 月以後，說明 NVIDIA 與 IREN 的最新 AI 雲端合作案及其在資料中心布局上的具體進展": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 2026 年 6 月至 2026 年 9 月間 NVIDIA 與 IREN AI 雲端合作的新聞報導與官方公告，說明合作內容與資料中心布局的具體進展",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？|0:done:0:kb:NVIDIA 目前的營收成長率是多少|1:done:1:web:NVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展|2:done:0:kb:在 NVIDIA 2026 FY Q1 10‑Q 中查找與 IREN AI 雲端合作的相關資訊|3:done:0:web:查找 2026 年 6 月 12 日之後的新聞報導，特別是 2026 年 8 月以後，說明 NVIDIA 與 IREN 的最新 AI 雲端合作案及其在資料中心布局上的具體進展|4:done:0:web:查找 2026 年 6 月至 2026 年 9 月間 NVIDIA 與 IREN AI 雲端合作的新聞報導與官方公告，說明合作內容與資料中心布局的具體進展": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 NVIDIA 官方發布的與 IREN AI 雲端合作的新聞稿或公告，說明合作內容與資料中心布局的具體進展",
+     "route": "web"
+    },
+    {
+     "task": "查找分析師或業界評論（如 Bloomberg、Reuters）對 NVIDIA 與 IREN 合作在資料中心布局上的影響與具體進展",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？|0:done:0:kb:NVIDIA 目前的營收成長率是多少|1:done:1:web:NVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展|2:done:0:kb:在 NVIDIA 2026 FY Q1 10‑Q 中查找與 IREN AI 雲端合作的相關資訊|3:done:0:web:查找 2026 年 6 月 12 日之後的新聞報導，特別是 2026 年 8 月以後，說明 NVIDIA 與 IREN 的最新 AI 雲端合作案及其在資料中心布局上的具體進展|4:done:0:web:查找 2026 年 6 月至 2026 年 9 月間 NVIDIA 與 IREN AI 雲端合作的新聞報導與官方公告，說明合作內容與資料中心布局的具體進展|5:done:0:web:查找 NVIDIA 官方發布的與 IREN AI 雲端合作的新聞稿或公告，說明合作內容與資料中心布局的具體進展|6:done:0:web:查找分析師或業界評論（如 Bloomberg、Reuters）對 NVIDIA 與 IREN 合作在資料中心布局上的影響與具體進展": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 IREN 官方發布的與 NVIDIA AI 雲端合作的公告，說明合作內容與資料中心布局的具體進展（2026 年 6 月至今）",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    1,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？|0:done:0:kb:NVIDIA 目前的毛利率是多少|1:done:1:web:黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找黃仁勳最近關於在中國市場開放 AI 晶片銷售的新聞及其對 NVIDIA 未來營收的潛在影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？|0:done:0:kb:NVIDIA 目前的毛利率是多少|1:done:1:web:黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響|2:done:0:web:查找黃仁勳最近關於在中國市場開放 AI 晶片銷售的新聞及其對 NVIDIA 未來營收的潛在影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "搜尋截至2026-09-02的最近新聞，黃仁勳談及在中國市場開放 AI 晶片銷售的具體內容",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？|0:done:0:kb:NVIDIA 目前的毛利率是多少|1:done:1:web:黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響|2:done:0:web:查找黃仁勳最近關於在中國市場開放 AI 晶片銷售的新聞及其對 NVIDIA 未來營收的潛在影響|3:done:0:web:搜尋截至2026-09-02的最近新聞，黃仁勳談及在中國市場開放 AI 晶片銷售的具體內容": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 Bloomberg 或 Reuters 等主要金融媒體於 2026-08 至 2026-09 報導黃仁勳宣布在中國開放 AI 晶片銷售的具體內容與市場影響分析",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？|0:done:0:kb:NVIDIA 目前的毛利率是多少|1:done:1:web:黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響|2:done:0:web:查找黃仁勳最近關於在中國市場開放 AI 晶片銷售的新聞及其對 NVIDIA 未來營收的潛在影響|3:done:0:web:搜尋截至2026-09-02的最近新聞，黃仁勳談及在中國市場開放 AI 晶片銷售的具體內容|4:done:0:web:查找 Bloomberg 或 Reuters 等主要金融媒體於 2026-08 至 2026-09 報導黃仁勳宣布在中國開放 AI 晶片銷售的具體內容與市場影響分析": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "取得 NVIDIA 官方於 2026-08 至 2026-09 的新聞稿，說明在中國市場開放 AI 晶片銷售的具體內容",
+     "route": "web"
+    },
+    {
+     "task": "收集分析師或市場研究機構對 NVIDIA 在中國開放 AI 晶片銷售的營收影響評估",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？|0:done:0:kb:NVIDIA 目前的毛利率是多少|1:done:1:web:黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響|2:done:0:web:查找黃仁勳最近關於在中國市場開放 AI 晶片銷售的新聞及其對 NVIDIA 未來營收的潛在影響|3:done:0:web:搜尋截至2026-09-02的最近新聞，黃仁勳談及在中國市場開放 AI 晶片銷售的具體內容|4:done:0:web:查找 Bloomberg 或 Reuters 等主要金融媒體於 2026-08 至 2026-09 報導黃仁勳宣布在中國開放 AI 晶片銷售的具體內容與市場影響分析|5:done:0:web:取得 NVIDIA 官方於 2026-08 至 2026-09 的新聞稿，說明在中國市場開放 AI 晶片銷售的具體內容|6:done:0:web:收集分析師或市場研究機構對 NVIDIA 在中國開放 AI 晶片銷售的營收影響評估": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026-08-30 至 2026-09-02 期間 Bloomberg、Reuters 或其他主要金融媒體報導 Jensen Huang 關於在中國市場開放 AI 晶片銷售的具體內容，並收集分析師對此營收影響的評估",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？|0:done:0:kb:Apple 目前的毛利率是多少|1:done:1:web:Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 Evercore ISI 最近對 Apple 的目標價調升及評等變化，以及市場對此的綜合看法",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？|0:done:0:kb:Apple 目前的毛利率是多少|1:done:1:web:Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？|2:done:0:web:查找 Evercore ISI 最近對 Apple 的目標價調升及評等變化，以及市場對此的綜合看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "Evercore ISI 最新對 Apple 的目標價與評等數值",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？|0:done:0:kb:Apple 目前的毛利率是多少|1:done:1:web:Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？|2:done:0:web:查找 Evercore ISI 最近對 Apple 的目標價調升及評等變化，以及市場對此的綜合看法|3:done:0:web:Evercore ISI 最新對 Apple 的目標價與評等數值": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？|0:done:0:kb:Apple 目前的毛利率是多少|1:done:1:web:Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？|2:done:0:web:查找 Evercore ISI 最近對 Apple 的目標價調升及評等變化，以及市場對此的綜合看法|3:done:0:web:Evercore ISI 最新對 Apple 的目標價與評等數值|4:done:0:web:查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？|0:done:0:kb:Apple 目前的毛利率是多少|1:done:1:web:Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？|2:done:0:web:查找 Evercore ISI 最近對 Apple 的目標價調升及評等變化，以及市場對此的綜合看法|3:done:0:web:Evercore ISI 最新對 Apple 的目標價與評等數值|4:done:0:web:查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）|5:done:0:web:查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此調升的綜合看法（截至2026-09-02）",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？|0:done:0:kb:Apple 目前的毛利率是多少|1:done:1:web:Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？|2:done:0:web:查找 Evercore ISI 最近對 Apple 的目標價調升及評等變化，以及市場對此的綜合看法|3:done:0:web:Evercore ISI 最新對 Apple 的目標價與評等數值|4:done:0:web:查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）|5:done:0:web:查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）|6:done:0:web:查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此調升的綜合看法（截至2026-09-02）": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "在 Apple 的最新 10‑Q/10‑K 中查找是否提及 Evercore ISI 的目標價或評等",
+     "route": "kb"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？|0:done:0:kb:Apple 近一年營收成長率是多少|1:done:1:web:Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2024年 WWDC Apple 發表的 Siri AI 新功能的新聞報導，並分析其對公司未來成長動能的影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？|0:done:0:kb:Apple 近一年營收成長率是多少|1:done:1:web:Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？|2:done:0:web:查找2024年 WWDC Apple 發表的 Siri AI 新功能的新聞報導，並分析其對公司未來成長動能的影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找分析師對 WWDC 2024 Siri AI 功能的成長動能評估",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？|0:done:0:kb:Apple 近一年營收成長率是多少|1:done:1:web:Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？|2:done:0:web:查找2024年 WWDC Apple 發表的 Siri AI 新功能的新聞報導，並分析其對公司未來成長動能的影響|3:done:0:web:查找分析師對 WWDC 2024 Siri AI 功能的成長動能評估": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 Apple 官方在 2024 年 WWDC 發表的 Siri AI 新功能的具體描述與主要媒體報導",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？|0:done:0:kb:Apple 近一年營收成長率是多少|1:done:1:web:Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？|2:done:0:web:查找2024年 WWDC Apple 發表的 Siri AI 新功能的新聞報導，並分析其對公司未來成長動能的影響|3:done:0:web:查找分析師對 WWDC 2024 Siri AI 功能的成長動能評估|4:done:0:web:查找 Apple 官方在 2024 年 WWDC 發表的 Siri AI 新功能的具體描述與主要媒體報導": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的最新新聞報導，並彙整分析師對其未來成長動能的評估",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？|0:done:0:kb:Apple 近一年營收成長率是多少|1:done:1:web:Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？|2:done:0:web:查找2024年 WWDC Apple 發表的 Siri AI 新功能的新聞報導，並分析其對公司未來成長動能的影響|3:done:0:web:查找分析師對 WWDC 2024 Siri AI 功能的成長動能評估|4:done:0:web:查找 Apple 官方在 2024 年 WWDC 發表的 Siri AI 新功能的具體描述與主要媒體報導|5:done:0:web:查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的最新新聞報導，並彙整分析師對其未來成長動能的評估": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的新聞報導，並彙整分析師對其未來成長動能的評估",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "live|Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？|0:done:0:kb:Apple 近一年營收成長率是多少|1:done:1:web:Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？|2:done:0:web:查找2024年 WWDC Apple 發表的 Siri AI 新功能的新聞報導，並分析其對公司未來成長動能的影響|3:done:0:web:查找分析師對 WWDC 2024 Siri AI 功能的成長動能評估|4:done:0:web:查找 Apple 官方在 2024 年 WWDC 發表的 Siri AI 新功能的具體描述與主要媒體報導|5:done:0:web:查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的最新新聞報導，並彙整分析師對其未來成長動能的評估|6:done:0:web:查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的新聞報導，並彙整分析師對其未來成長動能的評估": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的新聞摘要與主要分析師對其未來成長動能的評估",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？|0:done:0:kb:Microsoft 目前的營收成長率是多少|1:done:1:web:Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 Microsoft 最近自研七個 AI 模型的策略進展的最新新聞與分析，並說明對公司 AI 布局的意涵",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？|0:done:0:kb:Microsoft 目前的營收成長率是多少|1:done:1:web:Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息|2:done:0:web:查詢 Microsoft 最近自研七個 AI 模型的策略進展的最新新聞與分析，並說明對公司 AI 布局的意涵": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 Microsoft 最近在新聞中宣布自研七個 AI 模型的具體內容與分析，並說明對公司 AI 布局的意涵",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？|0:done:0:kb:Microsoft 目前的營收成長率是多少|1:done:1:web:Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息|2:done:0:web:查詢 Microsoft 最近自研七個 AI 模型的策略進展的最新新聞與分析，並說明對公司 AI 布局的意涵|3:done:0:web:查詢 Microsoft 最近在新聞中宣布自研七個 AI 模型的具體內容與分析，並說明對公司 AI 布局的意涵": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "取得截至 2026-09-02 的最新新聞與分析，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？|0:done:0:kb:Microsoft 目前的營收成長率是多少|1:done:1:web:Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息|2:done:0:web:查詢 Microsoft 最近自研七個 AI 模型的策略進展的最新新聞與分析，並說明對公司 AI 布局的意涵|3:done:0:web:查詢 Microsoft 最近在新聞中宣布自研七個 AI 模型的具體內容與分析，並說明對公司 AI 布局的意涵|4:done:0:web:取得截至 2026-09-02 的最新新聞與分析，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 2026 年 9 月前 Microsoft 宣布自研七個 AI 模型的最新新聞與分析，說明對公司 AI 布局的意涵",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？|0:done:0:kb:Microsoft 目前的營收成長率是多少|1:done:1:web:Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息|2:done:0:web:查詢 Microsoft 最近自研七個 AI 模型的策略進展的最新新聞與分析，並說明對公司 AI 布局的意涵|3:done:0:web:查詢 Microsoft 最近在新聞中宣布自研七個 AI 模型的具體內容與分析，並說明對公司 AI 布局的意涵|4:done:0:web:取得截至 2026-09-02 的最新新聞與分析，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵|5:done:0:web:查詢 2026 年 9 月前 Microsoft 宣布自研七個 AI 模型的最新新聞與分析，說明對公司 AI 布局的意涵": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "取得截至 2026-09-02 的最新新聞，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？|0:done:0:kb:Microsoft 目前的營收成長率是多少|1:done:1:web:Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息|2:done:0:web:查詢 Microsoft 最近自研七個 AI 模型的策略進展的最新新聞與分析，並說明對公司 AI 布局的意涵|3:done:0:web:查詢 Microsoft 最近在新聞中宣布自研七個 AI 模型的具體內容與分析，並說明對公司 AI 布局的意涵|4:done:0:web:取得截至 2026-09-02 的最新新聞與分析，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵|5:done:0:web:查詢 2026 年 9 月前 Microsoft 宣布自研七個 AI 模型的最新新聞與分析，說明對公司 AI 布局的意涵|6:done:0:web:取得截至 2026-09-02 的最新新聞，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 Microsoft 最近宣布自研七個 AI 模型的官方新聞稿與分析，說明對公司 AI 布局的意涵",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？|0:done:0:kb:Microsoft 目前的淨利率是多少|1:done:1:web:Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息與相關布局",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？|0:done:0:kb:Microsoft 目前的淨利率是多少|1:done:1:web:Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？|2:done:0:web:Microsoft 加入 Anthropic Mythos 資安計畫的最新消息與相關布局": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 Microsoft 加入 Anthropic Mythos 資安計畫的最新新聞及其在 AI 資安領域的布局",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？|0:done:0:kb:Microsoft 目前的淨利率是多少|1:done:1:web:Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？|2:done:0:web:Microsoft 加入 Anthropic Mythos 資安計畫的最新消息與相關布局|3:done:0:web:查找 Microsoft 加入 Anthropic Mythos 資安計畫的最新新聞及其在 AI 資安領域的布局": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找最新新聞，Microsoft 加入 Anthropic Mythos 資安計畫的細節與公司在 AI 資安領域的布局",
+     "route": "web"
+    },
+    {
+     "task": "在 Microsoft 2026 年 10-K 中搜尋與 Anthropic Mythos 資安計畫相關的描述",
+     "route": "kb"
+    }
+   ],
+   "drop": []
+  },
+  "live|Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？|0:done:0:kb:Microsoft 目前的淨利率是多少|1:done:1:web:Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？|2:done:0:web:Microsoft 加入 Anthropic Mythos 資安計畫的最新消息與相關布局|3:done:0:web:查找 Microsoft 加入 Anthropic Mythos 資安計畫的最新新聞及其在 AI 資安領域的布局|4:done:0:web:查找最新新聞，Microsoft 加入 Anthropic Mythos 資安計畫的細節與公司在 AI 資安領域的布局|5:done:0:kb:在 Microsoft 2026 年 10-K 中搜尋與 Anthropic Mythos 資安計畫相關的描述": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？|0:done:0:kb:Amazon 目前的毛利率是多少|1:done:1:web:Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？|0:done:0:kb:Amazon 目前的毛利率是多少|1:done:1:web:Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略|2:done:0:web:查詢 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找最新新聞報導，說明 Amazon 在歐洲逾 100 億歐元的投資計畫內容及其背後的成長策略",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？|0:done:0:kb:Amazon 目前的毛利率是多少|1:done:1:web:Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略|2:done:0:web:查詢 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略|3:done:0:web:查找最新新聞報導，說明 Amazon 在歐洲逾 100 億歐元的投資計畫內容及其背後的成長策略": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 Amazon 2026 年度 10‑K 或 10‑Q 中有關歐洲超過 100 億歐元 投資計畫的說明",
+     "route": "kb"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？|0:done:0:kb:Amazon 目前的毛利率是多少|1:done:1:web:Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略|2:done:0:web:查詢 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略|3:done:0:web:查找最新新聞報導，說明 Amazon 在歐洲逾 100 億歐元的投資計畫內容及其背後的成長策略|4:done:0:kb:查找 Amazon 2026 年度 10‑K 或 10‑Q 中有關歐洲超過 100 億歐元 投資計畫的說明": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年9月2日前的最新新聞，說明Amazon在歐洲超過100億歐元的投資計畫及其成長策略",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？|0:done:0:kb:Amazon 目前的毛利率是多少|1:done:1:web:Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略|2:done:0:web:查詢 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略|3:done:0:web:查找最新新聞報導，說明 Amazon 在歐洲逾 100 億歐元的投資計畫內容及其背後的成長策略|4:done:0:kb:查找 Amazon 2026 年度 10‑K 或 10‑Q 中有關歐洲超過 100 億歐元 投資計畫的說明|5:done:0:web:查找2026年9月2日前的最新新聞，說明Amazon在歐洲超過100億歐元的投資計畫及其成長策略": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年最新新聞，說明Amazon在歐洲投資逾100億歐元的具體內容及其成長策略",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？|0:done:0:kb:Amazon 目前的毛利率是多少|1:done:1:web:Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略|2:done:0:web:查詢 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略|3:done:0:web:查找最新新聞報導，說明 Amazon 在歐洲逾 100 億歐元的投資計畫內容及其背後的成長策略|4:done:0:kb:查找 Amazon 2026 年度 10‑K 或 10‑Q 中有關歐洲超過 100 億歐元 投資計畫的說明|5:done:0:web:查找2026年9月2日前的最新新聞，說明Amazon在歐洲超過100億歐元的投資計畫及其成長策略|6:done:0:web:查找2026年最新新聞，說明Amazon在歐洲投資逾100億歐元的具體內容及其成長策略": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年6月12日之後的新聞，說明Amazon在歐洲投資逾100億歐元的具體內容及其成長策略",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？|0:done:0:kb:Amazon 近一年的營收成長率是多少|1:done:1:web:新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這透露了市場對 Amazon 的何種看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢避險基金在 SpaceX IPO 前拋售 Amazon 等大型科技股的新聞，並分析市場對 Amazon 的看法",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？|0:done:0:kb:Amazon 近一年的營收成長率是多少|1:done:1:web:新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這透露了市場對 Amazon 的何種看法|2:done:0:web:查詢避險基金在 SpaceX IPO 前拋售 Amazon 等大型科技股的新聞，並分析市場對 Amazon 的看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢近期有關避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股的新聞，並分析市場對 Amazon 的看法",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？|0:done:0:kb:Amazon 近一年的營收成長率是多少|1:done:1:web:新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這透露了市場對 Amazon 的何種看法|2:done:0:web:查詢避險基金在 SpaceX IPO 前拋售 Amazon 等大型科技股的新聞，並分析市場對 Amazon 的看法|3:done:0:web:查詢近期有關避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股的新聞，並分析市場對 Amazon 的看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢2026年SpaceX IPO前避險基金拋售Amazon等大型科技股的新聞，並提取市場對Amazon的看法",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？|0:done:0:kb:Amazon 近一年的營收成長率是多少|1:done:1:web:新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這透露了市場對 Amazon 的何種看法|2:done:0:web:查詢避險基金在 SpaceX IPO 前拋售 Amazon 等大型科技股的新聞，並分析市場對 Amazon 的看法|3:done:0:web:查詢近期有關避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股的新聞，並分析市場對 Amazon 的看法|4:done:0:web:查詢2026年SpaceX IPO前避險基金拋售Amazon等大型科技股的新聞，並提取市場對Amazon的看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "搜尋 2026 年 SpaceX IPO 前避險基金拋售 Amazon 股票 的新聞並提取市場對 Amazon 的看法",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？|0:done:0:kb:Amazon 近一年的營收成長率是多少|1:done:1:web:新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這透露了市場對 Amazon 的何種看法|2:done:0:web:查詢避險基金在 SpaceX IPO 前拋售 Amazon 等大型科技股的新聞，並分析市場對 Amazon 的看法|3:done:0:web:查詢近期有關避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股的新聞，並分析市場對 Amazon 的看法|4:done:0:web:查詢2026年SpaceX IPO前避險基金拋售Amazon等大型科技股的新聞，並提取市場對Amazon的看法|5:done:0:web:搜尋 2026 年 SpaceX IPO 前避險基金拋售 Amazon 股票 的新聞並提取市場對 Amazon 的看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢2026年SpaceX IPO前避險基金拋售Amazon等大型科技股的新聞，並分析市場對Amazon的看法",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？|0:done:0:kb:Amazon 近一年的營收成長率是多少|1:done:1:web:新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這透露了市場對 Amazon 的何種看法|2:done:0:web:查詢避險基金在 SpaceX IPO 前拋售 Amazon 等大型科技股的新聞，並分析市場對 Amazon 的看法|3:done:0:web:查詢近期有關避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股的新聞，並分析市場對 Amazon 的看法|4:done:0:web:查詢2026年SpaceX IPO前避險基金拋售Amazon等大型科技股的新聞，並提取市場對Amazon的看法|5:done:0:web:搜尋 2026 年 SpaceX IPO 前避險基金拋售 Amazon 股票 的新聞並提取市場對 Amazon 的看法|6:done:0:web:查詢2026年SpaceX IPO前避險基金拋售Amazon等大型科技股的新聞，並分析市場對Amazon的看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 2026 年 SpaceX IPO 前避險基金拋售 Amazon 等大型科技股的新聞，並提取市場對 Amazon 的看法",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？|0:done:0:kb:Alphabet 目前的毛利率是多少|1:done:1:web:新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找最新新聞關於 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，分析其對 AI 投資策略的透露",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？|0:done:0:kb:Alphabet 目前的毛利率是多少|1:done:1:web:新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼|2:done:0:web:查找最新新聞關於 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，分析其對 AI 投資策略的透露": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找最新新聞中 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出細節，並分析其對 AI 投資策略的透露",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？|0:done:0:kb:Alphabet 目前的毛利率是多少|1:done:1:web:新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼|2:done:0:web:查找最新新聞關於 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，分析其對 AI 投資策略的透露|3:done:0:web:查找最新新聞中 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出細節，並分析其對 AI 投資策略的透露": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 2026 年最新新聞中 Alphabet 850 多億美元的籌資計畫與資本支出細節，並分析其對 AI 投資策略的影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？|0:done:0:kb:Alphabet 目前的毛利率是多少|1:done:1:web:新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼|2:done:0:web:查找最新新聞關於 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，分析其對 AI 投資策略的透露|3:done:0:web:查找最新新聞中 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出細節，並分析其對 AI 投資策略的透露|4:done:0:web:查找 2026 年最新新聞中 Alphabet 850 多億美元的籌資計畫與資本支出細節，並分析其對 AI 投資策略的影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "Alphabet 850 多億美元 籌資 計畫 與 大幅提高 資本支出 2026 新聞細節 以及 AI 投資策略的分析",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？|0:done:0:kb:Alphabet 目前的毛利率是多少|1:done:1:web:新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼|2:done:0:web:查找最新新聞關於 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，分析其對 AI 投資策略的透露|3:done:0:web:查找最新新聞中 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出細節，並分析其對 AI 投資策略的透露|4:done:0:web:查找 2026 年最新新聞中 Alphabet 850 多億美元的籌資計畫與資本支出細節，並分析其對 AI 投資策略的影響|5:done:0:web:Alphabet 850 多億美元 籌資 計畫 與 大幅提高 資本支出 2026 新聞細節 以及 AI 投資策略的分析": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年Alphabet 850億美元籌資計畫與資本支出提升的最新新聞，並分析其對AI投資策略的影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？|0:done:0:kb:Alphabet 目前的毛利率是多少|1:done:1:web:新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼|2:done:0:web:查找最新新聞關於 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，分析其對 AI 投資策略的透露|3:done:0:web:查找最新新聞中 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出細節，並分析其對 AI 投資策略的透露|4:done:0:web:查找 2026 年最新新聞中 Alphabet 850 多億美元的籌資計畫與資本支出細節，並分析其對 AI 投資策略的影響|5:done:0:web:Alphabet 850 多億美元 籌資 計畫 與 大幅提高 資本支出 2026 新聞細節 以及 AI 投資策略的分析|6:done:0:web:查找2026年Alphabet 850億美元籌資計畫與資本支出提升的最新新聞，並分析其對AI投資策略的影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年最新新聞，說明Alphabet 850多億美元的籌資計畫與資本支出增加的具體金額與目的，並分析此舉對其AI投資策略的意涵",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|Alphabet 近一年的營收成長率是多少？加上新聞中 Navan 與 Google Gemini 的合作案例，反映出 Google 在 AI 生態系布局上的哪些進展？|0:done:0:kb:Alphabet 近一年的營收成長率是多少|1:done:1:web:Navan 與 Google Gemini 的合作案例是什麼，並說明它反映出 Google 在 AI 生態系布局上的哪些進展": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？|0:done:0:kb:Meta 目前的毛利率如何|1:done:1:web:Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "最新 Morgan Stanley 分析 Meta AI 護城河與資本支出，及市場對其 AI 投資的綜合看法",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？|0:done:0:kb:Meta 目前的毛利率如何|1:done:1:web:Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資|2:done:0:web:最新 Morgan Stanley 分析 Meta AI 護城河與資本支出，及市場對其 AI 投資的綜合看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？|0:done:0:kb:Meta 目前的毛利率如何|1:done:1:web:Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資|2:done:0:web:最新 Morgan Stanley 分析 Meta AI 護城河與資本支出，及市場對其 AI 投資的綜合看法|3:done:0:web:Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出的分析及市場對其 AI 投資的綜合看法",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？|0:done:0:kb:Meta 目前的毛利率如何|1:done:1:web:Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資|2:done:0:web:最新 Morgan Stanley 分析 Meta AI 護城河與資本支出，及市場對其 AI 投資的綜合看法|3:done:0:web:Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資|4:done:0:web:查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出的分析及市場對其 AI 投資的綜合看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出以及市場對其 AI 投資的綜合看法",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？|0:done:0:kb:Meta 目前的毛利率如何|1:done:1:web:Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資|2:done:0:web:最新 Morgan Stanley 分析 Meta AI 護城河與資本支出，及市場對其 AI 投資的綜合看法|3:done:0:web:Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資|4:done:0:web:查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出的分析及市場對其 AI 投資的綜合看法|5:done:0:web:查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出以及市場對其 AI 投資的綜合看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出以及市場對其 AI 投資的分析與評論",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？|0:done:0:kb:Meta 目前的毛利率如何|1:done:1:web:Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資|2:done:0:web:最新 Morgan Stanley 分析 Meta AI 護城河與資本支出，及市場對其 AI 投資的綜合看法|3:done:0:web:Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資|4:done:0:web:查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出的分析及市場對其 AI 投資的綜合看法|5:done:0:web:查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出以及市場對其 AI 投資的綜合看法|6:done:0:web:查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出以及市場對其 AI 投資的分析與評論": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出以及市場對其 AI 投資的評論與綜合看法",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？|0:done:0:kb:Meta 近一年的營收成長率是多少|1:done:1:web:科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？|0:done:0:kb:Meta 近一年的營收成長率是多少|1:done:1:web:科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼|2:done:0:web:取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "取得2026年SpaceX IPO前避險基金拋售科技股的新聞報導，並收集對Meta股價可能影響的分析",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？|0:done:0:kb:Meta 近一年的營收成長率是多少|1:done:1:web:科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼|2:done:0:web:取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導|3:done:0:web:取得2026年SpaceX IPO前避險基金拋售科技股的新聞報導，並收集對Meta股價可能影響的分析": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導，並分析其對Meta股價的可能影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？|0:done:0:kb:Meta 近一年的營收成長率是多少|1:done:1:web:科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼|2:done:0:web:取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導|3:done:0:web:取得2026年SpaceX IPO前避險基金拋售科技股的新聞報導，並收集對Meta股價可能影響的分析|4:done:0:web:取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導，並分析其對Meta股價的可能影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導與主要內容",
+     "route": "web"
+    },
+    {
+     "task": "分析上述新聞對Meta股價在2026年9月前後的影響，包含股價變動幅度與可能的市場解讀",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？|0:done:0:kb:Meta 近一年的營收成長率是多少|1:done:1:web:科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼|2:done:0:web:取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導|3:done:0:web:取得2026年SpaceX IPO前避險基金拋售科技股的新聞報導，並收集對Meta股價可能影響的分析|4:done:0:web:取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導，並分析其對Meta股價的可能影響|5:done:0:web:取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導與主要內容|6:done:0:web:分析上述新聞對Meta股價在2026年9月前後的影響，包含股價變動幅度與可能的市場解讀": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "取得2026年9月前後Meta股價走勢及分析其與SpaceX IPO前科技股被避險基金拋售事件的關聯",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Tesla 目前的毛利率表現如何？加上新聞中 SpaceX 即將 IPO 讓 Tesla 關注度降溫的報導，這對 Tesla 目前的市場處境有何影響？|0:done:0:kb:Tesla 目前的毛利率是多少|1:done:1:web:SpaceX 即將 IPO 的報導對 Tesla 目前的市場處境有何影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找最新關於 SpaceX 即將 IPO 的新聞，分析其對 Tesla 市場處境的影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Tesla 目前的毛利率表現如何？加上新聞中 SpaceX 即將 IPO 讓 Tesla 關注度降溫的報導，這對 Tesla 目前的市場處境有何影響？|0:done:0:kb:Tesla 目前的毛利率是多少|1:done:1:web:SpaceX 即將 IPO 的報導對 Tesla 目前的市場處境有何影響|2:done:0:web:查找最新關於 SpaceX 即將 IPO 的新聞，分析其對 Tesla 市場處境的影響": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？|0:done:0:kb:Tesla 汽車業務的毛利率近期變化趨勢是什麼|1:done:1:web:Magnificent Seven 科技股近期全數下跌的新聞內容是什麼，且這對 Tesla 的股價表現透露了什麼": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "Magnificent Seven 科技股全數下跌的最新新聞內容及其對 Tesla 股價的可能影響分析",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？|0:done:0:kb:Tesla 汽車業務的毛利率近期變化趨勢是什麼|1:done:1:web:Magnificent Seven 科技股近期全數下跌的新聞內容是什麼，且這對 Tesla 的股價表現透露了什麼|2:done:0:web:Magnificent Seven 科技股全數下跌的最新新聞內容及其對 Tesla 股價的可能影響分析": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢最近 Magnificent Seven 科技股全數下跌的新聞，並分析其對 Tesla 股價的即時影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？|0:done:0:kb:Tesla 汽車業務的毛利率近期變化趨勢是什麼|1:done:1:web:Magnificent Seven 科技股近期全數下跌的新聞內容是什麼，且這對 Tesla 的股價表現透露了什麼|2:done:0:web:Magnificent Seven 科技股全數下跌的最新新聞內容及其對 Tesla 股價的可能影響分析|3:done:0:web:查詢最近 Magnificent Seven 科技股全數下跌的新聞，並分析其對 Tesla 股價的即時影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢截至 2026-09-02 的 Magnificent Seven 科技股全數下跌的最新新聞，並說明對 Tesla 股價的即時影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？|0:done:0:kb:Tesla 汽車業務的毛利率近期變化趨勢是什麼|1:done:1:web:Magnificent Seven 科技股近期全數下跌的新聞內容是什麼，且這對 Tesla 的股價表現透露了什麼|2:done:0:web:Magnificent Seven 科技股全數下跌的最新新聞內容及其對 Tesla 股價的可能影響分析|3:done:0:web:查詢最近 Magnificent Seven 科技股全數下跌的新聞，並分析其對 Tesla 股價的即時影響|4:done:0:web:查詢截至 2026-09-02 的 Magnificent Seven 科技股全數下跌的最新新聞，並說明對 Tesla 股價的即時影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "搜尋分析師對 Magnificent Seven 全部下跌對 Tesla 股價的看法與預測",
+     "route": "web"
+    },
+    {
+     "task": "查詢 Tesla 股價在 Magnificent Seven 下跌當日的即時走勢與交易量",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？|0:done:0:kb:Tesla 汽車業務的毛利率近期變化趨勢是什麼|1:done:1:web:Magnificent Seven 科技股近期全數下跌的新聞內容是什麼，且這對 Tesla 的股價表現透露了什麼|2:done:0:web:Magnificent Seven 科技股全數下跌的最新新聞內容及其對 Tesla 股價的可能影響分析|3:done:0:web:查詢最近 Magnificent Seven 科技股全數下跌的新聞，並分析其對 Tesla 股價的即時影響|4:done:0:web:查詢截至 2026-09-02 的 Magnificent Seven 科技股全數下跌的最新新聞，並說明對 Tesla 股價的即時影響|5:done:0:web:搜尋分析師對 Magnificent Seven 全部下跌對 Tesla 股價的看法與預測|6:done:0:web:查詢 Tesla 股價在 Magnificent Seven 下跌當日的即時走勢與交易量": {
+   "sufficient": true,
+   "add": [],
+   "drop": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？|0:done:0:kb:NVIDIA 目前的淨利率（profit margin）水準如何|1:done:1:web:NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找最新新聞中黃仁勳關於向中國市場開放 AI 晶片銷售的談話，並分析此訊息對輝達 AI 晶片競爭定位的影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？|0:done:0:kb:NVIDIA 目前的淨利率（profit margin）水準如何|1:done:1:web:NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼|2:done:0:web:查找最新新聞中黃仁勳關於向中國市場開放 AI 晶片銷售的談話，並分析此訊息對輝達 AI 晶片競爭定位的影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？|0:done:0:kb:NVIDIA 目前的淨利率（profit margin）水準如何|1:done:1:web:NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼|2:done:0:web:查找最新新聞中黃仁勳關於向中國市場開放 AI 晶片銷售的談話，並分析此訊息對輝達 AI 晶片競爭定位的影響|3:done:0:web:查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？|0:done:0:kb:NVIDIA 目前的淨利率（profit margin）水準如何|1:done:1:web:NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼|2:done:0:web:查找最新新聞中黃仁勳關於向中國市場開放 AI 晶片銷售的談話，並分析此訊息對輝達 AI 晶片競爭定位的影響|3:done:0:web:查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響|4:done:0:web:查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的具體新聞或訪談內容，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？|0:done:0:kb:NVIDIA 目前的淨利率（profit margin）水準如何|1:done:1:web:NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼|2:done:0:web:查找最新新聞中黃仁勳關於向中國市場開放 AI 晶片銷售的談話，並分析此訊息對輝達 AI 晶片競爭定位的影響|3:done:0:web:查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響|4:done:0:web:查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響|5:done:0:web:查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的具體新聞或訪談內容，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？|0:done:0:kb:NVIDIA 目前的淨利率（profit margin）水準如何|1:done:1:web:NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼|2:done:0:web:查找最新新聞中黃仁勳關於向中國市場開放 AI 晶片銷售的談話，並分析此訊息對輝達 AI 晶片競爭定位的影響|3:done:0:web:查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響|4:done:0:web:查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響|5:done:0:web:查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的具體新聞或訪談內容，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響|6:done:0:web:查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年9月以後的新聞中，黃仁勳提及向中國市場開放 AI 晶片銷售的最新聲明，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？|0:done:1:web:特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注|1:done:0:kb:特斯拉本季的淨利是多少": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢近期有關馬斯克旗下 SpaceX 或其他公司上市計畫的新聞，並評估是否影響特斯拉的媒體關注度",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？|0:done:1:web:特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注|1:done:0:kb:特斯拉本季的淨利是多少|2:done:0:web:查詢近期有關馬斯克旗下 SpaceX 或其他公司上市計畫的新聞，並評估是否影響特斯拉的媒體關注度": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    0,
+    2
+   ]
+  },
+  "live|特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？|0:done:1:web:特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注|1:done:0:kb:特斯拉本季的淨利是多少|2:done:0:web:查詢近期有關馬斯克旗下 SpaceX 或其他公司上市計畫的新聞，並評估是否影響特斯拉的媒體關注度|3:done:0:web:查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？|0:done:1:web:特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注|1:done:0:kb:特斯拉本季的淨利是多少|2:done:0:web:查詢近期有關馬斯克旗下 SpaceX 或其他公司上市計畫的新聞，並評估是否影響特斯拉的媒體關注度|3:done:0:web:查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度|4:done:0:web:查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢2026年最新有關SpaceX或其他馬斯克公司上市計畫的新聞，並評估其對特斯拉媒體關注度的影響",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？|0:done:1:web:特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注|1:done:0:kb:特斯拉本季的淨利是多少|2:done:0:web:查詢近期有關馬斯克旗下 SpaceX 或其他公司上市計畫的新聞，並評估是否影響特斯拉的媒體關注度|3:done:0:web:查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度|4:done:0:web:查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度|5:done:0:web:查詢2026年最新有關SpaceX或其他馬斯克公司上市計畫的新聞，並評估其對特斯拉媒體關注度的影響": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢2026年7月至2026年9月期間有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？|0:done:1:web:特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注|1:done:0:kb:特斯拉本季的淨利是多少|2:done:0:web:查詢近期有關馬斯克旗下 SpaceX 或其他公司上市計畫的新聞，並評估是否影響特斯拉的媒體關注度|3:done:0:web:查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度|4:done:0:web:查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度|5:done:0:web:查詢2026年最新有關SpaceX或其他馬斯克公司上市計畫的新聞，並評估其對特斯拉媒體關注度的影響|6:done:0:web:查詢2026年7月至2026年9月期間有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢2026年上半年至今的新聞，是否有報導馬斯克旗下SpaceX或其他公司計畫上市，並評估此報導是否分散特斯拉的媒體關注度",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    0,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？|0:done:1:web:Evercore ISI 最近調升目標價與評等的是哪家公司|1:pending:0:kb:該公司目前的毛利率是多少": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "該公司目前的毛利率是多少",
+     "route": "kb"
+    }
+   ],
+   "drop": [
+    1
+   ]
+  },
+  "live|新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？|0:done:1:web:Evercore ISI 最近調升目標價與評等的是哪家公司|1:done:0:kb:該公司目前的毛利率是多少|2:done:0:kb:該公司目前的毛利率是多少": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 Evercore ISI 最近調升目標價與評等的公司名稱",
+     "route": "web"
+    },
+    {
+     "task": "查詢該公司最新的毛利率（截至最新可用的 10‑Q）",
+     "route": "kb"
+    }
+   ],
+   "drop": [
+    0
+   ]
+  },
+  "live|新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？|0:done:1:web:Evercore ISI 最近調升目標價與評等的是哪家公司|1:done:0:kb:該公司目前的毛利率是多少|2:done:0:kb:該公司目前的毛利率是多少|3:done:0:web:查找 Evercore ISI 最近調升目標價與評等的公司名稱|4:pending:0:kb:查詢該公司最新的毛利率（截至最新可用的 10‑Q）": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找新聞中 Evercore ISI 最近調升目標價與評等的公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    4
+   ]
+  },
+  "live|新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？|0:done:1:web:Evercore ISI 最近調升目標價與評等的是哪家公司|1:done:0:kb:該公司目前的毛利率是多少|2:done:0:kb:該公司目前的毛利率是多少|3:done:0:web:查找 Evercore ISI 最近調升目標價與評等的公司名稱|4:pending:0:kb:查詢該公司最新的毛利率（截至最新可用的 10‑Q）|5:done:0:web:查找新聞中 Evercore ISI 最近調升目標價與評等的公司名稱": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找 2026 年 8 月至 9 月期間 Evercore ISI 最近調升目標價與評等的公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    4
+   ]
+  },
+  "live|新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？|0:done:1:web:Evercore ISI 最近調升目標價與評等的是哪家公司|1:done:0:kb:該公司目前的毛利率是多少|2:done:0:kb:該公司目前的毛利率是多少|3:done:0:web:查找 Evercore ISI 最近調升目標價與評等的公司名稱|4:pending:0:kb:查詢該公司最新的毛利率（截至最新可用的 10‑Q）|5:done:0:web:查找新聞中 Evercore ISI 最近調升目標價與評等的公司名稱|6:done:0:web:查找 2026 年 8 月至 9 月期間 Evercore ISI 最近調升目標價與評等的公司名稱": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找新聞中 Evercore ISI 最近調升目標價與評等的公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    0,
+    3,
+    5,
+    6
+   ]
+  },
+  "live|新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？|0:done:1:web:Evercore ISI 最近調升目標價與評等的是哪家公司|1:done:0:kb:該公司目前的毛利率是多少|2:done:0:kb:該公司目前的毛利率是多少|3:done:0:web:查找 Evercore ISI 最近調升目標價與評等的公司名稱|4:done:0:kb:查詢Apple最新的毛利率（截至最新可用的 10‑Q）|5:done:0:web:查找新聞中 Evercore ISI 最近調升目標價與評等的公司名稱|6:done:0:web:查找 2026 年 8 月至 9 月期間 Evercore ISI 最近調升目標價與評等的公司名稱": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找近期新聞中 Evercore ISI 調升目標價與評等的公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    0,
+    3,
+    5,
+    6
+   ]
+  },
+  "live|新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？|0:done:1:web:哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫|1:pending:0:kb:該公司最新年度的總營收是多少": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "該公司最新年度的總營收是多少",
+     "route": "kb"
+    }
+   ],
+   "drop": [
+    1
+   ]
+  },
+  "live|新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？|0:done:1:web:哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫|1:done:0:kb:該公司最新年度的總營收是多少|2:done:0:kb:該公司最新年度的總營收是多少": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？|0:done:1:web:哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫|1:done:0:kb:該公司最新年度的總營收是多少|2:done:0:kb:該公司最新年度的總營收是多少|3:done:0:web:查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "確認是哪家公司在最新新聞中宣布在歐洲投入超過 100 億歐元的投資計畫",
+     "route": "web"
+    },
+    {
+     "task": "取得該公司最新財政年度的總營收",
+     "route": "kb"
+    }
+   ],
+   "drop": [
+    1,
+    2
+   ]
+  },
+  "live|新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？|0:done:1:web:哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫|1:done:0:kb:該公司最新年度的總營收是多少|2:done:0:kb:該公司最新年度的總營收是多少|3:done:0:web:查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱|4:done:0:web:確認是哪家公司在最新新聞中宣布在歐洲投入超過 100 億歐元的投資計畫|5:pending:0:kb:取得該公司最新財政年度的總營收": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱",
+     "route": "web"
+    },
+    {
+     "task": "取得該公司最新財政年度的總營收",
+     "route": "both"
+    }
+   ],
+   "drop": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "live|新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？|0:done:1:web:哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫|1:done:0:kb:該公司最新年度的總營收是多少|2:done:0:kb:該公司最新年度的總營收是多少|3:done:0:web:查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱|4:done:0:web:確認是哪家公司在最新新聞中宣布在歐洲投入超過 100 億歐元的投資計畫|5:pending:0:kb:取得該公司最新財政年度的總營收|6:done:0:web:查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    0,
+    2,
+    3,
+    4,
+    6
+   ]
+  },
+  "live|新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？|0:done:1:web:哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫|1:done:0:kb:該公司最新年度的總營收是多少|2:done:0:kb:該公司最新年度的總營收是多少|3:done:0:web:查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱|4:done:0:web:確認是哪家公司在最新新聞中宣布在歐洲投入超過 100 億歐元的投資計畫|5:done:0:kb:取得NVIDIA最新財政年度的總營收|6:done:0:web:查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年最新新聞中提及在歐洲投入超過 100 億歐元投資的公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？|0:done:1:web:新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？|1:pending:0:kb:該公司最近一年的營收年增率是多少？": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢該公司最近一年的營收並計算年增率",
+     "route": "kb"
+    }
+   ],
+   "drop": [
+    1
+   ]
+  },
+  "live|新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？|0:done:1:web:新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？|1:done:0:kb:該公司最近一年的營收年增率是多少？|2:done:0:kb:查詢該公司最近一年的營收並計算年增率": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找提及 850 多億美元 籌資 計畫 並大幅拉高資本支出的公司新聞",
+     "route": "web"
+    },
+    {
+     "task": "取得該公司最近完整財政年度的營收數據並計算年增率",
+     "route": "both"
+    }
+   ],
+   "drop": []
+  },
+  "live|新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？|0:done:1:web:新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？|1:done:0:kb:該公司最近一年的營收年增率是多少？|2:done:0:kb:查詢該公司最近一年的營收並計算年增率|3:done:0:web:查找提及 850 多億美元 籌資 計畫 並大幅拉高資本支出的公司新聞|4:pending:0:both:取得該公司最近完整財政年度的營收數據並計算年增率": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "搜尋近期新聞中提及 850 多億美元 籌資 計畫 並 大幅 拉高 資本 支出的公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    4
+   ]
+  },
+  "live|新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？|0:done:1:web:新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？|1:done:0:kb:該公司最近一年的營收年增率是多少？|2:done:0:kb:查詢該公司最近一年的營收並計算年增率|3:done:0:web:查找提及 850 多億美元 籌資 計畫 並大幅拉高資本支出的公司新聞|4:pending:0:both:取得該公司最近完整財政年度的營收數據並計算年增率|5:done:0:web:搜尋近期新聞中提及 850 多億美元 籌資 計畫 並 大幅 拉高 資本 支出的公司名稱": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "搜尋2026年最新新聞，關鍵字「850 億美元」籌資 計畫 資本支出 以確定公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？|0:done:1:web:新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？|1:done:0:kb:該公司最近一年的營收年增率是多少？|2:done:0:kb:查詢該公司最近一年的營收並計算年增率|3:done:0:web:查找提及 850 多億美元 籌資 計畫 並大幅拉高資本支出的公司新聞|4:pending:0:both:取得該公司最近完整財政年度的營收數據並計算年增率|5:done:0:web:搜尋近期新聞中提及 850 多億美元 籌資 計畫 並 大幅 拉高 資本 支出的公司名稱|6:done:0:web:搜尋2026年最新新聞，關鍵字「850 億美元」籌資 計畫 資本支出 以確定公司名稱": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "搜尋2026年新聞中提及 850 億美元 籌資 計畫 並 大幅 拉高 資本 支出 的公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    0,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？|0:done:1:web:新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？|1:done:0:kb:該公司最近一年的營收年增率是多少？|2:done:0:kb:查詢該公司最近一年的營收並計算年增率|3:done:0:web:查找提及 850 多億美元 籌資 計畫 並大幅拉高資本支出的公司新聞|4:done:0:both:取得Microsoft最近完整財政年度的營收數據並計算年增率|5:done:0:web:搜尋近期新聞中提及 850 多億美元 籌資 計畫 並 大幅 拉高 資本 支出的公司名稱|6:done:0:web:搜尋2026年最新新聞，關鍵字「850 億美元」籌資 計畫 資本支出 以確定公司名稱": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年最新新聞中提及 850 多億美元 籌資 計畫 並大幅提升資本支出的公司名稱",
+     "route": "web"
+    },
+    {
+     "task": "取得該公司最近一年的營收並計算年增率",
+     "route": "kb"
+    }
+   ],
+   "drop": [
+    0,
+    3,
+    5,
+    6
+   ]
+  },
+  "live|新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？|0:done:1:web:哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？|1:pending:0:kb:該公司目前的營業利益率（operating margin）是多少？": {
+   "sufficient": false,
+   "add": [],
+   "drop": []
+  },
+  "live|新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？|0:done:1:web:哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？|1:done:0:kb:該公司目前的營業利益率（operating margin）是多少？": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱",
+     "route": "web"
+    },
+    {
+     "task": "取得該公司最新的營業利益率",
+     "route": "both"
+    }
+   ],
+   "drop": []
+  },
+  "live|新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？|0:done:1:web:哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？|1:done:0:kb:該公司目前的營業利益率（operating margin）是多少？|2:done:0:web:查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱|3:pending:0:both:取得該公司最新的營業利益率": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？|0:done:1:web:哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？|1:done:0:kb:該公司目前的營業利益率（operating margin）是多少？|2:done:0:web:查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱|3:pending:0:both:取得該公司最新的營業利益率|4:done:0:web:查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱",
+     "route": "web"
+    },
+    {
+     "task": "取得該公司的最新營業利益率",
+     "route": "kb"
+    }
+   ],
+   "drop": [
+    3
+   ]
+  },
+  "live|新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？|0:done:1:web:哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？|1:done:0:kb:該公司目前的營業利益率（operating margin）是多少？|2:done:0:web:查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱|3:pending:0:both:取得該公司最新的營業利益率|4:done:0:web:查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱|5:done:0:web:查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱|6:pending:0:kb:取得該公司的最新營業利益率": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱",
+     "route": "web"
+    },
+    {
+     "task": "取得該公司的最新營業利益率",
+     "route": "both"
+    }
+   ],
+   "drop": [
+    3,
+    6
+   ]
+  },
+  "live|新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？|0:done:1:web:哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？|1:done:0:kb:該公司目前的營業利益率（operating margin）是多少？|2:done:0:web:查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱|3:done:0:both:取得Microsoft最新的營業利益率|4:done:0:web:查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱|5:done:0:web:查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱|6:done:0:kb:取得Microsoft的最新營業利益率": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱",
+     "route": "web"
+    },
+    {
+     "task": "取得該公司目前的營業利益率（operating margin）",
+     "route": "kb"
+    }
+   ],
+   "drop": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|新聞中被 Morgan Stanley 特別稱許其 AI 護城河、同時大舉提高資本支出的是哪一家公司？該公司最新年度的淨利（net income）是多少？|0:done:1:web:哪家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河，且大幅提高資本支出？|1:pending:0:kb:該公司最新年度的淨利（net income）是多少？": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 Nvidia 最新年度的淨利（net income）",
+     "route": "kb"
+    }
+   ],
+   "drop": [
+    1
+   ]
+  },
+  "live|新聞中被 Morgan Stanley 特別稱許其 AI 護城河、同時大舉提高資本支出的是哪一家公司？該公司最新年度的淨利（net income）是多少？|0:done:1:web:哪家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河，且大幅提高資本支出？|1:pending:0:kb:該公司最新年度的淨利（net income）是多少？|2:done:0:kb:查詢 Nvidia 最新年度的淨利（net income）": {
+   "sufficient": true,
+   "add": [],
+   "drop": [
+    1
+   ]
+  },
+  "live|新聞中被 Morgan Stanley 特別稱許其 AI 護城河、同時大舉提高資本支出的是哪一家公司？該公司最新年度的淨利（net income）是多少？|0:done:1:web:哪家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河，且大幅提高資本支出？|1:done:0:kb:NVIDIA最新年度的淨利（net income）是多少？|2:done:0:kb:查詢 Nvidia 最新年度的淨利（net income）": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  }
+ },
+ "ticker": {
+  "該公司目前的毛利率是多少": [],
+  "查詢Apple最新的毛利率（截至最新可用的 10‑Q）": [
+   "AAPL"
+  ],
+  "該公司最新年度的總營收是多少": [],
+  "取得NVIDIA最新財政年度的總營收": [
+   "NVDA"
+  ],
+  "該公司最近一年的營收年增率是多少？": [],
+  "查詢該公司最近一年的營收並計算年增率": [],
+  "CompanyName total revenue FY2025 versus FY2026 percentage change": [],
+  "2026 年度 [公司名稱] 營收 total revenue 2025 2026 10-K": [],
+  "取得Microsoft最近完整財政年度的營收數據並計算年增率": [
+   "MSFT"
+  ],
+  "該公司目前的營業利益率（operating margin）是多少？": [],
+  "取得Microsoft最新的營業利益率": [
+   "MSFT"
+  ],
+  "取得Microsoft的最新營業利益率": [
+   "MSFT"
+  ],
+  "NVIDIA最新年度的淨利（net income）是多少？": [
+   "NVDA"
+  ]
+ }
+}

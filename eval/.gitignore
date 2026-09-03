@@ -71,3 +71,37 @@
 
 # Python 快取
 __pycache__/
+
+# ── 2026-09-01 補：**第五次**。上一段的警告寫著「新增 eval 輸入檔的同一次改動就要加白名單」 ─
+#   · news_routing_questions.json  check_news_routing.py 的題目分類（flow / mixed / record）。
+#     每一格 kind 是人工判的，而判錯的代價不對稱：把 flow 誤標成 record 會讓「拿財報冒充新聞」
+#     被記成正確行為（col-08 就差點放錯，它的 KB 側有快照市值＝該並陳而不是該擋 web）。
+#     腳本重現不了這個判斷。
+!news_routing_questions.json
+
+# ── 2026-09-01 補（同一次改動）：news 路由 before 臂的 fixture ─────────────────────
+# 理由與上面〈web fixture〉那段一字不差：錄下來的外部世界，重錄要連網燒額度且錄不回同一份。
+# 這一份綁 (collection=us_stock_rag_edgar_multiyear, as-of=2026-09-01)，
+# 與綁 mdna／2026-08-20 的 web_fixture_news37.json **不可混用**（腳本的環境綁定檢查會擋）。
+!web_fixture_newsroute_prod.json
+!web_replay_llm_newsroute_prod.json
+# after 臂的 llm replay cache。⚠ **必須與 before 臂分開**：共用的話 after 會重放 before 錄的
+# plan 輸出（那是加 route 之前的 `list[str]`）→ 全部落到 kb ＝ 整個實驗自我作廢。
+# web fixture 則刻意**共用**：同一份外部世界快照，兩臂才可比，且省 Tavily 額度。
+!web_replay_llm_newsroute_after.json
+# after2 臂（含「預算用完不退回 KB」與「replan 帶 route」兩個修正）的 llm replay cache。
+# ⚠ **刻意用全新的 cache 而不是沿用 after 那份**：沿用會讓 plan 直接命中、路由決定被凍結，
+#   於是量不到「router 判得穩不穩」——而那正是這一輪要驗的東西（mix-01 是 canary）。
+!web_replay_llm_newsroute_after2.json
+
+# ── 2026-09-03 補：**第六次**。上面兩段的警告都寫著同一句話，而我又漏了一次 ──────────
+#   通則已經寫過三遍還是沒生效，所以這次改寫成可執行的：**錄完 fixture 的那一次 commit，
+#   跑 `git check-ignore eval/<新檔>` 確認它沒被吃掉**——白名單是 opt-in，新檔預設會消失。
+# mixed 題型的 prod fixture（21 題，collection=us_stock_rag_edgar_multiyear、as-of=2026-09-02）。
+# ⚠ 綁 as-of 09-02，**不可與綁 09-01 的 newsroute_prod 混用**：`_url_published_date` 對未來日期
+#   一律丟棄（d <= as_of），錯配會讓今天抓的頁面失去日期＝把人工痕跡烘進基線。
+!web_fixture_mixed_prod.json
+!web_replay_llm_mixed_prod.json
+# probe_web_query_form 的 2x2 query 形式探針 fixture（r2 是第二輪，刻意另一份才比得出差異）。
+!web_fixture_query_form.json
+!web_fixture_query_form_r2.json

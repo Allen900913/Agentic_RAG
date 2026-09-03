@@ -29,7 +29,14 @@
   ⚠ **但「那有沒有害」正好被這條缺口本身擋住**：同一次量測顯示「gold 檔整個被排除」0 題、合成混池「誤選他家」0 題、圈選率 1.00 的題 0/8 → 在**檔名層**看不出任何損害。要分辨「它濾掉的是離題 chunk（正確）還是答案所在的 chunk（危險）」，**只能靠 chunk 層 gold**。
   → 這兩條原本分開的條目其實是同一件事：**先有 chunk 層 gold，才談得上要不要動 `relevant_ids`。**
 
-- **live 路徑的量尺（`check_web_claims`，5 條）是 flaky 的，不能當閘門用。**
+- ~~**live 路徑的量尺（`check_web_claims`，5 條）是 flaky 的**~~ → **2026-09-02 解掉了，成因是 fixture 不是斷言。**
+  重錄 fixture（綁 multiyear ＋ as-of 09-02）後跑 **4 輪：判定逐題完全一致**（PASS 4／FAIL 0／N-A 1），`hit=36 miss=0`。
+  ⚠ **關鍵證據是「穩定的同時仍然有噪音」**：四輪每一題的答案都不一樣（web-05 是 521／448／327／451 字），
+  而五個判定一格都沒動 → 斷言真的只測「不論 LLM 挑哪個來源都成立」的性質，不是被凍住了。
+  ⚠ 下面這段留著當**病歷**：它記的是「量尺綁在錯的世界上」長什麼樣子，而那個外觀與「系統壞了」完全相同。
+  **已收緊**：`--mode replay` 現在是 bare `strict` ＋ 唯讀。
+
+  〔以下為 2026-08-28 的原始診斷，保留〕
   實測 5 次跑分（2 個 collection × 有無 cache 污染 ＋ 1 次單題重跑）：`web-02` 的判定序列是 PASS,FAIL,FAIL,FAIL,PASS，`web-04` 是 FAIL,FAIL,FAIL,PASS。**同碼同 collection 會翻面。**
   根因不在斷言而在**輸入**：fixture 的 key 含 LLM 生成的英文 query 字串，每輪都可能不同 → `FixtureMiss` → 確定性 executor 的 `except Exception` 把它降級成「沒打 web」。
   ⚠ **重錄 fixture 不是解法**：只會換一組會再度 miss 的 key。
@@ -38,10 +45,12 @@
   **方向**：讓 replay 的比對不綁 query 字面（按子問題 index，或對 query 做正規化／近似比對）。
   **在修好之前**：這 5 條只能當「跑幾次看趨勢」的 probe，判讀一律 ≥3 輪、看逐題 k/n。**好消息是失敗現在會自己現形**——不再需要人去分辨 FAIL 是系統還是量尺。
 
-- **`llm_replay.py` 沒有唯讀模式，A/B 兩臂共用一份 cache 會單向污染。**
-  `atexit` 無條件把 miss 現場算出的結果寫回 → **第一臂的 miss 變成第二臂的 hit**（實測 hit 23→32，兩臂結果因此不可比）。現有防護只有 `RAG_REPLAY_MODE=strict`（miss 就報錯），而 `record_web_fixture.py --mode replay` 沒設它——那支的「replay」對 Tavily 成立、對 LLM 不成立。
-  **權宜做法**：每一臂用自己的 cache 副本（`--replay-cache <副本>`），跑完丟掉。
-  **卡點**：正解是加一個唯讀旗標，但要先確認沒有哪個既有流程依賴「跑一輪順便補快取」。
+  ⚠ **2026-09-02：上面那組 PASS/FAIL 翻面的實測數字是 08-28 之前量的，而根因鏈的源頭已經被堵過兩次**——`replan` 於 08-29 註冊進 `_KNOWN_KINDS`（它是「新 query」那條鏈的源頭），唯讀於 09-02 加上。**所以「還 flaky 嗎」現在是一個沒有答案的問題**，而不是一個已知的缺陷。
+  **下一步是重測不是重設計**：改 fixture 的 key（正規化／近似比對）風險比現況高——比對放寬會讓一次搜尋**配到錯的那筆錄影**，那比 miss 更糟（miss 會炸，配錯不會）。先用唯讀跑 ≥3 輪看逐題 k/n，再決定要不要動 key。
+
+- ~~**`llm_replay.py` 沒有唯讀模式**~~ → **2026-09-02 修掉**（`RAG_REPLAY_READONLY=1`，opt-in；`--mode replay` 自動開；閘門⑫ 10 項、5/5 變異）。
+  卡點「有沒有既有流程依賴回寫」也查清楚了：有三個（`record_web_fixture --mode record`＋兩支 period probe 會自動把快取指到 `eval/replay_cache.json`），所以**唯讀必須是 opt-in**。
+  ⚠ 這一條原本還寫著「`record_web_fixture.py --mode replay` 沒設 strict」——**那句已過期**，2026-08-29 就設了 `strict:plan,replan,translate_en,check`。剩下的漏洞是**非 strict 的三個 kind 仍會回寫**，那才是唯讀真正堵住的東西。
 
 ---
 
@@ -65,7 +74,7 @@
 任一情況在題庫裡出現、或有人把 Fundamentals 的版面改掉 → 重新評估。
 造這三種題**不能加進 `eval_set.json`**（分母不可變），要走獨立斷言集。
 
-## ⚠ `eval/web_fixture.json` 已經不可重放，必須重錄（2026-08-29 查清）
+## ~~`eval/web_fixture.json` 不可重放~~（2026-09-02 **已重錄**，見 CHANGELOG）
 
 **這份 fixture 是 live web 那條路唯一的自動化證據，而它從 2026-08-19 起就對不上系統了。**
 症狀先前被當成「LLM 不穩」：同一題五輪 PASS/FAIL 亂跳（web-02 {P,F,F,F,P}／web-04 {F,F,F,P}）。
@@ -96,30 +105,142 @@
 · 重錄後這裡的 strict 可以從 `strict:plan,replan,translate_en,check` 收緊成 bare `strict`
   （`period_intent`／`ticker`／`ratio` 三個接點比舊 fixture 新，現在放寬是為了避開假陽性）。
 
-⚠ **在重錄之前，`check_web_claims.py` 的任何結果都不能當證據。**
+✅ **2026-09-02 重錄完成**：綁 `us_stock_rag_edgar_multiyear` ＋ as-of `2026-09-02`，5 筆 web 回應。
+斷言逐條重新確認：`web-05`／`web-03`（兩個陰性對照）、`web-02`（`numbers_must_be_in_fixture` 自適應）、
+`web-04` 全 PASS；`web-01` 因輸入層缺事實而 `blocked`（判 N-A，見〈已知缺陷〉）。
+KB 側寫死的三個值都還在（`416.16`／`2026-06-12`／`4342.02`）。
+⚠ **strict 還沒收緊成 bare `strict`**：新快取雖然七個 kind 都有了，但收緊要另外跑一次確認不會誤炸。
 
-## `_WEB_TODO_RE` 的詞表漏洞（查清楚了，刻意沒修）
+## ~~`_WEB_TODO_RE` 的詞表漏洞~~（2026-09-02 **連函式一起刪掉了**）
 
-`_WEB_TODO_RE = re.compile(r"網路|上網|web\s*search|internet")`。2026-08-29 實測 replan 生出的
-web 待辦有一整族**它匹配不到**：
+路由改成 todo 的 `route` 欄位之後，它最後一個呼叫端（`_node_replan` 的 snapshot web-todo 拒絕）換成讀 route，整個函式與詞表因此沒有呼叫端 → 刪除，碼上留墓碑註解。
+它是「用硬編碼詞表做感知」的第三個死者（前兩個：`rq.looks_like_news_query`、`_RELATIVE_TIME_RE`）。
 
-    在 Yahoo Finance 上查詢 NVDA 當前股價
-    在 Bloomberg 上查詢 NVDA 當前股價
-    在 MarketWatch / Reuters / CNBC 上查詢 NVDA 當前股價
-    使用NASDAQ官方網站或API查詢NVDA即時股價        ← 「網站」不是「網路」
+⚠ 六個它匹配不到的真實措辭**仍逐字凍結在**閘門⑧p——那條斷言守的是「守衛不可以用**待辦文字**當前置條件」，與詞表存不存在無關，所以留著。
+新判準的斷言是 ⑧u/⑧v（snapshot 下 route=web 被拒、route=kb 仍加得進去）。
 
-**沒修的理由**：它現在只剩一個消費端——`_node_replan` 在 snapshot／`--no-web` 時拒絕 web 待辦。
-那是**成本**問題不是隔離問題（`verify_web_gate_isolation` 閘門① 證明隔離只靠 `freshness_mode`
-與 `ENABLE_WEB_SEARCH` 兩個獨立條件，詞表**不是**隔離機制）。漏掉的代價是 snapshot 多跑一個
-註定撈不到東西的待辦，不是資料外洩。
+## 計畫：把「路由」改成 todo 上的 `route`（2026-09-01 定案；**2026-09-02 第 1~5 步已完成**）
 
-⚠ **不要用「加幾個詞」修它**（`網站|Yahoo|Bloomberg|…`）——那正是 CLAUDE.md〈硬編碼詞表是警訊〉
-說的 O(n) 開始，而且站名清單天生無界。真要修就改成 LLM 判定，**但要先看那條警告**：
-「改成 LLM 之後，判別力來自『LLM 說不是就必須不是』——若空答案會掉回詞表，詞表仍然是實際
-做決定的人，而端到端跑分看不出任何差別」。
+**做完的**：斷言（閘門⑪ 30 項／⑯ 6 項）→ Plan 輸出 `route` ＋ 雙格式解析 → `_dispatch_todo`／`_escalate_route`／`_effective_route` → after 臂 A/B → 「預算用完不退回 KB」→ replan 帶 route（`_WEB_TODO_RE` 一併刪除）。逐項見 CHANGELOG。
 
-**復活條件**：這個詞表出現第二個消費端、或 snapshot 的成本變成問題。
-（`_web_retry_is_pointless` **刻意不使用它**，就是為了不繼承這個洞。）
+**還沒做的**：`depends_on` 的實際解析（mh-07 的「該公司」，只留了欄位）；`mixed` 那 21 題從來沒被量過（量尺對它們判別力弱）。下面保留原始計畫供對照。
+
+### 目標形狀
+
+```
+_node_plan  → todos[{task, route, depends_on, …}]     route ∈ {kb, web, both}
+_dispatch_todo(route, …)  純 Python，確定性叫 tool     ← 新增（**不是** LangGraph node）
+_check_sufficiency        只裁決：sufficient/missing/new_query/relevant_ids
+```
+
+### 為什麼**不**做成兩個 LangGraph node（這是這份計畫最重要的取捨）
+
+retrieve↔grade 迴圈現在跑在 `_run_one_todo` **裡面**，而 `_node_execute` 用 ThreadPoolExecutor
+一個 wave **平行**跑多個子問題（`agentic_rag_v2.py:3681`）。拆成兩個 graph node，迴圈就變成
+graph 的邊 ＝ 單一控制流 → **5 個子問題序列化**，一題的秒數直接翻幾倍（除非另外用 Send
+重建 fan-out，那是大得多的改動）。
+
+**責任拆開、迴圈留在同一個 node 裡**：單一職責在函式與 prompt 層完全做得到，wave 平行度不動。
+「每個 node 有自己的工作」買到的是圖上好看，賣掉的是平行度。
+
+### 它修得到什麼、修不到什麼（先寫下來，免得驗收時自我加分）
+
+`check_news_routing.py` 的第二軸把兩種病分開了。before 臂實測：
+
+**before 臂基準**（`experiments/newsroute_before.json`，23 題／0 錯誤，
+collection=`us_stock_rag_edgar_multiyear`、as-of 2026-09-01、live）：
+flow 16 題 → `web_grounded` 14／**`kb_only` 2**；record 7 題 → `kb_only` 6／**`web_grounded` 1**。
+
+| 病 | 題 | `route` 修得到嗎 |
+|---|---|---|
+| `no_route`（web 一次沒打，Grader 看著財報說「夠了」） | news-09 | **修得到**——`route=web` 在 rnd 0 就打，不經過 Grader |
+| `web_ignored`（打了 web 卻零 web 引用） | news-02 | **修不到**——Generator 側，另一條線 |
+| **過度路由**（純財報題打了 web 並引用） | mix-01 | **要盯住不能變差**——見下 |
+
+**誠實的預期是兩種失敗模式只解決一種。**
+
+⚠ **`mix-01` 是這次改動最重要的一格**，而且它現在就已經是陽性。題目是「Microsoft Azure
+**最新一季**的營收成長率」——答案在 10-Q 裡，但「最新」讓現行路徑打了一次 web 並引用它。
+新的 `route` 由 Plan 用**同一段文字**判，**同一個陷阱原封不動地搬過去**。
+所以驗收時 record 那半的 `web_grounded` **必須 ≤ 1**；變成 2 以上就是路由把「最新」
+一律當 flow ＝ 這次改動製造了新的病。
+（附帶：`mh-03` 純財報題也打了 2 次 web 但沒引用——那是白花錢，不是正確性缺陷。）
+
+### 逐檔逐函式
+
+**A. `agentic_rag_v2.py`**
+
+- **A1 `_PLANNER_PROMPT`（:1712）** 輸出格式 `["子問題"]` → `[{"task": …, "route": …}]`。
+  **刪掉三段**——它們存在的唯一理由就是「沒有 route 欄位，只好叫 Plan 別在文字裡暗示來源」：
+  ①【不要注入來源類型】整段 ②【量化財務題同樣不得注入新聞】整段
+  ③「⚠ 不再有例外（2026-08-19 KB 拔除新聞）…寫成『…的新聞內容是什麼』只會撈到空的」。
+  換成一句 route 判準（KB 只有 10-K/10-Q/Fundamentals；問「外面現在怎麼樣」→ web）。
+  ⚠ **這是刪不是加**：prompt 已經 55 行且早就寫著「不要杜撰原問題沒有的意圖」，
+  mh-07 照樣生出 `"NVIDIA最新年度的總營收是多少？"`——再加第九條 prose 是最不可能有效的做法。
+
+- **A2 `_plan_subqueries`（:1776）** 解析要**同時吃 `list[str]` 與 `list[dict]`**。
+  ⚠ 這條相容不是好心：既有 fixture 錄的 plan 值全是字串陣列，不吃就是所有 replay 當場失效。
+  `str → {"task": s, "route": "kb"}`。replay key 是 `f"{freshness_mode}|{query}"`，不含
+  system_prompt，所以改 prompt **不會**讓既有 key miss。
+
+- **A3 `_node_plan`（:3562）** todo 多兩格 `route` / `depends_on`（先只支援 `None`）。
+  `attributable` 不動。
+
+- **A4 新增 `_dispatch_todo(route, query, need)`** 純 Python：`kb`→`_retrieve_chunks`／
+  `web`→`_tavily_search`（**不撈 KB**）／`both`→兩個都做。
+
+- **A5 `_run_executor_deterministic`（:3393）**
+  · rnd 0：`query = task` **逐字**、依 route 分派。
+    ⚠ **逐字這件事不是省錢，是 `attributable` 的前提**：`_retrieve_chunks(…, attributable=(attributable and rnd == 0))`
+    的整個保證建立在「rnd 0 問的就是使用者問的」，閘門 ⑮f/⑮g 守的就是它。
+  · 升級規則（Python，非 LLM）：`route == "kb" and verdict["kb_unfixable"]` → 本輪起升級成 `both`。
+  · 末端那段 `if freshness_mode == LIVE and ENABLE_WEB_SEARCH and not sufficient` 的 web
+    fallback 併進 dispatch ＋ 升級規則，不再是「不足就上網」。
+
+- **A6 `_check_sufficiency`（:1848）** **`realtime_need` 留著不刪**。它已經是 live-only
+  區塊（`_CHECKER_LIVE_RECENCY_BLOCK`，snapshot prompt 逐字不變），而且還有三個消費端
+  （`_tavily_search(need=)`／`_unmet_realtime_gaps`／`_web_retry_is_pointless`）。
+  改的只是**它不再決定 web 打不打**——那件事交給 `route`。
+
+- **A7 `_node_replan`（:3768）＋ `_REPLANNER_PROMPT`（:3500）** 它現在的主要產出是
+  「改用網路搜尋查…」這類 todo（實測 news-11 一題 6 個近義串），有了 route 之後**這份工作消失**。
+  prompt 收窄成：只在「依賴解出了」或「缺一個明確的新離散事實」時加 todo。
+  新 todo 也要帶 `route` → `_WEB_TODO_RE`（:415）與 `_is_web_todo`（:1404）**可以刪**
+  （刪前先確認沒有別的消費端；閘門 ⑧p 逐字凍結了六個它匹配不到的措辭，一併處理）。
+  replan 的 replay key 要把 `route` 納入。
+
+**B. `llm_replay.py`** 不需要新 kind——Executor 不寫 query（改寫仍由 Grader 的 `new_query` 出）。
+日後若把改寫拆成獨立 rewriter，那時才加 `rewrite` 並配「該 miss 的維度都會 miss」誤報對照（照 ⑧d~⑧g）。
+
+### 五條確定性斷言（先寫斷言、後改碼；現在跑會全紅，那是對的）
+
+| # | 斷言 | 加在哪 |
+|---|---|---|
+| 1 | **route → tool 真值表**：`kb` 不打 web／`web` 不撈 KB／`both` 兩個都打 | `verify_web_gate_isolation.py` 新閘門 |
+| 2 | **rnd 0 的 query 與 `task` 逐字相同**（守 `attributable`／⑮g） | `verify_answer_validators.py` |
+| 3 | **升級規則真值表**：`kb + kb_unfixable → both`；**`kb + not sufficient + not kb_unfixable → 仍然 kb`**（誤報對照，少了它等於退回「不足就上網」） | `verify_web_gate_isolation.py` |
+| 4 | **Plan 輸出雙格式相容**：`list[str]` 與 `list[dict]` 都吃得下，且 str 的 route 預設值有斷言 | `verify_web_gate_isolation.py` |
+| 5 | **陰性對照：`route=kb` 的 todo web 呼叫數必須 0** | 端到端由 `check_news_routing.py` 的 record 那半守 |
+
+⚠ 斷言 3 的判別力**全在那條誤報對照**：只驗「該升級的有升級」的話，一個「一律升級」的實作也會滿分。
+
+### 驗收順序（每一步都能單獨驗收）
+
+1. 五條斷言先寫（全紅）
+2. A1+A2 改輸出格式與相容解析 → 驗收：**既有 fixture 仍能重放**、斷言 4 轉綠
+3. A3+A4+A5 dispatch 與升級規則 → 驗收：斷言 1/2/3 轉綠
+4. 端到端跑 after 臂 → `check_news_routing.py` 對 before（`experiments/newsroute_before.json`）
+5. A7 收窄 replan → 驗收：`probe_replan_contribution.py` 的待辦數下降且 record 那半不動
+
+### 明確不做的
+
+- **不**把 Executor/Grader 拆成 LangGraph node（平行度，見上）
+- **不**從 Checker 移除 `realtime_need`（三個消費端）
+- **不**碰 Generator 側的 `web_ignored`（news-02）——另一條線
+- **不**加 `depends_on` 的實際解析（mh-07 的「該公司」）。原本寫的是「先留欄位，等 route 站穩」；
+  route 站穩後於 2026-09-02 量了，**前提不成立** → 搬到〈已接受的極限〉並附復活條件
+
+---
 
 ## 待決的決策
 
@@ -177,6 +298,91 @@ web 待辦有一整族**它匹配不到**：
 ---
 
 ## 已知缺陷（查清楚了、還沒修）
+
+- ~~**「現在市值」的 web query 不帶 ticker → Tavily 確定性回垃圾**~~ → **同日推翻，那是暫時性的。**
+  原始觀察：`What is Apple's current market capitalization?` 拿回 12 筆垃圾（最高分 **0.377** 是一支
+  Tim Cook 影片，其餘是首頁／`en.wikipedia.org` 的「Capitalization」詞條／世界銀行 GDP 指標／
+  `capitalone.com`），**兩次獨立錄製逐字相同**。我據此判定「系統性不是偶發」——**那個推論是錯的**。
+  ⚠ **相隔十分鐘的相同回應，同樣可以只是 Tavily 在快取那個 query。** 我少的對照不是「再錄一次」，
+    是**時間上分得夠開的一次**。約一小時後同一句拿回 `companiesmarketcap.com`／`stockanalysis.com`／
+    `macrotrends`，**5/12 有值、top 0.899**；再重錄 `web-01` 就答出「$4.75 兆（截至 2026-09-01）
+    【web: stockanalysis.com】＋ KB 的 $4,342.02B（2026-06-12）」——**正是這條斷言要測的並陳行為**。
+  → **`web-01` 的 `blocked` 已解除**，斷言改成不綁值的版本（見下）。
+  → 真正留下來的教訓寫在 `docs/EVAL.md`：**Tavily 的回應會隨時間變**，任何「這個 query 撈不到東西」
+    的結論都要有**時間上分開**的重複，不是連續重跑。
+
+- ~~**web query 帶 ticker 會大幅改善檢索命中**~~ → **第二輪沒重現，撤回（2026-09-02 同日）。**
+  三小時後重跑（`--fixture` 換新路徑，否則 record 模式會先命中舊 fixture ＝ 量到重放不是重複）：
+  nvda 股價 A 從 **0/2 變成 7/12**、msft D 從 **0/4 變成 6/11**、apple A 從 **5/12 變成 0/2**。
+  **同一句 query 的 top 分數兩輪間 0.377 ↔ 0.899** → Tavily 的時間變異蓋過形式效應，
+  單輪 n=3 分不出任何東西。**不動 `_web_query_en`。** 詳見 docs/EVAL.md §4.7。
+  ⚠ 留下的是**方法**：`eval/probe_web_query_form.py` 還在，要再問這個問題時直接多跑幾輪。
+  〔以下為第一輪的原始數字，保留當病歷〕
+  `eval/probe_web_query_form.py` 的 2×2（問句／關鍵詞 × 有無 ticker，經生產 `_host_allowed` 複核後
+  數「內容裡真的有被問的那個量」）：
+
+  | | A 問句・無ticker（生產現況） | B 問句・**有ticker** | C 關鍵詞・無ticker | D 關鍵詞・有ticker |
+  |---|---|---|---|---|
+  | apple 市值 | 5/12（top .899） | 3/12（top .994） | **0/4** | **0/4** |
+  | msft 市值 | 0/3 | **1/12**（top .997） | 0/5 | 0/4 |
+  | nvda 股價（控制） | 0/2 | **10/10**（top .992） | 0/3 | 0/4 |
+
+  · **關鍵詞形式（C/D）六格全是 0**——`_web_query_en` docstring 記的 2026-08-13「`Apple market cap`
+    → score 0.91」**今天不再成立**。那條註解要改。
+  · **B 在三題都不輸且兩題大勝**，控制題最明顯（0/2 → 10/10）。A 與 B 是同一次 probe 內相隔數秒跑的，
+    時間混淆很小——這正是上面那個錯誤推論缺的控制。
+  ⚠ **只有一輪，而 Tavily 已證實會隨時間變** → 動生產之前要跑第二輪（時間分開）。
+  ⚠ **不可以拿「web-01 有沒有解除 block」當這個修法的證據**：那是為了讓 fixture 錄得漂亮而改受測物
+    ＝量尺與被測物耦合。判準只能是這支 probe（它量 Tavily，不量我們的答案）。
+
+- ~~**「KB 舊值 vs web 新值並陳」缺 validator**~~ → **2026-09-02 補上 R5**
+  （`find_undated_dual_sourcing`，掛在 Synthesize 最末；閘門⑰ 12 項、6/6 變異；
+  281 份既有答案乾跑觸發 1 次且是真陽性）。
+  ⚠ **驗收僅止於確定性那一半，不要當成端到端改善**：掛上前後各三輪，`web-01` 都是 **2/3**。
+    「並陳缺時點」這一型在 before 是 1/3、after 是 0/3——**n=3 遠低於任何解析度**，
+    不能宣稱它被修好了。真正成立的是：R5 在 r6 那份答案上會發話（逐字凍結在 ⑰a），
+    而在其餘 280 份上沉默。以下為原始診斷：
+  同一份 fixture 三輪重放（`web-01`，Apple 市值）：r5 PASS、**r6 FAIL**、r7 PASS。
+  r6 引用了 web 的 $4.75 兆卻**完全沒給時點**，還寫「兩者皆屬於同一時間段的不同來源」
+  ——六月的 KB 快照與九月的 web 值**不是**同一時間段，那是一句錯的話。
+  ⚠ 這條的 `why` 早就寫著「目前這個行為是 Generator 靠 prompt 做到的，validator 那條防線仍然是空的」，
+    **現在有數字了**。`find_unreconciled_web_conflicts` 那個分支實務上幾乎不觸發（見上一條 R4）。
+  **修法方向**：Synthesize 端加一道「web 與 KB 值並陳時，兩邊都必須帶時點」的確定性 validator。
+  **量尺已就位**：`web-01` 的兩條 `must_match`（KB 日期、web 日期）就是它的驗收指標，
+  且**刻意不綁數值也不綁日期寫法**（三輪寫出三種形式，見該條 `_assert_notes`）。
+
+- **`web_ignored`：web 打了、回應可用，但答案一個 web 都沒引用（2026-09-02，兩個獨立實例）。**
+  · `web-01` 第 10 輪：`n_web_calls=1`、fixture 裡有 `stockanalysis.com` 的 $4.75 兆，
+    而答案只有一句——「Apple 目前的市值約為 43,420.2 億美元【AAPL_Fundamentals_20260612.txt, chunk #0】」
+    ——**82 天前的快照當「目前」，零時點揭露、零 web 引用**。
+  · `mh-09`（`check_news_routing` 的 mixed 不對稱判定當天撈出來的）：`c=3` 打了三次 web，
+    答案卻只有財報引用。第二軸把兩者都歸在 `web_ignored`。
+  ⚠ **R5 對這一型正確地沉默**：沒有並陳就沒有時點問題。兩者是不同的病，不要合併成一個失敗率。
+  ⚠ **也不是「web 回垃圾」那一型**：這兩次 web 回應裡都有可用內容（第 10 輪與第 8/9 輪重放的是
+    **同一份 fixture**，而 8/9 兩輪都引用了它）。所以成因在 Generator 的抽樣，不在輸入。
+  **卡點**：確定性守衛不好寫——「web 有內容卻沒被引用」在 web 真的回垃圾時是**正確行為**
+  （見上面 Tavily 那條），兩者在結構層看起來一樣。要分辨得看內容層有沒有被問的那個量＝感知。
+  **現有量尺**：`check_web_claims` 的 `web-01`（逐輪 k/n）＋ `check_news_routing` 的第二軸。
+
+- **web 回應「非空」不等於「答得出來」，而結構性缺口只看得到前者（2026-09-02 命名）。**
+  `_unfulfilled_web_route_gaps` 的判準是 `route ∈ (web, both)` 且 `web_notes` 為空。上面那題
+  web 打了 1 次、拿回一堆**與問題無關但非空**的頁面 → `web_notes` 非空 → **不留缺口**，
+  外觀與「web 成功回答了」完全相同。
+  ⚠ **這是那個函式的設計範圍，不是 bug**（它刻意只做結構性判斷、不看 `realtime_need`）。
+  記在這裡是為了讓這個洞**有名字**：要補得靠內容層判準（web 回應裡到底有沒有被問的那個量），
+  而那是感知不是規則。
+  **可見後果**：答案標題句寫「Apple **目前**的市值約為 43,420.2 億美元」，值來自 **82 天前**
+  的 `AAPL_Fundamentals_20260612` 快照。⚠ **時點有揭露**（第二句寫了 2026-06-12），
+  所以這是「標題句措辭」不是「零揭露」——不要把它報成後者。
+
+- **R4「兩邊都標了出處就閉嘴」那個分支實務上幾乎不會觸發（2026-09-01 查到，方向安全）。**
+  `find_unreconciled_web_conflicts` 用 `w_cited = _WEB_MARK in w["quote"]` ／ `a_cited = _KB_MARK_RE.search(a["quote"])` 判斷「模型是否已經並陳」，兩個條件同時成立才保持沉默。**兩個獨立的理由讓它幾乎恆為 False**：
+  ① `quote` 是 Checker prompt 要求的「答案裡對應的原句片段（**30 字內**）」再截到 60 字元，而一則 web 引用光網址就遠超過 30 字元——片段裡通常根本沒有引用標記。
+  ② `_WEB_MARK = "[web:"` 是**半形**，而實測 40 份答案的 web 引用**全部是全形**【web: …】（生成端跟著中文標點走）。
+  **方向是安全的**：誤報時它要求的動作是「把兩個值連同時點都講清楚」，而那本來就是正確行為（該函式自己的 docstring 就是這樣論證選並陳而非裁決的）。代價只是**多燒一輪 reflect**。
+  **為什麼沒當場修**：改判斷式要先有能證偽它的確定性測試，而 `quote` 是 LLM 產物、目前沒有任何 fixture 錄著真實的 claims 陣列——現在改就是又一個「聽起來合理」的機制假設。
+  **復活條件**：① 錄一份真實 claims（含 quote）當 fixture；② 在 `verify_answer_validators.py` 加一條真值表（全形／半形 × quote 含不含標記 × 值差 >2%），確認「已並陳 → 沉默」與「未並陳 → 發話」兩個方向都測得到。
+  ⚠ 修法**不是**把 `_WEB_MARK` 加上全形就好——①才是主因，而「引用標記在不在 30 字片段裡」是機率問題不是格式問題。真正的修法可能是改判斷來源（看整份答案而不是 quote）。
 
 - **多公司題沒有期別保護。** `_resolve_period_filter_llm` 遇到兩家以上直接回 None，因為 `build_qdrant_filter` 吃 flat AND list、**結構上寫不出 per-ticker 的 OR-of-ANDs**（`MatchAny` 是全域 OR，會讓 A 公司的舊季通過 B 公司的期碼）。正確結構是 `should=[ must=[ticker==AAPL, period==202606 or empty], must=[ticker==MSFT, period==202603 or empty] ]`。
   **卡點是表達力**，要先讓 `build_qdrant_filter` 多接受一種 per-ticker 群組型別。
@@ -280,6 +486,7 @@ web 待辦有一整族**它匹配不到**：
 | **跨期近重複去重／MMR（修法 C）** | 殘留的排擠是**定義出來的**不是缺陷：`k2_newest` 剩下的 48 席全部是「組內恰好 2 份 filing」＝`keep=2` 刻意允許的第二席，**沒有任何一組 >2 ＝ collapse 零漏抓**。再用 `crowding_seats` 追它，量到的只會是 keep 值本身（收益指標與規則同定義的套套邏輯）。而那第二席不是浪費：`keep=1` 讓趨勢題期別覆蓋 −41% | 要有一把**不是 metadata 分組**的尺（內容層近重複）。而本專案量尺已飽和、沒有能調 λ 的尺 |
 | **曆年 vs 財年的年份歧義** | `fiscal_year` filter 現在只認財年，於是「Microsoft **2025 年**的季報」（曆年語意）會降級到 Tier 2。實測**內容沒變差**（前三名仍是 `MSFT_10Q_202512`／`202603`），變的是多一句揭露語 | 要真正解掉得讓 `parse_query_filters` 講出「這個年份是財年還是曆年」——那是動 LLM prompt、會動到 replay 基準與 65 題的檢索結果，**目前判斷不值得** |
 | **期別探針的 gold 不再細修** | 人工複審：**46/49 的 gold 就是該公司最新那一份**，而跨期 collapse 的規則正是「留最新」→ `gold@k` **結構上偏袒它**；3 題「gold 不是最新」的陰性對照經人工讀原文**全是假警報** | ⚠ **偏袒現在跑在生產 collection 上**。復活條件是「下一次要用 `gold@k` 的差值做決定時」——那時它不再是背景說明，是會左右結論的偏差。要修就得重寫 gold 到 **chunk 粒度並標註「哪些期別同樣可接受」**，那是重做題庫等級的工 |
+| **`depends_on` 不做實際解析** | **量下去沒有實例。** 生產 5 題 multi_hop 的 Planner **30 輪／78 個子任務**：**72 個是扇出**（每家公司、兩跳指標各問一次）、**0 個通靈**。原因是候選集合就寫在題面上（「在 A、B、C 三家中」），扇出讓 Generator 自己比大小——對**封閉候選集**這是正確策略，且結構上不需要依賴。剩下 6 個是「延後指涉」（「總營收最高的公司的毛利率是多少」），再往下追一層：`parse_query_filters` 9 次**全回 ticker=None**＝退回廣泛語意搜尋（浪費一個子任務），**不是鎖到錯的公司**——而同題其他輪次的扇出已涵蓋同一片地。欄位名取自的 `mh-07` 在**冷凍 37 題**裡（現在不計分），且它第一跳要的是**新聞**——KB 依設計沒有，就算做出完美的拓撲排序，第一跳照樣空手：那裡的綁定約束是語料不是依賴。**代價那一面**：要把 `_node_execute` 的單波 `ThreadPoolExecutor` 拆成多波，序列化一條**一題已燒 50~60 次 LLM** 的關鍵路徑，而〈明確不做的〉第一條正是為了平行度拒絕拆 node | 任一成立即重評：① 題庫出現**候選集合不在題面上**的比較題（「哪一家的 X 最高」而不列公司）② 冷凍 37 題靠 live web 復活——`mh-06`~`mh-10` 正是這個形狀，那時第一跳才有來源 ③ 延後指涉的子任務被量到**解成錯的單一 ticker**（現在 0/9；那才是危險，比 None 更糟，因為 hard filter 會鎖到別人的財報） |
 | **`faithfulness` 不再追高** | 這是**負空間**：把 gold 當答案餵回去只拿 0.659，多數題輸給系統。往上推等於要求系統比標準答案更保守 | 換 metric 才談 |
 | **`us_stock_rag_edgar_exp4` 的 Fundamentals 比率仍是小數** | exp4 ＝ 歷史基準，早就不是任何入口實際查的東西 | 若日後要拿 exp4 當對照臂，得先跑 `migrate_fundamentals_pct.py`，否則 Fundamentals 類題目的差異分不清是切塊還是單位 |
 | **`sem-08`**（AMZN AWS 策略方向） | 三種系統側修法皆敗於同一真因：生成模型判定「獲利數字」與「策略方向」問法無關而主動略過，**非訊號埋沒** | 只剩調整 rubric 或維持現狀 |

@@ -1,0 +1,1052 @@
+{
+ "plan": {
+  "live|Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？": [
+   {
+    "task": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+    "route": "web"
+   }
+  ],
+  "live|Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？": [
+   {
+    "task": "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？",
+    "route": "web"
+   }
+  ],
+  "live|最近分析師對 Apple 股票有哪些利多的看法？": [
+   {
+    "task": "Apple 最近分析師對其股票的利多看法有哪些",
+    "route": "web"
+   }
+  ],
+  "live|NVIDIA 最近跟 IREN 之間有什麼合作的新聞？": [
+   {
+    "task": "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？",
+    "route": "web"
+   }
+  ],
+  "live|關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？": [
+   {
+    "task": "NVIDIA 最近有什麼關於賣 AI 晶片到中國的消息",
+    "route": "web"
+   }
+  ],
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？": [
+   {
+    "task": "NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？",
+    "route": "web"
+   }
+  ],
+  "live|微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？": [
+   {
+    "task": "微軟最近在 AI 策略上的新消息及分析師的看法",
+    "route": "web"
+   }
+  ],
+  "live|有沒有 Microsoft 參與 AI 資安合作的新聞？": [
+   {
+    "task": "Microsoft 參與 AI 資安合作的新聞有哪些",
+    "route": "web"
+   }
+  ],
+  "live|Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？": [
+   {
+    "task": "Alphabet 最近有什麼大規模籌資或資本支出的消息",
+    "route": "web"
+   }
+  ],
+  "live|最近有哪些關於 Meta 的利多分析與 AI 投資消息？": [
+   {
+    "task": "Meta 最近有哪些利多分析",
+    "route": "web"
+   },
+   {
+    "task": "Meta 最近有哪些 AI 投資的消息",
+    "route": "web"
+   }
+  ],
+  "live|亞馬遜最近在歐洲有什麼大型投資的新聞？": [
+   {
+    "task": "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+    "route": "web"
+   }
+  ],
+  "live|最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？": [
+   {
+    "task": "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？",
+    "route": "web"
+   }
+  ],
+  "live|最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？": [
+   {
+    "task": "Apple 最近的股價有什麼值得注意的消息",
+    "route": "web"
+   },
+   {
+    "task": "Microsoft 最近的股價有什麼值得注意的消息",
+    "route": "web"
+   },
+   {
+    "task": "Amazon 最近的股價有什麼值得注意的消息",
+    "route": "web"
+   },
+   {
+    "task": "Alphabet 最近的股價有什麼值得注意的消息",
+    "route": "web"
+   },
+   {
+    "task": "Meta 最近的股價有什麼值得注意的消息",
+    "route": "web"
+   },
+   {
+    "task": "Nvidia 最近的股價有什麼值得注意的消息",
+    "route": "web"
+   },
+   {
+    "task": "Tesla 最近的股價有什麼值得注意的消息",
+    "route": "web"
+   }
+  ],
+  "live|新聞如何評價 Apple 服務業務的成長與獲利能力？": [
+   {
+    "task": "新聞如何評價 Apple 服務業務的成長與獲利能力？",
+    "route": "web"
+   }
+  ],
+  "live|新聞報導 Apple 為什麼被視為值得長期持有的股票？": [
+   {
+    "task": "Apple 為什麼被視為值得長期持有的股票？",
+    "route": "web"
+   }
+  ],
+  "live|NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？": [
+   {
+    "task": "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？",
+    "route": "web"
+   }
+  ],
+  "live|NVIDIA fiscal year 2026 的 Diluted EPS 是多少？": [
+   {
+    "task": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少",
+    "route": "kb"
+   }
+  ],
+  "live|Apple fiscal year 2025 的 Diluted EPS 是多少？": [
+   {
+    "task": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+    "route": "kb"
+   }
+  ],
+  "live|NVIDIA 的核心技術護城河是什麼？": [
+   {
+    "task": "NVIDIA 的核心技術護城河是什麼",
+    "route": "kb"
+   }
+  ],
+  "live|Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？": [
+   {
+    "task": "Amazon 在 AWS 服務上面臨的反壟斷或監管風險有哪些",
+    "route": "web"
+   },
+   {
+    "task": "Amazon 在 Prime 服務上面臨的反壟斷或監管風險有哪些",
+    "route": "web"
+   },
+   {
+    "task": "Amazon 在電商業務上面臨的反壟斷或監管風險有哪些",
+    "route": "web"
+   }
+  ],
+  "live|Microsoft Azure 最新一季的營收成長率是多少？": [
+   {
+    "task": "Microsoft Azure 最新一季的營收成長率是多少",
+    "route": "kb"
+   }
+  ],
+  "live|NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？": [
+   {
+    "task": "NVIDIA 最新一季資料中心營收成長多少",
+    "route": "kb"
+   },
+   {
+    "task": "NVIDIA 最新一季資料中心的主要驅動產品是什麼",
+    "route": "kb"
+   }
+  ],
+  "live|在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？": [
+   {
+    "task": "NVIDIA 最近一年營收年增率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Meta 最近一年營收年增率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Alphabet 最近一年營收年增率是多少",
+    "route": "kb"
+   },
+   {
+    "task": "NVIDIA 最近十二個月（TTM）的淨利是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Meta 最近十二個月（TTM）的淨利是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Alphabet 最近十二個月（TTM）的淨利是多少",
+    "route": "kb"
+   }
+  ]
+ },
+ "ratio": {
+  "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？": [
+   []
+  ],
+  "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？": [
+   []
+  ],
+  "Apple 最近分析師對其股票的利多看法有哪些": [
+   []
+  ],
+  "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？": [
+   []
+  ],
+  "NVIDIA 最近有什麼關於賣 AI 晶片到中國的消息": [
+   []
+  ],
+  "NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？": [
+   []
+  ],
+  "微軟最近在 AI 策略上的新消息及分析師的看法": [
+   []
+  ],
+  "Microsoft 參與 AI 資安合作的新聞有哪些": [
+   []
+  ],
+  "Alphabet 最近有什麼大規模籌資或資本支出的消息": [
+   []
+  ],
+  "Meta 最近有哪些利多分析\nMeta 最近有哪些 AI 投資的消息": [
+   [],
+   []
+  ],
+  "亞馬遜最近在歐洲有什麼大型投資的新聞？": [
+   []
+  ],
+  "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？": [
+   []
+  ],
+  "Apple 最近的股價有什麼值得注意的消息\nMicrosoft 最近的股價有什麼值得注意的消息\nAmazon 最近的股價有什麼值得注意的消息\nAlphabet 最近的股價有什麼值得注意的消息\nMeta 最近的股價有什麼值得注意的消息\nNvidia 最近的股價有什麼值得注意的消息\nTesla 最近的股價有什麼值得注意的消息": [
+   [],
+   [],
+   [],
+   [],
+   [],
+   [],
+   []
+  ],
+  "新聞如何評價 Apple 服務業務的成長與獲利能力？": [
+   [
+    "Profit Margin",
+    "Revenue Growth"
+   ]
+  ],
+  "Apple 為什麼被視為值得長期持有的股票？": [
+   []
+  ],
+  "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？": [
+   []
+  ],
+  "NVIDIA fiscal year 2026 的 Diluted EPS 是多少": [
+   []
+  ],
+  "Apple fiscal year 2025 的 Diluted EPS 是多少？": [
+   []
+  ],
+  "NVIDIA 的核心技術護城河是什麼": [
+   []
+  ],
+  "Amazon 在 AWS 服務上面臨的反壟斷或監管風險有哪些\nAmazon 在 Prime 服務上面臨的反壟斷或監管風險有哪些\nAmazon 在電商業務上面臨的反壟斷或監管風險有哪些": [
+   [],
+   [],
+   []
+  ],
+  "Microsoft Azure 最新一季的營收成長率是多少": [
+   [
+    "Revenue Growth"
+   ]
+  ],
+  "NVIDIA 最新一季資料中心營收成長多少\nNVIDIA 最新一季資料中心的主要驅動產品是什麼": [
+   [
+    "Revenue Growth"
+   ],
+   []
+  ],
+  "NVIDIA 最近一年營收年增率是多少\nMeta 最近一年營收年增率是多少\nAlphabet 最近一年營收年增率是多少\nNVIDIA 最近十二個月（TTM）的淨利是多少\nMeta 最近十二個月（TTM）的淨利是多少\nAlphabet 最近十二個月（TTM）的淨利是多少": [
+   [
+    "Revenue Growth"
+   ],
+   [
+    "Revenue Growth"
+   ],
+   [
+    "Revenue Growth"
+   ],
+   [],
+   [],
+   []
+  ]
+ },
+ "translate_en": {
+  "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？": "What recent lawsuits or settlement developments involving Siri has Apple reported?",
+  "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？": "What new updates on Siri were announced by Apple at the recent WWDC?",
+  "Apple 最近分析師對其股票的利多看法有哪些": "What recent bullish analyst views are there on Apple’s stock?",
+  "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？": "What recent news is there about a collaboration between NVIDIA and IREN?",
+  "NVIDIA 最近有什麼關於賣 AI 晶片到中國的消息": "What recent news is there regarding NVIDIA's sales of AI chips to China?",
+  "NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？": "What competition and market focus areas are highlighted in recent NVIDIA news?",
+  "微軟最近在 AI 策略上的新消息及分析師的看法": "Microsoft's latest AI strategy updates and analyst commentary",
+  "查詢微軟2026年第三季10-Q中關於AI策略的敘述": "Search Microsoft's Q3 2026 10-Q for statements on its AI strategy.",
+  "查詢微軟2026年最新的財務基本面中AI相關營收與研發支出": "Query Microsoft's latest 2026 financial fundamentals for AI-related revenue and R&D expense",
+  "Microsoft 參與 AI 資安合作的新聞有哪些": "What news coverage exists on Microsoft's participation in AI cybersecurity collaborations?",
+  "Alphabet 最近有什麼大規模籌資或資本支出的消息": "What recent large-scale capital raising or capital expenditure announcements has Alphabet made?",
+  "Meta 最近有哪些利多分析": "What recent bullish analyses are there for Meta?",
+  "Meta 最近有哪些 AI 投資的消息": "What recent AI investment news has Meta disclosed?",
+  "亞馬遜最近在歐洲有什麼大型投資的新聞？": "What recent large-scale investment announcements has Amazon made in Europe?",
+  "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？": "What recent news related to Tesla or Elon Musk is affecting Tesla’s market attention?",
+  "Microsoft 最近的股價有什麼值得注意的消息": "What notable developments are affecting Microsoft's recent share price",
+  "Apple 最近的股價有什麼值得注意的消息": "What notable news is there about Apple's recent stock price?",
+  "新聞如何評價 Apple 服務業務的成長與獲利能力？": "How do news outlets assess the growth and profitability of Apple's services business?",
+  "Apple 為什麼被視為值得長期持有的股票？": "Why is Apple considered a stock worth holding for the long term?",
+  "Apple 的最新基本面數據（營收、淨利、自由現金流等）截至 2026-06-12": "Apple's latest fundamental data (revenue, net income, free cash flow, etc.) as of June 12, 2026",
+  "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？": "Which Bitcoin mining company has NVIDIA recently partnered with for AI business?",
+  "NVIDIA fiscal year 2026 的 Diluted EPS 是多少": "What is NVIDIA's diluted EPS for fiscal year 2026?",
+  "Apple fiscal year 2025 的 Diluted EPS 是多少？": "What is Apple's diluted EPS for fiscal year 2025?",
+  "NVIDIA 的核心技術護城河是什麼": "What is NVIDIA's core technology moat?",
+  "Amazon 在 Prime 服務上面臨的反壟斷或監管風險有哪些": "What antitrust or regulatory risks does Amazon face regarding its Prime service?",
+  "Amazon 在 AWS 服務上面臨的反壟斷或監管風險有哪些": "What antitrust or regulatory risks does Amazon face regarding its AWS business?",
+  "Microsoft Azure 最新一季的營收成長率是多少": "What was Microsoft Azure's revenue growth rate for the most recent quarter?",
+  "NVIDIA 最新一季資料中心營收成長多少": "What was NVIDIA's data center revenue growth in the most recent quarter?",
+  "NVIDIA 最新一季資料中心的主要驅動產品是什麼": "What were the primary driver products for NVIDIA’s most recent quarter data center segment?",
+  "NVIDIA 最近一年營收年增率是多少": "What was NVIDIA's year-over-year revenue growth rate for the past year?",
+  "Meta 最近一年營收年增率是多少": "What was Meta's revenue year-over-year growth rate over the past year?",
+  "Alphabet 最近一年營收年增率是多少": "What was Alphabet's revenue year-over-year growth rate for the past year?",
+  "NVIDIA 最近十二個月（TTM）的淨利是多少": "What is NVIDIA's net income for the trailing twelve months (TTM)?",
+  "Meta 最近十二個月（TTM）的淨利是多少": "What is Meta's net income for the trailing twelve months (TTM)?",
+  "Alphabet 最近十二個月（TTM）的淨利是多少": "What is Alphabet's net income for the trailing twelve months (TTM)?"
+ },
+ "replan": {
+  "live|Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？|0:done:1:web:Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2024年至2026年Apple與Siri相關的法律訴訟或和解的具體案例與細節",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？|0:done:1:web:Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？|1:done:0:web:查找2024年至2026年Apple與Siri相關的法律訴訟或和解的具體案例與細節": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2024年至2026年Apple與Siri相關的法律訴訟或和解的最新新聞報導",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？|0:done:1:web:Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？|1:done:0:web:查找2024年至2026年Apple與Siri相關的法律訴訟或和解的具體案例與細節|2:done:0:web:查找2024年至2026年Apple與Siri相關的法律訴訟或和解的最新新聞報導": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2024年至2026年Apple與Siri相關的法律訴訟或和解的最新新聞報導，聚焦於具體案件名稱、法院、金額或和解條款",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？|0:done:1:web:Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？|1:done:0:web:查找2024年至2026年Apple與Siri相關的法律訴訟或和解的具體案例與細節|2:done:0:web:查找2024年至2026年Apple與Siri相關的法律訴訟或和解的最新新聞報導|3:done:0:web:查找2024年至2026年Apple與Siri相關的法律訴訟或和解的最新新聞報導，聚焦於具體案件名稱、法院、金額或和解條款": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2024年至2026年Apple因Siri的隱私或數據使用問題所涉及的訴訟或和解案件，包含法院、原告、金額或和解條款",
+     "route": "web"
+    },
+    {
+     "task": "查找2024年至2026年Apple因Siri的語音錄音或誤觸發問題所涉及的訴訟或和解案件，包含具體案件名稱與結果",
+     "route": "web"
+    },
+    {
+     "task": "查找2024年至2026年Apple因Siri在特定國家或地區的合規問題（如歐盟GDPR）所涉及的法律訴訟或和解",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？|0:done:1:web:Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？|1:done:0:web:查找2024年至2026年Apple與Siri相關的法律訴訟或和解的具體案例與細節|2:done:0:web:查找2024年至2026年Apple與Siri相關的法律訴訟或和解的最新新聞報導|3:done:0:web:查找2024年至2026年Apple與Siri相關的法律訴訟或和解的最新新聞報導，聚焦於具體案件名稱、法院、金額或和解條款|4:done:0:web:查找2024年至2026年Apple因Siri的隱私或數據使用問題所涉及的訴訟或和解案件，包含法院、原告、金額或和解條款|5:done:0:web:查找2024年至2026年Apple因Siri的語音錄音或誤觸發問題所涉及的訴訟或和解案件，包含具體案件名稱與結果|6:done:0:web:查找2024年至2026年Apple因Siri在特定國家或地區的合規問題（如歐盟GDPR）所涉及的法律訴訟或和解": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2024年至2026年Apple因Siri涉及的具體訴訟案件名稱、法院、原告、被告、金額或和解條款的最新新聞",
+     "route": "web"
+    },
+    {
+     "task": "查找2024年至2026年Apple因Siri的隱私或數據使用問題在歐盟或其他地區的法律訴訟或和解的官方法院文件或監管機構公告",
+     "route": "web"
+    },
+    {
+     "task": "查找2024年至2026年Apple因Siri的語音錄音或誤觸發問題的具體訴訟或和解案件的詳細報導",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？|0:done:1:web:Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|最近分析師對 Apple 股票有哪些利多的看法？|0:done:1:web:Apple 最近分析師對其股票的利多看法有哪些": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|NVIDIA 最近跟 IREN 之間有什麼合作的新聞？|0:done:1:web:NVIDIA 最近跟 IREN 之間有什麼合作的新聞？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？|0:done:1:web:NVIDIA 最近有什麼關於賣 AI 晶片到中國的消息": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？|0:done:1:web:NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？|0:done:1:web:NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？|1:done:0:web:查找2026年最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年8月到2026年9月的新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？|0:done:1:web:NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？|1:done:0:web:查找2026年最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|2:done:0:web:查找2026年8月到2026年9月的新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找截至2026-09-01的最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？|0:done:1:web:NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？|1:done:0:web:查找2026年最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|2:done:0:web:查找2026年8月到2026年9月的新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|3:done:0:web:查找截至2026-09-01的最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年9月1日前的分析師評論或市場報告，聚焦於NVIDIA財報前的競爭與市場焦點",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？|0:done:1:web:NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？|1:done:0:web:查找2026年最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|2:done:0:web:查找2026年8月到2026年9月的新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|3:done:0:web:查找截至2026-09-01的最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|4:done:0:web:查找2026年9月1日前的分析師評論或市場報告，聚焦於NVIDIA財報前的競爭與市場焦點": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年最新的新聞與分析師報告，聚焦於NVIDIA財報前的競爭對手（如AMD、Intel等）與市場焦點（AI晶片、資料中心需求等）",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？|0:done:1:web:NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？|1:done:0:web:查找2026年最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|2:done:0:web:查找2026年8月到2026年9月的新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|3:done:0:web:查找截至2026-09-01的最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|4:done:0:web:查找2026年9月1日前的分析師評論或市場報告，聚焦於NVIDIA財報前的競爭與市場焦點|5:done:0:web:查找2026年最新的新聞與分析師報告，聚焦於NVIDIA財報前的競爭對手（如AMD、Intel等）與市場焦點（AI晶片、資料中心需求等）": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "搜尋2026年1月至2026年7月的新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點（如AMD、Intel、AI晶片、資料中心需求等）",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？|0:done:1:web:NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？|1:done:0:web:查找2026年最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|2:done:0:web:查找2026年8月到2026年9月的新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|3:done:0:web:查找截至2026-09-01的最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點|4:done:0:web:查找2026年9月1日前的分析師評論或市場報告，聚焦於NVIDIA財報前的競爭與市場焦點|5:done:0:web:查找2026年最新的新聞與分析師報告，聚焦於NVIDIA財報前的競爭對手（如AMD、Intel等）與市場焦點（AI晶片、資料中心需求等）|6:done:0:web:搜尋2026年1月至2026年7月的新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點（如AMD、Intel、AI晶片、資料中心需求等）": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年9月1日前的 Bloomberg 與 Reuters 報導，聚焦於 NVIDIA 財報前的競爭對手與市場焦點",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？|0:done:1:web:微軟最近在 AI 策略上的新消息及分析師的看法": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢微軟2026年第三季10-Q中關於AI策略的敘述",
+     "route": "kb"
+    },
+    {
+     "task": "查詢微軟2026年最新的財務基本面中AI相關營收與研發支出",
+     "route": "kb"
+    }
+   ],
+   "drop": []
+  },
+  "live|微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？|0:done:1:web:微軟最近在 AI 策略上的新消息及分析師的看法|1:done:0:kb:查詢微軟2026年第三季10-Q中關於AI策略的敘述|2:done:0:kb:查詢微軟2026年最新的財務基本面中AI相關營收與研發支出": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢分析師對微軟AI策略的看法及近期相關新聞",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？|0:done:1:web:微軟最近在 AI 策略上的新消息及分析師的看法|1:done:0:kb:查詢微軟2026年第三季10-Q中關於AI策略的敘述|2:done:0:kb:查詢微軟2026年最新的財務基本面中AI相關營收與研發支出|3:done:0:web:查詢分析師對微軟AI策略的看法及近期相關新聞": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "取得分析師對微軟AI策略的看法的最新報導",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？|0:done:1:web:微軟最近在 AI 策略上的新消息及分析師的看法|1:done:0:kb:查詢微軟2026年第三季10-Q中關於AI策略的敘述|2:done:0:kb:查詢微軟2026年最新的財務基本面中AI相關營收與研發支出|3:done:0:web:查詢分析師對微軟AI策略的看法及近期相關新聞|4:done:0:web:取得分析師對微軟AI策略的看法的最新報導": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢2026年9月以來分析師對微軟 AI 策略的最新評價與評論",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？|0:done:1:web:微軟最近在 AI 策略上的新消息及分析師的看法|1:done:0:kb:查詢微軟2026年第三季10-Q中關於AI策略的敘述|2:done:0:kb:查詢微軟2026年最新的財務基本面中AI相關營收與研發支出|3:done:0:web:查詢分析師對微軟AI策略的看法及近期相關新聞|4:done:0:web:取得分析師對微軟AI策略的看法的最新報導|5:done:0:web:查詢2026年9月以來分析師對微軟 AI 策略的最新評價與評論": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "取得2026年9月以來分析師對微軟 AI 策略的最新評價與評論",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？|0:done:1:web:微軟最近在 AI 策略上的新消息及分析師的看法|1:done:0:kb:查詢微軟2026年第三季10-Q中關於AI策略的敘述|2:done:0:kb:查詢微軟2026年最新的財務基本面中AI相關營收與研發支出|3:done:0:web:查詢分析師對微軟AI策略的看法及近期相關新聞|4:done:0:web:取得分析師對微軟AI策略的看法的最新報導|5:done:0:web:查詢2026年9月以來分析師對微軟 AI 策略的最新評價與評論|6:done:0:web:取得2026年9月以來分析師對微軟 AI 策略的最新評價與評論": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢2026年9月以來的分析師對微軟 AI 策略的具體評價與目標價變化",
+     "route": "web"
+    },
+    {
+     "task": "查詢2026年9月以來的新聞報導中微軟 AI 策略的最新進展與發布",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    5,
+    6
+   ]
+  },
+  "live|有沒有 Microsoft 參與 AI 資安合作的新聞？|0:done:1:web:Microsoft 參與 AI 資安合作的新聞有哪些": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？|0:done:1:web:Alphabet 最近有什麼大規模籌資或資本支出的消息": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|最近有哪些關於 Meta 的利多分析與 AI 投資消息？|0:done:1:web:Meta 最近有哪些利多分析|1:done:1:web:Meta 最近有哪些 AI 投資的消息": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|亞馬遜最近在歐洲有什麼大型投資的新聞？|0:done:1:web:亞馬遜最近在歐洲有什麼大型投資的新聞？": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2026年最新的亞馬遜在歐洲的大型投資新聞，聚焦於物流、數據中心或其他重大項目",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|亞馬遜最近在歐洲有什麼大型投資的新聞？|0:done:1:web:亞馬遜最近在歐洲有什麼大型投資的新聞？|1:done:0:web:查找2026年最新的亞馬遜在歐洲的大型投資新聞，聚焦於物流、數據中心或其他重大項目": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？|0:done:1:web:最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？|0:done:1:web:Apple 最近的股價有什麼值得注意的消息|1:done:1:web:Microsoft 最近的股價有什麼值得注意的消息|2:done:0:web:Amazon 最近的股價有什麼值得注意的消息|3:done:0:web:Alphabet 最近的股價有什麼值得注意的消息|4:done:0:web:Meta 最近的股價有什麼值得注意的消息|5:done:0:web:Nvidia 最近的股價有什麼值得注意的消息|6:done:0:web:Tesla 最近的股價有什麼值得注意的消息": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "Magnificent Seven 最近的股價有什麼值得注意的消息",
+     "route": "web"
+    }
+   ],
+   "drop": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|新聞如何評價 Apple 服務業務的成長與獲利能力？|0:done:1:web:新聞如何評價 Apple 服務業務的成長與獲利能力？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|新聞報導 Apple 為什麼被視為值得長期持有的股票？|0:done:1:web:Apple 為什麼被視為值得長期持有的股票？": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "Apple 的最新基本面數據（營收、淨利、自由現金流等）截至 2026-06-12",
+     "route": "kb"
+    }
+   ],
+   "drop": []
+  },
+  "live|新聞報導 Apple 為什麼被視為值得長期持有的股票？|0:done:1:web:Apple 為什麼被視為值得長期持有的股票？|1:done:0:kb:Apple 的最新基本面數據（營收、淨利、自由現金流等）截至 2026-06-12": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找近期新聞與分析師觀點，說明 Apple 為何被視為值得長期持有的股票",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|新聞報導 Apple 為什麼被視為值得長期持有的股票？|0:done:1:web:Apple 為什麼被視為值得長期持有的股票？|1:done:0:kb:Apple 的最新基本面數據（營收、淨利、自由現金流等）截至 2026-06-12|2:done:0:web:查找近期新聞與分析師觀點，說明 Apple 為何被視為值得長期持有的股票": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查找2024年至2026年期間的新聞與分析師報告，說明 Apple 為何被視為值得長期持有的股票",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|新聞報導 Apple 為什麼被視為值得長期持有的股票？|0:done:1:web:Apple 為什麼被視為值得長期持有的股票？|1:done:0:kb:Apple 的最新基本面數據（營收、淨利、自由現金流等）截至 2026-06-12|2:done:0:web:查找近期新聞與分析師觀點，說明 Apple 為何被視為值得長期持有的股票|3:done:0:web:查找2024年至2026年期間的新聞與分析師報告，說明 Apple 為何被視為值得長期持有的股票": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|0:done:1:web:NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|NVIDIA fiscal year 2026 的 Diluted EPS 是多少？|0:done:0:kb:NVIDIA fiscal year 2026 的 Diluted EPS 是多少": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|Apple fiscal year 2025 的 Diluted EPS 是多少？|0:done:0:kb:Apple fiscal year 2025 的 Diluted EPS 是多少？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|NVIDIA 的核心技術護城河是什麼？|0:done:0:kb:NVIDIA 的核心技術護城河是什麼": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？|0:done:1:web:Amazon 在 AWS 服務上面臨的反壟斷或監管風險有哪些|1:done:1:web:Amazon 在 Prime 服務上面臨的反壟斷或監管風險有哪些|2:done:0:web:Amazon 在電商業務上面臨的反壟斷或監管風險有哪些": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "2024-2026 年度 Amazon 在 AWS 服務的主要反壟斷或監管調查與訴訟概況",
+     "route": "web"
+    },
+    {
+     "task": "2024-2026 年度 Amazon Prime 服務的主要反壟斷或監管風險與相關案件",
+     "route": "web"
+    },
+    {
+     "task": "2024-2026 年度 Amazon 電商業務的主要反壟斷或監管調查與訴訟概況",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？|0:done:1:web:Amazon 在 AWS 服務上面臨的反壟斷或監管風險有哪些|1:done:1:web:Amazon 在 Prime 服務上面臨的反壟斷或監管風險有哪些|2:done:0:web:Amazon 在電商業務上面臨的反壟斷或監管風險有哪些|3:done:0:web:2024-2026 年度 Amazon 在 AWS 服務的主要反壟斷或監管調查與訴訟概況|4:done:0:web:2024-2026 年度 Amazon Prime 服務的主要反壟斷或監管風險與相關案件|5:done:0:web:2024-2026 年度 Amazon 電商業務的主要反壟斷或監管調查與訴訟概況": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查詢 2024-2026 年 Amazon 在 AWS、Prime 及電商業務的主要反壟斷與監管調查與訴訟情況",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？|0:done:1:web:Amazon 在 AWS 服務上面臨的反壟斷或監管風險有哪些|1:done:1:web:Amazon 在 Prime 服務上面臨的反壟斷或監管風險有哪些|2:done:0:web:Amazon 在電商業務上面臨的反壟斷或監管風險有哪些|3:done:0:web:2024-2026 年度 Amazon 在 AWS 服務的主要反壟斷或監管調查與訴訟概況|4:done:0:web:2024-2026 年度 Amazon Prime 服務的主要反壟斷或監管風險與相關案件|5:done:0:web:2024-2026 年度 Amazon 電商業務的主要反壟斷或監管調查與訴訟概況|6:done:0:web:查詢 2024-2026 年 Amazon 在 AWS、Prime 及電商業務的主要反壟斷與監管調查與訴訟情況": {
+   "sufficient": false,
+   "add": [
+    {
+     "task": "查閱 Amazon 2024-2025 年 10-K 及 2026 Q2 10-Q 中的風險因素，了解 AWS、Prime 與電商業務的反壟斷或監管風險",
+     "route": "kb"
+    },
+    {
+     "task": "搜尋 2024-2026 年期間關於 Amazon AWS、Prime 及電商業務的最新反壟斷與監管新聞、分析師報告與官方聲明",
+     "route": "web"
+    }
+   ],
+   "drop": []
+  },
+  "live|Microsoft Azure 最新一季的營收成長率是多少？|0:done:0:kb:Microsoft Azure 最新一季的營收成長率是多少": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？|0:done:0:kb:NVIDIA 最新一季資料中心營收成長多少|1:done:0:kb:NVIDIA 最新一季資料中心的主要驅動產品是什麼": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？|0:done:0:kb:NVIDIA 最近一年營收年增率是多少|1:done:0:kb:Meta 最近一年營收年增率是多少|2:done:0:kb:Alphabet 最近一年營收年增率是多少|3:done:1:kb:NVIDIA 最近十二個月（TTM）的淨利是多少|4:done:0:kb:Meta 最近十二個月（TTM）的淨利是多少|5:done:0:kb:Alphabet 最近十二個月（TTM）的淨利是多少": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  }
+ },
+ "period_intent": {
+  "查詢微軟2026年第三季10-Q中關於AI策略的敘述": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "查詢微軟2026年最新的財務基本面中AI相關營收與研發支出": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Microsoft FY2026 AI revenue amount in 10-K": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Microsoft 2026 10-K AI revenue amount and AI-specific research and development expense": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Apple 的最新基本面數據（營收、淨利、自由現金流等）截至 2026-06-12": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Apple 2026-06-12 free cash flow figure from 10-Q": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Apple 2026-06-12 free cash flow figure": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "NVIDIA fiscal year 2026 的 Diluted EPS 是多少": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Apple fiscal year 2025 的 Diluted EPS 是多少？": {
+   "period_ref": "absolute",
+   "fiscal_year": 2025,
+   "granularity": "annual"
+  },
+  "NVIDIA 的核心技術護城河是什麼": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft Azure 最新一季的營收成長率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "NVIDIA 最新一季資料中心營收成長多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "NVIDIA 最新一季資料中心的主要驅動產品是什麼": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "NVIDIA 最近一年營收年增率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Meta 最近一年營收年增率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Alphabet 最近一年營收年增率是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "NVIDIA 最近十二個月（TTM）的淨利是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Meta 最近十二個月（TTM）的淨利是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Alphabet 最近十二個月（TTM）的淨利是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  }
+ },
+ "check": {
+  "查詢微軟2026年第三季10-Q中關於AI策略的敘述 || MSFT_10Q_202603.html#63 MSFT_10Q_202603.html#48 MSFT_10Q_202603.html#66 MSFT_10Q_202603.html#74 MSFT_10Q_202603.html#68 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#48",
+    "MSFT_10Q_202603.html#63",
+    "MSFT_10Q_202603.html#66",
+    "MSFT_10Q_202603.html#74",
+    "MSFT_10Q_202603.html#68"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢微軟2026年最新的財務基本面中AI相關營收與研發支出 || MSFT_10K_2026.html#131 MSFT_10K_2026.html#128 MSFT_10K_2026.html#132 MSFT_10K_2026.html#125 MSFT_10K_2026.html#0 || live": {
+   "sufficient": false,
+   "missing": "AI相關營收的具體金額或比例（如 AI 服務、Azure AI 等在 FY2026 的營收數字）",
+   "new_query": "Microsoft FY2026 AI revenue amount in 10-K",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#131",
+    "MSFT_10K_2026.html#128",
+    "MSFT_10K_2026.html#132",
+    "MSFT_10K_2026.html#125",
+    "MSFT_10K_2026.html#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢微軟2026年最新的財務基本面中AI相關營收與研發支出 || MSFT_10K_2026.html#128 MSFT_10K_2026.html#126 MSFT_10K_2026.html#129 MSFT_10K_2026.html#0 MSFT_10K_2026.html#131 || live": {
+   "sufficient": false,
+   "missing": "缺少 AI 相關營收的具體金額（如 Azure AI、Copilot 等產品的收入）以及 AI 研發支出的具體金額或佔比",
+   "new_query": "Microsoft 2026 10-K AI revenue amount and AI-specific research and development expense",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#128",
+    "MSFT_10K_2026.html#129",
+    "MSFT_10K_2026.html#0",
+    "MSFT_10K_2026.html#131"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢微軟2026年最新的財務基本面中AI相關營收與研發支出 || MSFT_10K_2026.html#131 MSFT_10K_2026.html#128 MSFT_10K_2026.html#132 MSFT_10K_2026.html#129 MSFT_10K_2026.html#125 || live": {
+   "sufficient": false,
+   "missing": "缺少 AI 相關營收的具體金額，以及 AI 相關研發支出的具體金額或佔比（如 AI 研發支出分項）",
+   "new_query": "Microsoft FY2026 AI revenue amount and AI-specific research and development expense",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#131",
+    "MSFT_10K_2026.html#128",
+    "MSFT_10K_2026.html#132",
+    "MSFT_10K_2026.html#129",
+    "MSFT_10K_2026.html#125"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Apple 的最新基本面數據（營收、淨利、自由現金流等）截至 2026-06-12 || AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202606.html#2 AAPL_10Q_202606.html#0 AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#17 || live": {
+   "sufficient": false,
+   "missing": "缺少直接列出的自由現金流數值（如 Free Cash Flow = …）",
+   "new_query": "Apple 2026-06-12 free cash flow figure from 10-Q",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0",
+    "AAPL_10Q_202606.html#2",
+    "AAPL_10Q_202606.html#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Apple 的最新基本面數據（營收、淨利、自由現金流等）截至 2026-06-12 || AAPL_10Q_202606.html#2 AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202603.html#17 AAPL_10Q_202603.html#2 AAPL_10Q_202606.html#0 || live": {
+   "sufficient": false,
+   "missing": "缺少明確的自由現金流（Free Cash Flow）數值，片段中只提供營運現金流與資本支出，未直接列出自由現金流。",
+   "new_query": "Apple 2026-06-12 free cash flow figure",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0",
+    "AAPL_10Q_202606.html#2"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA fiscal year 2026 的 Diluted EPS 是多少 || NVDA_10K_2026.html#164 NVDA_10Q_202604.html#14 NVDA_10K_2026.html#181 NVDA_10Q_202510.html#15 NVDA_10K_2026.html#203 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#164",
+    "NVDA_10K_2026.html#181"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Apple fiscal year 2025 的 Diluted EPS 是多少？ || AAPL_10K_2025.html#0 AAPL_10Q_202512.html#15 AAPL_10K_2025.html#115 AAPL_10Q_202512.html#18 AAPL_10Q_202506.html#20 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_10K_2025.html#0",
+    "AAPL_10K_2025.html#115"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 的核心技術護城河是什麼 || NVDA_10K_2026.html#20 NVDA_10K_2025.html#19 NVDA_10K_2026.html#28 NVDA_10K_2025.html#27 NVDA_10K_2026.html#120 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#20",
+    "NVDA_10K_2025.html#19",
+    "NVDA_10K_2026.html#28",
+    "NVDA_10K_2025.html#27",
+    "NVDA_10K_2026.html#120"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Microsoft Azure 最新一季的營收成長率是多少 || MSFT_10Q_202603.html#75 MSFT_10Q_202603.html#65 MSFT_10Q_202603.html#62 MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#69 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#75",
+    "MSFT_10Q_202603.html#49",
+    "MSFT_10Q_202603.html#69"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 最新一季資料中心營收成長多少 || NVDA_10Q_202604.html#42 NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#35 NVDA_10Q_202604.html#14 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10Q_202604.html#47"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 最新一季資料中心的主要驅動產品是什麼 || NVDA_10Q_202604.html#42 NVDA_Fundamentals_20260612.txt#2 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#34 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10Q_202604.html#42"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 最近一年營收年增率是多少 || NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 NVDA_10K_2026.html#20 NVDA_10K_2026.html#203 NVDA_10K_2026.html#165 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0",
+    "NVDA_10K_2026.html#164",
+    "NVDA_10K_2026.html#203"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Meta 最近一年營收年增率是多少 || META_Fundamentals_20260612.txt#0 META_Fundamentals_20260612.txt#1 META_IncomeStatement_20260612.txt#4 META_10K_2025.html#0 META_10K_2025.html#2 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Alphabet 最近一年營收年增率是多少 || GOOGL_Fundamentals_20260612.txt#0 GOOGL_10K_2025.html#282 GOOGL_10K_2025.html#268 GOOGL_10K_2025.html#272 GOOGL_10K_2025.html#271 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 最近十二個月（TTM）的淨利是多少 || NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 NVDA_10K_2026.html#165 NVDA_10K_2026.html#181 NVDA_10K_2026.html#166 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 81 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "NVIDIA 最近十二個月（TTM）的淨利是多少",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "Meta 最近十二個月（TTM）的淨利是多少 || META_Fundamentals_20260612.txt#0 META_Fundamentals_20260612.txt#1 META_10Q_202606.html#15 META_10Q_202606.html#2 META_10Q_202606.html#0 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Alphabet 最近十二個月（TTM）的淨利是多少 || GOOGL_Fundamentals_20260612.txt#0 GOOGL_10K_2025.html#2 GOOGL_10K_2025.html#271 GOOGL_10K_2025.html#269 GOOGL_10K_2025.html#268 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  }
+ }
+}

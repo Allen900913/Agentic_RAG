@@ -412,7 +412,26 @@ _COVERAGE_SOURCE_RE = re.compile(
 #   它曾是 `最近|最新|近期|目前|現在|截至今天|今日|latest|recent|current|today` 的詞表，
 #   實測 18 個真實時效措辭漏 10 個。要判「這題要不要即時資料」請看 Grader 的 `realtime_need`，
 #   要判「這次答案有沒有用到新聞」請看 `_news_freshness_gaps`——兩者都不靠字串比對。
-_WEB_TODO_RE = re.compile(r"網路|上網|web\s*search|internet", re.IGNORECASE)
+# ⚠ `_WEB_TODO_RE` / `_is_web_todo` 已於 2026-09-02 **從碼上刪除**（路由改成 todo 的 `route`
+#   欄位之後，最後一個呼叫端——`_node_replan` 的 snapshot web-todo 拒絕——換成讀 route）。
+#   留這段是因為它在多處註解／CHANGELOG／閘門⑧p 被引用：它曾是
+#   `網路|上網|web search|internet` 的詞表，而 replan 實際生出的是「在 Yahoo Finance 上查詢」
+#   「使用NASDAQ官方網站」——**一個都不匹配**（六個真實措辭逐字凍結在閘門⑧p）。
+#   它是「用硬編碼詞表做感知」的第三個死者（前兩個：`rq.looks_like_news_query`、
+#   `_RELATIVE_TIME_RE`）。要判「這個待辦該不該上網」請讀 `route` 欄位。
+
+# 路由：這個子問題該去哪裡拿資料。**封閉集合**——CLAUDE.md 說硬編碼詞表是警訊，
+# 而「格式定義的封閉集合」是那條規則明列的正當例外（同 `VALID_*_ITEMS`）。
+VALID_ROUTES = ("kb", "web", "both")
+
+# ⚠ **兩個預設值刻意不同，因為它們回答的是不同的問題**（判準見 `_parse_plan_output`）：
+#   · 舊格式的純字串 → `kb`：管的是**可重現性**。既有 fixture 是在「KB 先撈、web 當
+#     fallback」的世界錄的；落到 web/both 會讓每一份既有重放都憑空多打網路 ＝ 基準不再可比。
+#   · 新格式缺 route／填了非法值 → `both`：管的是**代價不對稱**（同 `realtime_need` 那條
+#     「判不出來填 days 不填 none」）。誤判成 kb 會讓新聞題**拿財報冒充新聞且零揭露**，
+#     那個失敗看不見；誤判成 both 只是多打一次網路。
+_ROUTE_LEGACY_DEFAULT = "kb"
+_ROUTE_UNCERTAIN_DEFAULT = "both"
 
 # 時效需求分級 → 容忍幾天（2026-08-13）。**分工**：「這題要多新」沒有唯一機械答案 → 交給 Grader
 # 判（`realtime_need` 欄位，只在 live 模式問）；「來源多舊」是確定性的 → 交給 Python 從檔名算。
@@ -1401,10 +1420,6 @@ def _news_freshness_gaps(chunks: list[dict], as_of: date) -> list[dict]:
     return gaps
 
 
-def _is_web_todo(task: str) -> bool:
-    return bool(_WEB_TODO_RE.search(task or ""))
-
-
 def _unmet_realtime_gaps(task: str, need: str, chunks: list[dict], as_of: date) -> list[dict]:
     """這個子問題**需要即時資料**（Grader 判 `realtime_need != none`）→ 記一筆時效缺口。
 
@@ -1429,6 +1444,25 @@ def _unmet_realtime_gaps(task: str, need: str, chunks: list[dict], as_of: date) 
     ceiling = _kb_ceiling_date(chunks) if chunks else None
     return [{"ticker": ticker, "cutoff": ceiling.isoformat() if ceiling else "",
              "as_of": as_of.isoformat(), "doc_type": "realtime", "need": need}]
+
+
+def _unfulfilled_web_route_gaps(route: str, web_notes: list[str], chunks: list[dict],
+                                as_of: date) -> list[dict]:
+    """**被路由到 web 的待辦卻一次 web 都沒拿到** → 記一筆時效缺口。確定性，零 LLM。
+
+    ⚠ **刻意不看 `realtime_need`**（`_unmet_realtime_gaps` 走的是那條路）。那個欄位是
+      Grader 的三分類 LLM 輸出，BACKLOG 記著它在一個措辭族上實測 0/3；而且它要 Grader
+      跑過才有值——`route=web` ＋ 預算用完時我們根本沒跑到 Grader，那條路必然沉默。
+      這裡的判準是**結構性**的：Planner 說這題要上網，而網路一次都沒查到。零判斷成分。
+
+    ⚠ 只在 live 才會被呼叫（見 `_run_one_todo`）。snapshot 下 `_effective_route` 已把
+      route 降級成 kb，這裡也不會有陽性——**eval 基準因此一格不動**（閘門⑪z5）。
+    """
+    if route not in ("web", "both") or web_notes:
+        return []
+    ceiling = _kb_ceiling_date(chunks) if chunks else None
+    return [{"ticker": "", "cutoff": ceiling.isoformat() if ceiling else "",
+             "as_of": as_of.isoformat(), "doc_type": "realtime", "need": "days"}]
 
 
 # ── 口徑揭露 validator（確定性，零 LLM）─────────────────────────────────────────
@@ -1731,19 +1765,27 @@ _PLANNER_PROMPT = f"""你是美股情報 RAG 的規劃器。把使用者問題�
     釘具體季度**——寫「X 目前的毛利率」而非「X FY20XX QX 的毛利率」。這類指標的權威來源是 Fundamentals 的
     TTM 預算值(無季度標記);一旦把子問題釘成某季,檢索會被季度導向 10-Q、把 TTM 來源整個濾出候選池,
     導致答錯口徑(季度 vs TTM)。唯有原問題自己明講某一季(如「FY2026 Q2 毛利率」)才照寫那一季。
-- 【不要注入來源類型】除非使用者原句明講「新聞 / 報導」或「財報 / 財務數字」,否則**絕不**在子問題裡自行加上
-  「在新聞中 / 相關新聞內容 / 在財報中」等來源限定詞。特別是「如何 / 為何 / 怎麼做 / 靠什麼」這類問策略、
-  競爭定位、商業模式、產品佈局的定性題——答案通常寫在 10-K / 10-Q 的業務描述(business / competition /
-  strategy)段落,不是新聞;把它硬改寫成「…的新聞內容是什麼」會讓檢索只撈 news、漏掉正解。保持子問題來源中性
-  (照原問法問「X 如何做 Y」),讓 hybrid 檢索自己決定命中哪種文件。
-  ·【量化財務題同樣不得注入新聞】「營收/營業利益/毛利/成長多少/成長率/YoY/花了多少錢/收購價/出貨量」等
-    金額與其「驅動因素 / 主要原因 / 如何影響某部門」的歸因,一律寫在 10-Q/10-K 的財報數字與 MD&A(管理層
-    討論與分析),**不是**新聞。像「X 最新一季營收成長多少?驅動因素是什麼」「收購 Y 花多少錢?如何影響 Z 部門」
-    這種題,子問題絕不可加「…的新聞內容是什麼 / 相關新聞」——那會把 10-Q 擠掉、只撈到零散新聞而漏掉正解。
-    ⚠ **不再有例外**(2026-08-19 KB 拔除新聞):向量庫裡**只有** 10-K/10-Q 與 Fundamentals,
-    沒有任何新聞 chunk。原句是市場事件/情緒/風評(「因為某公司要上市被搶風頭」「傳出裁員」)時,
-    子問題照原問法寫成中性事實查詢即可——那類內容由 live web 補,不是靠向量庫。寫成
-    「…的新聞內容是什麼」只會撈到空的。
+- 【子問題文字保持來源中性】**來源由下面的 route 欄位決定,不要寫進子問題的文字裡**。
+  絕不在 task 裡自行加上「在新聞中 / 相關新聞內容 / 在財報中」等來源限定詞——照原問法寫
+  (「X 如何做 Y」「X 最近有什麼消息」),讓 route 去說它該往哪裡查。
+- 【路由 route】每個子問題除了 task,還要判一個 route:
+  · "kb"   ── 答案在 10-K / 10-Q / Fundamentals 裡:財報數字、比率、營收/獲利/成長率、
+              業務與策略與競爭與風險敘述、指定財報期間的事實、跨公司財務比較。
+              ⚠ 「最新一季」「上一季」「最近一個財年」屬於這一類——那是**財報期別**(由 filing
+              定義),不是 wall clock。
+              ⚠ **定性題也在這裡**:問「如何 / 為何 / 靠什麼 / 競爭優勢 / 護城河 / 商業模式 /
+              面臨哪些風險」的題目,答案寫在 10-K 的 business、competition、risk factors 與
+              MD&A 段落,**不是新聞**。**「監管」「反壟斷」「訴訟」「地緣政治」「供應鏈風險」
+              這些字本身不代表要上網**——公司自己在 10-K Item 1A 就逐條列著這些風險。
+              只有問句帶了時間動態(「最近有什麼進展」「最新裁決」「這週的消息」)才算 web。
+  · "web"  ── 知識庫**結構上沒有這種資料**:新聞、報導、分析師看法/目標價/評等、市場情緒與風評、
+              公司公告與事件。⚠ 向量庫裡**沒有任何新聞 chunk**,這類子問題送 kb 等於撈不到,
+              而模型會拿舊財報硬答且不會交代——那比答不出來更糟。
+  · "both" ── 兩邊都有而且都要講:知識庫有帶期間的舊值、外面有更新的值。典型是「目前的市值 /
+              現在的股價 / 現在的本益比」——Fundamentals 有快照值(帶日期),web 有當日值,
+              正確答案是**兩個都給並各標時點**,不是挑一個。
+  判不出來時填 "both",不要填 "kb":兩種錯的代價不對稱——填錯 both 只是多打一次網路,
+  填錯 kb 會讓答案拿舊資料冒充現況且零揭露。
 - 【檢索標的檢驗】每個子問題都必須指向一個「向量庫裡撈得到的離散事實」——具體的財報數字、
   Fundamentals 的估值/比率欄位、或 10-K/10-Q 裡的一段具體業務/策略敘述。(向量庫裡沒有新聞。)子問題若只是要求「解讀 / 影響 / 意義 / 背景 /
   綜合看法 / 透露什麼訊息 / 反映什麼
@@ -1759,11 +1801,47 @@ _PLANNER_PROMPT = f"""你是美股情報 RAG 的規劃器。把使用者問題�
   · 只有「集合詞需逐一列舉成員」或「多實體/多年度比較」時,才可以超過 3 個(此時以意圖保全為準,不受精簡限制)。
 - 不要杜撰原問題沒有的意圖;不要拆過細。最多 {MAX_SUBQUERIES} 個。
 
-只輸出一個 JSON 陣列(元素是繁體中文子問題字串),不要任何其他文字。
-例:["Apple 的 FY2025 EPS 是多少","Apple 的 FY2024 EPS 是多少"]"""
+只輸出一個 JSON 陣列,元素是物件 {{"task": 繁體中文子問題, "route": "kb"|"web"|"both"}},
+不要任何其他文字。
+例:[{{"task":"Apple 的 FY2025 EPS 是多少","route":"kb"}},
+    {{"task":"Apple 最近有什麼跟 Siri 有關的消息","route":"web"}},
+    {{"task":"Apple 目前的市值是多少","route":"both"}}]"""
 
 
-def _plan_subqueries(query: str, freshness_mode: str) -> list[str]:
+def _parse_plan_output(data) -> list[dict]:
+    """把 Planner 的原始輸出正規化成 `[{"task": str, "route": str}]`。**純函式、零 LLM、零網路。**
+
+    **兩種格式都要吃得下**：
+      · `["子問題", …]`                       ← 2026-09-01 之前的格式，**既有 fixture 錄的全是這種**
+      · `[{"task": …, "route": …}, …]`        ← 新格式
+
+    ⚠ **相容舊格式不是好心，是必要條件**：`llm_replay` 的 `plan` 快取裡錄的全是字串陣列，
+      不吃就是所有既有重放當場失效（而 web fixture 的 key 是從 plan 一路推導出來的）。
+
+    ⚠ **兩個預設值刻意不同**（常數在 `_ROUTE_LEGACY_DEFAULT` / `_ROUTE_UNCERTAIN_DEFAULT`
+      上方有完整理由）：舊格式字串 → `kb`（可重現性）；新格式缺值／非法值 → `both`（代價不對稱）。
+
+    ⚠ **解析寬鬆、分派嚴格**：非法值在這裡就正規化掉，**不要原樣傳下去**——
+      `_dispatch_todo` 對非法 route 是當場炸的（閘門⑪f），一次 LLM 亂填會毀掉整個 query。
+    """
+    if not isinstance(data, list):
+        return []
+    out: list[dict] = []
+    for item in data:
+        if isinstance(item, str):
+            task, route = item.strip(), _ROUTE_LEGACY_DEFAULT
+        elif isinstance(item, dict):
+            task = str(item.get("task") or "").strip()
+            raw = str(item.get("route") or "").strip().lower()
+            route = raw if raw in VALID_ROUTES else _ROUTE_UNCERTAIN_DEFAULT
+        else:
+            continue                      # 數字/None/巢狀陣列 → 丟掉,不要 str() 成垃圾子問題
+        if task:
+            out.append({"task": task, "route": route})
+    return out
+
+
+def _plan_subqueries(query: str, freshness_mode: str) -> list[dict]:
     """Planner 節點的核心：把問題拆成原子子問題。拆解失敗(解不出 JSON) → 退回單一問題,不讓規劃器失手就整個 run 掛。"""
     # 重放快取（見 llm_replay）：未設 RAG_REPLAY_CACHE 時完全 no-op。key 刻意不含
     # system_prompt——它內嵌隨 collection 變動的 KB Coverage Snapshot，納入 key 會讓
@@ -1771,16 +1849,21 @@ def _plan_subqueries(query: str, freshness_mode: str) -> list[str]:
     _rk = f"{freshness_mode}|{query}"
     _hit = _replay.get("plan", _rk)
     if _hit is not _replay.MISS:
-        _trace(f"plan(replay): {len(_hit)} sub-queries → {_hit}")
-        return list(_hit)
+        # ⚠ 命中也要走同一條正規化：舊快取錄的是 `list[str]`,直接回傳會讓下游拿到字串而不是
+        #   dict。**這條是既有 fixture 能不能繼續重放的唯一關口**（閘門⑪n）。
+        subs = _parse_plan_output(_hit)
+        _trace(f"plan(replay): {len(subs)} sub-queries → {subs}")
+        return subs
     system_prompt = _PLANNER_PROMPT + "\n\n" + _build_temporal_contract(freshness_mode)
     messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": query}]
     with _quiet():
         raw = rq.call_llm(messages, CHECKER_MODEL, temperature=0.0)
     data = _loads_json_lenient(raw)
-    subs = [str(x).strip() for x in data if str(x).strip()] if isinstance(data, list) else []
+    subs = _parse_plan_output(data)
     if not subs:
-        subs = [query.strip()]
+        # 拆解失敗 → 退回單一問題。route 用 uncertain 的那個預設（拆都拆不出來時，
+        # 更沒有理由相信「這題 KB 一定有」）。
+        subs = [{"task": query.strip(), "route": _ROUTE_UNCERTAIN_DEFAULT}]
     subs = subs[:MAX_SUBQUERIES]
     _trace(f"plan: {len(subs)} sub-queries → {subs}")
     _replay.put("plan", _rk, subs)
@@ -2424,6 +2507,173 @@ _WEB_MARK = "[web:"
 _KB_MARK_RE = re.compile(r"chunk\s*#\s*\d+")
 
 
+# web／KB 引用標記。⚠ **兩種括號都要收**：`_WEB_MARK` 是半形 `[web:`，而實測 40 份答案的
+# web 引用**全部是全形**【web: …】（生成端跟著中文標點走）。只認半形的後果是 R4 的
+# 「已經並陳就閉嘴」分支永遠為 False（見 BACKLOG）。新規則不重蹈那一步。
+_WEB_CITE_ANY_RE = re.compile(r"[\[【]\s*web\s*[:：]", re.IGNORECASE)
+_KB_CITE_ANY_RE = re.compile(r"[\[【][^\]】]*chunk\s*#\s*\d+[^\[【]*?[\]】]", re.IGNORECASE)
+
+# 「這句話帶了時點嗎」。日曆日期：ISO／中文／英文月份三種寫法都收——實測**同一份 fixture
+# 三輪就寫出三種形式**（`（截至 2026-09-01）`／`此數據來自 2026 年 9 月 1 日的最新報告`／
+# `依據 2026 年 6 月 12 日的…`）。只認一種寫法的量尺第二輪就誤報，那個錯已經犯過兩次。
+_CAL_DATE_RE = re.compile(
+    r"\b20\d{2}\s*[-/年]\s*(0?[1-9]|1[0-2])\s*[-/月]"
+    r"|\b(0?[1-9]|1[0-2])\s*/\s*(0?[1-9]|[12]\d|3[01])\s*/\s*\d{2,4}\b"
+    r"|\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},?\s+20\d{2}\b",
+    re.IGNORECASE)
+# 財報期間：日曆日期以外，財年／季別／檔名裡的期別戳都算 KB 那半的時點。
+# ⚠ **檔名戳一定要算**：`【AAPL_10K_2025.html, chunk #115】` 本身就交代了期別。不算的話
+#   這條規則會在幾乎每一份有引用的答案上觸發＝把它變成一個常數，那種規則不帶任何資訊。
+_FISCAL_MARK_RE = re.compile(
+    r"FY\s*20\d{2}|20\d{2}\s*(財政年度|財年|會計年度)|第\s*[1-4一二三四]\s*季"
+    r"|_10[KQ]_\d{4,6}|_\d{8}\b|Q[1-4]\s*(FY)?\s*20\d{2}|20\d{2}\s*Q[1-4]", re.IGNORECASE)
+
+_DUAL_SENT_SPLIT_RE = re.compile(r"[。！？!?；;\n]+")
+
+# ⚠ **比對日期之前一定要正規化連字號。** 生成端寫的是 U+2011（不換行連字號）：`2026‑09‑01`
+#   看起來與 `2026-09-01` 一模一樣，但 `[-/年]` 匹配不到。實測乾跑時這一個字元製造了
+#   **3/4 的誤報**（三份答案明明每一句都標了日期）。`eval/check_web_claims._norm` 早就在做
+#   這件事，這裡沒抄到那一課——**凡是拿 regex 讀 LLM 寫出來的日期，都要先過這一層**。
+_DASH_CHARS = "\u2010\u2011\u2012\u2013\u2014\u2015\uff0d\u2212"
+_DASH_TRANS = {ord(c): "-" for c in _DASH_CHARS}
+
+# 句子裡的**金額**（不是任意數字）。單位一律正規化成百萬美元，因為要判的是「這兩個值可不可
+# 比」——實測失敗案例寫的是 `$4.75 trillion` 與 `$4342.02 billion`，字面完全不同、量級相同。
+_MONEY_RE = re.compile(
+    r"(?:US)?\$\s*([\d,]+(?:\.\d+)?)\s*(trillion|billion|million|兆|億)?"
+    r"|([\d,]+(?:\.\d+)?)\s*(兆美元|億美元|百萬美元)",
+    re.IGNORECASE)
+_MONEY_SCALE = {"trillion": 1_000_000.0, "兆": 1_000_000.0, "兆美元": 1_000_000.0,
+                "billion": 1_000.0, "億": 100.0, "億美元": 100.0,
+                "million": 1.0, "百萬美元": 1.0}
+
+
+def _money_in_millions(text: str) -> list[float]:
+    """句子裡所有金額，正規化成百萬美元。⚠ 沒有單位詞的裸 `$1,234` 一律忽略——猜單位會
+    製造假的可比性，而這條規則的整個判別力就建立在「這兩個值是同一個量」上面。"""
+    out = []
+    for m in _MONEY_RE.finditer(text or ""):
+        raw, unit = (m.group(1), m.group(2)) if m.group(1) else (m.group(3), m.group(4))
+        if not unit:
+            continue
+        try:
+            out.append(float(raw.replace(",", "")) * _MONEY_SCALE[unit.lower()])
+        except (ValueError, KeyError):
+            continue
+    return out
+
+
+def find_undated_dual_sourcing(answer: str) -> list[str]:
+    """R5 **並陳必須帶時點**（零 LLM）：web 與財報給出**同一個量的兩個值**時，兩邊都要交代時點。
+
+    **被一次實測逼出來的（2026-09-02）**：`web-01`（Apple 市值）同一份 fixture 三輪重放
+    PASS／**FAIL**／PASS。失敗那輪引用了 web 的 $4.75 兆卻**完全沒給時點**，還寫
+    「兩者皆屬於同一時間段的不同來源」——六月的 KB 快照與九月的 web 值**不是**同一時間段，
+    那是一句錯的話。讀者看到的是兩個差 9% 的數字被宣告成同期。
+
+    **為什麼 R4 抓不到**：`find_unreconciled_web_conflicts` 的 bucket key 含 `unit`，而答案寫的是
+    `$4.75 兆` 與 `$4342.02 billion` → **兩個單位落到不同桶**，規則從頭到尾沒觸發。本規則
+    把金額正規化成百萬美元再比，繞開那個坑；也不需要 LLM 抽出來的 `claims`。
+
+    **觸發條件收得很窄，而那是量出來的**：第一版只要求「同時引用 web 與財報就要有時點」，
+    在 281 份既有答案上**觸發 34 次（並陳答案的 28%）**，絕大多數是新聞敘述引用
+    （「華爾街仍維持 Strong Buy 共識」），要求那種句子標查得日期不是這個病。
+    現在要求**兩邊句子都出現可比較的金額**（量級差在 10 倍以內、值差超過 2%）——
+    那才是「同一個量的兩個值」的確定性代理。
+
+    **判準是同句共現**（沿用 `check_news_routing.admits_flow_gap` 的教訓）：整篇比對會讓答案裡
+    任何一個日期替所有來源背書——而那正是要抓的病（KB 的 6 月日期替 web 值背書）。
+
+    ⚠ **誤報下的動作是安全的**（選這個動作而不是裁決的主要理由，同 R4）：要求模型做的事是
+      「把每個值的時點寫出來」，那對任何答案都是正確行為。裁決型規則沒有這個性質。
+
+    ⚠ **能力上界①**：只看得到答案自己寫出來的東西。答案只講其中一邊、或把 web 值寫成沒有引用
+      的敘述，這裡看不到——那是 citation validator 的守備範圍。
+
+    ⚠ **能力上界②（2026-09-02 量出來的，別再試著收緊）**：金額量級配對（10 倍內、差 >2%）
+      是「同一個量」的**代理**，不是它本身。實測它會把不同的量配成一對：
+        · `news-14`：KB「九個月服務收入 917.28 億」 vs web「FY2025 全年 1,092 億」（不同期間）
+        · `news-03`：KB「九個月營收 3,136.95 億」   vs web「盈餘 1,120.1 億」（不同指標）
+      **財報那側接受檔名期別戳（`_FISCAL_MARK_RE`）正是在吸收這個不精確**——它是承重的，
+      不是讓步。試過把 KB 側收緊成「web 有日曆日期時 KB 也必須有」：179 份並陳答案的觸發從
+      2 變成 9，而**新增的 7 筆全部是上面那種假配對**。
+      → 因此 `eval/web_claims.json` 的 `web-01` 斷言**比本規則嚴格是正確的**：那一題經人工確認
+        兩個值就是同一個量，而 validator 沒有這個知識。兩者不該對齊。
+      **真正的解法**是讓配對精確而不是讓判準更嚴：把 `find_unreconciled_web_conflicts`（R4）的
+      bucket key 做**單位正規化**（它有 LLM 抽出來的 `metric`／`entity`，只差 `unit` 沒normalise）。
+      那要動 R4 的行為，需要它自己的乾跑與閘門。
+    """
+    body = rq.strip_evidence_tail(answer or "").translate(_DASH_TRANS)
+    if not body.strip():
+        return []
+    sents = [x for x in _DUAL_SENT_SPLIT_RE.split(body) if x.strip()]
+    web_sents = [x for x in sents if _WEB_CITE_ANY_RE.search(x)]
+    kb_sents = [x for x in sents if _KB_CITE_ANY_RE.search(x)]
+    if not web_sents or not kb_sents:
+        return []          # 沒有並陳 → 這條規則沒有意見
+
+    # 有沒有「同一個量的兩個值」：量級可比（10 倍內）且真的不同（>2%，同 R4 的門檻）。
+    pairs = [(w, k) for ws in web_sents for w in _money_in_millions(ws)
+             for ks in kb_sents for k in _money_in_millions(ks)
+             if w > 0 and k > 0 and max(w, k) / min(w, k) <= 10
+             and abs(w - k) / max(w, k) > 0.02]
+    if not pairs:
+        return []
+
+    problems: list[str] = []
+    if not any(_CAL_DATE_RE.search(x) for x in web_sents):
+        problems.append(
+            "答案把網路來源的金額與財報金額並列，但**網路那一邊沒有交代時點**。"
+            "網路值請在同一句裡註明查得日期（例如「截至 2026-09-01」），"
+            "不要讓讀者以為它與財報值屬於同一個時間段。")
+    if not any((_CAL_DATE_RE.search(x) or _FISCAL_MARK_RE.search(x)) for x in kb_sents):
+        problems.append(
+            "答案把網路來源的金額與財報金額並列，但**財報那一邊沒有交代期間**。"
+            "財報值請在同一句裡註明所屬財報期間或資料日期。")
+    return problems
+
+
+_WEB_UNCITED_MARK = "⚠ 網路結果未採用："
+
+
+def web_fetched_but_uncited_notice(answer: str, web_extra: str) -> str:
+    """R6 **抓到了 web 卻一個都沒引用** → 附一句揭露（確定性，零 LLM，**不重生成**）。
+
+    **治的病（2026-09-02 實測）**：`web-01` 第 10 輪 `n_web_calls=1`、fixture 裡就有
+    `stockanalysis.com` 的 $4.75 兆，而答案只有一句
+    「Apple 目前的市值約為 43,420.2 億美元【AAPL_Fundamentals_20260612.txt, chunk #0】」
+    ——**82 天前的快照當「目前」，零 web 引用、零時點揭露**。同一份 fixture 的第 8、9 輪都
+    引用了它，所以成因是 Generator 的抽樣，不是輸入。五道 validator 一道都不會響
+    （chunk 是真的、數字溯源得到、期別也對、citation 合法）。
+
+    ⚠ **為什麼掛在 Synthesize 而不是 todo 層**：`_format_unresolved_freshness_notice` 對
+      `todo["web_used"]` 為真的待辦直接 `continue`。而 `web_used` 問的是「**檢索**有沒有拿到
+      web」，這裡的病是「**答案**沒有引用 web」——r10 那一輪 `web_used` 是 True，整個待辦
+      被跳過，一句警語都不會出。只有在 Synthesize 才看得到答案文字。
+
+    ⚠ **為什麼是「揭露」不是「重生成」**：誤報方向決定的。web 真的回垃圾時（實測 2026-09-02
+      上午 Apple 市值那次，12 筆全是首頁與維基詞條），「網路結果未採用」**字面上就是真的**；
+      而重生成會白燒一輪 LLM，還可能把對的答案改壞。同 R4／R5 選「並陳」與「補時點」而不是
+      「裁決」的理由：**誤報下要求做的事本來就是正確行為**。
+
+    ⚠ **能力上界（寫清楚免得被當成保證）**：它分不出「web 有可用內容卻沒被引用」與
+      「web 回的東西根本答不了這題」——兩者在結構層完全相同，要分辨得看內容層有沒有被問的
+      那個量＝感知不是規則。所以措辭刻意**只陳述事實、不宣稱原因**（同 `_basis_disclosure_notice`
+      那條：斷言一個查不到的原因就是在製造新的不可信內容）。
+
+    ⚠ **頻率很低，不要拿端到端跑分驗收它**：現行架構上 116 個題×輪只出現 1 次（≈0.9%，
+      `newsroute_after2` 23 ＋ `mixed_prod_r1~r3` 63 ＋ `web-01` 重放 30）。它是**靜默失效上的
+      一層字面為真的揭露**，驗收只能靠確定性閘門⑱。
+    """
+    if not (web_extra or "").strip() or not (answer or "").strip():
+        return ""
+    if _WEB_CITE_ANY_RE.search(rq.strip_evidence_tail(answer)):
+        return ""          # 引用了就沒事——本規則對比例沒有意見
+    return ("\n\n---\n" + _WEB_UNCITED_MARK +
+            "本次已取得網路搜尋結果，但最終答案未引用其中任何來源；"
+            "以上內容僅根據知識庫的 SEC 財報與基本面資料，**不代表涵蓋至查詢日**。")
+
+
 def find_unreconciled_web_conflicts(claims: list[dict]) -> list[str]:
     """R4 **web ↔ 財報並陳**（零 LLM）：同一格出現互斥數值、一邊只在 web、另一邊在財報 →
     要求答案**兩個都講、各自標出處與時點**。
@@ -2827,6 +3077,51 @@ _NUMBER_REVISE_SUFFIX = """
 
 以下是找不到出處的數字:
 {issues}"""
+
+
+_DUAL_SOURCE_REVISE_SUFFIX = """
+
+⚠ 時點檢查未通過：你的答案把**網路來源的金額**與**財報金額**並列，但其中一邊沒有交代它是
+什麼時候的數字。讀者會以為兩個值屬於同一個時間段——而它們通常差好幾個月。
+請重寫整份答案（維持 [filename, chunk #N] 與 [web: 網址] 的引用格式）,並做到:
+1. **每個金額都在它自己那一句裡帶上時點**：網路值寫查得日期（如「截至 2026-09-01」）,
+   財報值寫所屬期間或資料日期（如「2026-06-12 的基本面資料」「FY2025」）。
+2. **兩個值都要留著**,不要挑一個講,也不要把其中一個當成錯的刪掉——它們可以都是對的,
+   只是時點不同。
+3. **不要宣稱它們屬於同一個時間段**,除非來源真的這樣寫。
+4. 其餘正確的內容照舊。
+
+以下是問題:
+{issues}"""
+
+
+def _dual_source_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
+                               verbose: bool = False, web_extra: str = "", period_note: str = "") -> str:
+    """R5 並陳時點稽核 → 有缺時點則帶問題重生成一次 → 再過 citation 稽核。
+
+    **放在數字溯源之後**（管線最末）：時點是**措辭**問題，而前面每一道 validator 的重生成都
+    可能把時點改掉。放在中間等於只驗了一個會被後面推翻的版本——同 `_number_check_and_fix`
+    當初被移到 reflect 之後的理由。
+
+    **經濟性**：偵測零成本；281 份既有答案乾跑**只觸發 1 次，而那 1 次是真陽性**
+    （`web_replay_r6` 的 web-01），所以放進主線不會擾動既有基準。
+    """
+    if not (answer or "").strip():
+        return answer
+    found = find_undated_dual_sourcing(answer)
+    if not found:
+        return answer
+    issues = "\n".join(f"- {p}" for p in found)
+    if verbose:
+        print(f"--- dual-source validator: 並陳缺時點 ---\n{issues}")
+    _trace(f"dual_source: {len(found)} 個時點缺口,重生成一次")
+    revised = _write_final_answer(query, chunks, model_name,
+                                  extra_user=_DUAL_SOURCE_REVISE_SUFFIX.format(issues=issues),
+                                  web_extra=web_extra, period_note=period_note)
+    if revised and revised.strip():
+        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
+                                           web_extra=web_extra, period_note=period_note)
+    return answer
 
 
 def _number_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
@@ -3385,9 +3680,74 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
             list(state.period_notes))
 
 
+def _effective_route(route: str, freshness_mode: str) -> str:
+    """套上 **eval 隔離**之後的實際 route。純函式、零副作用。
+
+    ⚠ snapshot（＝eval 走的路）或 `ENABLE_WEB_SEARCH` 關閉時**一律降級成 `kb`**。兩層理由：
+      ① **這就是 eval 隔離**。CLAUDE.md：隔離只靠 `freshness_mode == LIVE` 與
+         `ENABLE_WEB_SEARCH` 兩個獨立條件，任何「相關性詞表」都不是隔離機制。把這兩個條件
+         收在**一個純函式**裡，才寫得出真值表（閘門⑪t~⑪w）。
+      ② **降級成 `kb` 而不是「什麼都不撈」**：snapshot 下每個 todo 本來就只撈 KB，
+         降級成 kb 才能讓 **eval 的行為與加 route 之前逐字相同**——回空會讓 65 題基準整批位移。
+
+    ⚠ 這裡**不做**非法值正規化（那是 `_parse_plan_output` 的事）：讓被改壞的 route 一路走到
+      `_dispatch_todo` 當場炸，比在這裡默默吞掉好。live 之外吞不吞都沒有差別（碰不到 web）。
+    """
+    if freshness_mode != FRESHNESS_LIVE or not ENABLE_WEB_SEARCH:
+        return "kb"
+    return route
+
+
+def _escalate_route(route: str, verdict: dict) -> str:
+    """KB 走不下去時要不要升級到 web。純函式、零 LLM。
+
+    ⚠ **只有 `kb_unfixable` 才升級，「不足」本身不算**。這條看起來保守，但它正是這次改動的
+      重點：現行行為是 `not verdict["sufficient"]` 就打 web，於是純財報題也會上網
+      （實測 before 臂 `mix-01`「Azure **最新一季**營收成長率」打了 web 並引用它）。
+      把「不足」當升級條件 ＝ 換個寫法回到原地，還加重過度路由。誤報對照見閘門⑪i。
+
+    ⚠ **升級成 `web` 而不是 `both`**，這一格被既有的閘門⑤當場抓過：`kb_unfixable` 的意思就是
+      「KB 結構上補不了」，而 kb 那一半**已經在池子裡**（`_merge_chunks` 只加不減）——再撈一次
+      照定義不可能有用，只是把 2026-08-14 那個「21 次檢索原地打轉」的病換個寫法請回來。
+      閘門⑤ 的斷言是「KB 補不了 → 只檢索 1 次」，`both` 會讓它變成 2 次。
+    """
+    if route == "kb" and not verdict.get("sufficient") and verdict.get("kb_unfixable"):
+        return "web"
+    return route
+
+
+def _dispatch_todo(route: str, query: str, *, need: str = "none",
+                   attributable: bool = True) -> tuple[list[dict], list[str]]:
+    """依 route 叫對應的 tool。**純 Python、零 LLM 判斷**——它不決定要不要上網，只執行。
+
+    回 `(chunks, web_notes)`。policy（eval 隔離、web 預算、升級）全部在呼叫端，
+    這裡只有「route 說什麼就做什麼」。這個分工是刻意的：**分派給 Python、裁決給 LLM**
+    （CLAUDE.md），而 policy 各自有自己的純函式與真值表。
+
+    ⚠ **非法 route 當場炸，不可靜默預設**：預設成 kb 的話，Plan 打錯一個字就讓新聞題
+      全退回「拿財報硬答」，而那個失敗的外觀與「路由判成 kb」**完全相同**（閘門⑪f）。
+      寬鬆正規化是 `_parse_plan_output` 的職責——**解析寬鬆、分派嚴格**。
+    """
+    if route not in VALID_ROUTES:
+        raise ValueError(f"未知的 route {route!r}；合法值是 {VALID_ROUTES}")
+    chunks: list[dict] = []
+    web_notes: list[str] = []
+    if route in ("kb", "both"):
+        chunks = _retrieve_chunks(query, attributable=attributable)
+    if route in ("web", "both"):
+        # ⚠ 一定要走 `_tavily_search`（白名單複核／地區子網域／去重／過時過濾／截斷都在裡面）
+        #   與 `_web_query_en`（Tavily 對英文 query 明顯較好）。自己直接叫 TavilyClient
+        #   會把那六道一起繞掉。閘門⑪g 用 AST 守這一條。
+        note = _tavily_search(_web_query_en(query), need=need)
+        if note and not note.startswith("（"):
+            web_notes.append(note)
+    return chunks, web_notes
+
+
 def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: str,
                                 subq_index: int, verbose: bool, *,
-                                attributable: bool) -> tuple[str, list[str], str, list[str]]:
+                                attributable: bool,
+                                route: str = "kb") -> tuple[str, list[str], str, list[str]]:
     """[預設] Executor 核心（deterministic，2026-07-29 修）：**planner 子問題原封不動直接檢索**，不讓
     Agent A(ReAct) 自行改寫 query。流程：直接 retrieve → Grader 評分 → 不夠則用 Grader 的 targeted
     new_query 再 retrieve（併池、只加不減）→ 有界 MAX_REWRITES → 走生產契約產局部摘要。
@@ -3398,61 +3758,75 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
     state = _current_run_state()
     web_notes: list[str] = []
     active_query = task
+    # eval 隔離在這裡一次套用：snapshot／web 關閉 → 一律 kb（見 `_effective_route`）。
+    eff_route = _effective_route(route, freshness_mode)
     verdict = {"sufficient": False, "missing": "", "new_query": ""}
     try:
         for rnd in range(MAX_REWRITES + 1):
+            # web 預算是 **query 級**的（子問題會被 replanner 撐大，只靠子問題級上限總量無界）。
+            # 只在這一輪真的會打 web 時才取用，取不到就這一輪降級成純 KB。
+            _round_route = eff_route
+            if _round_route in ("web", "both") and not _take_query_web_budget():
+                if _round_route == "both":
+                    # both 的 KB 那一半本來就該撈，只是這一輪沒有 web 可加。
+                    _trace(f"execute[{subq_index}] web 預算已用完（{QUERY_WEB_BUDGET} 次）"
+                           f"→ 這一輪只跑 KB")
+                    _round_route = "kb"
+                else:
+                    # ⚠ **route=web 拿不到額度時絕不退回 KB。** 這個 todo 之所以是 web，
+                    #   就是因為 KB 依設計沒有這種資料（`RAW_EXCLUDE_DIRS` 排除 News/）；
+                    #   退回去撈只會拿到財報，然後被當成新聞引用、零揭露——那正是這整個
+                    #   改動要治的病。實測 after 臂 `news-10`／`news-13` 就是這樣來的。
+                    #   預算是 query 級的，這一輪拿不到，之後也不會有 → 直接收工，
+                    #   由下面的 `_unfulfilled_web_route_gaps` 留下可揭露的缺口。
+                    _trace(f"execute[{subq_index}] web 預算已用完（{QUERY_WEB_BUDGET} 次）"
+                           f"且 route=web → 不退回 KB，本子問題留空並記缺口")
+                    break
             # 兩個條件都要成立：① 這個 todo 本身出自 Planner（不是 replan 加的）
             # ② 還沒被 Grader 改寫過（rnd 0）。任何一個不成立，這一輪產生的揭露句都不該
             # 說「所詢問」——它問的不是使用者問的東西。
-            chunks = _retrieve_chunks(active_query, attributable=(attributable and rnd == 0))
+            chunks, _notes = _dispatch_todo(
+                _round_route, active_query,
+                need=verdict.get("realtime_need", "none"),
+                attributable=(attributable and rnd == 0))
+            web_notes.extend(_notes)
             merged = _merge_chunks(list(state.pool), chunks)    # 併池：只加不減，補救輪不洗掉先前好 chunk
             state.pool.clear()
             state.pool.extend(merged)
             verdict = _check_sufficiency(task, state.pool, temporal_scope, freshness_mode)  # Agent B｜Grader
             state.relevant_ids.clear()
             state.relevant_ids.update(verdict.get("relevant_ids", []))
-            _trace(f"execute[{subq_index}] det round={rnd} q={active_query[:32]!r} pool={len(state.pool)} "
+            _trace(f"execute[{subq_index}] det round={rnd} route={_round_route} "
+                   f"q={active_query[:32]!r} pool={len(state.pool)} "
                    f"sufficient={verdict['sufficient']} missing={verdict['missing'][:40]!r}")
             if verdict["sufficient"] or rnd >= MAX_REWRITES:
                 break
-            # KB 補不了的不足（目前唯一來源：live 時效改判）→ 立刻跳出，別把改寫次數燒在必敗的重試上。
+            # 升級：只有「KB 結構上補不了」才從 kb 升成 both（見 `_escalate_route`）。
+            _next_route = _escalate_route(eff_route, verdict)
+            # 防空轉：升級**沒改變任何東西**時再多跑一輪也沒有意義。
             # ⚠ 2026-08-14 實測「蘋果的即時市值」：時效改判每輪都判 False，而**任何 KB 檢索都不可能
-            #   讓 KB 變新**，於是 7 個子問題 × 3 輪 = 21 次檢索、7 次 web call 全在原地打轉。
-            #   這是結構性死迴圈，不是這一題的巧合——只要「不足的原因是資料不在 KB 裡」就會發生。
-            if verdict.get("kb_unfixable"):
-                _trace(f"execute[{subq_index}] 不足原因 KB 補不了（時效）→ 跳過剩餘 "
-                       f"{MAX_REWRITES - rnd} 次改寫，直接走 web")
+            #   讓 KB 變新**，於是 7 個子問題 × 3 輪 = 21 次檢索全在原地打轉。這是結構性死迴圈，
+            #   不是那一題的巧合——只要「不足的原因是資料不在 KB 裡」就會發生。
+            if verdict.get("kb_unfixable") and _next_route == eff_route:
+                _trace(f"execute[{subq_index}] 不足原因 KB 補不了（時效）且路由已無可升級 → "
+                       f"跳過剩餘 {MAX_REWRITES - rnd} 次改寫")
                 break
+            # ⚠ **已知成本**：升級成 web 之後還會再 grade 一次，而那一次的池子與這一次相同
+            #   （web_notes 不是 chunk），所以判定必然一樣 → **多燒一次 Grader 呼叫**。
+            #   刻意接受：把它省掉要在迴圈裡插一段 inline dispatch＋break，而這個迴圈已經
+            #   為了「省一輪」踩過兩次坑。一次 LLM 呼叫換迴圈可讀性，划算。
+            eff_route = _next_route
             active_query = verdict["new_query"] or task        # Grader 的 targeted rewrite（唯一改寫來源，deterministic temp=0）
 
-        # live 時效補救：KB 仍不足 → 補一次 web（snapshot 不補、不製造 wall-clock 缺口）。
-        #
-        # ⚠ 2026-08-13 **兩道詞表閘門都已拿掉**：先是 `rq.looks_like_news_query(task)`，再是
-        # `_RELATIVE_TIME_RE.search(task)`。兩者是同一個病——用硬編碼詞表做感知，換個措辭就漏。
-        # 實測 18 個真實時效措辭，`_RELATIVE_TIME_RE` 漏掉 10 個（「今天股價」「即時市值」「盤中報價」
-        # 「這禮拜」「昨年以來」…），而且漏網的代價不是答不出來，是**自信地把舊資料當成即時資料**：
-        # 「特斯拉今天股價下跌 2.96%」引用的是三週前的新聞、「蘋果即時市值 $4342.02B」是兩個月前的
-        # 快照，兩者都零揭露。詞表還連帶擋掉時效警語（`_format_unresolved_freshness_notice` 掛在
-        # 「有 web 待辦未解決」路徑上，沒觸發 web 就連警語都不會出現）。
-        #
-        # **它們都不是 eval 隔離機制**——隔離由 `freshness_mode == LIVE` 與 `ENABLE_WEB_SEARCH`
-        # 兩個獨立條件負責，且 eval 的 freshness 預設就是 snapshot，各自都足以擋住。
-        # 常駐證明見 [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py)。
-        #
-        # 現在擋濫用的只剩 `not verdict["sufficient"]`，而它已被補上時效判準（見 _check_sufficiency
-        # 的 live 改判）：KB 答得出**且夠新**才不上網。
-        # ⚠ 成本上界是 `QUERY_WEB_BUDGET`（query 級），**不是** `WEB_SEARCH_MAX_CALLS`——後者記在
-        #   每個子問題各自歸零的 `_RunState`，2026-08-14 才發現它從來沒有封住總量（實跑 7 次）。
-        if (freshness_mode == FRESHNESS_LIVE and ENABLE_WEB_SEARCH and not verdict["sufficient"]):
-            if not _take_query_web_budget():
-                _trace(f"execute[{subq_index}] 整個 query 的 web 預算已用完"
-                       f"（{QUERY_WEB_BUDGET} 次）→ 不再搜尋")
-            else:
-                note = _tavily_search(_web_query_en(verdict.get("new_query") or task),
-                                      need=verdict.get("realtime_need", "none"))
-                if note and not note.startswith("（"):
-                    web_notes.append(note)
-                    _trace(f"execute[{subq_index}] det web fallback → {len(note)} chars")
+        # ⚠ **這裡原本有一段「KB 仍不足 → 補一次 web」的 fallback，2026-09-01 拿掉了。**
+        #   它的觸發條件是 `not verdict["sufficient"]` ——「答不出來就上網」，而那正是
+        #   before 臂量到的過度路由來源（`mix-01`「Azure 最新一季營收成長率」是純財報題，
+        #   卻打了 web 並引用它）。現在改由**兩件事**接手，各自有純函式與真值表：
+        #     · 該不該上網 → Planner 判的 `route`（＋ `_effective_route` 的 eval 隔離）
+        #     · KB 走不下去要不要升級 → `_escalate_route`（只認 `kb_unfixable`，不認「不足」）
+        #   兩道詞表閘門（`rq.looks_like_news_query` / `_RELATIVE_TIME_RE`）更早之前就拿掉了，
+        #   理由相同：用硬編碼詞表做感知，換個措辭就漏。常駐證明見
+        #   [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py)。
     except Exception as e:
         _trace(f"execute[{subq_index}] deterministic executor 例外 → 降級：{e!r}")
         if not state.pool:
@@ -3465,7 +3839,8 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
 
 def _run_executor(task: str, temporal_scope: str, freshness_mode: str,
                   subq_index: int, verbose: bool, *,
-                  attributable: bool) -> tuple[str, list[str], str, list[str]]:
+                  attributable: bool,
+                  route: str = "kb") -> tuple[str, list[str], str, list[str]]:
     """Dispatcher：預設 deterministic（planner 子問題直接檢索）；AGENTIC_REACT_EXECUTOR=true 回舊 ReAct。
 
     第三個回傳值是 Grader 最後一次的 `realtime_need`——`_run_one_todo` 要靠它判「這個子問題
@@ -3473,10 +3848,13 @@ def _run_executor(task: str, temporal_scope: str, freshness_mode: str,
     第四個是這個子問題檢索時發生的**期間降級揭露**（見 `_retrieve_chunks`），最終由 Synthesize
     注入 Generator prompt——與單管線 `run_single_query` 的 `fallback_note` 是同一個東西。"""
     if USE_REACT_EXECUTOR:
+        # ⚠ ReAct 這條路**不吃 route**：它是已退役的對照組（gold-chunk 覆蓋 16/75 vs 35/75），
+        #   自己決定何時停、自己選 tool。要讓它支援 route 得先把那些 agency 收回來，
+        #   不在這次範圍內。用它跑 ＝ 回到加 route 之前的行為。
         return _run_executor_react(task, temporal_scope, freshness_mode, subq_index, verbose,
                                    attributable=attributable)
     return _run_executor_deterministic(task, temporal_scope, freshness_mode, subq_index, verbose,
-                                      attributable=attributable)
+                                      attributable=attributable, route=route)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -3500,14 +3878,21 @@ class SupervisorState(TypedDict, total=False):
 _REPLANNER_PROMPT = f"""你是美股情報 RAG 的動態重規劃器。給你「原始問題」與「目前待辦清單（含各自狀態與
 已完成的局部結果）」。請根據目前已收集到的結果，決定如何更新待辦清單：
 
+- 【路由 route】每個新增的待辦都要帶 route（"kb"｜"web"｜"both"），判準與 Planner 相同：
+  向量庫裡只有 10-K／10-Q 與 Fundamentals，**沒有任何新聞**。問「外面現在怎麼樣」（新聞、報導、
+  分析師看法、即時報價）填 "web"；問財報數字／業務敘述填 "kb"；兩邊都有而且都要講填 "both"。
+  ⚠ **不要把來源寫進 task 文字**——不要寫「改用網路搜尋查…」「使用即時金融網站…」，
+  那件事現在由 route 欄位表達。task 只寫「要查什麼」。
 - 只有時間契約明確指定 live、web 可用、且某個已完成待辦的 KB cutoff 確實早於查詢日並影響原始問題時，
-  才能在 add 裡新增「改用網路搜尋查…」的新待辦。snapshot 模式禁止因 wall clock 新增 web 待辦。
+  才能新增 route="web" 的待辦。snapshot 模式禁止因 wall clock 新增 web 待辦。
 - 若目前已收集到的結果**已足以完整回答原始問題** → sufficient 設 true（剩餘 pending 待辦會被跳過）。
 - 若某些還沒做的 pending 待辦其實已無必要 → 把它們的 id 放進 drop。
 - 不要重複新增已經有的待辦；新增要克制（清單總數上限 {MAX_TODOS}）。
 
 只輸出一個 JSON 物件，不要任何其他文字：
-{{"sufficient": true 或 false, "add": ["新待辦字串", ...], "drop": [待辦id 數字, ...]}}"""
+{{"sufficient": true 或 false,
+  "add": [{{"task": "新待辦", "route": "kb"|"web"|"both"}}, ...],
+  "drop": [待辦id 數字, ...]}}"""
 
 # live 專屬追加段（2026-08-29）。**刻意只在 live 追加**：snapshot 的 replanner prompt 因此
 # 逐字不變，65 題基準不被動到（同 `_CHECKER_LIVE_RECENCY_BLOCK` 的作法）。
@@ -3553,7 +3938,7 @@ def _web_retry_is_pointless(todos: list[dict]) -> bool:
       說的形狀：用字串比對做感知，換個措辭就漏。
       → 所以呼叫端**不再看待辦文字**：`intraday` ＋ 已搜過 web 時，追加**任何**待辦都拒絕。
         依據是 before ＋ after2 兩臂合計 **18 個 intraday replan 待辦、獨有且被引用的 chunk ＝ 0**。
-      ⚠ `_WEB_TODO_RE` 的洞**沒有因此修好**，它還守著 snapshot 的 web todo 拒絕路徑（成本問題，
+      ⚠ **2026-09-02 起 `_WEB_TODO_RE` 整個沒了**：那條 snapshot 拒絕路徑改讀 `route` 欄位，
         不是隔離問題——隔離只靠 `freshness_mode` 與 `ENABLE_WEB_SEARCH`）。見 BACKLOG。
     """
     return any(t.get("web_used") and t.get("realtime_need") == "intraday" for t in todos)
@@ -3565,13 +3950,21 @@ def _node_plan(state: SupervisorState) -> dict:
     # ratio 意圖交 LLM（見 _classify_ratio_fields）。整批一次 call，且**在這裡**判：
     # 子問題是這條路的實際輸入，原始問句不是（「Microsoft 的營收成長率」可能被拆成
     # 口語的「成長得快不快」，詞表在那一刻就漏了）。
-    rfields = _classify_ratio_fields(subs)
+    rfields = _classify_ratio_fields([sub["task"] for sub in subs])
     todos = []
-    for i, subquery in enumerate(subs):
+    for i, sub in enumerate(subs):
+        subquery = sub["task"]
         scope = _build_todo_temporal_scope(subquery, freshness_mode)
         todos.append({
             "id": i,
             "task": subquery,
+            # 路由：這個子問題該去哪裡拿資料。**由 Planner 判、寫成欄位**，不再靠
+            # 「改用網路搜尋查…」這種自由文字 ＋ `_WEB_TODO_RE` 反向解析（那條路匹配不到
+            # 「在 Yahoo Finance 上查詢」，見閘門⑧p）。
+            "route": sub["route"],
+            # 依賴：這個子問題要等哪個 todo 的結果才寫得出來（mh-07 的「該公司」）。
+            # **這一版只留欄位不解析**——先讓 route 站穩，見 BACKLOG 的〈明確不做的〉。
+            "depends_on": None,
             "temporal_scope": scope,
             # Planner 的分解是**使用者意圖的重述** → 由它產生的期間降級揭露可以說「所詢問財年」。
             # 對照 `_node_replan` 那一個（見該處註解）。判準與 `_retrieve_chunks` 的 docstring 同一條。
@@ -3583,7 +3976,8 @@ def _node_plan(state: SupervisorState) -> dict:
             "status": "pending",
             "result": "",
         })
-    _trace(f"plan: {len(todos)} todos → {[t['task'] for t in todos]}")
+    _trace(f"plan: {len(todos)} todos → "
+           f"{[(t['task'], t['route']) for t in todos]}")
     return {"todos": todos, "collected": [], "web_notes": [], "period_notes": [],
             "iterations": 0, "sufficient": False}
 
@@ -3595,6 +3989,9 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
     task = todo["task"]
     summary, web_notes, realtime_need, period_notes = _run_executor(
         task, todo.get("temporal_scope", ""), freshness_mode, todo["id"], verbose,
+        # ⚠ `.get(..., "kb")` 而不是下標：`_node_replan` 建的 todo 這一版還沒有 route
+        #   （第 5 步才收窄 replan）。預設 kb ＝ 與加 route 之前逐字相同的行為。
+        route=todo.get("route", "kb"),
         # ⚠ 刻意用 `todo["attributable"]` 而不是 `.get(..., True)`：漏設要當場 KeyError。
         #   給預設值＝新的 todo 建立點會靜默沿用「可歸因」，那正是這次要防的東西。
         #   兩個建立點都設了這個欄位，由 `verify_answer_validators.py` 閘門 ⑮g 把關。
@@ -3627,7 +4024,13 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
         _now = _get_as_of_date()
         # 兩種缺口併存：① 用了過期的 KB 新聞（新聞若復活才會有）② 需要即時資料卻沒拿到 web
         gaps = (_news_freshness_gaps(picked, _now)
-                + _unmet_realtime_gaps(task, realtime_need, picked, _now))
+                + _unmet_realtime_gaps(task, realtime_need, picked, _now)
+                # 第三個來源：路由說要上網、卻一次 web 都沒拿到（預算用完／搜不到）。
+                # 用 `_effective_route` 而不是 todo 的原始 route——eval 隔離已經把它降級的
+                # 情況不該算缺口（閘門⑪z5）。
+                + _unfulfilled_web_route_gaps(
+                    _effective_route(todo.get("route", "kb"), freshness_mode),
+                    web_notes, picked, _now))
     else:
         gaps = []
     return {"id": todo["id"], "summary": summary, "web_used": bool(web_notes),
@@ -3756,7 +4159,8 @@ def _node_replan(state: SupervisorState) -> dict:
     #   不入 key 就會讓「已打過 web」與「還沒打」共用同一個決策——那正好把這個修法抵銷掉。
     #   原則同 `check` 的 key 含候選 chunk id：**凡是合法改變決策的東西都要入 key**。
     _rk = "|".join([freshness_mode, state["query"]]
-                   + [f"{t['id']}:{t['status']}:{int(bool(t.get('web_used')))}:{t['task']}"
+                   + [f"{t['id']}:{t['status']}:{int(bool(t.get('web_used')))}"
+                        f":{t.get('route', 'kb')}:{t['task']}"
                       for t in todos])
     _hit = _replay.get("replan", _rk)
     if _hit is not _replay.MISS:
@@ -3788,16 +4192,27 @@ def _node_replan(state: SupervisorState) -> dict:
             if t["id"] in drop_ids and t["status"] == "pending" and not _is_dependent_hop(t["task"]):
                 t["status"] = "dropped"
         next_id = max((t["id"] for t in todos), default=-1) + 1
-        for a in (data.get("add", []) or []):
-            if isinstance(a, str) and a.strip() and len(todos) < MAX_TODOS:
-                task = a.strip()
+        # ⚠ 用**同一個** `_parse_plan_output` 正規化（唯一定義點）：它同時吃舊格式的
+        #   `["字串"]`（既有 replay 快取錄的全是這種 → 落到 kb）與新格式的
+        #   `[{"task":…, "route":…}]`。理由與 Planner 那邊逐字相同，見該函式 docstring。
+        for a in _parse_plan_output(data.get("add", []) or []):
+            if len(todos) < MAX_TODOS:
+                task, a_route = a["task"], a["route"]
                 # Prompt 是機率性約束；snapshot / --no-web 再用 Python 硬擋 web todo。
-                if _is_web_todo(task) and (freshness_mode == FRESHNESS_SNAPSHOT or not ENABLE_WEB_SEARCH):
+                # ⚠ **判準從 `_is_web_todo(task)` 換成 route 欄位**（2026-09-02）：那個詞表
+                #   （`網路|上網|web search|internet`）匹配不到「在 Yahoo Finance 上查詢」
+                #   「使用NASDAQ官方網站」——六個真實措辭逐字凍結在閘門⑧p。現在路由是欄位，
+                #   不需要再從中文句子反推。
+                if a_route in ("web", "both") and (freshness_mode == FRESHNESS_SNAPSHOT
+                                                   or not ENABLE_WEB_SEARCH):
                     _trace(f"replan: 拒絕不符合時間模式的 web todo → {task!r}")
                     continue
                 # intraday 且已打過 web → 追加任何待辦都必然徒勞（實測 18/18 零貢獻）。
-                # ⚠ **刻意不加 `_is_web_todo(task)` 這個前置條件**，理由見該函式 docstring：
-                #   那個詞表漏掉「在 Yahoo Finance 上查詢…」這一整族措辭。
+                # ⚠ **刻意不加「這是不是 web 待辦」的前置條件**：intraday 且已搜過 web 之後，
+                #   追加**任何**待辦都徒勞，不只 web 的。第二版曾用 `_is_web_todo(task)` 當前置
+                #   條件而被詞表漏掉（六個措辭凍結在閘門⑧p）；那個函式已於 2026-09-02 刪除，
+                #   但這裡的判準不變——**不要**改成 `a_route in ("web","both")`，那會讓
+                #   「查一下 10-Q 有沒有提到」這種徒勞的 kb 待辦重新溜進來。
                 if _web_retry_is_pointless(todos):
                     _trace(f"replan: 拒絕徒勞的追加待辦（intraday 且已搜過 web）→ {task!r}")
                     continue
@@ -3812,6 +4227,10 @@ def _node_replan(state: SupervisorState) -> dict:
                     # 裡面夾帶的年份／filing type 都是腦補的。若標成 True，col-10 的假前提會換一扇門回來
                     # ——而閘門 ⑮f 抓不到（它驗的是 `rnd == 0` 這個條件還在，條件確實還在）。
                     "attributable": False,
+                    # 路由：與 `_node_plan` 同一個欄位。舊 replay 快取錄的是純字串 →
+                    # `_parse_plan_output` 把它們落到 "kb" ＝ 與加 route 之前相同的行為。
+                    "route": a_route,
+                    "depends_on": None,
                     "freshness_gaps": [],   # 同上：執行完由 _node_execute 回填
                     "period_notes": [],
                     "web_used": False,
@@ -3914,6 +4333,13 @@ def _node_synthesize(state: SupervisorState) -> dict:
         if not rq.looks_like_refusal(answer):
             answer = _number_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
                                            web_extra=web_extra, period_note=period_note)
+        # R5 並陳時點（零 LLM 偵測）**放最末**：時點是措辭問題，而上面每一道的重生成都可能
+        # 把時點改掉；放中間等於只驗了一個會被後面推翻的版本。281 份既有答案乾跑觸發 1 次
+        # 且是真陽性（見 find_undated_dual_sourcing），所以不會擾動既有基準。
+        if not rq.looks_like_refusal(answer):
+            answer = _dual_source_check_and_fix(state["query"], answer, chunks, GEN_MODEL,
+                                                verbose=verbose, web_extra=web_extra,
+                                                period_note=period_note)
     except Exception as e:
         _trace(f"synthesize: 最終生成失敗（{e!r}）→ 退回零 LLM 機械式摘要")
         answer = _mechanical_summary(state["query"], chunks) if chunks else \
@@ -3926,7 +4352,15 @@ def _node_synthesize(state: SupervisorState) -> dict:
     # 時效聲明由 Python 機械式附加，不要求 Writer 自己記得，也不讓 citation validator 把這段
     # collection metadata 誤當成無引用的回答事實。snapshot 的 todos 不會帶 freshness_gaps。
     if state.get("freshness_mode", FRESHNESS_LIVE) == FRESHNESS_LIVE:
+        # ⚠ **拒答判定要在附加任何聲明之前取**：`rq.looks_like_refusal` 帶 150 字上限，
+        #   附完時效聲明再判，一份真正的拒答會因為變長而不再像拒答（守門靜默失效）。
+        _was_refusal = rq.looks_like_refusal(answer)
         answer = answer.rstrip() + _format_unresolved_freshness_notice(state.get("todos", []))
+        # R6（見 `web_fetched_but_uncited_notice`）：抓到了 web 卻一個都沒引用 → 揭露。
+        # ⚠ 必須在這裡而不是 todo 層：`_format_unresolved_freshness_notice` 對 `web_used` 為真的
+        #   待辦直接跳過，而這裡的病正好是「web_used 為真、答案卻沒引用」。
+        if not _was_refusal:
+            answer = answer.rstrip() + web_fetched_but_uncited_notice(answer, web_extra)
     # 口徑揭露：與時效聲明同一個位置、同一個理由（機械式附加，不要求 Writer 自己記得）。
     # ⚠ 判的是**答案實際引用**的 chunk，不是候選池——池裡有 TTM 但答案沒用，讀者一樣拿不到。
     _cited = _extract_citations(answer)

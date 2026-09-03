@@ -40,6 +40,14 @@ import sys
 from datetime import date
 from pathlib import Path
 
+# ⚠ **這一行是被一次真實的付費長跑炸掉逼出來的**（2026-09-01）：web 內容含 ` `
+#   （窄不斷行空格），Windows 預設 cp950 編不出來 → **進度列印**當場 UnicodeEncodeError。
+#   炸點在答案算完之後，所以那一批的 LLM 與 Tavily 額度全燒完才把結果丟掉。
+#   必須早於 `import agentic_rag_v2`：它會把 sys.stdout 包起來並保存 `_real` 參考，
+#   而 reconfigure 是**就地**改編碼，先改再被包住才生效。
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 _ROOT = Path(__file__).resolve().parent.parent
 
 # 錄製題庫。id 前綴 web- 以免與 eval_set.json 的 100 題混淆——**這些不進 eval_set**
@@ -91,9 +99,20 @@ def main(argv=None) -> int:
     #     另外三個（`period_intent`／`ticker`／`ratio`）是更晚才加的接點，比既有 fixture 新，
     #     bare strict 會誤炸在「這份 fixture 錄的時候還沒有這個接點」上——那是假陽性。
     #     它們的漂移仍然抓得到，只是繞一步：檢索變了 → 候選 chunk id 變了 → `check` 的 key 變了。
-    #     ⚠ 若日後重錄整份 fixture，這裡可以收緊成 bare `strict`。
+    #   ⚠ **2026-09-02 收緊成 bare `strict`**：整份 fixture 已重錄（綁 multiyear ＋ as-of 09-02），
+    #     七個接點的中間產物都在同一輪裡錄齊，上面那個「fixture 比接點舊」的假陽性理由消失了。
+    #     證據是**三輪重放 `hit=36 miss=0`**——bare strict 在這三輪裡一次都不會誤炸。
+    #     ⚠ 換一份 fixture 或加新接點時，這裡要退回 per-kind，否則會炸在「這份 fixture 錄的時候
+    #       還沒有這個接點」上——那是假陽性。
     if args.mode == "replay" and not args.lenient_replay:
-        os.environ["RAG_REPLAY_MODE"] = "strict:plan,replan,translate_en,check"
+        os.environ["RAG_REPLAY_MODE"] = "strict"
+    # ⚠ **replay 一律唯讀**（2026-09-02，與 strict 是兩件事）：strict 只涵蓋上面四個 kind，
+    #   其餘三個（`period_intent`／`ticker`／`ratio`）miss 之後仍會**回寫**——於是「replay」
+    #   這一輪會偷偷改掉 fixture，下一輪就重放到一份被自己改過的東西。這是 `web_replay.note_meta`
+    #   踩過的同一個形狀（「證據自我抹除」，害 fixture 對不上 collection 三週沒有跡象）。
+    #   record 模式**不能**開，那一輪的產物就是快取本身。
+    if args.mode == "replay":
+        os.environ["RAG_REPLAY_READONLY"] = "1"
 
     sys.path.insert(0, str(_ROOT))
     import rag_query as rq                      # noqa: E402
@@ -158,6 +177,17 @@ def main(argv=None) -> int:
         return s["recorded"] + s["hit"]
 
     records = []
+
+    def _flush_records() -> None:
+        """**逐題落盤**（2026-09-01）。原本只在迴圈跑完才寫一次，於是任何中途中斷
+        ——例外、Ctrl-C、機器睡著——都會把已經燒掉的 LLM 與 Tavily 額度連同結果一起丟掉。
+        實測一次：批次在第二題的進度列印上炸掉，第一題的答案已經算完卻沒有留下任何東西。"""
+        Path(args.output).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.output).write_text(json.dumps(
+            {"meta": {"as_of": args.as_of, "collection": rq.COLLECTION_NAME,
+                      "fixture": args.fixture, "replay_cache": args.replay_cache},
+             "records": records}, ensure_ascii=False, indent=2), encoding="utf-8")
+
     for qid, query, why in items:
         before = _web_calls()
         print(f"\n──[{qid}] {query}\n   （{why}）")
@@ -166,6 +196,7 @@ def main(argv=None) -> int:
         except Exception as e:
             print(f"   [FAIL] {e!r}")
             records.append({"id": qid, "query": query, "why": why, "error": repr(e)})
+            _flush_records()
             continue
         n_web = _web_calls() - before
         ans = out.get("answer", "")
@@ -176,14 +207,11 @@ def main(argv=None) -> int:
             "sources": [{"source": c.get("source"), "chunk_index": c.get("chunk_index")}
                         for c in (out.get("chunks") or [])],
         })
+        _flush_records()          # ⚠ 先落盤再列印：列印是**最可能炸的那一步**（見檔頭 reconfigure）
         print(f"   web 呼叫錄到 {n_web} 次｜答案 {len(ans)} 字")
         print(f"   {ans[:220].replace(chr(10), ' ')}")
 
-    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
-    Path(args.output).write_text(json.dumps(
-        {"meta": {"as_of": args.as_of, "collection": rq.COLLECTION_NAME,
-                  "fixture": args.fixture, "replay_cache": args.replay_cache},
-         "records": records}, ensure_ascii=False, indent=2), encoding="utf-8")
+    _flush_records()
     print(f"\nfixture → {args.fixture}（web 回應 {_wr.stats()['recorded']} 筆）")
     print(f"答案 → {args.output}")
     print("下一步：讀答案，把『這題該成立什麼』寫成斷言檔，再用 replay 模式驗。")

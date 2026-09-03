@@ -27,12 +27,15 @@
 """
 from __future__ import annotations
 
+import inspect
 import json
 import sys
 from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")   # 本檔輸出含 ↔／⚠／全形，Windows 預設 cp950 會在 gate8 當場炸
 
 import agentic_rag_v2 as ar   # noqa: E402
 
@@ -1257,8 +1260,12 @@ def gate15_period_fallback_disclosure() -> None:
             "attributable" in _nodefault, f"無預設的={_nodefault}")
 
     # ⑮f2 逐個呼叫點驗（同 ⑮b／⑭a 的形狀：改三處漏一處要叫得出來）
+    # ⚠ 2026-09-01：確定性補救迴圈改成經由 `_dispatch_todo` 叫檢索器（route 分派），
+    #   所以「帶 attributable 的呼叫點」現在**兩種函式都算**。少了 `_dispatch_todo`
+    #   這一半，⑮f3 會找不到迴圈那一處而變成前提失敗——那是錨點過期不是系統壞掉。
     _calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)
-              and ast.unparse(n.func).endswith("_retrieve_chunks")]
+              and (ast.unparse(n.func).endswith("_retrieve_chunks")
+                   or ast.unparse(n.func).endswith("_dispatch_todo"))]
     _assert("⑮f2 前提：找得到 `_retrieve_chunks` 的呼叫點（找不到＝下面全是假性通過）",
             len(_calls) >= 4, f"共 {len(_calls)} 處")
     _no_kw = [ast.unparse(c)[:70] for c in _calls
@@ -1268,8 +1275,10 @@ def gate15_period_fallback_disclosure() -> None:
 
     # ⑮f3 判別力所在：補救迴圈那一處**不可以是常數**。
     #     `attributable=True` 寫死在迴圈裡，f1/f2/f4 照樣全綠，而 col-10 原封不動地回來。
-    _loop = [c for c in _calls if c.args and ast.unparse(c.args[0]) == "active_query"]
-    _assert("⑮f3 前提：找得到確定性補救迴圈的檢索呼叫（第一個引數是 active_query）",
+    # `_dispatch_todo(route, active_query, …)` → active_query 是**第二個**位置引數。
+    _loop = [c for c in _calls
+             if any(ast.unparse(a) == "active_query" for a in c.args[:2])]
+    _assert("⑮f3 前提：找得到確定性補救迴圈的檢索呼叫（引數裡有 active_query）",
             len(_loop) == 1, f"找到 {len(_loop)} 處")
     if len(_loop) == 1:
         _v = next(k.value for k in _loop[0].keywords if k.arg == "attributable")
@@ -1395,21 +1404,47 @@ def gate15_period_fallback_disclosure() -> None:
 
     # ⑮g5 值流：不是「寫了關鍵字」而是「值真的從 todo 走到 executor」（同 ⑮e／⑧g 的教訓）
     _seen_attr: list = []
+    _seen_route: list = []
     _o6 = {"_run_executor": ar._run_executor}
+
+    def _todo(flag=True, **extra):
+        d = {"id": 0, "task": "某個沒有公司名的子問題", "temporal_scope": "",
+             "attributable": flag, "freshness_gaps": [], "period_notes": [],
+             "web_used": False, "status": "pending", "result": ""}
+        d.update(extra)
+        return d
+
     try:
-        ar._run_executor = (lambda task, scope, fm, idx, verbose, *, attributable:
-                            (_seen_attr.append(attributable), ("摘要", [], "none", []))[1])
+        ar._run_executor = (lambda task, scope, fm, idx, verbose, *, attributable, route="kb":
+                            (_seen_attr.append(attributable), _seen_route.append(route),
+                             ("摘要", [], "none", []))[2])
         for _flag in (True, False):
             ar._reset_run_pool()
-            ar._run_one_todo({"id": 0, "task": "某個沒有公司名的子問題", "temporal_scope": "",
-                              "attributable": _flag, "freshness_gaps": [], "period_notes": [],
-                              "web_used": False, "status": "pending", "result": ""},
-                             ar.FRESHNESS_SNAPSHOT, False)
+            ar._run_one_todo(_todo(_flag), ar.FRESHNESS_SNAPSHOT, False)
+        _attr_flow = list(_seen_attr)          # ⚠ 先凍結：下面的 route 測試會再跑幾次 _run_one_todo
+        # ⑮g6 **值流（route）**：同 ⑮e／⑮g5 的教訓——「呼叫點有沒有寫 `route=`」與「值有沒有
+        #     真的從 todo 走到 executor」是兩件事。少了這條，一個 `route="kb"` 寫死的呼叫點
+        #     照樣全綠，而 Planner 判的路由**一格都不會生效**。
+        _seen_route.clear()
+        for _r in ("web", "both", "kb"):
+            ar._reset_run_pool()
+            ar._run_one_todo(_todo(True, route=_r), ar.FRESHNESS_SNAPSHOT, False)
+        _route_flow = list(_seen_route)
+        # ⑮g7 誤報對照：**沒有 route 的舊 todo**（`_node_replan` 這一版還沒補）必須落到 "kb"
+        #     ＝與加 route 之前逐字相同的行為，而不是 KeyError 把整個子問題打掉。
+        _seen_route.clear()
+        ar._reset_run_pool()
+        ar._run_one_todo(_todo(True), ar.FRESHNESS_SNAPSHOT, False)
+        _route_missing = list(_seen_route)
     finally:
         for k, v in _o6.items():
             setattr(ar, k, v)
     _assert("⑮g5 todo 的 `attributable` 真的流到 executor（不是只寫了關鍵字）",
-            _seen_attr == [True, False], f"實際={_seen_attr}")
+            _attr_flow == [True, False], f"實際={_attr_flow}")
+    _assert(f"⑮g6 todo 的 route **值**真的流到 executor（實得 {_route_flow}）",
+            _route_flow == ["web", "both", "kb"])
+    _assert(f"⑮g7 誤報對照：todo 沒有 route 時退回 'kb'（實得 {_route_missing}）",
+            _route_missing == ["kb"])
 
     # ⑮g6 行為 ＋ 誤報對照：replan 出身的 todo，連第一輪的揭露句都不得逸出；
     #     Planner 出身的仍然要逸出（否則就是把功能關掉而不是修好）。
@@ -1437,6 +1472,282 @@ def gate15_period_fallback_disclosure() -> None:
             _out.get(True) == ["NOTE::某個子問題"], f"實際={_out.get(True)}")
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+def gate16_round0_query_is_verbatim() -> None:
+    """閘門⑯：**rnd 0 檢索用的 query 與子問題逐字相同，且只有 rnd 0 算可歸因**。
+
+    **為什麼是斷言而不是註解**：`attributable` 的整個保證建立在「rnd 0 問的就是使用者問的」
+    這個不變量上——`_retrieve_chunks(active_query, attributable=(attributable and rnd == 0))`。
+    閘門⑮f/⑮g 驗的是「揭露句該不該說『所詢問財年』」，而**那個判斷的前提就是這裡**：
+    只要有誰讓 rnd 0 先改寫一次 query，⑮ 全綠而前提已經崩了。
+
+    **這支現在是綠的，寫它是為了接下來的重構**（路由改成 todo 的 `route` 欄位，
+    見 [`BACKLOG.md`](../BACKLOG.md)）：那次會動 `_run_executor_deterministic` 的迴圈頭，
+    而「rnd 0 逐字」是那次改動**最容易順手弄丟**的一格。
+
+    ⚠ **刻意是行為測試不是 AST**：AST 只看得到「有沒有寫 `active_query = task`」，
+      看不到「第一次真的送出去的是哪個字串」。實測相近的坑：⑮b 只驗了呼叫點寫了
+      `period_note=`，而那照樣可能傳一個永遠是空的變數（⑮e 才補上）。
+
+    ⚠ **判別力在 ⑯c/⑯d 兩條誤報對照**：只驗「第一次是 task」的話，一個「**每一輪都用 task**、
+      完全不理 Grader 改寫」的實作也會通過——而那會讓 MAX_REWRITES 整個變成空轉。
+    """
+    print("\n[gate16] rnd 0 的 query 逐字 ＋ attributable 只在 rnd 0")
+
+    def _trace_rounds(attributable: bool, task: str = "Apple FY2025 的營收是多少"):
+        """跑真實的 `_run_executor_deterministic`，側錄每一輪送進檢索器的 (query, attributable)。
+        兩個 tool 與摘要都換成樁 → 零 LLM、零網路、零 Qdrant。"""
+        seen: list[tuple[str, bool]] = []
+        saved = (ar._retrieve_chunks, ar._check_sufficiency,
+                 ar._tavily_search, ar._fallback_local_summary)
+
+        def _fake_retrieve(q, *, attributable):
+            seen.append((q, attributable))
+            # ⚠ `raw_rerank_score` 不可省：`_merge_chunks` 拿它排序,少了會 KeyError,
+            #   而那個例外會被 `_run_executor_deterministic` 的 `except Exception` **吞掉**
+            #   → 迴圈只跑一輪就走降級路徑,⑯c/⑯d 量到的是降級行為不是受測行為。
+            #   （這正是 CLAUDE.md 說的「量尺自備輸入」那個坑：樁要長得像生產的產物。）
+            return [{"source": "AAPL_10K_2025.html", "chunk_index": 0,
+                     "content": "stub", "ticker": "AAPL", "raw_rerank_score": 0.9}]
+
+        ar._retrieve_chunks = _fake_retrieve
+        # 永遠判不足 → 迴圈會跑滿 MAX_REWRITES+1 輪,才看得到「第二輪換了沒」。
+        ar._check_sufficiency = lambda *a, **k: {
+            "sufficient": False, "missing": "缺 FY2025", "new_query": "REWRITTEN_BY_GRADER",
+            "relevant_ids": [], "realtime_need": "none", "kb_unfixable": False}
+        ar._tavily_search = lambda q, need="none": "（stub）"
+        ar._fallback_local_summary = lambda task_, chunks: "（stub 摘要）"
+        try:
+            ar._run_executor_deterministic(
+                task, "", ar.FRESHNESS_SNAPSHOT, 0, False, attributable=attributable)
+        finally:
+            (ar._retrieve_chunks, ar._check_sufficiency,
+             ar._tavily_search, ar._fallback_local_summary) = saved
+        return seen
+
+    TASK = "Apple FY2025 的營收是多少"
+    rounds = _trace_rounds(True, TASK)
+
+    _assert("⑯a 至少跑了 2 輪（否則後面的誤報對照全部沒有判別力）",
+            len(rounds) >= 2, f"實得 {len(rounds)} 輪：{rounds!r}")
+    _assert("⑯b rnd 0 送進檢索器的 query 與子問題**逐字**相同",
+            bool(rounds) and rounds[0][0] == TASK,
+            f"實得 {rounds[0][0]!r} != {TASK!r}（rnd 0 一旦被改寫,⑮ 的『所詢問財年』就成了假前提）")
+    _assert("⑯c **誤報對照**：rnd 1 必須換成 Grader 的 new_query",
+            len(rounds) >= 2 and rounds[1][0] == "REWRITTEN_BY_GRADER",
+            f"實得 {(rounds[1][0] if len(rounds) >= 2 else '（沒有第二輪）')!r}；"
+            "每輪都用 task ＝ MAX_REWRITES 整個空轉,而 ⑯b 照樣全綠")
+    _assert("⑯d rnd 0 是 attributable=True，其餘輪一律 False",
+            bool(rounds) and rounds[0][1] is True
+            and all(a is False for _, a in rounds[1:]),
+            f"實得 {[a for _, a in rounds]}")
+
+    rounds_no = _trace_rounds(False, TASK)
+    _assert("⑯e **誤報對照**：todo 本身不可歸因時，連 rnd 0 也必須是 False",
+            bool(rounds_no) and all(a is False for _, a in rounds_no),
+            f"實得 {[a for _, a in rounds_no]}；只看 `rnd == 0` 而漏掉 `attributable and` "
+            "＝ replan 造的 todo 也會宣稱『所詢問財年』（⑮g 治的正是這個病）")
+    _assert("⑯f 不可歸因時 rnd 0 的 query 仍然逐字（歸因與改寫是兩件事）",
+            bool(rounds_no) and rounds_no[0][0] == TASK, f"實得 {rounds_no[0][0]!r}")
+
+
+def gate17_dual_source_timepoints() -> None:
+    """閘門⑰：R5「並陳必須帶時點」（`find_undated_dual_sourcing`）。
+
+    **它治的病**（2026-09-02 實測）：`web-01` 同一份 fixture 三輪重放 PASS／**FAIL**／PASS，
+    失敗那輪引用了 web 的 $4.75 兆卻**完全沒給時點**，還寫「兩者皆屬於同一時間段的不同來源」
+    ——六月的 KB 快照與九月的 web 值不是同一時間段。R4 抓不到它，因為 R4 的 bucket key 含
+    `unit`，而 `$4.75 兆` 與 `$4342.02 billion` 落到不同桶。
+
+    ⚠ **判別力幾乎全在誤報對照**（⑰c~⑰g），陽性那幾條一個「一律發話」的實作也會通過。
+      三條是**乾跑實際踩出來的**，各自逐字凍結：
+        · **⑰c** U+2011 不換行連字號：`2026‑09‑01` 看起來與 ASCII 版一樣但 `[-/年]` 匹配不到。
+          第一版在 281 份答案裡的 4 個觸發有 **3 個是這個字元造成的誤報**。
+        · **⑰f** 新聞敘述引用：第一版只要求「同時引用 web 與財報就要有時點」，觸發率
+          **34/123（28%）**，絕大多數是這一型。現在要求兩邊都出現**可比較的金額**。
+        · **⑰g** 量級差 >10 倍 ＝ 不是同一個量（$25.56B 的自由現金流 vs $4.34T 的市值）。
+    """
+    print("\n── 閘門⑰：R5 並陳必須帶時點 ─────────────────────────────")
+    f = ar.find_undated_dual_sourcing
+
+    # ⑰a 真陽性：web_replay_r6.json 的 web-01，**逐字**。
+    R6 = ("Apple 目前的市值約為 **47,500 億美元（$4.75 trillion）**（即 47,500 億美元"
+          "（$4.75 兆））【web: https://stockanalysis.com/stocks/aapl/market-cap】。\n\n"
+          "作為參考，Apple 在 2026\u2011 06\u201112 的公司基本面資料中列示的市值為 "
+          "**43,420.2 億美元（$4342.02 billion）**【AAPL_Fundamentals_20260612.txt, chunk #0】。")
+    _assert("⑰a 真陽性：web 金額與財報金額並列，web 那句沒有任何日期 → 發話",
+            any("網路那一邊" in p for p in f(R6)), f"實得 {f(R6)}")
+
+    # ⑰b 誤報對照：同一題答對的那一輪（r5），兩邊都有時點 → 沉默。
+    R5 = ("Apple 目前的市值約為 **47,500 億美元（$4.75 兆）**，此數據來自 2026 年 9 月 1 日的"
+          "最新報告【web: https://stockanalysis.com/stocks/aapl/market-cap】。\n\n"
+          "（供參考：根據 2026-06-12 的公司基本面資料，Apple 的市值為 43,420.2 億美元"
+          "（$4342.02 billion）【AAPL_Fundamentals_20260612.txt, chunk #0】。）")
+    _assert("⑰b 誤報對照：兩邊都標了時點 → 沉默", f(R5) == [], f"實得 {f(R5)}")
+
+    # ⑰c 誤報對照（**乾跑踩出來的**）：日期用 U+2011 不換行連字號寫，必須照樣算數。
+    NB = ("Apple 目前的市值大約是 44,600 億美元（$4.46 trillion），依據 StockAnalysis.com，"
+          "Apple 在 2026\u201108\u201114 的市值為 **44,600 億美元（$4.46 trillion）**"
+          "【web: https://stockanalysis.com/stocks/aapl/market-cap】。\n"
+          "內部基本面資料（截至 2026\u201106\u201112）列出市值 **43,420.2 億美元"
+          "（$4,342.02 billion）**【AAPL_Fundamentals_20260612.txt, chunk #0】。")
+    _assert("⑰c 誤報對照：U+2011 連字號寫的日期照樣算時點（第一版 3/4 的誤報來自這個字元）",
+            f(NB) == [], f"實得 {f(NB)}")
+
+    # ⑰d/⑰e 誤報對照：沒有並陳就沒有意見。
+    WEB_ONLY = ("Apple 目前的市值約為 **47,500 億美元（$4.75 trillion）**"
+                "【web: https://stockanalysis.com/stocks/aapl/market-cap】。")
+    KB_ONLY = ("Apple 的市值為 **43,420.2 億美元（$4342.02 billion）**"
+               "【AAPL_Fundamentals_20260612.txt, chunk #0】。")
+    _assert("⑰d 誤報對照：只有 web 引用（沒有財報）→ 沉默", f(WEB_ONLY) == [], f"實得 {f(WEB_ONLY)}")
+    _assert("⑰e 誤報對照：只有財報引用（沒有 web）→ 沉默", f(KB_ONLY) == [], f"實得 {f(KB_ONLY)}")
+
+    # ⑰f 誤報對照（**乾跑踩出來的**）：新聞敘述型引用。第一版在這裡誤報，觸發率 28%。
+    NEWS = ("多篇報導指出，儘管股價近期下跌，華爾街仍維持「Strong Buy」共識"
+            "【web: https://finance.yahoo.com/markets/stocks/articles/meta-stock-sinks-32.html】。\n"
+            "為支撐 AI 需求，META 正在裁減約 8,000 個職位、凍結約 6,000 個新職缺"
+            "【web: https://finance.yahoo.com/markets/stocks/articles/meta-ai.html】。\n"
+            "公司的自由現金流達 255.6 億美元（$25.56 billion）"
+            "【META_Fundamentals_20260612.txt, chunk #1】。")
+    _assert("⑰f 誤報對照：web 那半是新聞敘述、沒有可比較的金額 → 沉默（第一版在這裡 28% 誤報）",
+            f(NEWS) == [], f"實得 {f(NEWS)}")
+
+    # ⑰g 誤報對照：兩個金額量級差超過 10 倍 ＝ 不是同一個量。
+    FAR = ("Apple 的市值約為 **47,500 億美元（$4.75 trillion）**"
+           "【web: https://stockanalysis.com/stocks/aapl/market-cap】。\n"
+           "其季度研發費用為 **86 億美元（$8.6 billion）**"
+           "【AAPL_10Q_202606.html, chunk #12】。")
+    _assert("⑰g 誤報對照：兩個金額差超過 10 倍（市值 vs 研發費用）→ 不是同一個量 → 沉默",
+            f(FAR) == [], f"實得 {f(FAR)}")
+
+    # ⑰h 同句規則：日期在**別的句子**不算——那正是要抓的病（KB 的日期替 web 值背書）。
+    CROSS = ("截至 2026-06-12 的資料如下。\n"
+             "Apple 目前的市值約為 **47,500 億美元（$4.75 trillion）**"
+             "【web: https://stockanalysis.com/stocks/aapl/market-cap】。\n"
+             "財報值為 **43,420.2 億美元（$4342.02 billion）**"
+             "【AAPL_Fundamentals_20260612.txt, chunk #0】。")
+    _assert("⑰h 同句規則：日期在別句不算（整篇比對會讓一個日期替所有來源背書）",
+            any("網路那一邊" in p for p in f(CROSS)), f"實得 {f(CROSS)}")
+
+    # ⑰i KB 那半可以靠**檔名的期別戳**滿足——不然這條規則會在幾乎每份答案上觸發＝變成常數。
+    # ⚠ **這條的測資必須讓財報那句「只有檔名戳、沒有日曆日期」**：第一版拿 ⑰a 的 R6 來測，
+    #   而 R6 的財報句裡本來就寫著 `2026-06-12` → 它是靠日曆日期通過的，檔名戳那條路
+    #   **從來沒被測到**。變異測試當場證實：把 `_FISCAL_MARK_RE` 從 KB 判斷拿掉，全綠。
+    STAMP_ONLY = ("Apple 目前的市值約為 **47,500 億美元（$4.75 trillion）**（截至 2026-09-01）"
+                  "【web: https://stockanalysis.com/stocks/aapl/market-cap】。\n"
+                  "財報列示的市值為 **43,420.2 億美元（$4342.02 billion）**"
+                  "【AAPL_Fundamentals_20260612.txt, chunk #0】。")
+    _assert("⑰i 財報那半只有檔名期別戳（`_20260612`）、沒有日曆日期 → 仍算交代了期間",
+            f(STAMP_ONLY) == [], f"實得 {f(STAMP_ONLY)}")
+
+    # ⑰j 接線：真的被 `_node_synthesize` 呼叫，而且**在數字溯源之後**（管線最末）。
+    #    ⚠ 順序不是裝飾：時點是措辭，前面每一道的重生成都可能改掉它。
+    src = inspect.getsource(ar._node_synthesize)
+    i_num = src.find("_number_check_and_fix")
+    i_dual = src.find("_dual_source_check_and_fix")
+    _assert("⑰j 接線：`_node_synthesize` 呼叫了 `_dual_source_check_and_fix`", i_dual > 0)
+    _assert("⑰k 順序：R5 排在數字溯源**之後**（前面每一道重生成都可能改掉時點）",
+            i_num > 0 and i_dual > i_num, f"num@{i_num} dual@{i_dual}")
+
+    # ⑰l 守門一致：拒答時要跳過（同其他四道，見閘門⑭）。
+    _assert("⑰l 守門：拒答時跳過（與其他四道共用 `rq.looks_like_refusal`）",
+            "looks_like_refusal" in src[max(0, i_dual - 200):i_dual])
+
+
+def gate18_web_fetched_but_uncited() -> None:
+    """閘門⑱：R6「抓到 web 卻一個都沒引用」→ 揭露（`web_fetched_but_uncited_notice`）。
+
+    **它治的病**：`web-01` 第 10 輪 `n_web_calls=1`、fixture 裡就有 $4.75 兆，答案卻只有
+    「Apple 目前的市值約為 43,420.2 億美元【AAPL_Fundamentals_20260612.txt, chunk #0】」
+    ——82 天前的快照當「目前」，零 web 引用、零揭露，五道 validator 一道都不響。
+
+    ⚠ **這是揭露不是重生成**，因為誤報方向決定：web 真的回垃圾時「網路結果未採用」字面為真。
+    ⚠ **頻率極低**（現行架構 116 題×輪出現 1 次），所以**驗收只能靠這道閘門**，
+      不要拿端到端跑分當證據。
+    ⚠ **⑱f 是這道閘門最重要的一條**：在答案後面加字**可能翻掉 eval 側分類器的判定**
+      （`check_news_routing.classify` 讀的就是答案文字）。任何「機械式附加」都要驗這件事，
+      否則量尺會被受測物的輸出改變＝CLAUDE.md〈量尺不可與被測物耦合〉的第三種形狀。
+    """
+    print("\n── 閘門⑱：R6 抓到 web 卻沒引用 → 揭露 ────────────────────")
+    f = ar.web_fetched_but_uncited_notice
+    WEB_EXTRA = "\n=== 網路搜尋結果 ===\n[web: https://stockanalysis.com/stocks/aapl/market-cap] ..."
+
+    # ⑱a 陽性：web_replay_r10 的 web-01，**逐字**。
+    R10 = ("Apple 目前的市值約為 **43,420.2 億美元（$4,342.02 billion）**（即約 43,400 億美元"
+           "（$4.34 trillion））【AAPL_Fundamentals_20260612.txt, chunk #0】.")
+    _assert("⑱a 陽性：web 有內容、答案零 web 引用 → 出揭露句",
+            ar._WEB_UNCITED_MARK in f(R10, WEB_EXTRA), f"實得 {f(R10, WEB_EXTRA)!r}")
+
+    # ⑱b 誤報對照：引用了 web 就沒事——本規則對「引用比例」沒有意見。
+    CITED = ("Apple 目前的市值約為 **47,500 億美元（$4.75 兆）**（截至 2026-09-01）"
+             "【web: https://stockanalysis.com/stocks/aapl/market-cap】。\n"
+             "財報值為 43,420.2 億美元【AAPL_Fundamentals_20260612.txt, chunk #0】。")
+    _assert("⑱b 誤報對照：答案有 web 引用 → 沉默", f(CITED, WEB_EXTRA) == "", f"實得 {f(CITED, WEB_EXTRA)!r}")
+
+    # ⑱c 誤報對照：web 根本沒拿到內容 → 沉默。那是 `_unfulfilled_web_route_gaps` 的守備範圍，
+    #    在這裡再講一次會變成同一件事講兩句。
+    _assert("⑱c 誤報對照：web_extra 為空（沒抓到內容）→ 沉默（避免與時效缺口重複揭露）",
+            f(R10, "") == "" and f(R10, "   ") == "", f"實得 {f(R10, '')!r}")
+
+    # ⑱d 全形／半形 web 標記都要認。⚠ 生產的 `_WEB_MARK` 只認半形，而實測答案全是全形——
+    #    只認半形會讓這條規則在**每一份**有 web 引用的答案上誤報（R4 就是這樣壞掉的）。
+    FULL = "市值為 4.75 兆【web: https://stockanalysis.com/x】。"
+    HALF = "市值為 4.75 兆[web: https://stockanalysis.com/x]。"
+    _assert("⑱d 全形【web:】與半形 [web:] 都算引用（只認半形＝R4 那個壞法）",
+            f(FULL, WEB_EXTRA) == "" and f(HALF, WEB_EXTRA) == "",
+            f"全形={f(FULL, WEB_EXTRA)!r} 半形={f(HALF, WEB_EXTRA)!r}")
+
+    # ⑱e 接線：掛在 LIVE 分支，而且**拒答判定取在附加任何聲明之前**。
+    #    ⚠ `looks_like_refusal` 有 150 字上限：先附時效聲明再判，真拒答會因為變長而不再像
+    #      拒答 → 守門靜默失效。
+    src = inspect.getsource(ar._node_synthesize)
+    i_flag = src.find("_was_refusal = rq.looks_like_refusal")
+    # ⚠ **要找 `i_flag` 之後**的那一個：`_format_unresolved_freshness_notice` 在
+    #   `_node_synthesize` 裡出現兩次，第一次在「collected/web 皆空 → 拒答」的早退分支。
+    #   拿第一次來比順序會永遠 FAIL，而那是斷言寫錯不是接線錯。
+    #   （早退分支不需要 R6：它的條件是 `not chunks and not web_notes` → web_extra 必為空。）
+    i_notice = src.find("_format_unresolved_freshness_notice", i_flag)
+    i_r6 = src.find("web_fetched_but_uncited_notice")
+    _assert("⑱e1 接線：`_node_synthesize` 呼叫了 `web_fetched_but_uncited_notice`", i_r6 > 0)
+    _assert("⑱e2 拒答判定取在**附加任何聲明之前**（150 字上限會讓後判失效）",
+            0 < i_flag < i_notice < i_r6, f"flag@{i_flag} notice@{i_notice} r6@{i_r6}")
+    _assert("⑱e3 只在 LIVE 分支（snapshot 的 eval 基準一格不動）",
+            "FRESHNESS_LIVE" in src[max(0, i_flag - 300):i_flag])
+
+    # ⑱f **跨量尺安全性：驗那個「讓它安全」的不變量，不是驗「結果剛好沒變」。**
+    #
+    # ⚠ 第一版寫的是「附上揭露句後 `check_news_routing.classify` 的判定不變」——**恆真、
+    #   零判別力**。因為揭露句以 `\n\n---\n⚠` 開頭，正好命中 `rq.EVIDENCE_TAIL_RE`
+    #   （`\n-{3,}\n(?=\s*(?:📚|⚠))`）→ 每一個呼叫 `strip_evidence_tail` 的消費端**根本看不到
+    #   它**。變異測試當場證實：把措辭改成含承認詞的「本次無法取得可用的網路新聞來源」
+    #   （`_ADMIT_RE` ＋ `_FLOW_SCOPE_RE` 同句命中）**照樣全綠**。
+    # → 所以真正該驗的是**邊界前綴**：揭露句必須落在證據尾巴的界線**之後**。措辭因此可以
+    #   自由改；一旦有人把前綴拿掉，它就會漏進答案本體並且**能夠**翻掉分類器（⑱f2 證明這件事）。
+    notice = f(R10, WEB_EXTRA)
+    # ⚠ 比對前 rstrip：`EVIDENCE_TAIL_RE` 的樣式是「換行 ＋ 三個以上減號 ＋ 換行」，
+    #   切完會把界線**前面**那個換行留在本體尾巴。
+    _assert("⑱f1 揭露句落在證據尾巴界線之後（`strip_evidence_tail` 之後逐字等於原答案）",
+            ar.rq.strip_evidence_tail(R10 + notice).rstrip() == R10.rstrip(),
+            f"實得 {ar.rq.strip_evidence_tail(R10 + notice)[-60:]!r}")
+
+    # ⑱f2 **誤報對照**：證明那個前綴是承重的，不是裝飾。少了它，同一段文字會漏進答案本體
+    #     ——而且足以把 eval 側分類器從 `kb_only`（危險）翻成 `admits_gap`（誠實）。
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import check_news_routing as cnr
+        leaked = "。本次無法取得可用的網路新聞來源"      # 拿掉前綴、且措辭含承認詞
+        before = cnr.classify(R10)[0]
+        after_safe = cnr.classify(R10 + notice)[0]
+        after_leak = cnr.classify(R10 + leaked)[0]
+        _assert("⑱f2 誤報對照：**沒有**邊界前綴時，同一段文字會把 kb_only 翻成 admits_gap",
+                before == "kb_only" and after_leak == "admits_gap",
+                f"before={before} leak={after_leak}（若沒翻面，這條斷言就沒有前提）")
+        _assert("⑱f3 有邊界前綴時判定不變（⑱f2 證明了這不是恆真）",
+                after_safe == before, f"{before} → {after_safe}")
+    except ImportError as e:
+        _assert("⑱f2/⑱f3 跨量尺誤報對照", False, f"import 失敗 {e!r}（不要靜默跳過斷言）")
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -1462,6 +1773,9 @@ def main() -> int:
     gate13_refusal_no_citation_tail()
     gate14_synthesize_refusal_guards()
     gate15_period_fallback_disclosure()
+    gate16_round0_query_is_verbatim()
+    gate17_dual_source_timepoints()
+    gate18_web_fetched_but_uncited()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")

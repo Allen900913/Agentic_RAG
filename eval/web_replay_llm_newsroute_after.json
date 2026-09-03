@@ -1,0 +1,2527 @@
+{
+ "plan": {
+  "live|Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？": [
+   {
+    "task": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+    "route": "web"
+   }
+  ],
+  "live|Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？": [
+   {
+    "task": "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？",
+    "route": "web"
+   }
+  ],
+  "live|最近分析師對 Apple 股票有哪些利多的看法？": [
+   {
+    "task": "最近分析師對 Apple 股票有哪些利多的看法？",
+    "route": "web"
+   }
+  ],
+  "live|NVIDIA 最近跟 IREN 之間有什麼合作的新聞？": [
+   {
+    "task": "NVIDIA 最近與 IREN 的合作新聞是什麼",
+    "route": "web"
+   }
+  ],
+  "live|關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？": [
+   {
+    "task": "NVIDIA 最近有什麼關於向中國銷售 AI 晶片的消息",
+    "route": "web"
+   }
+  ],
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？": [
+   {
+    "task": "NVIDIA 面臨哪些競爭對手或競爭情況",
+    "route": "web"
+   },
+   {
+    "task": "NVIDIA 目前的市場焦點是什麼",
+    "route": "web"
+   }
+  ],
+  "live|微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？": [
+   {
+    "task": "微軟最近在 AI 策略上的新消息及分析師的看法",
+    "route": "web"
+   }
+  ],
+  "live|有沒有 Microsoft 參與 AI 資安合作的新聞？": [
+   {
+    "task": "Microsoft 參與 AI 資安合作的新聞有哪些",
+    "route": "web"
+   }
+  ],
+  "live|Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？": [
+   {
+    "task": "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+    "route": "web"
+   }
+  ],
+  "live|最近有哪些關於 Meta 的利多分析與 AI 投資消息？": [
+   {
+    "task": "Meta 最近的利多分析有哪些",
+    "route": "web"
+   },
+   {
+    "task": "Meta 最近的 AI 投資消息有哪些",
+    "route": "web"
+   }
+  ],
+  "live|亞馬遜最近在歐洲有什麼大型投資的新聞？": [
+   {
+    "task": "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+    "route": "web"
+   }
+  ],
+  "live|最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？": [
+   {
+    "task": "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？",
+    "route": "web"
+   }
+  ],
+  "live|最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？": [
+   {
+    "task": "Apple 最近的股價有什麼值得注意的消息？",
+    "route": "web"
+   },
+   {
+    "task": "Microsoft 最近的股價有什麼值得注意的消息？",
+    "route": "web"
+   },
+   {
+    "task": "Amazon 最近的股價有什麼值得注意的消息？",
+    "route": "web"
+   },
+   {
+    "task": "Alphabet 最近的股價有什麼值得注意的消息？",
+    "route": "web"
+   },
+   {
+    "task": "Meta 最近的股價有什麼值得注意的消息？",
+    "route": "web"
+   },
+   {
+    "task": "Nvidia 最近的股價有什麼值得注意的消息？",
+    "route": "web"
+   },
+   {
+    "task": "Tesla 最近的股價有什麼值得注意的消息？",
+    "route": "web"
+   }
+  ],
+  "live|新聞如何評價 Apple 服務業務的成長與獲利能力？": [
+   {
+    "task": "Apple 服務業務的成長與獲利能力在最近的新聞中如何被評價？",
+    "route": "web"
+   }
+  ],
+  "live|新聞報導 Apple 為什麼被視為值得長期持有的股票？": [
+   {
+    "task": "Apple 為什麼被視為值得長期持有的股票？",
+    "route": "web"
+   }
+  ],
+  "live|NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？": [
+   {
+    "task": "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？",
+    "route": "web"
+   }
+  ],
+  "live|NVIDIA fiscal year 2026 的 Diluted EPS 是多少？": [
+   {
+    "task": "NVIDIA FY2026 的 Diluted EPS 是多少",
+    "route": "kb"
+   }
+  ],
+  "live|Apple fiscal year 2025 的 Diluted EPS 是多少？": [
+   {
+    "task": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+    "route": "kb"
+   }
+  ],
+  "live|NVIDIA 的核心技術護城河是什麼？": [
+   {
+    "task": "NVIDIA 的核心技術護城河是什麼",
+    "route": "kb"
+   }
+  ],
+  "live|Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？": [
+   {
+    "task": "Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼",
+    "route": "kb"
+   },
+   {
+    "task": "Amazon 在 Prime 服務上面臨的反壟斷或監管風險是什麼",
+    "route": "kb"
+   },
+   {
+    "task": "Amazon 在電商業務上面臨的反壟斷或監管風險是什麼",
+    "route": "kb"
+   }
+  ],
+  "live|Microsoft Azure 最新一季的營收成長率是多少？": [
+   {
+    "task": "Microsoft Azure 最新一季的營收成長率是多少？",
+    "route": "kb"
+   }
+  ],
+  "live|NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？": [
+   {
+    "task": "NVIDIA 最新一季資料中心營收成長多少",
+    "route": "kb"
+   },
+   {
+    "task": "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼",
+    "route": "kb"
+   }
+  ],
+  "live|在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？": [
+   {
+    "task": "NVIDIA 最近一年營收年增率（YoY revenue growth）是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Meta 最近一年營收年增率（YoY revenue growth）是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Alphabet 最近一年營收年增率（YoY revenue growth）是多少",
+    "route": "kb"
+   },
+   {
+    "task": "NVIDIA 最近十二個月（TTM）的淨利（net income）是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Meta 最近十二個月（TTM）的淨利（net income）是多少",
+    "route": "kb"
+   },
+   {
+    "task": "Alphabet 最近十二個月（TTM）的淨利（net income）是多少",
+    "route": "kb"
+   }
+  ]
+ },
+ "ratio": {
+  "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？": [
+   []
+  ],
+  "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？": [
+   []
+  ],
+  "最近分析師對 Apple 股票有哪些利多的看法？": [
+   []
+  ],
+  "NVIDIA 最近與 IREN 的合作新聞是什麼": [
+   []
+  ],
+  "NVIDIA 最近有什麼關於向中國銷售 AI 晶片的消息": [
+   []
+  ],
+  "NVIDIA 面臨哪些競爭對手或競爭情況\nNVIDIA 目前的市場焦點是什麼": [
+   [],
+   []
+  ],
+  "微軟最近在 AI 策略上的新消息及分析師的看法": [
+   []
+  ],
+  "Microsoft 參與 AI 資安合作的新聞有哪些": [
+   []
+  ],
+  "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？": [
+   []
+  ],
+  "Meta 最近的利多分析有哪些\nMeta 最近的 AI 投資消息有哪些": [
+   [],
+   []
+  ],
+  "亞馬遜最近在歐洲有什麼大型投資的新聞？": [
+   []
+  ],
+  "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？": [
+   []
+  ],
+  "Apple 最近的股價有什麼值得注意的消息？\nMicrosoft 最近的股價有什麼值得注意的消息？\nAmazon 最近的股價有什麼值得注意的消息？\nAlphabet 最近的股價有什麼值得注意的消息？\nMeta 最近的股價有什麼值得注意的消息？\nNvidia 最近的股價有什麼值得注意的消息？\nTesla 最近的股價有什麼值得注意的消息？": [
+   [],
+   [],
+   [],
+   [],
+   [],
+   [],
+   []
+  ],
+  "Apple 服務業務的成長與獲利能力在最近的新聞中如何被評價？": [
+   [
+    "Profit Margin",
+    "Revenue Growth"
+   ]
+  ],
+  "Apple 為什麼被視為值得長期持有的股票？": [
+   []
+  ],
+  "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？": [
+   []
+  ],
+  "NVIDIA FY2026 的 Diluted EPS 是多少": [
+   []
+  ],
+  "Apple fiscal year 2025 的 Diluted EPS 是多少？": [
+   []
+  ],
+  "NVIDIA 的核心技術護城河是什麼": [
+   []
+  ],
+  "Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼\nAmazon 在 Prime 服務上面臨的反壟斷或監管風險是什麼\nAmazon 在電商業務上面臨的反壟斷或監管風險是什麼": [
+   [],
+   [],
+   []
+  ],
+  "Microsoft Azure 最新一季的營收成長率是多少？": [
+   [
+    "Revenue Growth"
+   ]
+  ],
+  "NVIDIA 最新一季資料中心營收成長多少\nNVIDIA 最新一季資料中心營收的主要驅動產品是什麼": [
+   [
+    "Revenue Growth"
+   ],
+   []
+  ],
+  "NVIDIA 最近一年營收年增率（YoY revenue growth）是多少\nMeta 最近一年營收年增率（YoY revenue growth）是多少\nAlphabet 最近一年營收年增率（YoY revenue growth）是多少\nNVIDIA 最近十二個月（TTM）的淨利（net income）是多少\nMeta 最近十二個月（TTM）的淨利（net income）是多少\nAlphabet 最近十二個月（TTM）的淨利（net income）是多少": [
+   [
+    "Revenue Growth"
+   ],
+   [
+    "Revenue Growth"
+   ],
+   [
+    "Revenue Growth"
+   ],
+   [],
+   [],
+   []
+  ]
+ },
+ "translate_en": {
+  "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？": "What recent litigation or settlement news related to Siri has Apple disclosed?",
+  "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？": "What new updates on Siri were announced by Apple at the recent WWDC?",
+  "最近分析師對 Apple 股票有哪些利多的看法？": "What recent bullish viewpoints have analysts expressed about Apple stock?",
+  "查閱 Apple 最新的分析師報告摘要（如 FactSet、Thomson Reuters）以獲取利多觀點": "Review the latest analyst report summaries for Apple (e.g., FactSet, Thomson Reuters) to obtain bullish viewpoints",
+  "查閱 Apple 最近的 SEC 8‑K 或 10‑Q 文件中包含的分析師評論或利多觀點": "Review analyst comments or bullish viewpoints included in Apple's recent SEC Form 8-K or 10-Q filings",
+  "改用網路搜尋查找2026年7月以後的 Apple 分析師利多觀點（如 Bloomberg、Yahoo Finance、MarketWatch 等）": "Search online for bullish analyst viewpoints on Apple after July 2026 (e.g., Bloomberg, Yahoo Finance, MarketWatch, etc.)",
+  "查閱 Apple 最近的 SEC 8‑K 文件中是否包含分析師目標價上調或利多評論": "Check whether Apple's recent SEC Form 8-K filings contain analyst target price upgrades or bullish commentary.",
+  "查閱 Apple 最近的投資者關係新聞稿或官方公告中分析師的利多觀點": "Check Apple's recent investor relations press releases or official announcements for analysts' bullish viewpoints.",
+  "使用網路搜尋查找2026年7月以後 Apple 分析師的升級評級或目標價上調（如 TipRanks、Zacks、FactSet）": "Use online search to find analyst upgrades or target price increases for Apple after July 2026 (e.g., TipRanks, Zacks, FactSet)",
+  "NVIDIA 最近與 IREN 的合作新聞是什麼": "What is the latest news on NVIDIA's collaboration with IREN?",
+  "NVIDIA 最近有什麼關於向中國銷售 AI 晶片的消息": "What recent updates are there on NVIDIA's AI chip sales to China?",
+  "查閱 NVDA 202604 10‑Q 中關於 AI 晶片對中國的銷售情況": "Review NVDA's 202604 10-Q for AI chip sales to China",
+  "NVIDIA 目前的市場焦點是什麼": "What is NVIDIA's current market focus?",
+  "NVIDIA 面臨哪些競爭對手或競爭情況": "What competitors or competitive landscape does NVIDIA face?",
+  "改用網路搜尋查近期新聞中對 NVIDIA 競爭與市場焦點的報導": "Search recent news for reports on NVIDIA's competitive landscape and market focus.",
+  "微軟最近在 AI 策略上的新消息及分析師的看法": "Microsoft's latest AI strategy updates and analyst commentary",
+  "Microsoft 參與 AI 資安合作的新聞有哪些": "What news coverage exists on Microsoft's involvement in AI cybersecurity collaborations?",
+  "查找 Microsoft AI 資安合作的官方新聞稿或公告": "Locate Microsoft's official press release or announcement on its AI cybersecurity partnership.",
+  "Search SEC filings (e.g., 8‑K) for Microsoft AI security partnership announcements": "Search SEC filings (e.g., 8-K) for Microsoft AI security partnership announcements",
+  "查找合作夥伴公司（如 OpenAI、Palo Alto Networks、CrowdStrike 等）的公告或新聞稿，是否提及與 Microsoft 的 AI 資安合作": "Search partner companies’ (e.g., OpenAI, Palo Alto Networks, CrowdStrike) press releases or announcements for any mention of AI cybersecurity collaboration with Microsoft.",
+  "搜尋最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件，是否包含 Microsoft AI 資安合作的資訊": "Search recent investor presentations, earnings call transcripts, or SEC Form 8-K attachments for information on Microsoft AI security collaborations.",
+  "在 2026 年 7 月至 9 月期間，搜尋 Microsoft 官方安全部落格（Microsoft Security Blog）是否有關於 AI 資安合作的文章或公告": "Search the Microsoft Security Blog for any articles or announcements about AI security collaborations between July and September 2026.",
+  "搜尋 2026 年第三季（Q3）Microsoft 投資者簡報或新聞稿，檢查是否提及 AI 資安合作": "Search Microsoft Q3 2026 investor presentation or press release for any mention of AI cybersecurity collaboration",
+  "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？": "What recent large-scale fundraising or capital expenditure announcements has Alphabet (Google) made?",
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg": "Search Bloomberg online for recent Alphabet capital expenditure news",
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 Reuters": "Use a web search to find recent Reuters news on Alphabet’s fundraising and capital expenditures.",
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Yahoo Finance": "Search online for recent Alphabet capital expenditure news on Yahoo Finance",
+  "改用網路搜尋查找Alphabet近期籌資新聞於 CNBC": "Search online for recent Alphabet fundraising news on CNBC",
+  "改用網路搜尋查找Alphabet 2026 Q3 10‑Q 中的資本支出資訊於 SEC.gov": "Search SEC.gov for Alphabet’s 2026 Q3 10-Q capital expenditure information.",
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 The Wall Street Journal": "Use an online search to find recent Alphabet financing and capital expenditure news in The Wall Street Journal",
+  "Meta 最近的利多分析有哪些": "What recent bullish analyses are there for Meta?",
+  "Meta 最近的 AI 投資消息有哪些": "What are the recent AI investment updates for Meta?",
+  "亞馬遜最近在歐洲有什麼大型投資的新聞？": "What recent major investment news does Amazon have in Europe?",
+  "查閱 Amazon 2025 年 10-K 中的歐洲投資計畫": "Review Amazon's European investment plan in its 2025 Form 10-K filing",
+  "查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋）": "Search for Amazon's latest large-scale European investment news for 2026 (using web search)",
+  "查閱 Amazon 2026 年 10-Q 中的歐洲投資資訊": "Review Amazon's 2026 Form 10-Q for European investment information",
+  "查閱 Amazon 2026 年官方新聞稿中關於歐洲大型投資的資訊": "Review Amazon's 2026 official press release for details on its major European investment.",
+  "查閱 Amazon 2026 年投資者簡報（Investor Presentation）中關於歐洲的大型投資資訊": "Review the details on major European investments in Amazon’s 2026 Investor Presentation.",
+  "查詢歐洲主要新聞媒體（如 Reuters、Financial Times、Bloomberg）報導的 Amazon 2026 年最新大型投資": "Search major European news outlets (e.g., Reuters, Financial Times, Bloomberg) for reports on Amazon’s latest large-scale investments in 2026.",
+  "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？": "What recent news involving Tesla or Elon Musk is impacting Tesla's investor attention?",
+  "Apple 最近的股價有什麼值得注意的消息？": "What notable news is there regarding Apple's recent stock price?",
+  "Microsoft 最近的股價有什麼值得注意的消息？": "What notable developments are affecting Microsoft's recent share price?",
+  "Amazon 最近的股價有什麼值得注意的消息？": "What notable developments are there concerning Amazon's recent share price?",
+  "Alphabet 最近的股價有什麼值得注意的消息？": "What notable news is there regarding Alphabet's recent stock price?",
+  "Meta 最近的股價有什麼值得注意的消息？": "What notable news is there regarding Meta's recent stock price?",
+  "Nvidia 最近的股價有什麼值得注意的消息？": "What notable developments are there regarding Nvidia's recent share price?",
+  "Tesla 最近的股價有什麼值得注意的消息？": "What notable news is there regarding Tesla's recent stock price?",
+  "Apple 服務業務的成長與獲利能力在最近的新聞中如何被評價？": "How have recent news articles evaluated the growth and profitability of Apple's services business?",
+  "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價": "Use web search to find news commentary on Apple’s services segment growth and profitability from June 13 2026 to September 1 2026.",
+  "改用網路搜尋查找Apple 2026 Q3 earnings call transcript 中對服務業務的成長與獲利能力的評論": "Search online for Apple’s 2026 Q3 earnings call transcript and locate comments on the growth and profitability of its services business.",
+  "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的分析師評論或新聞評論": "Use web search to locate analyst and news commentary on Apple’s services segment between June 13 2026 and September 1 2026.",
+  "在知識庫中查找截至2026-06-12的Apple 服務業務的新聞評價與分析": "Search the knowledge base for news commentary and analysis on Apple’s services business up to June 12 2026.",
+  "Apple 為什麼被視為值得長期持有的股票？": "Why is Apple considered a stock worth holding for the long term?",
+  "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？": "Which Bitcoin mining company has NVIDIA recently partnered with for AI business?",
+  "改用網路搜尋於 Bloomberg 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": "Search Bloomberg online to identify the Bitcoin mining company NVIDIA recently partnered with for AI business.",
+  "改用網路搜尋於 Reuters 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": "Search Reuters to identify the Bitcoin mining company that NVIDIA recently partnered with for AI business.",
+  "改用網路搜尋於 Yahoo Finance 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": "Use Yahoo Finance to find which Bitcoin mining company NVIDIA recently partnered with for AI business.",
+  "改用網路搜尋於 CNBC 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": "Search CNBC to find which Bitcoin mining company NVIDIA recently partnered with for AI business.",
+  "改用網路搜尋於 Financial Times 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": "Search the Financial Times to identify the Bitcoin mining company that NVIDIA recently partnered with for AI business.",
+  "改用網路搜尋於 The Wall Street Journal 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": "Search The Wall Street Journal online to identify the Bitcoin mining company NVIDIA recently partnered with for its AI business.",
+  "NVIDIA FY2026 的 Diluted EPS 是多少": "What is NVIDIA's diluted EPS for FY2026?",
+  "Apple fiscal year 2025 的 Diluted EPS 是多少？": "What is Apple's diluted EPS for fiscal year 2025?",
+  "NVIDIA 的核心技術護城河是什麼": "What is NVIDIA's core technology moat?",
+  "Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼": "What antitrust or regulatory risks does Amazon face in its AWS business?",
+  "Amazon 在 Prime 服務上面臨的反壟斷或監管風險是什麼": "What antitrust or regulatory risks does Amazon face regarding its Prime service?",
+  "Amazon 在電商業務上面臨的反壟斷或監管風險是什麼": "What antitrust or regulatory risks does Amazon face in its e-commerce business?",
+  "Microsoft Azure 最新一季的營收成長率是多少？": "What was Microsoft Azure's revenue growth rate for the most recent quarter?",
+  "NVIDIA 最新一季資料中心營收成長多少": "What was NVIDIA's data center revenue growth in the most recent quarter?",
+  "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼": "What were the primary driver products for NVIDIA's most recent quarter data center revenue?",
+  "NVIDIA 最近一年營收年增率（YoY revenue growth）是多少": "What was NVIDIA's YoY revenue growth over the past year?",
+  "Meta 最近一年營收年增率（YoY revenue growth）是多少": "What was Meta's YoY revenue growth over the past year?",
+  "Alphabet 最近一年營收年增率（YoY revenue growth）是多少": "What was Alphabet's YoY revenue growth over the past year?",
+  "NVIDIA 最近十二個月（TTM）的淨利（net income）是多少": "What is NVIDIA's net income for the most recent twelve months (TTM)?",
+  "Meta 最近十二個月（TTM）的淨利（net income）是多少": "What is Meta's net income for the trailing twelve months (TTM)?",
+  "Alphabet 最近十二個月（TTM）的淨利（net income）是多少": "What is Alphabet's net income for the trailing twelve months (TTM)?"
+ },
+ "replan": {
+  "live|Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？|0:done:1:Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？|0:done:1:Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？": {
+   "sufficient": false,
+   "add": [],
+   "drop": []
+  },
+  "live|最近分析師對 Apple 股票有哪些利多的看法？|0:done:1:最近分析師對 Apple 股票有哪些利多的看法？": {
+   "sufficient": false,
+   "add": [
+    "查閱 Apple 最新的分析師報告摘要（如 FactSet、Thomson Reuters）以獲取利多觀點"
+   ],
+   "drop": []
+  },
+  "live|最近分析師對 Apple 股票有哪些利多的看法？|0:done:1:最近分析師對 Apple 股票有哪些利多的看法？|1:done:0:查閱 Apple 最新的分析師報告摘要（如 FactSet、Thomson Reuters）以獲取利多觀點": {
+   "sufficient": false,
+   "add": [
+    "查閱 Apple 最近的 SEC 8‑K 或 10‑Q 文件中包含的分析師評論或利多觀點"
+   ],
+   "drop": []
+  },
+  "live|最近分析師對 Apple 股票有哪些利多的看法？|0:done:1:最近分析師對 Apple 股票有哪些利多的看法？|1:done:0:查閱 Apple 最新的分析師報告摘要（如 FactSet、Thomson Reuters）以獲取利多觀點|2:done:0:查閱 Apple 最近的 SEC 8‑K 或 10‑Q 文件中包含的分析師評論或利多觀點": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋查找2026年7月以後的 Apple 分析師利多觀點（如 Bloomberg、Yahoo Finance、MarketWatch 等）"
+   ],
+   "drop": []
+  },
+  "live|最近分析師對 Apple 股票有哪些利多的看法？|0:done:1:最近分析師對 Apple 股票有哪些利多的看法？|1:done:0:查閱 Apple 最新的分析師報告摘要（如 FactSet、Thomson Reuters）以獲取利多觀點|2:done:0:查閱 Apple 最近的 SEC 8‑K 或 10‑Q 文件中包含的分析師評論或利多觀點|3:done:0:改用網路搜尋查找2026年7月以後的 Apple 分析師利多觀點（如 Bloomberg、Yahoo Finance、MarketWatch 等）": {
+   "sufficient": false,
+   "add": [
+    "查閱 Apple 最近的 SEC 8‑K 文件中是否包含分析師目標價上調或利多評論",
+    "查閱 Apple 最近的投資者關係新聞稿或官方公告中分析師的利多觀點"
+   ],
+   "drop": []
+  },
+  "live|最近分析師對 Apple 股票有哪些利多的看法？|0:done:1:最近分析師對 Apple 股票有哪些利多的看法？|1:done:0:查閱 Apple 最新的分析師報告摘要（如 FactSet、Thomson Reuters）以獲取利多觀點|2:done:0:查閱 Apple 最近的 SEC 8‑K 或 10‑Q 文件中包含的分析師評論或利多觀點|3:done:0:改用網路搜尋查找2026年7月以後的 Apple 分析師利多觀點（如 Bloomberg、Yahoo Finance、MarketWatch 等）|4:done:0:查閱 Apple 最近的 SEC 8‑K 文件中是否包含分析師目標價上調或利多評論|5:done:0:查閱 Apple 最近的投資者關係新聞稿或官方公告中分析師的利多觀點": {
+   "sufficient": false,
+   "add": [
+    "使用網路搜尋查找2026年7月以後 Apple 分析師的升級評級或目標價上調（如 TipRanks、Zacks、FactSet）",
+    "查閱 Apple 投資者關係網站的最新新聞稿，尋找分析師的利多評論或目標價上調"
+   ],
+   "drop": []
+  },
+  "live|最近分析師對 Apple 股票有哪些利多的看法？|0:done:1:最近分析師對 Apple 股票有哪些利多的看法？|1:done:0:查閱 Apple 最新的分析師報告摘要（如 FactSet、Thomson Reuters）以獲取利多觀點|2:done:0:查閱 Apple 最近的 SEC 8‑K 或 10‑Q 文件中包含的分析師評論或利多觀點|3:done:0:改用網路搜尋查找2026年7月以後的 Apple 分析師利多觀點（如 Bloomberg、Yahoo Finance、MarketWatch 等）|4:done:0:查閱 Apple 最近的 SEC 8‑K 文件中是否包含分析師目標價上調或利多評論|5:done:0:查閱 Apple 最近的投資者關係新聞稿或官方公告中分析師的利多觀點|6:done:0:使用網路搜尋查找2026年7月以後 Apple 分析師的升級評級或目標價上調（如 TipRanks、Zacks、FactSet）": {
+   "sufficient": false,
+   "add": [
+    "使用網路搜尋查找2026年7月以後 Apple 分析師的利多觀點於 Seeking Alpha",
+    "查閱 Apple 2026年7月以後的 earnings call transcript（電話會議文字稿）中分析師的正面評論"
+   ],
+   "drop": [
+    3,
+    6
+   ]
+  },
+  "live|NVIDIA 最近跟 IREN 之間有什麼合作的新聞？|0:done:1:NVIDIA 最近與 IREN 的合作新聞是什麼": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？|0:done:1:NVIDIA 最近有什麼關於向中國銷售 AI 晶片的消息": {
+   "sufficient": false,
+   "add": [
+    "查閱 NVDA 202604 10‑Q 中關於 AI 晶片對中國的銷售情況"
+   ],
+   "drop": []
+  },
+  "live|關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？|0:done:1:NVIDIA 最近有什麼關於向中國銷售 AI 晶片的消息|1:done:0:查閱 NVDA 202604 10‑Q 中關於 AI 晶片對中國的銷售情況": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？|0:done:1:NVIDIA 面臨哪些競爭對手或競爭情況|1:done:1:NVIDIA 目前的市場焦點是什麼": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋查近期新聞中對 NVIDIA 競爭與市場焦點的報導"
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？|0:done:1:NVIDIA 面臨哪些競爭對手或競爭情況|1:done:1:NVIDIA 目前的市場焦點是什麼|2:done:0:改用網路搜尋查近期新聞中對 NVIDIA 競爭與市場焦點的報導": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？|0:done:1:微軟最近在 AI 策略上的新消息及分析師的看法": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|有沒有 Microsoft 參與 AI 資安合作的新聞？|0:done:1:Microsoft 參與 AI 資安合作的新聞有哪些": {
+   "sufficient": false,
+   "add": [
+    "查找 Microsoft AI 資安合作的官方新聞稿或公告"
+   ],
+   "drop": []
+  },
+  "live|有沒有 Microsoft 參與 AI 資安合作的新聞？|0:done:1:Microsoft 參與 AI 資安合作的新聞有哪些|1:done:0:查找 Microsoft AI 資安合作的官方新聞稿或公告": {
+   "sufficient": false,
+   "add": [
+    "Search SEC filings (e.g., 8‑K) for Microsoft AI security partnership announcements"
+   ],
+   "drop": []
+  },
+  "live|有沒有 Microsoft 參與 AI 資安合作的新聞？|0:done:1:Microsoft 參與 AI 資安合作的新聞有哪些|1:done:0:查找 Microsoft AI 資安合作的官方新聞稿或公告|2:done:0:Search SEC filings (e.g., 8‑K) for Microsoft AI security partnership announcements": {
+   "sufficient": false,
+   "add": [
+    "查找合作夥伴公司（如 OpenAI、Palo Alto Networks、CrowdStrike 等）的公告或新聞稿，是否提及與 Microsoft 的 AI 資安合作",
+    "搜尋最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件，是否包含 Microsoft AI 資安合作的資訊"
+   ],
+   "drop": []
+  },
+  "live|有沒有 Microsoft 參與 AI 資安合作的新聞？|0:done:1:Microsoft 參與 AI 資安合作的新聞有哪些|1:done:0:查找 Microsoft AI 資安合作的官方新聞稿或公告|2:done:0:Search SEC filings (e.g., 8‑K) for Microsoft AI security partnership announcements|3:done:0:查找合作夥伴公司（如 OpenAI、Palo Alto Networks、CrowdStrike 等）的公告或新聞稿，是否提及與 Microsoft 的 AI 資安合作|4:done:0:搜尋最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件，是否包含 Microsoft AI 資安合作的資訊": {
+   "sufficient": false,
+   "add": [
+    "在 2026 年 7 月至 9 月期間，搜尋 Microsoft 官方安全部落格（Microsoft Security Blog）是否有關於 AI 資安合作的文章或公告",
+    "搜尋 2026 年第三季（Q3）Microsoft 投資者簡報或新聞稿，檢查是否提及 AI 資安合作"
+   ],
+   "drop": []
+  },
+  "live|有沒有 Microsoft 參與 AI 資安合作的新聞？|0:done:1:Microsoft 參與 AI 資安合作的新聞有哪些|1:done:0:查找 Microsoft AI 資安合作的官方新聞稿或公告|2:done:0:Search SEC filings (e.g., 8‑K) for Microsoft AI security partnership announcements|3:done:0:查找合作夥伴公司（如 OpenAI、Palo Alto Networks、CrowdStrike 等）的公告或新聞稿，是否提及與 Microsoft 的 AI 資安合作|4:done:0:搜尋最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件，是否包含 Microsoft AI 資安合作的資訊|5:done:0:在 2026 年 7 月至 9 月期間，搜尋 Microsoft 官方安全部落格（Microsoft Security Blog）是否有關於 AI 資安合作的文章或公告|6:done:0:搜尋 2026 年第三季（Q3）Microsoft 投資者簡報或新聞稿，檢查是否提及 AI 資安合作": {
+   "sufficient": false,
+   "add": [
+    "使用網路搜尋查找 2026 年 7 月至 9 月期間 Microsoft AI 資安合作的新聞（例如 Reuters、Bloomberg）"
+   ],
+   "drop": []
+  },
+  "live|Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？|0:done:1:Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg"
+   ],
+   "drop": []
+  },
+  "live|Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？|0:done:1:Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？|1:done:0:改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 Reuters"
+   ],
+   "drop": []
+  },
+  "live|Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？|0:done:1:Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？|1:done:0:改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg|2:done:0:改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 Reuters": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋查找Alphabet近期資本支出新聞於 Yahoo Finance",
+    "改用網路搜尋查找Alphabet近期籌資新聞於 CNBC",
+    "改用網路搜尋查找Alphabet 2026 Q3 10‑Q 中的資本支出資訊於 SEC.gov"
+   ],
+   "drop": []
+  },
+  "live|Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？|0:done:1:Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？|1:done:0:改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg|2:done:0:改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 Reuters|3:done:0:改用網路搜尋查找Alphabet近期資本支出新聞於 Yahoo Finance|4:done:0:改用網路搜尋查找Alphabet近期籌資新聞於 CNBC|5:done:0:改用網路搜尋查找Alphabet 2026 Q3 10‑Q 中的資本支出資訊於 SEC.gov": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 The Wall Street Journal"
+   ],
+   "drop": []
+  },
+  "live|Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？|0:done:1:Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？|1:done:0:改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg|2:done:0:改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 Reuters|3:done:0:改用網路搜尋查找Alphabet近期資本支出新聞於 Yahoo Finance|4:done:0:改用網路搜尋查找Alphabet近期籌資新聞於 CNBC|5:done:0:改用網路搜尋查找Alphabet 2026 Q3 10‑Q 中的資本支出資訊於 SEC.gov|6:done:0:改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 The Wall Street Journal": {
+   "sufficient": false,
+   "add": [],
+   "drop": []
+  },
+  "live|最近有哪些關於 Meta 的利多分析與 AI 投資消息？|0:done:1:Meta 最近的利多分析有哪些|1:done:1:Meta 最近的 AI 投資消息有哪些": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|亞馬遜最近在歐洲有什麼大型投資的新聞？|0:done:1:亞馬遜最近在歐洲有什麼大型投資的新聞？": {
+   "sufficient": false,
+   "add": [
+    "查閱 Amazon 2025 年 10-K 中的歐洲投資計畫"
+   ],
+   "drop": []
+  },
+  "live|亞馬遜最近在歐洲有什麼大型投資的新聞？|0:done:1:亞馬遜最近在歐洲有什麼大型投資的新聞？|1:done:0:查閱 Amazon 2025 年 10-K 中的歐洲投資計畫": {
+   "sufficient": false,
+   "add": [
+    "查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋）"
+   ],
+   "drop": [
+    1
+   ]
+  },
+  "live|亞馬遜最近在歐洲有什麼大型投資的新聞？|0:done:1:亞馬遜最近在歐洲有什麼大型投資的新聞？|1:done:0:查閱 Amazon 2025 年 10-K 中的歐洲投資計畫|2:done:0:查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋）": {
+   "sufficient": false,
+   "add": [
+    "查閱 Amazon 2026 年 10-Q 中的歐洲投資資訊",
+    "查閱 Amazon 2026 年官方新聞稿中關於歐洲大型投資的資訊"
+   ],
+   "drop": []
+  },
+  "live|亞馬遜最近在歐洲有什麼大型投資的新聞？|0:done:1:亞馬遜最近在歐洲有什麼大型投資的新聞？|1:done:0:查閱 Amazon 2025 年 10-K 中的歐洲投資計畫|2:done:0:查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋）|3:done:0:查閱 Amazon 2026 年 10-Q 中的歐洲投資資訊|4:done:0:查閱 Amazon 2026 年官方新聞稿中關於歐洲大型投資的資訊": {
+   "sufficient": false,
+   "add": [
+    "查閱 Amazon 2026 年投資者簡報（Investor Presentation）中關於歐洲的大型投資資訊"
+   ],
+   "drop": []
+  },
+  "live|亞馬遜最近在歐洲有什麼大型投資的新聞？|0:done:1:亞馬遜最近在歐洲有什麼大型投資的新聞？|1:done:0:查閱 Amazon 2025 年 10-K 中的歐洲投資計畫|2:done:0:查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋）|3:done:0:查閱 Amazon 2026 年 10-Q 中的歐洲投資資訊|4:done:0:查閱 Amazon 2026 年官方新聞稿中關於歐洲大型投資的資訊|5:done:0:查閱 Amazon 2026 年投資者簡報（Investor Presentation）中關於歐洲的大型投資資訊": {
+   "sufficient": false,
+   "add": [
+    "查詢歐洲主要新聞媒體（如 Reuters、Financial Times、Bloomberg）報導的 Amazon 2026 年最新大型投資"
+   ],
+   "drop": []
+  },
+  "live|亞馬遜最近在歐洲有什麼大型投資的新聞？|0:done:1:亞馬遜最近在歐洲有什麼大型投資的新聞？|1:done:0:查閱 Amazon 2025 年 10-K 中的歐洲投資計畫|2:done:0:查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋）|3:done:0:查閱 Amazon 2026 年 10-Q 中的歐洲投資資訊|4:done:0:查閱 Amazon 2026 年官方新聞稿中關於歐洲大型投資的資訊|5:done:0:查閱 Amazon 2026 年投資者簡報（Investor Presentation）中關於歐洲的大型投資資訊|6:done:0:查詢歐洲主要新聞媒體（如 Reuters、Financial Times、Bloomberg）報導的 Amazon 2026 年最新大型投資": {
+   "sufficient": false,
+   "add": [
+    "查詢 2026 年 Amazon 在歐洲的 AWS 數據中心擴建投資新聞",
+    "查詢 2026 年歐洲監管機構（如歐盟委員會）對 Amazon 投資的批准或公告"
+   ],
+   "drop": [
+    0,
+    2
+   ]
+  },
+  "live|最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？|0:done:1:最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？|0:done:1:Apple 最近的股價有什麼值得注意的消息？|1:done:1:Microsoft 最近的股價有什麼值得注意的消息？|2:done:0:Amazon 最近的股價有什麼值得注意的消息？|3:done:0:Alphabet 最近的股價有什麼值得注意的消息？|4:done:0:Meta 最近的股價有什麼值得注意的消息？|5:done:0:Nvidia 最近的股價有什麼值得注意的消息？|6:done:0:Tesla 最近的股價有什麼值得注意的消息？": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋查 Apple 最近股價消息（截至2026-09-01）",
+    "改用網路搜尋查 Microsoft 最近股價消息（截至2026-09-01）",
+    "改用網路搜尋查 Alphabet 最近股價消息（截至2026-09-01）",
+    "改用網路搜尋查 Meta 最近股價消息（截至2026-09-01）"
+   ],
+   "drop": [
+    0,
+    1,
+    3,
+    4
+   ]
+  },
+  "live|新聞如何評價 Apple 服務業務的成長與獲利能力？|0:done:1:Apple 服務業務的成長與獲利能力在最近的新聞中如何被評價？": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價"
+   ],
+   "drop": []
+  },
+  "live|新聞如何評價 Apple 服務業務的成長與獲利能力？|0:done:1:Apple 服務業務的成長與獲利能力在最近的新聞中如何被評價？|1:done:0:改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋查找Apple 2026 Q3 earnings call transcript 中對服務業務的成長與獲利能力的評論"
+   ],
+   "drop": []
+  },
+  "live|新聞如何評價 Apple 服務業務的成長與獲利能力？|0:done:1:Apple 服務業務的成長與獲利能力在最近的新聞中如何被評價？|1:done:0:改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價|2:done:0:改用網路搜尋查找Apple 2026 Q3 earnings call transcript 中對服務業務的成長與獲利能力的評論": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的分析師評論或新聞評論"
+   ],
+   "drop": []
+  },
+  "live|新聞如何評價 Apple 服務業務的成長與獲利能力？|0:done:1:Apple 服務業務的成長與獲利能力在最近的新聞中如何被評價？|1:done:0:改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價|2:done:0:改用網路搜尋查找Apple 2026 Q3 earnings call transcript 中對服務業務的成長與獲利能力的評論|3:done:0:改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的分析師評論或新聞評論": {
+   "sufficient": false,
+   "add": [
+    "在知識庫中查找截至2026-06-12的Apple 服務業務的新聞評價與分析"
+   ],
+   "drop": []
+  },
+  "live|新聞如何評價 Apple 服務業務的成長與獲利能力？|0:done:1:Apple 服務業務的成長與獲利能力在最近的新聞中如何被評價？|1:done:0:改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價|2:done:0:改用網路搜尋查找Apple 2026 Q3 earnings call transcript 中對服務業務的成長與獲利能力的評論|3:done:0:改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的分析師評論或新聞評論|4:done:0:在知識庫中查找截至2026-06-12的Apple 服務業務的新聞評價與分析": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|新聞報導 Apple 為什麼被視為值得長期持有的股票？|0:done:1:Apple 為什麼被視為值得長期持有的股票？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|0:done:1:NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋於 Bloomberg 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意"
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|0:done:1:NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|1:done:0:改用網路搜尋於 Bloomberg 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋於 Reuters 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意"
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|0:done:1:NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|1:done:0:改用網路搜尋於 Bloomberg 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|2:done:0:改用網路搜尋於 Reuters 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋於 Yahoo Finance 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意",
+    "改用網路搜尋於 CNBC 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意"
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|0:done:1:NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|1:done:0:改用網路搜尋於 Bloomberg 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|2:done:0:改用網路搜尋於 Reuters 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|3:done:0:改用網路搜尋於 Yahoo Finance 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|4:done:0:改用網路搜尋於 CNBC 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋於 Financial Times 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意"
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|0:done:1:NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|1:done:0:改用網路搜尋於 Bloomberg 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|2:done:0:改用網路搜尋於 Reuters 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|3:done:0:改用網路搜尋於 Yahoo Finance 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|4:done:0:改用網路搜尋於 CNBC 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|5:done:0:改用網路搜尋於 Financial Times 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋於 The Wall Street Journal 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意"
+   ],
+   "drop": []
+  },
+  "live|NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|0:done:1:NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？|1:done:0:改用網路搜尋於 Bloomberg 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|2:done:0:改用網路搜尋於 Reuters 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|3:done:0:改用網路搜尋於 Yahoo Finance 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|4:done:0:改用網路搜尋於 CNBC 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|5:done:0:改用網路搜尋於 Financial Times 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意|6:done:0:改用網路搜尋於 The Wall Street Journal 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "sufficient": false,
+   "add": [
+    "改用網路搜尋於 CoinDesk 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意",
+    "改用網路搜尋於 Business Insider 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意"
+   ],
+   "drop": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "live|NVIDIA fiscal year 2026 的 Diluted EPS 是多少？|0:done:0:NVIDIA FY2026 的 Diluted EPS 是多少": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|Apple fiscal year 2025 的 Diluted EPS 是多少？|0:done:0:Apple fiscal year 2025 的 Diluted EPS 是多少？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|NVIDIA 的核心技術護城河是什麼？|0:done:0:NVIDIA 的核心技術護城河是什麼": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？|0:done:0:Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼|1:done:0:Amazon 在 Prime 服務上面臨的反壟斷或監管風險是什麼|2:done:0:Amazon 在電商業務上面臨的反壟斷或監管風險是什麼": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|Microsoft Azure 最新一季的營收成長率是多少？|0:done:0:Microsoft Azure 最新一季的營收成長率是多少？": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？|0:done:0:NVIDIA 最新一季資料中心營收成長多少|1:done:0:NVIDIA 最新一季資料中心營收的主要驅動產品是什麼": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  },
+  "live|在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？|0:done:0:NVIDIA 最近一年營收年增率（YoY revenue growth）是多少|1:done:1:Meta 最近一年營收年增率（YoY revenue growth）是多少|2:done:1:Alphabet 最近一年營收年增率（YoY revenue growth）是多少|3:done:0:NVIDIA 最近十二個月（TTM）的淨利（net income）是多少|4:done:0:Meta 最近十二個月（TTM）的淨利（net income）是多少|5:done:1:Alphabet 最近十二個月（TTM）的淨利（net income）是多少": {
+   "sufficient": true,
+   "add": [],
+   "drop": []
+  }
+ },
+ "period_intent": {
+  "查閱 Apple 最新的分析師報告摘要（如 FactSet、Thomson Reuters）以獲取利多觀點": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple Inc latest analyst report summary FactSet Thomson Reuters bullish outlook 2026": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "查閱 Apple 最近的 SEC 8‑K 或 10‑Q 文件中包含的分析師評論或利多觀點": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple Inc. 2026 Q3 Form 10-Q analyst commentary": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Apple 2026 10-Q analyst commentary OR Apple 8-K analyst view": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "改用網路搜尋查找2026年7月以後的 Apple 分析師利多觀點（如 Bloomberg、Yahoo Finance、MarketWatch 等）": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple analyst bullish outlook July 2026 Bloomberg Yahoo Finance MarketWatch": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "查閱 Apple 最近的 SEC 8‑K 文件中是否包含分析師目標價上調或利多評論": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "查閱 Apple 最近的投資者關係新聞稿或官方公告中分析師的利多觀點": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple Inc 8-K recent analyst target price upgrade bullish commentary": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple recent investor relations press release analyst bullish commentary June 2026": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Apple Inc 8-K analyst target price upgrade OR bullish commentary recent filing": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple investor relations press release analyst bullish outlook 2026 Q3 recent": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "使用網路搜尋查找2026年7月以後 Apple 分析師的升級評級或目標價上調（如 TipRanks、Zacks、FactSet）": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple analyst upgrade July 2026 target price increase TipRanks Zacks FactSet": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": null
+  },
+  "NVIDIA 面臨哪些競爭對手或競爭情況": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA 目前的市場焦點是什麼": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋查近期新聞中對 NVIDIA 競爭與市場焦點的報導": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA recent news competition market focus August 2026": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "NVIDIA recent news competition market focus 2024 2025 2026": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "查找 Microsoft AI 資安合作的官方新聞稿或公告": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft AI security partnership press release announcement site:microsoft.com": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft AI security partnership press release official announcement": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Search SEC filings (e.g., 8‑K) for Microsoft AI security partnership announcements": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft Form 8-K AI security partnership announcement": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft Form 8-K AI security partnership announcement filing date": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "查找合作夥伴公司（如 OpenAI、Palo Alto Networks、CrowdStrike 等）的公告或新聞稿，是否提及與 Microsoft 的 AI 資安合作": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "搜尋最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件，是否包含 Microsoft AI 資安合作的資訊": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Palo Alto Networks press release AI security partnership with Microsoft OR CrowdStrike announcement AI security collaboration Microsoft OR OpenAI news AI security cooperation Microsoft": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft recent investor presentation AI security collaboration 2026 OR Microsoft earnings call transcript AI security partnership 2026 OR Microsoft 8-K AI security collaboration": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": null
+  },
+  "OpenAI press release AI security partnership with Microsoft; Palo Alto Networks announcement AI security collaboration Microsoft; CrowdStrike news Microsoft AI security partnership": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft recent investor presentation AI security partnership OR Microsoft 8-K AI security collaboration OR Microsoft earnings call transcript AI cybersecurity partnership 2026": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "在 2026 年 7 月至 9 月期間，搜尋 Microsoft 官方安全部落格（Microsoft Security Blog）是否有關於 AI 資安合作的文章或公告": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "搜尋 2026 年第三季（Q3）Microsoft 投資者簡報或新聞稿，檢查是否提及 AI 資安合作": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Microsoft Security Blog July 2026 AI security partnership site:security.microsoft.com": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft Q3 2026 investor presentation AI security partnership press release": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Microsoft Security Blog AI security partnership July 2026 September 2026 site:security.microsoft.com": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft FY2026 Q3 investor presentation AI security partnership OR Microsoft Q3 2026 press release AI security collaboration": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Alphabet recent capital expenditures Bloomberg news 2026": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Alphabet recent capital expenditures Bloomberg news June 2026": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 Reuters": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Alphabet Reuters recent fundraising capital expenditures 2026": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Yahoo Finance": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋查找Alphabet近期籌資新聞於 CNBC": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Alphabet recent capital expenditures news site:finance.yahoo.com 2026": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Alphabet fundraising news CNBC 2026 recent": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Alphabet capital expenditures recent news site:finance.yahoo.com": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Alphabet recent fundraising news CNBC 2026": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": null
+  },
+  "改用網路搜尋查找Alphabet 2026 Q3 10‑Q 中的資本支出資訊於 SEC.gov": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Alphabet 2026 Q3 Form 10-Q capital expenditures purchases of property and equipment site:sec.gov": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 The Wall Street Journal": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Alphabet recent fundraising capital expenditures Wall Street Journal 2026 site:wsj.com": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": null
+  },
+  "Alphabet recent fundraising and capital expenditures Wall Street Journal 2026": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Meta 最近的利多分析有哪些": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Meta 最近的 AI 投資消息有哪些": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "查閱 Amazon 2025 年 10-K 中的歐洲投資計畫": {
+   "period_ref": "absolute",
+   "fiscal_year": 2025,
+   "granularity": "annual"
+  },
+  "Amazon 2025 10-K European investment plan details": {
+   "period_ref": "absolute",
+   "fiscal_year": 2025,
+   "granularity": "annual"
+  },
+  "Amazon 2025 Form 10-K European investment plan details": {
+   "period_ref": "absolute",
+   "fiscal_year": 2025,
+   "granularity": "annual"
+  },
+  "查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋）": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Amazon 2026 Europe large investment announcement news": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 2026 Europe large investment news": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "查閱 Amazon 2026 年 10-Q 中的歐洲投資資訊": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "查閱 Amazon 2026 年官方新聞稿中關於歐洲大型投資的資訊": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Amazon 2026 Form 10-Q Europe investment information": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Amazon 2026 press release Europe large investment": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": null
+  },
+  "Amazon 2026 10-Q Europe investment information": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "查閱 Amazon 2026 年投資者簡報（Investor Presentation）中關於歐洲的大型投資資訊": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Amazon 2026 investor presentation Europe large investment details": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "查詢歐洲主要新聞媒體（如 Reuters、Financial Times、Bloomberg）報導的 Amazon 2026 年最新大型投資": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 2026 large investment Europe site:reuters.com OR site:ft.com OR site:bloomberg.com": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 2026 large investment reported by Reuters OR Financial Times OR Bloomberg": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft 最近的股價有什麼值得注意的消息？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple 最近的股價有什麼值得注意的消息？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 最近的股價有什麼值得注意的消息？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple AAPL recent stock price news June 2026": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": null
+  },
+  "Amazon recent stock price news June 2026 price movement and market reaction": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": null
+  },
+  "Alphabet 最近的股價有什麼值得注意的消息？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon recent stock price news June 2026 share price movement after Q2 earnings": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Alphabet GOOGL recent stock price news September 2026 latest price change and market commentary": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": null
+  },
+  "Meta 最近的股價有什麼值得注意的消息？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Alphabet Inc. recent stock price news June 2026 price change earnings release": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Meta Platforms recent stock price and news June 2026 price movement, latest market reaction, recent earnings or regulatory updates": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Nvidia 最近的股價有什麼值得注意的消息？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Meta Platforms current stock price and recent news affecting its share price June 2026": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": null
+  },
+  "Nvidia recent stock price movement and news June 2026": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": null
+  },
+  "Tesla 最近的股價有什麼值得注意的消息？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Nvidia recent stock price movement and news September 2026 share price change recent developments": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Tesla recent stock price movement June 2026 news price change percentage": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Tesla recent stock price news June 2026": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple services revenue Q3 2026 news analysis June 13 2026 to September 1 2026 profitability commentary": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Apple services growth profitability news June 13 2026 to September 1 2026": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋查找Apple 2026 Q3 earnings call transcript 中對服務業務的成長與獲利能力的評論": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Apple Q3 2026 earnings call transcript services segment growth profitability comments": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的分析師評論或新聞評論": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple services analyst commentary June 13 2026 to September 1 2026 OR Apple services news July 2026 analyst report": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple services analyst commentary June 2026 July 2026 August 2026 news articles": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "在知識庫中查找截至2026-06-12的Apple 服務業務的新聞評價與分析": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple services segment news analysis June 2026 up to June 12 2026": {
+   "period_ref": "latest",
+   "fiscal_year": 2026,
+   "granularity": "quarter"
+  },
+  "Apple services business news analysis June 2026 analyst commentary": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋於 Bloomberg 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA recent partnership with Bitcoin mining company AI business Bloomberg 2026": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA recent partnership with Bitcoin mining company AI business Bloomberg": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋於 Reuters 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Reuters NVIDIA recent AI partnership with a bitcoin mining company": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Reuters recent NVIDIA partnership with Bitcoin mining company AI business": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋於 Yahoo Finance 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋於 CNBC 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA recent partnership with Bitcoin mining company AI business Yahoo Finance 2026": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA recent AI partnership Bitcoin mining company CNBC": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA recent partnership with Bitcoin mining company AI business site:yahoo.com finance": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA recent partnership with Bitcoin mining company AI business site:CNBC.com": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋於 Financial Times 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Financial Times NVIDIA recent partnership with bitcoin mining company AI business": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Financial Times NVIDIA recent partnership with Bitcoin mining company AI business": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋於 The Wall Street Journal 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Wall Street Journal NVIDIA recent partnership with Bitcoin mining company AI business": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA FY2026 的 Diluted EPS 是多少": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "Apple fiscal year 2025 的 Diluted EPS 是多少？": {
+   "period_ref": "absolute",
+   "fiscal_year": 2025,
+   "granularity": "annual"
+  },
+  "NVIDIA 的核心技術護城河是什麼": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 在 Prime 服務上面臨的反壟斷或監管風險是什麼": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 在電商業務上面臨的反壟斷或監管風險是什麼": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Microsoft Azure 最新一季的營收成長率是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "NVIDIA 最新一季資料中心營收成長多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "quarter"
+  },
+  "NVIDIA 最近一年營收年增率（YoY revenue growth）是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Meta 最近一年營收年增率（YoY revenue growth）是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Alphabet 最近一年營收年增率（YoY revenue growth）是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "NVIDIA 最近十二個月（TTM）的淨利（net income）是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Meta 最近十二個月（TTM）的淨利（net income）是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Alphabet 最近十二個月（TTM）的淨利（net income）是多少": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  }
+ },
+ "check": {
+  "查閱 Apple 最新的分析師報告摘要（如 FactSet、Thomson Reuters）以獲取利多觀點 || AAPL_10K_2024.html#129 AAPL_Fundamentals_20260612.txt#0 AAPL_Fundamentals_20260612.txt#1 AAPL_10K_2023.html#134 AAPL_10Q_202512.html#14 || live": {
+   "sufficient": false,
+   "missing": "缺少 Apple 最新的分析師報告摘要及其利多觀點（如 FactSet、Thomson Reuters 的分析師評等、目標價、正面評語）",
+   "new_query": "Apple Inc latest analyst report summary FactSet Thomson Reuters bullish outlook 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查閱 Apple 最新的分析師報告摘要（如 FactSet、Thomson Reuters）以獲取利多觀點 || AAPL_Fundamentals_20260612.txt#0 AAPL_10K_2025.html#16 AAPL_10K_2025.html#2 AAPL_10K_2025.html#17 AAPL_10K_2025.html#109 || live": {
+   "sufficient": false,
+   "missing": "缺少 Apple 最新的分析師報告摘要（FactSet、Thomson Reuters 等）的內容與利多觀點",
+   "new_query": "Apple Inc latest analyst report summary FactSet Thomson Reuters bullish outlook 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查閱 Apple 最近的 SEC 8‑K 或 10‑Q 文件中包含的分析師評論或利多觀點 || AAPL_10Q_202606.html#21 AAPL_10Q_202606.html#22 AAPL_10Q_202606.html#39 AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#15 || live": {
+   "sufficient": false,
+   "missing": "缺少來自 Apple 最近的 8‑K 或 10‑Q 文件中包含的分析師評論或利多觀點的文字內容，片段中未出現任何 analyst commentary 或 bullish statement。",
+   "new_query": "Apple Inc. 2026 Q3 Form 10-Q analyst commentary",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查閱 Apple 最近的 SEC 8‑K 或 10‑Q 文件中包含的分析師評論或利多觀點 || AAPL_10Q_202606.html#21 AAPL_10Q_202606.html#17 AAPL_10Q_202606.html#22 AAPL_10Q_202606.html#16 AAPL_10Q_202606.html#20 || live": {
+   "sufficient": false,
+   "missing": "缺少來自 Apple 最近 8‑K 或 10‑Q 文件的分析師評論或利多觀點文字敘述",
+   "new_query": "Apple 2026 10-Q analyst commentary OR Apple 8-K analyst view",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找2026年7月以後的 Apple 分析師利多觀點（如 Bloomberg、Yahoo Finance、MarketWatch 等） || AAPL_10Q_202606.html#20 AAPL_10Q_202603.html#19 AAPL_10Q_202603.html#25 AAPL_10Q_202603.html#66 AAPL_Fundamentals_20260612.txt#0 || live": {
+   "sufficient": false,
+   "missing": "缺少2026年7月以後的分析師正面觀點與相關來源（如 Bloomberg、Yahoo Finance、MarketWatch）的具體評論、評級或目標價",
+   "new_query": "Apple analyst bullish outlook July 2026 Bloomberg Yahoo Finance MarketWatch",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找2026年7月以後的 Apple 分析師利多觀點（如 Bloomberg、Yahoo Finance、MarketWatch 等） || AAPL_10Q_202606.html#20 AAPL_10Q_202603.html#19 AAPL_10Q_202603.html#25 AAPL_10Q_202603.html#66 AAPL_10Q_202512.html#35 || live": {
+   "sufficient": false,
+   "missing": "缺少2026年7月以後的分析師利多觀點及來源（如 Bloomberg、Yahoo Finance、MarketWatch）的具體說法、評級、目標價或其他正面評估資訊",
+   "new_query": "Apple analyst bullish outlook July 2026 Bloomberg Yahoo Finance MarketWatch",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查閱 Apple 最近的 SEC 8‑K 文件中是否包含分析師目標價上調或利多評論 || AAPL_10Q_202606.html#21 AAPL_10Q_202606.html#22 AAPL_10Q_202606.html#39 AAPL_10Q_202606.html#17 AAPL_10Q_202606.html#15 || live": {
+   "sufficient": false,
+   "missing": "缺少 Apple 最近的 SEC 8‑K 文件內容，特別是是否包含分析師目標價上調或利多評論的資訊。",
+   "new_query": "Apple Inc 8-K recent analyst target price upgrade bullish commentary",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查閱 Apple 最近的投資者關係新聞稿或官方公告中分析師的利多觀點 || AAPL_10Q_202606.html#29 AAPL_10Q_202606.html#22 AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#15 AAPL_10Q_202606.html#16 || live": {
+   "sufficient": false,
+   "missing": "缺少來自最近 Apple 投資者關係新聞稿或官方公告中，分析師對公司未來表現的利多評論或具體引用。",
+   "new_query": "Apple recent investor relations press release analyst bullish commentary June 2026",
+   "relevant_ids": [
+    "AAPL_10Q_202606.html#29"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查閱 Apple 最近的 SEC 8‑K 文件中是否包含分析師目標價上調或利多評論 || AAPL_10K_2025.html#17 AAPL_10K_2024.html#16 AAPL_10K_2025.html#16 AAPL_10K_2024.html#17 AAPL_10K_2025.html#156 || live": {
+   "sufficient": false,
+   "missing": "缺少 Apple 最近的 8‑K 文件中是否提及分析師目標價上調或利多評論的具體敘述或引用",
+   "new_query": "Apple Inc 8-K analyst target price upgrade OR bullish commentary recent filing",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查閱 Apple 最近的投資者關係新聞稿或官方公告中分析師的利多觀點 || AAPL_10Q_202606.html#29 AAPL_10Q_202606.html#22 AAPL_10Q_202606.html#20 AAPL_10Q_202603.html#28 AAPL_10Q_202606.html#38 || live": {
+   "sufficient": false,
+   "missing": "缺少具體的分析師利多觀點或正面評語（如分析師對 Apple 未來營收、產品或股價的正面預測、目標價上調等）在最近的投資者關係新聞稿或官方公告中的內容。",
+   "new_query": "Apple investor relations press release analyst bullish outlook 2026 Q3 recent",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查閱 Apple 最近的投資者關係新聞稿或官方公告中分析師的利多觀點 || AAPL_10Q_202606.html#22 AAPL_10Q_202606.html#21 AAPL_10Q_202606.html#37 AAPL_10Q_202606.html#16 AAPL_10Q_202606.html#26 || live": {
+   "sufficient": false,
+   "missing": "缺少 Apple 最近投資者關係新聞稿或官方公告中分析師的利多觀點、評論或引用文字",
+   "new_query": "Apple investor relations press release analyst bullish outlook 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查找2026年7月以後 Apple 分析師的升級評級或目標價上調（如 TipRanks、Zacks、FactSet） || AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#26 AAPL_10Q_202606.html#33 AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202603.html#60 || live": {
+   "sufficient": false,
+   "missing": "缺少2026年7月以後的分析師升級、目標價上調資訊，尤其是來自 TipRanks、Zacks、FactSet 等平台的具體升級事件或目標價變動數據。",
+   "new_query": "Apple analyst upgrade July 2026 target price increase TipRanks Zacks FactSet",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查閱 NVDA 202604 10‑Q 中關於 AI 晶片對中國的銷售情況 || NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#2 NVDA_10Q_202604.html#23 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#0 || live": {
+   "sufficient": false,
+   "missing": "缺少 202604 10‑Q 中關於 AI 晶片在中國的銷售額、占比或相關敘述等具體資訊",
+   "new_query": "NVDA 10-Q 202604 AI chip sales to China",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查閱 NVDA 202604 10‑Q 中關於 AI 晶片對中國的銷售情況 || NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#2 NVDA_10Q_202604.html#23 NVDA_10Q_202604.html#84 NVDA_10Q_202604.html#36 || live": {
+   "sufficient": false,
+   "missing": "缺乏 AI 晶片在中國的具體銷售數據或比例（如營收金額、佔比、變化趨勢）",
+   "new_query": "NVIDIA 202604 10-Q AI chip sales to China revenue amount",
+   "relevant_ids": [
+    "NVDA_10Q_202604.html#84"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查閱 NVDA 202604 10‑Q 中關於 AI 晶片對中國的銷售情況 || NVDA_10Q_202604.html#35 NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#14 NVDA_10Q_202604.html#0 NVDA_10Q_202604.html#26 || live": {
+   "sufficient": false,
+   "missing": "缺少 AI 晶片在中國的銷售額、比例或相關描述等具體數據",
+   "new_query": "NVIDIA 10-Q 202604 AI chip sales China",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 面臨哪些競爭對手或競爭情況 || NVDA_10Q_202510.html#89 NVDA_10K_2026.html#81 NVDA_10K_2025.html#90 NVDA_Fundamentals_20260612.txt#2 NVDA_10Q_202507.html#82 || live": {
+   "sufficient": false,
+   "missing": "缺少具體的競爭對手名稱與市場競爭情況，例如 AMD、Intel、Qualcomm 等在 GPU、AI 加速器或資料中心市場的競爭關係與市場佔有率等具體資訊。",
+   "new_query": "NVIDIA 主要競爭對手 GPU 市場 AMD Intel 2026 競爭情況 市場佔有率",
+   "relevant_ids": [
+    "NVDA_10Q_202510.html#89",
+    "NVDA_10K_2026.html#81",
+    "NVDA_10K_2025.html#90",
+    "NVDA_10Q_202507.html#82"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 目前的市場焦點是什麼 || NVDA_10Q_202604.html#40 NVDA_Fundamentals_20260612.txt#2 NVDA_Fundamentals_20260612.txt#1 NVDA_10Q_202604.html#78 NVDA_10Q_202604.html#36 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10Q_202604.html#40",
+    "NVDA_Fundamentals_20260612.txt#2",
+    "NVDA_10Q_202604.html#78",
+    "NVDA_10Q_202604.html#36"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查近期新聞中對 NVIDIA 競爭與市場焦點的報導 || NVDA_10K_2024.html#21 NVDA_10Q_202604.html#40 NVDA_10K_2026.html#120 NVDA_10Q_202510.html#45 NVDA_10K_2024.html#34 || live": {
+   "sufficient": false,
+   "missing": "缺乏近期新聞報導，未提供關於 NVIDIA 競爭對手、競爭態勢或市場焦點的最新媒體文章、分析師評論或新聞摘要。",
+   "new_query": "NVIDIA recent news competition market focus August 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查近期新聞中對 NVIDIA 競爭與市場焦點的報導 || NVDA_10K_2026.html#81 NVDA_10Q_202507.html#78 NVDA_10K_2024.html#21 NVDA_10K_2025.html#82 NVDA_10Q_202604.html#40 || live": {
+   "sufficient": false,
+   "missing": "缺少近期新聞報導，需提供2024‑2026年內關於NVIDIA在AI晶片、市場焦點及競爭情況的新聞來源、發佈日期與關鍵內容摘要。",
+   "new_query": "NVIDIA recent news competition market focus 2024 2025 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查近期新聞中對 NVIDIA 競爭與市場焦點的報導 || NVDA_10Q_202504.html#37 NVDA_10K_2026.html#81 NVDA_10K_2026.html#16 NVDA_10K_2025.html#15 NVDA_10K_2026.html#166 || live": {
+   "sufficient": false,
+   "missing": "缺少近期新聞報導，需提供包含競爭對手（如 AMD、Intel 等）以及市場焦點（AI、資料中心等）的最新新聞文章、發布日期與來源。",
+   "new_query": "NVIDIA recent news competition market focus September 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查找 Microsoft AI 資安合作的官方新聞稿或公告 || MSFT_10Q_202512.html#151 MSFT_10K_2025.html#107 MSFT_10K_2025.html#88 MSFT_10K_2026.html#101 MSFT_10Q_202603.html#152 || live": {
+   "sufficient": false,
+   "missing": "缺少 Microsoft AI 資安合作的官方新聞稿或公告的具體內容，包括合作夥伴、發布日期、合作細節等資訊",
+   "new_query": "Microsoft AI security partnership press release announcement site:microsoft.com",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查找 Microsoft AI 資安合作的官方新聞稿或公告 || MSFT_10Q_202409.html#126 MSFT_10K_2024.html#87 MSFT_10Q_202512.html#151 MSFT_10K_2025.html#107 MSFT_10K_2025.html#88 || live": {
+   "sufficient": false,
+   "missing": "缺少具體的 Microsoft AI 資安合作官方新聞稿或公告的標題、發布日期、連結或內容摘要等資訊。",
+   "new_query": "Microsoft AI security partnership press release official announcement",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Search SEC filings (e.g., 8‑K) for Microsoft AI security partnership announcements || MSFT_10K_2026.html#65 MSFT_10K_2025.html#245 MSFT_10K_2026.html#240 MSFT_10K_2026.html#23 MSFT_10K_2026.html#33 || live": {
+   "sufficient": false,
+   "missing": "Specific Form 8‑K filing(s) that announce a Microsoft AI security partnership, including the partner name, announcement date, and details of the partnership.",
+   "new_query": "Microsoft Form 8-K AI security partnership announcement",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Search SEC filings (e.g., 8‑K) for Microsoft AI security partnership announcements || MSFT_10K_2026.html#65 MSFT_10K_2024.html#25 MSFT_10K_2025.html#245 MSFT_10K_2024.html#23 MSFT_10K_2026.html#240 || live": {
+   "sufficient": false,
+   "missing": "缺少具體的 8‑K 申報文件，內容應包括 Microsoft 與哪家合作夥伴在 AI 安全領域的合作公告、公告日期、合作要點或描述。",
+   "new_query": "Microsoft Form 8-K AI security partnership announcement filing date",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Search SEC filings (e.g., 8‑K) for Microsoft AI security partnership announcements || MSFT_10K_2026.html#65 MSFT_10K_2025.html#25 MSFT_10Q_202603.html#131 MSFT_10K_2024.html#23 MSFT_10Q_202512.html#131 || live": {
+   "sufficient": false,
+   "missing": "具體的 AI 安全合作夥伴名稱、合作內容、公告日期以及對應的 8‑K（或其他）SEC 申報文件編號或連結，文件中需明確提及「AI」與「安全」合作。",
+   "new_query": "Microsoft 8-K AI security partnership announcement filing date 2024..2026",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查找合作夥伴公司（如 OpenAI、Palo Alto Networks、CrowdStrike 等）的公告或新聞稿，是否提及與 Microsoft 的 AI 資安合作 || MSFT_10Q_202603.html#142 MSFT_10Q_202512.html#52 MSFT_10K_2025.html#118 MSFT_10K_2026.html#112 MSFT_10Q_202603.html#50 || live": {
+   "sufficient": false,
+   "missing": "缺少來自 Palo Alto Networks、CrowdStrike（或 OpenAI）的公告或新聞稿，具體提及與 Microsoft 的 AI 資安合作的內容與細節。",
+   "new_query": "Palo Alto Networks press release AI security partnership with Microsoft OR CrowdStrike announcement AI security collaboration Microsoft OR OpenAI news AI security cooperation Microsoft",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "搜尋最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件，是否包含 Microsoft AI 資安合作的資訊 || MSFT_10Q_202603.html#152 MSFT_10Q_202603.html#143 MSFT_10Q_202603.html#142 MSFT_10Q_202603.html#21 MSFT_10Q_202603.html#135 || live": {
+   "sufficient": false,
+   "missing": "缺少任何來自最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件中提及 Microsoft AI 資安合作的具體敘述或引用。",
+   "new_query": "Microsoft recent investor presentation AI security collaboration 2026 OR Microsoft earnings call transcript AI security partnership 2026 OR Microsoft 8-K AI security collaboration",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查找合作夥伴公司（如 OpenAI、Palo Alto Networks、CrowdStrike 等）的公告或新聞稿，是否提及與 Microsoft 的 AI 資安合作 || MSFT_10K_2025.html#31 MSFT_10K_2026.html#32 MSFT_10Q_202603.html#142 MSFT_10Q_202509.html#43 MSFT_10Q_202512.html#52 || live": {
+   "sufficient": false,
+   "missing": "缺少 OpenAI、Palo Alto Networks、CrowdStrike 等合作夥伴的公告或新聞稿中提及與 Microsoft 的 AI 資安合作的具體資訊（如發布日期、合作內容、涉及的安全技術或產品等）",
+   "new_query": "OpenAI press release AI security partnership with Microsoft; Palo Alto Networks announcement AI security collaboration Microsoft; CrowdStrike news Microsoft AI security partnership",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "搜尋最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件，是否包含 Microsoft AI 資安合作的資訊 || MSFT_10Q_202603.html#152 MSFT_10Q_202603.html#143 MSFT_10Q_202603.html#142 MSFT_10Q_202603.html#21 MSFT_Fundamentals_20260612.txt#0 || live": {
+   "sufficient": false,
+   "missing": "缺少具體的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件中提及 Microsoft 與 AI 資安合作的內容或聲明。",
+   "new_query": "Microsoft recent investor presentation AI security partnership OR Microsoft 8-K AI security collaboration OR Microsoft earnings call transcript AI cybersecurity partnership 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查找合作夥伴公司（如 OpenAI、Palo Alto Networks、CrowdStrike 等）的公告或新聞稿，是否提及與 Microsoft 的 AI 資安合作 || MSFT_10Q_202512.html#52 MSFT_10K_2025.html#118 MSFT_10K_2026.html#112 MSFT_10Q_202603.html#50 MSFT_10Q_202509.html#43 || live": {
+   "sufficient": false,
+   "missing": "缺少合作夥伴公司（OpenAI、Palo Alto Networks、CrowdStrike）的官方公告或新聞稿，具體提及與 Microsoft 的 AI 資安合作的內容與實例。",
+   "new_query": "OpenAI press release AI security partnership with Microsoft; Palo Alto Networks announcement AI security collaboration Microsoft; CrowdStrike news AI security partnership Microsoft",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "搜尋最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件，是否包含 Microsoft AI 資安合作的資訊 || MSFT_10K_2026.html#32 MSFT_10K_2026.html#101 MSFT_10K_2026.html#65 MSFT_10Q_202603.html#152 MSFT_10K_2026.html#110 || live": {
+   "sufficient": false,
+   "missing": "缺少最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件中提及 Microsoft AI 資安合作的具體內容或證據",
+   "new_query": "Microsoft recent investor presentation AI security collaboration 2026 OR Microsoft earnings call transcript AI security partnership 2026 OR Microsoft 8-K AI security partnership",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "在 2026 年 7 月至 9 月期間，搜尋 Microsoft 官方安全部落格（Microsoft Security Blog）是否有關於 AI 資安合作的文章或公告 || MSFT_10K_2026.html#75 MSFT_10K_2026.html#33 MSFT_10K_2026.html#36 MSFT_10K_2026.html#37 MSFT_10K_2026.html#32 || live": {
+   "sufficient": false,
+   "missing": "缺少2026年7月至9月期間在 Microsoft Security Blog 上關於 AI 資安合作的文章或公告的具體資訊（標題、發佈日期、摘要或連結）。",
+   "new_query": "Microsoft Security Blog July 2026 AI security partnership site:security.microsoft.com",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "搜尋 2026 年第三季（Q3）Microsoft 投資者簡報或新聞稿，檢查是否提及 AI 資安合作 || MSFT_10Q_202603.html#152 MSFT_10Q_202603.html#135 MSFT_10Q_202603.html#2 MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#63 || live": {
+   "sufficient": false,
+   "missing": "缺少在 2026 年第三季的投資者簡報或新聞稿中，提及 Microsoft 與合作夥伴就 AI 資安進行合作的具體敘述或聲明。",
+   "new_query": "Microsoft Q3 2026 investor presentation AI security partnership press release",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#152",
+    "MSFT_10Q_202603.html#135"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "在 2026 年 7 月至 9 月期間，搜尋 Microsoft 官方安全部落格（Microsoft Security Blog）是否有關於 AI 資安合作的文章或公告 || MSFT_10K_2026.html#75 MSFT_10K_2026.html#101 MSFT_10K_2026.html#33 MSFT_10K_2026.html#36 MSFT_10K_2026.html#37 || live": {
+   "sufficient": false,
+   "missing": "缺少2026年7月至9月期間在 Microsoft Security Blog 上發佈的任何關於 AI 資安合作的文章或公告的具體資訊（如標題、發佈日期、內容摘要或連結）。",
+   "new_query": "Microsoft Security Blog AI security partnership July 2026 September 2026 site:security.microsoft.com",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "搜尋 2026 年第三季（Q3）Microsoft 投資者簡報或新聞稿，檢查是否提及 AI 資安合作 || MSFT_10Q_202603.html#143 MSFT_10Q_202603.html#50 MSFT_10Q_202603.html#152 MSFT_10Q_202603.html#142 MSFT_10Q_202603.html#2 || live": {
+   "sufficient": false,
+   "missing": "需要找到 2026 年第三季 Microsoft 投資者簡報或新聞稿中提及 AI 資安合作的具體敘述或聲明",
+   "new_query": "Microsoft FY2026 Q3 investor presentation AI security partnership OR Microsoft Q3 2026 press release AI security collaboration",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "在 2026 年 7 月至 9 月期間，搜尋 Microsoft 官方安全部落格（Microsoft Security Blog）是否有關於 AI 資安合作的文章或公告 || MSFT_10K_2026.html#75 MSFT_10K_2026.html#101 MSFT_10K_2026.html#33 MSFT_10K_2026.html#36 MSFT_10K_2026.html#65 || live": {
+   "sufficient": false,
+   "missing": "缺少2026年7月至9月期間在 Microsoft Security Blog 上發佈的任何關於 AI 資安合作的文章或公告的具體資訊（標題、發佈日期、URL 等）。",
+   "new_query": "Microsoft Security Blog AI security partnership July 2026 site:security.microsoft.com",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "搜尋 2026 年第三季（Q3）Microsoft 投資者簡報或新聞稿，檢查是否提及 AI 資安合作 || MSFT_10Q_202603.html#2 MSFT_10Q_202603.html#152 MSFT_10Q_202603.html#138 MSFT_10Q_202603.html#143 MSFT_10Q_202603.html#142 || live": {
+   "sufficient": false,
+   "missing": "缺少2026年第三季Microsoft投資者簡報或新聞稿中是否提及AI資安合作的具體敘述或證據",
+   "new_query": "Microsoft Q3 2026 investor presentation AI security partnership press release",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg || GOOGL_10Q_202606.html#38 GOOGL_10Q_202606.html#2 GOOGL_10Q_202606.html#37 GOOGL_10Q_202606.html#41 GOOGL_Fundamentals_20260612.txt#1 || live": {
+   "sufficient": false,
+   "missing": "缺少 Bloomberg 出版的近期 Alphabet 資本支出新聞報導，包括新聞標題、發布日期、報導內容摘要及資本支出金額等資訊。",
+   "new_query": "Alphabet recent capital expenditures Bloomberg news 2026",
+   "relevant_ids": [
+    "GOOGL_10Q_202606.html#2",
+    "GOOGL_10Q_202606.html#41"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg || GOOGL_10K_2023.html#247 GOOGL_10Q_202603.html#31 GOOGL_10Q_202603.html#29 GOOGL_10Q_202603.html#30 GOOGL_10Q_202606.html#41 || live": {
+   "sufficient": false,
+   "missing": "缺少 Bloomberg 的近期新聞報導，需提供報導日期、內容摘要以及提及的 Alphabet 資本支出金額或趨勢。",
+   "new_query": "Alphabet recent capital expenditures Bloomberg news June 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg || GOOGL_10K_2023.html#247 GOOGL_10Q_202606.html#2 GOOGL_10Q_202603.html#31 GOOGL_10Q_202603.html#29 GOOGL_10Q_202603.html#30 || live": {
+   "sufficient": false,
+   "missing": "缺少 Bloomberg 的近期新聞報導，包含報導日期、來源標示為 Bloomberg，以及其中提及的 Alphabet 最近資本支出金額或相關評論。",
+   "new_query": "Alphabet recent capital expenditures Bloomberg 2026",
+   "relevant_ids": [
+    "GOOGL_10K_2023.html#247",
+    "GOOGL_10Q_202606.html#2",
+    "GOOGL_10Q_202603.html#31"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 Reuters || GOOGL_10K_2023.html#247 GOOGL_10K_2025.html#158 GOOGL_10K_2023.html#243 GOOGL_10K_2024.html#140 GOOGL_10K_2024.html#165 || live": {
+   "sufficient": false,
+   "missing": "缺少近期 Reuters 報導的 Alphabet 籌資與資本支出資訊（新聞來源、發佈日期、金額或計畫等）",
+   "new_query": "Alphabet Reuters recent fundraising capital expenditures 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 Reuters || GOOGL_10K_2023.html#247 GOOGL_10Q_202603.html#87 GOOGL_10Q_202603.html#30 GOOGL_10Q_202606.html#37 GOOGL_10Q_202603.html#29 || live": {
+   "sufficient": false,
+   "missing": "缺少 Reuters 的新聞報導，需提供近期（2026 年）Alphabet 籌資與資本支出相關的 Reuters 文章標題、發佈日期、摘要或連結等資訊。",
+   "new_query": "Alphabet Reuters recent fundraising capital expenditures 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Yahoo Finance || GOOGL_10K_2024.html#277 GOOGL_10Q_202606.html#41 GOOGL_10Q_202603.html#31 GOOGL_10K_2025.html#272 GOOGL_10K_2024.html#278 || live": {
+   "sufficient": false,
+   "missing": "缺少在 Yahoo Finance 上的近期 Alphabet 資本支出新聞報導（標題、發布日期、摘要或連結），以及該新聞中提及的資本支出金額或趨勢。",
+   "new_query": "Alphabet recent capital expenditures news site:finance.yahoo.com 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期籌資新聞於 CNBC || GOOGL_10Q_202606.html#34 GOOGL_10Q_202606.html#37 GOOGL_10Q_202606.html#38 GOOGL_10Q_202606.html#41 GOOGL_10Q_202606.html#43 || live": {
+   "sufficient": false,
+   "missing": "Alphabet recent fundraising news reported by CNBC (e.g., amount raised, date, type of financing)",
+   "new_query": "Alphabet fundraising news CNBC 2026 recent",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Yahoo Finance || GOOGL_10K_2023.html#247 GOOGL_10Q_202603.html#29 GOOGL_10Q_202603.html#30 GOOGL_10Q_202603.html#31 GOOGL_10Q_202606.html#41 || live": {
+   "sufficient": false,
+   "missing": "缺少Yahoo Finance上的近期Alphabet資本支出新聞來源、標題、發布日期或摘要，亦未提供指向Yahoo Finance的搜尋結果連結。",
+   "new_query": "Alphabet capital expenditures recent news site:finance.yahoo.com",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期籌資新聞於 CNBC || GOOGL_10K_2025.html#9 GOOGL_10K_2025.html#214 GOOGL_10K_2025.html#292 GOOGL_10K_2025.html#264 GOOGL_10K_2025.html#191 || live": {
+   "sufficient": false,
+   "missing": "Alphabet 最近在 CNBC 報導的籌資新聞（如最新的債務發行、股權增資或其他資金募集活動）的具體資訊與細節。",
+   "new_query": "Alphabet recent fundraising news CNBC 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期籌資新聞於 CNBC || GOOGL_10Q_202606.html#34 GOOGL_10Q_202603.html#30 GOOGL_10K_2025.html#9 GOOGL_10K_2025.html#214 GOOGL_10Q_202606.html#37 || live": {
+   "sufficient": false,
+   "missing": "缺少來自 CNBC 的 Alphabet 最近籌資新聞的報導、發布日期、籌資金額或相關細節",
+   "new_query": "Alphabet recent fundraising news CNBC 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet 2026 Q3 10‑Q 中的資本支出資訊於 SEC.gov || GOOGL_10Q_202606.html#41 GOOGL_10Q_202603.html#31 GOOGL_10Q_202606.html#38 GOOGL_10Q_202606.html#37 GOOGL_10Q_202603.html#30 || live": {
+   "sufficient": false,
+   "missing": "Alphabet 2026 Q3 (three months ended September 30, 2026) capital expenditures amount (purchases of property and equipment) from the 10‑Q filing",
+   "new_query": "Alphabet 2026 Q3 Form 10-Q capital expenditures purchases of property and equipment site:sec.gov",
+   "relevant_ids": [
+    "GOOGL_10Q_202606.html#41",
+    "GOOGL_10Q_202603.html#31"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet 2026 Q3 10‑Q 中的資本支出資訊於 SEC.gov || GOOGL_10Q_202603.html#31 GOOGL_10Q_202606.html#41 GOOGL_10Q_202606.html#1 GOOGL_10Q_202603.html#29 GOOGL_10Q_202603.html#32 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "GOOGL_10Q_202603.html#31"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 The Wall Street Journal || GOOGL_10Q_202606.html#37 GOOGL_10Q_202606.html#38 GOOGL_10Q_202606.html#41 GOOGL_10Q_202606.html#43 GOOGL_Fundamentals_20260612.txt#1 || live": {
+   "sufficient": false,
+   "missing": "缺少來自《華爾街日報》的Alphabet近期籌資與資本支出新聞，需包含具體金額、時間與相關說明",
+   "new_query": "Alphabet recent fundraising capital expenditures Wall Street Journal 2026 site:wsj.com",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 The Wall Street Journal || GOOGL_10Q_202606.html#2 GOOGL_10Q_202606.html#37 GOOGL_10Q_202606.html#38 GOOGL_10Q_202606.html#41 GOOGL_10Q_202606.html#43 || live": {
+   "sufficient": false,
+   "missing": "缺少在《華爾街日報》上關於Alphabet近期籌資金額與資本支出金額的新聞報導、標題、日期及具體數字說明。",
+   "new_query": "Alphabet recent fundraising and capital expenditures Wall Street Journal 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 The Wall Street Journal || GOOGL_10Q_202606.html#2 GOOGL_10K_2025.html#264 GOOGL_10Q_202606.html#37 GOOGL_10Q_202606.html#38 GOOGL_10K_2025.html#214 || live": {
+   "sufficient": false,
+   "missing": "缺少來自 The Wall Street Journal 的近期新聞報導，說明 Alphabet 的籌資活動與資本支出金額、時間與相關細節。",
+   "new_query": "Alphabet recent fundraising capital expenditures Wall Street Journal 2026 site:wsj.com",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Meta 最近的利多分析有哪些 || META_Fundamentals_20260612.txt#1 META_10Q_202606.html#132 META_10Q_202606.html#37 META_10Q_202606.html#7 META_10Q_202606.html#15 || live": {
+   "sufficient": false,
+   "missing": "缺少近期的正面分析內容，例如分析師升級、目標價上調、營收或使用者成長亮點、AI/AR 產品的正面預期或最新財報中的利好訊息等具體利多資訊。",
+   "new_query": "Meta Platforms recent bullish analyst reports 2026 Q2 positive outlook target price upgrade AI revenue growth",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Meta 最近的 AI 投資消息有哪些 || META_10Q_202606.html#164 META_10Q_202606.html#75 META_10Q_202606.html#73 META_10Q_202606.html#160 META_10Q_202606.html#168 || live": {
+   "sufficient": false,
+   "missing": "候選中沒有任何能證明時效的來源（KB 只有財報期間資料，財報期間不是發布日）,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Meta 最近的 AI 投資消息有哪些",
+   "relevant_ids": [
+    "META_10Q_202606.html#75",
+    "META_10Q_202606.html#73",
+    "META_10Q_202606.html#160",
+    "META_10Q_202606.html#168"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "查閱 Amazon 2025 年 10-K 中的歐洲投資計畫 || AMZN_10K_2025.html#216 AMZN_10K_2025.html#45 AMZN_10K_2025.html#44 AMZN_10K_2025.html#95 AMZN_10K_2025.html#50 || live": {
+   "sufficient": false,
+   "missing": "缺少 Amazon 2025 年 10-K 中關於歐洲投資計畫的具體描述、金額、時間表或相關細節。",
+   "new_query": "Amazon 2025 10-K European investment plan details",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查閱 Amazon 2025 年 10-K 中的歐洲投資計畫 || AMZN_10K_2025.html#216 AMZN_10K_2025.html#205 AMZN_10K_2025.html#45 AMZN_10K_2025.html#206 AMZN_10K_2025.html#44 || live": {
+   "sufficient": false,
+   "missing": "缺少 Amazon 2025 年 10‑K 中關於歐洲投資計畫的具體描述、金額、時間表或相關條款等資訊。",
+   "new_query": "Amazon 2025 Form 10-K European investment plan details",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查閱 Amazon 2025 年 10-K 中的歐洲投資計畫 || AMZN_10K_2025.html#216 AMZN_10K_2025.html#45 AMZN_10K_2025.html#44 AMZN_10K_2025.html#217 AMZN_10K_2025.html#205 || live": {
+   "sufficient": false,
+   "missing": "缺少 Amazon 2025 年 10-K 中關於歐洲投資計畫的具體描述、金額、時間表或相關細節。",
+   "new_query": "Amazon 2025 Form 10-K Europe investment plan details",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋） || AMZN_10K_2025.html#28 AMZN_10K_2025.html#142 AMZN_10K_2025.html#45 AMZN_10K_2025.html#95 AMZN_10K_2025.html#135 || live": {
+   "sufficient": false,
+   "missing": "缺少2026年Amazon在歐洲的具體大型投資新聞內容，如投資項目、金額、地點或相關公告。",
+   "new_query": "Amazon 2026 Europe large investment announcement news",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋） || AMZN_10K_2025.html#28 AMZN_10Q_202606.html#2 AMZN_10K_2025.html#135 AMZN_10K_2025.html#142 AMZN_10Q_202606.html#79 || live": {
+   "sufficient": false,
+   "missing": "缺乏2026年在歐洲的 Amazon 大型投資相關新聞內容（具體投資項目、金額、地點、時間等）",
+   "new_query": "Amazon 2026 Europe large investment news",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋） || AMZN_10K_2025.html#28 AMZN_10K_2025.html#135 AMZN_10Q_202606.html#2 AMZN_10K_2025.html#142 AMZN_10Q_202606.html#79 || live": {
+   "sufficient": false,
+   "missing": "缺少2026年在歐洲的Amazon大型投資新聞的具體資訊，如投資金額、投資地點、項目描述或官方公告。",
+   "new_query": "Amazon 2026 Europe large investment announcement news",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查閱 Amazon 2026 年 10-Q 中的歐洲投資資訊 || AMZN_10Q_202603.html#134 AMZN_10Q_202606.html#136 AMZN_10Q_202603.html#26 AMZN_10Q_202606.html#24 AMZN_10Q_202603.html#24 || live": {
+   "sufficient": false,
+   "missing": "缺少 Amazon 2026 年 10‑Q 中關於歐洲投資的具體資訊，如投資金額、歐洲子公司或項目說明等",
+   "new_query": "Amazon 2026 Form 10-Q Europe investment information",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查閱 Amazon 2026 年官方新聞稿中關於歐洲大型投資的資訊 || AMZN_10K_2025.html#135 AMZN_10Q_202603.html#2 AMZN_10Q_202603.html#24 AMZN_10Q_202606.html#2 AMZN_10Q_202606.html#24 || live": {
+   "sufficient": false,
+   "missing": "Amazon 2026 官方新聞稿中關於歐洲大型投資的具體內容（投資金額、地點、項目說明等）",
+   "new_query": "Amazon 2026 press release Europe large investment",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查閱 Amazon 2026 年 10-Q 中的歐洲投資資訊 || AMZN_10Q_202603.html#134 AMZN_10Q_202606.html#136 AMZN_10Q_202606.html#24 AMZN_10Q_202603.html#24 AMZN_10Q_202603.html#26 || live": {
+   "sufficient": false,
+   "missing": "缺乏任何關於 Amazon 2026 年 10‑Q 中歐洲投資的具體資訊，如歐洲子公司、資本支出、投資金額或相關敘述。",
+   "new_query": "Amazon 2026 10-Q Europe investment information",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查閱 Amazon 2026 年官方新聞稿中關於歐洲大型投資的資訊 || AMZN_10Q_202606.html#94 AMZN_10Q_202603.html#93 AMZN_10K_2025.html#134 AMZN_10Q_202603.html#43 AMZN_10K_2025.html#135 || live": {
+   "sufficient": false,
+   "missing": "缺少 Amazon 2026 年官方新聞稿中關於歐洲大型投資的具體資訊（投資金額、地點、項目說明等）",
+   "new_query": "Amazon 2026 press release Europe large investment",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查閱 Amazon 2026 年 10-Q 中的歐洲投資資訊 || AMZN_10Q_202603.html#134 AMZN_10Q_202603.html#1 AMZN_10Q_202606.html#136 AMZN_10Q_202606.html#1 AMZN_10Q_202603.html#2 || live": {
+   "sufficient": false,
+   "missing": "缺少具體的歐洲投資金額、投資項目或子公司名稱等詳細資訊，僅有提及與 Amazon.com NV Investment Holdings LLC 的協議，未說明投資規模或內容。",
+   "new_query": "Amazon 2026 10-Q 歐洲 投資 金額 子公司 詳細資訊",
+   "relevant_ids": [
+    "AMZN_10Q_202603.html#134"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查閱 Amazon 2026 年投資者簡報（Investor Presentation）中關於歐洲的大型投資資訊 || AMZN_10Q_202603.html#24 AMZN_10Q_202606.html#2 AMZN_10Q_202606.html#79 AMZN_10Q_202606.html#24 AMZN_10Q_202603.html#134 || live": {
+   "sufficient": false,
+   "missing": "缺少 Amazon 2026 年投資者簡報中關於歐洲的大型投資的具體內容，如投資金額、項目、地點等資訊。",
+   "new_query": "Amazon 2026 investor presentation Europe large investment details",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢歐洲主要新聞媒體（如 Reuters、Financial Times、Bloomberg）報導的 Amazon 2026 年最新大型投資 || AMZN_10K_2025.html#140 AMZN_10K_2025.html#135 AMZN_10K_2024.html#95 AMZN_10Q_202606.html#94 AMZN_10Q_202603.html#93 || live": {
+   "sufficient": false,
+   "missing": "缺少 Reuters、Financial Times、Bloomberg 等歐洲主要新聞媒體報導的 Amazon 2026 年大型投資的具體內容、投資金額與項目細節。",
+   "new_query": "Amazon 2026 large investment Europe site:reuters.com OR site:ft.com OR site:bloomberg.com",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢歐洲主要新聞媒體（如 Reuters、Financial Times、Bloomberg）報導的 Amazon 2026 年最新大型投資 || AMZN_10Q_202606.html#94 AMZN_10K_2025.html#134 AMZN_10Q_202603.html#93 AMZN_10K_2025.html#135 AMZN_10K_2025.html#140 || live": {
+   "sufficient": false,
+   "missing": "缺少 Reuters、Financial Times、Bloomberg 等歐洲主要新聞媒體對 Amazon 2026 年最新大型投資的報導內容，包括投資項目、金額、地點或其他具體細節的描述。",
+   "new_query": "Amazon 2026 large investment reported by Reuters OR Financial Times OR Bloomberg",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Microsoft 最近的股價有什麼值得注意的消息？ || MSFT_Fundamentals_20260612.txt#0 MSFT_10Q_202412.html#36 MSFT_10Q_202503.html#32 MSFT_10K_2025.html#31 MSFT_10K_2026.html#32 || live": {
+   "sufficient": false,
+   "missing": "缺少最近的股價具體數值、漲跌幅或近期影響股價的新聞事件（如財報、重大公告、收購、AI 產品發布等）",
+   "new_query": "Microsoft recent stock price movement and news September 2026",
+   "relevant_ids": [
+    "MSFT_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Apple 最近的股價有什麼值得注意的消息？ || AAPL_10K_2024.html#74 AAPL_10K_2025.html#75 AAPL_10K_2023.html#1 AAPL_10K_2025.html#63 AAPL_10K_2024.html#123 || live": {
+   "sufficient": false,
+   "missing": "缺少最近的股價具體數值或變化百分比，以及近期影響股價的具體新聞或事件（如最新財報、產品發布、回購計畫或市場波動等）",
+   "new_query": "Apple AAPL recent stock price news June 2026",
+   "relevant_ids": [
+    "AAPL_10K_2024.html#74",
+    "AAPL_10K_2025.html#75",
+    "AAPL_10K_2025.html#63"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Amazon 最近的股價有什麼值得注意的消息？ || AMZN_10K_2025.html#206 AMZN_10Q_202603.html#93 AMZN_10Q_202606.html#94 AMZN_10Q_202506.html#124 AMZN_10Q_202606.html#134 || live": {
+   "sufficient": false,
+   "missing": "缺少 Amazon 最近的股價數值、漲跌幅或與股價相關的最新新聞（如財報發布、分析師評級、重大事件導致的股價波動等）",
+   "new_query": "Amazon recent stock price news June 2026 price movement and market reaction",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Apple 最近的股價有什麼值得注意的消息？ || AAPL_10Q_202606.html#1 AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202606.html#2 AAPL_10Q_202606.html#0 AAPL_10K_2023.html#73 || live": {
+   "sufficient": false,
+   "missing": "缺少最近的股價水平、漲跌幅或相關的新聞/事件（如財報發布、回購、股息、股價波動等）",
+   "new_query": "Apple Inc. recent stock price news September 2026 OR Apple AAPL stock price movement latest news 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Amazon 最近的股價有什麼值得注意的消息？ || AMZN_10Q_202606.html#2 AMZN_10Q_202606.html#0 AMZN_10Q_202606.html#24 AMZN_10Q_202606.html#136 AMZN_10Q_202603.html#2 || live": {
+   "sufficient": false,
+   "missing": "缺少 Amazon 最近的股價數值、漲跌幅或相關的市場新聞/事件說明",
+   "new_query": "Amazon recent stock price news June 2026 share price movement after Q2 earnings",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Alphabet 最近的股價有什麼值得注意的消息？ || GOOGL_10K_2024.html#193 GOOGL_10K_2024.html#289 GOOGL_10K_2025.html#34 GOOGL_10K_2024.html#36 GOOGL_10K_2023.html#189 || live": {
+   "sufficient": false,
+   "missing": "缺少Alphabet最近的股價數值以及近期與股價相關的新聞或事件（如最新收盤價、漲跌幅、重要公告、分析師評級變動等）",
+   "new_query": "Alphabet GOOGL recent stock price news September 2026 latest price change and market commentary",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Amazon 最近的股價有什麼值得注意的消息？ || AMZN_10Q_202606.html#0 AMZN_10Q_202606.html#88 AMZN_10Q_202606.html#2 AMZN_10Q_202506.html#2 AMZN_10Q_202606.html#74 || live": {
+   "sufficient": false,
+   "missing": "缺少最近的股價走勢、漲跌幅、具體價格或相關市場新聞與評論等資訊。",
+   "new_query": "Amazon (AMZN) recent stock price movement news June 2026 price change",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Alphabet 最近的股價有什麼值得注意的消息？ || GOOGL_10Q_202606.html#1 GOOGL_Fundamentals_20260612.txt#0 GOOGL_10Q_202606.html#0 GOOGL_10Q_202606.html#2 GOOGL_10Q_202606.html#53 || live": {
+   "sufficient": false,
+   "missing": "缺少Alphabet近期股價的具體數值、漲跌幅或相關的新聞事件（如財報發布、指引變動、股價波動原因等）",
+   "new_query": "Alphabet Inc. recent stock price news June 2026 price change earnings release",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Meta 最近的股價有什麼值得注意的消息？ || META_Fundamentals_20260612.txt#1 META_10K_2024.html#157 META_Fundamentals_20260612.txt#0 META_10Q_202509.html#35 META_10Q_202403.html#39 || live": {
+   "sufficient": false,
+   "missing": "缺少 Meta 最近的股價數值（如最新收盤價或即時價格）以及與該股價相關的最新市場消息或事件（如盈餘公布、重大訴訟結果、股東回購進度等）",
+   "new_query": "Meta Platforms recent stock price and news June 2026 price movement, latest market reaction, recent earnings or regulatory updates",
+   "relevant_ids": [
+    "META_10Q_202509.html#35",
+    "META_10Q_202403.html#39",
+    "META_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Alphabet 最近的股價有什麼值得注意的消息？ || GOOGL_10Q_202606.html#1 GOOGL_10Q_202606.html#2 GOOGL_10Q_202606.html#0 GOOGL_10Q_202606.html#38 GOOGL_Fundamentals_20260612.txt#0 || live": {
+   "sufficient": false,
+   "missing": "缺少Alphabet近期股價的具體數值、漲跌幅度以及相關的新聞或事件說明（如財報發布、指引變動、重大市場反應等）",
+   "new_query": "Alphabet recent stock price news June 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Meta 最近的股價有什麼值得注意的消息？ || META_Fundamentals_20260612.txt#0 META_10Q_202606.html#1 META_Fundamentals_20260612.txt#1 META_10Q_202606.html#2 META_10Q_202606.html#0 || live": {
+   "sufficient": false,
+   "missing": "缺少Meta Platforms最新的股價數值（當前價格、漲跌幅）以及近期影響股價的新聞或事件",
+   "new_query": "Meta Platforms current stock price and recent news affecting its share price June 2026",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "Nvidia 最近的股價有什麼值得注意的消息？ || NVDA_10K_2026.html#118 NVDA_10K_2025.html#119 NVDA_10K_2025.html#10 NVDA_10K_2026.html#10 NVDA_10K_2026.html#181 || live": {
+   "sufficient": false,
+   "missing": "缺少最近的股價變動幅度、具體日期以及導致變動的新聞或事件說明（如財報、產品發布、宏觀因素等）",
+   "new_query": "Nvidia recent stock price movement and news June 2026",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Nvidia 最近的股價有什麼值得注意的消息？ || NVDA_10K_2026.html#118 NVDA_10K_2025.html#119 NVDA_10K_2026.html#10 NVDA_10Q_202604.html#34 NVDA_10K_2025.html#10 || live": {
+   "sufficient": false,
+   "missing": "缺少近期股價變動的具體數值或漲跌幅，以及最近影響股價的新聞事件（如財報發布、重大合作、政策變動或市場情緒等）",
+   "new_query": "Nvidia recent stock price movement and news September 2026 share price change recent developments",
+   "relevant_ids": [
+    "NVDA_10Q_202604.html#34"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Tesla 最近的股價有什麼值得注意的消息？ || TSLA_10K_2025.html#100 TSLA_10K_2024.html#113 TSLA_10Q_202409.html#41 TSLA_10K_2025.html#91 TSLA_Fundamentals_20260612.txt#0 || live": {
+   "sufficient": false,
+   "missing": "缺少具體的近期股價變動數據（如價格、漲跌幅）以及導致該變動的最新新聞或事件說明。",
+   "new_query": "Tesla recent stock price movement June 2026 news price change percentage",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Nvidia 最近的股價有什麼值得注意的消息？ || NVDA_10K_2026.html#118 NVDA_10K_2025.html#119 NVDA_10K_2026.html#10 NVDA_10K_2026.html#181 NVDA_10Q_202510.html#101 || live": {
+   "sufficient": false,
+   "missing": "缺少 Nvidia 最近的股價水平、漲跌幅或近期市場消息（如財報、指引、重大公告、股價波動原因等具體數字或敘述）。",
+   "new_query": "Nvidia recent stock price news June 2026 price change earnings announcement share repurchase impact",
+   "relevant_ids": [
+    "NVDA_10Q_202510.html#101"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Tesla 最近的股價有什麼值得注意的消息？ || TSLA_10Q_202606.html#35 TSLA_10Q_202606.html#20 TSLA_10Q_202606.html#2 TSLA_10Q_202606.html#42 TSLA_10Q_202606.html#17 || live": {
+   "sufficient": false,
+   "missing": "缺少Tesla最近的股價數值、漲跌幅以及與該股價變動相關的新聞或事件說明",
+   "new_query": "Tesla recent stock price news June 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Tesla 最近的股價有什麼值得注意的消息？ || TSLA_Fundamentals_20260612.txt#0 TSLA_10Q_202606.html#2 TSLA_10Q_202606.html#20 TSLA_10Q_202606.html#0 TSLA_10Q_202606.html#17 || live": {
+   "sufficient": false,
+   "missing": "缺少 Tesla 最近的股價水平、漲跌幅或百分比變化，以及近期影響股價的新聞或事件（如財報、產品發布、監管動向等）",
+   "new_query": "Tesla recent stock price movement and news June 2026 Q2 price change news",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價 || AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#37 AAPL_10Q_202603.html#19 AAPL_10Q_202512.html#18 AAPL_10Q_202606.html#38 || live": {
+   "sufficient": false,
+   "missing": "缺少2026-06-13至2026-09-01期間的新聞或分析評論，以及服務業務的獲利指標（如營業利益、毛利率或貢獻毛利）等資訊。",
+   "new_query": "Apple services revenue Q3 2026 news analysis June 13 2026 to September 1 2026 profitability commentary",
+   "relevant_ids": [
+    "AAPL_10Q_202606.html#20",
+    "AAPL_10Q_202606.html#38"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價 || AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#37 AAPL_10Q_202606.html#38 AAPL_10Q_202606.html#16 AAPL_10Q_202606.html#15 || live": {
+   "sufficient": false,
+   "missing": "缺乏2026-06-13至2026-09-01期間的新聞或分析師評論，說明Apple服務業務的成長與獲利能力的質性評價與引用。",
+   "new_query": "Apple services growth profitability news June 13 2026 to September 1 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找Apple 2026 Q3 earnings call transcript 中對服務業務的成長與獲利能力的評論 || AAPL_10Q_202606.html#17 AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#15 AAPL_10Q_202606.html#16 AAPL_10Q_202606.html#0 || live": {
+   "sufficient": false,
+   "missing": "缺少Apple 2026 Q3 earnings call transcript中管理層對服務業務成長與獲利能力的具體評論或敘述",
+   "new_query": "Apple Q3 2026 earnings call transcript services segment growth profitability comments",
+   "relevant_ids": [],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的分析師評論或新聞評論 || AAPL_10Q_202606.html#20 AAPL_10Q_202603.html#19 AAPL_10Q_202606.html#37 AAPL_10Q_202512.html#18 AAPL_10Q_202606.html#38 || live": {
+   "sufficient": false,
+   "missing": "缺少2026-06-13至2026-09-01期間關於Apple服務業務的分析師評論或新聞評論（質性分析、觀點、引用、情緒等），僅有財報數字不足以回答。",
+   "new_query": "Apple services analyst commentary June 13 2026 to September 1 2026 OR Apple services news July 2026 analyst report",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的分析師評論或新聞評論 || AAPL_10Q_202606.html#20 AAPL_10Q_202603.html#19 AAPL_10Q_202606.html#39 AAPL_10Q_202606.html#37 AAPL_10Q_202512.html#18 || live": {
+   "sufficient": false,
+   "missing": "缺少2026-06-13至2026-09-01期間關於Apple服務業務的分析師評論或新聞報導，需包含分析師觀點、新聞摘要或市場評論等文字資訊。",
+   "new_query": "Apple services analyst commentary June 2026 July 2026 August 2026 news articles",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "在知識庫中查找截至2026-06-12的Apple 服務業務的新聞評價與分析 || AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#39 AAPL_10Q_202606.html#38 AAPL_10Q_202606.html#15 AAPL_10Q_202603.html#38 || live": {
+   "sufficient": false,
+   "missing": "缺少截至2026-06-12的Apple 服務業務的新聞報導、分析師評論或媒體評價等外部分析資訊。",
+   "new_query": "Apple services segment news analysis June 2026 up to June 12 2026",
+   "relevant_ids": [
+    "AAPL_10Q_202606.html#39",
+    "AAPL_10Q_202606.html#38"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "在知識庫中查找截至2026-06-12的Apple 服務業務的新聞評價與分析 || AAPL_10Q_202606.html#37 AAPL_10Q_202606.html#38 AAPL_10Q_202606.html#20 AAPL_10Q_202606.html#39 AAPL_10Q_202606.html#26 || live": {
+   "sufficient": false,
+   "missing": "缺少關於 Apple 服務業務的新聞評價與分析（如媒體評論、分析師報告、新聞文章），僅有財務數據未提供評論性內容。",
+   "new_query": "Apple services business news analysis June 2026 analyst commentary",
+   "relevant_ids": [
+    "AAPL_10Q_202606.html#37",
+    "AAPL_10Q_202606.html#38",
+    "AAPL_10Q_202606.html#39"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 Bloomberg 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10Q_202604.html#30 NVDA_10Q_202604.html#42 NVDA_10Q_202604.html#72 NVDA_10Q_202604.html#15 NVDA_10Q_202604.html#34 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意的具體公司名稱與合作細節",
+   "new_query": "NVIDIA recent partnership with Bitcoin mining company AI business Bloomberg 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 Bloomberg 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10K_2026.html#81 NVDA_10K_2026.html#20 NVDA_10K_2026.html#122 NVDA_10K_2026.html#25 NVDA_10K_2026.html#28 || live": {
+   "sufficient": false,
+   "missing": "缺少最近 NVIDIA 與哪家比特幣挖礦公司合作 AI 業務的具體公司名稱與合作細節",
+   "new_query": "NVIDIA recent partnership with Bitcoin mining company AI business Bloomberg",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 Reuters 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10Q_202604.html#30 NVDA_10Q_202604.html#42 NVDA_10Q_202604.html#34 NVDA_10Q_202604.html#72 NVDA_10Q_202604.html#36 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意的具體公司名稱及合作內容",
+   "new_query": "Reuters NVIDIA recent AI partnership with a bitcoin mining company",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 Reuters 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10K_2026.html#20 NVDA_10K_2025.html#19 NVDA_10Q_202604.html#30 NVDA_10K_2026.html#25 NVDA_10K_2024.html#15 || live": {
+   "sufficient": false,
+   "missing": "缺少最近與 NVIDIA 合作的比特幣挖礦公司名稱及合作內容的具體資訊（如 Reuters 報導的合作細節）",
+   "new_query": "Reuters recent NVIDIA partnership with Bitcoin mining company AI business",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 Reuters 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10K_2026.html#20 NVDA_10K_2025.html#19 NVDA_10Q_202410.html#86 NVDA_10K_2026.html#25 NVDA_Fundamentals_20260612.txt#1 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意的具體公司名稱及 Reuters 報導細節",
+   "new_query": "Reuters NVIDIA recent AI partnership Bitcoin mining company 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 Yahoo Finance 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10K_2026.html#20 NVDA_10K_2025.html#19 NVDA_10K_2024.html#49 NVDA_10K_2025.html#21 NVDA_10K_2026.html#120 || live": {
+   "sufficient": false,
+   "missing": "缺少最近與比特幣挖礦公司合作的具體公司名稱及合作細節（例如合作夥伴是哪一家、合作內容是 AI 相關業務）",
+   "new_query": "NVIDIA recent partnership with Bitcoin mining company AI business Yahoo Finance 2026",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 CNBC 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10Q_202604.html#30 NVDA_10Q_202604.html#42 NVDA_10Q_202604.html#72 NVDA_10Q_202604.html#34 NVDA_10Q_202604.html#78 || live": {
+   "sufficient": false,
+   "missing": "缺少合作的比特幣挖礦公司名稱以及合作內容的具體說明（如合作時間、AI 相關業務細節）",
+   "new_query": "NVIDIA recent AI partnership Bitcoin mining company CNBC",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 Yahoo Finance 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10K_2026.html#20 NVDA_10K_2026.html#25 NVDA_10K_2026.html#81 NVDA_10K_2026.html#122 NVDA_10K_2026.html#28 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意的具體公司名稱及合作細節（如合作內容、時間），以及 Yahoo Finance 的來源資訊。",
+   "new_query": "NVIDIA recent partnership with Bitcoin mining company AI business site:yahoo.com finance",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 CNBC 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10K_2026.html#20 NVDA_10K_2025.html#19 NVDA_10K_2026.html#25 NVDA_10Q_202604.html#30 NVDA_10Q_202604.html#42 || live": {
+   "sufficient": false,
+   "missing": "缺少最近與哪家比特幣挖礦公司合作的具體公司名稱，以及 CNBC 報導此合作的資訊。",
+   "new_query": "NVIDIA recent partnership with Bitcoin mining company AI business site:CNBC.com",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 CNBC 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10K_2026.html#20 NVDA_10K_2025.html#19 NVDA_10K_2026.html#25 NVDA_10Q_202410.html#86 NVDA_10Q_202604.html#30 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意的具體公司名稱以及 CNBC 報導的相關資訊",
+   "new_query": "NVIDIA recent AI partnership bitcoin mining company CNBC",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 Financial Times 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10Q_202604.html#30 NVDA_10Q_202604.html#42 NVDA_10Q_202604.html#34 NVDA_10Q_202604.html#72 NVDA_10Q_202604.html#36 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意的具體公司名稱及相關報導（如 Financial Times 的報導）",
+   "new_query": "Financial Times NVIDIA recent partnership with bitcoin mining company AI business",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 Financial Times 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10K_2026.html#20 NVDA_10K_2026.html#25 NVDA_10Q_202410.html#86 NVDA_10K_2024.html#15 NVDA_Fundamentals_20260612.txt#1 || live": {
+   "sufficient": false,
+   "missing": "缺少與哪家比特幣挖礦公司合作的具體公司名稱及合作細節（如合作內容、時間）",
+   "new_query": "Financial Times NVIDIA recent partnership with Bitcoin mining company AI business",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 The Wall Street Journal 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10Q_202604.html#30 NVDA_10Q_202604.html#42 NVDA_10Q_202604.html#34 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#72 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意的具體資訊（公司名稱與合作內容），以及 WSJ 報導的引用。",
+   "new_query": "Wall Street Journal NVIDIA recent partnership with Bitcoin mining company AI business",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋於 The Wall Street Journal 查找 NVIDIA 最近與哪家比特幣挖礦公司合作 AI 生意 || NVDA_10K_2026.html#25 NVDA_Fundamentals_20260612.txt#1 NVDA_10Q_202410.html#86 NVDA_10K_2024.html#15 NVDA_10K_2026.html#120 || live": {
+   "sufficient": false,
+   "missing": "缺少最近與比特幣挖礦公司合作的具體公司名稱及合作內容的資訊，且需有 WSJ 報導作為來源。",
+   "new_query": "Wall Street Journal NVIDIA recent partnership with Bitcoin mining company AI business",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "NVIDIA FY2026 的 Diluted EPS 是多少 || NVDA_10K_2026.html#164 NVDA_10Q_202604.html#14 NVDA_10K_2026.html#181 NVDA_10Q_202510.html#15 NVDA_10K_2026.html#118 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#164",
+    "NVDA_10K_2026.html#181"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Apple fiscal year 2025 的 Diluted EPS 是多少？ || AAPL_10K_2025.html#0 AAPL_10Q_202512.html#15 AAPL_10K_2025.html#115 AAPL_10Q_202512.html#18 AAPL_10Q_202506.html#20 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_10K_2025.html#0",
+    "AAPL_10K_2025.html#115"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 的核心技術護城河是什麼 || NVDA_10K_2026.html#20 NVDA_10K_2025.html#19 NVDA_10K_2026.html#28 NVDA_10K_2025.html#27 NVDA_10K_2026.html#120 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#20",
+    "NVDA_10K_2025.html#19",
+    "NVDA_10K_2026.html#28",
+    "NVDA_10K_2025.html#27",
+    "NVDA_10K_2026.html#120"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼 || AMZN_10K_2024.html#80 AMZN_10K_2025.html#81 AMZN_10Q_202603.html#124 AMZN_10Q_202606.html#125 AMZN_10Q_202406.html#41 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10K_2024.html#80",
+    "AMZN_10K_2025.html#81",
+    "AMZN_10Q_202603.html#124",
+    "AMZN_10Q_202606.html#125"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Amazon 在 Prime 服務上面臨的反壟斷或監管風險是什麼 || AMZN_10K_2025.html#81 AMZN_10K_2024.html#80 AMZN_10Q_202603.html#124 AMZN_10Q_202606.html#125 AMZN_10Q_202606.html#45 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10K_2025.html#81",
+    "AMZN_10K_2024.html#80",
+    "AMZN_10Q_202603.html#124",
+    "AMZN_10Q_202606.html#125"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Amazon 在電商業務上面臨的反壟斷或監管風險是什麼 || AMZN_10K_2025.html#81 AMZN_10Q_202509.html#119 AMZN_10Q_202506.html#115 AMZN_10K_2024.html#80 AMZN_10K_2024.html#61 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AMZN_10K_2025.html#81",
+    "AMZN_10Q_202509.html#119",
+    "AMZN_10Q_202506.html#115",
+    "AMZN_10K_2024.html#80"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Microsoft Azure 最新一季的營收成長率是多少？ || MSFT_10Q_202603.html#75 MSFT_10Q_202603.html#65 MSFT_10Q_202603.html#62 MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#69 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#75",
+    "MSFT_10Q_202603.html#49",
+    "MSFT_10Q_202603.html#69"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 最新一季資料中心營收成長多少 || NVDA_10Q_202604.html#42 NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#35 NVDA_10Q_202604.html#14 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10Q_202604.html#47"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼 || NVDA_10Q_202604.html#42 NVDA_10Q_202604.html#36 NVDA_10Q_202604.html#47 NVDA_10Q_202604.html#51 NVDA_10Q_202604.html#35 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10Q_202604.html#42"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "NVIDIA 最近一年營收年增率（YoY revenue growth）是多少 || NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 NVDA_10K_2026.html#20 NVDA_10K_2026.html#203 NVDA_10K_2026.html#165 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Meta 最近一年營收年增率（YoY revenue growth）是多少 || META_Fundamentals_20260612.txt#0 META_Fundamentals_20260612.txt#1 META_10K_2025.html#2 META_10K_2025.html#0 META_IncomeStatement_20260612.txt#4 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 81 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Meta 最近一年營收年增率（YoY revenue growth）是多少",
+   "relevant_ids": [
+    "META_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "Alphabet 最近一年營收年增率（YoY revenue growth）是多少 || GOOGL_Fundamentals_20260612.txt#0 GOOGL_10K_2025.html#2 GOOGL_10K_2025.html#282 GOOGL_10K_2025.html#271 GOOGL_10K_2025.html#298 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 81 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Alphabet 最近一年營收年增率（YoY revenue growth）是多少",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "NVIDIA 最近十二個月（TTM）的淨利（net income）是多少 || NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 NVDA_10K_2026.html#165 NVDA_10K_2026.html#0 NVDA_10K_2026.html#181 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Meta 最近十二個月（TTM）的淨利（net income）是多少 || META_Fundamentals_20260612.txt#0 META_Fundamentals_20260612.txt#1 META_10Q_202606.html#15 META_10Q_202606.html#2 META_10Q_202606.html#0 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "META_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Alphabet 最近十二個月（TTM）的淨利（net income）是多少 || GOOGL_Fundamentals_20260612.txt#0 GOOGL_10K_2025.html#2 GOOGL_10K_2025.html#271 GOOGL_10K_2025.html#269 GOOGL_10K_2025.html#268 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 81 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Alphabet 最近十二個月（TTM）的淨利（net income）是多少",
+   "relevant_ids": [
+    "GOOGL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  }
+ },
+ "ticker": {
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg": [
+   "GOOGL"
+  ],
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 Reuters": [
+   "GOOGL"
+  ],
+  "改用網路搜尋查找Alphabet近期資本支出新聞於 Yahoo Finance": [
+   "GOOGL"
+  ],
+  "改用網路搜尋查找Alphabet近期籌資新聞於 CNBC": [
+   "GOOGL"
+  ],
+  "改用網路搜尋查找Alphabet 2026 Q3 10‑Q 中的資本支出資訊於 SEC.gov": [
+   "GOOGL"
+  ],
+  "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 The Wall Street Journal": [
+   "GOOGL"
+  ],
+  "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價": [
+   "AAPL"
+  ],
+  "改用網路搜尋查找Apple 2026 Q3 earnings call transcript 中對服務業務的成長與獲利能力的評論": [
+   "AAPL"
+  ],
+  "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的分析師評論或新聞評論": [
+   "AAPL"
+  ],
+  "在知識庫中查找截至2026-06-12的Apple 服務業務的新聞評價與分析": [
+   "AAPL"
+  ]
+ }
+}

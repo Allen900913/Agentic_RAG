@@ -833,6 +833,65 @@ def _check_replan_is_replayed() -> int:
     results.append(("⑧r 誤報對照：intraday 但還沒搜過 → 第一次仍加得進去",
                     len(kept2) == 1, f"實得 {kept2}（第一次都不准搜＝時效能力歸零）"))
 
+    # ── ⑧s~⑧v：replan 建的 todo 也帶 route（2026-09-02，計畫第 5 步）──────────────
+    # ⚠ 這一組取代了 `_WEB_TODO_RE`：**snapshot 的 web-todo 拒絕判準從「待辦文字裡有沒有
+    #   『網路』二字」換成「route 欄位是什麼」**。那個詞表匹配不到「在 Yahoo Finance 上查詢」
+    #   （⑧p 逐字凍結了六個），而路由現在是欄位，不需要從中文句子反推。
+    def _replan_todos(todos_, add_list, fm=LIVE):
+        saved = (_lr._CACHE, _lr.enabled, ar.rq.call_llm, ar._build_temporal_contract)
+        _lr._CACHE, _lr.enabled = {}, (lambda: False)
+        ar.rq.call_llm = lambda m, mn, temperature=0.0: json.dumps(
+            {"sufficient": False, "add": add_list, "drop": []})
+        ar._build_temporal_contract = lambda mode: "(stub)"
+        try:
+            out = ar._node_replan({"query": "q", "freshness_mode": fm,
+                                   "todos": todos_, "collected": []})
+            return [(t["task"], t.get("route")) for t in out["todos"] if t["id"] != 0]
+        finally:
+            (_lr._CACHE, _lr.enabled, ar.rq.call_llm, ar._build_temporal_contract) = saved
+
+    _saved_web2 = ar.ENABLE_WEB_SEARCH
+    ar.ENABLE_WEB_SEARCH = True
+    try:
+        _new_fmt = _replan_todos([_td()], [{"task": "Tesla 最近的新聞", "route": "web"},
+                                           {"task": "Tesla 上季營收", "route": "kb"}])
+        _legacy = _replan_todos([_td()], ["改用網路搜尋查 Tesla 最近的新聞"])
+        _snap_web = _replan_todos([_td()], [{"task": "Tesla 最近的新聞", "route": "web"}],
+                                  fm=SNAP)
+        _snap_kb = _replan_todos([_td()], [{"task": "Tesla 上季營收", "route": "kb"}], fm=SNAP)
+    finally:
+        ar.ENABLE_WEB_SEARCH = _saved_web2
+
+    results.append(("⑧s replan 建的 todo 帶 route，且值是 LLM 給的那個",
+                    _new_fmt == [("Tesla 最近的新聞", "web"), ("Tesla 上季營收", "kb")],
+                    f"實得 {_new_fmt}；沒有 route ＝ 落到預設 kb ＝ 新聞題又去撈財報"))
+    results.append(("⑧t 舊格式（純字串）的 add 仍吃得下，route 落到 kb",
+                    _legacy == [("改用網路搜尋查 Tesla 最近的新聞", "kb")],
+                    f"實得 {_legacy}；既有 replay 快取錄的全是字串,不吃就是全部失效"))
+    results.append(("⑧u snapshot 下 route=web 的追加待辦被拒（判準已換成 route,不是詞表）",
+                    _snap_web == [], f"實得 {_snap_web}"))
+    results.append(("⑧v **誤報對照**：snapshot 下 route=kb 的追加待辦仍加得進去",
+                    _snap_kb == [("Tesla 上季營收", "kb")],
+                    f"實得 {_snap_kb}（一起擋掉＝把 replan 關掉冒充修好）"))
+
+    # ⑧w route 必須是重放 key 的一個維度：它會改變 replan 的決策輸入。
+    _seen_keys = []
+    _o = (_lr._CACHE, _lr.enabled, _lr.put, ar.rq.call_llm, ar._build_temporal_contract)
+    _lr._CACHE, _lr.enabled = {}, (lambda: True)
+    _lr.put = lambda kind, key, val: _seen_keys.append(key)
+    ar.rq.call_llm = lambda m, mn, temperature=0.0: json.dumps(
+        {"sufficient": False, "add": [], "drop": []})
+    ar._build_temporal_contract = lambda mode: "(stub)"
+    try:
+        for _r in ("kb", "web"):
+            ar._node_replan({"query": "q", "freshness_mode": LIVE, "collected": [],
+                             "todos": [dict(_td(), route=_r)]})
+    finally:
+        (_lr._CACHE, _lr.enabled, _lr.put, ar.rq.call_llm, ar._build_temporal_contract) = _o
+    results.append(("⑧w **誤報對照**：todo 的 route 不同 → 重放 key 必須不同",
+                    len(_seen_keys) == 2 and _seen_keys[0] != _seen_keys[1],
+                    f"實得 {_seen_keys}；key 不含 route ＝ 兩種路由的 replan 決策互相蓋掉"))
+
     print()
     print(f"  {'replan 必須可重放（key 不含自由文字結果）':<52}{'判定':>8}")
     print("  " + "-" * 68)
@@ -895,6 +954,306 @@ def _check_fixture_binding_is_preserved() -> int:
 
     print()
     print(f"  {'fixture 綁定不可自我抹除':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
+def _check_route_dispatch() -> int:
+    """閘門⑪：**路由是 todo 上的欄位，分派是確定性的**（2026-09-01 先寫斷言、後改碼）。
+
+    **為什麼**：現在的路由散在三個地方，沒有一個是為它設計的——
+    ① Grader 的 `realtime_need`（三分類 LLM 欄位，一個措辭族實測 0/3）
+    ② Replanner 把「改用網路搜尋查…」寫成**自由文字**塞進 todo（實測 news-11 一題 6 個近義串）
+    ③ `_WEB_TODO_RE` 用 regex 把那句中文**再解析回來**（匹配不到「在 Yahoo Finance 上查詢」）。
+    改動的本質是：**別再把路由決定編碼成一句中文再叫 regex 解析回來**，讓它變成欄位。
+
+    ⚠ **這支現在會 FAIL，那是對的**：`_dispatch_todo`／`_escalate_route`／`_parse_plan_output`
+      都還不存在。斷言先寫，是為了讓「改完到底算不算對」在動工前就定義好。
+      計畫見 [`BACKLOG.md`](../BACKLOG.md)〈把「路由」改成 todo 上的 `route`〉。
+
+    ⚠ **判別力集中在三條誤報對照**，少了它們一個「一律 kb」或「一律上網」的實作也會滿分：
+      · **⑪f** 非法 route 必須在 dispatch **當場炸**——靜默預設成 kb 的話，Plan 打錯一個字
+        就會讓新聞題全部退回「拿財報硬答」，而那個失敗的外觀與「路由判成 kb」**完全相同**。
+      · **⑪i** `kb` ＋ 不足但**非** `kb_unfixable` → **仍然是 kb**。少了這條，
+        一個「不足就升級上網」的實作會全綠，而那正是現在這條路（`not sufficient` 就打 web）
+        ——等於改了個寂寞，還把 record 那半的過度路由做得更嚴重。
+      · **⑪n** 舊格式 `list[str]` 的 route 預設必須是 **kb**。既有 fixture 錄的 plan 值全是
+        字串陣列；預設成 web 或 both 會讓所有既有重放**憑空多打網路**＝基準不再可比。
+
+    ⚠ **⑪n 與 ⑪q/⑪r 的預設值刻意不同，那不是筆誤**——它們回答的是不同的問題：
+      · ⑪n（舊格式字串）管**可重現性**：那些 fixture 是在「KB 先撈、web 當 fallback」的世界
+        錄的，落到 `kb` 才不會生出新的 Tavily 呼叫與新的 fixture key。
+      · ⑪q/⑪r（新格式缺值／非法值）管**代價不對稱**，判準沿用 `realtime_need` 那條
+        「判不出來填 days 不填 none」：誤判成 `kb` 會讓新聞題**拿財報冒充新聞且零揭露**
+        （`check_news_routing.py` 量的正是這個，而它看不見）；誤判成 `both` 只是多打一次網路。
+    """
+    import ast
+    import inspect
+
+    results: list[tuple[str, bool, str]] = []
+
+    def _has(name: str):
+        return getattr(ar, name, None)
+
+    VALID = _has("VALID_ROUTES")
+    results.append(("⑪a ar.VALID_ROUTES 是宣告好的封閉集合 {kb, web, both}",
+                    VALID is not None and set(VALID) == {"kb", "web", "both"},
+                    f"實得 {VALID!r}（封閉集合要列清單,不要散在各處的字串比對）"))
+
+    dispatch = _has("_dispatch_todo")
+    results.append(("⑪b ar._dispatch_todo 存在且可呼叫", callable(dispatch),
+                    "還沒實作（計畫 A4）"))
+
+    # ── 行為測試：把兩個 tool 都換成計數樁，零網路零 Qdrant ────────────────────────
+    def _run(route):
+        """回 (kb 次數, web 次數, 例外)。兩個 tool 都換成樁——**不要只換一個**，
+        只換 web 的話「web 分支其實也撈了 KB」這個誤報就看不見。"""
+        n = {"kb": 0, "web": 0}
+        saved = (ar._retrieve_chunks, ar._tavily_search)
+        ar._retrieve_chunks = lambda q, **kw: (n.__setitem__("kb", n["kb"] + 1) or [])
+        ar._tavily_search = lambda q, need="none": (
+            n.__setitem__("web", n["web"] + 1) or "（stub）")
+        try:
+            dispatch(route, "某個子問題")
+            return n["kb"], n["web"], None
+        except Exception as e:                    # noqa: BLE001 - 要把例外當成結果之一
+            return n["kb"], n["web"], e
+        finally:
+            ar._retrieve_chunks, ar._tavily_search = saved
+
+    if callable(dispatch):
+        kb_k, kb_w, kb_e = _run("kb")
+        results.append(("⑪c route=kb → 撈 KB、**一次都不打 web**",
+                        kb_e is None and kb_k >= 1 and kb_w == 0,
+                        f"kb={kb_k} web={kb_w} err={kb_e!r}"))
+        wb_k, wb_w, wb_e = _run("web")
+        results.append(("⑪d route=web → 打 web、**不撈 KB**（這一刀才是修好新聞題的那一刀）",
+                        wb_e is None and wb_w >= 1 and wb_k == 0,
+                        f"kb={wb_k} web={wb_w} err={wb_e!r}"))
+        bo_k, bo_w, bo_e = _run("both")
+        results.append(("⑪e route=both → 兩個都做（並陳題：KB 有舊值、web 有新值）",
+                        bo_e is None and bo_k >= 1 and bo_w >= 1,
+                        f"kb={bo_k} web={bo_w} err={bo_e!r}"))
+        bad = [_run(r) for r in ("", None, "news", "KB")]
+        results.append(("⑪f **誤報對照**：非法 route 必須當場炸，不可靜默預設",
+                        all(e is not None for _, _, e in bad),
+                        "靜默預設 → Plan 打錯一個字,新聞題全退回拿財報硬答,"
+                        "而外觀與「路由判成 kb」完全相同"))
+        # ⑪g web 分支必須走既有的 _tavily_search（那裡面有白名單複核／去重／過時過濾／截斷）
+        try:
+            src = inspect.getsource(dispatch)
+            calls = {n.func.id for n in ast.walk(ast.parse(src))
+                     if isinstance(n, ast.Call) and isinstance(n.func, ast.Name)}
+            calls |= {n.func.attr for n in ast.walk(ast.parse(src))
+                      if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)}
+        except (OSError, SyntaxError):
+            calls = set()
+        results.append(("⑪g web 分支走既有 _tavily_search **與** _web_query_en",
+                        "_tavily_search" in calls and "_web_query_en" in calls,
+                        f"實得呼叫 {sorted(calls)}；直接叫 TavilyClient ＝白名單複核／地區子網域／"
+                        "去重／過時過濾／截斷全部繞掉；少了 _web_query_en ＝ 送中文 query 給 "
+                        "Tavily（變異測試 M5 逃脫過一次，就是因為這條只驗了前半）"))
+    else:
+        for tag in ("⑪c", "⑪d", "⑪e", "⑪f", "⑪g"):
+            results.append((f"{tag} （_dispatch_todo 不存在,跳過）", False, "還沒實作"))
+
+    # ── 升級規則：kb 走不下去時怎麼辦（純 Python，不是 LLM）──────────────────────
+    esc = _has("_escalate_route")
+    results.append(("⑪h ar._escalate_route 存在且可呼叫", callable(esc), "還沒實作（計畫 A5）"))
+    if callable(esc):
+        def _e(route, sufficient, unfixable):
+            try:
+                return esc(route, {"sufficient": sufficient, "kb_unfixable": unfixable})
+            except Exception as ex:               # noqa: BLE001
+                return f"ERR {ex!r}"
+        results.append(("⑪i **誤報對照**：kb ＋ 不足但非 kb_unfixable → **仍然 kb**",
+                        _e("kb", False, False) == "kb",
+                        f"實得 {_e('kb', False, False)!r}；判成 both ＝ 退回現在的"
+                        "「不足就上網」,改了個寂寞且加重 record 那半的過度路由"))
+        # ⚠ **這條原本寫 both，被既有的閘門⑤當場推翻**（「KB 補不了 → 只檢索 1 次」實得 2）。
+        #   `kb_unfixable` ＝ KB 結構上補不了，而 kb 那一半已經在池子裡（_merge_chunks 只加不減）
+        #   → 再撈一次照定義不可能有用，只是把 2026-08-14「21 次檢索原地打轉」換個寫法請回來。
+        #   **先寫的斷言不等於對的斷言**；這一格是舊閘門修正新規格的實例。
+        results.append(("⑪j kb ＋ kb_unfixable → **web**（kb 那半已在池裡，再撈不可能有用）",
+                        _e("kb", False, True) == "web", f"實得 {_e('kb', False, True)!r}"))
+        results.append(("⑪k kb ＋ 已足夠 → 不升級",
+                        _e("kb", True, False) == "kb", f"實得 {_e('kb', True, False)!r}"))
+        results.append(("⑪l **誤報對照**：web／both 不得被降級回 kb",
+                        _e("web", False, True) in ("web", "both")
+                        and _e("both", True, False) == "both",
+                        f"實得 web→{_e('web', False, True)!r} both→{_e('both', True, False)!r}"))
+    else:
+        for tag in ("⑪i", "⑪j", "⑪k", "⑪l"):
+            results.append((f"{tag} （_escalate_route 不存在,跳過）", False, "還沒實作"))
+
+    # ── Plan 輸出解析：新舊兩種格式都要吃得下 ────────────────────────────────────
+    parse = _has("_parse_plan_output")
+    results.append(("⑪m ar._parse_plan_output 存在且可呼叫", callable(parse),
+                    "還沒實作（計畫 A2）"))
+    if callable(parse):
+        def _p(raw):
+            try:
+                return parse(raw)
+            except Exception as ex:               # noqa: BLE001
+                return f"ERR {ex!r}"
+        old = _p(["A 的營收", "B 的新聞"])
+        results.append(("⑪n **誤報對照**：舊格式 list[str] 的 route 預設必須是 kb",
+                        isinstance(old, list) and len(old) == 2
+                        and all(t.get("route") == "kb" for t in old)
+                        and [t.get("task") for t in old] == ["A 的營收", "B 的新聞"],
+                        f"實得 {old!r}；預設成 web/both 會讓**所有既有 fixture 重放**的行為"
+                        "悄悄改變＝跨日基準不再可比"))
+        new = _p([{"task": "X 的新聞", "route": "web"}])
+        results.append(("⑪o 新格式 list[dict] 原樣保留 route",
+                        isinstance(new, list) and new[:1] and new[0].get("route") == "web",
+                        f"實得 {new!r}"))
+        mixed = _p(["純字串", {"task": "帶路由", "route": "both"}])
+        results.append(("⑪p 新舊混雜也要吃（LLM 不保證整批同格式）",
+                        isinstance(mixed, list) and len(mixed) == 2
+                        and mixed[0].get("route") == "kb" and mixed[1].get("route") == "both",
+                        f"實得 {mixed!r}"))
+        noroute = _p([{"task": "缺 route"}])
+        results.append(("⑪q dict 缺 route → 補 **both**，且**不可 KeyError 讓整個 plan 掛掉**",
+                        isinstance(noroute, list) and noroute[:1]
+                        and noroute[0].get("route") == "both", f"實得 {noroute!r}"))
+        illegal = _p([{"task": "亂填", "route": "news"}])
+        results.append(("⑪r 非法 route 在**解析時**正規化成 both（不是原樣傳給 dispatch）",
+                        isinstance(illegal, list) and illegal[:1]
+                        and illegal[0].get("route") == "both",
+                        f"實得 {illegal!r}；原樣傳下去會延後到 ⑪f 才炸,"
+                        "一次 LLM 亂填就毀掉整個 query"))
+        results.append(("⑪s 解析結果每一格的 route 都在 VALID_ROUTES 裡",
+                        VALID is not None and all(
+                            isinstance(r, list) and all(t.get("route") in set(VALID) for t in r)
+                            for r in (old, new, mixed, noroute, illegal)
+                            if isinstance(r, list)), ""))
+    else:
+        for tag in ("⑪n", "⑪o", "⑪p", "⑪q", "⑪r", "⑪s"):
+            results.append((f"{tag} （_parse_plan_output 不存在,跳過）", False, "還沒實作"))
+
+    # ── eval 隔離：**route 之後，隔離的單一實作點是 `_effective_route`** ────────────
+    # ⚠ **這一組是變異測試逼出來的**：把 `_effective_route` 的隔離整段拿掉（snapshot 也照
+    #   route 走 → eval 直接連網），**當時兩支閘門一條都沒響**。原因是閘門① 的 `_gate()` 是
+    #   生產判斷式的**抄寫不是 import**（該處自己的 ⚠ 就寫著這件事），抄的還是加 route 之前
+    #   的條件。所以隔離必須在**它現在真正住的地方**再被驗一次。
+    eff = _has("_effective_route")
+    results.append(("⑪t ar._effective_route 存在且可呼叫", callable(eff), "還沒實作"))
+    if callable(eff):
+        _saved_flag = ar.ENABLE_WEB_SEARCH
+        try:
+            ar.ENABLE_WEB_SEARCH = True
+            snap = [eff(r, SNAP) for r in ("kb", "web", "both")]
+            live = [eff(r, LIVE) for r in ("kb", "web", "both")]
+            ar.ENABLE_WEB_SEARCH = False
+            off = [eff(r, LIVE) for r in ("kb", "web", "both")]
+        finally:
+            ar.ENABLE_WEB_SEARCH = _saved_flag
+        results.append(("⑪u **snapshot（eval 走的路）一律降級成 kb**，不論 route 是什麼",
+                        snap == ["kb", "kb", "kb"],
+                        f"實得 {snap}；不是 kb ＝ **eval 直接連網**，這是本檔存在的理由"))
+        results.append(("⑪v ENABLE_WEB_SEARCH=False 時也一律 kb（兩個條件各自都足夠）",
+                        off == ["kb", "kb", "kb"], f"實得 {off}"))
+        results.append(("⑪w **誤報對照**：live ＋ web 開啟時必須原樣放行，不可一律 kb",
+                        live == ["kb", "web", "both"],
+                        f"實得 {live}；全 kb ＝ 隔離做過頭,live 時效能力整個失效"))
+
+    # ⑪x/⑪y 端到端接線：純函式對不代表迴圈真的用了它（同 ⑮b→⑮e 的教訓）。
+    if callable(dispatch):
+        def _e2e(fm):
+            n = {"kb": 0, "web": 0}
+            saved = (ar._retrieve_chunks, ar._check_sufficiency,
+                     ar._tavily_search, ar._fallback_local_summary, ar._web_query_en)
+            ar._retrieve_chunks = lambda q, **kw: (n.__setitem__("kb", n["kb"] + 1) or [])
+            ar._tavily_search = lambda q, need="none": (
+                n.__setitem__("web", n["web"] + 1) or "（stub）")
+            ar._web_query_en = lambda q: q
+            ar._check_sufficiency = lambda *a, **k: {
+                "sufficient": True, "missing": "", "new_query": "",
+                "relevant_ids": [], "realtime_need": "none", "kb_unfixable": False}
+            ar._fallback_local_summary = lambda t, c: "stub"
+            try:
+                ar._reset_run_pool()
+                ar._reset_query_web_budget()
+                ar._run_executor_deterministic("某個新聞子問題", "", fm, 0, False,
+                                               attributable=True, route="web")
+            finally:
+                (ar._retrieve_chunks, ar._check_sufficiency, ar._tavily_search,
+                 ar._fallback_local_summary, ar._web_query_en) = saved
+            return n
+        _snap_n, _live_n = _e2e(SNAP), _e2e(LIVE)
+        results.append(("⑪x 接線：route=web 的 todo 在 **snapshot** 下 web 呼叫 0 次、改撈 KB",
+                        _snap_n["web"] == 0 and _snap_n["kb"] >= 1, f"實得 {_snap_n}"))
+        results.append(("⑪y **誤報對照**：同一個 todo 在 live 下必須真的打到 web",
+                        _live_n["web"] >= 1, f"實得 {_live_n}；0 次 ＝ 隔離做過頭"))
+
+    # ── web 預算用完時，`route=web` **不可以退回 KB**（2026-09-02）────────────────
+    # ⚠ **這一組是 after 臂量出來的**：`news-10`／`news-13` 兩題沒有任何 replan todo，
+    #   財報引用卻不是 0——成因是預算用完後把 route 降級成 kb，於是又去撈財報。
+    #   `route=web` 的意思就是「KB 依設計沒有這種資料」，降級的結果是**拿財報回答新聞題**，
+    #   而那正是這整個改動要治的病。`_unmet_realtime_gaps` 的 docstring 早就點名這個情境
+    #   （「web 預算用完 → 答案回頭用財報 chunk 生成 → 零揭露」），只是那條路依賴
+    #   `realtime_need` 這個 BACKLOG 記著會失手的 LLM 欄位。這裡改用**確定性**判準：
+    #   「這個 todo 被路由到 web，而它一次 web 都沒拿到」本身就是缺口。
+    if callable(dispatch):
+        def _budget_probe(route, fm, budget_left):
+            """把預算調到 `budget_left` 再跑一個 todo，回 (kb 次數, web 次數, gaps)。"""
+            n = {"kb": 0, "web": 0}
+            saved = (ar._retrieve_chunks, ar._check_sufficiency, ar._tavily_search,
+                     ar._fallback_local_summary, ar._web_query_en, ar.QUERY_WEB_BUDGET)
+            ar._retrieve_chunks = lambda q, **kw: (
+                n.__setitem__("kb", n["kb"] + 1)
+                or [{"source": "AAPL_10K_2025.html", "chunk_index": 0, "content": "stub",
+                     "ticker": "AAPL", "raw_rerank_score": 0.9}])
+            # ⚠ 樁的回傳**不可以用「（」開頭**：生產約定那是「查無結果」的標記，
+            #   `_dispatch_todo` 會把它濾掉 → web_notes 空 → 缺口恆為真 → ⑪z4 誤報。
+            #   （被 ⑪z4 當場抓出來的，正是 CLAUDE.md 說的「樁要長得像生產的產物」。）
+            ar._tavily_search = lambda q, need="none": (
+                n.__setitem__("web", n["web"] + 1)
+                or "網路搜尋結果: - Stub（發布日 2026-09-01）[web: https://reuters.com/x]")
+            ar._web_query_en = lambda q: q
+            ar._check_sufficiency = lambda *a, **k: {
+                "sufficient": True, "missing": "", "new_query": "",
+                "relevant_ids": [], "realtime_need": "none", "kb_unfixable": False}
+            ar._fallback_local_summary = lambda t, c: "stub"
+            ar.QUERY_WEB_BUDGET = budget_left
+            try:
+                ar._reset_run_pool()
+                ar._reset_query_web_budget()
+                out = ar._run_one_todo(
+                    {"id": 0, "task": "Apple 最近有什麼新聞", "temporal_scope": "",
+                     "attributable": True, "route": route, "freshness_gaps": [],
+                     "period_notes": [], "web_used": False, "status": "pending", "result": ""},
+                    fm, False)
+                return n, out.get("freshness_gaps") or []
+            finally:
+                (ar._retrieve_chunks, ar._check_sufficiency, ar._tavily_search,
+                 ar._fallback_local_summary, ar._web_query_en,
+                 ar.QUERY_WEB_BUDGET) = saved
+
+        _n0, _g0 = _budget_probe("web", LIVE, 0)     # 預算用完
+        results.append(("⑪z1 route=web ＋ 預算用完 → **一次 KB 都不撈**（不可退回財報）",
+                        _n0["kb"] == 0 and _n0["web"] == 0,
+                        f"實得 {_n0}；撈了 KB ＝ 拿財報回答新聞題,正是本次改動要治的病"))
+        results.append(("⑪z2 同上，必須留下時效缺口（否則就是靜默降級）",
+                        len(_g0) >= 1, f"實得 gaps={_g0}"))
+        _n1, _g1 = _budget_probe("both", LIVE, 0)
+        results.append(("⑪z3 **誤報對照**：route=both ＋ 預算用完 → KB 那半照撈",
+                        _n1["kb"] >= 1 and _n1["web"] == 0,
+                        f"實得 {_n1}；both 的 KB 半本來就該撈,一起擋掉是矯枉過正"))
+        _n2, _g2 = _budget_probe("web", LIVE, 3)     # 有預算
+        results.append(("⑪z4 **誤報對照**：route=web ＋ 有預算且拿到 web → **不得**留缺口",
+                        _n2["web"] >= 1 and not _g2,
+                        f"實得 {_n2} gaps={_g2}；恆留缺口 ＝ 警語永遠印,這條斷言沒有判別力"))
+        _n3, _g3 = _budget_probe("web", SNAP, 0)     # eval
+        results.append(("⑪z5 **誤報對照**：snapshot 下（已降級成 kb）不得憑空多出缺口",
+                        not _g3, f"實得 gaps={_g3}；eval 基準會因此位移"))
+
+    print()
+    print(f"  {'路由欄位與確定性分派（先寫斷言、後改碼）':<52}{'判定':>8}")
     print("  " + "-" * 68)
     fail = 0
     for name, ok, note in results:
@@ -1000,6 +1359,134 @@ def _check_content_date_extraction() -> int:
     return fail
 
 
+def _check_replay_readonly() -> int:
+    """閘門⑫：唯讀模式真的不寫，而且 miss 不准隱形（2026-09-02）。
+
+    **守的是什麼**：`llm_replay` 的 `atexit` 無條件回寫 → A/B 共用一份 fixture 時，
+    **先跑那臂的 miss 會變成後跑那臂的 hit**（實測 hit 23→32，兩臂不可比）。這條污染是
+    **單向**的：永遠偏袒後跑的那一方，而且兩臂外觀都「掛了 fixture」，看不出異常。
+
+    ⚠ **判別力集中在三條，其餘陽性一個「唯讀就整個 no-op」的實作也會通過**：
+      · **⑫e**（單向污染的重現＋消失）——先證明非唯讀真的會污染，再證明唯讀讓它消失。
+        少了前半，「唯讀下 armB miss」可能只是這個測試沒建立污染條件。
+      · **⑫i** 唯讀時**檔案裡已有的** key 照樣 hit——擋掉「唯讀 ＝ 把模組關掉」的實作，
+        那樣 A/B 兩臂會一起失去 fixture，比污染更糟且更難察覺。
+      · **⑫f** 唯讀時 hit/miss 照樣印出來——非唯讀唯一的出口是 `_flush()` 那行
+        `[replay] wrote`，唯讀不寫檔就沒有那行 → **miss 完全隱形**，外觀與「系統沒走那條路」相同。
+    """
+    import contextlib
+    import tempfile
+    import llm_replay as _lr
+
+    results: list[tuple[str, bool, str]] = []
+    _saved_env = {k: os.environ.get(k) for k in
+                  ("RAG_REPLAY_CACHE", "RAG_REPLAY_READONLY", "RAG_REPLAY_MODE")}
+    _saved_globals = (_lr._CACHE, _lr._PATH, _lr._DIRTY, dict(_lr._STATS))
+
+    def _reset(path, *, ro, mode=None):
+        """把模組狀態歸零並重設 env。**必須清 `_CACHE`**：它是 process 層快取，
+        不清的話第二個情境讀到的是第一個情境的 dict，測到的東西就不是磁碟上的事實。"""
+        os.environ["RAG_REPLAY_CACHE"] = str(path)
+        os.environ.pop("RAG_REPLAY_READONLY", None)
+        os.environ.pop("RAG_REPLAY_MODE", None)
+        if ro:
+            os.environ["RAG_REPLAY_READONLY"] = "1"
+        if mode:
+            os.environ["RAG_REPLAY_MODE"] = mode
+        _lr._CACHE, _lr._PATH, _lr._DIRTY = None, None, False
+        _lr._STATS.update({"hit": 0, "miss": 0, "skipped_write": 0})
+
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            fp = Path(td) / "rc.json"
+
+            # ── ⑫a 預設（未設 READONLY）＝既有三個流程依賴的行為，必須逐字不變 ──────
+            _reset(fp, ro=False)
+            _lr.put("plan", "k1", ["a"])
+            _lr._flush()
+            wrote = fp.exists() and json.loads(fp.read_text(encoding="utf-8")) == {"plan": {"k1": ["a"]}}
+            results.append(("⑫a 預設仍然回寫（record_web_fixture／兩支 period probe 靠它）",
+                            wrote, f"檔案={fp.exists()}"))
+
+            _before = fp.read_bytes()
+
+            # ── ⑫b/⑫c/⑫d 唯讀：put 不進 cache、不設 _DIRTY、磁碟逐字不變 ─────────
+            _reset(fp, ro=True)
+            _lr.put("plan", "k2", ["b"])
+            results.append(("⑫b 唯讀時 put 之後 get 仍然 miss（沒進 cache）",
+                            _lr.get("plan", "k2") is _lr.MISS, "put 竟然生效了"))
+            results.append(("⑫c 唯讀時 `_DIRTY` 保持 False（守入口不是守出口）",
+                            _lr._DIRTY is False, f"_DIRTY={_lr._DIRTY}"))
+            _lr._flush()
+            results.append(("⑫d 唯讀時磁碟內容逐字不變", fp.read_bytes() == _before,
+                            "檔案被改了"))
+
+            # ── ⑫i 唯讀**不是**把模組關掉：既有的 key 照樣 hit ────────────────────
+            results.append(("⑫i 唯讀時檔案裡已有的 key 照樣 hit（不是整個 no-op）",
+                            _lr.get("plan", "k1") == ["a"], f"實得 {_lr.get('plan', 'k1')!r}"))
+
+            # ── ⑫f miss 不准隱形 ─────────────────────────────────────────────────
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                _lr._flush()
+            out = buf.getvalue()
+            results.append(("⑫f 唯讀時 `_flush` 照樣印出 hit/miss（否則 miss 完全隱形）",
+                            "read-only" in out and "miss=" in out, f"實得 {out.strip()!r}"))
+
+            # ── ⑫e **單向污染**：先重現，再證明唯讀讓它消失 ──────────────────────
+            #    兩臂共用同一份 fixture，armA 先跑（miss → 算出結果 → put），armB 後跑。
+            def _two_arms(readonly: bool) -> bool:
+                fp2 = Path(td) / f"ab_{int(readonly)}.json"
+                fp2.write_text("{}", encoding="utf-8")
+                _reset(fp2, ro=readonly)
+                if _lr.get("plan", "shared") is _lr.MISS:      # armA miss → 現場算 → 回寫
+                    _lr.put("plan", "shared", ["armA 算出來的"])
+                _lr._flush()
+                _reset(fp2, ro=readonly)                        # armB：新 process 的模擬
+                return _lr.get("plan", "shared") is not _lr.MISS
+
+            polluted = _two_arms(readonly=False)
+            clean = _two_arms(readonly=True)
+            results.append(("⑫e1 **先重現**：非唯讀下 armA 的 miss 變成 armB 的 hit",
+                            polluted is True, "污染沒重現 → 這個測試沒有前提"))
+            results.append(("⑫e2 唯讀下同一個 key 在 armB 仍然 miss（污染消失）",
+                            clean is False, "唯讀沒擋住回寫"))
+
+            # ── ⑫g readonly() 每次重讀 env（不可快取成模組層常數）────────────────
+            _reset(fp, ro=False)
+            was = _lr.readonly()
+            os.environ["RAG_REPLAY_READONLY"] = "1"
+            now = _lr.readonly()
+            results.append(("⑫g `readonly()` 每次重讀 env（不是 import 時定死）",
+                            was is False and now is True, f"{was} → {now}"))
+
+            # ── ⑫h 與 strict 正交：唯讀不得讓 strict 靜默失效 ────────────────────
+            _reset(fp, ro=True, mode="strict:plan")
+            try:
+                _lr.get("plan", "不存在的 key")
+                got = None
+            except _lr.ReplayCacheMiss:
+                got = _lr.ReplayCacheMiss
+            results.append(("⑫h 唯讀 ＋ strict 正交：miss 照樣拋 ReplayCacheMiss",
+                            got is _lr.ReplayCacheMiss, f"實得 {got}"))
+    finally:
+        for k, v in _saved_env.items():
+            os.environ.pop(k, None)
+            if v is not None:
+                os.environ[k] = v
+        _lr._CACHE, _lr._PATH, _lr._DIRTY = _saved_globals[:3]
+        _lr._STATS.update(_saved_globals[3])
+
+    print()
+    print(f"  {'replay 唯讀模式（A/B 單向污染）':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
 def main() -> int:
     print(f"  {'情境':<24}{'Q1':>6}{'Q2':>6}{'Q3':>6}{'Q4':>6}{'呼叫':>6}   判定")
     print("  " + "-" * 68)
@@ -1031,6 +1518,8 @@ def main() -> int:
     fail += _check_replan_is_replayed()
     fail += _check_fixture_binding_is_preserved()
     fail += _check_content_date_extraction()
+    fail += _check_route_dispatch()
+    fail += _check_replay_readonly()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0

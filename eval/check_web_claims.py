@@ -101,6 +101,21 @@ def _eval_one(claim: dict, rec: dict | None, allowlist: set[str],
         return "N-A", ["結果檔裡沒有這一題"]
     if rec.get("error"):
         return "N-A", [f"該題執行失敗：{rec['error'][:80]}"]
+    # ── `blocked`：這份 fixture **在輸入層**就承載不了這條斷言 ─────────────────────
+    # ⚠ **這是一個「停用測試」的按鈕，所以它的護欄全在可見度上**：判成 N-A 而不是 PASS
+    #   （N-A 從不併進 PASS，而且 **N-A 照樣讓退出碼非零**——所以 block 掉一條斷言不會讓
+    #   這支變綠，忘記解除也不會安靜過去），理由與證據逐字印出來，而且必須寫在 claims 檔裡
+    #   讓 diff 看得見。**不要**用它來讓一條會 FAIL 的斷言安靜下來——判準是
+    #   「FAIL 的成因在**輸入**還是在**受測物**」：輸入沒有那個事實 → blocked；
+    #   輸入有而系統沒用上 → 那是真 FAIL,不准 block。
+    # ⚠ 刻意**不做成「拿 regex 去 fixture 裡找」的自動前置條件**：`fixture_text` 是整份
+    #   fixture 攤平的 blob,一條「市值有沒有出現」的樣式會匹配到**別題**的回應
+    #   （實測 NVDA 那題的回應裡就有 `Market Cap (intraday)5.262T`）→ 自動前置條件會
+    #   在錯誤的證據上放行。人工設、寫下證據、可被 diff 看見,比一個會誤判的自動判準誠實。
+    if blocked := claim.get("blocked"):
+        return "N-A", [f"**blocked**：{blocked.get('reason', '(沒寫理由)')}",
+                       f"證據：{blocked.get('evidence', '(沒寫證據)')}",
+                       f"解除條件：{blocked.get('unblock_when', '(沒寫)')}"]
 
     ans = _norm(rec.get("answer") or "")
     calls = rec.get("n_web_calls", rec.get("n_web_calls_recorded"))
