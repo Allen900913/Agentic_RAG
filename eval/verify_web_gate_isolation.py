@@ -1487,6 +1487,142 @@ def _check_replay_readonly() -> int:
     return fail
 
 
+def _check_monkeypatch_reaches_callers() -> int:
+    """閘門⑬：套件化之後，打在套件上的 monkeypatch 仍然攔得住呼叫端（2026-09-03）。
+
+    **守的是什麼**：`agentic_rag_v2.py`（單一 4549 行檔）拆成 `agentic_rag_version/` 套件時，
+    最危險的失效**不會有任何外觀差異**。eval 全靠 `ar.<name> = stub` 攔截，而那是在**套件物件**
+    上改綁定；一旦呼叫端寫成 `from .webtools import _tavily_search`，那個名字就綁死在
+    呼叫端模組的 globals 裡，**stub 再也蓋不到它** → `verify_web_gate_isolation` 保證的
+    「eval 絕不連網」會**真的連網**，而閘門本身照樣全綠（它只數自己那個 stub 被叫幾次）。
+
+    同樣的病也吃常數：`ENABLE_WEB_SEARCH` / `QUERY_WEB_BUDGET` 被 eval 直接改寫，
+    子模組若各自 `from .config import ENABLE_WEB_SEARCH`，改的就是另一份。
+
+    ⚠ **判別力全在 ⑬e，其餘四條今天是空跑**：套件目前只有 `__init__`，沒有子模組，
+      所以 ⑬b~⑬d 是**真空成立**（vacuously true）——它們現在回報 OK **不代表有判別力**，
+      只代表還沒有東西可以違反。⑬e 拿一個**故意造出來的違規**餵同一套檢查，證明它抓得到；
+      沒有 ⑬e，這道閘門就是這個專案犯過六次的「量尺與被測物耦合」的第七次。
+
+    ⚠ **⑬a 刻意從 eval 腳本反推而不是只讀凍結清單**：漏掉一個 patch 站點的失敗方式，
+      與「那個站點本來就不存在」外觀相同。所以凍結清單少於實際 patch 的名字時要當場炸。
+    """
+    import ast as _ast
+    import pkgutil as _pkgutil
+    import re as _re
+    import sys as _sys
+    from pathlib import Path as _P
+
+    results: list[tuple[str, bool, str]] = []
+
+    def _ck(name: str, ok: bool, note: str = "") -> None:
+        results.append((name, bool(ok), note))
+
+    # ── ⑬a 凍結清單 vs eval 實際 patch 的名字 ──────────────────────────────────
+    FROZEN = {
+        "ENABLE_WEB_SEARCH", "QUERY_WEB_BUDGET", "_build_temporal_contract",
+        "_check_sufficiency", "_fallback_local_summary", "_get_kb_coverage",
+        "_get_models", "_retrieve_chunks", "_run_executor", "_run_one_todo",
+        "_tavily_search", "_web_query_en", "_write_final_answer",
+    }
+    _assign = _re.compile(r"\b_?ar\.([A-Za-z_][A-Za-z_0-9]*)\s*=(?!=)")
+    found: set[str] = set()
+    for p in sorted(_P(__file__).parent.glob("*.py")):
+        found |= set(_assign.findall(p.read_text(encoding="utf-8")))
+    missing = found - FROZEN
+    _ck("⑬a 凍結清單涵蓋 eval 實際 patch 的每一個名字", not missing,
+        f"清單漏了 {sorted(missing)}——拆分時不會被保護")
+
+    pkg = _sys.modules[ar.__name__]
+    submods = []
+    if hasattr(pkg, "__path__"):
+        for mi in _pkgutil.iter_modules(list(pkg.__path__)):
+            m = _sys.modules.get(f"{ar.__name__}.{mi.name}")
+            if m is not None and getattr(m, "__file__", None):
+                submods.append(m)
+
+    # ── ⑬b 沒有任何子模組把被 patch 的名字綁成自己的 module-level global ──────────
+    def _shadowers(names: set[str], mods) -> list[str]:
+        bad = []
+        for m in mods:
+            for n in names:
+                if n in vars(m):
+                    bad.append(f"{m.__name__}.{n}")
+        return bad
+
+    shadow = _shadowers(FROZEN, submods)
+    _ck(f"⑬b 子模組（{len(submods)} 個）都沒有遮蔽被 patch 的名字", not shadow,
+        f"遮蔽：{shadow[:4]}")
+
+    # ── ⑬c 子模組裡沒有「直接呼叫全域名字」的呼叫點（必須走套件物件）───────────────
+    def _direct_calls(names: set[str], mods) -> list[str]:
+        bad = []
+        for m in mods:
+            try:
+                tree = _ast.parse(_P(m.__file__).read_text(encoding="utf-8"))
+            except (OSError, SyntaxError):
+                continue
+            for node in _ast.walk(tree):
+                if (isinstance(node, _ast.Call) and isinstance(node.func, _ast.Name)
+                        and node.func.id in names):
+                    bad.append(f"{m.__name__}:{node.lineno} {node.func.id}()")
+        return bad
+
+    direct = _direct_calls(FROZEN, submods)
+    _ck("⑬c 子模組沒有直接呼叫被 patch 的名字（要走套件物件）", not direct,
+        f"直呼：{direct[:4]}")
+
+    # ── ⑬d 動態版：真的 patch 下去，沒有任何子模組還握著舊物件 ───────────────────
+    sentinel = object()
+    victim = "_tavily_search"
+    saved = getattr(ar, victim)
+    try:
+        setattr(ar, victim, sentinel)
+        stale = [f"{m.__name__}.{victim}" for m in submods
+                 if victim in vars(m) and vars(m)[victim] is not sentinel]
+    finally:
+        setattr(ar, victim, saved)
+    _ck(f"⑬d patch `ar.{victim}` 之後沒有子模組握著舊物件", not stale, f"舊物件：{stale}")
+
+    # ── ⑬e 誤報對照：故意造一個違規的假子模組，上面三條必須抓到 ────────────────────
+    #   ⚠ 這是本道**唯一**有判別力的斷言（⑬b~⑬d 在還沒有子模組時是真空成立）。
+    import types as _types
+    fake = _types.ModuleType(f"{ar.__name__}._fake_violation")
+    fake.__file__ = str(_P(__file__).parent / "_fake_violation_probe.py")
+    fake._tavily_search = saved                     # ← 遮蔽：from .webtools import _tavily_search
+    fake.ENABLE_WEB_SEARCH = True                   # ← 常數也一樣會被遮蔽
+    caught_b = _shadowers(FROZEN, [fake])
+    _ck("⑬e1 誤報對照：遮蔽了就必須被 ⑬b 抓到", len(caught_b) == 2, f"只抓到 {caught_b}")
+
+    src = ("def go(q):\n"
+           "    _tavily_search(q)\n"
+           "    return ENABLE_WEB_SEARCH\n")
+    probe = _P(fake.__file__)
+    try:
+        probe.write_text(src, encoding="utf-8")
+        caught_c = _direct_calls(FROZEN, [fake])
+        _ck("⑬e2 誤報對照：直接呼叫全域名字必須被 ⑬c 抓到", len(caught_c) == 1,
+            f"抓到 {caught_c}")
+    finally:
+        probe.unlink(missing_ok=True)
+
+    setattr(ar, victim, sentinel)
+    try:
+        caught_d = [f"{fake.__name__}.{victim}"] if vars(fake)[victim] is not sentinel else []
+    finally:
+        setattr(ar, victim, saved)
+    _ck("⑬e3 誤報對照：握著舊物件必須被 ⑬d 抓到", len(caught_d) == 1, f"抓到 {caught_d}")
+
+    print()
+    print(f"  {'套件化之後 monkeypatch 仍攔得住':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
 def main() -> int:
     print(f"  {'情境':<24}{'Q1':>6}{'Q2':>6}{'Q3':>6}{'Q4':>6}{'呼叫':>6}   判定")
     print("  " + "-" * 68)
@@ -1520,6 +1656,7 @@ def main() -> int:
     fail += _check_content_date_extraction()
     fail += _check_route_dispatch()
     fail += _check_replay_readonly()
+    fail += _check_monkeypatch_reaches_callers()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0
