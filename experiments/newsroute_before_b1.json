@@ -1,0 +1,263 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_prod.json"
+  },
+  "records": [
+    {
+      "id": "news-01",
+      "query": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+      "why": "flow",
+      "answer": "Apple 最近涉及兩項與 Siri 相關的訴訟和解——一是 2026 年 5 月 5 日以 **2.5 億美元** 和解的「延遲 Siri AI 功能」消費者集體訴訟；二是先前的 **9,500萬美元** 隱私錄音和解案，允許受影響使用者索取賠償。  \n\n- 2026‑05‑05，Apple 同意以 **2.5 億美元（$250 million）** 了結一宗因公司延遲推出 Siri 人工智慧功能而提起的消費者集體訴訟，並未承認過錯，仍需法院批准。[web: https://www.reuters.com/legal/litigation/apple-settles-lawsuit-over-late-siri-ai-features-250-million-2026-05-05]  \n- 另一宗涉及 Siri 會在未經使用者明確啟動時錄音的隱私訴訟，Apple 同意支付 **0.95 億美元（$95 million）** 以和解，受影響的使用者可根據案件規則申請賠償，且 Apple 否認曾將 Siri 數據用於行銷目的。[web: https://www.nasdaq.com/articles/apple-user-heres-how-get-slice-95-million-siri-lawsuit-payout]  \n\n因此，Apple 近期的 Siri 相關法律動態包括上述兩筆金額分別為 **2.5 億美元** 與 **9,500萬美元** 的和解。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #22 (rerank=0.715)\n  - AAPL_10Q_202606.html #21 (rerank=0.701)\n  - AAPL_10Q_202606.html #20 (rerank=0.699)\n  - AAPL_10Q_202606.html #15 (rerank=0.683)\n  - AAPL_10Q_202606.html #17 (rerank=0.674)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "Apple 最近與 Siri 相關的法律訴訟或和解是什麼？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 21
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 17
+        }
+      ]
+    },
+    {
+      "id": "news-02",
+      "query": "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？",
+      "why": "flow",
+      "answer": "Apple 在 2026 年的 WWDC 上正式推出了 **Siri AI**，並將其納入全新命名的 iOS 27、iPadOS 27、macOS 27、watchOS 27、visionOS 27 以及 tvOS 27 系統中【AAPL_10Q_202606.html, chunk #32】。  \n\n- 這次發佈同時伴隨 iOS 27、macOS 27（代號 Golden Gate）等作業系統的更新，標誌著 Apple 以「Apple Intelligence」為旗幟的 AI 佈局進入新階段。  \n- 但公司亦指出，歐盟《數位市場法》（DMA）等競爭法規可能迫使 Apple 在部分司法管轄區限制或不推出 Siri AI，進而對其競爭優勢與財務表現產生負面影響【AAPL_10Q_202606.html, chunk #63】。  \n\n因此，最新的 WWDC 消息是 Siri 以 AI 形態重新登場，成為 iOS 27 系列的一部分，同時面臨法規合規風險。\n\n---\n⚠ 資料時效：AAPL 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #32 (rerank=0.659)\n  - AAPL_10Q_202603.html #25 (rerank=0.559)\n  - AAPL_10Q_202606.html #63 (rerank=0.546)\n  - AAPL_10Q_202512.html #15 (rerank=0.541)\n  - AAPL_10Q_202603.html #14 (rerank=0.535)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 在最近的 WWDC 上關於 Siri 的新消息是什麼",
+        "改用網路搜尋查找 WWDC 2026 Apple Siri 新消息",
+        "查找 Apple 官方新聞稿中 WWDC 2026 關於 Siri 的更新資訊",
+        "查找 Bloomberg 報導 WWDC 2026 Apple Siri AI 新功能",
+        "使用網路搜尋查找 The Verge、TechCrunch 等媒體報導 Apple WWDC 2026 Siri AI 新功能",
+        "使用網路搜尋查找 Apple Newsroom 或 MacRumors 報導 WWDC 2026 Siri AI 新功能"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 32
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 63
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 14
+        }
+      ]
+    },
+    {
+      "id": "news-03",
+      "query": "最近分析師對 Apple 股票有哪些利多的看法？",
+      "why": "flow",
+      "answer": "分析師近期普遍看好 Apple，提升目標價、維持或升級為買進，並指出公司營收與獲利持續強勁成長。  \n\n- 多家研究機構在 2026 年 7 月與 6 月的報告中給予 **Apple**「**bullish**」評等，且 **Price Target** 均有上調（如 Argus 於 2026‑07‑31 仍維持 bullish 並 **Price Target: Increased**）[web: https://finance.yahoo.com/research/stock-forecast/AAPL]。  \n- **HSBC** 把目標價調升至 **$366**，相較於當時收盤約 **$333** 暗示約 **10%** 上漲空間 [web: https://finance.yahoo.com/markets/stocks/articles/top-analyst-resets-apple-stock-223300903.html]。  \n- 同篇報導指出，**TipRanks** 追蹤的分析師中 **Buy** 評等達 **19** 位，形成 **Moderate Buy** 共識，且 **平均目標價** 為 **$328.69**，高於當前股價 [web: https://finance.yahoo.com/markets/stocks/articles/top-analyst-resets-apple-stock-223300903.html]。  \n- **StockAnalysis** 網站顯示，Apple 的 **TTM 營收** 為 **4,668.2 億美元（$466.82 billion）**，較前期 **+14.2%**；**淨利** 為 **1,289.3 億美元（$128.93 billion）**，較前期 **+29.9%**；**每股盈餘 (EPS)** 為 **$8.72**，較前期 **+32.6%**，均顯示盈利持續加速 [web: https://stockanalysis.com/stocks/aapl]。  \n- 同站亦列出 **2025 財年** 營收 **4,161.6 億美元（$416.16 billion）**，較上年 **+6.43%**；**盈餘** **1,120.1 億美元（$112.01 billion）**，較上年 **+19.50%**，進一步佐證公司基本面向好 [web: https://stockanalysis.com/stocks/aapl]。  \n- 從 Apple 2026 Q3 10‑Q 可見 **九個月營收** 由 **3,136.95 億美元（$313,695 million）** 增至 **3,643.57 億美元（$364,357 million）**，年增 **16%**，其中 **iPhone** 營收 **+22%**、**Services** 營收 **+14%**，均為正向驅動力 [AAPL_10Q_202606.html, chunk #37]、[AAPL_10Q_202606.html, chunk #38]。  \n- 同期 **基本每股盈餘** 從 **$1.57** 提升至 **$2.03**，**稀釋每股盈餘** 從 **$1.57** 提升至 **$2.02**，顯示獲利率提升 [AAPL_10Q_202606.html, chunk #20]。  \n\n綜合以上，分析師認為 Apple 受益於 iPhone、服務與其他產品線的持續增長，財務指標顯著改善，因而提升目標價並給予買進或持續看好的評等。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #20 (rerank=0.692)\n  - AAPL_10Q_202606.html #37 (rerank=0.689)\n  - AAPL_10Q_202606.html #22 (rerank=0.679)\n  - AAPL_10Q_202606.html #38 (rerank=0.675)\n  - AAPL_10Q_202606.html #26 (rerank=0.617)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "分析師對 Apple 股票的利多看法有哪些"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 26
+        }
+      ]
+    },
+    {
+      "id": "news-04",
+      "query": "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？",
+      "why": "flow",
+      "answer": "NVIDIA 最近與 IREN Limited 簽署了戰略合作協議，將共同推動大規模 AI 基礎建設。  \n\n- 2026 年 5 月 7 日，NVIDIA 宣布與 IREN 建立「戰略夥伴關係」，雙方將合作部署最高 5 GW 的 NVIDIA DSX‑aligned AI 基礎設施，並在 IREN 的全球資料中心管線中逐步擴張【web: https://finance.yahoo.com/sectors/technology/articles/nvidia-iren-announce-strategic-partnership-203400700.html】。  \n- 同日，NVIDIA 獲得 IREN 發行的五年認購權，允許 NVIDIA 以每股 70 美元的價格購買最多 3 000 萬股，最高投資金額可達 21 億美元【web: https://www.reuters.com/business/nvidia-invest-up-21-billion-iren-part-ai-data-center-deal-2026-05-07】。  \n- 依據 IREN 發布的新聞稿，雙方簽署了一份為期五年、價值約 34 億美元的 AI 雲端服務合約，IREN 將為 NVIDIA 內部 AI 與研究工作負責管理式 GPU 雲端服務，部署約 60 MW 的 Air‑cooled Blackwell 平台於德州 Childress 數據中心【web: https://finance.yahoo.com/sectors/technology/articles/iren-partnership-nvidia-expands-3-143642848.html】。  \n- 這項合作同時被列為 NVIDIA 在 2026 年 10‑K 中的「strategic collaboration」之一，與 IREN Limited 共同加速 AI 采購與部署【NVDA_Fundamentals_20260612.txt, chunk #2】。  \n\n簡而言之，NVIDIA 與 IREN 的最新合作包括：一份約 34 億美元、為期五年的 AI 雲端合約；最高 21 億美元的股權認購權；以及目標在未來數年內部署最高 5 GW AI 基礎設施的計畫。\n\n---\n⚠ 資料時效：NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #25 (rerank=0.724)\n  - NVDA_10Q_202604.html #15 (rerank=0.717)\n  - NVDA_10K_2026.html #24 (rerank=0.716)\n  - NVDA_10K_2026.html #20 (rerank=0.711)\n  - NVDA_10Q_202604.html #14 (rerank=0.709)\n  - NVDA_10Q_202604.html #35 (rerank=0.708)\n  - NVDA_10K_2025.html #19 (rerank=0.699)\n  - NVDA_10K_2026.html #16 (rerank=0.690)\n  - NVDA_10Q_202507.html #27 (rerank=0.679)\n  - NVDA_Fundamentals_20260612.txt #2 (rerank=0.672)\n  - NVDA_10K_2026.html #206 (rerank=0.651)\n  - NVDA_10K_2024.html #22 (rerank=0.646)\n  - NVDA_10K_2024.html #212 (rerank=0.616)\n  - NVDA_10K_2024.html #165 (rerank=0.590)\n  - NVDA_10K_2026.html #164 (rerank=0.588)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 與 IREN 最近的合作內容是什麼",
+        "使用網路搜尋查找 NVIDIA 與 IREN 的合作新聞，特別是官方新聞稿或 Bloomberg 報導",
+        "在 NVIDIA 最新的 10‑Q/10‑K 中搜尋 IREN 合作資訊",
+        "在 NVIDIA 官方網站的新聞稿中搜尋與 IREN 的合作公告",
+        "使用網路搜尋查找 IREN 官方網站上關於與 NVIDIA 合作的公告或新聞稿",
+        "使用網路搜尋查找 2026 年 7 月以後 NVIDIA 與 IREN 的合作新聞或官方公告",
+        "在 SEC EDGAR 系統中查找 2026 年 7 月以後的 8‑K 文件，確認是否有 NVIDIA 與 IREN 的合作公告"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 35
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 16
+        },
+        {
+          "source": "NVDA_10Q_202507.html",
+          "chunk_index": 27
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 206
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 212
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 165
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 131
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 15
+        }
+      ]
+    },
+    {
+      "id": "news-05",
+      "query": "關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？",
+      "why": "flow",
+      "answer": "最近，NVIDIA 在中國的 AI 晶片銷售仍受嚴格出口管制限制，僅有極少量的 H200 晶片出貨，且公司已否認將於今年底推出專為中國設計的 AI 晶片。  \n\n- Reuters 於 2026‑08‑20 報導，NVIDIA 否認有「在今年底前向中國推出 AI 晶片」的傳聞，稱相關報導不實，且公司已調整軟體以符合美國出口管制規定。 [web: https://www.reuters.com/world/china/nvidia-ship-ai-chip-china-by-year-end-information-reports-2026-08-20]  \n- 同樣在 Reuters 2026‑08‑26 的報導指出，美國在 2025 年 5 月批准約 10 家中國企業（包括阿里巴巴、騰訊、字節跳動）可購買 NVIDIA 最強大的 H200 AI 晶片，但「交付仍停滯」且「出貨量非常少」；公司在財報中未將中國資料中心營收納入未來展望。 [web: https://www.reuters.com/business/media-telecom/nvidia-forecasts-quarterly-revenue-above-estimates-2026-08-26]  \n- Bloomberg 2026‑08‑26 報導稱，NVIDIA 在最近一季（截至 2026‑07‑26）向中國客戶銷售的 H200 晶片佔資料中心營收「不到 1%」，且實際出貨量遠低於美國政府在 1 月授予的許可額度，因需求不足公司已計提約 4 億美元（$400 million） 的庫存減值。 [web: https://www.bloomberg.com/news/articles/2026-08-26/nvidia-steps-back-into-china-market-with-first-h200-chip-sales]  \n- CNBC 2026‑07‑14 引述美國商務部官員稱，H200 晶片已重新開始向中國出貨，但「非常少」的出貨量仍是目前的實際情況。 [web: https://www.cnbc.com/2026/07/14/nvidia-h200-ai-chips-china.html]  \n\n公司文件亦說明出口管制對中國市場的持續影響：  \n\n- 2026 年 10‑K 中指出，出口管制已對 NVIDIA 的全球供應鏈與銷售造成負面衝擊，且「來自美國以外客戶的營收」在 FY2027 第一期佔總營收的 22%，在 FY2026 第一期佔 42%，其中中國貢獻比例已大幅下降。 [NVDA_10K_2026.html, chunk #85]  \n- 同一 10‑K 亦說明，未來若出口管制進一步收緊，可能限制 NVIDIA 向中國及其他受限國家提供 AI 產品與服務，進一步削弱其競爭力。 [NVDA_10K_2026.html, chunk #85]  \n- 2025 年 10‑K 中提到，儘管 NVIDIA 在 2025 財年擴大了針對中國的資料中心產品組合，使中國資料中心營收有所成長，但相對於整體資料中心營收仍「遠低於」出口管制前的水平，且公司持續尋求不需許可的替代產品以維持中國市場供應。 [NVDA_10K_2025.html, chunk #128]  \n\n- 10‑Q（FY2027 第一期）顯示，2026 年 4 月底的三個月內，中國（含香港）客戶總營收為 45.5 億美元（$4,550 million），佔當季總營收 816.15 億美元（$81,615 million） 的約 5.6%；同時「來自美國以外客戶的營收」占比 22%。 [NVDA_10Q_202604.html, chunk #35]  \n\n綜合以上資訊，NVIDIA 近期在中國的 AI 晶片銷售仍非常有限，主要受美國出口管制與許可配額限制，且公司已公開否認將於今年底推出專門針對中國市場的 AI 晶片。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10Q_202604.html #35 (rerank=0.727)\n  - NVDA_10Q_202604.html #0 (rerank=0.727)\n  - NVDA_10Q_202604.html #47 (rerank=0.726)\n  - NVDA_10K_2026.html #85 (rerank=0.661)\n  - NVDA_10K_2025.html #86 (rerank=0.631)\n  - NVDA_10K_2025.html #128 (rerank=0.625)\n  - NVDA_10K_2025.html #85 (rerank=0.624)",
+      "n_web_calls": 2,
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "NVIDIA 最近有關將 AI 晶片銷往中國的消息是什麼？",
+        "查閱 NVDA 202604 10-Q 中關於中國 AI 晶片銷售的最新資訊"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 35
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 47
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 85
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 86
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 128
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 85
+        }
+      ]
+    }
+  ]
+}

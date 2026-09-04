@@ -1,0 +1,64 @@
+as-of=2026-08-15  collection=us_stock_rag_edgar_multiyear  題數=1
+
+──[web-04] Tesla 最近有什麼重要消息？
+   （新聞時效）
+[agentic_rag] Loading BGE-M3 + reranker + Qdrant (one-time)...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 1603.92it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:00<00:09, 42.87it/s]Loading weights:  17%|█▋        | 65/391 [00:00<00:01, 291.18it/s]Loading weights:  24%|██▍       | 93/391 [00:00<00:01, 220.92it/s]Loading weights:  74%|███████▍  | 289/391 [00:00<00:00, 747.20it/s]Loading weights:  99%|█████████▉| 389/391 [00:00<00:00, 750.47it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 558.51it/s]
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 4052.15it/s]
+[INFO] Opening Qdrant server: http://localhost:6333
+Traceback (most recent call last):
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\eval\record_web_fixture.py", line 166, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\eval\record_web_fixture.py", line 137, in main
+    out = ar.run_agentic(query, freshness_mode=ar.FRESHNESS_LIVE)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3844, in run_agentic
+    final = graph.invoke(init, config={"recursion_limit": recursion_limit})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\pregel\main.py", line 3913, in invoke
+    for chunk in self.stream(
+                 ^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\pregel\main.py", line 2967, in stream
+    for _ in runner.tick(
+             ^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\pregel\_runner.py", line 207, in tick
+    run_with_retry(
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\pregel\_retry.py", line 617, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 707, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 447, in invoke
+    ret = self.func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3556, in _node_execute
+    results[i] = fut.result()
+                 ^^^^^^^^^^^^
+  File "C:\Users\p76141495\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\p76141495\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3468, in _run_one_todo
+    summary, web_notes, realtime_need, period_notes = _run_executor(
+                                                      ^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3399, in _run_executor
+    return _run_executor_deterministic(task, temporal_scope, freshness_mode, subq_index, verbose,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3332, in _run_executor_deterministic
+    verdict = _check_sufficiency(task, state.pool, temporal_scope, freshness_mode)  # Agent B｜Grader
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 1787, in _check_sufficiency
+    _hit = _replay.get("check", _rk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\llm_replay.py", line 152, in get
+    raise ReplayCacheMiss(
+llm_replay.ReplayCacheMiss: replay cache miss（strict 模式）: kind=check key='Tesla 最近的重大新聞是什麼 || TSLA_10Q_202403.html#71 TSLA_10K_2023.html#109 TSLA_10K_2024.html#235 TSLA_10Q_202603.html#45 TSLA_10K_2025.html#222 || live'。fixture 不完整,先在非 strict 模式跑一次補齊。（若這是跨 collection A/B,kind=check 的 miss 是合法的——改用 RAG_REPLAY_MODE=strict:plan,translate_en）
+[replay] wrote experiments\webgate2\cache_s1.json (hit=2 miss=3)

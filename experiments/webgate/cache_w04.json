@@ -1,0 +1,838 @@
+{
+ "plan": {
+  "live|Apple 目前的市值是多少？": [
+   "Apple 目前的市值是多少？"
+  ],
+  "live|NVIDIA 現在的股價是多少？": [
+   "NVIDIA 現在的股價是多少"
+  ],
+  "live|Microsoft 最新一季的 Azure 營收成長率是多少？": [
+   "Microsoft Azure 營收成長率是多少"
+  ],
+  "live|Tesla 最近有什麼重要消息？": [
+   "Tesla 最近的重大新聞是什麼"
+  ],
+  "live|Apple 在 FY2025 全年的總營收是多少？": [
+   "Apple 在 FY2025 全年的總營收是多少？"
+  ]
+ },
+ "translate_en": {
+  "Apple 目前的市值是多少？": "What is Apple's current market capitalization?",
+  "改用網路搜尋查 Apple 目前的市值": "Search online for Apple's current market capitalization.",
+  "改用網路搜尋查 Apple 目前的市值（最新）": "Search online for Apple's latest market capitalization.",
+  "使用網路搜尋取得 Apple 於 2026‑08‑15 的最新市值": "Obtain Apple's latest market capitalization as of August 15, 2026 via an online search",
+  "使用網路搜尋查詢 Apple 於 2026‑08‑15 的即時市值": "Search online for Apple's real-time market capitalization as of August 15, 2026",
+  "改用網路搜尋查 Apple 目前的市值（即時）": "Use an online search to check Apple's current market cap (real-time)",
+  "改用網路搜尋查 Apple 於 2026‑08‑15 的即時市值（最新）": "Search online for Apple's real-time market capitalization as of August 15, 2026 (latest)",
+  "NVIDIA 現在的股價是多少": "What is NVIDIA's current share price?",
+  "改用網路搜尋查 NVIDIA 現在的股價": "Search online for NVIDIA's current stock price",
+  "使用網路搜尋查 NVIDIA 現在的股價": "Search online for NVIDIA's current stock price",
+  "使用網路搜尋查 NVIDIA 現在的即時股價": "Search online for NVIDIA's current real-time stock price",
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (Yahoo Finance)": "Use an online search to check NVIDIA's current real-time stock price on Yahoo Finance",
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (NASDAQ)": "Use an online search to check NVIDIA's current real-time stock price (NASDAQ)",
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (MarketWatch)": "Use an online search to check NVIDIA’s current real-time stock price on MarketWatch",
+  "Microsoft Azure 營收成長率是多少": "What is Microsoft Azure's revenue growth rate?",
+  "Tesla 最近的重大新聞是什麼": "What are Tesla's recent material news?",
+  "改用網路搜尋查 Tesla 2026-07-22 至 2026-08-15 的最新新聞": "Search online for Tesla's latest news from July 22 2026 to August 15 2026.",
+  "Apple 在 FY2025 全年的總營收是多少？": "What was Apple's total revenue for FY2025?",
+  "改用網路搜尋查 Tesla 2026-07-22 至 2026-08-15 的重要消息": "Search online for Tesla's significant news from July 22 2026 to August 15 2026",
+  "改用網路搜尋查 Tesla 最近的最新消息（2026-07-22至2026-08-15）": "I’m unable to browse the web, so I can’t retrieve the latest Tesla news for that period.",
+  "使用網路即時查詢 Apple 目前的市值": "Use real-time online data to check Apple's current market capitalization",
+  "改用網路搜尋查 Apple 目前的市值（2026-08-15）": "Use an online search to find Apple's current market capitalization as of August 15, 2026.",
+  "使用網路即時查詢 Apple 目前的市值（2026-08-15）": "Use real-time web data to look up Apple's current market capitalization as of August 15, 2026.",
+  "使用網路搜尋查詢 NVIDIA 現在的股價": "Use an online search to find NVIDIA's current share price",
+  "使用網路搜尋查詢 NVIDIA 今日股價 (2026-08-15)": "Use an online search to look up NVIDIA's current stock price as of August 15, 2026.",
+  "使用網路搜尋查詢 NVIDIA (NVDA) 股價於 2026-08-15": "Search online for NVIDIA (NVDA) stock price on August 15, 2026",
+  "查找 Microsoft 2026 Q3 (10‑Q) Azure 營收成長率": "Find Microsoft 2026 Q3 (10-Q) Azure revenue growth rate",
+  "改用網路搜尋查 Microsoft Azure latest quarter revenue growth rate": "Search online for Microsoft Azure's latest quarter revenue growth rate",
+  "改用網路搜尋查 Microsoft Azure Q4 FY2026 revenue growth rate": "Search online for Microsoft Azure Q4 FY2026 revenue growth rate",
+  "查詢 Apple 最新市值（截至 2026-08-15） via 網路搜尋": "Query Apple's latest market capitalization (as of August 15 2026) via web search",
+  "改用網路搜尋查 Apple 目前的市值（截至 2026-08-15）": "Use an online search to find Apple's current market capitalization as of August 15, 2026.",
+  "使用網路即時查詢 NVIDIA 現在的股價": "Use an online real-time query to retrieve NVIDIA's current share price",
+  "使用網路即時查詢 NVIDIA 最新股價": "Use a real-time internet lookup to obtain NVIDIA's latest share price",
+  "改用網路即時查詢 NVIDIA 現在的股價": "Use an online real-time query for NVIDIA's current stock price",
+  "重新使用網路即時查詢 NVIDIA 現在的股價": "Perform a real-time web query for NVIDIA's current stock price",
+  "使用網路即時查詢 NVIDIA 於 2026-08-15 的最新股價": "Use real-time data to retrieve NVIDIA's latest stock price on August 15, 2026",
+  "提取 MSFT FY2026 Q3 10-Q 中 Azure 營收成長率": "Extract Azure revenue growth rate from MSFT FY2026 Q3 10-Q",
+  "使用網路搜尋查找 Tesla 2026-07-22 至 2026-08-15 的最新消息": "Search online for the latest Tesla news from July 22 2026 to August 15 2026",
+  "使用網路搜尋查找 Tesla 2026-08-01 至 2026-08-15 的最新消息": "Use web search to find the latest Tesla news from August 1, 2026 to August 15, 2026.",
+  "使用網路搜尋查詢 2026-08-15 NVIDIA 股價": "Search online for NVIDIA's stock price on August 15, 2026",
+  "重新使用網路搜尋查詢 NVIDIA 最新股價": "Search online for NVIDIA's latest stock price",
+  "使用網路即時查詢 NVIDIA 2026-08-15 股價": "Use real-time web lookup for NVIDIA's share price on August 15, 2026",
+  "使用網路 API 查詢 NVIDIA 當前股價 (2026-08-15)": "Query NVIDIA's current stock price via web API (as of 2026-08-15)",
+  "使用網路搜尋查詢 NVIDIA 2026-08-15 即時股價": "Search online for NVIDIA's real-time stock price on August 15, 2026",
+  "改用網路搜尋查找 Tesla 2026 年 6 月 12 日之後的最新重要消息": "Use web search to find the latest material news on Tesla after June 12 2026."
+ },
+ "check": {
+  "Apple 目前的市值是多少？ || AAPL_Fundamentals_20260612.txt#0 AAPL_10K_2025.html#1 AAPL_News_20260519_01.txt#5 AAPL_10K_2025.html#75 AAPL_Fundamentals_20260612.txt#1 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 64 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+   "new_query": "Apple 目前的市值是多少？",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": true
+  },
+  "改用網路搜尋查 Apple 目前的市值 || AAPL_Fundamentals_20260612.txt#0 AAPL_10K_2025.html#1 AAPL_10K_2025.html#75 AAPL_News_20260519_01.txt#5 AAPL_10K_2025.html#109 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 64 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+   "new_query": "改用網路搜尋查 Apple 目前的市值",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": true
+  },
+  "改用網路搜尋查 Apple 目前的市值（最新） || AAPL_Fundamentals_20260612.txt#0 AAPL_News_20260519_01.txt#5 AAPL_10K_2025.html#75 AAPL_10Q_202606.html#21 AAPL_10K_2025.html#109 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 46 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+   "new_query": "改用網路搜尋查 Apple 目前的市值（最新）",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": true
+  },
+  "使用網路搜尋取得 Apple 於 2026‑08‑15 的最新市值 || AAPL_10Q_202606.html#21 AAPL_10Q_202606.html#1 AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202603.html#1 AAPL_10Q_202603.html#20 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 46 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "使用網路搜尋取得 Apple 於 2026‑08‑15 的最新市值",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "使用網路搜尋查詢 Apple 於 2026‑08‑15 的即時市值 || AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202606.html#21 AAPL_10Q_202606.html#1 AAPL_10Q_202603.html#20 AAPL_10Q_202603.html#1 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 46 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+   "new_query": "使用網路搜尋查詢 Apple 於 2026‑08‑15 的即時市值",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": true
+  },
+  "改用網路搜尋查 Apple 目前的市值（即時） || AAPL_Fundamentals_20260612.txt#0 AAPL_10K_2025.html#1 AAPL_10Q_202606.html#1 AAPL_10Q_202603.html#1 AAPL_10Q_202606.html#21 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 46 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+   "new_query": "改用網路搜尋查 Apple 目前的市值（即時）",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": true
+  },
+  "改用網路搜尋查 Apple 於 2026‑08‑15 的即時市值（最新） || AAPL_10Q_202603.html#1 AAPL_10Q_202606.html#1 AAPL_10Q_202606.html#21 AAPL_Fundamentals_20260612.txt#0 AAPL_News_20260519_01.txt#5 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 46 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+   "new_query": "改用網路搜尋查 Apple 於 2026‑08‑15 的即時市值（最新）",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": true
+  },
+  "NVIDIA 現在的股價是多少 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#164 NVDA_Fundamentals_20260612.txt#0 NVDA_10Q_202604.html#14 || live": {
+   "sufficient": false,
+   "missing": "缺少截至 2026-08-15 的 NVIDIA 當前股價（即時或最近收盤價）",
+   "new_query": "NVIDIA latest stock price as of 2026-08-15",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "NVIDIA 現在的股價是多少 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#164 NVDA_10K_2026.html#165 NVDA_10Q_202604.html#14 || live": {
+   "sufficient": false,
+   "missing": "缺少截至2026-08-15的即時股價數值",
+   "new_query": "NVIDIA current stock price as of August 15 2026",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "NVIDIA 現在的股價是多少 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 NVDA_10K_2026.html#165 || live": {
+   "sufficient": false,
+   "missing": "缺少最新的 NVIDIA 股價（截至 KB 可得的最新日期 2026-06-12 的收盤價或當時的市場價格）",
+   "new_query": "NVIDIA closing stock price June 2026",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查 NVIDIA 現在的股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#165 NVDA_10Q_202604.html#14 || live": {
+   "sufficient": false,
+   "missing": "NVIDIA 的即時股價（截至 2026-08-15 的每股價格）",
+   "new_query": "NVIDIA current stock price August 15 2026",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查 NVIDIA 現在的股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 NVDA_10K_2026.html#181 || live": {
+   "sufficient": false,
+   "missing": "NVIDIA current stock price (as of 2026-08-15)",
+   "new_query": "NVDA current stock price live quote",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10",
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查 NVIDIA 現在的股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#1 NVDA_10Q_202510.html#1 || live": {
+   "sufficient": false,
+   "missing": "NVIDIA current stock price (price per share at the present moment)",
+   "new_query": "NVDA current stock price today",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#165 NVDA_10Q_202604.html#14 || live": {
+   "sufficient": false,
+   "missing": "NVIDIA (NVDA) 的即時股價（以美元表示的當前價格）",
+   "new_query": "NVIDIA current stock price NVDA real-time quote today",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 NVDA_10K_2026.html#165 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 當前（即時）股價數值，需提供截至 2026-08-15 的最新交易價格",
+   "new_query": "NVIDIA current stock price August 2026 live price NVDA",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 NVDA_10K_2026.html#181 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 當前即時股價的數值",
+   "new_query": "NVIDIA current stock price live quote",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#165 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 當前的即時股價數值（最新交易價格）",
+   "new_query": "NVIDIA NVDA latest market price live quote",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10Q_202510.html#25 NVDA_Fundamentals_20260612.txt#0 NVDA_10Q_202510.html#0 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 當前即時股價或最新市場報價",
+   "new_query": "NVIDIA current stock price live quote NVDA real-time price",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10Q_202510.html#25 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#1 || live": {
+   "sufficient": false,
+   "missing": "即時股價數值（NVIDIA 當前的股價）",
+   "new_query": "NVDA live stock price quote today",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (Yahoo Finance) || NVDA_News_20260519_01.txt#2 NVDA_10K_2026.html#10 NVDA_10K_2026.html#118 NVDA_10K_2026.html#165 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "即時股價數值（如當前的美元價格）",
+   "new_query": "NVIDIA current live stock price Yahoo Finance",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (Yahoo Finance) || NVDA_News_20260519_02.txt#0 NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_News_20260519_01.txt#2 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA (NVDA) 當前即時股價的具體數字（如 $xxx.xx）來自 Yahoo Finance",
+   "new_query": "NVDA current stock price Yahoo Finance",
+   "relevant_ids": [
+    "NVDA_News_20260519_02.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (Yahoo Finance) || NVDA_News_20260519_01.txt#2 NVDA_News_20260519_01.txt#0 NVDA_10K_2026.html#1 NVDA_10Q_202510.html#1 NVDA_Fundamentals_20260612.txt#0 || live": {
+   "sufficient": false,
+   "missing": "即時股價數值（如 $xxx.xx）",
+   "new_query": "NVIDIA current stock price Yahoo Finance live quote",
+   "relevant_ids": [
+    "NVDA_News_20260519_01.txt#2",
+    "NVDA_News_20260519_01.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (NASDAQ) || NVDA_10K_2026.html#10 NVDA_10K_2026.html#118 NVDA_10K_2026.html#165 NVDA_10K_2026.html#164 NVDA_10K_2026.html#181 || live": {
+   "sufficient": false,
+   "missing": "即時的 NVIDIA NASDAQ 股價數值",
+   "new_query": "NVIDIA current stock price NASDAQ live quote",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (NASDAQ) || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#165 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "即時 NASDAQ 股價數值（當前價格）",
+   "new_query": "NVIDIA current stock price NASDAQ",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (NASDAQ) || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10Q_202604.html#14 NVDA_10K_2026.html#165 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 在 NASDAQ 的即時股價數值",
+   "new_query": "NVIDIA current NASDAQ stock price live quote",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (MarketWatch) || NVDA_10K_2026.html#10 NVDA_10K_2026.html#118 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#165 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 當前即時股價（如 MarketWatch 上的最新報價）",
+   "new_query": "NVIDIA current stock price MarketWatch",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查 NVIDIA 現在的即時股價 (MarketWatch) || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#165 NVDA_10Q_202604.html#14 || live": {
+   "sufficient": false,
+   "missing": "即時的 NVIDIA 股價（如 MarketWatch 上顯示的最新價格）",
+   "new_query": "NVIDIA current stock price MarketWatch",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "Microsoft Azure 營收成長率是多少 || MSFT_10K_2026.html#129 MSFT_10Q_202512.html#71 MSFT_10Q_202603.html#75 MSFT_10Q_202512.html#77 MSFT_10Q_202603.html#65 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#129",
+    "MSFT_10Q_202512.html#71",
+    "MSFT_10Q_202603.html#75"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Retrieve Azure revenue growth rate for Microsoft FY2026 Q3 (most recent quarter) from MSFT 10-Q FY2026 Q3 || MSFT_10Q_202603.html#75 MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#69 MSFT_10Q_202603.html#62 MSFT_10Q_202603.html#65 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#75",
+    "MSFT_10Q_202603.html#49",
+    "MSFT_10Q_202603.html#69"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Search web for Microsoft Azure revenue growth rate for FY2026 Q4 (ended 2026-06-30) || MSFT_10K_2026.html#129 MSFT_10K_2026.html#111 MSFT_10K_2026.html#124 MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#75 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#129",
+    "MSFT_10K_2026.html#111",
+    "MSFT_10Q_202603.html#49",
+    "MSFT_10Q_202603.html#75"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Tesla 最近的重大新聞是什麼 || TSLA_News_20260721_01.txt#0 GOOGL_News_20260721_01.txt#0 NVDA_News_20260519_01.txt#1 TSLA_News_20260721_01.txt#1 TSLA_News_20260721_01.txt#2 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 25 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Tesla 最近的重大新聞是什麼",
+   "relevant_ids": [
+    "TSLA_News_20260721_01.txt#0",
+    "TSLA_News_20260721_01.txt#1",
+    "TSLA_News_20260721_01.txt#2"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查 Tesla 2026-07-22 至 2026-08-15 的最新新聞 || TSLA_News_20260721_01.txt#0 GOOGL_News_20260721_01.txt#0 NVDA_News_20260519_01.txt#1 TSLA_News_20260612_01.txt#0 NVDA_News_20260612_01.txt#0 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 25 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "改用網路搜尋查 Tesla 2026-07-22 至 2026-08-15 的最新新聞",
+   "relevant_ids": [
+    "TSLA_News_20260721_01.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "Apple 在 FY2025 全年的總營收是多少？ || AAPL_10K_2025.html#115 AAPL_10K_2025.html#0 AAPL_10K_2025.html#85 AAPL_10K_2025.html#109 AAPL_10K_2025.html#84 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_10K_2025.html#115",
+    "AAPL_10K_2025.html#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查 Tesla 2026-07-22 至 2026-08-15 的重要消息 || TSLA_News_20260721_01.txt#0 GOOGL_News_20260721_01.txt#0 NVDA_News_20260519_01.txt#1 TSLA_News_20260612_01.txt#0 NVDA_News_20260612_01.txt#0 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 25 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "改用網路搜尋查 Tesla 2026-07-22 至 2026-08-15 的重要消息",
+   "relevant_ids": [
+    "TSLA_News_20260721_01.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查 Tesla 最近的最新消息（2026-07-22至2026-08-15） || TSLA_News_20260721_01.txt#0 NVDA_News_20260519_01.txt#1 GOOGL_News_20260721_01.txt#0 NVDA_News_20260612_01.txt#0 TSLA_News_20260612_01.txt#0 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 25 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "改用網路搜尋查 Tesla 最近的最新消息（2026-07-22至2026-08-15）",
+   "relevant_ids": [
+    "TSLA_News_20260721_01.txt#0",
+    "GOOGL_News_20260721_01.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 Apple 目前的市值 || AAPL_10K_2025.html#1 AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202603.html#1 AAPL_10K_2025.html#2 AAPL_10Q_202606.html#1 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 46 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+   "new_query": "使用網路即時查詢 Apple 目前的市值",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": true
+  },
+  "改用網路搜尋查 Apple 目前的市值（2026-08-15） || AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202606.html#21 AAPL_10Q_202603.html#20 AAPL_10Q_202606.html#1 AAPL_10Q_202603.html#1 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 46 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+   "new_query": "改用網路搜尋查 Apple 目前的市值（2026-08-15）",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": true
+  },
+  "使用網路即時查詢 Apple 目前的市值（2026-08-15） || AAPL_10Q_202606.html#21 AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202603.html#20 AAPL_10Q_202606.html#1 AAPL_10Q_202603.html#1 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 46 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+   "new_query": "使用網路即時查詢 Apple 目前的市值（2026-08-15）",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": true
+  },
+  "使用網路搜尋查詢 NVIDIA 現在的股價 || NVDA_10K_2026.html#10 NVDA_10K_2026.html#118 NVDA_10K_2026.html#165 NVDA_10K_2026.html#164 NVDA_10Q_202604.html#14 || live": {
+   "sufficient": false,
+   "missing": "NVIDIA's current (real‑time) stock price as of today (2026‑08‑15)",
+   "new_query": "NVDA current stock price today",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 NVIDIA 現在的股價 || NVDA_News_20260519_01.txt#2 NVDA_10Q_202510.html#1 NVDA_10K_2026.html#1 NVDA_Fundamentals_20260612.txt#0 NVDA_IncomeStatement_20260612.txt#5 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 當前（即時）股價的數值",
+   "new_query": "NVIDIA current stock price as of today 2026-08-15",
+   "relevant_ids": [
+    "NVDA_News_20260519_01.txt#2",
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 NVIDIA 現在的股價 || NVDA_10K_2026.html#118 NVDA_News_20260519_01.txt#2 NVDA_10K_2026.html#10 NVDA_10Q_202510.html#1 NVDA_10K_2026.html#1 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 最新的股價數值（例如截至 KB 最新可得日期 2026-06-12 的收盤價或即時報價）",
+   "new_query": "NVIDIA latest stock price June 2026",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 NVIDIA 今日股價 (2026-08-15) || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#165 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "2026-08-15 的即時股價",
+   "new_query": "NVIDIA stock price August 15 2026",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 NVIDIA 今日股價 (2026-08-15) || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#181 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 在 2026-08-15（或最新可得日期）的具體股價數值",
+   "new_query": "NVIDIA closing stock price June 12 2026",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 NVIDIA 今日股價 (2026-08-15) || NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#181 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "NVIDIA 在 2026-08-15 的即時或收盤股價",
+   "new_query": "NVDA stock price August 15 2026",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 NVIDIA (NVDA) 股價於 2026-08-15 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#181 NVDA_10K_2026.html#165 || live": {
+   "sufficient": false,
+   "missing": "2026-08-15 的 NVIDIA (NVDA) 股價具體數值",
+   "new_query": "NVDA closing price on August 15 2026",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0",
+    "NVDA_10K_2026.html#118"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 NVIDIA (NVDA) 股價於 2026-08-15 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#115 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#2 || live": {
+   "sufficient": false,
+   "missing": "2026-08-15 的 NVIDIA (NVDA) 股價具體數值",
+   "new_query": "NVDA stock price on August 15 2026",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 NVIDIA (NVDA) 股價於 2026-08-15 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#115 NVDA_10Q_202510.html#101 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA (NVDA) 在 2026-08-15 的收盤股價或當日交易價格",
+   "new_query": "NVIDIA NVDA historical stock price August 15 2026 closing price",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10",
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "查找 Microsoft 2026 Q3 (10‑Q) Azure 營收成長率 || MSFT_10Q_202603.html#75 MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#69 MSFT_10Q_202603.html#65 MSFT_10Q_202603.html#62 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#75",
+    "MSFT_10Q_202603.html#49",
+    "MSFT_10Q_202603.html#69"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查 Microsoft Azure latest quarter revenue growth rate || MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#75 MSFT_10Q_202603.html#69 MSFT_10Q_202603.html#66 MSFT_10Q_202603.html#65 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#49",
+    "MSFT_10Q_202603.html#75",
+    "MSFT_10Q_202603.html#69"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查 Microsoft Azure Q4 FY2026 revenue growth rate || MSFT_10K_2026.html#111 MSFT_10K_2026.html#124 MSFT_10K_2026.html#129 MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#75 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10K_2026.html#111",
+    "MSFT_10K_2026.html#129"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "查詢 Apple 最新市值（截至 2026-08-15） via 網路搜尋 || AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202606.html#1 AAPL_10Q_202603.html#1 AAPL_10K_2025.html#2 AAPL_10Q_202603.html#2 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "改用網路搜尋查 Apple 目前的市值（截至 2026-08-15） || AAPL_Fundamentals_20260612.txt#0 AAPL_10Q_202606.html#21 AAPL_10Q_202603.html#20 AAPL_10Q_202606.html#1 AAPL_10Q_202603.html#1 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "AAPL_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 現在的股價 || NVDA_10K_2026.html#164 NVDA_10K_2026.html#165 NVDA_10K_2026.html#10 NVDA_10Q_202604.html#14 NVDA_10Q_202510.html#15 || live": {
+   "sufficient": false,
+   "missing": "NVIDIA 當前即時股價（具體價格數值）",
+   "new_query": "NVDA live stock price today",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 現在的股價 || NVDA_News_20260519_01.txt#0 NVDA_News_20260519_02.txt#0 NVDA_News_20260519_01.txt#2 NVDA_IncomeStatement_20260612.txt#5 NVDA_IncomeStatement_20260612.txt#1 || live": {
+   "sufficient": false,
+   "missing": "NVIDIA (NVDA) 當前即時股價的具體數值（例如 $xxx.xx）",
+   "new_query": "NVDA current stock price live quote Yahoo Finance",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 現在的股價 || NVDA_News_20260519_01.txt#0 NVDA_News_20260519_01.txt#2 NVDA_News_20260519_02.txt#0 NVDA_10K_2026.html#1 NVDA_Fundamentals_20260612.txt#0 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA (NVDA) 的即時股價數值（例如 2026‑08‑15 的最新價格）以及其時間戳記。",
+   "new_query": "NVDA current stock price live quote August 2026 site:finance.yahoo.com",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 最新股價 || NVDA_10K_2026.html#10 NVDA_10K_2026.html#165 NVDA_10Q_202510.html#15 NVDA_10Q_202604.html#14 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "即時的 NVIDIA 最新股價數值",
+   "new_query": "NVDA current stock price live quote",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 最新股價 || NVDA_10K_2026.html#1 NVDA_10Q_202510.html#1 NVDA_News_20260519_01.txt#2 NVDA_10Q_202604.html#1 NVDA_News_20260519_02.txt#0 || live": {
+   "sufficient": false,
+   "missing": "最新的 NVIDIA 股價（即時價格或最近收盤價）",
+   "new_query": "NVIDIA current stock price as of August 15 2026 live quote",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 最新股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#1 NVDA_10Q_202510.html#1 NVDA_News_20260519_01.txt#2 || live": {
+   "sufficient": false,
+   "missing": "即時的 NVIDIA 最新股價（具體價格數字）",
+   "new_query": "NVIDIA current stock price live quote August 2026",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "改用網路即時查詢 NVIDIA 現在的股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#165 NVDA_10K_2026.html#164 NVDA_Fundamentals_20260612.txt#0 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 當前（即時）股價數值",
+   "new_query": "NVIDIA current stock price live quote",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "重新使用網路即時查詢 NVIDIA 現在的股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#165 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#164 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 於 2026-08-15 的最新股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#16 NVDA_10K_2026.html#165 NVDA_10K_2026.html#181 || live": {
+   "sufficient": false,
+   "missing": "2026-08-15 的即時股價數值",
+   "new_query": "NVIDIA stock price August 15 2026",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 於 2026-08-15 的最新股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#181 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 在 2026-08-15 或最近的即時股價數值",
+   "new_query": "NVIDIA latest stock price August 15 2026",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "提取 MSFT FY2026 Q3 10-Q 中 Azure 營收成長率 || MSFT_10Q_202603.html#75 MSFT_10Q_202603.html#49 MSFT_10Q_202603.html#69 MSFT_10Q_202603.html#62 MSFT_10Q_202603.html#65 || live": {
+   "sufficient": true,
+   "missing": "",
+   "new_query": "",
+   "relevant_ids": [
+    "MSFT_10Q_202603.html#75",
+    "MSFT_10Q_202603.html#49",
+    "MSFT_10Q_202603.html#69"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查找 Tesla 2026-07-22 至 2026-08-15 的最新消息 || TSLA_News_20260721_01.txt#0 GOOGL_News_20260721_01.txt#0 NVDA_News_20260519_01.txt#1 NVDA_News_20260612_01.txt#0 TSLA_News_20260612_01.txt#0 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 25 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "使用網路搜尋查找 Tesla 2026-07-22 至 2026-08-15 的最新消息",
+   "relevant_ids": [
+    "TSLA_News_20260721_01.txt#0",
+    "GOOGL_News_20260721_01.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查找 Tesla 2026-08-01 至 2026-08-15 的最新消息 || TSLA_News_20260721_01.txt#0 NVDA_News_20260519_01.txt#1 GOOGL_News_20260721_01.txt#0 NVDA_News_20260612_01.txt#0 TSLA_News_20260612_01.txt#0 || live": {
+   "sufficient": false,
+   "missing": "候選中最新來源已是 25 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "使用網路搜尋查找 Tesla 2026-08-01 至 2026-08-15 的最新消息",
+   "relevant_ids": [
+    "TSLA_News_20260721_01.txt#0",
+    "TSLA_News_20260612_01.txt#0"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 2026-08-15 NVIDIA 股價 || NVDA_10K_2026.html#118 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#10 NVDA_10K_2026.html#165 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 在 2026-08-15 的股價（或最新可得的股價）具體數值",
+   "new_query": "NVIDIA stock price August 15 2026",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 2026-08-15 NVIDIA 股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#181 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA (NVDA) 在 2026-08-15 的收盤價或即時股價資訊（或最新可得的股價數據）",
+   "new_query": "NVIDIA stock price August 15 2026",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "重新使用網路搜尋查詢 NVIDIA 最新股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#165 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 當前（即時）股價的具體數值",
+   "new_query": "NVIDIA NVDA latest live stock price",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "重新使用網路搜尋查詢 NVIDIA 最新股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#1 NVDA_Fundamentals_20260612.txt#0 NVDA_10Q_202510.html#1 || live": {
+   "sufficient": false,
+   "missing": "最新的即時股價（截至2026-08-15的價格）",
+   "new_query": "NVIDIA current stock price August 15 2026",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 2026-08-15 股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#165 NVDA_10K_2026.html#16 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "2026-08-15 的即時股價數值",
+   "new_query": "NVDA stock price on August 15 2026 real-time",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 2026-08-15 股價 || NVDA_10K_2026.html#10 NVDA_10K_2026.html#118 NVDA_10K_2026.html#115 NVDA_Fundamentals_20260612.txt#0 NVDA_10Q_202510.html#101 || live": {
+   "sufficient": false,
+   "missing": "缺少 2026-08-15 當日的 NVIDIA (NVDA) 即時股價或收盤價",
+   "new_query": "NVIDIA stock price on August 15 2026",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路即時查詢 NVIDIA 2026-08-15 股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#115 NVDA_Fundamentals_20260612.txt#0 NVDA_10Q_202510.html#101 || live": {
+   "sufficient": false,
+   "missing": "NVIDIA (NVDA) stock price on 2026-08-15 (closing or latest intraday price)",
+   "new_query": "NVDA stock price August 15 2026",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路 API 查詢 NVIDIA 當前股價 (2026-08-15) || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_10K_2026.html#165 NVDA_10K_2026.html#181 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "2026-08-15 的即時股價或取得即時股價的 API 呼叫方式",
+   "new_query": "NVIDIA current stock price API 2026-08-15 live quote endpoint",
+   "relevant_ids": [],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 NVIDIA 2026-08-15 即時股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#165 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 在 2026-08-15 的即時股價或最新可得的股價數值",
+   "new_query": "NVIDIA stock price August 15 2026",
+   "relevant_ids": [
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10",
+    "NVDA_Fundamentals_20260612.txt#0"
+   ],
+   "realtime_need": "intraday",
+   "kb_unfixable": false
+  },
+  "使用網路搜尋查詢 NVIDIA 2026-08-15 即時股價 || NVDA_10K_2026.html#118 NVDA_10K_2026.html#10 NVDA_Fundamentals_20260612.txt#0 NVDA_10K_2026.html#181 NVDA_10K_2026.html#164 || live": {
+   "sufficient": false,
+   "missing": "缺少 NVIDIA 在 2026-08-15 的即時股價（具體價格數值）",
+   "new_query": "NVIDIA stock price August 15 2026",
+   "relevant_ids": [
+    "NVDA_Fundamentals_20260612.txt#0",
+    "NVDA_10K_2026.html#118",
+    "NVDA_10K_2026.html#10"
+   ],
+   "realtime_need": "none",
+   "kb_unfixable": false
+  },
+  "Tesla 最近的重大新聞是什麼 || TSLA_10Q_202606.html#41 TSLA_10Q_202606.html#51 TSLA_10Q_202606.html#35 TSLA_10Q_202606.html#52 TSLA_10Q_202606.html#19 || live": {
+   "sufficient": false,
+   "missing": "候選中沒有任何能證明時效的來源（KB 只有財報期間資料，財報期間不是發布日）,而本題需要 days 等級的即時性（原判定：足夠）",
+   "new_query": "Tesla 最近的重大新聞是什麼",
+   "relevant_ids": [
+    "TSLA_10Q_202606.html#35",
+    "TSLA_10Q_202606.html#51"
+   ],
+   "realtime_need": "days",
+   "kb_unfixable": true
+  },
+  "改用網路搜尋查找 Tesla 2026 年 6 月 12 日之後的最新重要消息 || TSLA_10Q_202606.html#35 TSLA_10Q_202606.html#17 TSLA_10Q_202606.html#0 TSLA_Fundamentals_20260612.txt#0 TSLA_10Q_202606.html#2 || live": {
+   "sufficient": false,
+   "missing": "缺少2026年6月12日之後的最新重要新聞、公告或重大事件的具體資訊",
+   "new_query": "Tesla latest news after June 12 2026 press release major developments",
+   "relevant_ids": [],
+   "realtime_need": "days",
+   "kb_unfixable": false
+  }
+ },
+ "ratio": {
+  "Tesla 最近的重大新聞是什麼": [
+   []
+  ]
+ },
+ "period_intent": {
+  "Tesla 最近的重大新聞是什麼": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "改用網路搜尋查找 Tesla 2026 年 6 月 12 日之後的最新重要消息": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Tesla latest news after June 12 2026 press release major developments": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  }
+ }
+}

@@ -1,0 +1,2019 @@
+{
+  "meta": {
+    "collection": "us_stock_rag_edgar_multiyear",
+    "top_k": 5,
+    "period_intent_llm": "0",
+    "queries": 24,
+    "chunks": 13022
+  },
+  "rows": {
+    "bh-01": {
+      "category": "historical",
+      "ticker": "AAPL",
+      "query": "Apple 在 2022 財年的總營收是多少？",
+      "literal": "394,328",
+      "kb_absent": false,
+      "gold": [
+        "AAPL_10K_2023.html",
+        "AAPL_10K_2024.html"
+      ],
+      "gold_sections": [
+        [
+          "AAPL",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "AAPL",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "AAPL",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "AAPL",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 14,
+      "topk": [
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 0,
+          "section": [
+            "AAPL",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 129,
+          "section": [
+            "AAPL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 111,
+          "section": [
+            "AAPL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "AAPL_10K_2023.html",
+          "chunk_index": 77,
+          "section": [
+            "AAPL",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "AAPL_10Q_202406.html",
+          "chunk_index": 19,
+          "section": [
+            "AAPL",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202406"
+        }
+      ]
+    },
+    "bh-02": {
+      "category": "historical",
+      "ticker": "TSLA",
+      "query": "Tesla 2022 年的總營收是多少？",
+      "literal": "81,462",
+      "kb_absent": false,
+      "gold": [
+        "TSLA_10K_2023.html",
+        "TSLA_10K_2024.html"
+      ],
+      "gold_sections": [
+        [
+          "TSLA",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "TSLA",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "TSLA",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "TSLA",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 15,
+      "topk": [
+        {
+          "source": "TSLA_10K_2024.html",
+          "chunk_index": 159,
+          "section": [
+            "TSLA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "TSLA_10K_2024.html",
+          "chunk_index": 0,
+          "section": [
+            "TSLA",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "TSLA_10K_2024.html",
+          "chunk_index": 2,
+          "section": [
+            "TSLA",
+            "10-K",
+            "cash_flow_statement"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 0,
+          "section": [
+            "TSLA",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "TSLA_10K_2023.html",
+          "chunk_index": 2,
+          "section": [
+            "TSLA",
+            "10-K",
+            "cash_flow_statement"
+          ],
+          "period_code": "2023"
+        }
+      ]
+    },
+    "bh-03": {
+      "category": "historical",
+      "ticker": "GOOGL",
+      "query": "Alphabet 2022 年的總營收是多少？",
+      "literal": "282,836",
+      "kb_absent": false,
+      "gold": [
+        "GOOGL_10K_2023.html",
+        "GOOGL_10K_2024.html"
+      ],
+      "gold_sections": [
+        [
+          "GOOGL",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "GOOGL",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "GOOGL",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "GOOGL",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 12,
+      "topk": [
+        {
+          "source": "GOOGL_10K_2024.html",
+          "chunk_index": 274,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "GOOGL_10K_2024.html",
+          "chunk_index": 277,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "GOOGL_10K_2024.html",
+          "chunk_index": 275,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 229,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 268,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2025"
+        }
+      ]
+    },
+    "bh-04": {
+      "category": "historical",
+      "ticker": "META",
+      "query": "Meta 2022 年的總營收是多少？",
+      "literal": "116,609",
+      "kb_absent": false,
+      "gold": [
+        "META_10K_2023.html",
+        "META_10K_2024.html"
+      ],
+      "gold_sections": [
+        [
+          "META",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "META",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "META",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "META",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 16,
+      "topk": [
+        {
+          "source": "META_10K_2024.html",
+          "chunk_index": 0,
+          "section": [
+            "META",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "META_10K_2024.html",
+          "chunk_index": 2,
+          "section": [
+            "META",
+            "10-K",
+            "cash_flow_statement"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "META_10K_2023.html",
+          "chunk_index": 2,
+          "section": [
+            "META",
+            "10-K",
+            "cash_flow_statement"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "META_10Q_202509.html",
+          "chunk_index": 0,
+          "section": [
+            "META",
+            "10-Q",
+            "income_statement"
+          ],
+          "period_code": "202509"
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 0,
+          "section": [
+            "META",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2025"
+        }
+      ]
+    },
+    "bh-05": {
+      "category": "historical",
+      "ticker": "AMZN",
+      "query": "Amazon 2022 年的淨銷售額是多少？",
+      "literal": "513,983",
+      "kb_absent": false,
+      "gold": [
+        "AMZN_10K_2023.html",
+        "AMZN_10K_2024.html"
+      ],
+      "gold_sections": [
+        [
+          "AMZN",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "AMZN",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "AMZN",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "AMZN",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 14,
+      "topk": [
+        {
+          "source": "AMZN_10K_2024.html",
+          "chunk_index": 0,
+          "section": [
+            "AMZN",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "AMZN_10K_2023.html",
+          "chunk_index": 111,
+          "section": [
+            "AMZN",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "AMZN_10K_2023.html",
+          "chunk_index": 24,
+          "section": [
+            "AMZN",
+            "10-K",
+            "notes_table"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "AMZN_10Q_202403.html",
+          "chunk_index": 60,
+          "section": [
+            "AMZN",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202403"
+        },
+        {
+          "source": "AMZN_10K_2023.html",
+          "chunk_index": 139,
+          "section": [
+            "AMZN",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2023"
+        }
+      ]
+    },
+    "bh-06": {
+      "category": "historical",
+      "ticker": "NVDA",
+      "query": "NVIDIA 在 FY2023（截至 2023 年 1 月）的營收是多少？",
+      "literal": "26,974",
+      "kb_absent": false,
+      "gold": [
+        "NVDA_10K_2024.html",
+        "NVDA_10K_2025.html"
+      ],
+      "gold_sections": [
+        [
+          "NVDA",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "NVDA",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "NVDA",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "NVDA",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 13,
+      "topk": [
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 163,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 0,
+          "section": [
+            "NVDA",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "NVDA_10Q_202404.html",
+          "chunk_index": 0,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "income_statement"
+          ],
+          "period_code": "202404"
+        },
+        {
+          "source": "NVDA_10Q_202410.html",
+          "chunk_index": 15,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202410"
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 206,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2025"
+        }
+      ]
+    },
+    "bh-07": {
+      "category": "historical",
+      "ticker": "MSFT",
+      "query": "Microsoft 在 2023 財年的營收是多少？",
+      "literal": "211,915",
+      "kb_absent": false,
+      "gold": [
+        "MSFT_10K_2024.html",
+        "MSFT_10K_2025.html"
+      ],
+      "gold_sections": [
+        [
+          "MSFT",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "MSFT",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "MSFT",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "MSFT",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": null,
+      "gold_in_topk": false,
+      "pool_size": 20,
+      "topk": [
+        {
+          "source": "MSFT_10Q_202312.html",
+          "chunk_index": 0,
+          "section": [
+            "MSFT",
+            "10-Q",
+            "income_statement"
+          ],
+          "period_code": "202312"
+        },
+        {
+          "source": "MSFT_10Q_202312.html",
+          "chunk_index": 57,
+          "section": [
+            "MSFT",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202312"
+        },
+        {
+          "source": "MSFT_10Q_202312.html",
+          "chunk_index": 86,
+          "section": [
+            "MSFT",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202312"
+        },
+        {
+          "source": "MSFT_10Q_202312.html",
+          "chunk_index": 2,
+          "section": [
+            "MSFT",
+            "10-Q",
+            "cash_flow_statement"
+          ],
+          "period_code": "202312"
+        },
+        {
+          "source": "MSFT_10Q_202312.html",
+          "chunk_index": 76,
+          "section": [
+            "MSFT",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202312"
+        }
+      ]
+    },
+    "bh-08": {
+      "category": "historical",
+      "ticker": "TSLA",
+      "query": "Tesla 在 2024 年第一季的營收是多少？",
+      "literal": "21,301",
+      "kb_absent": false,
+      "gold": [
+        "TSLA_10Q_202403.html",
+        "TSLA_10Q_202503.html"
+      ],
+      "gold_sections": [
+        [
+          "TSLA",
+          "10-Q",
+          "Part_I_Item_1"
+        ],
+        [
+          "TSLA",
+          "10-Q",
+          "Part_I_Item_2"
+        ],
+        [
+          "TSLA",
+          "10-Q",
+          "income_statement"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 20,
+      "topk": [
+        {
+          "source": "TSLA_10Q_202403.html",
+          "chunk_index": 0,
+          "section": [
+            "TSLA",
+            "10-Q",
+            "income_statement"
+          ],
+          "period_code": "202403"
+        },
+        {
+          "source": "TSLA_10Q_202403.html",
+          "chunk_index": 41,
+          "section": [
+            "TSLA",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202403"
+        },
+        {
+          "source": "TSLA_10Q_202403.html",
+          "chunk_index": 2,
+          "section": [
+            "TSLA",
+            "10-Q",
+            "cash_flow_statement"
+          ],
+          "period_code": "202403"
+        },
+        {
+          "source": "TSLA_10Q_202403.html",
+          "chunk_index": 14,
+          "section": [
+            "TSLA",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202403"
+        },
+        {
+          "source": "TSLA_10Q_202403.html",
+          "chunk_index": 1,
+          "section": [
+            "TSLA",
+            "10-Q",
+            "balance_sheet"
+          ],
+          "period_code": "202403"
+        }
+      ]
+    },
+    "bh-09": {
+      "category": "historical",
+      "ticker": "NVDA",
+      "query": "NVIDIA 在 2023 年 10 月底結束的那一季營收是多少？",
+      "literal": "18,120",
+      "kb_absent": false,
+      "gold": [
+        "NVDA_10Q_202310.html",
+        "NVDA_10Q_202410.html"
+      ],
+      "gold_sections": [
+        [
+          "NVDA",
+          "10-Q",
+          "Part_I_Item_1"
+        ],
+        [
+          "NVDA",
+          "10-Q",
+          "Part_I_Item_2"
+        ],
+        [
+          "NVDA",
+          "10-Q",
+          "income_statement"
+        ],
+        [
+          "NVDA",
+          "10-Q",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 13,
+      "topk": [
+        {
+          "source": "NVDA_10Q_202410.html",
+          "chunk_index": 15,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202410"
+        },
+        {
+          "source": "NVDA_10Q_202410.html",
+          "chunk_index": 0,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "income_statement"
+          ],
+          "period_code": "202410"
+        },
+        {
+          "source": "NVDA_10Q_202407.html",
+          "chunk_index": 15,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202407"
+        },
+        {
+          "source": "NVDA_10Q_202407.html",
+          "chunk_index": 0,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "income_statement"
+          ],
+          "period_code": "202407"
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 209,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        }
+      ]
+    },
+    "bh-10": {
+      "category": "historical",
+      "ticker": "GOOGL",
+      "query": "Alphabet 在 2024 年第一季的營收是多少？",
+      "literal": "80,539",
+      "kb_absent": false,
+      "gold": [
+        "GOOGL_10Q_202403.html",
+        "GOOGL_10Q_202503.html"
+      ],
+      "gold_sections": [
+        [
+          "GOOGL",
+          "10-Q",
+          "Part_I_Item_1"
+        ],
+        [
+          "GOOGL",
+          "10-Q",
+          "Part_I_Item_2"
+        ],
+        [
+          "GOOGL",
+          "10-Q",
+          "income_statement"
+        ],
+        [
+          "GOOGL",
+          "10-Q",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 20,
+      "topk": [
+        {
+          "source": "GOOGL_10Q_202403.html",
+          "chunk_index": 0,
+          "section": [
+            "GOOGL",
+            "10-Q",
+            "income_statement"
+          ],
+          "period_code": "202403"
+        },
+        {
+          "source": "GOOGL_10Q_202403.html",
+          "chunk_index": 2,
+          "section": [
+            "GOOGL",
+            "10-Q",
+            "cash_flow_statement"
+          ],
+          "period_code": "202403"
+        },
+        {
+          "source": "GOOGL_10Q_202403.html",
+          "chunk_index": 32,
+          "section": [
+            "GOOGL",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202403"
+        },
+        {
+          "source": "GOOGL_10Q_202403.html",
+          "chunk_index": 1,
+          "section": [
+            "GOOGL",
+            "10-Q",
+            "balance_sheet"
+          ],
+          "period_code": "202403"
+        },
+        {
+          "source": "GOOGL_10Q_202403.html",
+          "chunk_index": 33,
+          "section": [
+            "GOOGL",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202403"
+        }
+      ]
+    },
+    "bh-11": {
+      "category": "historical",
+      "ticker": "AAPL",
+      "query": "Apple 在 2024 年 6 月底結束的那一季淨銷售額是多少？",
+      "literal": "85,777",
+      "kb_absent": false,
+      "gold": [
+        "AAPL_10Q_202406.html",
+        "AAPL_10Q_202506.html"
+      ],
+      "gold_sections": [
+        [
+          "AAPL",
+          "10-Q",
+          "Part_I_Item_1"
+        ],
+        [
+          "AAPL",
+          "10-Q",
+          "Part_I_Item_2"
+        ],
+        [
+          "AAPL",
+          "10-Q",
+          "income_statement"
+        ],
+        [
+          "AAPL",
+          "10-Q",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 17,
+      "topk": [
+        {
+          "source": "AAPL_10Q_202506.html",
+          "chunk_index": 20,
+          "section": [
+            "AAPL",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202506"
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 111,
+          "section": [
+            "AAPL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 129,
+          "section": [
+            "AAPL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "AAPL_10Q_202503.html",
+          "chunk_index": 20,
+          "section": [
+            "AAPL",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202503"
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 0,
+          "section": [
+            "AAPL",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2024"
+        }
+      ]
+    },
+    "bh-12": {
+      "category": "historical",
+      "ticker": "GOOGL",
+      "query": "Google Cloud 在 2022 年的營收是多少？",
+      "literal": "26,280",
+      "kb_absent": false,
+      "gold": [
+        "GOOGL_10K_2023.html",
+        "GOOGL_10K_2024.html"
+      ],
+      "gold_sections": [
+        [
+          "GOOGL",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "GOOGL",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "GOOGL",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 12,
+      "topk": [
+        {
+          "source": "GOOGL_10K_2024.html",
+          "chunk_index": 320,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 323,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 222,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "GOOGL_10Q_202509.html",
+          "chunk_index": 103,
+          "section": [
+            "GOOGL",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202509"
+        },
+        {
+          "source": "GOOGL_10K_2024.html",
+          "chunk_index": 287,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        }
+      ]
+    },
+    "bh-13": {
+      "category": "historical",
+      "ticker": "META",
+      "query": "Meta 的 Reality Labs 部門在 2022 年虧損多少？",
+      "literal": "13,717",
+      "kb_absent": false,
+      "gold": [
+        "META_10K_2023.html",
+        "META_10K_2024.html"
+      ],
+      "gold_sections": [
+        [
+          "META",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "META",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "META",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 4,
+      "gold_in_topk": true,
+      "pool_size": 6,
+      "topk": [
+        {
+          "source": "META_10Q_202406.html",
+          "chunk_index": 161,
+          "section": [
+            "META",
+            "10-Q",
+            "Part_II_Item_1A"
+          ],
+          "period_code": "202406"
+        },
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 87,
+          "section": [
+            "META",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202603"
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 203,
+          "section": [
+            "META",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "META_10K_2024.html",
+          "chunk_index": 161,
+          "section": [
+            "META",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 94,
+          "section": [
+            "META",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202606"
+        }
+      ]
+    },
+    "bh-14": {
+      "category": "historical",
+      "ticker": "AMZN",
+      "query": "AWS 在 2022 年的淨銷售額是多少？",
+      "literal": "80,096",
+      "kb_absent": false,
+      "gold": [
+        "AMZN_10K_2023.html",
+        "AMZN_10K_2024.html"
+      ],
+      "gold_sections": [
+        [
+          "AMZN",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "AMZN",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "AMZN",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": null,
+      "gold_in_topk": false,
+      "pool_size": 20,
+      "topk": [
+        {
+          "source": "AMZN_Fundamentals_20260612.txt",
+          "chunk_index": 1,
+          "section": null,
+          "period_code": ""
+        },
+        {
+          "source": "META_IncomeStatement_20260612.txt",
+          "chunk_index": 4,
+          "section": null,
+          "period_code": ""
+        },
+        {
+          "source": "MSFT_IncomeStatement_20260612.txt",
+          "chunk_index": 4,
+          "section": null,
+          "period_code": ""
+        },
+        {
+          "source": "TSLA_IncomeStatement_20260612.txt",
+          "chunk_index": 3,
+          "section": null,
+          "period_code": ""
+        },
+        {
+          "source": "AMZN_IncomeStatement_20260612.txt",
+          "chunk_index": 4,
+          "section": null,
+          "period_code": ""
+        }
+      ]
+    },
+    "bh-15": {
+      "category": "historical",
+      "ticker": "NVDA",
+      "query": "NVIDIA 資料中心業務在 FY2023 的營收是多少？",
+      "literal": "15,005",
+      "kb_absent": false,
+      "gold": [
+        "NVDA_10K_2024.html",
+        "NVDA_10K_2025.html"
+      ],
+      "gold_sections": [
+        [
+          "NVDA",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "NVDA",
+          "10-K",
+          "income_statement"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 17,
+      "topk": [
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 129,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "NVDA_10Q_202310.html",
+          "chunk_index": 47,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202310"
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 206,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 210,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "NVDA_10Q_202310.html",
+          "chunk_index": 51,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202310"
+        }
+      ]
+    },
+    "bh-16": {
+      "category": "historical",
+      "ticker": "MSFT",
+      "query": "Microsoft 的 Intelligent Cloud 部門在 2024 財年營收是多少？",
+      "literal": "105,362",
+      "kb_absent": false,
+      "gold": [
+        "MSFT_10K_2024.html"
+      ],
+      "gold_sections": [
+        [
+          "MSFT",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "MSFT",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "MSFT",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 18,
+      "topk": [
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 252,
+          "section": [
+            "MSFT",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 152,
+          "section": [
+            "MSFT",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "MSFT_10Q_202412.html",
+          "chunk_index": 81,
+          "section": [
+            "MSFT",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202412"
+        },
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 148,
+          "section": [
+            "MSFT",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "MSFT_10Q_202412.html",
+          "chunk_index": 75,
+          "section": [
+            "MSFT",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202412"
+        }
+      ]
+    },
+    "bh-17": {
+      "category": "historical",
+      "ticker": "TSLA",
+      "query": "Tesla 在 2023 年交付了多少輛車？",
+      "literal": "1,808,581",
+      "kb_absent": false,
+      "gold": [
+        "TSLA_10K_2023.html"
+      ],
+      "gold_sections": [
+        [
+          "TSLA",
+          "10-K",
+          "Item_7"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 20,
+      "topk": [
+        {
+          "source": "TSLA_10K_2023.html",
+          "chunk_index": 115,
+          "section": [
+            "TSLA",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "TSLA_10Q_202409.html",
+          "chunk_index": 52,
+          "section": [
+            "TSLA",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202409"
+        },
+        {
+          "source": "TSLA_10K_2023.html",
+          "chunk_index": 1,
+          "section": [
+            "TSLA",
+            "10-K",
+            "balance_sheet"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "TSLA_10K_2023.html",
+          "chunk_index": 2,
+          "section": [
+            "TSLA",
+            "10-K",
+            "cash_flow_statement"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "TSLA_10K_2024.html",
+          "chunk_index": 1,
+          "section": [
+            "TSLA",
+            "10-K",
+            "balance_sheet"
+          ],
+          "period_code": "2024"
+        }
+      ]
+    },
+    "bh-18": {
+      "category": "historical",
+      "ticker": "NVDA",
+      "query": "NVIDIA 因為終止收購 Arm 認列了多少收購終止費用？",
+      "literal": "1,353",
+      "kb_absent": false,
+      "gold": [
+        "NVDA_10K_2024.html",
+        "NVDA_10K_2025.html",
+        "NVDA_10Q_202310.html"
+      ],
+      "gold_sections": [
+        [
+          "NVDA",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "NVDA",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "NVDA",
+          "10-K",
+          "cash_flow_statement"
+        ],
+        [
+          "NVDA",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "NVDA",
+          "10-Q",
+          "Part_I_Item_1"
+        ],
+        [
+          "NVDA",
+          "10-Q",
+          "Part_I_Item_2"
+        ],
+        [
+          "NVDA",
+          "10-Q",
+          "cash_flow_statement"
+        ],
+        [
+          "NVDA",
+          "10-Q",
+          "income_statement"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 15,
+      "topk": [
+        {
+          "source": "NVDA_10Q_202310.html",
+          "chunk_index": 58,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202310"
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 148,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 180,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 163,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 179,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2025"
+        }
+      ]
+    },
+    "bh-19": {
+      "category": "historical",
+      "ticker": "GOOGL",
+      "query": "Alphabet 2023 年的裁員在研發費用裡認列了多少員工資遣費用？",
+      "literal": "reduction in our workforce",
+      "kb_absent": false,
+      "gold": [
+        "GOOGL_10K_2023.html"
+      ],
+      "gold_sections": [
+        [
+          "GOOGL",
+          "10-K",
+          "Item_7"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 20,
+      "topk": [
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 273,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 142,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_1"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 2,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "cash_flow_statement"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 319,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 315,
+          "section": [
+            "GOOGL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2023"
+        }
+      ]
+    },
+    "bh-20": {
+      "category": "historical",
+      "ticker": "META",
+      "query": "Meta 在 2023 年 12 月的家族日活躍人數（DAP）是多少？",
+      "literal": "3.19",
+      "kb_absent": false,
+      "gold": [
+        "META_10K_2023.html",
+        "META_10K_2024.html",
+        "META_10Q_202509.html"
+      ],
+      "gold_sections": [
+        [
+          "META",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "META",
+          "10-Q",
+          "Part_I_Item_2"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 15,
+      "topk": [
+        {
+          "source": "META_10K_2024.html",
+          "chunk_index": 164,
+          "section": [
+            "META",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 166,
+          "section": [
+            "META",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "META_10Q_202509.html",
+          "chunk_index": 59,
+          "section": [
+            "META",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202509"
+        },
+        {
+          "source": "META_10Q_202603.html",
+          "chunk_index": 60,
+          "section": [
+            "META",
+            "10-Q",
+            "Part_I_Item_2"
+          ],
+          "period_code": "202603"
+        },
+        {
+          "source": "META_10K_2023.html",
+          "chunk_index": 36,
+          "section": [
+            "META",
+            "10-K",
+            "Item_1"
+          ],
+          "period_code": "2023"
+        }
+      ]
+    },
+    "bc-01": {
+      "category": "control",
+      "ticker": "AAPL",
+      "query": "Apple 最新一個財年的總營收是多少？",
+      "literal": "416,161",
+      "kb_absent": false,
+      "gold": [
+        "AAPL_10K_2025.html"
+      ],
+      "gold_sections": [
+        [
+          "AAPL",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "AAPL",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "AAPL",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "AAPL",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 2,
+      "gold_in_topk": true,
+      "pool_size": 17,
+      "topk": [
+        {
+          "source": "AAPL_10K_2023.html",
+          "chunk_index": 77,
+          "section": [
+            "AAPL",
+            "10-K",
+            "Item_7"
+          ],
+          "period_code": "2023"
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 0,
+          "section": [
+            "AAPL",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 0,
+          "section": [
+            "AAPL",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 1,
+          "section": null,
+          "period_code": ""
+        },
+        {
+          "source": "AAPL_10K_2023.html",
+          "chunk_index": 109,
+          "section": [
+            "AAPL",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2023"
+        }
+      ]
+    },
+    "bc-02": {
+      "category": "control",
+      "ticker": "NVDA",
+      "query": "NVIDIA 最新一個財年的營收是多少？",
+      "literal": "215,938",
+      "kb_absent": false,
+      "gold": [
+        "NVDA_10K_2026.html"
+      ],
+      "gold_sections": [
+        [
+          "NVDA",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "NVDA",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "NVDA",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "NVDA",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 1,
+      "gold_in_topk": true,
+      "pool_size": 14,
+      "topk": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2026"
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 15,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202510"
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 163,
+          "section": [
+            "NVDA",
+            "10-K",
+            "Item_8"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14,
+          "section": [
+            "NVDA",
+            "10-Q",
+            "Part_I_Item_1"
+          ],
+          "period_code": "202604"
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 1,
+          "section": null,
+          "period_code": ""
+        }
+      ]
+    },
+    "bc-03": {
+      "category": "control",
+      "ticker": "MSFT",
+      "query": "Microsoft 最新一個財年的營收是多少？",
+      "literal": "331,839",
+      "kb_absent": false,
+      "gold": [
+        "MSFT_10K_2026.html"
+      ],
+      "gold_sections": [
+        [
+          "MSFT",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "MSFT",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "MSFT",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "MSFT",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 8,
+      "gold_in_topk": false,
+      "pool_size": 10,
+      "topk": [
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 0,
+          "section": [
+            "MSFT",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 0,
+          "section": [
+            "MSFT",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 1,
+          "section": null,
+          "period_code": ""
+        },
+        {
+          "source": "MSFT_10Q_202509.html",
+          "chunk_index": 0,
+          "section": [
+            "MSFT",
+            "10-Q",
+            "income_statement"
+          ],
+          "period_code": "202509"
+        },
+        {
+          "source": "MSFT_10Q_202409.html",
+          "chunk_index": 0,
+          "section": [
+            "MSFT",
+            "10-Q",
+            "income_statement"
+          ],
+          "period_code": "202409"
+        }
+      ]
+    },
+    "bc-04": {
+      "category": "control",
+      "ticker": "META",
+      "query": "Meta 最新一個財年的營收是多少？",
+      "literal": "200,966",
+      "kb_absent": false,
+      "gold": [
+        "META_10K_2025.html"
+      ],
+      "gold_sections": [
+        [
+          "META",
+          "10-K",
+          "Item_7"
+        ],
+        [
+          "META",
+          "10-K",
+          "Item_8"
+        ],
+        [
+          "META",
+          "10-K",
+          "income_statement"
+        ],
+        [
+          "META",
+          "10-K",
+          "notes_table"
+        ]
+      ],
+      "gold_rank": 3,
+      "gold_in_topk": true,
+      "pool_size": 13,
+      "topk": [
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 1,
+          "section": null,
+          "period_code": ""
+        },
+        {
+          "source": "META_IncomeStatement_20260612.txt",
+          "chunk_index": 0,
+          "section": null,
+          "period_code": ""
+        },
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 0,
+          "section": [
+            "META",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2025"
+        },
+        {
+          "source": "META_10K_2024.html",
+          "chunk_index": 0,
+          "section": [
+            "META",
+            "10-K",
+            "income_statement"
+          ],
+          "period_code": "2024"
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0,
+          "section": null,
+          "period_code": ""
+        }
+      ]
+    }
+  }
+}

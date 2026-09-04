@@ -1,0 +1,548 @@
+[
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "Apple 目前的市值是多少？",
+    "attributable": true,
+    "chunks": [
+     "AAPL_Fundamentals_20260612.txt#0"
+    ],
+    "web": 1,
+    "secs": 29.5,
+    "n_picked": 1,
+    "n_new": 1,
+    "n_new_cited": 1
+   }
+  ],
+  "n_web": 1,
+  "answer_len": 180,
+  "n_cited": 1,
+  "id": "web-01",
+  "round": 0,
+  "query": "Apple 目前的市值是多少？",
+  "secs": 70.5
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "Apple 目前的市值是多少？",
+    "attributable": true,
+    "chunks": [
+     "AAPL_Fundamentals_20260612.txt#0"
+    ],
+    "web": 1,
+    "secs": 30.3,
+    "n_picked": 1,
+    "n_new": 1,
+    "n_new_cited": 1
+   }
+  ],
+  "n_web": 1,
+  "answer_len": 220,
+  "n_cited": 1,
+  "id": "web-01",
+  "round": 1,
+  "query": "Apple 目前的市值是多少？",
+  "secs": 47.0
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "NVIDIA 現在的股價是多少",
+    "attributable": true,
+    "chunks": [
+     "NVDA_10K_2025.html#119",
+     "NVDA_10K_2026.html#118"
+    ],
+    "web": 1,
+    "secs": 60.4,
+    "n_picked": 2,
+    "n_new": 2,
+    "n_new_cited": 2
+   }
+  ],
+  "n_web": 1,
+  "answer_len": 142,
+  "n_cited": 2,
+  "id": "web-02",
+  "round": 0,
+  "query": "NVIDIA 現在的股價是多少？",
+  "secs": 84.2
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "NVIDIA 現在的股價是多少",
+    "attributable": true,
+    "chunks": [
+     "NVDA_10K_2026.html#118",
+     "NVDA_10K_2025.html#119",
+     "NVDA_10K_2026.html#10",
+     "NVDA_10K_2025.html#10"
+    ],
+    "web": 1,
+    "secs": 81.8,
+    "n_picked": 4,
+    "n_new": 4,
+    "n_new_cited": 0
+   },
+   {
+    "id": 1,
+    "task": "使用NASDAQ官方網站或API查詢NVDA即時股價",
+    "attributable": false,
+    "chunks": [
+     "NVDA_10K_2025.html#10",
+     "NVDA_10K_2026.html#10",
+     "NVDA_10K_2025.html#1",
+     "NVDA_10K_2025.html#119",
+     "NVDA_10K_2026.html#115"
+    ],
+    "web": 1,
+    "secs": 61.0,
+    "n_picked": 5,
+    "n_new": 2,
+    "n_new_cited": 0
+   },
+   {
+    "id": 2,
+    "task": "在 Yahoo Finance 上查詢 NVDA 當前股價",
+    "attributable": false,
+    "chunks": [
+     "NVDA_10K_2026.html#1",
+     "NVDA_10Q_202510.html#1",
+     "NVDA_10K_2025.html#1",
+     "NVDA_10Q_202604.html#1",
+     "NVDA_Fundamentals_20260612.txt#0"
+    ],
+    "web": 1,
+    "secs": 69.8,
+    "n_picked": 5,
+    "n_new": 4,
+    "n_new_cited": 0
+   },
+   {
+    "id": 3,
+    "task": "在 Bloomberg 上查詢 NVDA 當前股價",
+    "attributable": false,
+    "chunks": [
+     "NVDA_10Q_202510.html#1",
+     "NVDA_10K_2026.html#1",
+     "NVDA_10K_2024.html#10",
+     "NVDA_10K_2025.html#1",
+     "NVDA_10Q_202604.html#1"
+    ],
+    "web": 0,
+    "secs": 61.7,
+    "n_picked": 5,
+    "n_new": 1,
+    "n_new_cited": 0
+   },
+   {
+    "id": 4,
+    "task": "在 MarketWatch 上查詢 NVDA 當前股價",
+    "attributable": false,
+    "chunks": [
+     "NVDA_10K_2026.html#1",
+     "NVDA_10K_2025.html#1",
+     "NVDA_10Q_202510.html#1",
+     "NVDA_Fundamentals_20260612.txt#0",
+     "NVDA_10Q_202604.html#1"
+    ],
+    "web": 0,
+    "secs": 62.5,
+    "n_picked": 5,
+    "n_new": 0,
+    "n_new_cited": 0
+   },
+   {
+    "id": 5,
+    "task": "在 Reuters 上查詢 NVDA 當前股價",
+    "attributable": false,
+    "chunks": [
+     "NVDA_10Q_202510.html#1",
+     "NVDA_10K_2026.html#1",
+     "NVDA_10K_2024.html#10",
+     "NVDA_10Q_202604.html#1",
+     "NVDA_10K_2024.html#115"
+    ],
+    "web": 0,
+    "secs": 69.9,
+    "n_picked": 5,
+    "n_new": 1,
+    "n_new_cited": 0
+   },
+   {
+    "id": 6,
+    "task": "在 CNBC 上查詢 NVDA 當前股價",
+    "attributable": false,
+    "chunks": [
+     "NVDA_10K_2026.html#1",
+     "NVDA_10Q_202510.html#1",
+     "NVDA_10K_2025.html#1",
+     "NVDA_10Q_202604.html#1",
+     "NVDA_IncomeStatement_20260612.txt#5"
+    ],
+    "web": 0,
+    "secs": 65.7,
+    "n_picked": 5,
+    "n_new": 1,
+    "n_new_cited": 0
+   }
+  ],
+  "n_web": 3,
+  "answer_len": 125,
+  "n_cited": 0,
+  "id": "web-02",
+  "round": 1,
+  "query": "NVIDIA 現在的股價是多少？",
+  "secs": 503.0
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "Microsoft 最新一季的 Azure 營收成長率是多少",
+    "attributable": true,
+    "chunks": [
+     "MSFT_10Q_202603.html#75",
+     "MSFT_10Q_202603.html#49",
+     "MSFT_10Q_202603.html#69",
+     "MSFT_Fundamentals_20260612.txt#0"
+    ],
+    "web": 0,
+    "secs": 17.6,
+    "n_picked": 4,
+    "n_new": 4,
+    "n_new_cited": 1
+   }
+  ],
+  "n_web": 0,
+  "answer_len": 397,
+  "n_cited": 1,
+  "id": "web-03",
+  "round": 0,
+  "query": "Microsoft 最新一季的 Azure 營收成長率是多少？",
+  "secs": 31.9
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "Microsoft 目前的 Azure 營收成長率是多少",
+    "attributable": true,
+    "chunks": [
+     "MSFT_10Q_202603.html#75",
+     "MSFT_10Q_202603.html#69",
+     "MSFT_10Q_202603.html#49",
+     "MSFT_Fundamentals_20260612.txt#0"
+    ],
+    "web": 1,
+    "secs": 22.1,
+    "n_picked": 4,
+    "n_new": 4,
+    "n_new_cited": 1
+   }
+  ],
+  "n_web": 1,
+  "answer_len": 686,
+  "n_cited": 1,
+  "id": "web-03",
+  "round": 1,
+  "query": "Microsoft 最新一季的 Azure 營收成長率是多少？",
+  "secs": 49.1
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "Tesla 最近的重大消息是什麼",
+    "attributable": true,
+    "chunks": [
+     "TSLA_10Q_202506.html#83",
+     "TSLA_10K_2025.html#155"
+    ],
+    "web": 1,
+    "secs": 27.4,
+    "n_picked": 2,
+    "n_new": 2,
+    "n_new_cited": 2
+   }
+  ],
+  "n_web": 1,
+  "answer_len": 747,
+  "n_cited": 2,
+  "id": "web-04",
+  "round": 0,
+  "query": "Tesla 最近有什麼重要消息？",
+  "secs": 69.8
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "Tesla 最近的新聞內容是什麼",
+    "attributable": true,
+    "chunks": [
+     "TSLA_10Q_202606.html#35",
+     "TSLA_10Q_202606.html#22",
+     "TSLA_10Q_202606.html#1",
+     "TSLA_10Q_202606.html#19",
+     "TSLA_10Q_202606.html#17"
+    ],
+    "web": 1,
+    "secs": 78.4,
+    "n_picked": 5,
+    "n_new": 5,
+    "n_new_cited": 4
+   }
+  ],
+  "n_web": 1,
+  "answer_len": 1652,
+  "n_cited": 4,
+  "id": "web-04",
+  "round": 1,
+  "query": "Tesla 最近有什麼重要消息？",
+  "secs": 140.2
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "Apple 在 FY2025 全年的總營收是多少？",
+    "attributable": true,
+    "chunks": [
+     "AAPL_10K_2025.html#115",
+     "AAPL_10K_2025.html#0",
+     "AAPL_10K_2025.html#85",
+     "AAPL_10K_2025.html#84"
+    ],
+    "web": 0,
+    "secs": 25.6,
+    "n_picked": 4,
+    "n_new": 4,
+    "n_new_cited": 2
+   }
+  ],
+  "n_web": 0,
+  "answer_len": 433,
+  "n_cited": 2,
+  "id": "web-05",
+  "round": 0,
+  "query": "Apple 在 FY2025 全年的總營收是多少？",
+  "secs": 39.3
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "Apple 在 FY2025 全年的總營收是多少？",
+    "attributable": true,
+    "chunks": [
+     "AAPL_10K_2025.html#115",
+     "AAPL_10K_2025.html#0",
+     "AAPL_10K_2025.html#85"
+    ],
+    "web": 0,
+    "secs": 28.0,
+    "n_picked": 3,
+    "n_new": 3,
+    "n_new_cited": 2
+   }
+  ],
+  "n_web": 0,
+  "answer_len": 386,
+  "n_cited": 2,
+  "id": "web-05",
+  "round": 1,
+  "query": "Apple 在 FY2025 全年的總營收是多少？",
+  "secs": 41.9
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "NVIDIA 最近一年（最新可得年度）的營收年增率（YoY revenue growth）是多少？",
+    "attributable": true,
+    "chunks": [
+     "NVDA_Fundamentals_20260612.txt#0",
+     "NVDA_10K_2026.html#164"
+    ],
+    "web": 0,
+    "secs": 32.5,
+    "n_picked": 2,
+    "n_new": 2,
+    "n_new_cited": 1
+   },
+   {
+    "id": 1,
+    "task": "Meta 最近一年（最新可得年度）的營收年增率（YoY revenue growth）是多少？",
+    "attributable": true,
+    "chunks": [
+     "META_Fundamentals_20260612.txt#0"
+    ],
+    "web": 0,
+    "secs": 85.8,
+    "n_picked": 1,
+    "n_new": 1,
+    "n_new_cited": 0
+   },
+   {
+    "id": 2,
+    "task": "Alphabet 最近一年（最新可得年度）的營收年增率（YoY revenue growth）是多少？",
+    "attributable": true,
+    "chunks": [
+     "GOOGL_Fundamentals_20260612.txt#0"
+    ],
+    "web": 0,
+    "secs": 66.9,
+    "n_picked": 1,
+    "n_new": 1,
+    "n_new_cited": 0
+   },
+   {
+    "id": 3,
+    "task": "NVIDIA 最近十二個月（TTM）的淨利（net income）是多少？",
+    "attributable": true,
+    "chunks": [
+     "NVDA_Fundamentals_20260612.txt#0"
+    ],
+    "web": 1,
+    "secs": 31.1,
+    "n_picked": 1,
+    "n_new": 0,
+    "n_new_cited": 0
+   },
+   {
+    "id": 4,
+    "task": "Meta 最近十二個月（TTM）的淨利（net income）是多少？",
+    "attributable": true,
+    "chunks": [
+     "META_Fundamentals_20260612.txt#0"
+    ],
+    "web": 0,
+    "secs": 36.8,
+    "n_picked": 1,
+    "n_new": 0,
+    "n_new_cited": 0
+   },
+   {
+    "id": 5,
+    "task": "Alphabet 最近十二個月（TTM）的淨利（net income）是多少？",
+    "attributable": true,
+    "chunks": [
+     "GOOGL_Fundamentals_20260612.txt#0"
+    ],
+    "web": 0,
+    "secs": 42.3,
+    "n_picked": 1,
+    "n_new": 0,
+    "n_new_cited": 0
+   }
+  ],
+  "n_web": 1,
+  "answer_len": 444,
+  "n_cited": 1,
+  "id": "mh-03",
+  "round": 0,
+  "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+  "secs": 183.3
+ },
+ {
+  "todos": [
+   {
+    "id": 0,
+    "task": "NVIDIA 最近一年營收年增率是多少",
+    "attributable": true,
+    "chunks": [
+     "NVDA_Fundamentals_20260612.txt#0"
+    ],
+    "web": 1,
+    "secs": 26.1,
+    "n_picked": 1,
+    "n_new": 1,
+    "n_new_cited": 1
+   },
+   {
+    "id": 1,
+    "task": "Meta 最近一年營收年增率是多少",
+    "attributable": true,
+    "chunks": [
+     "META_Fundamentals_20260612.txt#0"
+    ],
+    "web": 1,
+    "secs": 44.9,
+    "n_picked": 1,
+    "n_new": 1,
+    "n_new_cited": 1
+   },
+   {
+    "id": 2,
+    "task": "Alphabet 最近一年營收年增率是多少",
+    "attributable": true,
+    "chunks": [
+     "GOOGL_Fundamentals_20260612.txt#0"
+    ],
+    "web": 1,
+    "secs": 36.0,
+    "n_picked": 1,
+    "n_new": 1,
+    "n_new_cited": 1
+   },
+   {
+    "id": 3,
+    "task": "NVIDIA 最近十二個月的淨利是多少",
+    "attributable": true,
+    "chunks": [
+     "NVDA_10K_2026.html#164",
+     "NVDA_10K_2026.html#166"
+    ],
+    "web": 0,
+    "secs": 34.0,
+    "n_picked": 2,
+    "n_new": 2,
+    "n_new_cited": 0
+   },
+   {
+    "id": 4,
+    "task": "Meta 最近十二個月的淨利是多少",
+    "attributable": true,
+    "chunks": [
+     "META_10K_2025.html#2",
+     "META_10K_2025.html#0"
+    ],
+    "web": 0,
+    "secs": 40.8,
+    "n_picked": 2,
+    "n_new": 2,
+    "n_new_cited": 0
+   },
+   {
+    "id": 5,
+    "task": "Alphabet 最近十二個月的淨利是多少",
+    "attributable": true,
+    "chunks": [
+     "GOOGL_10K_2025.html#2",
+     "GOOGL_10K_2025.html#269",
+     "GOOGL_10K_2025.html#268",
+     "GOOGL_10K_2025.html#271"
+    ],
+    "web": 0,
+    "secs": 43.8,
+    "n_picked": 4,
+    "n_new": 4,
+    "n_new_cited": 0
+   }
+  ],
+  "n_web": 3,
+  "answer_len": 1157,
+  "n_cited": 3,
+  "id": "mh-03",
+  "round": 1,
+  "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+  "secs": 152.7
+ }
+]

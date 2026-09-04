@@ -1,0 +1,857 @@
+{
+  "meta": {
+    "collection": "us_stock_rag_edgar_mdna",
+    "top_k": 5,
+    "latest": {
+      "GOOGL": "202606",
+      "MSFT": "202603",
+      "AMZN": "202606",
+      "AAPL": "202606",
+      "META": "202606",
+      "NVDA": "202604",
+      "TSLA": "202606"
+    }
+  },
+  "agg": {
+    "single_on": {
+      "queries": 16,
+      "n_10q_chunks": 61,
+      "n_stale": 0,
+      "stale_rate": 0.0,
+      "companies_asked": 16,
+      "companies_missing_latest": 0,
+      "missing_rate": 0.0
+    },
+    "single_off": {
+      "queries": 16,
+      "n_10q_chunks": 52,
+      "n_stale": 30,
+      "stale_rate": 0.5769,
+      "companies_asked": 16,
+      "companies_missing_latest": 1,
+      "missing_rate": 0.0625
+    },
+    "multi": {
+      "queries": 8,
+      "n_10q_chunks": 21,
+      "n_stale": 9,
+      "stale_rate": 0.4286,
+      "companies_asked": 17,
+      "companies_missing_latest": 6,
+      "missing_rate": 0.3529
+    }
+  },
+  "arms": {
+    "single_on": {
+      "mix-01": {
+        "query": "Microsoft Azure 最新一季的營收成長率是多少？",
+        "asked": [
+          "MSFT"
+        ],
+        "n_10q": 5,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "mix-02": {
+        "query": "Microsoft More Personal Computing 部門最新一季營收表現如何？哪些因素互相抵銷？",
+        "asked": [
+          "MSFT"
+        ],
+        "n_10q": 5,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "mix-03": {
+        "query": "Microsoft 最新一季整體營業利益成長多少？主要由哪些部門帶動？",
+        "asked": [
+          "MSFT"
+        ],
+        "n_10q": 4,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_Fundamentals_20260612.txt",
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "mix-04": {
+        "query": "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？",
+        "asked": [
+          "AMZN"
+        ],
+        "n_10q": 4,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "AMZN_10Q_202606.html",
+          "AMZN_10Q_202606.html",
+          "AMZN_10Q_202606.html",
+          "AMZN_Fundamentals_20260612.txt",
+          "AMZN_10Q_202606.html"
+        ]
+      },
+      "mix-05": {
+        "query": "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？",
+        "asked": [
+          "AMZN"
+        ],
+        "n_10q": 5,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "AMZN_10Q_202606.html",
+          "AMZN_10Q_202606.html",
+          "AMZN_10Q_202606.html",
+          "AMZN_10Q_202606.html",
+          "AMZN_10Q_202606.html"
+        ]
+      },
+      "mix-06": {
+        "query": "Google Cloud 部門最新一季的營收成長多少？",
+        "asked": [
+          "GOOGL"
+        ],
+        "n_10q": 5,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "GOOGL_10Q_202606.html",
+          "GOOGL_10Q_202606.html",
+          "GOOGL_10Q_202606.html",
+          "GOOGL_10Q_202606.html",
+          "GOOGL_10Q_202606.html"
+        ]
+      },
+      "mix-08": {
+        "query": "Meta 最新一季總營收成長多少？主要驅動因素是什麼？",
+        "asked": [
+          "META"
+        ],
+        "n_10q": 2,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "META_Fundamentals_20260612.txt",
+          "META_Fundamentals_20260612.txt",
+          "META_10Q_202606.html",
+          "META_IncomeStatement_20260612.txt",
+          "META_10Q_202606.html"
+        ]
+      },
+      "mix-09": {
+        "query": "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？",
+        "asked": [
+          "AAPL"
+        ],
+        "n_10q": 2,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "AAPL_News_20260519_01.txt",
+          "AAPL_News_20260519_01.txt",
+          "AAPL_10Q_202606.html",
+          "AAPL_10Q_202606.html",
+          "AAPL_News_20260519_01.txt"
+        ]
+      },
+      "mix-11": {
+        "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
+        "asked": [
+          "NVDA"
+        ],
+        "n_10q": 4,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "NVDA_10Q_202604.html",
+          "NVDA_10Q_202604.html",
+          "NVDA_10Q_202604.html",
+          "NVDA_10Q_202604.html",
+          "NVDA_Fundamentals_20260612.txt"
+        ]
+      },
+      "mix-12": {
+        "query": "NVIDIA 這一季在中國市場的資料中心晶片出貨狀況如何？跟去年同期相比有何變化？",
+        "asked": [
+          "NVDA"
+        ],
+        "n_10q": 4,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "NVDA_10Q_202604.html",
+          "NVDA_10Q_202604.html",
+          "NVDA_10Q_202604.html",
+          "NVDA_News_20260519_03.txt",
+          "NVDA_10Q_202604.html"
+        ]
+      },
+      "mix-13": {
+        "query": "Tesla 能源生成與儲能業務最新一季營收表現如何？",
+        "asked": [
+          "TSLA"
+        ],
+        "n_10q": 4,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "TSLA_10Q_202606.html",
+          "TSLA_10Q_202606.html",
+          "TSLA_Fundamentals_20260612.txt",
+          "TSLA_10Q_202606.html",
+          "TSLA_10Q_202606.html"
+        ]
+      },
+      "mix-14": {
+        "query": "Tesla 汽車銷售營收最新一季成長多少？主要驅動因素是什麼？",
+        "asked": [
+          "TSLA"
+        ],
+        "n_10q": 4,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "TSLA_10Q_202606.html",
+          "TSLA_10Q_202606.html",
+          "TSLA_10Q_202606.html",
+          "TSLA_10Q_202606.html",
+          "TSLA_News_20260721_01.txt"
+        ]
+      },
+      "col-11": {
+        "query": "微軟的雲端服務最近成長得快不快？",
+        "asked": [
+          "MSFT"
+        ],
+        "n_10q": 5,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "col-12": {
+        "query": "Meta 最近這一季賺（營收）成長多少？",
+        "asked": [
+          "META"
+        ],
+        "n_10q": 2,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "META_Fundamentals_20260612.txt",
+          "META_Fundamentals_20260612.txt",
+          "META_10Q_202606.html",
+          "META_10Q_202606.html",
+          "META_IncomeStatement_20260612.txt"
+        ]
+      },
+      "col-13": {
+        "query": "蘋果在大中華區最近賣得好不好？",
+        "asked": [
+          "AAPL"
+        ],
+        "n_10q": 3,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "AAPL_News_20260519_01.txt",
+          "AAPL_News_20260519_01.txt",
+          "AAPL_10Q_202606.html",
+          "AAPL_10Q_202606.html",
+          "AAPL_10Q_202606.html"
+        ]
+      },
+      "col-15": {
+        "query": "特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？",
+        "asked": [
+          "TSLA"
+        ],
+        "n_10q": 3,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "TSLA_News_20260612_01.txt",
+          "TSLA_News_20260721_01.txt",
+          "TSLA_10Q_202606.html",
+          "TSLA_10Q_202606.html",
+          "TSLA_10Q_202606.html"
+        ]
+      }
+    },
+    "single_off": {
+      "mix-01": {
+        "query": "Microsoft Azure 最新一季的營收成長率是多少？",
+        "asked": [
+          "MSFT"
+        ],
+        "n_10q": 5,
+        "n_stale": 3,
+        "stale_rate": 0.6,
+        "stale_detail": [
+          "MSFT@202512(最新202603)",
+          "MSFT@202512(最新202603)",
+          "MSFT@202512(最新202603)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "MSFT_10Q_202512.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202512.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202512.html"
+        ]
+      },
+      "mix-02": {
+        "query": "Microsoft More Personal Computing 部門最新一季營收表現如何？哪些因素互相抵銷？",
+        "asked": [
+          "MSFT"
+        ],
+        "n_10q": 5,
+        "n_stale": 2,
+        "stale_rate": 0.4,
+        "stale_detail": [
+          "MSFT@202512(最新202603)",
+          "MSFT@202512(最新202603)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202512.html",
+          "MSFT_10Q_202512.html",
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "mix-03": {
+        "query": "Microsoft 最新一季整體營業利益成長多少？主要由哪些部門帶動？",
+        "asked": [
+          "MSFT"
+        ],
+        "n_10q": 3,
+        "n_stale": 1,
+        "stale_rate": 0.3333,
+        "stale_detail": [
+          "MSFT@202512(最新202603)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "MSFT_10Q_202603.html",
+          "MSFT_Fundamentals_20260612.txt",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202512.html",
+          "MSFT_10K_2026.html"
+        ]
+      },
+      "mix-04": {
+        "query": "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？",
+        "asked": [
+          "AMZN"
+        ],
+        "n_10q": 4,
+        "n_stale": 2,
+        "stale_rate": 0.5,
+        "stale_detail": [
+          "AMZN@202603(最新202606)",
+          "AMZN@202603(最新202606)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "AMZN_10Q_202606.html",
+          "AMZN_10Q_202603.html",
+          "AMZN_10Q_202606.html",
+          "AMZN_Fundamentals_20260612.txt",
+          "AMZN_10Q_202603.html"
+        ]
+      },
+      "mix-05": {
+        "query": "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？",
+        "asked": [
+          "AMZN"
+        ],
+        "n_10q": 3,
+        "n_stale": 2,
+        "stale_rate": 0.6667,
+        "stale_detail": [
+          "AMZN@202603(最新202606)",
+          "AMZN@202603(最新202606)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "AMZN_10Q_202603.html",
+          "AMZN_10Q_202606.html",
+          "AMZN_10K_2025.html",
+          "AMZN_10Q_202603.html",
+          "AMZN_10K_2025.html"
+        ]
+      },
+      "mix-06": {
+        "query": "Google Cloud 部門最新一季的營收成長多少？",
+        "asked": [
+          "GOOGL"
+        ],
+        "n_10q": 4,
+        "n_stale": 2,
+        "stale_rate": 0.5,
+        "stale_detail": [
+          "GOOGL@202603(最新202606)",
+          "GOOGL@202603(最新202606)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "GOOGL_10Q_202606.html",
+          "GOOGL_10Q_202603.html",
+          "GOOGL_10K_2025.html",
+          "GOOGL_10Q_202606.html",
+          "GOOGL_10Q_202603.html"
+        ]
+      },
+      "mix-08": {
+        "query": "Meta 最新一季總營收成長多少？主要驅動因素是什麼？",
+        "asked": [
+          "META"
+        ],
+        "n_10q": 2,
+        "n_stale": 1,
+        "stale_rate": 0.5,
+        "stale_detail": [
+          "META@202603(最新202606)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "META_Fundamentals_20260612.txt",
+          "META_10K_2025.html",
+          "META_Fundamentals_20260612.txt",
+          "META_10Q_202606.html",
+          "META_10Q_202603.html"
+        ]
+      },
+      "mix-09": {
+        "query": "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？",
+        "asked": [
+          "AAPL"
+        ],
+        "n_10q": 3,
+        "n_stale": 2,
+        "stale_rate": 0.6667,
+        "stale_detail": [
+          "AAPL@202603(最新202606)",
+          "AAPL@202603(最新202606)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "AAPL_News_20260519_01.txt",
+          "AAPL_News_20260519_01.txt",
+          "AAPL_10Q_202606.html",
+          "AAPL_10Q_202603.html",
+          "AAPL_10Q_202603.html"
+        ]
+      },
+      "mix-11": {
+        "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
+        "asked": [
+          "NVDA"
+        ],
+        "n_10q": 4,
+        "n_stale": 3,
+        "stale_rate": 0.75,
+        "stale_detail": [
+          "NVDA@202510(最新202604)",
+          "NVDA@202510(最新202604)",
+          "NVDA@202510(最新202604)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "NVDA_10K_2026.html",
+          "NVDA_10Q_202604.html",
+          "NVDA_10Q_202510.html",
+          "NVDA_10Q_202510.html",
+          "NVDA_10Q_202510.html"
+        ]
+      },
+      "mix-12": {
+        "query": "NVIDIA 這一季在中國市場的資料中心晶片出貨狀況如何？跟去年同期相比有何變化？",
+        "asked": [
+          "NVDA"
+        ],
+        "n_10q": 2,
+        "n_stale": 2,
+        "stale_rate": 1.0,
+        "stale_detail": [
+          "NVDA@202510(最新202604)",
+          "NVDA@202510(最新202604)"
+        ],
+        "companies_missing_latest": [
+          "NVDA"
+        ],
+        "sources": [
+          "NVDA_10Q_202510.html",
+          "NVDA_10K_2026.html",
+          "NVDA_10Q_202510.html",
+          "NVDA_10K_2026.html",
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "mix-13": {
+        "query": "Tesla 能源生成與儲能業務最新一季營收表現如何？",
+        "asked": [
+          "TSLA"
+        ],
+        "n_10q": 3,
+        "n_stale": 2,
+        "stale_rate": 0.6667,
+        "stale_detail": [
+          "TSLA@202603(最新202606)",
+          "TSLA@202603(最新202606)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "TSLA_10Q_202603.html",
+          "TSLA_10Q_202603.html",
+          "TSLA_Fundamentals_20260612.txt",
+          "TSLA_10K_2025.html",
+          "TSLA_10Q_202606.html"
+        ]
+      },
+      "mix-14": {
+        "query": "Tesla 汽車銷售營收最新一季成長多少？主要驅動因素是什麼？",
+        "asked": [
+          "TSLA"
+        ],
+        "n_10q": 3,
+        "n_stale": 2,
+        "stale_rate": 0.6667,
+        "stale_detail": [
+          "TSLA@202603(最新202606)",
+          "TSLA@202603(最新202606)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "TSLA_10Q_202603.html",
+          "TSLA_10Q_202606.html",
+          "TSLA_10K_2025.html",
+          "TSLA_10K_2025.html",
+          "TSLA_10Q_202603.html"
+        ]
+      },
+      "col-11": {
+        "query": "微軟的雲端服務最近成長得快不快？",
+        "asked": [
+          "MSFT"
+        ],
+        "n_10q": 5,
+        "n_stale": 4,
+        "stale_rate": 0.8,
+        "stale_detail": [
+          "MSFT@202512(最新202603)",
+          "MSFT@202512(最新202603)",
+          "MSFT@202512(最新202603)",
+          "MSFT@202512(最新202603)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "MSFT_10Q_202512.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202512.html",
+          "MSFT_10Q_202512.html",
+          "MSFT_10Q_202512.html"
+        ]
+      },
+      "col-12": {
+        "query": "Meta 最近這一季賺（營收）成長多少？",
+        "asked": [
+          "META"
+        ],
+        "n_10q": 3,
+        "n_stale": 1,
+        "stale_rate": 0.3333,
+        "stale_detail": [
+          "META@202603(最新202606)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "META_Fundamentals_20260612.txt",
+          "META_Fundamentals_20260612.txt",
+          "META_10Q_202606.html",
+          "META_10Q_202603.html",
+          "META_10Q_202606.html"
+        ]
+      },
+      "col-13": {
+        "query": "蘋果在大中華區最近賣得好不好？",
+        "asked": [
+          "AAPL"
+        ],
+        "n_10q": 2,
+        "n_stale": 1,
+        "stale_rate": 0.5,
+        "stale_detail": [
+          "AAPL@202603(最新202606)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "AAPL_10K_2025.html",
+          "AAPL_10Q_202606.html",
+          "AAPL_10Q_202603.html",
+          "AAPL_News_20260519_01.txt",
+          "AAPL_News_20260519_01.txt"
+        ]
+      },
+      "col-15": {
+        "query": "特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？",
+        "asked": [
+          "TSLA"
+        ],
+        "n_10q": 1,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [],
+        "sources": [
+          "TSLA_10Q_202606.html",
+          "TSLA_News_20260721_01.txt",
+          "TSLA_News_20260612_01.txt",
+          "TSLA_10K_2025.html",
+          "TSLA_10K_2025.html"
+        ]
+      }
+    },
+    "multi": {
+      "mc-01": {
+        "query": "比較 Apple 和 Microsoft 最新一季的營收成長，哪一家比較快？",
+        "asked": [
+          "AAPL",
+          "MSFT"
+        ],
+        "n_10q": 3,
+        "n_stale": 2,
+        "stale_rate": 0.6667,
+        "stale_detail": [
+          "MSFT@202512(最新202603)",
+          "MSFT@202512(最新202603)"
+        ],
+        "companies_missing_latest": [
+          "AAPL"
+        ],
+        "sources": [
+          "AAPL_News_20260519_01.txt",
+          "MSFT_10Q_202512.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202512.html",
+          "MSFT_Fundamentals_20260612.txt"
+        ]
+      },
+      "mc-02": {
+        "query": "NVIDIA 和 Tesla 最近一季的毛利率差多少？",
+        "asked": [
+          "NVDA",
+          "TSLA"
+        ],
+        "n_10q": 2,
+        "n_stale": 1,
+        "stale_rate": 0.5,
+        "stale_detail": [
+          "NVDA@202510(最新202604)"
+        ],
+        "companies_missing_latest": [
+          "TSLA"
+        ],
+        "sources": [
+          "NVDA_10K_2026.html",
+          "NVDA_10K_2026.html",
+          "NVDA_10Q_202510.html",
+          "NVDA_Fundamentals_20260612.txt",
+          "NVDA_10Q_202604.html",
+          "TSLA_Fundamentals_20260612.txt"
+        ]
+      },
+      "mc-03": {
+        "query": "Microsoft 與 Google 最新一季的營業利益哪一家比較好？",
+        "asked": [
+          "MSFT",
+          "GOOGL"
+        ],
+        "n_10q": 4,
+        "n_stale": 1,
+        "stale_rate": 0.25,
+        "stale_detail": [
+          "MSFT@202512(最新202603)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "GOOGL_10Q_202606.html",
+          "GOOGL_10Q_202606.html",
+          "MSFT_10Q_202603.html",
+          "MSFT_10Q_202512.html",
+          "MSFT_Fundamentals_20260612.txt"
+        ]
+      },
+      "mc-04": {
+        "query": "NVIDIA 跟 Apple 最近一季誰的淨利比較高？",
+        "asked": [
+          "AAPL",
+          "NVDA"
+        ],
+        "n_10q": 2,
+        "n_stale": 1,
+        "stale_rate": 0.5,
+        "stale_detail": [
+          "NVDA@202510(最新202604)"
+        ],
+        "companies_missing_latest": [
+          "AAPL"
+        ],
+        "sources": [
+          "NVDA_10K_2026.html",
+          "NVDA_10Q_202510.html",
+          "NVDA_10K_2026.html",
+          "NVDA_10Q_202604.html",
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "mc-05": {
+        "query": "Amazon 和 Meta 最新一季的營收各是多少？",
+        "asked": [
+          "AMZN",
+          "META"
+        ],
+        "n_10q": 1,
+        "n_stale": 0,
+        "stale_rate": 0.0,
+        "stale_detail": [],
+        "companies_missing_latest": [
+          "META"
+        ],
+        "sources": [
+          "META_Fundamentals_20260612.txt",
+          "META_IncomeStatement_20260612.txt",
+          "META_Fundamentals_20260612.txt",
+          "AMZN_10Q_202606.html",
+          "META_10K_2025.html"
+        ]
+      },
+      "mc-06": {
+        "query": "比較 Apple、Microsoft、NVIDIA 最新一季的營收。",
+        "asked": [
+          "AAPL",
+          "MSFT",
+          "NVDA"
+        ],
+        "n_10q": 3,
+        "n_stale": 1,
+        "stale_rate": 0.3333,
+        "stale_detail": [
+          "NVDA@202510(最新202604)"
+        ],
+        "companies_missing_latest": [
+          "MSFT"
+        ],
+        "sources": [
+          "NVDA_10Q_202510.html",
+          "NVDA_10Q_202604.html",
+          "NVDA_10K_2026.html",
+          "NVDA_10K_2026.html",
+          "AAPL_10Q_202606.html"
+        ]
+      },
+      "mc-07": {
+        "query": "Tesla 和 Amazon 目前這一季的銷售表現如何？",
+        "asked": [
+          "AMZN",
+          "TSLA"
+        ],
+        "n_10q": 4,
+        "n_stale": 2,
+        "stale_rate": 0.5,
+        "stale_detail": [
+          "AMZN@202603(最新202606)",
+          "TSLA@202603(最新202606)"
+        ],
+        "companies_missing_latest": [],
+        "sources": [
+          "TSLA_10Q_202606.html",
+          "AMZN_10Q_202603.html",
+          "AMZN_10Q_202606.html",
+          "TSLA_Fundamentals_20260612.txt",
+          "TSLA_10Q_202603.html"
+        ]
+      },
+      "mc-08": {
+        "query": "Meta 與 Google 最新一季的營收成長差距有多大？",
+        "asked": [
+          "GOOGL",
+          "META"
+        ],
+        "n_10q": 2,
+        "n_stale": 1,
+        "stale_rate": 0.5,
+        "stale_detail": [
+          "GOOGL@202603(最新202606)"
+        ],
+        "companies_missing_latest": [
+          "META"
+        ],
+        "sources": [
+          "META_Fundamentals_20260612.txt",
+          "META_Fundamentals_20260612.txt",
+          "GOOGL_10Q_202606.html",
+          "META_10K_2025.html",
+          "GOOGL_10Q_202603.html"
+        ]
+      }
+    }
+  }
+}

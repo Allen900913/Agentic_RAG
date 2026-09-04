@@ -1,0 +1,24 @@
+  ✓ ① 正確答案 → PASS
+      預期 PASS / 實得 PASS(-) claimed=NVDA truth=NVDA
+  ✓ ② 變異：argmax→argmin,同一份答案必須翻成 FAIL（判別力證明）
+      預期 FAIL / 實得 FAIL(-) claimed=NVDA truth=GOOGL
+  ✓ ③ 宣稱了別家 → FAIL（抽取器 + 比較器一起測）
+      預期 FAIL / 實得 FAIL(-) claimed=META truth=NVDA
+  ✓ ④ 公司名在錨點**之前** → 仍要抽得到（實測兩種語序都出現過）
+      預期 PASS / 實得 PASS(-) claimed=NVDA truth=NVDA
+  ✓ ⑤ 少一家的值 → N/A(unfounded),不可算 PASS 也不可算 FAIL
+      預期 N/A / 實得 N/A(unfounded) claimed=NVDA truth=None
+  ✓ ⑥ 沒有比較級宣稱（拒答形狀）→ N/A(no_claim)
+      預期 N/A / 實得 N/A(no_claim) claimed=None truth=None
+  ✓ ⑦ 引用清單裡的公司名不得污染抽取（📚 之後全部忽略）
+      預期 PASS / 實得 PASS(-) claimed=NVDA truth=NVDA
+  ✓ ⑧ [真實句型] 題目重述清單緊接最高級：列舉不是宣稱（來源 gj_mdna_65q_after2 mh-01）
+      預期 PASS / 實得 PASS(-) claimed=NVDA truth=NVDA
+  ✓ ⑨ [真實句型] 「A 領先於 B、C」：錨點後面接的是輸家（來源 gj_ratio_llm_r2 mh-03）
+      預期 PASS / 實得 PASS(-) claimed=NVDA truth=NVDA
+  ✓ ⑩ 及物動詞只有兩家、無列舉可排除 → 仍要挑錨點**之前**那家
+      預期 PASS / 實得 PASS(-) claimed=NVDA truth=NVDA
+  ✓ ⑪ 誤報對照：⑧ 的句型但宣稱換成錯的那家 → 必須仍抓得到 FAIL
+      預期 FAIL / 實得 FAIL(-) claimed=META truth=NVDA
+
+selftest: 11/11 PASS

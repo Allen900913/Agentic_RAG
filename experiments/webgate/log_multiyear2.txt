@@ -1,0 +1,37 @@
+as-of=2026-08-15  collection=us_stock_rag_edgar_multiyear  題數=5
+
+──[web-01] Apple 目前的市值是多少？
+   （intraday；KB 結構上沒有即時市值）
+[agentic_rag] Loading BGE-M3 + reranker + Qdrant (one-time)...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 1643.06it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:00<00:23, 16.33it/s]Loading weights:  24%|██▍       | 93/391 [00:00<00:01, 276.25it/s]Loading weights:  58%|█████▊    | 225/391 [00:00<00:00, 578.54it/s]Loading weights:  86%|████████▌ | 335/391 [00:00<00:00, 725.20it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 405.18it/s]
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 5561.46it/s]
+[INFO] Opening Qdrant server: http://localhost:6333
+   web 呼叫錄到 2 次｜答案 981 字
+   Apple 目前的市值約為 **44,600 億美元（$4.46 兆）**（即 44,600 億美元（$4.46 trillion））【web: https://stockanalysis.com/stocks/aapl/market-cap】。    - 依 **StockAnalysis** 報導，Apple 的市值在 **2026‑08‑14** 為 **44,600 億美元（$4.46 trillion）**，較前一年增長 28
+
+──[web-02] NVIDIA 現在的股價是多少？
+   （intraday；純即時報價）
+   web 呼叫錄到 0 次｜答案 202 字
+   我沒有足夠的資訊來回答 NVIDIA 現在的股價是多少，因為提供的參考資料中僅列示了指數基準值與財務指標，未包含即時或最近的股價數據【NVDA_Fundamentals_20260612.txt, chunk #0】。  --- ⚠ 資料時效：NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-15）；Web 未提供可用補充，因此以上內容不代表涵蓋至查詢日。
+
+──[web-03] Microsoft 最新一季的 Azure 營收成長率是多少？
+   （KB 有舊值、web 可能更新 → 權威衝突）
+   web 呼叫錄到 0 次｜答案 575 字
+   Microsoft 最新一季的 Azure 營收成長率為 **40%**【MSFT_10Q_202603.html, chunk #69】。此數字來自 2026 年第一季（截至 2026 年 3 月 31 日）與 2025 年同季比較，顯示 Azure 及其他雲端服務營收較去年同期成長 40%。  --- ⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不
+
+──[web-04] Tesla 最近有什麼重要消息？
+   （新聞時效）
+   web 呼叫錄到 1 次｜答案 2175 字
+   Tesla 最近正面臨多項重大訴訟與監管調查，同時供應鏈合約被削減近 99%，股價自年初以來下跌約 24%，且前財務長 Deepak Ahuja 於 2026 年 5 月加入電池回收公司 Redwood Materials【TSLA_10Q_202606.html, chunk #49】【web: https://finance.yahoo.com/quote/TSLA/news】【web: https://www.cnbc.com/2
+
+──[web-05] Apple 在 FY2025 全年的總營收是多少？
+   （陰性對照：純歷史財報，不該打 web）
+   web 呼叫錄到 0 次｜答案 429 字
+   Apple 在 FY2025 全年的總營收為 **4,161.61 億美元（$416,161 million）**（即約 4,161.61 億美元（$416.161 billion））【AAPL_10K_2025.html, chunk #0】。    - 這個金額來自 Apple 2025 年度合併損益表的「Net sales」項目，列示為 $416,161（單位：百萬美元）【AAPL_10K_2025.html, chunk #0】
+
+fixture → experiments/webgate/fix_B.json（web 回應 0 筆）
+答案 → experiments/webgate/replay_multiyear.json
+下一步：讀答案，把『這題該成立什麼』寫成斷言檔，再用 replay 模式驗。
+[replay] wrote experiments\webgate\cache_B.json (hit=19 miss=39)

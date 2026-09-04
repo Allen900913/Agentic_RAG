@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_after2.json"
+  },
+  "records": [
+    {
+      "id": "news-01",
+      "query": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+      "why": "flow",
+      "answer": "Apple 最近因 Siri 相關的兩起訴訟分別在 2026 年達成和解：一宗涉及 AI 功能未如廣告所示的虛假宣傳，Apple 同意支付 **2.5 億美元（$250 million）**；另一宗指控 Siri 竊聽用戶對話的隱私案，Apple 同意支付 **0.95 億美元（$95 million）**【web: https://www.reuters.com/legal/litigation/apple-settles-lawsuit-over-late-siri-ai-features-250-million-2026-05-05】、【web: https://apnews.com/article/apple-siri-iphone-lawsuit-settlement-9b8ab3e079ae6962435f38eddb937b39】。\n\n**AI 功能虛假宣傳訴訟**  \n- 原告：Peter Landsheft 於 2024 年在加州聯邦法院（北加州聯邦地區法院）提起集體訴訟，指稱 Apple 在 2024 年的開發者大會上宣稱即將推出的 Siri AI 功能未如期交付，導致消費者為未具備的功能支付溢價【web: https://www.reuters.com/legal/litigation/apple-settles-lawsuit-over-late-siri-ai-features-250-million-2026-05-05】。  \n- 和解金額：Apple 同意支付 **2.5 億美元（$250 million）**，不承認任何不當行為，仍需法院最終批准【web: https://www.reuters.com/legal/litigation/apple-settles-lawsuit-over-late-siri-ai-features-250-million-2026-05-05】。  \n- 付款範圍：合格的消費者將獲得約 **25 至 95 美元** 的補償，具體金額取決於索賠數量等因素【web: https://finance.yahoo.com/technology/ai/articles/apple-siri-ai-settlement-eligible-175337303.html】。  \n- 法院審批時間表：初步批准已於 2026 年 5 月取得，最終批准聽證會定於 **2027 年 2 月 24 日**，付款將在法院批准後的數個月內完成【web: https://finance.yahoo.com/technology/ai/articles/apple-siri-ai-settlement-eligible-175337303.html】。\n\n**Siri 隱私（竊聽）訴訟**  \n- 原告：未具名消費者集團指控 Apple 透過 Siri 進行未經授權的錄音與監聽，涉及違反美國竊聽與隱私法【web: https://apnews.com/article/apple-siri-iphone-lawsuit-settlement-9b8ab3e079ae6962435f38eddb937b39】。  \n- 和解金額：Apple 同意支付 **0.95 億美元（$95 million）** 給予受影響的用戶與原告律師費用，並未承認違法行為【web: https://apnews.com/article/apple-siri-iphone-lawsuit-settlement-9b8ab3e079ae6962435f38eddb937b39】。  \n- 相關說明：此筆和解金額相較於 Apple 自 2014 年 9 月以來累積的 **7,050 億美元（$705 billion）** 利潤僅佔極小比例，亦遠低於律師最初估計的可能賠償額 **約 15 億美元（$1.5 billion）**【web: https://apnews.com/article/apple-siri-iphone-lawsuit-settlement-9b8ab3e079ae6962435f38eddb937b39】。\n\n總結來說，Apple 近期的 Siri 相關法律動向主要集中在兩大和解：一是針對 AI 功能未如期交付的集體訴訟，金額 2.5 億美元（$250 million）；二是針對 Siri 可能的隱私侵害，金額 0.95 億美元（$95 million），兩案皆已達成和解且仍待最終法院批准。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+        "查找2024年至2026年Apple與Siri相關的法律訴訟或和解的具體案例與細節",
+        "查找2024年至2026年Apple與Siri相關的法律訴訟或和解的最新新聞報導",
+        "查找2024年至2026年Apple與Siri相關的法律訴訟或和解的最新新聞報導，聚焦於具體案件名稱、法院、金額或和解條款",
+        "查找2024年至2026年Apple因Siri的隱私或數據使用問題所涉及的訴訟或和解案件，包含法院、原告、金額或和解條款",
+        "查找2024年至2026年Apple因Siri的語音錄音或誤觸發問題所涉及的訴訟或和解案件，包含具體案件名稱與結果",
+        "查找2024年至2026年Apple因Siri在特定國家或地區的合規問題（如歐盟GDPR）所涉及的法律訴訟或和解"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-02",
+      "query": "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？",
+      "why": "flow",
+      "answer": "Apple 在 2026 年 WWDC 上宣佈了全新升級的 Siri，重新命名為 **Siri AI**，並將其與 Apple Intelligence 深度整合，使 Siri 成為「更具對話性、能理解個人情境、可跨多個 App 處理多步驟任務」的助理，同時推出專屬的 Siri App、全新文字輸入框與改進的語音模型【web: https://www.cnbc.com/2026/06/08/apple-wwdc-2026-live-updates.html】。\n\n- **對話與長回覆**：Apple 示範使用者可與 Siri 來回對話，Siri 的回答變得更長、更深入，使用者甚至可以在示範中拉下新出現的文字輸入欄以取得更多資訊【web: https://www.cnbc.com/2026/06/08/apple-wwdc-2026-live-updates.html】。  \n- **個人情境與跨 App 能力**：Siri AI 能「了解個人情境」並根據不同 App 的功能完成任務，這是 Apple Intelligence 的核心功能【web: https://www.cnbc.com/2026/06/08/apple-wwdc-2026-live-updates.html】。  \n- **多步驟功能**：使用者可以一次下達多個指令，讓 Siri 同時處理多項任務，例如一次性草擬電子郵件或執行一連串操作【web: https://finance.yahoo.com/news/apple-wwdc-preview-apple-gets-a-second-shot-at-its-ai-rollout-143000592.html】。  \n- **專屬 Siri App**：Apple 推出全新 Siri App，讓使用者在不同裝置間重新查看對話，並結合視覺智慧與寫作工具【web: https://www.reuters.com/business/siri-ai-child-safety-tools-key-takeaways-apples-wwdc-2026-06-08】。  \n- **新聲音與語音改進**：Siri AI 配備全新與改進的語音模型，提供更自然的語音回應【web: https://www.cnbc.com/2026/06/08/apple-wwdc-2026-live-updates.html】。  \n- **Dynamic Island 與文字搜尋框**：Siri 現在會出現在 iPhone 的 Dynamic Island 頂部，並可透過向下滑動螢幕中間呼叫新搜尋框，以文字方式提問或下指令【web: https://finance.yahoo.com/news/apple-wwdc-preview-apple-gets-a-second-shot-at-its-ai-rollout-143000592.html】。  \n- **相機模式與營養資訊**：在 Camera App 中啟動 Siri 後，可即時辨識營養標籤並匯入餐飲追蹤，同時提供物件辨識與相關資訊（如背包是否符合隨身行李規格）【web: https://apnews.com/article/apple-siri-wwdc-iphone-aa25d07c06d366ec5b62643a1f5b0db9】。  \n- **隱私優先**：Apple 強調 Siri AI 的所有資料處理皆在使用者裝置或 Apple Private Cloud Compute 上完成，資料不會被公司儲存或存取【web: https://www.reuters.com/business/siri-ai-child-safety-tools-key-takeaways-apples-wwdc-2026-06-08】。  \n- **底層模型與合作**：Siri AI 依託於新版 Apple Foundation Models，這些模型是與 Google Gemini 合作開發，支援更佳的推理、影像理解與影像生成能力【web: https://www.reuters.com/business/siri-ai-child-safety-tools-key-takeaways-apples-wwdc-2026-06-08】。  \n\n總結來說，Apple 在本次 WWDC 中將 Siri 重新定位為「Siri AI」，提供更長、更具對話性的回覆、跨 App 的多步驟執行、專屬 App、視覺智慧與隱私保護等多項新功能，旨在讓 Siri 成為「更有能力、能幫助使用者完成更多日常任務」的 AI 助理。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-03",
+      "query": "最近分析師對 Apple 股票有哪些利多的看法？",
+      "why": "flow",
+      "answer": "分析師普遍看好 Apple，因為多家機構上調目標價、看好 Apple Intelligence（AI）帶來的長期需求、以及生態系統與服務的持續成長。  \n\n- **目標價大幅上調**：BofA、Citi、Evercore ISI、Morgan Stanley、Tigress Financial、Wedbush、HSBC 等多家機構將 Apple 的目標價提升至 **US$330‑US$400** 的區間，部分機構甚至更高【web: https://finance.yahoo.com/markets/stocks/articles/apple-aapl-stock-gets-fair-081418058.html】。  \n- **AI 與 Apple Intelligence**：BofA 把 2026 年 WWDC 描述為「AI 故事的重置」，認為 AI 助理計畫將成為長期成長的關鍵；Evercore ISI 也把 AI 與未來 Apple Intelligence 升級視為提升營收與自由現金流的動力【web: https://finance.yahoo.com/markets/stocks/articles/apple-aapl-stock-gets-fair-081418058.html】。  \n- **生態系統與服務組合**：多家分析師（包括 BofA、Evercore ISI、Morgan Stanley）指出 Apple 的硬體、軟體與服務生態系統的整合，以及服務收入的持續提升，是支撐長期增長的核心【web: https://finance.yahoo.com/markets/stocks/articles/apple-aapl-stock-gets-fair-081418058.html】。  \n- **晶片與供應鏈優勢**：Evercore ISI 與 BofA 強調 Apple 自家矽晶片以及與 Broadcom 等供應商的協議，有助於確保產能並支援未來 AI 功能升級【web: https://finance.yahoo.com/markets/stocks/articles/apple-aapl-stock-gets-fair-081418058.html】。  \n- **Goldman Sachs 的 AI 正向預期**：Goldman Sachs 分析師 Michael Ng 認為持續推出整合式 AI 功能，將提升產品需求與服務收入（包括 iCloud 儲存需求），對 Apple 的長期需求構成正面支撐【web: https://finance.yahoo.com/markets/article/why-this-analyst-is-down-on-apple-stock-even-as-it-hovers-near-record-highs-130907412.html】。  \n- **共識評等與平均目標價**：根據 S&P Global 追蹤的 46 位分析師，Apple 的共識評等為 **「Buy」**，平均目標價為 **US$322.28**，相較目前股價有 **3.95%** 的上行空間，最高目標價達 **US$400**【web: https://stockanalysis.com/stocks/aapl/forecast】。  \n\n以上各點皆來自近期分析師報告，顯示市場對 Apple 股票的主要利多觀點集中在 AI 發展、服務與生態系統的持續擴張，以及目標價的顯著上調。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 最近分析師對其股票的利多看法有哪些"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-04",
+      "query": "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？",
+      "why": "flow",
+      "answer": "NVIDIA 最近與 IREN 簽署了多項合作，包含在 2026 年 3 月宣布的 **部署最高 5 GW AI 基礎設施** 計畫、在 2026 年 5 月宣布的 **最高 21 億美元投資及 0.3 億（30 百萬）股認購權**，以及一份 **約 34 億美元的五年 AI 雲服務合約**【web: https://finance.yahoo.com/sectors/technology/articles/iren-partners-nvidia-5-gw-205851949.html】【web: https://www.reuters.com/business/nvidia-invest-up-21-billion-iren-part-ai-data-center-deal-2026-05-07】【web: https://finance.yahoo.com/sectors/technology/articles/iren-partnership-nvidia-expands-3-143642848.html】。\n\n**合作要點**  \n1. **5 GW AI 基礎設施部署**：NVIDIA 與 IREN 宣布合作，將在 IREN 既有資料中心（包括加拿大 Mackenzie 與美國 Texas Childress）部署最高 5 GW 的 AI 計算容量，並於 2026 年 3 月 4 日簽署採購超過 50,000 顆 NVIDIA B300 GPU 的協議，計畫在 2026 年底前將 GPU 數量擴增至 150,000 台【web: https://finance.yahoo.com/sectors/technology/articles/iren-partners-nvidia-5-gw-205851949.html】。  \n2. **最高 21 億美元投資與股權認購權**：2026 年 5 月 7 日，NVIDIA 同意向 IREN 投資最高 21 億美元，並取得五年內以每股 70 美元價格購買最多 0.3 億（30 百萬）股 IREN 普通股的認購權，雙方稱此舉將加速大型 AI 工廠的建設，首波部署將聚焦於 IREN 位於 Texas Sweetwater 的 2 GW 產能園區【web: https://www.reuters.com/business/nvidia-invest-up-21-billion-iren-part-ai-data-center-deal-2026-05-07】。  \n3. **約 34 億美元 AI 雲服務合約**：IREN 亦簽署了一份為期五年的 AI 基礎設施雲服務合約，價值約 34 億美元，為 NVIDIA 內部 AI 與研究工作提供受管理的 GPU 雲服務，部署將使用 NVIDIA Blackwell 平台系統，約 60 MW 的空冷容量，位於 Texas Childress 資料中心【web: https://finance.yahoo.com/sectors/technology/articles/iren-partnership-nvidia-expands-3-143642848.html】。  \n\n以上即為近期 NVIDIA 與 IREN 之間的主要合作新聞。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-05",
+      "query": "關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？",
+      "why": "flow",
+      "answer": "最近的消息顯示，NVIDIA 的 H200 人工智慧晶片已於 **2026 年 7 月 14 日** 重新開始向中國出貨，但同時中國市場的 AI 晶片銷售仍受美國出口管制限制，出貨量仍相當有限且出現供需落差。  \n\n- **出貨重啟**：美國商務部官員在 2026‑07‑14 的 CNBC 報導中指出，NVIDIA 的 H200 晶片已重新出貨至中國，可能進一步提升銷售額 [web: https://www.cnbc.com/2026/07/14/nvidia-h200-ai-chips-china.html]。  \n- **先前預期為零**：NVIDIA 執行長 Jensen Huang 在 2025 年 5 月的 CNBC 采訪中曾告訴投資人「**expect nothing**」於中國的 AI 晶片營收，並自去年起將中國潛在收入排除在財務預測之外，顯示公司對中國市場的預期曾極低 [web: https://www.cnbc.com/2026/07/14/nvidia-h200-ai-chips-china.html]。  \n- **銷售仍受阻**：Yahoo Finance 的未標示日期報導稱，儘管需求仍高於供給，NVIDIA 在中國的 AI 晶片銷售「**stall**」且受到出口管制限制，許多晶片只能透過走私渠道進入中國市場 [web: https://finance.yahoo.com/technology/ai/articles/nvidias-ai-chip-sales-china-043900974.html]。  \n- **本地競爭者崛起**：同一 Yahoo Finance 文章指出，華為等本地晶片製造商正逐漸在中國市場取得領先地位，且中國大學與大型科技公司仍在尋求 H200 等高階晶片以支援研發 [web: https://finance.yahoo.com/technology/ai/articles/nvidias-ai-chip-sales-china-043900974.html]。  \n- **美國進一步限制**：另一篇未標示日期的 Yahoo Finance 報導稱，美國白宮已通知相關機構，將阻止 NVIDIA 向中國銷售「**scaled‑down**」的 AI 晶片，因為中國新頒布的指導方針要求國家資助的資料中心只能使用國產晶片，進一步削弱 NVIDIA 在中國的市場機會 [web: https://finance.yahoo.com/news/us-block-nvidias-sale-scaled-014642577.html]。  \n- **市場觀感**：AP News（未標示日期）同樣報導稱，NVIDIA 在中國的 AI 晶片銷售停滯，需求仍高於供給，且多起走私案例顯示市場對其技術的強烈渴求 [web: https://apnews.com/article/ai-chips-nvidia-huawei-china-1ae6228c4928ddbb43f984e9b38f49dd]。  \n\n綜合上述，近期的主要訊息是：**H200 晶片已在 2026 年 7 月重新出貨至中國，但整體銷售仍受美國出口管制限制，市場需求高於供給，且本地競爭者正加速追趕**。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 最近有什麼關於賣 AI 晶片到中國的消息"
+      ],
+      "sources": []
+    }
+  ]
+}

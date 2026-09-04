@@ -45,6 +45,11 @@ Thumbs.db
 # === Logs ===
 *.log
 logs/
+# 例外：**被文件用檔名指著、當成證據**的 log 必須納入版控。
+# CLAUDE.md〈預設 LLM〉那格與 CHANGELOG 2026-09-03 都指著下面這一份當選型依據，
+# 而 `*.log` 把它擋在版控外＝任何人 clone 下來都查不到那個決定的根據（2026-09-04 發現）。
+# 新增這類例外的判準只有一條：**有文件用檔名指著它**。純粹是跑步過程的 stdout 不要加。
+!experiments/_model_bakeoff_20260903.log
 
 # === Local Notes / Course Handout ===
 .claude/

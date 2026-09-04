@@ -1,0 +1,74 @@
+collection=us_stock_rag_edgar_multiyear  CHECKER=openai/gpt-oss-120b  repeat=2  題數=6   （web 走計數樁，零網路）
+
+[agentic_rag] Loading BGE-M3 + reranker + Qdrant (one-time)...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 1872.57it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:  53%|█████▎    | 207/391 [00:00<00:00, 2027.73it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 663.21it/s] 
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 5193.95it/s]
+[INFO] Opening Qdrant server: http://localhost:6333
+  web-01 r0:   70.5s  待辦 plan=1 replan=0  web=1
+  web-01 r1:   47.0s  待辦 plan=1 replan=0  web=1
+  web-02 r0:   84.2s  待辦 plan=1 replan=0  web=1
+  web-02 r1:  503.0s  待辦 plan=1 replan=6  web=3
+  web-03 r0:   31.9s  待辦 plan=1 replan=0  web=0
+  web-03 r1:   49.1s  待辦 plan=1 replan=0  web=1
+  web-04 r0:   69.8s  待辦 plan=1 replan=0  web=1
+  web-04 r1:  140.2s  待辦 plan=1 replan=0  web=1
+  web-05 r0:   39.3s  待辦 plan=1 replan=0  web=0
+  web-05 r1:   41.9s  待辦 plan=1 replan=0  web=0
+  mh-03 r0:  183.3s  待辦 plan=6 replan=0  web=1
+  mh-03 r1:  152.7s  待辦 plan=6 replan=0  web=3
+
+出身              待辦數  commit     獨有        獨有且被引用     獨有=0     被引用=0   web        秒
+------------------------------------------------------------------------------------
+Planner          22      48     45            20        3         9    11    922.1
+Replanner         6      30      9             0        1         6     2    390.6
+
+逐待辦明細（順序＝執行順序；⚠ replan 天生跑在後面，判讀要跟 planner 的後段比）
+------------------------------------------------------------------------------------
+  web-01 r0  (答案引用 1 個 chunk)
+     [plan  ] commit=1 獨有=1 獨有且被引用=1 web=1 29.5s  Apple 目前的市值是多少？
+  web-01 r1  (答案引用 1 個 chunk)
+     [plan  ] commit=1 獨有=1 獨有且被引用=1 web=1 30.3s  Apple 目前的市值是多少？
+  web-02 r0  (答案引用 2 個 chunk)
+     [plan  ] commit=2 獨有=2 獨有且被引用=2 web=1 60.4s  NVIDIA 現在的股價是多少
+  web-02 r1  (答案引用 0 個 chunk)
+     [plan  ] commit=4 獨有=4 獨有且被引用=0 web=1 81.8s  NVIDIA 現在的股價是多少
+     [REPLAN] commit=5 獨有=2 獨有且被引用=0 web=1 61.0s  使用NASDAQ官方網站或API查詢NVDA即時股價
+     [REPLAN] commit=5 獨有=4 獨有且被引用=0 web=1 69.8s  在 Yahoo Finance 上查詢 NVDA 當前股價
+     [REPLAN] commit=5 獨有=1 獨有且被引用=0 web=0 61.7s  在 Bloomberg 上查詢 NVDA 當前股價
+     [REPLAN] commit=5 獨有=0 獨有且被引用=0 web=0 62.5s  在 MarketWatch 上查詢 NVDA 當前股價
+     [REPLAN] commit=5 獨有=1 獨有且被引用=0 web=0 69.9s  在 Reuters 上查詢 NVDA 當前股價
+     [REPLAN] commit=5 獨有=1 獨有且被引用=0 web=0 65.7s  在 CNBC 上查詢 NVDA 當前股價
+  web-03 r0  (答案引用 1 個 chunk)
+     [plan  ] commit=4 獨有=4 獨有且被引用=1 web=0 17.6s  Microsoft 最新一季的 Azure 營收成長率是多少
+  web-03 r1  (答案引用 1 個 chunk)
+     [plan  ] commit=4 獨有=4 獨有且被引用=1 web=1 22.1s  Microsoft 目前的 Azure 營收成長率是多少
+  web-04 r0  (答案引用 2 個 chunk)
+     [plan  ] commit=2 獨有=2 獨有且被引用=2 web=1 27.4s  Tesla 最近的重大消息是什麼
+  web-04 r1  (答案引用 4 個 chunk)
+     [plan  ] commit=5 獨有=5 獨有且被引用=4 web=1 78.4s  Tesla 最近的新聞內容是什麼
+  web-05 r0  (答案引用 2 個 chunk)
+     [plan  ] commit=4 獨有=4 獨有且被引用=2 web=0 25.6s  Apple 在 FY2025 全年的總營收是多少？
+  web-05 r1  (答案引用 2 個 chunk)
+     [plan  ] commit=3 獨有=3 獨有且被引用=2 web=0 28.0s  Apple 在 FY2025 全年的總營收是多少？
+  mh-03 r0  (答案引用 1 個 chunk)
+     [plan  ] commit=2 獨有=2 獨有且被引用=1 web=0 32.5s  NVIDIA 最近一年（最新可得年度）的營收年增率（YoY revenue growth
+     [plan  ] commit=1 獨有=1 獨有且被引用=0 web=0 85.8s  Meta 最近一年（最新可得年度）的營收年增率（YoY revenue growth）是
+     [plan  ] commit=1 獨有=1 獨有且被引用=0 web=0 66.9s  Alphabet 最近一年（最新可得年度）的營收年增率（YoY revenue grow
+     [plan  ] commit=1 獨有=0 獨有且被引用=0 web=1 31.1s  NVIDIA 最近十二個月（TTM）的淨利（net income）是多少？
+     [plan  ] commit=1 獨有=0 獨有且被引用=0 web=0 36.8s  Meta 最近十二個月（TTM）的淨利（net income）是多少？
+     [plan  ] commit=1 獨有=0 獨有且被引用=0 web=0 42.3s  Alphabet 最近十二個月（TTM）的淨利（net income）是多少？
+  mh-03 r1  (答案引用 3 個 chunk)
+     [plan  ] commit=1 獨有=1 獨有且被引用=1 web=1 26.1s  NVIDIA 最近一年營收年增率是多少
+     [plan  ] commit=1 獨有=1 獨有且被引用=1 web=1 44.9s  Meta 最近一年營收年增率是多少
+     [plan  ] commit=1 獨有=1 獨有且被引用=1 web=1 36.0s  Alphabet 最近一年營收年增率是多少
+     [plan  ] commit=2 獨有=2 獨有且被引用=0 web=0 34.0s  NVIDIA 最近十二個月的淨利是多少
+     [plan  ] commit=2 獨有=2 獨有且被引用=0 web=0 40.8s  Meta 最近十二個月的淨利是多少
+     [plan  ] commit=4 獨有=4 獨有且被引用=0 web=0 43.8s  Alphabet 最近十二個月的淨利是多少
+
+⚠ 這支是 probe 不是閘門：LLM 有噪音，判讀看逐待辦明細，不要看總平均。
+⚠ 誤報對照＝上表的 Planner 那一列。若它的『獨有且被引用』也接近 0，
+  那麼 Replanner 的 0 就不是關於 replan 的證據，是這個指標沒有判別力。
+
+寫入 experiments/replan_contribution_after2.json

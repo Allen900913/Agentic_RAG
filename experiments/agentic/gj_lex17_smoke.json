@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "producer": "run_agentic_on_evalset.py",
+    "module": "agentic_rag_v2",
+    "collection": "us_stock_rag_edgar_mdna",
+    "retrieval_model": "openai/gpt-oss-120b",
+    "checker_model": "openai/gpt-oss-120b",
+    "gen_model": "openai/gpt-oss-120b",
+    "validator": true,
+    "web_search": false,
+    "freshness_mode": "snapshot",
+    "eval_set": "eval\\eval_set.json"
+  },
+  "records": [
+    {
+      "id": "lex-16",
+      "category": "lexical",
+      "query": "Apple 近一年的整體營收成長率是多少？",
+      "answerable": true,
+      "answer": "Apple 近一年營收成長率約為 **16.60%**（以最近十二個月為基礎）【AAPL_Fundamentals_20260612.txt, chunk #0】；若以完整財政年度2025相較2024計算，則營收從 **3,910.35 億美元（$391.035 billion）** 增至 **4,161.61 億美元（$416.161 billion）**，年增幅約 **6.42%**【AAPL_10K_2025.html, chunk #115】。  \n\n- **TTM YoY 成長率 16.60%**：此數字直接來自公司財務概況中的「Revenue Growth (YoY)」指標，代表過去十二個月的營收較前一年同期提升了 16.60%【AAPL_Fundamentals_20260612.txt, chunk #0】。  \n- **FY2025 vs FY2024 成長率 6.42%**：根據 2025 年 Form 10‑K，2025 年總淨銷售為 4,161.61 億美元（$416,161 million），2024 年為 3,910.35 億美元（$391,035 million），計算得出 (416,161‑391,035) / 391,035 ≈ 6.42% 的年度增長【AAPL_10K_2025.html, chunk #115】。  \n\n因此，根據不同的時間基礎，Apple 的營收成長率分別為 16.60%（TTM）與約 6.4%（FY2025）。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.700)\n  - AAPL_10K_2025.html #115 (rerank=0.611)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 115
+        }
+      ],
+      "contexts": [
+        "[AAPL] === AAPL Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Apple Inc. Sector : Technology Industry : Consumer Electronics Employees: 166,000\n\n--- Valuation Metrics --- Market Cap : $4342.02B Enterprise Value : $4358.23B P/E Ratio Trailing: 35.83394 P/E Ratio Forward : 30.810581 Price/Sales (TTM) : 9.618119 Price/Book : 40.720387 EV/EBITDA : 27.243\n\n--- Profitability --- Revenue (TTM) : $451.44B Gross Profit : $216.07B EBITDA : $159.98B Net Income : $122.58B Profit Margin : 27.15% Operating Margin: 32.27% Gross Margin : 47.86%\n\n--- Growth --- Revenue Growth (YoY): 16.60% Earnings Growth : 21.80% EPS Trailing : 8.25 EPS Forward : 9.59508",
+        "[AAPL 10-K period 2025] Apple Inc. | 2025 Form 10-K | 35\n\nThe following table shows disaggregated net sales, as well as the portion of total net sales that was previously deferred, for 2025, 2024 and 2023 (in millions):\n\n202520242023\n\niPhone\n\n$209,586 $201,183 $200,583 \n\nMac\n\n33,708 29,984 29,357 \n\niPad\n\n28,023 26,694 28,300 \n\nWearables, Home and Accessories\n\n35,686 37,005 39,845 \n\nServices (1)\n\n109,158 96,169 85,200 \n\nTotal net sales$416,161 $391,035 $383,285 \n\nPortion of total net sales that was included in deferred revenue as of the beginning of the period$8,229 $7,728 $8,169 \n\n(1)Services net sales include amortization of the deferred value of services bundled in the sales price of certain products. The Company’s proportion of net sales by disaggregated revenue source was generally consistent for each reportable segment in Note 13, “Segment Information and Geographic Data” for 2025, 2024 and 2023, except in Greater China, where iPhone revenue represented a moderately higher proportion of net sales. As of September 27, 2025 and September 28, 2024, the Company had total deferred revenue of $13.7 billion and $12.8 billion, respectively. As of September 27, 2025, the Company expects 66% of total deferred revenue to be realized in less than a year, 23% within one-to-two years, 9% within two-to-three years and 2% in greater than three years. Note 3 – Earnings Per Share\n\nThe following table shows the computation of basic and diluted earnings per share for 2025, 2024 and 2023 (net income in millions and shares in thousands):\n\n202520242023\n\nNumerator:\n\nNet income$112,010 $93,736 $96,995 \n\nDenominator:\n\nWeighted-average basic shares outstanding14,948,500 15,343,783 15,744,231 \n\nEffect of dilutive share-based awards56,197 64,312 68,316 \n\nWeighted-average diluted shares15,004,697 15,408,095 15,812,547 \n\nBasic earnings per share$7.49 $6.11 $6.16 \n\nDiluted earnings per share$7.46 $6.08 $6.13 \n\nApproximately 24 million restricted stock units (“RSUs”) were excluded from the computation of diluted earnings per share for 2023 because their effect would have been antidilutive. Apple Inc. | 2025 Form 10-K | 36\n\nNote 4 – Financial Instruments\n\nCash, Cash Equivalents and Marketable Securities\n\nThe following tables show the Company’s cash, cash equivalents and marketable securities by significant investment category as of September 27, 2025 and September 28, 2024 (in millions):\n\n2025\n\nAdjustedCostUnrealizedGainsUnrealizedLossesFairValueCash andCashEquivalentsCurrentMarketableSecuritiesNon-CurrentMarketableSecurities\n\nCash$28,267 $— $— $28,267 $28,267 $— $— \n\nLevel 1:\n\nMoney market funds5,272 — — 5,272 5,272 — — \n\nMutual funds\n\n679 177 (2)854 — 854 — \n\nSubtotal5,951 177 (2)6,126 5,272 854 — \n\nLevel 2 (1):\n\nU.S. Treasury securities16,074 56 (282)15,848 1,190 3,712 10,946 \n\nU.S. agency securities5,269 — (149)5,120 251 2,456 2,413"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Apple 近一年的整體營收成長率是多少？"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "lex-17",
+      "category": "lexical",
+      "query": "Microsoft 的營收成長率表現如何？",
+      "answerable": true,
+      "answer": "Microsoft 的營收在最近的財務期間持續兩位數成長，全年營收成長率約為 **18%** 左右【MSFT_10K_2026.html, chunk #124】。  \n\n- **六個月（截至 2025 年 12 月 31 日）**：營收較前一年同季增加 **94 億美元（$9.4 billion）**，成長 **16%**【MSFT_10Q_202512.html, chunk #75】。  \n- **三個月（截至 2025 年 12 月 31 日）**：營收較前一年同季增加 **47 億美元（$4.7 billion）**，成長 **16%**【MSFT_10Q_202512.html, chunk #70】。  \n- **三個月（截至 2026 年 3 月 31 日）**：營收較前一年同季增加 **128 億美元（$12.8 billion）**，成長 **18%**【MSFT_10Q_202603.html, chunk #62】。  \n- **全年（FY2026 vs FY2025）**：營收增加 **501 億美元（$50.1 billion）**，成長 **18%**【MSFT_10K_2026.html, chunk #124】。  \n- **TTM（截至 2026‑06‑12）**：營收年增率 **18.30%**（YoY）【MSFT_Fundamentals_20260612.txt, chunk #0】。  \n\n綜合以上資料，Microsoft 在最近的各季與全年報告中，營收成長率皆介於 **16% 至 18%** 之間，顯示公司持續受益於 Microsoft Cloud、Microsoft 365 商業雲端與 Azure 等核心業務的推動。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202512.html #75 (rerank=0.658)\n  - MSFT_10Q_202512.html #70 (rerank=0.657)\n  - MSFT_10K_2026.html #124 (rerank=0.636)\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.633)\n  - MSFT_10Q_202603.html #62 (rerank=0.610)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 70
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 124
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 62
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 63
+        }
+      ],
+      "contexts": [
+        "[MSFT 10-Q period 202512] [Six Months Ended December 31, 2025 vs December 31, 2024] [section: Productivity and Business Processes] Six Months Ended December 31, 2025 Compared with Six Months Ended December 31, 2024\n\nProductivity and Business Processes\n\nRevenue increased $9.4 billion or 16%. •Microsoft 365 Commercial products and cloud services revenue increased $6.9 billion or 17%. Microsoft 365 Commercial cloud revenue grew 17% with growth in revenue per user driven by Microsoft 365 E5 and Microsoft 365 Copilot, and continued Microsoft 365 Commercial seat growth. Microsoft 365 Commercial products revenue grew 15% driven by Windows Commercial on-premises components of Microsoft 365 suite sales, as well as an increase in Office 2024 transactional purchasing. •Microsoft 365 Consumer products and cloud services revenue increased $961 million or 27%. Microsoft 365 Consumer cloud revenue grew 27% driven by growth in revenue per user and continued growth in Microsoft 365 Consumer subscribers. •LinkedIn revenue increased $917 million or 10% driven by growth in Marketing Solutions. •Dynamics products and cloud services revenue increased $578 million or 15% driven by growth in Dynamics 365. Dynamics 365 revenue grew 19% with growth across all workloads. Operating income increased $7.6 billion or 23%. •Cost of revenue increased $968 million or 9% driven by growth in Microsoft 365 Commercial cloud. •Gross margin increased $8.4 billion or 18% driven by growth in Microsoft 365 Commercial cloud. Gross margin percentage increased driven by efficiency gains in Microsoft 365 Commercial cloud even with the impact of investments in AI infrastructure and growing AI product usage. •Operating expenses increased $809 million or 6% driven by research and development investments in compute capacity and AI talent, as well as higher advertising expenses.\n\nRevenue, gross margin, and operating income included a favorable foreign currency impact of 2%, 3%, and 3%, respectively.",
+        "[MSFT 10-Q period 202512] [Three Months Ended December 31, 2025 vs December 31, 2024] [section: Productivity and Business Processes] Three Months Ended December 31, 2025 Compared with Three Months Ended December 31, 2024\n\nProductivity and Business Processes\n\nRevenue increased $4.7 billion or 16%. •Microsoft 365 Commercial products and cloud services revenue increased $3.4 billion or 16%. Microsoft 365 Commercial cloud revenue grew 17% with growth in revenue per user driven by Microsoft 365 E5 and Microsoft 365 Copilot. Microsoft 365 Commercial seats grew 6% driven by small and medium businesses and frontline worker offerings. Microsoft 365 Commercial products revenue grew 13% driven by Windows Commercial on-premises components of Microsoft 365 suite sales, as well as an increase in Office 2024 transactional purchasing. •Microsoft 365 Consumer products and cloud services revenue increased $484 million or 27%. Microsoft 365 Consumer cloud revenue grew 29% driven by growth in revenue per user and Microsoft 365 Consumer subscriber growth of 6%. •LinkedIn revenue increased $495 million or 11% driven by growth in Marketing Solutions. •Dynamics products and cloud services revenue increased $291 million or 15% driven by growth in Dynamics 365. Dynamics 365 revenue grew 19% with growth across all workloads. Operating income increased $3.7 billion or 22%. •Cost of revenue increased $541 million or 10% driven by growth in Microsoft 365 Commercial cloud. •Gross margin increased $4.1 billion or 17% driven by growth in Microsoft 365 Commercial cloud. Gross margin percentage increased primarily driven by efficiency gains in Microsoft 365 Commercial cloud even with continued investments in AI infrastructure and growing AI product usage. •Operating expenses increased $424 million or 6% driven by research and development investments in compute capacity and AI talent, as well as higher advertising expenses.\n\nRevenue, gross margin, and operating income included a favorable foreign currency impact of 2%, 2%, and 3%, respectively.",
+        "[MSFT 10-K period 2026] [Fiscal Year 2026 vs 2025] Fiscal Year 2026 Compared with Fiscal Year 2025\n\nRevenue increased $50.1 billion or 18% driven by growth in Microsoft Cloud. Intelligent Cloud revenue increased driven by Azure. Productivity and Business Processes revenue increased driven by Microsoft 365 Commercial cloud. More Personal Computing revenue decreased driven by XBOX (formerly Gaming), offset in part by growth in Search advertising. Cost of revenue increased $18.5 billion or 21% driven by growth in Microsoft Cloud.",
+        "[MSFT] === MSFT Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Microsoft Corporation Sector : Technology Industry : Software - Infrastructure Employees: 228,000\n\n--- Valuation Metrics --- Market Cap : $2899.62B Enterprise Value : $2946.82B P/E Ratio Trailing: 23.262217 P/E Ratio Forward : 20.176886 Price/Sales (TTM) : 9.110466 Price/Book : 6.9982247 EV/EBITDA : 15.976\n\n--- Profitability --- Revenue (TTM) : $318.27B Gross Profit : $217.41B EBITDA : $184.46B Net Income : $125.22B Profit Margin : 39.34% Operating Margin: 46.33% Gross Margin : 68.31%\n\n--- Growth --- Revenue Growth (YoY): 18.30% Earnings Growth : 23.40% EPS Trailing : 16.78 EPS Forward : 19.3459",
+        "[MSFT 10-Q period 202603] [Three Months Ended March 31, 2026 vs March 31, 2025] Three Months Ended March 31, 2026 Compared with Three Months Ended March 31, 2025\n\nRevenue increased $12.8 billion or 18% driven by growth in Microsoft Cloud. Intelligent Cloud revenue increased driven by Azure.",
+        "[MSFT 10-Q period 202603] [Three Months Ended March 31, 2026 vs March 31, 2025] Productivity and Business Processes revenue increased driven by Microsoft 365 Commercial cloud. More Personal Computing revenue decreased with lower hardware sales across Devices and Gaming, offset in part by growth in Search advertising. Cost of revenue increased $4.9 billion or 22% driven by growth in Microsoft Cloud. Gross margin increased $7.9 billion or 16% with growth across each of our segments. •Gross margin percentage decreased driven by continued investments in AI infrastructure and growing AI product usage, offset in part by efficiency gains across the Microsoft Cloud. •Microsoft Cloud gross margin percentage decreased to 66% driven by continued investments in AI infrastructure and growing AI product usage, offset in part by efficiency gains in Azure and Microsoft 365 Commercial cloud. Operating expenses increased $1.5 billion or 9% primarily driven by continued investments in research and development compute capacity, AI talent, and data to support product development across the portfolio. Total company headcount declined year-over-year. Operating income increased $6.4 billion or 20% driven by growth in Productivity and Business Processes and Intelligent Cloud. Revenue, gross margin, and operating income included a favorable foreign currency impact of 3%, 3%, and 4%, respectively."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Microsoft 的營收成長率表現如何"
+      ],
+      "agentic_n_chunks": 6
+    }
+  ]
+}

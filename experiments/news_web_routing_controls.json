@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "as_of": "2026-08-19",
+    "collection": "us_stock_rag_edgar_mdna",
+    "checker_model": "openai/gpt-oss-120b",
+    "repeat": 1,
+    "control_ids": [
+      "lex-03",
+      "lex-07",
+      "sem-01",
+      "sem-06",
+      "mix-01",
+      "mix-11",
+      "col-10",
+      "mh-03"
+    ],
+    "note": "web 呼叫由計數樁攔截，未連網；本檔只量路由，不量答案品質"
+  },
+  "records": [
+    {
+      "round": 0,
+      "id": "sem-01",
+      "arm": "control",
+      "category": "semantic",
+      "query": "NVIDIA 的核心技術護城河是什麼？",
+      "n_web": 0,
+      "web_queries": [],
+      "sub_queries": [
+        "NVIDIA 的核心技術護城河是什麼？"
+      ],
+      "answer_len": 1194,
+      "answer_head": "NVIDIA 的核心護城河在於其完整的端到端加速運算平台，結合自家 GPU 硬體、廣泛的軟體堆疊（如 CUDA 與 AI Enterprise）以及龐大的開發者與合作夥伴生態系【NVDA_10K_2026.html, chunk #20】【NVDA_10K_2026.html, chunk #28】。\n\n- **硬體與系統共設計**：NVIDIA 以 Blackwell 架構推出的資料中心規模 G",
+      "error": ""
+    },
+    {
+      "round": 0,
+      "id": "sem-06",
+      "arm": "control",
+      "category": "semantic",
+      "query": "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？",
+      "n_web": 0,
+      "web_queries": [],
+      "sub_queries": [
+        "Amazon 在 AWS 方面面臨哪些反壟斷或監管風險？",
+        "Amazon 在 Prime 服務方面面臨哪些反壟斷或監管風險？",
+        "Amazon 在電商業務方面面臨哪些反壟斷或監管風險？"
+      ],
+      "answer_len": 1135,
+      "answer_head": "Amazon 正在面臨來自美國與其他國家主管機關的多項反壟斷與監管風險，這些風險同時涉及其電商平台（包括實體店面、履行網路與 Prime 服務）以及 AWS 雲端服務。  \n\n- **電商平台與 Prime**：公司被指控其店面營運、履行網路與 Prime 服務可能違反競爭相關或消費者保護規定，涉及價格設定、商品展示、使用賣家資料等可能的壟斷或不公平競爭行為【AMZN_10K_2025.html,",
+      "error": ""
+    },
+    {
+      "round": 0,
+      "id": "mix-01",
+      "arm": "control",
+      "category": "mixed",
+      "query": "Microsoft Azure 最新一季的營收成長率是多少？",
+      "n_web": 0,
+      "web_queries": [],
+      "sub_queries": [
+        "Microsoft Azure 最新一季的營收成長率是多少"
+      ],
+      "answer_len": 512,
+      "answer_head": "Microsoft Azure 在最新一季（截至 2026 年 3 月 31 日的第三季）營收成長率為 **40%**【MSFT_10Q_202603.html, chunk #49】。  \n\n- 2026 年第三季（即三個月結束於 2026‑03‑31）與 2025 年同季相比，Azure 及其他雲端服務營收增長 40%，此增幅同樣在九個月累計與單季比較中被報導【MSFT_10Q_202603.",
+      "error": ""
+    },
+    {
+      "round": 0,
+      "id": "mix-11",
+      "arm": "control",
+      "category": "mixed",
+      "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
+      "n_web": 0,
+      "web_queries": [],
+      "sub_queries": [
+        "NVIDIA 最新一季資料中心營收成長多少？",
+        "NVIDIA 最新一季資料中心的主要驅動產品是什麼？"
+      ],
+      "answer_len": 594,
+      "answer_head": "NVIDIA 在最新一季（截至 2026 年 4 月 26 日的第一季）資料中心（Data Center）營收 **成長 92%**，較去年同期的 391.12 億美元（$39,112 million） 增至 752.46 億美元（$75,246 million）【NVDA_10Q_202604.html, chunk #47】。  \n\n- 這一營收增幅主要受 **Blackwell 300 系列",
+      "error": ""
+    },
+    {
+      "round": 0,
+      "id": "lex-03",
+      "arm": "control",
+      "category": "lexical",
+      "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
+      "n_web": 0,
+      "web_queries": [],
+      "sub_queries": [
+        "NVIDIA fiscal year 2026 的 Diluted EPS 是多少"
+      ],
+      "answer_len": 358,
+      "answer_head": "NVIDIA 2026 財政年度的稀釋每股盈餘 (Diluted EPS) 為 **$4.90** 每股【NVDA_10K_2026.html, chunk #164】。  \n\n- 依據合併綜合損益表，2026 年度稀釋每股盈餘為 $4.90，基本每股盈餘則為 $4.93【NVDA_10K_2026.html, chunk #164】。  \n- 同樣的稀釋每股盈餘數字亦在股權獎勵說明中列示為 $4",
+      "error": ""
+    },
+    {
+      "round": 0,
+      "id": "lex-07",
+      "arm": "control",
+      "category": "lexical",
+      "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+      "n_web": 0,
+      "web_queries": [],
+      "sub_queries": [
+        "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+      ],
+      "answer_len": 328,
+      "answer_head": "Apple 在 2025 財政年度的每股攤薄盈餘（Diluted EPS）為 **7.46 美元**【AAPL_10K_2025.html, chunk #0】。  \n\n此數字來自公司 2025 年 10‑K 報表的「Diluted (in dollars per share)」欄位，對應 FY2025（截至 2025 年 9 月 27 日）的財務結果【AAPL_10K_2025.html, ch",
+      "error": ""
+    },
+    {
+      "round": 0,
+      "id": "col-10",
+      "arm": "control",
+      "category": "colloquial",
+      "query": "微軟每年能自由運用的現金大概有多少？",
+      "n_web": 0,
+      "web_queries": [],
+      "sub_queries": [
+        "微軟目前的自由現金流大概有多少"
+      ],
+      "answer_len": 241,
+      "answer_head": "微軟每年可自由運用的現金約為 **370.1 億美元（$37.01 billion）**【MSFT_Fundamentals_20260612.txt, chunk #1】。  \n\n此數字來自公司財務概況中列示的「Free Cash Flow」項目，代表在扣除資本支出後，微軟在一年內可支配的淨現金流量。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_Fu",
+      "error": ""
+    },
+    {
+      "round": 0,
+      "id": "mh-03",
+      "arm": "control_loose",
+      "category": "multi_hop",
+      "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+      "n_web": 0,
+      "web_queries": [],
+      "sub_queries": [
+        "NVIDIA 的最近一年（YoY）營收增長率是多少",
+        "Meta 的最近一年（YoY）營收增長率是多少",
+        "Alphabet 的最近一年（YoY）營收增長率是多少",
+        "NVIDIA 的最近十二個月（TTM）淨利是多少",
+        "Meta 的最近十二個月（TTM）淨利是多少",
+        "Alphabet 的最近十二個月（TTM）淨利是多少"
+      ],
+      "answer_len": 672,
+      "answer_head": "在 NVIDIA、Meta、Alphabet 三家公司中，最近一年營收年增率最高的是 **NVIDIA**，其 YoY 營收增長為 **85.20%**，且該公司最近十二個月（TTM）的淨利為 **1,596.1 億美元（$159.61 billion）**【NVDA_Fundamentals_20260612.txt, chunk #0】。\n\n- NVIDIA 的營收年增率 85.20% 明顯高",
+      "error": ""
+    }
+  ]
+}

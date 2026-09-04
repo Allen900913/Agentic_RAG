@@ -1,0 +1,1977 @@
+[
+ {
+  "id": "news-01",
+  "kind": "flow",
+  "query": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-02",
+  "kind": "flow",
+  "query": "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-03",
+  "kind": "flow",
+  "query": "最近分析師對 Apple 股票有哪些利多的看法？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "最近分析師對 Apple 股票有哪些利多的看法"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "最近分析師對 Apple 股票有哪些利多的看法？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 最近分析師對其股票的利多看法有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 最近分析師對其股票的利多看法有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 最近分析師對其股票的利多看法有哪些"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-04",
+  "kind": "flow",
+  "query": "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近跟 IREN 之間有什麼合作的新聞"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近與 IREN 之間的合作新聞是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近跟 IREN 之間有什麼合作的新聞"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近跟 IREN 之間有什麼合作的新聞"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-05",
+  "kind": "flow",
+  "query": "關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近有什麼關於賣 AI 晶片到中國的消息"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近有什麼關於賣 AI 晶片到中國的消息"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近有什麼關於向中國銷售 AI 晶片的消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近有什麼關於賣 AI 晶片到中國的消息"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近有什麼關於向中國銷售 AI 晶片的消息"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-06",
+  "kind": "flow",
+  "query": "NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 在財報發布前的新聞中，面臨哪些競爭與市場焦點？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 在財報發布前的新聞中，提到它面臨哪些競爭與市場焦點"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 在最新財報公布前的新聞中，關注它面臨哪些競爭與市場焦點？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最近的新聞中提到的主要競爭對手有哪些",
+     "NVIDIA 最近的新聞中關注的市場焦點或關鍵議題是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 在財報公布前的新聞中，提到的主要競爭對手有哪些？",
+     "NVIDIA 在財報公布前的新聞中，關注的主要市場焦點是什麼？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-07",
+  "kind": "flow",
+  "query": "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "微軟最近在 AI 策略上的新消息及分析師的看法是什麼？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "微軟最近在 AI 策略上的新消息及分析師的看法"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "微軟最近在 AI 策略上的新消息及分析師的看法是什麼"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-08",
+  "kind": "flow",
+  "query": "有沒有 Microsoft 參與 AI 資安合作的新聞？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 近期有關 AI 資安合作的新聞有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 參與 AI 資安合作的新聞有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 參與 AI 資安合作的新聞有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 參與 AI 資安合作的新聞有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 參與 AI 資安合作的新聞有哪些"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-09",
+  "kind": "flow",
+  "query": "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet 最近有什麼大規模籌資或資本支出的消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-10",
+  "kind": "flow",
+  "query": "最近有哪些關於 Meta 的利多分析與 AI 投資消息？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "最近有哪些關於 Meta 的利多分析？",
+     "最近有哪些關於 Meta 的 AI 投資消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 最近有哪些利多分析與 AI 投資相關的消息"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Meta 最近的利多分析有哪些",
+     "Meta 最近的 AI 投資相關消息有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Meta 最近有哪些利多分析",
+     "Meta 最近有哪些 AI 投資消息"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Meta 最近的利多分析有哪些",
+     "Meta 最近的 AI 投資消息有哪些"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-11",
+  "kind": "flow",
+  "query": "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "亞馬遜最近在歐洲有什麼大型投資的新聞？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "亞馬遜最近在歐洲有什麼大型投資的新聞"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "亞馬遜最近在歐洲有什麼大型投資的新聞"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "亞馬遜最近在歐洲有什麼大型投資的新聞？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "亞馬遜最近在歐洲有什麼大型投資的新聞？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-12",
+  "kind": "flow",
+  "query": "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-13",
+  "kind": "flow",
+  "query": "最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 7,
+    "tasks": [
+     "最近 Apple 的股價有什麼值得注意的消息？",
+     "最近 Microsoft 的股價有什麼值得注意的消息？",
+     "最近 Amazon 的股價有什麼值得注意的消息？",
+     "最近 Alphabet (Google) 的股價有什麼值得注意的消息？",
+     "最近 Meta 的股價有什麼值得注意的消息？",
+     "最近 Nvidia 的股價有什麼值得注意的消息？",
+     "最近 Tesla 的股價有什麼值得注意的消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 7,
+    "tasks": [
+     "Apple 最近的股價有什麼值得注意的消息？",
+     "Microsoft 最近的股價有什麼值得注意的消息？",
+     "Amazon 最近的股價有什麼值得注意的消息？",
+     "Alphabet (Google) 最近的股價有什麼值得注意的消息？",
+     "Meta 最近的股價有什麼值得注意的消息？",
+     "Nvidia 最近的股價有什麼值得注意的消息？",
+     "Tesla 最近的股價有什麼值得注意的消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 7,
+    "tasks": [
+     "Apple 最近的股價有什麼值得注意的消息？",
+     "Microsoft 最近的股價有什麼值得注意的消息？",
+     "Amazon 最近的股價有什麼值得注意的消息？",
+     "Alphabet 最近的股價有什麼值得注意的消息？",
+     "Meta 最近的股價有什麼值得注意的消息？",
+     "Nvidia 最近的股價有什麼值得注意的消息？",
+     "Tesla 最近的股價有什麼值得注意的消息？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 7,
+    "tasks": [
+     "Apple 最近的股價有什麼值得注意的消息",
+     "Microsoft 最近的股價有什麼值得注意的消息",
+     "Amazon 最近的股價有什麼值得注意的消息",
+     "Alphabet 最近的股價有什麼值得注意的消息",
+     "Meta 最近的股價有什麼值得注意的消息",
+     "Nvidia 最近的股價有什麼值得注意的消息",
+     "Tesla 最近的股價有什麼值得注意的消息"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 7,
+    "tasks": [
+     "Apple 最近的股價有什麼值得注意的消息？",
+     "Microsoft 最近的股價有什麼值得注意的消息？",
+     "Amazon 最近的股價有什麼值得注意的消息？",
+     "Alphabet 最近的股價有什麼值得注意的消息？",
+     "Meta 最近的股價有什麼值得注意的消息？",
+     "Nvidia 最近的股價有什麼值得注意的消息？",
+     "Tesla 最近的股價有什麼值得注意的消息？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-14",
+  "kind": "flow",
+  "query": "新聞如何評價 Apple 服務業務的成長與獲利能力？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "新聞如何評價 Apple 服務業務的成長與獲利能力？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "新聞如何評價 Apple 服務業務的成長與獲利能力？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "新聞如何評價 Apple 服務業務的成長與獲利能力？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "近期新聞如何評價 Apple 服務業務的成長與獲利能力？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "新聞如何評價 Apple 服務業務的成長與獲利能力？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "news-15",
+  "kind": "flow",
+  "query": "新聞報導 Apple 為什麼被視為值得長期持有的股票？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 為什麼被視為值得長期持有的股票"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 為什麼被視為值得長期持有的股票？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 為什麼被視為值得長期持有的股票？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 為什麼被視為值得長期持有的股票？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 最近的新聞中，哪些因素被提及使其被視為值得長期持有的股票？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "col-14",
+  "kind": "flow",
+  "query": "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "lex-03",
+  "kind": "record",
+  "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的 FY2026 Diluted EPS 是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的 FY2026 Diluted EPS 是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVDA 的 FY2026 Diluted EPS 是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "lex-07",
+  "kind": "record",
+  "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 的 FY2025 Diluted EPS 是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple FY2025 Diluted EPS 是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "sem-01",
+  "kind": "record",
+  "query": "NVIDIA 的核心技術護城河是什麼？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的核心技術護城河是什麼？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的核心技術護城河是什麼？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的核心技術護城河是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的核心技術護城河是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的核心技術護城河是什麼"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "sem-06",
+  "kind": "record",
+  "query": "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 3,
+    "tasks": [
+     "Amazon 在 AWS 業務上面臨哪些反壟斷或監管風險？",
+     "Amazon 在 Prime 服務上面臨哪些反壟斷或監管風險？",
+     "Amazon 在電商業務上面臨哪些反壟斷或監管風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 3,
+    "tasks": [
+     "Amazon 在 AWS 方面面臨哪些反壟斷或監管風險？",
+     "Amazon 在 Prime 服務方面面臨哪些反壟斷或監管風險？",
+     "Amazon 在電商業務方面面臨哪些反壟斷或監管風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 3,
+    "tasks": [
+     "Amazon 在 AWS 方面面臨的反壟斷或監管風險是什麼",
+     "Amazon 在 Prime 服務方面面臨的反壟斷或監管風險是什麼",
+     "Amazon 在電商業務方面面臨的反壟斷或監管風險是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 3,
+    "tasks": [
+     "Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼",
+     "Amazon 在 Prime 服務上面臨的反壟斷或監管風險是什麼",
+     "Amazon 在電商業務上面臨的反壟斷或監管風險是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 3,
+    "tasks": [
+     "Amazon 在 AWS 方面面臨哪些反壟斷或監管風險？",
+     "Amazon 在 Prime 服務方面面臨哪些反壟斷或監管風險？",
+     "Amazon 在電商業務方面面臨哪些反壟斷或監管風險？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mix-01",
+  "kind": "record",
+  "query": "Microsoft Azure 最新一季的營收成長率是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft Azure 最新一季的營收成長率是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft Azure 最新一季的營收成長率是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft Azure 最新一季的營收成長率是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft Azure 最新一季的營收成長率是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft Azure 最新一季的營收成長率是多少？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mix-11",
+  "kind": "record",
+  "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新一季（FY2027 Q1）資料中心營收的 YoY 成長率是多少",
+     "NVIDIA 最新一季（FY2027 Q1）資料中心營收的主要驅動產品是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新一季資料中心營收成長多少",
+     "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新一季資料中心營收成長多少",
+     "NVIDIA 最新一季資料中心的主要驅動產品是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新一季（FY2027 Q1）資料中心營收成長多少",
+     "NVIDIA 最新一季（FY2027 Q1）資料中心營收的主要驅動產品是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最近一季（即 FY2027 Q1）資料中心營收的 YoY 成長率是多少？",
+     "NVIDIA 最近一季資料中心營收的主要驅動產品是什麼？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mh-03",
+  "kind": "record",
+  "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 6,
+    "tasks": [
+     "NVIDIA 最近一年的營收年增率（YoY revenue growth）是多少",
+     "Meta 最近一年的營收年增率（YoY revenue growth）是多少",
+     "Alphabet 最近一年的營收年增率（YoY revenue growth）是多少",
+     "NVIDIA 最近十二個月（TTM）的淨利是多少",
+     "Meta 最近十二個月（TTM）的淨利是多少",
+     "Alphabet 最近十二個月（TTM）的淨利是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 6,
+    "tasks": [
+     "NVIDIA 最近一年營收年增率（YoY revenue growth）是多少",
+     "Meta 最近一年營收年增率（YoY revenue growth）是多少",
+     "Alphabet 最近一年營收年增率（YoY revenue growth）是多少",
+     "NVIDIA 最近十二個月的淨利（net income）是多少",
+     "Meta 最近十二個月的淨利（net income）是多少",
+     "Alphabet 最近十二個月的淨利（net income）是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 6,
+    "tasks": [
+     "NVIDIA 最近一年營收年增率（YoY revenue growth）是多少",
+     "Meta 最近一年營收年增率（YoY revenue growth）是多少",
+     "Alphabet 最近一年營收年增率（YoY revenue growth）是多少",
+     "NVIDIA 最近十二個月（TTM）的淨利（net income）是多少",
+     "Meta 最近十二個月（TTM）的淨利（net income）是多少",
+     "Alphabet 最近十二個月（TTM）的淨利（net income）是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 6,
+    "tasks": [
+     "NVIDIA 最近一年營收年增率（YoY revenue growth）是多少",
+     "Meta 最近一年營收年增率（YoY revenue growth）是多少",
+     "Alphabet 最近一年營收年增率（YoY revenue growth）是多少",
+     "NVIDIA 最近十二個月（TTM）的淨利（net income）是多少",
+     "Meta 最近十二個月（TTM）的淨利（net income）是多少",
+     "Alphabet 最近十二個月（TTM）的淨利（net income）是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 6,
+    "tasks": [
+     "NVIDIA 的過去一年營收年增率（YoY revenue growth）是多少",
+     "Meta 的過去一年營收年增率（YoY revenue growth）是多少",
+     "Alphabet 的過去一年營收年增率（YoY revenue growth）是多少",
+     "NVIDIA 最近十二個月（TTM）的淨利（net income）是多少",
+     "Meta 最近十二個月（TTM）的淨利（net income）是多少",
+     "Alphabet 最近十二個月（TTM）的淨利（net income）是多少"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-01",
+  "kind": "record",
+  "query": "Apple 的主要競爭對手有哪些，競爭壓力來自哪些面向？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 的主要競爭對手有哪些",
+     "Apple 面臨的競爭壓力來自哪些面向"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 的主要競爭對手有哪些",
+     "Apple 面臨的競爭壓力來自哪些面向"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 的主要競爭對手有哪些",
+     "Apple 面臨的競爭壓力來自哪些面向"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 的主要競爭對手有哪些",
+     "Apple 的競爭壓力來自哪些面向"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 的主要競爭對手有哪些",
+     "Apple 面臨的競爭壓力來自哪些面向"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-02",
+  "kind": "record",
+  "query": "Meta 在隱私與資料保護方面面臨哪些監管風險？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 在隱私與資料保護方面面臨哪些監管風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 在隱私與資料保護方面面臨哪些監管風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 在隱私與資料保護方面面臨哪些監管風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 在隱私與資料保護方面面臨哪些監管風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 在隱私與資料保護方面面臨哪些監管風險？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-03",
+  "kind": "record",
+  "query": "Tesla 的商業模式為什麼與傳統車廠不同？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Tesla 的商業模式與傳統車廠有何不同？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Tesla 的商業模式與傳統車廠有何不同？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Tesla 的商業模式為什麼與傳統車廠不同？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Tesla 的商業模式為什麼與傳統車廠不同？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Tesla 的商業模式為什麼與傳統車廠不同？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-04",
+  "kind": "record",
+  "query": "Microsoft 靠什麼維持在雲端市場的競爭優勢？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 在雲端市場維持競爭優勢的關鍵因素是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 在雲端市場維持競爭優勢的因素是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 在雲端市場維持競爭優勢的關鍵因素是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 在雲端市場維持競爭優勢的因素是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 在雲端市場維持競爭優勢的關鍵因素是什麼"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-05",
+  "kind": "record",
+  "query": "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-06",
+  "kind": "record",
+  "query": "NVIDIA 為何在供應鏈上高度依賴少數代工廠？這帶來什麼風險？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 在供應鏈上高度依賴少數代工廠的原因及其帶來的風險是什麼？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 為何在供應鏈上高度依賴少數代工廠？",
+     "NVIDIA 這樣的供應鏈依賴帶來什麼風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 為何在供應鏈上高度依賴少數代工廠？",
+     "NVIDIA 依賴少數代工廠會帶來哪些風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 在供應鏈上高度依賴少數代工廠的原因及其帶來的風險是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 為何在供應鏈上高度依賴少數代工廠？",
+     "NVIDIA 因高度依賴少數代工廠而面臨哪些風險？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-07",
+  "kind": "record",
+  "query": "Amazon 的營運利潤率為什麼會受履約成本影響？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 的營運利潤率為什麼會受履約成本影響？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 的營運利潤率為什麼會受履約成本影響？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 的營運利潤率為什麼會受履約成本影響？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 的營運利潤率為什麼會受履約成本影響？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 的營運利潤率為什麼會受履約成本影響？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-08",
+  "kind": "record",
+  "query": "Apple 在中國市場面臨哪些地緣政治與法規風險？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在中國市場面臨哪些地緣政治與法規風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在中國市場面臨哪些地緣政治與法規風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在中國市場面臨哪些地緣政治與法規風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在中國市場面臨哪些地緣政治與法規風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在中國市場面臨哪些地緣政治與法規風險"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ }
+]

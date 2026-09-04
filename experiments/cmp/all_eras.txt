@@ -1,0 +1,87 @@
+claims=5  rounds=67
+  [0] gj_AB_20260809.json
+  [1] gj_disclosure_r1.json
+  [2] gj_ground2_claims4_r1.json
+  [3] gj_ground2_claims4_r2.json
+  [4] gj_ground2_claims4_r3.json
+  [5] gj_ground2_full100_20260812.json
+  [6] gj_ground_claims4_r1.json
+  [7] gj_ground_claims4_r2.json
+  [8] gj_ground_claims4_r3.json
+  [9] gj_head_claims4.json
+  [10] gj_head_full100_20260810.json
+  [11] gj_hist_after_multiyear.json
+  [12] gj_hist_before_mdna.json
+  [13] gj_lex17_smoke.json
+  [14] gj_mdna_65q_after.json
+  [15] gj_mdna_65q_after2.json
+  [16] gj_mdna_65q_r1.json
+  [17] gj_mdna_claims4_r1.json
+  [18] gj_mdna_claims4_r2.json
+  [19] gj_mdna_claims4_r3.json
+  [20] gj_mdna_claims6_r1.json
+  [21] gj_mdna_claims6_r2.json
+  [22] gj_mdna_full100.json
+  [23] gj_mi15_backstop_20260806.json
+  [24] gj_mi15_planA_20260807.json
+  [25] gj_multiyear_prod_r1.json
+  [26] gj_multiyear_prod_r2.json
+  [27] gj_notice_e2e.json
+  [28] gj_period_full100_20260813.json
+  [29] gj_plannerfix2_probe.json
+  [30] gj_plannerfix_probe.json
+  [31] gj_pool10_clean.json
+  [32] gj_ratio_llm_r1.json
+  [33] gj_ratio_llm_r2.json
+  [34] gj_single_ft_full100_20260807.json
+  [35] gj_single_fulltrans.json
+  [36] gj_single_zh_full100_20260803.json
+  [37] gj_smoke_ratio_llm.json
+  [38] gj_trace_probe.json
+  [39] gj_v2_5fix.json
+  [40] gj_v2_baseline_20260802.json
+  [41] gj_v2_dedup_full100_20260808.json
+  [42] gj_v2_exp4_8q.json
+  [43] gj_v2_fix6.json
+  [44] gj_v2_full100_20260803.json
+  [45] gj_v2_full100_20260806.json
+  [46] gj_v2_full100_20260807.json
+  [47] gj_v2_gap1_20260802.json
+  [48] gj_v2_gap2_mi_20260802.json
+  [49] gj_v2_mh15_subset.json
+  [50] gj_v2_mh_20260803.json
+  [51] gj_v2_multihop.json
+  [52] gj_v2_multihop_7co_ref.json
+  [53] gj_v2_p2_mi_20260803.json
+  [54] gj_v2_period_8q.json
+  [55] gj_v2_period_full100_20260808.json
+  [56] gj_v2_period_replay1.json
+  [57] gj_v2_period_replay2.json
+  [58] gj_v2_pipeline.json
+  [59] gj_v2_q2check_20260803.json
+  [60] gj_v2_rule10.json
+  [61] gj_v2_zh_full100_20260803.json
+  [62] gj_v2_zh_full100_20260804.json
+  [63] gj_variance_r2.json
+  [64] gj_widen_pool12_full100.json
+  [65] gj_widen_smoke.json
+  [66] gj_zh_smoke.json
+
+逐輪判定：P=PASS  F=FAIL(值都在還挑錯)  N=N/A  -=這輪沒有這題
+
+題       比較欄位                    逐輪                                                                   答案宣稱        真值       缺值      
+-------------------------------------------------------------------------------------------------------------------------------
+mh-01   Revenue (TTM)           PP---P----P---PPP-----P--PP-P--PPPNNP---NP--NPP--NNNN--PPPP-NPP-P--  AMZN/MSFT   AMZN     AMZN,GOOGL,META,MSFTno_claim unfounded
+mh-02   Gross Margin            PP---P----P---PPP-----P--PP-P--PPPPPP---NP--NPP--NPNN--PPPP-NPP-P--  META/NVDA   META     META,MSFT,NVDAno_claim unfounded
+mh-03   Revenue Growth (YoY)    PP---P----P---PPP-----P--PP-P--PPPPPP---PP--PPP--PPPN--PPPN-NPP-P--  NVDA        NVDA     NVDA    no_claim unfounded
+mh-04   Operating Margin        PP---P----P---PPP-----P--PP-P--PPPPPP--NNP--PPP--PPP---PPPN-PPP-P--  MSFT        MSFT     -       no_claim
+mh-05   Net Income              PP---P----P---PPP-----P--PP-P--PPPPPP--NNP--NPP--NNN---PPPN-NPP-P--  GOOGL       GOOGL    AMZN,GOOGL,MSFTno_claim unfounded
+
+⚠ wrong_winner（值都在眼前還挑錯）：0/335
+⚠ unfounded（沒看到某家的值卻仍宣告最高者）：6/335
+  N/A（這一輪沒量到東西，**不是通過**）：29/335
+  PASS：141/335
+
+⚠ 判別力上限：這批語料**沒有任何一題是接近值**，也沒有缺值或跨單位的情況。
+  全 PASS 只證明「值都在、單位一致、差距很大」時不會錯，不能外推。
+⚠ 宣稱抽取是感知不是規則 → 上表的『答案宣稱』欄請人工掃一遍再下結論。

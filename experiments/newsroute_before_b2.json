@@ -1,0 +1,263 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_prod.json"
+  },
+  "records": [
+    {
+      "id": "news-06",
+      "query": "NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？",
+      "why": "flow",
+      "answer": "在財報公布前，新聞主要關注 NVIDIA 正面臨來自 AMD、Intel 以及大型雲端業者自行開發的加速器等激烈競爭，同時聚焦於資料中心與 AI 基礎建設、能源與資本供應、客戶集中度以及全球監管審查等市場焦點。  \n\n**競爭壓力**  \n- AMD 正被視為 AI 資料中心晶片領域的「嚴重競爭者」​[web: https://finance.yahoo.com/markets/stocks/articles/could-nvidia-cheapest-way-own-130023861.html]。  \n- Intel 亦在推出自家晶片，與 NVIDIA 形成直接競爭​[web: https://www.reuters.com/business/retail-consumer/nvidia-faces-growth-test-rubin-debut-meets-ai-financing-scrutiny-2026-08-25]。  \n- 大型雲端服務提供商（hyperscalers）正自行開發客製化加速器，進一步加劇競爭​[web: https://finance.yahoo.com/markets/stocks/articles/could-nvidia-cheapest-way-own-130023861.html]。  \n- 10‑K 中列出「競爭技術與競爭者產品發布、公告或其他行動」可能對 NVIDIA 產生負面影響​[Reference 2: NVDA_10K_2026.html, chunk #54]。  \n\n**市場焦點與風險**  \n- **資料中心與 AI 基礎建設**：2026 財年營收成長主要來自資料中心運算與加速運算平台，Blackwell 架構佔據資料中心營收大部分​[Reference 1: NVDA_10K_2026.html, chunk #122]。  \n- **能源與資本供應**：資料中心、能源與資本的可獲得性被視為支撐 AI 基礎建設的關鍵，任何短缺都可能拖延客戶部署或降低 AI 採用規模​[Reference 1: NVDA_10K_2026.html, chunk #122]；同時 10‑K 強調「可用的資料中心容量或能源」是影響營收時機與規模的重要因素​[Reference 2: NVDA_10K_2026.html, chunk #54]。  \n- **供應鏈與產品轉換風險**：新產品過渡與複雜系統配置可能導致生產延遲、庫存調整、產品良率下降與材料成本上升​[Reference 1: NVDA_10K_2026.html, chunk #122]。  \n- **客戶集中度**：最新報導指出，僅三家客戶就佔超過 50% 銷售，顯示對少數大型客戶的依賴度高​[web: https://finance.yahoo.com/markets/stocks/articles/nvidias-next-earnings-report-aug-165358714.html]。  \n- **監管審查**：歐盟、美國、英國、韓國與中國等多國競爭主管機關已向 NVIDIA 索取資訊，顯示監管壓力持續升溫​[Reference 3: NVDA_10K_2026.html, chunk #24]。  \n\n**主要市場與產品領域**  \n- NVIDIA 的 Compute & Networking（資料中心加速運算、AI 解決方案與網路）與 Graphics（遊戲與企業工作站 GPU）兩大分部，涵蓋資料中心、遊戲、專業視覺化與汽車四大市場​[Reference 4: NVDA_10K_2026.html, chunk #24]。  \n- 2026 財年推出的 Rubin 平台與 Blackwell Ultra 平台是公司在資料中心與 AI 產品線的最新佈局​[Reference 1: NVDA_10K_2026.html, chunk #122]。  \n\n綜合以上，新聞在財報前聚焦於 NVIDIA 必須在激烈的晶片競爭、供應鏈與資本限制、客戶集中風險以及全球監管審查之間，持續維持其在資料中心與 AI 基礎建設市場的領先地位。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #122 (rerank=0.711)\n  - NVDA_10K_2026.html #54 (rerank=0.707)\n  - NVDA_10K_2026.html #81 (rerank=0.707)\n  - NVDA_10K_2026.html #24 (rerank=0.683)\n  - NVDA_10K_2026.html #164 (rerank=0.651)\n  - NVDA_10Q_202507.html #36 (rerank=0.627)\n  - NVDA_10K_2026.html #21 (rerank=0.610)",
+      "n_web_calls": 2,
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "NVIDIA 在財報前的新聞中，面臨哪些競爭與市場焦點？",
+        "改用網路搜尋查找2026年8月的NVIDIA財報前新聞，聚焦競爭與市場焦點"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 122
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 54
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 81
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10Q_202507.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 21
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 34
+        }
+      ]
+    },
+    {
+      "id": "news-07",
+      "query": "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？",
+      "why": "flow",
+      "answer": "微軟最近在 AI 策略上延長了與 OpenAI 的合作，持續投入 AI 基礎設施與產品整合，分析師普遍認為 Azure 與 Copilot 是股價上漲的關鍵，但對 AI 營收變現的時程仍保持謹慎態度。[MSFT_10K_2026.html, chunk #112]  \n\n**最新策略動向**  \n- 微軟於 2025 年 10 月與 2026 年 4 月再次延長與 OpenAI 的長期合作協議，並保留 OpenAI 知識產權（包括模型與基礎設施）以整合至自家產品，Microsoft 亦是 OpenAI 的主要投資者，將持續收到營收分成。[MSFT_10K_2026.html, chunk #112]  \n- 公司在 10‑Q（2026 Q1）中指出，AI 產品與服務的成本結構仍具不確定性，尤其是模型訓練與推論成本、元件價格與能源費用，若成本上升或 AI 服務價格因競爭而下降，將可能侵蝕毛利與營運成果。[MSFT_10K_2026.html, chunk #4]  \n- 同一文件亦提醒，若 AI 工作負載的採用速度低於預期，或客戶將工作轉移至競爭平台、內部部署或其他替代方案，微軟可能無法實現預期的投資回報。[MSFT_10K_2026.html, chunk #4]  \n- 風險披露中提到，AI 演算法、訓練資料與生成內容可能出現偏差、錯誤或不當，若發生此類問題可能導致聲譽、法律或競爭上的損害。[MSFT_10K_2026.html, chunk #9]  \n\n**分析師觀點**  \n- Zacks 分析師在其每日博客中將 Microsoft 列入焦點，雖未給予具體評等，但指出股價當日微跌 0.48%。[web: https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-okta-144500723.html]  \n- Jefferies 分析師 Brent Thill 在 1 月 5 日重申「Buy」評等，目標價 $675，認為投資者應在 AI 營收變現更明朗前保持選股謹慎。[web: https://finance.yahoo.com/news/microsoft-msft-ai-strategy-reinforces-220418792.html]  \n- Morgan Stanley 分析師 Adam Wood 於 7 月 21 日接手 Microsoft，給予「Overweight」評等與 $600 目標價，強調 Azure 與 Microsoft 365 Copilot 為「股價上漲的關鍵」[web: https://www.marketwatch.com/story/microsoft-has-3-secret-weapons-that-could-drive-its-stock-50-higher-analyst-says-f1afb554]。  \n- 另有分析師報告指出，市場對 Microsoft 的 AI 與雲端敘事持「牛市」與「謹慎」混合的看法，認為公司財報強勁且 AI 與雲端動能持續，但對未來 AI 營收的定價與成長仍有分歧。[web: https://finance.yahoo.com/news/analyst-views-shifting-microsofts-ai-071305123.html]  \n\n**總結**  \n微軟正透過延長與 OpenAI 的合作、加大 AI 基礎設施投資以及將 AI 深度嵌入 Azure 與 Copilot 產品，來鞏固其 AI 版圖；分析師普遍看好 Azure 與 Copilot 作為成長引擎，給予正面評等與較高目標價，但同時提醒 AI 營收變現與成本壓力仍是未來不確定因素。\n\n---\n⚠ 資料時效：MSFT 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10K_2026.html #112 (rerank=0.724)\n  - MSFT_10Q_202603.html #50 (rerank=0.723)\n  - MSFT_10Q_202512.html #52 (rerank=0.716)\n  - MSFT_10K_2026.html #60 (rerank=0.705)\n  - MSFT_10K_2026.html #32 (rerank=0.697)\n  - MSFT_10K_2026.html #33 (rerank=0.694)\n  - MSFT_10K_2026.html #110 (rerank=0.678)\n  - MSFT_10K_2026.html #35 (rerank=0.672)\n  - MSFT_10K_2026.html #75 (rerank=0.652)\n  - MSFT_10Q_202603.html #143 (rerank=0.632)\n  - MSFT_10K_2025.html #31 (rerank=0.620)\n  - MSFT_10Q_202603.html #63 (rerank=0.611)\n  - MSFT_10Q_202603.html #142 (rerank=0.605)\n  - MSFT_10K_2025.html #116 (rerank=0.588)\n  - MSFT_10Q_202603.html #66 (rerank=0.587)\n  - MSFT_10Q_202603.html #74 (rerank=0.565)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "微軟最近在 AI 策略上的新消息及分析師的看法",
+        "查詢分析師對微軟 AI 策略的看法",
+        "查詢分析師對微軟 AI 策略的看法於最新的 sell‑side research 報告",
+        "從 Bloomberg 取得分析師對微軟 AI 策略的最新評價",
+        "查詢分析師對微軟 AI 策略的看法於最新的 earnings call transcript",
+        "使用網路搜尋查詢2026年最新分析師對微軟 AI 策略的評價與看法",
+        "在 Yahoo Finance 上搜尋 2026 年最新分析師對微軟 AI 策略的評價與看法"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 50
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 52
+        },
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 118
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 60
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 32
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 33
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 110
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 35
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 127
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 82
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 143
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 31
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 63
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 142
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 68
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 116
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 66
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 74
+        }
+      ]
+    },
+    {
+      "id": "news-08",
+      "query": "有沒有 Microsoft 參與 AI 資安合作的新聞？",
+      "why": "flow",
+      "answer": "是的，近期有多則新聞報導 Microsoft 正與其他組織合作，將 AI 應用於資安領域。  \n\n- 2026 年 7 月 27 日，CNBC 報導 Microsoft 推出名為 **MAI‑Cyber‑1‑Flash** 的 AI 模型，用於偵測程式碼中的資安漏洞，並與 OpenAI 的 GPT‑5.4 結合，聲稱在 CyberGym 基準測試中以 50% 成本提供「世界領先」的效能【web: https://www.cnbc.com/2026/07/27/microsoft-touts-cost-saving-ai-model-for-cybersecurity.html】。  \n- 2026 年 4 月 16 日，Reuters 報導 Microsoft 與 Stellantis 簽署五年 AI 合作協議，雙方將共同打造全球 **AI‑驅動的網路防禦中心**，以防止車輛、客戶資料與營運的資安威脅【web: https://www.reuters.com/business/autos-transportation/stellantis-microsoft-sign-five-year-partnership-ai-push-2026-04-16】。  \n- 2026 年 4 月 23 日，CNBC 報導 Microsoft 在澳洲投入 180 億美元，合作內容包括 **資安**、工作技能提升與 AI 開發，並將與澳洲政府的訊號情報機構及內政部門合作保護關鍵基礎設施【web: https://www.cnbc.com/2026/04/23/microsoft-expands-ai-footprint-in-australia-with-18-billion-investment.html】。  \n\n此外，Microsoft 自 2019 年即與 **OpenAI** 建立長期戰略夥伴關係，並於 2025 年 10 月與 2026 年 4 月延長合作，持續在自家產品中整合 OpenAI 的模型與基礎設施，並透過 **AI‑驅動的安全、合規、身分與隱私解決方案** 為客戶提供資安防護【MSFT_10K_2026.html, chunk #112】、【MSFT_10K_2026.html, chunk #33】。  \n\n因此，從公司年報的合作說明到多則即時新聞，都顯示 Microsoft 正積極參與 AI 與資安的合作計畫。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10K_2026.html #112 (rerank=0.704)\n  - MSFT_10Q_202603.html #50 (rerank=0.698)\n  - MSFT_10K_2025.html #32 (rerank=0.663)\n  - MSFT_10K_2025.html #107 (rerank=0.656)\n  - MSFT_10K_2026.html #33 (rerank=0.654)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "Microsoft 參與 AI 資安合作的新聞有哪些？"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 50
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 32
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 107
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 33
+        }
+      ]
+    },
+    {
+      "id": "news-09",
+      "query": "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+      "why": "flow",
+      "answer": "Alphabet 最近在 2025 與 2026 上半年均進行了大規模的資本支出與籌資活動，主要包括巨額的設備購置、發行債務與可轉換優先股，以及發行普通股等資金來源【GOOGL_10Q_202606.html, chunk #41】。\n\n- **資本支出（CapEx）**：在 2025 年上半年購買不動產與設備的支出為 **396.43 億美元（$39,643 million）**，而在 2026 年上半年則升至 **805.98 億美元（$80,598 million）**【GOOGL_10Q_202606.html, chunk #41】。  \n- **籌資活動**  \n  - **發行債務**：2025 年上半年取得 **313.78 億美元（$31,378 million）** 的債務資金，2026 年上半年則增加至 **562.26 億美元（$56,226 million）**【GOOGL_10Q_202606.html, chunk #41】。  \n  - **發行可轉換優先股**：2026 年上半年取得 **190.63 億美元（$19,063 million）** 的強制可轉換優先股資金（2025 年無此項）【GOOGL_10Q_202606.html, chunk #41】。  \n  - **發行普通股**：2026 年上半年取得 **304.99 億美元（$30,499 million）** 的普通股發行收入（2025 年無此項）【GOOGL_10Q_202606.html, chunk #41】。  \n  - **股票回購**：2025 年上半年回購股票支出為 **283.06 億美元（$28,306 million）**，2026 年上半年則未進行回購【GOOGL_10Q_202606.html, chunk #41】。  \n  - **股息支付**：2025 年上半年支付股息 **49.77 億美元（$4,977 million）**，2026 年上半年支付 **52.31 億美元（$5,231 million）**【GOOGL_10Q_202606.html, chunk #41】。  \n\n這些數據顯示 Alphabet 正在同時加大設備投資與透過債務與股權工具籌集資金，以支撐其業務擴張與營運需求。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_10Q_202606.html #41 (rerank=0.709)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Alphabet（Google）最近的大規模籌資或資本支出消息是什麼"
+      ],
+      "sources": [
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 41
+        }
+      ]
+    },
+    {
+      "id": "news-10",
+      "query": "最近有哪些關於 Meta 的利多分析與 AI 投資消息？",
+      "why": "flow",
+      "answer": "最近的利多分析與 AI 投資消息主要集中在以下幾個面向：\n\n1. **分析師對 Meta 的正面預期**  \n   - Yahoo Finance 報導指出，分析師普遍看好 Meta Q2 營收，預估收入在 **580 億美元（$58 billion） 至 610 億美元（$61 billion）** 之間，年增率超過 **25%**，且長期預期 2027 年盈餘將重新加速成長，AI 投資被視為提升廣告收入的關鍵動能【web: https://finance.yahoo.com/markets/stocks/articles/meta-q2-earnings-strong-revenue-152413998.html】。  \n   - 同樣在 Yahoo Finance 的另一篇文章中，分析師稱 Meta 的 Muse Spark AI 模型具備「**首次提升 AI 產業估值**」的潛力，認為其能提升廣告目標設定與回報率，並將公司估值視為 **18 倍 2027 年 GAAP EPS**（調整後為 15 倍），屬於吸引買入的利多訊號【web: https://finance.yahoo.com/markets/stocks/articles/meta-muse-spark-ai-model-110234797.html】。  \n   - CNBC（2026‑06‑28）報導 Evercore ISI 分析師 Mahaney 稱 Meta 正利用 AI 增強使用者與廣告主的滿意度，提升 ROAS，並預測 2028 年營收將比華爾街共識高 **5%**，同時指出訂閱服務的高利潤潛力【web: https://www.cnbc.com/2026/06/28/top-analysts-bullish-on-these-stocks-for-long-term-growth-potential.html】。\n\n2. **AI 基礎建設與資本支出規模**  \n   - Reuters（2026‑07‑28）報導 Meta 與 BlackRock 合作在德州 El Paso 投資 **140 億美元（$14 billion）** 建置資料中心，並計畫到 2028 年在美國投入 **6,000 億美元（$600 billion）** 用於 AI 基礎建設，包含多座千兆瓦級資料中心，預計總計算能力將擴增至 **5 GW**【web: https://www.reuters.com/technology/meta-blackrock-partner-14-billion-el-paso-data-center-2026-07-28】。  \n   - Reuters（2026‑07‑29）指出 Meta 今年的 AI 相關資本支出上限提升至 **1,300 億美元（$130 billion）‑1,450 億美元（$145 billion）**，相較去年翻倍，並計畫將計算能力在本年度提升至 **7 GW**，明年再增至 **14 GW**【web: https://www.reuters.com/business/meta-narrows-annual-capex-forecast-ai-buildout-grows-2026-07-29】。  \n   - Yahoo Finance（未標示日期）同樣報導 Meta 將 2026 年資本支出範圍調整為 **1,250 億美元（$125 billion）‑1,450 億美元（$145 billion）**，較先前上調 **100 億美元（$10 billion）**，主要用於 AI 基礎設施【web: https://finance.yahoo.com/technology/ai/articles/meta-set-ai-budget-much-161200148.html】。\n\n3. **公司內部對 AI 的投資與策略說明**  \n   - 在 2026 年 6 月的 10‑Q（第 75 段）中，Meta 表示 **87%** 的總成本與費用屬於「Family of Apps」(FoA) 部門，且已大幅提升與 AI 相關的基礎建設投資，包括第三方雲端容量、伺服器與資料中心，以支援生成式 AI 與超級智慧的發展【META_10Q_202606.html, chunk #75】。  \n   - 同一份 10‑Q（第 73 段）說明，Meta 正在 AI 推薦引擎上取得成效，提升使用者參與度與廣告變現，儘管仍面臨年輕族群與其他平台的競爭【META_10Q_202606.html, chunk #73】。  \n   - 10‑Q（第 160 段）提醒，Meta 在消費者硬體與虛擬/擴增實境領域的經驗相對有限，若無法成功開發與行銷相關產品，可能影響 AI 投資的獲利前景；同時公司持續推出新 AI 功能，如對話式 AI、AI 影像編輯工具等【META_10Q_202606.html, chunk #160】。\n\n4. **最新 AI 產品與市場反應**  \n   - CNBC（2026‑07‑29）報導 Meta 最近推出的 **Muse Spark 1.1** 模型，被 AI 主管 Alexandr Wang 稱為「在代理與程式碼工作上最強的模型」，且價格較 OpenAI 與 Anthropic 更具競爭力，顯示公司在 AI 產品化方面取得進展【web: https://www.cnbc.com/2026/07/29/zuckerberg-metas-ai-capacity-dilemma-what-to-sell-vs-what-to-keep.html】。\n\n綜合以上，近期的利多訊號包括分析師對營收與 AI 帶動的長期成長持樂觀態度、公司大幅提升 AI 基礎建設與資本支出、以及在內部文件中明確指出 AI 投資已成為核心策略並已見初步成效。這些因素共同構成了目前市場對 Meta 的正面預期。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_10Q_202606.html #0 (rerank=0.679)\n  - META_10Q_202606.html #2 (rerank=0.677)\n  - META_Fundamentals_20260612.txt #1 (rerank=0.673)\n  - META_10Q_202606.html #15 (rerank=0.664)\n  - META_10Q_202606.html #75 (rerank=0.621)\n  - META_10Q_202606.html #73 (rerank=0.593)\n  - META_10Q_202606.html #160 (rerank=0.578)",
+      "n_web_calls": 2,
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "Meta 最近的利多分析有哪些",
+        "Meta 最近的 AI 投資消息有哪些"
+      ],
+      "sources": [
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 73
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 160
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 168
+        }
+      ]
+    }
+  ]
+}

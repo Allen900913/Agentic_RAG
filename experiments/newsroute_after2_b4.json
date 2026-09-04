@@ -1,0 +1,208 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_after2.json"
+  },
+  "records": [
+    {
+      "id": "col-14",
+      "query": "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？",
+      "why": "flow",
+      "answer": "NVIDIA 最近與前比特幣礦商 IREN 搭上線，簽署了 AI 雲端基礎建設合作協議，讓該公司從比特幣挖礦轉向 AI 服務【web: https://finance.yahoo.com/technology/ai/articles/iren-just-passed-biggest-ai-203243332.html】。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？"
+      ],
+      "sources": []
+    },
+    {
+      "id": "lex-03",
+      "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
+      "why": "record",
+      "answer": "NVIDIA 2026 財政年度的稀釋每股盈餘（Diluted EPS）為 **$4.90**【NVDA_10K_2026.html, chunk #164】。  \n\n- 這個數字來自公司合併綜合損益表中「Diluted」每股淨利的欄位，對應的財務期間為截至 2026 年 1 月 25 日的完整財政年度。  \n- 同一表格亦顯示基本每股盈餘（Basic EPS）為 $4.93，供參考【NVDA_10K_2026.html, chunk #164】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #164 (rerank=0.729)\n  - NVDA_10K_2026.html #181 (rerank=0.722)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "NVIDIA fiscal year 2026 的 Diluted EPS 是多少"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 181
+        }
+      ]
+    },
+    {
+      "id": "lex-07",
+      "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+      "why": "record",
+      "answer": "Apple 在 2025 財政年度的稀釋每股盈餘 (Diluted EPS) 為 **$7.46**【AAPL_10K_2025.html, chunk #0】。  \n\n- 這個數字來自 Apple 2025 年 10‑K 報表的合併損益表，列示「Diluted (in dollars per share)」為 7.46【AAPL_10K_2025.html, chunk #115】。  \n- 同時，該報表亦顯示 2025 年的基本每股盈餘 (Basic EPS) 為 $7.49，顯示稀釋後的每股盈餘略低於基本每股盈餘【AAPL_10K_2025.html, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10K_2025.html #0 (rerank=0.727)\n  - AAPL_10K_2025.html #115 (rerank=0.725)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 115
+        }
+      ]
+    },
+    {
+      "id": "sem-01",
+      "query": "NVIDIA 的核心技術護城河是什麼？",
+      "why": "record",
+      "answer": "NVIDIA 的核心護城河在於從 GPU 硬體到完整軟體平台（CUDA、數百套領域專屬庫、SDK、API）以及規模龐大的開發者與企業生態系統所形成的全堆疊 AI 基礎設施，讓公司能同時掌握硬體、系統與軟體三層面的競爭優勢。  \n\n**技術與平台層面的護城河**  \n- NVIDIA 的技術堆疊以 **CUDA 程式模型** 為基礎，支援所有 NVIDIA GPU，並配備 **數百套領域專屬軟體庫、框架、演算法、軟體開發套件 (SDK) 與應用程式介面 (API)**，形成加速 AI、資料分析、科學運算與 3D 圖形等工作負載的完整生態系統【NVDA_10K_2026.html, chunk #20】。  \n- 公司採取 **平台策略**，將硬體、系統、軟體、演算法、庫、AI 模型與訓練資料集以及服務緊密結合，為客戶創造獨特價值【NVDA_10K_2026.html, chunk #20】。  \n- 在 AI 端到端平台方面，NVIDIA 提供 **完整的加速運算平台**，同時支援 **訓練與推論**，涵蓋 **GPU、CPU 與 DPU** 三大主要運算單元，確保在資料中心規模的 AI 伺服器上具備全方位硬體能力【NVDA_10K_2026.html, chunk #28】。  \n- 企業級 AI 服務 **NVIDIA AI Enterprise** 包含 **NVIDIA NIM（提升 2.5 倍 token 吞吐量）**、**NVIDIA NeMo**、以及 **AI Blueprints**，協助企業快速部署生成式 AI 應用【NVDA_10K_2025.html, chunk #27】。  \n\n**生態系統與研發投入**  \n- 全球已有 **超過 0.075 億（7.5 百萬）開發者** 使用 CUDA 及其他軟體工具，形成龐大且持續成長的開發者基礎，進一步鞏固平台價值【NVDA_10K_2026.html, chunk #28】。（2025 年資料顯示 **0.059 億（5.9 百萬）開發者**，顯示持續擴張）【NVDA_10K_2025.html, chunk #27】  \n- NVIDIA 與 **數百所大學**、**數萬家新創公司** 透過 **Inception 計畫** 進行合作與人才培育，擴大技術傳播與應用範圍【NVDA_10K_2026.html, chunk #28】。  \n- 自公司成立以來，已 **投入超過 767 億美元（$76.7 billion） 研發資金**，持續推動 GPU、CUDA、AI 演算法等關鍵創新，鞏固技術領先地位【NVDA_10K_2026.html, chunk #20】（2025 年資料顯示投入 582 億美元（$58.2 billion））【NVDA_10K_2025.html, chunk #19】。  \n\n**規模與互聯能力**  \n- NVIDIA 的平台允許 **數十萬顆 GPU 互相連接，形成單一巨型電腦**，滿足大型 AI 模型訓練與推論所需的資料中心規模運算需求【NVDA_10K_2026.html, chunk #20】。  \n\n綜合上述，NVIDIA 的護城河來源於 **硬體（GPU 為核心，並擴展至 CPU、DPU）**、**軟體堆疊（CUDA、領域專屬庫、SDK、API）**、**企業級 AI 服務套件**、以及 **龐大的開發者與合作夥伴生態系統**，再加上 **巨額研發投入**，使其在 AI 基礎設施市場具備難以被競爭者快速複製的全方位競爭優勢。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #20 (rerank=0.638)\n  - NVDA_10K_2025.html #19 (rerank=0.609)\n  - NVDA_10K_2026.html #28 (rerank=0.547)\n  - NVDA_10K_2025.html #27 (rerank=0.524)\n  - NVDA_10K_2026.html #120 (rerank=0.519)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "NVIDIA 的核心技術護城河是什麼"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 27
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 120
+        }
+      ]
+    },
+    {
+      "id": "sem-06",
+      "query": "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？",
+      "why": "record",
+      "answer": "Amazon 在 AWS、Prime 以及電商平台都面臨多項反壟斷與監管風險，主要包括歐盟將其雲端服務列為「門檻者」並要求更嚴格的自我偏好與資料可移植性限制、美国 FTC 針對 Prime 訂閱計畫的欺騙與壟斷指控，以及歐盟與美國對其電商平台使用第三方賣家資料、控制 Buy Box 與強制使用自家物流的調查與訴訟。[web: https://www.cnbc.com/2020/11/11/eu-investigates-amazon-what-it-means-for-us-antitrust-probes.html]、[web: https://www.cnbc.com/2020/10/06/amazon-bullies-partners-and-vendors-says-antitrust-subcommittee.html]、[web: https://www.reuters.com/business/challenges-facing-amazons-new-ceo-andy-jassy-2021-07-05]、[web: https://www.reuters.com/legal/ftcs-amazon-complaint-zeros-seller-prices-logistics-2023-09-27]、[web: https://www.cnbc.com/2025/09/25/amazon-ftc-prime-settlement.html]、[web: https://finance.yahoo.com/technology/ai/articles/amazon-microsoft-face-eu-gatekeeper-132656278.html]、[web: https://www.reuters.com/business/retail-consumer/amazon-microsoft-cloud-computing-services-should-fall-under-eu-tech-rules-eu-2026-06-25]、[web: https://www.reuters.com/technology/amazon-reaches-settlement-with-eu-over-use-data-avoids-fine-2022-12-20]。\n\n**AWS（Amazon Web Services）**  \n- 歐盟根據《數位市場法》將 AWS 列為「門檻者」，將對其施加自我偏好限制、互通性與資料可攜性義務，增加合規成本與營運限制。[web: https://finance.yahoo.com/technology/ai/articles/amazon-microsoft-face-eu-gatekeeper-132656278.html]、[web: https://www.reuters.com/business/retail-consumer/amazon-microsoft-cloud-computing-services-should-fall-under-eu-tech-rules-eu-2026-06-25]。  \n- 美國國會反壟斷小組指出，AWS 向客戶收取資料傳出費用，並可能以此製造切換障礙，形成「摩擦」以阻礙客戶轉向其他雲端供應商。[web: https://www.cnbc.com/2020/10/06/amazon-bullies-partners-and-vendors-says-antitrust-subcommittee.html]。  \n- 同一小組認為，AWS 基於開源專案（如 Elasticsearch、MongoDB）推出相似服務，可能鎖定客戶，形成市場支配力的濫用風險。[web: https://www.cnbc.com/2020/10/06/amazon-bullies-partners-and-vendors-says-antitrust-subcommittee.html]。\n\n**Prime 訂閱服務**  \n- 美國聯邦貿易委員會（FTC）於 2023 年起訴 Amazon，指控其利用「壟斷力量」抬高價格、降低商品品質，並透過欺騙手段迫使消費者加入 Prime，違反公平競爭原則。[web: https://www.reuters.com/business/challenges-facing-amazons-new-ceo-andy-jassy-2021-07-05]、[web: https://www.reuters.com/legal/ftcs-amazon-complaint-zeros-seller-prices-logistics-2023-09-27]。  \n- FTC 亦指控 Amazon 在 Prime 內要求賣家必須使用其物流服務，即使賣家願意使用更便宜或跨平台的配送方案，形成對賣家的強制性依賴。[web: https://www.reuters.com/legal/ftcs-amazon-complaint-zeros-seller-prices-logistics-2023-09-27]。  \n- 2025 年 Amazon 與 FTC 達成 25 億美元和解，承認在 Prime 訂閱計畫中存在「欺騙」行為，並支付 10 億美元民事罰款及 15 億美元退款，以緩解監管壓力。[web: https://www.cnbc.com/2025/09/25/amazon-ftc-prime-settlement.html]。\n\n**電商平台（Marketplace）**  \n- 歐盟調查 Amazon 利用第三方賣家資料來開發自有品牌商品，並對 Buy Box 的控制被指可能抑制競爭，屬於雙重角色（平台與自營零售商）引發的反壟斷關切。[web: https://www.cnbc.com/2020/11/11/eu-investigates-amazon-what-it-means-for-us-antitrust-probes.html]。  \n- 2022 年 Amazon 與歐盟就三起反壟斷案件達成和解，同意在七年內不使用賣家資料於自營零售，並在網站上顯示第二個顯著的 Buy Box，以避免對競爭對手的不公平待遇；若違約，最高可被處以年營收 10% 的罰款。[web: https://www.reuters.com/technology/amazon-reaches-settlement-with-eu-over-use-data-avoids-fine-2022-12-20]。  \n- 美國 FTC 於 2023 年的訴狀指出，Amazon 透過高額履約費用（2020‑2022 年間提升約 30%）以及對使用其他平台較低價格的賣家進行「懲罰」— 使其在 Amazon 平台上更難被搜尋到，從而限制價格競爭。[web: https://www.reuters.com/legal/ftcs-amazon-complaint-zeros-seller-prices-logistics-2023-09-27]。  \n- 同時，FTC 也指控 Amazon 強迫使用其物流服務（Prime 物流），並收取高額的推薦、廣告與履約費用，導致賣家收入被大幅抽成，進一步加劇反壟斷風險。[web: https://www.reuters.com/legal/ftcs-amazon-complaint-zeros-seller-prices-logistics-2023-09-27]。\n\n**總結**  \n- **AWS**：面臨歐盟「門檻者」指定與資料可攜性義務、以及美國反壟斷小組對資料傳出費用與服務鎖定的審查。  \n- **Prime**：受 FTC 訴訟與和解影響，涉及欺騙性銷售、強制使用自家物流、以及高額費用的反競爭指控。  \n- **電商平台**：受到歐盟與美國雙重監管，焦點在於第三方賣家資料的使用、Buy Box 控制、強制物流與高額履約費用等多項反壟斷問題。  \n\n以上風險皆直接來自提供的參考資料，未見其他未披露的資訊。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Amazon 在 AWS 服務上面臨的反壟斷或監管風險有哪些",
+        "Amazon 在 Prime 服務上面臨的反壟斷或監管風險有哪些",
+        "Amazon 在電商業務上面臨的反壟斷或監管風險有哪些",
+        "2024-2026 年度 Amazon 在 AWS 服務的主要反壟斷或監管調查與訴訟概況",
+        "2024-2026 年度 Amazon Prime 服務的主要反壟斷或監管風險與相關案件",
+        "2024-2026 年度 Amazon 電商業務的主要反壟斷或監管調查與訴訟概況",
+        "查詢 2024-2026 年 Amazon 在 AWS、Prime 及電商業務的主要反壟斷與監管調查與訴訟情況"
+      ],
+      "sources": []
+    },
+    {
+      "id": "mix-01",
+      "query": "Microsoft Azure 最新一季的營收成長率是多少？",
+      "why": "record",
+      "answer": "Microsoft Azure 在最新一季（截至2026年3月31日的三個月）營收成長率為40%【MSFT_10Q_202603.html, chunk #69】。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202603.html #75 (rerank=0.715)\n  - MSFT_10Q_202603.html #49 (rerank=0.708)\n  - MSFT_10Q_202603.html #69 (rerank=0.704)\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.516)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Microsoft Azure 最新一季的營收成長率是多少"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 49
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 69
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mix-11",
+      "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
+      "why": "record",
+      "answer": "NVIDIA 最新一季資料中心（Data Center）營收較去年同期成長 **92%**，較上一季成長 **21%**【NVDA_10Q_202604.html, chunk #47】。  \n\n- 本季資料中心營收為 **752 億美元（$75.2 billion）**，較去年同期的 391 億美元（$39.1 billion） 大幅提升【NVDA_10Q_202604.html, chunk #47】。  \n- 成長的主要驅動力來自 **Blackwell 300 產品的出貨提升**，以及 **InfiniBand、Spectrum‑X Ethernet 與 NVLink 解決方案的需求**【NVDA_10Q_202604.html, chunk #47】。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10Q_202604.html #42 (rerank=0.715)\n  - NVDA_10Q_202604.html #47 (rerank=0.698)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.596)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "NVIDIA 最新一季資料中心營收成長多少",
+        "NVIDIA 最新一季資料中心的主要驅動產品是什麼"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 47
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mh-03",
+      "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+      "why": "record",
+      "answer": "NVIDIA 的最近一年營收年增率最高，為 **85.20%**，其最近十二個月（TTM）的淨利為 **1,596.1 億美元（$159.61 billion）**【NVDA_Fundamentals_20260612.txt, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_Fundamentals_20260612.txt #0 (rerank=0.726)\n  - META_Fundamentals_20260612.txt #0 (rerank=0.726)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.724)\n  - NVDA_10K_2026.html #164 (rerank=0.703)\n  - NVDA_10K_2026.html #203 (rerank=0.677)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "NVIDIA 最近一年營收年增率是多少",
+        "Meta 最近一年營收年增率是多少",
+        "Alphabet 最近一年營收年增率是多少",
+        "NVIDIA 最近十二個月（TTM）的淨利是多少",
+        "Meta 最近十二個月（TTM）的淨利是多少",
+        "Alphabet 最近十二個月（TTM）的淨利是多少"
+      ],
+      "sources": [
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 203
+        }
+      ]
+    }
+  ]
+}

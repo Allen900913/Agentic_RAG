@@ -1,0 +1,839 @@
+{
+  "meta": {
+    "model": "openai/gpt-oss-120b",
+    "repeat": 3,
+    "collection": "us_stock_rag_edgar_multiyear",
+    "n_positive": 20,
+    "n_control": 8
+  },
+  "positive": {
+    "exact": 60
+  },
+  "control": {
+    "exact": 24
+  },
+  "rows": [
+    {
+      "id": "pos-01",
+      "query": "AWS 在 2022 年的淨銷售額是多少？",
+      "want": [
+        "AMZN"
+      ],
+      "runs": [
+        [
+          "AMZN"
+        ],
+        [
+          "AMZN"
+        ],
+        [
+          "AMZN"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-02",
+      "query": "Azure 這一季的營收成長率？",
+      "want": [
+        "MSFT"
+      ],
+      "runs": [
+        [
+          "MSFT"
+        ],
+        [
+          "MSFT"
+        ],
+        [
+          "MSFT"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-03",
+      "query": "iPhone 佔總營收的比重？",
+      "want": [
+        "AAPL"
+      ],
+      "runs": [
+        [
+          "AAPL"
+        ],
+        [
+          "AAPL"
+        ],
+        [
+          "AAPL"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-04",
+      "query": "YouTube 廣告營收成長得快嗎？",
+      "want": [
+        "GOOGL"
+      ],
+      "runs": [
+        [
+          "GOOGL"
+        ],
+        [
+          "GOOGL"
+        ],
+        [
+          "GOOGL"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-05",
+      "query": "Instagram 的變現進度如何？",
+      "want": [
+        "META"
+      ],
+      "runs": [
+        [
+          "META"
+        ],
+        [
+          "META"
+        ],
+        [
+          "META"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-06",
+      "query": "Reality Labs 去年虧了多少？",
+      "want": [
+        "META"
+      ],
+      "runs": [
+        [
+          "META"
+        ],
+        [
+          "META"
+        ],
+        [
+          "META"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-07",
+      "query": "CUDA 生態系構成的護城河有多深？",
+      "want": [
+        "NVDA"
+      ],
+      "runs": [
+        [
+          "NVDA"
+        ],
+        [
+          "NVDA"
+        ],
+        [
+          "NVDA"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-08",
+      "query": "Model Y 這一季交付了多少台？",
+      "want": [
+        "TSLA"
+      ],
+      "runs": [
+        [
+          "TSLA"
+        ],
+        [
+          "TSLA"
+        ],
+        [
+          "TSLA"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-09",
+      "query": "Xbox 的營收貢獻多少？",
+      "want": [
+        "MSFT"
+      ],
+      "runs": [
+        [
+          "MSFT"
+        ],
+        [
+          "MSFT"
+        ],
+        [
+          "MSFT"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-10",
+      "query": "LinkedIn 對整體營收的貢獻？",
+      "want": [
+        "MSFT"
+      ],
+      "runs": [
+        [
+          "MSFT"
+        ],
+        [
+          "MSFT"
+        ],
+        [
+          "MSFT"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-11",
+      "query": "GeForce 顯示卡的毛利率？",
+      "want": [
+        "NVDA"
+      ],
+      "runs": [
+        [
+          "NVDA"
+        ],
+        [
+          "NVDA"
+        ],
+        [
+          "NVDA"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-12",
+      "query": "Prime 會員訂閱收入有多少？",
+      "want": [
+        "AMZN"
+      ],
+      "runs": [
+        [
+          "AMZN"
+        ],
+        [
+          "AMZN"
+        ],
+        [
+          "AMZN"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-13",
+      "query": "WhatsApp 的商業化做到哪了？",
+      "want": [
+        "META"
+      ],
+      "runs": [
+        [
+          "META"
+        ],
+        [
+          "META"
+        ],
+        [
+          "META"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-14",
+      "query": "App Store 抽成貢獻多少服務營收？",
+      "want": [
+        "AAPL"
+      ],
+      "runs": [
+        [
+          "AAPL"
+        ],
+        [
+          "AAPL"
+        ],
+        [
+          "AAPL"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-15",
+      "query": "Waymo 投入了多少資源？",
+      "want": [
+        "GOOGL"
+      ],
+      "runs": [
+        [
+          "GOOGL"
+        ],
+        [
+          "GOOGL"
+        ],
+        [
+          "GOOGL"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-16",
+      "query": "超級充電站網路帶來多少營收？",
+      "want": [
+        "TSLA"
+      ],
+      "runs": [
+        [
+          "TSLA"
+        ],
+        [
+          "TSLA"
+        ],
+        [
+          "TSLA"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-17",
+      "query": "Kindle 的銷售狀況？",
+      "want": [
+        "AMZN"
+      ],
+      "runs": [
+        [
+          "AMZN"
+        ],
+        [
+          "AMZN"
+        ],
+        [
+          "AMZN"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-18",
+      "query": "Bing 搜尋的市佔有起來嗎？",
+      "want": [
+        "MSFT"
+      ],
+      "runs": [
+        [
+          "MSFT"
+        ],
+        [
+          "MSFT"
+        ],
+        [
+          "MSFT"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-19",
+      "query": "AWS 跟 Azure 誰成長比較快？",
+      "want": [
+        "AMZN",
+        "MSFT"
+      ],
+      "runs": [
+        [
+          "AMZN",
+          "MSFT"
+        ],
+        [
+          "AMZN",
+          "MSFT"
+        ],
+        [
+          "AMZN",
+          "MSFT"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "pos-20",
+      "query": "iPhone 跟 Model Y，哪個產品線的營收比較大？",
+      "want": [
+        "AAPL",
+        "TSLA"
+      ],
+      "runs": [
+        [
+          "AAPL",
+          "TSLA"
+        ],
+        [
+          "AAPL",
+          "TSLA"
+        ],
+        [
+          "AAPL",
+          "TSLA"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "hard-01",
+      "query": "Other Bets 這個部門虧了多少？",
+      "want": [
+        "GOOGL"
+      ],
+      "runs": [
+        [
+          "GOOGL"
+        ],
+        [
+          "GOOGL"
+        ],
+        [
+          "GOOGL"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "hard-02",
+      "query": "Intelligent Cloud 分部的營運利益？",
+      "want": [
+        "MSFT"
+      ],
+      "runs": [
+        [
+          "MSFT"
+        ],
+        [
+          "MSFT"
+        ],
+        [
+          "MSFT"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "hard-03",
+      "query": "Compute & Networking 分部的營收成長？",
+      "want": [
+        "NVDA"
+      ],
+      "runs": [
+        [
+          "NVDA"
+        ],
+        [
+          "NVDA"
+        ],
+        [
+          "NVDA"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "hard-04",
+      "query": "Family of Apps 的營收佔比？",
+      "want": [
+        "META"
+      ],
+      "runs": [
+        [
+          "META"
+        ],
+        [
+          "META"
+        ],
+        [
+          "META"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "hard-05",
+      "query": "Wearables, Home and Accessories 賣得如何？",
+      "want": [
+        "AAPL"
+      ],
+      "runs": [
+        [],
+        [],
+        []
+      ],
+      "verdicts": [
+        "partial",
+        "partial",
+        "partial"
+      ],
+      "exact": 0,
+      "partial": 3,
+      "wrong": 0
+    },
+    {
+      "id": "hard-06",
+      "query": "能源生成與儲存業務的毛利率？",
+      "want": [
+        "TSLA"
+      ],
+      "runs": [
+        [
+          "TSLA"
+        ],
+        [
+          "TSLA"
+        ],
+        [
+          "TSLA"
+        ]
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "neg-01",
+      "query": "AMD 的資料中心營收成長多少？",
+      "want": [],
+      "runs": [
+        [],
+        [],
+        []
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "neg-02",
+      "query": "Intel 的晶圓代工進度如何？",
+      "want": [],
+      "runs": [
+        [],
+        [],
+        []
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "neg-03",
+      "query": "Salesforce 的訂閱營收？",
+      "want": [],
+      "runs": [
+        [],
+        [],
+        []
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "neg-04",
+      "query": "台積電的先進製程良率如何？",
+      "want": [],
+      "runs": [
+        [],
+        [],
+        []
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "neg-05",
+      "query": "Snapdragon 的效能贏過對手嗎？",
+      "want": [],
+      "runs": [
+        [],
+        [],
+        []
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "neg-06",
+      "query": "這一季整體科技股的景氣如何？",
+      "want": [],
+      "runs": [
+        [],
+        [],
+        []
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "neg-07",
+      "query": "聯準會升息對股市有什麼影響？",
+      "want": [],
+      "runs": [
+        [],
+        [],
+        []
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    },
+    {
+      "id": "neg-08",
+      "query": "本益比是什麼意思？",
+      "want": [],
+      "runs": [
+        [],
+        [],
+        []
+      ],
+      "verdicts": [
+        "exact",
+        "exact",
+        "exact"
+      ],
+      "exact": 3,
+      "partial": 0,
+      "wrong": 0
+    }
+  ]
+}

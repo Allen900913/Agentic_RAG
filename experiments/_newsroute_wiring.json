@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_prod.json"
+  },
+  "records": [
+    {
+      "id": "lex-07",
+      "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+      "why": "record",
+      "answer": "Apple 在 2025 財政年度的每股攤薄盈餘（Diluted EPS）為 **$7.46**【AAPL_10K_2025.html, chunk #0】。  \n\n- 2025 年度的稀釋每股盈餘（Diluted earnings per share）列示為 $7.46，對應的淨收入為 1,120.1 億美元（$112,010 百萬），稀釋後加權平均普通股數為 15,004,697 千股【AAPL_10K_2025.html, chunk #115】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10K_2025.html #0 (rerank=0.727)\n  - AAPL_10K_2025.html #115 (rerank=0.725)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 115
+        }
+      ]
+    }
+  ]
+}

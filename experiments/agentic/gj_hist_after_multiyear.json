@@ -1,0 +1,843 @@
+{
+  "meta": {
+    "producer": "run_agentic_on_evalset.py",
+    "module": "agentic_rag_v2",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "retrieval_model": "openai/gpt-oss-120b",
+    "checker_model": "openai/gpt-oss-120b",
+    "gen_model": "openai/gpt-oss-120b",
+    "validator": true,
+    "web_search": false,
+    "freshness_mode": "snapshot",
+    "eval_set": "eval/period_probe_benefit_queries.json"
+  },
+  "records": [
+    {
+      "id": "bh-01",
+      "category": "historical",
+      "query": "Apple 在 2022 財年的總營收是多少？",
+      "answerable": true,
+      "answer": "Apple 在 2022 財年的總營收為 **3,943.28 億美元（$394,328 百萬）**（即約 3,943 億美元（$394.3 billion））【AAPL_10K_2024.html, chunk #0】。  \n\n- 這個金額來自 Apple 2022 財年（截至 2022 年 9 月 24 日）的「Net sales」項目，報表單位為「in millions」【AAPL_10K_2023.html, chunk #0】。  \n- 同一數字亦在 2024 年度的 10‑K 報告中列示，確認其一致性【AAPL_10K_2024.html, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10K_2024.html #0 (rerank=0.716)\n  - AAPL_10K_2024.html #111 (rerank=0.714)\n  - AAPL_10K_2023.html #0 (rerank=0.712)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 111
+        },
+        {
+          "source": "AAPL_10K_2023.html",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[AAPL 10-K period 2024] ## Consolidated Statement of Income\n\n**Apple Inc.** (AAPL)\n\n**Year Ended** *(In millions, except shares in thousands and per share data)*\n\n|  | Sep 28, 2024 | Sep 30, 2023 | Sep 24, 2022 |\n| --- | ---: | ---: | ---: |\n|         Net sales | $391,035 | $383,285 | $394,328 |\n| *        Products* | $294,866 | $298,085 | $316,199 |\n| *        Services* | $96,169 | $85,200 | $78,129 |\n|         Cost of sales | $210,352 | $214,137 | $223,546 |\n| *        Products* | $185,233 | $189,282 | $201,471 |\n| *        Services* | $25,119 | $24,855 | $22,075 |\n|       Gross margin | $180,683 | $169,148 | $170,782 |\n|           Research and development | $31,370 | $29,915 | $26,251 |\n|           Selling, general and administrative | $26,097 | $24,932 | $25,094 |\n|           Total operating expenses | $57,467 | $54,847 | $51,345 |\n|         Operating income | $123,216 | $114,301 | $119,437 |\n|         Other income/(expense), net | $269 | $(565) | $(334) |\n|       Income before provision for income taxes | $123,485 | $113,736 | $119,103 |\n|       Provision for income taxes | $29,749 | $16,741 | $19,300 |\n|       Net income | $93,736 | $96,995 | $99,803 |\n|         Basic (in dollars per share) | 6.11 | 6.16 | 6.15 |\n|         Diluted (in dollars per share) | 6.08 | 6.13 | 6.11 |\n|         Basic (in shares) | 15,343,783 | 15,744,231 | 16,215,963 |\n|         Diluted (in shares) | 15,408,095 | 15,812,547 | 16,325,819 |",
+        "[AAPL 10-K period 2024] Therefore, the Company accounts for all third-party application–related sales on a net basis by recognizing in Services net sales only the commission it retains. Net sales disaggregated by significant products and services for 2024, 2023 and 2022 were as follows (in millions):\n\n202420232022\n\niPhone\n\n$201,183 $200,583 $205,489 \n\nMac\n\n29,984 29,357 40,177 \n\niPad\n\n26,694 28,300 29,292 \n\nWearables, Home and Accessories\n\n37,005 39,845 41,241 \n\nServices (1)\n\n96,169 85,200 78,129 \n\nTotal net sales$391,035 $383,285 $394,328 \n\n(1)Services net sales include amortization of the deferred value of services bundled in the sales price of certain products. Total net sales include $7.7 billion of revenue recognized in 2024 that was included in deferred revenue as of September 30, 2023, $8.2 billion of revenue recognized in 2023 that was included in deferred revenue as of September 24, 2022, and $7.5 billion of revenue recognized in 2022 that was included in deferred revenue as of September 25, 2021. Apple Inc. | 2024 Form 10-K | 35\n\nThe Company’s proportion of net sales by disaggregated revenue source was generally consistent for each reportable segment in Note 13, “Segment Information and Geographic Data” for 2024, 2023 and 2022, except in Greater China, where iPhone revenue represented a moderately higher proportion of net sales. As of September 28, 2024 and September 30, 2023, the Company had total deferred revenue of $12.8 billion and $12.1 billion, respectively. As of September 28, 2024, the Company expects 64% of total deferred revenue to be realized in less than a year, 25% within one-to-two years, 9% within two-to-three years and 2% in greater than three years. Note 3 – Earnings Per Share\n\nThe following table shows the computation of basic and diluted earnings per share for 2024, 2023 and 2022 (net income in millions and shares in thousands):\n\n202420232022\n\nNumerator:\n\nNet income$93,736 $96,995 $99,803 \n\nDenominator:\n\nWeighted-average basic shares outstanding15,343,783 15,744,231 16,215,963 \n\nEffect of dilutive share-based awards64,312 68,316 109,856 \n\nWeighted-average diluted shares15,408,095 15,812,547 16,325,819 \n\nBasic earnings per share$6.11 $6.16 $6.15 \n\nDiluted earnings per share$6.08 $6.13 $6.11 \n\nApproximately 24 million restricted stock units (“RSUs”) were excluded from the computation of diluted earnings per share for 2023 because their effect would have been antidilutive. Note 4 – Financial Instruments\n\nCash, Cash Equivalents and Marketable Securities\n\nThe following tables show the Company’s cash, cash equivalents and marketable securities by significant investment category as of September 28, 2024 and September 30, 2023 (in millions):\n\n2024\n\nAdjustedCostUnrealizedGainsUnrealizedLossesFairValueCash andCashEquivalentsCurrentMarketableSecuritiesNon-CurrentMarketableSecurities\n\nCash$27,199 $— $— $27,199 $27,199 $— $— \n\nLevel 1:\n\nMoney market funds778 — — 778 778 — — \n\nMutual funds\n\n515 105 (3)617 — 617 — \n\nSubtotal1,293 105 (3)1,395 778 617 — \n\nLevel 2 (1):\n\nU.S. Treasury securities16,150 45 (516)15,679 212 4,087 11,380 \n\nU.S.",
+        "[AAPL 10-K period 2023] ## Consolidated Statement of Income\n\n**Apple Inc.** (AAPL)\n\n**Year Ended** *(In millions, except shares in thousands and per share data)*\n\n|  | Sep 30, 2023 | Sep 24, 2022 | Sep 25, 2021 |\n| --- | ---: | ---: | ---: |\n|         Net sales | $383,285 | $394,328 | $365,817 |\n| *        Products* | $298,085 | $316,199 | $297,392 |\n| *        Services* | $85,200 | $78,129 | $68,425 |\n|         Cost of sales | $214,137 | $223,546 | $212,981 |\n| *        Products* | $189,282 | $201,471 | $192,266 |\n| *        Services* | $24,855 | $22,075 | $20,715 |\n|       Gross margin | $169,148 | $170,782 | $152,836 |\n|           Research and development | $29,915 | $26,251 | $21,914 |\n|           Selling, general and administrative | $24,932 | $25,094 | $21,973 |\n|           Total operating expenses | $54,847 | $51,345 | $43,887 |\n|         Operating income | $114,301 | $119,437 | $108,949 |\n|         Other income/(expense), net | $(565) | $(334) | $258 |\n|       Income before provision for income taxes | $113,736 | $119,103 | $109,207 |\n|       Provision for income taxes | $16,741 | $19,300 | $14,527 |\n|       Net income | $96,995 | $99,803 | $94,680 |\n|         Basic (in dollars per share) | 6.16 | 6.15 | 5.67 |\n|         Diluted (in dollars per share) | 6.13 | 6.11 | 5.61 |\n|         Basic (in shares) | 15,744,231 | 16,215,963 | 16,701,272 |\n|         Diluted (in shares) | 15,812,547 | 16,325,819 | 16,864,919 |"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Apple 在 2022 財年的總營收是多少？"
+      ],
+      "agentic_n_chunks": 3
+    },
+    {
+      "id": "bh-02",
+      "category": "historical",
+      "query": "Tesla 2022 年的總營收是多少？",
+      "answerable": true,
+      "answer": "Tesla 2022 年的總營收為 **814.62 億美元（$81,462 百萬）**【TSLA_10K_2024.html, chunk #0】。  \n此數字來自公司 2022 年 12 月 31 日止的合併損益表，表格標示「In millions」為單位，顯示全年營收為 $81,462（百萬美元）。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_10K_2024.html #0 (rerank=0.730)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "TSLA_10K_2024.html",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[TSLA 10-K period 2024] ## Consolidated Statement of Income\n\n**Tesla, Inc.** (TSLA)\n\n**Year Ended** *(In millions, except shares and per share data)*\n\n|  | Dec 31, 2024 | Dec 31, 2023 | Dec 31, 2022 |\n| --- | ---: | ---: | ---: |\n|           Revenues | $97,690 | $96,773 | $81,462 |\n| *          Automotive Revenues* | $77,070 | $82,419 | $71,462 |\n| *          Energy generation and storage* | 10,086 | 6,035 | 3,909 |\n| *          Services and other* | $10,534 | $8,319 | $6,091 |\n|           Total cost of revenues | $80,240 | $79,113 | $60,609 |\n| *          Automotive Revenues* | $62,873 | $66,389 | $51,108 |\n| *          Energy generation and storage* | 7,446 | 4,894 | 3,621 |\n| *          Services and other* | $9,921 | $7,830 | $5,880 |\n|         Gross profit | $17,450 | $17,660 | $20,853 |\n|           Research and development | $4,540 | $3,969 | $3,075 |\n|           Selling, general and administrative | $5,150 | $4,800 | $3,946 |\n|           Restructuring and other | $684 |  | $176 |\n|         Total operating expenses | $10,374 | $8,769 | $7,197 |\n|         Income from operations | 7,076 | 8,891 | 13,656 |\n|         Interest income | $1,569 | $1,066 | $297 |\n|         Interest expense | $(350) | $(156) | $(191) |\n|         Other income (expense), net | $695 | $172 | $(43) |\n|         Income before income taxes | $8,990 | $9,973 | $13,719 |\n|         Provision for (benefit from) income taxes | $1,837 | $(5,001) | $1,132 |\n|       Net income | $7,153 | $14,974 | $12,587 |\n|       Net income (loss) attributable to noncontrolling interests and redeemable noncontrolling interests in subsidiaries | $62 | $(23) | $31 |\n|       Net income attributable to common stockholders | $7,091 | $14,997 | $12,556 |\n|         Basic (in dollars per share) | 2.23 | 4.73 | 4.02 |\n|         Diluted (in dollars per share) | 2.04 | 4.30 | 3.62 |\n|         Basic (in shares) | 3,197 | 3,174 | 3,130 |\n|         Diluted (in shares) | 3,498 | 3,485 | 3,475 |"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Tesla 2022 年的總營收是多少？"
+      ],
+      "agentic_n_chunks": 1
+    },
+    {
+      "id": "bh-03",
+      "category": "historical",
+      "query": "Alphabet 2022 年的總營收是多少？",
+      "answerable": true,
+      "answer": "Alphabet 2022 年的總營收為 **2,828.36 億美元（$282,836 百萬）**【GOOGL_10K_2024.html, chunk #274】。  \n\n此數字來自公司 2022 年財務報表的合併損益表，列示「Revenues」為 $282,836（單位為百萬美元）【GOOGL_10K_2023.html, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_10K_2024.html #274 (rerank=0.731)\n  - GOOGL_10K_2023.html #0 (rerank=0.730)\n  - GOOGL_10K_2024.html #0 (rerank=0.729)\n  - GOOGL_10K_2023.html #229 (rerank=0.728)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "GOOGL_10K_2024.html",
+          "chunk_index": 274
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10K_2024.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 229
+        }
+      ],
+      "contexts": [
+        "[GOOGL 10-K period 2024] Alphabet Inc. CONSOLIDATED STATEMENTS OF INCOME\n\n(in millions, except per share amounts)\n\n Year Ended December 31,\n\n 202220232024\n\nRevenues$282,836 $307,394 $350,018 \n\nCosts and expenses:\n\nCost of revenues126,203 133,332 146,306 \n\nResearch and development39,500 45,427 49,326 \n\nSales and marketing26,567 27,917 27,808 \n\nGeneral and administrative15,724 16,425 14,188 \n\nTotal costs and expenses207,994 223,101 237,628 \n\nIncome from operations74,842 84,293 112,390 \n\nOther income (expense), net(3,514)1,424 7,425 \n\nIncome before income taxes71,328 85,717 119,815 \n\nProvision for income taxes11,356 11,922 19,697 \n\nNet income$59,972 $73,795 $100,118 \n\nBasic net income per share (Note 12)\n\n$4.59 $5.84 $8.13 \n\nDiluted net income per share (Note 12)\n\n$4.56 $5.80 $8.04 \n\nSee accompanying notes. 53.",
+        "[GOOGL 10-K period 2023] ## Consolidated Statement of Income\n\n**Alphabet Inc.** (GOOG)\n\n**Year Ended** *(In millions, except shares and per share data)*\n\n|  | Dec 31, 2023 | Dec 31, 2022 | Dec 31, 2021 |\n| --- | ---: | ---: | ---: |\n|   Revenues | $307,394 | $282,836 | $257,637 |\n|       Cost of revenues | $133,332 | $126,203 | $110,939 |\n|       Research and development | $45,427 | $39,500 | $31,562 |\n|       Sales and marketing | $27,917 | $26,567 | $22,912 |\n|       General and administrative | $16,425 | $15,724 | $13,510 |\n|       Total costs and expenses | $223,101 | $207,994 | $178,923 |\n|     Income from operations | 84,293 | 74,842 | 78,714 |\n|     Other income (expense), net | $1,424 | $(3,514) | $12,020 |\n|   Total | $85,717 | $71,328 | $90,734 |\n|   Provision for income taxes | $11,922 | $11,356 | $14,701 |\n|   Net income | $73,795 | $59,972 | $76,033 |\n|   Basic net income per share of Class A, Class B, and Class C stock (in dollars per share) | 5.84 | 4.59 | 5.69 |\n| *    Class A Common Stock* | 5.84 | 4.59 | 5.69 |\n| *    Class B Common Stock* | 5.84 | 4.59 | 5.69 |\n| *    Class C Capital Stock* | 5.84 | 4.59 | 5.69 |\n|   Diluted net income per share of Class A, Class B, and Class C stock (in dollars per share) | 5.80 | 4.56 | 5.61 |\n| *    Class A Common Stock* | 5.80 | 4.56 | 5.61 |\n| *    Class B Common Stock* | 5.80 | 4.56 | 5.61 |\n| *    Class C Capital Stock* | 5.80 | 4.56 | 5.61 |",
+        "[GOOGL 10-K period 2024] ## Consolidated Statement of Income\n\n**Alphabet Inc.** (GOOG)\n\n**Year Ended** *(In millions, except shares and per share data)*\n\n|  | Dec 31, 2024 | Dec 31, 2023 | Dec 31, 2022 |\n| --- | ---: | ---: | ---: |\n|   Revenues | $350,018 | $307,394 | $282,836 |\n|     Cost of revenues | $146,306 | $133,332 | $126,203 |\n|     Research and development | $49,326 | $45,427 | $39,500 |\n|     Sales and marketing | $27,808 | $27,917 | $26,567 |\n|     General and administrative | $14,188 | $16,425 | $15,724 |\n|       Total costs and expenses | $237,628 | $223,101 | $207,994 |\n|     Income from operations | 112,390 | 84,293 | 74,842 |\n|     Other income (expense), net | $7,425 | $1,424 | $(3,514) |\n|   Income before income taxes | $119,815 | $85,717 | $71,328 |\n|   Provision for income taxes | $19,697 | $11,922 | $11,356 |\n|   Net income | $100,118 | $73,795 | $59,972 |\n|   Basic net income per share (in dollars per share) | 8.13 | 5.84 | 4.59 |\n| *    Class A* | 8.13 | 5.84 | 4.59 |\n| *    Class B* | 8.13 | 5.84 | 4.59 |\n| *    Class C* | 8.13 | 5.84 | 4.59 |\n|   Diluted net income per share (in dollars per share) | 8.04 | 5.80 | 4.56 |\n| *    Class A* | 8.05 | 5.80 | 4.56 |\n| *    Class B* | 8.05 | 5.80 | 4.56 |\n| *    Class C* | 8.03 | 5.80 | 4.56 |",
+        "[GOOGL 10-K period 2023] [section: % Change from Prior Period] % Change from Prior Period\n\nYear Ended December 31,Less FX EffectConstant Currency RevenuesAs ReportedLess Hedging EffectLess FX EffectConstant Currency Revenues\n\n20222023\n\nUnited States$134,814 $146,286 $0 $146,286 9 %0 %9 %\n\nEMEA82,062 91,038 460 90,578 11 %1 %10 %\n\nAPAC47,024 51,514 (1,759)53,273 10 %(3)%13 %\n\nOther Americas16,976 18,320 (654)18,974 8 %(4)%12 %\n\nRevenues, excluding hedging effect\n\n280,876 307,158 (1,953)309,111 9 %(1)%10 %\n\nHedging gains (losses)1,960 236 \n\nTotal revenues(1)\n\n$282,836 $307,394 $309,111 9 %0 %(1)%10 %\n\n(1)Total constant currency revenues of $309.1 billion for 2023 increased $28.2 billion compared to $280.9 billion in revenues, excluding hedging effect, for 2022. EMEA revenue growth was favorably affected by changes in foreign currency exchange rates, primarily due to the U.S. dollar weakening relative to the Euro, partially offset by the U.S. dollar strengthening relative to the Turkish lira. APAC revenue growth was unfavorably affected by changes in foreign currency exchange rates, primarily due to the U.S. dollar strengthening relative to the Japanese yen. Other Americas revenue growth was unfavorably affected by changes in foreign currency exchange rates, primarily due to the U.S. dollar strengthening relative to the Argentine peso. 37.\n\nAlphabet Inc. Costs and Expenses"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Alphabet 2022 年的總營收是多少"
+      ],
+      "agentic_n_chunks": 4
+    },
+    {
+      "id": "bh-04",
+      "category": "historical",
+      "query": "Meta 2022 年的總營收是多少？",
+      "answerable": true,
+      "answer": "Meta 2022 年的總營收為 **1,166.09 億美元（$116,609 百萬）**【META_10K_2024.html, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_10K_2024.html #0 (rerank=0.729)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "META_10K_2024.html",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[META 10-K period 2024] ## Consolidated Statement of Income\n\n**Meta Platforms, Inc.** (META)\n\n**Year Ended** *(In millions, except shares and per share data)*\n\n|  | Dec 31, 2024 | Dec 31, 2023 | Dec 31, 2022 |\n| --- | ---: | ---: | ---: |\n|   Revenue | $164,501 | $134,902 | $116,609 |\n|       Cost of revenue | $30,161 | $25,959 | $25,249 |\n|       Research and development | $43,873 | $38,483 | $35,338 |\n|       Marketing and sales | $11,347 | $12,301 | $15,262 |\n|       General and administrative | $9,740 | $11,408 | $11,816 |\n|       Total costs and expenses | $95,121 | $88,151 | $87,665 |\n|     Income (loss) from operations | 69,380 | 46,751 | 28,944 |\n|     Interest and other income (expense), net | $1,283 | $677 | $(125) |\n|   Income before provision for income taxes | $70,663 | $47,428 | $28,819 |\n|   Provision for income taxes | $8,303 | $8,330 | $5,619 |\n|   Net income | $62,360 | $39,098 | $23,200 |\n|     Basic (in dollars per share) | 24.61 | 15.19 | 8.63 |\n|     Diluted (in dollars per share) | 23.86 | 14.87 | 8.59 |\n|     Basic (in shares) | 2,534 | 2,574 | 2,687 |\n| *      Class A Common Stock* | 2,189 | 2,220 | 2,285 |\n| *      Class B Common Stock* | 345 | 354 | 402 |\n|     Diluted (in shares) | 2,614 | 2,629 | 2,702 |"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Meta 2022 年的總營收是多少"
+      ],
+      "agentic_n_chunks": 1
+    },
+    {
+      "id": "bh-05",
+      "category": "historical",
+      "query": "Amazon 2022 年的淨銷售額是多少？",
+      "answerable": true,
+      "answer": "Amazon 2022 年的淨銷售額為 **5,139.83 億美元（$513,983 百萬）**【AMZN_10K_2024.html, chunk #0】。此金額來自公司在 2022 年 12 月 31 日止年度的合併損益表，列示為「Total net sales」【AMZN_10K_2023.html, chunk #24】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AMZN_10K_2024.html #0 (rerank=0.729)\n  - AMZN_10K_2023.html #0 (rerank=0.729)\n  - AMZN_10K_2023.html #24 (rerank=0.725)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AMZN_10K_2024.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10K_2023.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10K_2023.html",
+          "chunk_index": 24
+        }
+      ],
+      "contexts": [
+        "[AMZN 10-K period 2024] ## Consolidated Statement of Income\n\n**AMAZON.COM, INC.** (AMZN)\n\n**Year Ended** *(In millions, except shares and per share data)*\n\n|  | Dec 31, 2024 | Dec 31, 2023 | Dec 31, 2022 |\n| --- | ---: | ---: | ---: |\n|       Total net sales | $637,959 | $574,785 | $513,983 |\n| *        Net product sales* | $272,311 | $255,887 | $242,901 |\n| *        Net service sales* | $365,648 | $318,898 | $271,082 |\n|         Cost of sales | $326,288 | $304,739 | $288,831 |\n|         Fulfillment | $98,505 | $90,619 | $84,299 |\n|         Technology and infrastructure | $88,544 | $85,622 | $73,213 |\n|         Sales and marketing | $43,907 | $44,370 | $42,238 |\n|         General and administrative | $11,359 | $11,816 | $11,891 |\n|         Other operating expense (income), net | $763 | $767 | $1,263 |\n|           Total operating expenses | $569,366 | $537,933 | $501,735 |\n|         Operating income | $68,593 | $36,852 | $12,248 |\n|         Interest income | $4,677 | $2,949 | $989 |\n|         Interest expense | $(2,406) | $(3,182) | $(2,367) |\n|         Other income (expense), net | $(2,250) | $938 | $(16,806) |\n|         Total non-operating income (expense) | $21 | $705 | $(18,184) |\n|       Income (loss) before income taxes | $68,614 | $37,557 | $(5,936) |\n|       Benefit (provision) for income taxes | $(9,265) | $(7,120) | $3,217 |\n|       Equity-method investment activity, net of tax | $(101) | $(12) | $(3) |\n|       Net income (loss) | $59,248 | $30,425 | $(2,722) |\n|       Basic earnings per share (in dollars per share) | 5.66 | 2.95 | -0.27 |\n|       Diluted earnings per share (in dollars per share) | 5.53 | 2.90 | -0.27 |\n|         Basic (in shares) | 10,473 | 10,304 | 10,189 |\n|         Diluted (in shares) | 10,721 | 10,492 | 10,189 |",
+        "[AMZN 10-K period 2023] ## Consolidated Statement of Income\n\n**AMAZON.COM, INC.** (AMZN)\n\n**Year Ended** *(In millions, except shares and per share data)*\n\n|  | Dec 31, 2023 | Dec 31, 2022 | Dec 31, 2021 |\n| --- | ---: | ---: | ---: |\n|       Total net sales | $574,785 | $513,983 | $469,822 |\n| *        Net product sales* | $255,887 | $242,901 | $241,787 |\n| *        Net service sales* | $318,898 | $271,082 | $228,035 |\n|         Cost of sales | $304,739 | $288,831 | $272,344 |\n|         Fulfillment | $90,619 | $84,299 | $75,111 |\n|         Technology and infrastructure | $85,622 | $73,213 | $56,052 |\n|         Sales and marketing | $44,370 | $42,238 | $32,551 |\n|         General and administrative | $11,816 | $11,891 | $8,823 |\n|         Other operating expense (income), net | $767 | $1,263 | $62 |\n|           Total operating expenses | $537,933 | $501,735 | $444,943 |\n|         Operating income | $36,852 | $12,248 | $24,879 |\n|         Interest income | $2,949 | $989 | $448 |\n|         Interest expense | $(3,182) | $(2,367) | $(1,809) |\n|         Other income (expense), net | $938 | $(16,806) | $14,633 |\n|         Total non-operating income (expense) | $705 | $(18,184) | $13,272 |\n|       Income (loss) before income taxes | $37,557 | $(5,936) | $38,151 |\n|       Benefit (provision) for income taxes | $(7,120) | $3,217 | $(4,791) |\n|       Equity-method investment activity, net of tax | $(12) | $(3) | $4 |\n|       Net income (loss) | $30,425 | $(2,722) | $33,364 |\n|       Basic earnings per share (in dollars per share) | 2.95 | -0.27 | 3.30 |\n|       Diluted earnings per share (in dollars per share) | 2.90 | -0.27 | 3.24 |\n|         Basic (in shares) | 10,304 | 10,189 | 10,117 |\n|         Diluted (in shares) | 10,492 | 10,189 | 10,296 |",
+        "[AMZN 10-K period 2023] Net sales include product and service sales. Product sales represent revenue from the sale of products and related shipping fees and digital media content where we record revenue gross. Service sales primarily represent third-party seller f\n\n|  | Year Ended December 31, |  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n|  | 2022 |  | 2023 |  |  |  |  |\n| Net Sales: |  |  |  |  |  |  |  |\n| North America | $ | 315,880 |  |  | $ | 352,828 |  |\n| International | 118,007 |  |  | 131,200 |  |  |  |\n| AWS | 80,096 |  |  | 90,757 |  |  |  |\n| Consolidated | $ | 513,983 |  |  | $ | 574,785 |  |\n| Year-over-year Percentage Growth (Decline): |  |  |  |  |  |  |  |\n| North America | 13 | % |  | 12 | % |  |  |\n| International | (8) |  |  | 11 |  |  |  |\n| AWS | 29 |  |  | 13 |  |  |  |\n| Consolidated | 9 |  |  | 12 |  |  |  |\n| Year-over-year Percentage Growth, excluding the effect of foreign exchange rates: |  |  |  |  |  |  |  |\n| North America | 13 | % |  | 12 | % |  |  |\n| International | 4 |  |  | 11 |  |  |  |\n| AWS | 29 |  |  | 13 |  |  |  |\n| Consolidated | 13 |  |  | 12 |  |  |  |\n| Net Sales Mix: |  |  |  |  |  |  |  |\n| North America | 61 | % |  | 61 | % |  |  |\n| International | 23 |  |  | 23 |  |  |  |\n| AWS | 16 |  |  | 16 |  |  |  |\n| Consolidated | 100 | % |  | 100 | % |  |  |"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Amazon 2022 年的淨銷售額是多少"
+      ],
+      "agentic_n_chunks": 3
+    },
+    {
+      "id": "bh-06",
+      "category": "historical",
+      "query": "NVIDIA 在 FY2023（截至 2023 年 1 月）的營收是多少？",
+      "answerable": true,
+      "answer": "NVIDIA 在 FY2023（截至 2023 年 1 月）的營收為 **$26,974**（以百萬美元計）【NVDA_10K_2025.html, chunk #163】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2025.html #163 (rerank=0.731)\n  - NVDA_10K_2024.html #0 (rerank=0.730)\n  - NVDA_10K_2024.html #209 (rerank=0.730)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 163
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 209
+        }
+      ],
+      "contexts": [
+        "[NVDA 10-K period 2025] /s/ PricewaterhouseCoopers LLP\n\nSan Jose, California\n\nFebruary 26, 2025\n\nWe have served as the Company’s auditor since 2004. 51\n\n\nNVIDIA Corporation and Subsidiaries\n\nConsolidated Statements of Income\n\n(In millions, except per share data)\n\nYear Ended\n\nJan 26, 2025Jan 28, 2024Jan 29, 2023\n\nRevenue$130,497 $60,922 $26,974 \n\nCost of revenue32,639 16,621 11,618 \n\nGross profit97,858 44,301 15,356 \n\nOperating expenses\n\nResearch and development12,914 8,675 7,339 \n\nSales, general and administrative3,491 2,654 2,440 \n\nAcquisition termination cost— — 1,353 \n\nTotal operating expenses16,405 11,329 11,132 \n\nOperating income81,453 32,972 4,224 \n\nInterest income1,786 866 267 \n\nInterest expense(247)(257)(262)\n\nOther, net1,034 237 (48)\n\nOther income (expense), net2,573 846 (43)\n\nIncome before income tax84,026 33,818 4,181 \n\nIncome tax expense (benefit)11,146 4,058 (187)\n\nNet income$72,880 $29,760 $4,368 \n\nNet income per share:\n\nBasic$2.97 $1.21 $0.18 \n\nDiluted$2.94 $1.19 $0.17 \n\nWeighted average shares used in per share computation:\n\nBasic24,555 24,690 24,870 \n\nDiluted24,804 24,940 25,070 \n\nSee accompanying Notes to the Consolidated Financial Statements. 52\n\n\nNVIDIA Corporation and Subsidiaries\n\nConsolidated Statements of Comprehensive Income\n\n(In millions)\n\nYear Ended\n\nJan 26, 2025Jan 28, 2024Jan 29, 2023\n\nNet income$72,880 $29,760 $4,368 \n\nOther comprehensive income (loss), net of tax\n\nAvailable-for-sale securities:\n\nNet change in unrealized gain (loss)1 80 (31)\n\nReclassification adjustments for net realized gain included in net income— — 1 \n\nNet change in unrealized gain (loss)1 80 (30)\n\nCash flow hedges:\n\nNet change in unrealized gain21 38 47 \n\nReclassification adjustments for net realized loss included in net income(21)(48)(49)\n\nNet change in unrealized loss— (10)(2)\n\nOther comprehensive income (loss), net of tax1 70 (32)\n\nTotal comprehensive income$72,881 $29,830 $4,336 \n\nSee accompanying Notes to the Consolidated Financial Statements. 53\n\n\nNVIDIA Corporation and Subsidiaries\n\nConsolidated Balance Sheets\n\n(In millions, except par value)\n\n Jan 26, 2025Jan 28, 2024\n\nAssets  \n\nCurrent assets:  \n\nCash and cash equivalents$8,589 $7,280 \n\nMarketable securities34,621 18,704 \n\nAccounts receivable, net23,065 9,999 \n\nInventories10,080 5,282 \n\nPrepaid expenses and other current assets3,771 3,080 \n\nTotal current assets80,126 44,345 \n\nProperty and equipment, net6,283 3,914 \n\nOperating lease assets1,793 1,346 \n\nGoodwill5,188 4,430 \n\nIntangible assets, net807 1,112 \n\nDeferred income tax assets10,979 6,081 \n\nOther assets6,425 4,500 \n\nTotal assets$111,601 $65,728 \n\nLiabilities and Shareholders' Equity\n\nCurrent liabilities:\n\nAccounts payable$6,310 $2,699 \n\nAccrued and other current liabilities11,737 6,682 \n\nShort-term debt— 1,250 \n\nTotal current liabilities18,047 10,631 \n\nLong-term debt8,463 8,459 \n\nLong-term operating lease liabilities 1,519 1,119",
+        "[NVDA 10-K period 2024] ## Consolidated Statement of Income\n\n**NVIDIA CORP** (NVDA)\n\n**Year Ended** *(In millions, except shares and per share data)*\n\n|  | Jan 28, 2024 | Jan 29, 2023 | Jan 30, 2022 |\n| --- | ---: | ---: | ---: |\n|     Revenue | $60,922 | $26,974 | $26,914 |\n| *    Data Center* | $47,525 | $15,005 | $10,613 |\n| *    Gaming* | $10,447 | $9,067 | $12,462 |\n| *    Professional Visualization* | $1,553 | $1,544 | $2,111 |\n| *    Automotive* | $1,091 | $903 | $566 |\n| *    OEM and Other* | $306 | $455 | $1,162 |\n|     Cost of revenue | $16,621 | $11,618 | $9,439 |\n| *    Inventory purchase obligations in excess of projections* | $1,400 | $1,100 |  |\n|   Gross profit | $44,301 | $15,356 | $17,475 |\n|     Research and development | $8,675 | $7,339 | $5,268 |\n|     Sales, general and administrative | $2,654 | $2,440 | $2,166 |\n|     Acquisition termination cost |  | $1,353 |  |\n|       Total operating expenses | $11,329 | $11,132 | $7,434 |\n|     Operating income | $32,972 | $4,224 | $10,041 |\n|     Interest income | $866 | $267 | $29 |\n|     Interest expense | $(257) | $(262) | $(236) |\n|     Other, net | $237 | $(48) | $107 |\n|     Other income (expense), net | $846 | $(43) | $(100) |\n|   Income before income tax | $33,818 | $4,181 | $9,941 |\n|   Income tax expense (benefit) | $4,058 | $(187) | $189 |\n|   Net income | $29,760 | $4,368 | $9,752 |\n|     Basic (in USD per share) | 12.05 | 1.76 | 3.91 |\n|     Diluted (in USD per share) | 11.93 | 1.74 | 3.85 |\n|     Basic (in shares) | 2,469 | 2,487 | 2,496 |\n|     Diluted (in shares) | 2,494 | 2,507 | 2,535 |",
+        "[NVDA 10-K period 2024] The table below presents details of our reportable segments and the “All Other” category. Compute & NetworkingGraphicsAll OtherConsolidated\n\n(In millions)\n\nYear Ended Jan 28, 2024:\n\nRevenue$47,405 $13,517 $— $60,922 \n\nOperating income (loss)$32,016 $5,846 $(4,890)$32,972 \n\nYear Ended Jan 29, 2023:\n\nRevenue$15,068 $11,906 $— $26,974 \n\nOperating income (loss)$5,083 $4,552 $(5,411)$4,224 \n\nYear Ended Jan 30, 2022:\n\nRevenue$11,046 $15,868 $— $26,914 \n\nOperating income (loss)$4,598 $8,492 $(3,049)$10,041 \n\n78\n\n\nNVIDIA Corporation and Subsidiaries\n\nNotes to the Consolidated Financial Statements\n\n(Continued)\n\nYear Ended\n\nJan 28, 2024Jan 29, 2023Jan 30, 2022\n\n(In millions)\n\nReconciling items included in \"All Other\" category:\n\nStock-based compensation expense$(3,549)$(2,710)$(2,004)\n\nUnallocated cost of revenue and operating expenses(728)(595)(399)\n\nAcquisition-related and other costs(583)(674)(636)\n\nIP-related and legal settlement costs(40)(23)(10)\n\nRestructuring costs and other— (54)— \n\nAcquisition termination cost— (1,353)— \n\nOther10 (2)— \n\nTotal$(4,890)$(5,411)$(3,049)\n\nRevenue by geographic areas is designated based upon the billing location of the customer. End customer location may be different than our customer’s billing location."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "NVIDIA 在 FY2023（截至 2023 年 1 月）的營收是多少？"
+      ],
+      "agentic_n_chunks": 3
+    },
+    {
+      "id": "bh-07",
+      "category": "historical",
+      "query": "Microsoft 在 2023 財年的營收是多少？",
+      "answerable": true,
+      "answer": "Microsoft 在 2023 財年的營收為 **2,119.15 億美元（$211,915 百萬）**【MSFT_10K_2024.html, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10K_2024.html #0 (rerank=0.726)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[MSFT 10-K period 2024] ## Consolidated Statement of Income\n\n**MICROSOFT CORPORATION** (MSFT)\n\n**Year Ended** *(In millions, except shares and per share data)*\n\n|  | Jun 30, 2024 | Jun 30, 2023 | Jun 30, 2022 |\n| --- | ---: | ---: | ---: |\n|         Revenue | $245,122 | $211,915 | $198,270 |\n| *        Product* | $64,773 | $64,699 | $72,732 |\n| *        Service and Other* | $180,349 | $147,216 | $125,538 |\n|         Cost of revenue | $74,114 | $65,863 | $62,650 |\n| *        Product* | $15,272 | $17,804 | $19,064 |\n| *        Service and Other* | $58,842 | $48,059 | $43,586 |\n|       Gross margin | $171,008 | $146,052 | $135,620 |\n|       Research and development | $29,510 | $27,195 | $24,512 |\n|       Sales and marketing | $24,456 | $22,759 | $21,825 |\n|       General and administrative | $7,609 | $7,575 | $5,900 |\n|         Operating income | $109,433 | $88,523 | $83,383 |\n|         Other income (expense), net | $(1,646) | $788 | $333 |\n|       Income before income taxes | $107,787 | $89,311 | $83,716 |\n|       Provision for income taxes | $19,651 | $16,950 | $10,978 |\n|       Net income | $88,136 | $72,361 | $72,738 |\n|         Basic | 11.86 | 9.72 | 9.70 |\n|         Diluted | 11.80 | 9.68 | 9.65 |\n|         Basic | 7,431 | 7,446 | 7,496 |\n|         Diluted | 7,469 | 7,472 | 7,540 |"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Microsoft 的 FY2023 營收是多少"
+      ],
+      "agentic_n_chunks": 1
+    },
+    {
+      "id": "bh-08",
+      "category": "historical",
+      "query": "Tesla 在 2024 年第一季的營收是多少？",
+      "answerable": true,
+      "answer": "Tesla 在 2024 年第一季（截至 2024 年 3 月 31 日）的營收為 **213 億美元（$21.30 billion）**，即 **213.01 億美元（$21,301 million）**【TSLA_10Q_202403.html, chunk #41】【TSLA_10Q_202403.html, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_10Q_202403.html #0 (rerank=0.731)\n  - TSLA_10Q_202403.html #41 (rerank=0.727)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "TSLA_10Q_202403.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "TSLA_10Q_202403.html",
+          "chunk_index": 41
+        }
+      ],
+      "contexts": [
+        "[TSLA 10-Q period 202403] ## Consolidated Statement of Income\n\n**Tesla, Inc.** (TSLA)\n\n**Three Months Ended** *(In millions, except shares and per share data)*\n\n|  | Mar 31, 2024 (Q1) | Mar 31, 2023 (Q1) |\n| --- | ---: | ---: |\n|           Revenues | $21,301 | $23,329 |\n| *          Automotive Revenues* | $17,378 | $19,963 |\n| *          Energy generation and storage* | 1,635 | 1,529 |\n| *          Services and other* | $2,288 | $1,837 |\n|           Total cost of revenues | $17,605 | $18,818 |\n| *          Automotive Revenues* | $14,166 | $15,755 |\n| *          Energy generation and storage* | 1,232 | 1,361 |\n| *          Services and other* | $2,207 | $1,702 |\n|         Gross profit | $3,696 | $4,511 |\n|           Research and development | $1,151 | $771 |\n|           Selling, general and administrative | $1,374 | $1,076 |\n|         Total operating expenses | $2,525 | $1,847 |\n|         Income from operations | 1,171 | 2,664 |\n|         Interest income | $350 | $213 |\n|         Interest expense | $(76) | $(29) |\n|         Other income (expense), net | $108 | $(48) |\n|         Income before income taxes | $1,553 | $2,800 |\n|         (Benefit from) provision for income taxes | $409 | $261 |\n|         Net income | $1,144 | $2,539 |\n|         Net income attributable to noncontrolling interests and redeemable noncontrolling interests in subsidiaries | $15 | $26 |\n|       Net income attributable to common stockholders | $1,129 | $2,513 |\n|         Basic (in dollars per share) | 0.37 | 0.80 |\n|         Diluted (in dollars per share) | 0.34 | 0.73 |\n|         Basic (in shares) | 3,186 | 3,166 |\n|         Diluted (in shares) | 3,484 | 3,468 |",
+        "[TSLA 10-Q period 202403] [section: Overview] Additionally, we are increasingly focused on products and services based on AI, robotics and automation. In 2024, we produced approximately 433,000 consumer vehicles and delivered approximately 387,000 consumer vehicles through the first quarter. We are focused on profitable growth, including by leveraging existing factories and production lines to introduce new and more affordable products, increasing vehicle production, utilized capacity and delivery capabilities, reducing costs, improving and developing our vehicles and battery technologies, vertically integrating and localizing our supply chain, further improving and deploying our FSD capabilities, including through our planned robotaxi product, and expanding our global infrastructure, including our service and charging infrastructure. In 2024, we deployed 4.05 GWh of energy storage products through the first quarter. We are focused on ramping the production and increasing the market penetration of our energy storage products. During the three months ended March 31, 2024, we recognized total revenues of $21.30 billion, representing a decrease of $2.03 billion, compared to the prior year. During the three months ended March 31, 2024, our net income attributable to common stockholders was $1.13 billion, representing an unfavorable change of $1.38 billion, compared to the same period in the prior year. We continue to ramp production and build and optimize our manufacturing capacity, expand our operations while focusing on further cost reductions and operational efficiencies to enable increased deliveries and deployments of our products, and invest in research and development to accelerate our AI, software, and fleet-based profits for further revenue growth. We ended the first quarter of 2024 with $26.86 billion in cash and cash equivalents and investments, representing a decrease of $2.23 billion from the end of 2023. Our cash flows provided by operating activities during the three months ended March 31, 2024 and 2023 were $242 million and $2.51 billion, respectively, representing a decrease of $2.27 billion. Capital expenditures amounted to $2.77 billion during the three months ended March 31, 2024, compared to $2.07 billion during the same period ended March 31, 2023, representing an increase of $701 million. Overall growth has allowed our business to generally fund itself, and we will continue investing in a number of capital-intensive projects and research and development in upcoming periods.\n\nManagement Opportunities, Challenges and Uncertainties and 2024 Outlook"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Tesla 在 2024 年第一季的營收是多少"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "bh-09",
+      "category": "historical",
+      "query": "NVIDIA 在 2023 年 10 月底結束的那一季營收是多少？",
+      "answerable": true,
+      "answer": "NVIDIA 在 2023 年 10 月底結束的那一季營收為 **181.2 億美元（$18,120 百萬）**（即 181.2 億美元（$18.12 billion））【NVDA_10Q_202310.html, chunk #0】。  \n\n- 這是 2023 年 10 月 29 日結束的第三季（Q3）營收，列於合併損益表的「Revenue」項目【NVDA_10Q_202310.html, chunk #0】。  \n- 同一數字亦在該季的「Revenue」段落中被描述為「Revenue for the third quarter … was 181.2 億美元（$18.12 billion）」【NVDA_10Q_202310.html, chunk #51】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10Q_202410.html #0 (rerank=0.730)\n  - NVDA_10Q_202410.html #15 (rerank=0.730)\n  - NVDA_10Q_202310.html #0 (rerank=0.729)\n  - NVDA_10Q_202310.html #51 (rerank=0.728)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "NVDA_10Q_202410.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202410.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "NVDA_10Q_202310.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202310.html",
+          "chunk_index": 51
+        }
+      ],
+      "contexts": [
+        "[NVDA 10-Q period 202410] ## Consolidated Statement of Income\n\n**NVIDIA CORP** (NVDA)\n\n**Three and Nine Months Ended** *(In millions, except shares and per share data)*\n\n|  | Oct 27, 2024 (Q3) | Oct 29, 2023 (Q3) | Oct 27, 2024 (YTD) | Oct 29, 2023 (YTD) |\n| --- | ---: | ---: | ---: | ---: |\n|     Revenue | $35,082 | $18,120 | $91,166 | $38,819 |\n| *    Data Center* | $30,771 | $14,514 | $79,606 | $29,121 |\n| *      Compute* | $27,644 | $11,908 | $69,640 | $23,877 |\n| *      Networking* | $3,127 | $2,606 | $9,966 | $5,244 |\n| *    Gaming* | $3,279 | $2,856 | $8,806 | $7,582 |\n| *    Professional Visualization* | $486 | $416 | $1,367 | $1,090 |\n| *    Automotive* | $449 | $261 | $1,124 | $810 |\n| *    OEM and Other* | $97 | $73 | $263 | $216 |\n|     Cost of revenue | $8,926 | $4,720 | $22,031 | $11,309 |\n| *    Inventory Purchase Obligations In Excess Of Projections* | $543 | $473 | $1,300 | $734 |\n|   Gross profit | $26,156 | $13,400 | $69,135 | $27,510 |\n|       Research and development | $3,390 | $2,294 | $9,200 | $6,210 |\n|       Sales, general and administrative | $897 | $689 | $2,516 | $1,942 |\n|       Total operating expenses | $4,287 | $2,983 | $11,716 | $8,152 |\n|     Operating income | $21,869 | $10,417 | $57,419 | $19,358 |\n|     Interest income | $472 | $234 | $1,275 | $572 |\n|     Interest expense | $(61) | $(63) | $(186) | $(194) |\n|     Other, net | $36 | $(66) | $301 | $(24) |\n|     Other income (expense), net | $447 | $105 | $1,390 | $354 |\n|   Income before income tax | $22,316 | $10,522 | $58,809 | $19,712 |\n|   Income tax expense | $3,007 | $1,279 | $8,020 | $2,237 |\n|   Net income | $19,309 | $9,243 | $50,789 | $17,475 |\n|     Basic (in dollars per share) | 0.79 | 0.37 | 2.07 | 0.71 |\n|     Diluted (in dollars per share) | 0.78 | 0.37 | 2.04 | 0.70 |\n|     Basic (in shares) | 24,533 | 24,680 | 24,577 | 24,700 |\n|     Diluted (in shares) | 24,774 | 24,940 | 24,837 | 24,940 |",
+        "[NVDA 10-Q period 202410] Item 1. Financial Statements (Unaudited)\n\nNVIDIA Corporation and Subsidiaries\n\nCondensed Consolidated Statements of Income\n\n(In millions, except per share data)\n\n(Unaudited)\n\n Three Months EndedNine Months Ended\n\n Oct 27, 2024Oct 29, 2023Oct 27, 2024Oct 29, 2023\n\nRevenue$35,082 $18,120 $91,166 $38,819 \n\nCost of revenue8,926 4,720 22,031 11,309 \n\nGross profit26,156 13,400 69,135 27,510 \n\nOperating expenses  \n\nResearch and development3,390 2,294 9,200 6,210 \n\nSales, general and administrative897 689 2,516 1,942 \n\nTotal operating expenses4,287 2,983 11,716 8,152 \n\nOperating income21,869 10,417 57,419 19,358 \n\nInterest income472 234 1,275 572 \n\nInterest expense(61)(63)(186)(194)\n\nOther, net36 (66)301 (24)\n\nOther income (expense), net\n\n447 105 1,390 354 \n\nIncome before income tax22,316 10,522 58,809 19,712 \n\nIncome tax expense3,007 1,279 8,020 2,237 \n\nNet income$19,309 $9,243 $50,789 $17,475 \n\nNet income per share:\n\nBasic$0.79 $0.37 $2.07 $0.71 \n\nDiluted$0.78 $0.37 $2.04 $0.70 \n\nWeighted average shares used in per share computation:\n\nBasic24,533 24,680 24,577 24,700 \n\nDiluted24,774 24,940 24,837 24,940 \n\nSee accompanying Notes to Condensed Consolidated Financial Statements. 3\n\nNVIDIA Corporation and Subsidiaries\n\nCondensed Consolidated Statements of Comprehensive Income\n\n(In millions)\n\n(Unaudited)\n\n Three Months EndedNine Months Ended\n\n Oct 27, 2024Oct 29, 2023Oct 27, 2024Oct 29, 2023\n\nNet income$19,309 $9,243 $50,789 $17,475 \n\nOther comprehensive income (loss), net of tax\n\nAvailable-for-sale securities:\n\nNet change in unrealized gain49 — 71 7 \n\nCash flow hedges:\n\nNet change in unrealized gain (loss)— (23)20 (14)\n\nReclassification adjustments for net realized loss included in net income(2)(14)(15)(38)\n\nNet change in unrealized gain (loss)(2)(37)5 (52)\n\nOther comprehensive income (loss), net of tax47 (37)76 (45)\n\nTotal comprehensive income$19,356 $9,206 $50,865 $17,430 \n\nSee accompanying Notes to Condensed Consolidated Financial Statements. 4\n\nNVIDIA Corporation and Subsidiaries\n\nCondensed Consolidated Balance Sheets\n\n(In millions)\n\n(Unaudited)\n\n Oct 27, 2024Jan 28, 2024\n\nAssets\n\nCurrent assets:  \n\nCash and cash equivalents$9,107 $7,280 \n\nMarketable securities29,380 18,704 \n\nAccounts receivable, net17,693 9,999 \n\nInventories7,654 5,282 \n\nPrepaid expenses and other current assets3,806 3,080 \n\nTotal current assets67,640 44,345 \n\nProperty and equipment, net5,343 3,914 \n\nOperating lease assets1,755 1,346 \n\nGoodwill4,724 4,430 \n\nIntangible assets, net838 1,112 \n\nDeferred income tax assets10,276 6,081 \n\nOther assets5,437 4,500 \n\nTotal assets$96,013 $65,728 \n\nLiabilities and Shareholders' Equity  \n\nCurrent liabilities:  \n\nAccounts payable$5,353 $2,699 \n\nAccrued and other current liabilities11,126 6,682",
+        "[NVDA 10-Q period 202310] ## Consolidated Statement of Income\n\n**NVIDIA CORP** (NVDA)\n\n**Three and Nine Months Ended** *(In millions, except shares and per share data)*\n\n|  | Oct 29, 2023 (Q3) | Oct 30, 2022 (Q3) | Oct 29, 2023 (YTD) | Oct 30, 2022 (YTD) |\n| --- | ---: | ---: | ---: | ---: |\n|     Revenue | $18,120 | $5,931 | $38,819 | $20,923 |\n| *    Data Center* | $14,514 | $3,833 | $29,121 | $11,389 |\n| *    Gaming* | $2,856 | $1,574 | $7,582 | $7,236 |\n| *    Professional Visualization* | $416 | $200 | $1,090 | $1,318 |\n| *    Automotive* | $261 | $251 | $810 | $609 |\n| *    OEM and Other* | $73 | $73 | $216 | $371 |\n|     Cost of revenue | $4,720 | $2,754 | $11,309 | $9,400 |\n|   Gross profit | $13,400 | $3,177 | $27,510 | $11,523 |\n|     Research and development | $2,294 | $1,945 | $6,210 | $5,387 |\n|     Sales, general and administrative | $689 | $631 | $1,942 | $1,815 |\n|     Acquisition termination cost |  |  |  | $1,353 |\n|       Total operating expenses | $2,983 | $2,576 | $8,152 | $8,555 |\n|     Operating income | $10,417 | $601 | $19,358 | $2,968 |\n|     Interest income | $234 | $88 | $572 | $152 |\n|     Interest expense | $(63) | $(65) | $(194) | $(198) |\n|     Other, net | $(66) | $(11) | $(24) | $(29) |\n|     Other income (expense), net | $105 | $12 | $354 | $(75) |\n|   Income before income tax | $10,522 | $613 | $19,712 | $2,893 |\n|   Income tax expense (benefit) | $1,279 | $(67) | $2,237 | $(61) |\n|   Net income | $9,243 | $680 | $17,475 | $2,954 |\n|     Basic (in dollars per share) | 3.75 | 0.27 | 7.07 | 1.18 |\n|     Diluted (in dollars per share) | 3.71 | 0.27 | 7.01 | 1.17 |\n|     Basic (in shares) | 2,468 | 2,483 | 2,470 | 2,495 |\n|     Diluted (in shares) | 2,494 | 2,499 | 2,494 | 2,517 |",
+        "[NVDA 10-Q period 202310] [section: Revenue] Revenue\n\nRevenue for the third quarter and first nine months of fiscal year 2024 was $18.12 billion and $38.82 billion, up 206% and 86%, respectively. 29\n\nRevenue by Reportable Segments\n\nThree Months EndedNine Months Ended\n\n October 29,2023October 30,2022$Change%ChangeOctober 29,2023October 30,2022$Change%Change\n\n ($ in millions)\n\nCompute & Networking$14,645 $3,816 $10,829 284 %$29,507 $11,395 $18,112 159 %\n\nGraphics3,475 2,115 1,360 64 %9,312 9,528 (216)(2)%\n\nTotal$18,120 $5,931 $12,189 206 %$38,819 $20,923 $17,896 86 %\n\nCompute & Networking - The increase in the third quarter and first nine months of fiscal year 2024 compared to the third quarter and first nine months of fiscal year 2023 was due to higher Data Center revenue. Compute GPUs grew 369% year-on-year and 193% compared to the first nine months of fiscal year 2023 led by strong demand for the NVIDIA HGX platform driven by global demand for the training and inferencing of large language models, recommendation engines and inferencing of generative AI applications."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "NVIDIA 在 2023 年 10 月底結束的那一季營收是多少？"
+      ],
+      "agentic_n_chunks": 4
+    },
+    {
+      "id": "bh-10",
+      "category": "historical",
+      "query": "Alphabet 在 2024 年第一季的營收是多少？",
+      "answerable": true,
+      "answer": "Alphabet 在 2024 年第一季的營收為 **805.39 億美元（$80,539 百萬）**【GOOGL_10Q_202403.html, chunk #0】。  \n\n- 這一季的營收較 2023 年第一季的 **697.87 億美元（$69,787 百萬）** 上升了約 **107.52 億美元（$10,752 百萬）**【GOOGL_10Q_202403.html, chunk #32】。  \n- 營收增長的同時，成本與費用也從 **523.72 億美元（$52,372 百萬）** 增至 **550.67 億美元（$55,067 百萬）**，導致營業利益從 **174.15 億美元（$17,415 百萬）** 提升至 **254.72 億美元（$25,472 百萬）**【GOOGL_10Q_202403.html, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_10Q_202403.html #0 (rerank=0.730)\n  - GOOGL_10Q_202403.html #32 (rerank=0.728)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "GOOGL_10Q_202403.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10Q_202403.html",
+          "chunk_index": 32
+        }
+      ],
+      "contexts": [
+        "[GOOGL 10-Q period 202403] ## Consolidated Statement of Income\n\n**Alphabet Inc.** (GOOG)\n\n**Three Months Ended** *(In millions, except shares and per share data)*\n\n|  | Mar 31, 2024 (Q1) | Mar 31, 2023 (Q1) |\n| --- | ---: | ---: |\n|   Revenues | $80,539 | $69,787 |\n|       Cost of revenues | $33,712 | $30,612 |\n|       Research and development | $11,903 | $11,468 |\n|       Sales and marketing | $6,426 | $6,533 |\n|       General and administrative | $3,026 | $3,759 |\n|       Total costs and expenses | $55,067 | $52,372 |\n|     Income from operations | 25,472 | 17,415 |\n|     Other income (expense), net | $2,843 | $790 |\n|   Income before income taxes | $28,315 | $18,205 |\n|   Provision for income taxes | $4,653 | $3,154 |\n|   Net income | $23,662 | $15,051 |\n|   Basic net income per share of Class A, Class B, and Class C stock (in dollars per share) | 1.91 | 1.18 |\n| *    Class A Common Stock* | 1.91 | 1.18 |\n| *    Class B Common Stock* | 1.91 | 1.18 |\n| *    Class C Capital Stock* | 1.91 | 1.18 |\n|   Diluted net income per share of Class A, Class B, and Class C stock (in dollars per share) | 1.89 | 1.17 |\n| *    Class A Common Stock* | 1.89 | 1.17 |\n| *    Class B Common Stock* | 1.89 | 1.17 |\n| *    Class C Capital Stock* | 1.89 | 1.17 |",
+        "[GOOGL 10-Q period 202403] Alphabet Inc. CONSOLIDATED STATEMENTS OF INCOME\n\n(in millions, except per share amounts; unaudited)\n\nThree Months Ended\n\nMarch 31,\n\n20232024\n\nRevenues$69,787 $80,539 \n\nCosts and expenses:\n\nCost of revenues30,612 33,712 \n\nResearch and development11,468 11,903 \n\nSales and marketing6,533 6,426 \n\nGeneral and administrative3,759 3,026 \n\nTotal costs and expenses52,372 55,067 \n\nIncome from operations17,415 25,472 \n\nOther income (expense), net790 2,843 \n\nIncome before income taxes18,205 28,315 \n\nProvision for income taxes3,154 4,653 \n\nNet income$15,051 $23,662 \n\nBasic net income per share of Class A, Class B, and Class C stock$1.18 $1.91 \n\nDiluted net income per share of Class A, Class B, and Class C stock$1.17 $1.89 \n\nSee accompanying notes. Alphabet Inc. Alphabet Inc. CONSOLIDATED STATEMENTS OF COMPREHENSIVE INCOME\n\n(in millions; unaudited)\n\nThree Months Ended\n\n March 31,\n\n 20232024\n\nNet income$15,051 $23,662 \n\nOther comprehensive income (loss):\n\nChange in foreign currency translation adjustment, net of income tax benefit (expense) of $47 and $(18)\n\n596 (503)\n\nAvailable-for-sale investments:\n\nChange in net unrealized gains (losses)866 (360)\n\nLess: reclassification adjustment for net (gains) losses included in net income292 311 \n\nNet change, net of income tax benefit (expense) of $(330) and $14\n\n1,158 (49)\n\nCash flow hedges:\n\nChange in net unrealized gains (losses)(74)186 \n\nLess: reclassification adjustment for net (gains) losses included in net income(77)(71)\n\nNet change, net of income tax benefit (expense) of $30 and $(23)\n\n(151)115 \n\nOther comprehensive income (loss)1,603 (437)\n\nComprehensive income$16,654 $23,225 \n\nSee accompanying notes. 7\n\n\nAlphabet Inc. Alphabet Inc. CONSOLIDATED STATEMENTS OF STOCKHOLDERS’ EQUITY\n\n(in millions; unaudited)\n\n Three Months Ended March 31, 2023\n\n Class A, Class B, Class C Stock and Additional Paid-In CapitalAccumulatedOtherComprehensiveIncome (Loss)RetainedEarningsTotalStockholders’Equity\n\n SharesAmount\n\nBalance as of December 31, 202212,849 $68,184 $(7,603)$195,563 $256,144 \n\nStock issued30 0 0 0 0 \n\nStock-based compensation expense0 5,313 0 0 5,313 \n\nTax withholding related to vesting of restricted stock units and other0 (2,093)0 0 (2,093)\n\nRepurchases of stock(157)(1,135)0 (13,989)(15,124)\n\nNet income0 0 0 15,051 15,051 \n\nOther comprehensive income (loss)0 0 1,603 0 1,603 \n\nBalance as of March 31, 202312,722 $70,269 $(6,000)$196,625 $260,894 \n\n Three Months Ended March 31, 2024\n\n Class A, Class B, Class C Stock and Additional Paid-In CapitalAccumulatedOtherComprehensiveIncome (Loss)RetainedEarningsTotalStockholders’Equity\n\n SharesAmount"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Alphabet 在 2024 年第一季的營收是多少？"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "bh-11",
+      "category": "historical",
+      "query": "Apple 在 2024 年 6 月底結束的那一季淨銷售額是多少？",
+      "answerable": true,
+      "answer": "Apple 在 2024 年 6 月底結束的那一季（即截至 2024 年 6 月 30 日的財季）之淨銷售額，參考資料中並未披露；唯一可取得的最新季別淨銷售額是截至 2024 年 3 月 30 日的財季，為 **907.53 億美元（$90,753 百萬）**【AAPL_10Q_202403.html, chunk #15】。因此，根據目前提供的文件，無法得知 2024 年 6 月底結束財季的淨銷售額。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202403.html #15 (rerank=0.729)\n  - AAPL_10Q_202403.html #39 (rerank=0.728)\n  - AAPL_10Q_202403.html #0 (rerank=0.727)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AAPL_10Q_202403.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "AAPL_10Q_202403.html",
+          "chunk_index": 39
+        },
+        {
+          "source": "AAPL_10Q_202403.html",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[AAPL 10-Q period 202403] Financial Statements\n\nApple Inc. CONDENSED CONSOLIDATED STATEMENTS OF OPERATIONS (Unaudited)\n\n(In millions, except number of shares, which are reflected in thousands, and per-share amounts)\n\nThree Months EndedSix Months Ended\n\nMarch 30,2024April 1,2023March 30,2024April 1,2023\n\nNet sales:\n\n   Products$66,886 $73,929 $163,344 $170,317 \n\n   Services23,867 20,907 46,984 41,673 \n\nTotal net sales90,753 94,836 210,328 211,990 \n\nCost of sales:\n\n   Products42,424 46,795 100,864 107,560 \n\n   Services6,058 6,065 12,338 12,122 \n\nTotal cost of sales48,482 52,860 113,202 119,682 \n\nGross margin42,271 41,976 97,126 92,308 \n\nOperating expenses:\n\nResearch and development7,903 7,457 15,599 15,166 \n\nSelling, general and administrative6,468 6,201 13,254 12,808 \n\nTotal operating expenses14,371 13,658 28,853 27,974 \n\nOperating income27,900 28,318 68,273 64,334 \n\nOther income/(expense), net158 64 108 (329)\n\nIncome before provision for income taxes28,058 28,382 68,381 64,005 \n\nProvision for income taxes4,422 4,222 10,829 9,847 \n\nNet income$23,636 $24,160 $57,552 $54,158 \n\nEarnings per share:\n\nBasic$1.53 $1.53 $3.72 $3.42 \n\nDiluted$1.53 $1.52 $3.71 $3.41 \n\nShares used in computing earnings per share:\n\nBasic15,405,856 15,787,154 15,457,810 15,839,939 \n\nDiluted15,464,709 15,847,050 15,520,675 15,901,384 \n\nSee accompanying Notes to Condensed Consolidated Financial Statements. Apple Inc. | Q2 2024 Form 10-Q | 1\n\nApple Inc. CONDENSED CONSOLIDATED STATEMENTS OF COMPREHENSIVE INCOME (Unaudited)\n\n(In millions)\n\nThree Months EndedSix Months Ended\n\nMarch 30,2024April 1,2023March 30,2024April 1,2023\n\nNet income$23,636 $24,160 $57,552 $54,158 \n\nOther comprehensive income/(loss):\n\nChange in foreign currency translation, net of tax(322)(95)(14)(109)\n\nChange in unrealized gains/losses on derivative instruments, net of tax:\n\nChange in fair value of derivative instruments456 (13)(75)(1,001)\n\nAdjustment for net (gains)/losses realized and included in net income232 (191)(591)(1,957)\n\nTotal change in unrealized gains/losses on derivative instruments688 (204)(666)(2,958)\n\nChange in unrealized gains/losses on marketable debt securities, net of tax:\n\nChange in fair value of marketable debt securities(7)1,403 3,038 2,303 \n\nAdjustment for net (gains)/losses realized and included in net income59 62 134 127 \n\nTotal change in unrealized gains/losses on marketable debt securities52 1,465 3,172 2,430 \n\nTotal other comprehensive income/(loss)418 1,166 2,492 (637)\n\nTotal comprehensive income$24,054 $25,326 $60,044 $53,521",
+        "[AAPL 10-Q period 202403] [section: Products and Services Performance] Products and Services Performance\n\nThe following table shows net sales by category for the three- and six-month periods ended March 30, 2024 and April 1, 2023 (dollars in millions):\n\nThree Months EndedSix Months Ended\n\nMarch 30,2024April 1,2023ChangeMarch 30,2024April 1,2023Change\n\nNet sales by category:\n\niPhone$45,963 $51,334 (10)%$115,665 $117,109 (1)%\n\nMac7,451 7,168 4 %15,231 14,903 2 %\n\niPad5,559 6,670 (17)%12,582 16,066 (22)%\n\nWearables, Home and Accessories7,913 8,757 (10)%19,866 22,239 (11)%\n\nServices23,867 20,907 14 %46,984 41,673 13 %\n\nTotal net sales$90,753 $94,836 (4)%$210,328 $211,990 (1)%\n\niPhone\n\niPhone net sales decreased during the second quarter of 2024 compared to the second quarter of 2023 due to lower net sales of Pro models. Year-over-year iPhone net sales were relatively flat during the first six months of 2024. Mac\n\nMac net sales increased during the second quarter and first six months of 2024 compared to the same periods in 2023 due to higher net sales of laptops. iPad\n\niPad net sales decreased during the second quarter and first six months of 2024 compared to the same periods in 2023 due primarily to lower net sales of iPad Pro® and iPad 9th generation. Wearables, Home and Accessories\n\nWearables, Home and Accessories net sales decreased during the second quarter and first six months of 2024 compared to the same periods in 2023 due primarily to lower net sales of Wearables and Accessories. Services\n\nServices net sales increased during the second quarter and first six months of 2024 compared to the same periods in 2023 due primarily to higher net sales from advertising, the App Store® and cloud services. Apple Inc.\n\n| Q2 2024 Form 10-Q | 15",
+        "[AAPL 10-Q period 202403] ## Consolidated Statement of Income\n\n**Apple Inc.** (AAPL)\n\n**Three and Six Months Ended** *(In millions, except shares in thousands and per share data)*\n\n|  | Mar 30, 2024 (Q2) | Mar 30, 2024 (YTD) | Apr 1, 2023 (YTD) | Apr 1, 2023 (Q3) |\n| --- | ---: | ---: | ---: | ---: |\n|         Net sales | $90,753 | $210,328 | $211,990 | $94,836 |\n| *        Products* | $66,886 | $163,344 | $170,317 | $73,929 |\n| *        Services* | $23,867 | $46,984 | $41,673 | $20,907 |\n|         Cost of sales | $48,482 | $113,202 | $119,682 | $52,860 |\n| *        Products* | $42,424 | $100,864 | $107,560 | $46,795 |\n| *        Services* | $6,058 | $12,338 | $12,122 | $6,065 |\n|       Gross margin | $42,271 | $97,126 | $92,308 | $41,976 |\n|           Research and development | $7,903 | $15,599 | $15,166 | $7,457 |\n|           Selling, general and administrative | $6,468 | $13,254 | $12,808 | $6,201 |\n|           Total operating expenses | $14,371 | $28,853 | $27,974 | $13,658 |\n|         Operating income | $27,900 | $68,273 | $64,334 | $28,318 |\n|         Other income/(expense), net | $158 | $108 | $(329) | $64 |\n|       Income before provision for income taxes | $28,058 | $68,381 | $64,005 | $28,382 |\n|       Provision for income taxes | $4,422 | $10,829 | $9,847 | $4,222 |\n|       Net income | $23,636 | $57,552 | $54,158 | $24,160 |\n|         Basic (in dollars per share) | 1.53 | 3.72 | 3.42 | 1.53 |\n|         Diluted (in dollars per share) | 1.53 | 3.71 | 3.41 | 1.52 |\n|         Basic (in shares) | 15,405,856 | 15,457,810 | 15,839,939 | 15,787,154 |\n|         Diluted (in shares) | 15,464,709 | 15,520,675 | 15,901,384 | 15,847,050 |"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Apple 的 FY2024 Q2 淨銷售額是多少"
+      ],
+      "agentic_n_chunks": 3
+    },
+    {
+      "id": "bh-12",
+      "category": "historical",
+      "query": "Google Cloud 在 2022 年的營收是多少？",
+      "answerable": true,
+      "answer": "Google Cloud 在 2022 年的營收為 **262.8 億美元（$26,280 million）**【GOOGL_10K_2024.html, chunk #320】。此數字來自 Alphabet 2022 年度財報的分部收入表，列示 Google Cloud 於 2022 年的營收為 26,280（單位：百萬美元）【GOOGL_10K_2023.html, chunk #323】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_10K_2024.html #320 (rerank=0.731)\n  - GOOGL_10K_2023.html #323 (rerank=0.730)\n  - GOOGL_10K_2023.html #287 (rerank=0.728)\n  - GOOGL_10K_2024.html #287 (rerank=0.727)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "GOOGL_10K_2024.html",
+          "chunk_index": 320
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 323
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 287
+        },
+        {
+          "source": "GOOGL_10K_2024.html",
+          "chunk_index": 287
+        }
+      ],
+      "contexts": [
+        "[GOOGL 10-K period 2024] Our operating segments are not evaluated using asset information. The following table presents revenue, profitability, and expense information about our segments (in millions):\n\nYear Ended December 31,\n\n202220232024\n\nRevenues:\n\nGoogle Services$253,528 $272,543 $304,930 \n\nGoogle Cloud26,280 33,088 43,229 \n\nOther Bets1,068 1,527 1,648 \n\nHedging gains (losses)1,960 236 211 \n\nTotal revenues$282,836 $307,394 $350,018 \n\nOperating income (loss):\n\nGoogle Services$82,699 $95,858 $121,263 \n\nGoogle Cloud(1,922)1,716 6,112 \n\nOther Bets(4,636)(4,095)(4,444)\n\nAlphabet-level activities\n\n(1,299)(9,186)(10,541)\n\nTotal income from operations$74,842 $84,293 $112,390 \n\nSupplemental information about our segment expenses:\n\nGoogle Services:\n\nEmployee compensation expenses\n\n$43,529 $46,224 $44,560 \n\nOther costs and expenses\n\n127,300 130,461 139,107 \n\nTotal Google Services costs and expenses\n\n$170,829 $176,685 $183,667 \n\nGoogle Cloud:\n\nEmployee compensation expenses\n\n$16,132 $19,054 $20,519 \n\nOther costs and expenses\n\n12,070 12,318 16,598 \n\nTotal Google Cloud costs and expenses\n\n$28,202 $31,372 $37,117 \n\nGoogle Services and Google Cloud employee compensation expenses include the costs associated with direct and allocated employees. Google Services and Google Cloud other costs and expenses primarily include direct costs, such as advertising and promotional activities and third party services fees as well as allocated costs, such as technical infrastructure and office facilities usage costs. Additionally, Google Services other costs and expenses include content and traffic acquisition costs and device costs. See Note 2 for information relating to revenues by geography.",
+        "[GOOGL 10-K period 2023] Our operating segments are not evaluated using asset information. The following table presents information about our segments (in millions):\n\nYear Ended December 31,\n\n202120222023\n\nRevenues:\n\nGoogle Services$237,529 $253,528 $272,543 \n\nGoogle Cloud19,206 26,280 33,088 \n\nOther Bets753 1,068 1,527 \n\nHedging gains (losses)149 1,960 236 \n\nTotal revenues$257,637 $282,836 $307,394 \n\nOperating income (loss):\n\nGoogle Services$88,132 $82,699 $95,858 \n\nGoogle Cloud(2,282)(1,922)1,716 \n\nOther Bets(4,051)(4,636)(4,095)\n\nAlphabet-level activities\n\n(3,085)(1,299)(9,186)\n\nTotal income from operations$78,714 $74,842 $84,293 \n\nSee Note 2 for information relating to revenues by geography. 86.",
+        "[GOOGL 10-K period 2023] Note 2. Revenues \n\nDisaggregated Revenues\n\nThe following table presents revenues disaggregated by type (in millions):\n\nYear Ended December 31,\n\n202120222023\n\nGoogle Search & other$148,951 $162,450 $175,033 \n\nYouTube ads28,845 29,243 31,510 \n\nGoogle Network31,701 32,780 31,312 \n\nGoogle advertising209,497 224,473 237,855 \n\nGoogle subscriptions, platforms, and devices\n\n28,032 29,055 34,688 \n\nGoogle Services total237,529 253,528 272,543 \n\nGoogle Cloud19,206 26,280 33,088 \n\nOther Bets753 1,068 1,527 \n\nHedging gains (losses)149 1,960 236 \n\nTotal revenues$257,637 $282,836 $307,394 \n\nNo individual customer or groups of affiliated customers represented more than 10% of our revenues in 2021, 2022, or 2023. The following table presents revenues disaggregated by geography, based on the addresses of our customers (in millions):\n\nYear Ended December 31,\n\n 202120222023\n\nUnited States$117,854 46 %$134,814 48 %$146,286 47 %\n\nEMEA(1)\n\n79,107 31 82,062 29 91,038 30 \n\nAPAC(1)\n\n46,123 18 47,024 16 51,514 17 \n\nOther Americas(1)\n\n14,404 5 16,976 6 18,320 6 \n\nHedging gains (losses)149 0 1,960 1 236 0 \n\nTotal revenues$257,637 100 %$282,836 100 %$307,394 100 %\n\n(1)    Regions represent Europe, the Middle East, and Africa (EMEA); Asia-Pacific (APAC); and Canada and Latin America (\"Other Americas\"). Revenue Backlog\n\nAs of December 31, 2023, we had $74.1 billion of remaining performance obligations (“revenue backlog”), primarily related to Google Cloud. Our revenue backlog represents commitments in customer contracts for future services that have not yet been recognized as revenue. The estimated revenue backlog and timing of revenue recognition for these commitments is largely driven by our ability to deliver in accordance with relevant contract terms and when our customers utilize services. We expect to recognize approximately half of the revenue backlog as revenues over the next 24 months with the remaining to be recognized thereafter. Revenue backlog includes related deferred revenue currently recorded as well as amounts that will be invoiced in future periods, and excludes contracts with an original expected term of one year or less and cancellable contracts. Deferred Revenues\n\nWe record deferred revenues when cash payments are received or due in advance of our performance, including amounts which are refundable. Deferred revenues primarily relate to Google Cloud and Google subscriptions, platforms, and devices. Total deferred revenue as of December 31, 2022 was $4.5 billion, of which $2.4 billion was recognized as revenues for the year ended December 31, 2023. Note 3.",
+        "[GOOGL 10-K period 2024] Note 2. Revenues \n\nDisaggregated Revenues\n\nThe following table presents revenues disaggregated by type (in millions):\n\nYear Ended December 31,\n\n202220232024\n\nGoogle Search & other$162,450 $175,033 $198,084 \n\nYouTube ads29,243 31,510 36,147 \n\nGoogle Network32,780 31,312 30,359 \n\nGoogle advertising224,473 237,855 264,590 \n\nGoogle subscriptions, platforms, and devices\n\n29,055 34,688 40,340 \n\nGoogle Services total253,528 272,543 304,930 \n\nGoogle Cloud26,280 33,088 43,229 \n\nOther Bets1,068 1,527 1,648 \n\nHedging gains (losses)1,960 236 211 \n\nTotal revenues$282,836 $307,394 $350,018 \n\nNo individual customer or groups of affiliated customers represented more than 10% of our revenues in 2022, 2023, or 2024. The following table presents revenues disaggregated by geography, based on the addresses of our customers (in millions):\n\nYear Ended December 31,\n\n 202220232024\n\nUnited States$134,814 48 %$146,286 47 %$170,447 49 %\n\nEMEA(1)\n\n82,062 29 91,038 30 102,127 29 \n\nAPAC(1)\n\n47,024 16 51,514 17 56,815 16 \n\nOther Americas(1)\n\n16,976 6 18,320 6 20,418 6 \n\nHedging gains (losses)1,960 1 236 0 211 0 \n\nTotal revenues$282,836 100 %$307,394 100 %$350,018 100 %\n\n(1)    Regions represent Europe, the Middle East, and Africa (EMEA); Asia-Pacific (APAC); and Canada and Latin America (\"Other Americas\"). Revenue Backlog\n\nAs of December 31, 2024, we had $93.2 billion of remaining performance obligations (“revenue backlog”), primarily related to Google Cloud. Revenue backlog represents commitments in customer contracts for future services that have not yet been recognized as revenue. We expect to recognize approximately half of the revenue backlog as revenues over the next 24 months with the remainder to be recognized thereafter. The estimated revenue backlog and timing of revenue recognition for these commitments is largely driven by our ability to deliver in accordance with relevant contract terms and when our customers utilize services. Revenue backlog includes related deferred revenue currently recorded as well as amounts that will be invoiced in future periods, and excludes contracts with an original expected term of one year or less and cancellable contracts. Deferred Revenues\n\nWe record deferred revenues when cash payments are received or due in advance of our performance, including amounts which are refundable. Deferred revenues primarily relate to Google Cloud and Google subscriptions, platforms, and devices. Total deferred revenue as of December 31, 2023 was $5.0 billion, of which $3.9 billion was recognized as revenues for the year ended December 31, 2024. Total deferred revenue as of December 31, 2024 was $6.0 billion. Note 3.\n\nFinancial Instruments \n\n64."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Google Cloud 在 2022 年的營收是多少"
+      ],
+      "agentic_n_chunks": 4
+    },
+    {
+      "id": "bh-13",
+      "category": "historical",
+      "query": "Meta 的 Reality Labs 部門在 2022 年虧損多少？",
+      "answerable": true,
+      "answer": "Meta 在 2022 年的 Reality Labs 部門虧損為 (13,717) million【META_10K_2024.html, chunk #206】。  \n\n此數字來源於 Meta 2024 年 10‑K 報告的「Segment profitability」表格，該表列示 Reality Labs 在 2024、2023 與 2022 年的營運損益，分別為 (17,729) million、(16,120) million 與 (13,717) million（單位為百萬美元）【META_10K_2024.html, chunk #206】。  \n\n因此，2022 年 Reality Labs 的營運虧損為 (13,717) million。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_10K_2024.html #206 (rerank=0.728)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "META_10K_2024.html",
+          "chunk_index": 206
+        }
+      ],
+      "contexts": [
+        "[META 10-K period 2024] [section: Segment profitability] Segment profitability\n\nThe following table sets forth income (loss) from operations by segment:\n\nYear Ended December 31,\n\n2024202320222024 vs 2023 % change2023 vs 2022 % change\n\n(in millions, except percentages)\n\nFamily of Apps$87,109 $62,871 $42,661 39 %47 %\n\nReality Labs(17,729)(16,120)(13,717)(10)%(18)%\n\nTotal income from operations$69,380 $46,751 $28,944 48 %62 %"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Meta 的 Reality Labs 部門在 2022 年虧損多少"
+      ],
+      "agentic_n_chunks": 1
+    },
+    {
+      "id": "bh-14",
+      "category": "historical",
+      "query": "AWS 在 2022 年的淨銷售額是多少？",
+      "answerable": true,
+      "answer": "AWS 在 2022 年的淨銷售額，根據目前提供的參考資料，無法取得具體數字【AMZN_10K_2024.html, chunk #112】。  \n\n- 參考文件僅列出 AWS 的淨銷售額於 2023 年為 **907.57 億美元（$90,757 百萬）**，2024 年為 **1,075.56 億美元（$107,556 百萬）**，以及 2025 年的預估 **1,287.25 億美元（$128,725 百萬）**，但未包含 2022 年的數據【AMZN_10K_2024.html, chunk #112】。  \n- 其他段落（如資產分布、資本支出等）亦未提及 2022 年的 AWS 淨銷售額【AMZN_10K_2024.html, chunk #197】。  \n\n因此，從現有的材料中找不到 2022 年 AWS 的淨銷售額。若需此資訊，建議查閱完整的 2022 年度 10‑K 報告。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AMZN_10K_2024.html #197 (rerank=0.729)\n  - AMZN_10K_2024.html #112 (rerank=0.729)\n  - AMZN_10K_2024.html #24 (rerank=0.728)\n  - AMZN_10K_2025.html #113 (rerank=0.728)\n  - AMZN_10Q_202603.html #72 (rerank=0.727)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AMZN_10K_2024.html",
+          "chunk_index": 197
+        },
+        {
+          "source": "AMZN_10K_2024.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "AMZN_10K_2024.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 113
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 72
+        }
+      ],
+      "contexts": [
+        "[AMZN 10-K period 2024] Net sales are attributed to countries primarily based on country-focused online and physical stores or, for AWS purposes, the selling entity. Net sales attributed to countries that represent a significant portion of consolidated net sales are as follows (in millions):\n\n Year Ended December 31,\n\n 202220232024\n\nUnited States$356,113 $395,637 $438,015 \n\nGermany33,598 37,588 40,856 \n\nUnited Kingdom30,074 33,591 37,855 \n\nJapan24,396 26,002 27,401 \n\nRest of world69,802 81,967 93,832 \n\nConsolidated$513,983 $574,785 $637,959 \n\n67\n\n\nTotal segment assets exclude corporate assets, such as cash and cash equivalents, marketable securities, other long-term investments, corporate facilities, goodwill and other acquired intangible assets, and tax assets. Technology infrastructure assets are allocated among the segments based on usage, with the majority allocated to the AWS segment. Total segment assets reconciled to consolidated amounts are as follows (in millions):\n\n December 31,\n\n 202220232024\n\nNorth America (1)$185,268 $196,029 $210,120 \n\nInternational (1)64,666 69,718 69,487 \n\nAWS (2)88,491 108,533 155,953 \n\nCorporate124,250 153,574 189,334 \n\nConsolidated$462,675 $527,854 $624,894 \n\n___________________\n\n(1)North America and International segment assets primarily consist of property and equipment, operating leases, inventory, accounts receivable, and digital video and music content. (2)AWS segment assets primarily consist of property and equipment, accounts receivable, and operating leases. Property and equipment, net by segment is as follows (in millions):\n\n December 31,\n\n 202220232024\n\nNorth America$90,076 $93,632 $103,041 \n\nInternational23,347 24,357 25,618 \n\nAWS60,324 72,701 110,683 \n\nCorporate12,968 13,487 13,323 \n\nConsolidated$186,715 $204,177 $252,665 \n\nTotal net additions to property and equipment include technology infrastructure assets, which are allocated among the segments based on usage, with the majority allocated to the AWS segment. Total net additions to property and equipment include the effect of non-cash activity such as property and equipment acquired but not yet paid for. Total net additions to property and equipment are as follows (in millions):\n\n Year Ended December 31,\n\n 202220232024\n\nNorth America (1)$23,682 $17,529 $24,348 \n\nInternational (1)6,711 4,144 6,643 \n\nAWS (2)27,755 24,843 53,267 \n\nCorporate2,688 1,828 1,494 \n\nConsolidated$60,836 $48,344 $85,752 \n\n___________________\n\n(1)Includes property and equipment added under finance leases of $422 million, $525 million, and $616 million in 2022, 2023, and 2024, and under build-to-suit lease arrangements of $3.2 billion, $356 million, and $89 million in 2022, 2023, and 2024. (2)Includes property and equipment added under finance leases of $253 million, $117 million, and $238 million in 2022, 2023, and 2024, and under build-to-suit lease arrangements of $20 million, $1 million, and $8 million in 2022, 2023, and 2024. U.S. property and equipment, net and operating leases were $180.0 billion, $196.0 billion, and $241.6 billion, as of December 31, 2022, 2023, and 2024, and non-U.S. property and equipment, net and operating leases were $72.9 billion, $80.7 billion, and $87.2 billion as of December 31, 2022, 2023, and 2024. Except for the U.S., property and equipment, net and operating leases in any single country were less than 10% of consolidated property and equipment, net and operating leases. 68\n\n\nDepreciation and amortization expense on property and equipment, including corporate property and equipment, are allocated to all segments based on usage. Total depreciation and amortization expense, by segment, is as follows (in millions):\n\n Year Ended December 31,\n\n 202220232024\n\nNorth America$11,565 $13,678 $14,285 \n\nInternational3,483 4,016 4,462 \n\nAWS9,876 12,531 13,320 \n\nConsolidated$24,924 $30,225 $32,067",
+        "[AMZN 10-K period 2024] [section: Net Sales] Net Sales\n\nNet sales include product and service sales. Product sales represent revenue from the sale of products and related shipping fees and digital media content where we record revenue gross. Service sales primarily represent third-party seller fees, which includes commissions and any related fulfillment and shipping fees, AWS sales, advertising services, Amazon Prime membership fees, and certain digital media content subscriptions. Net sales information is as follows (in millions):\n\nYear Ended December 31,\n\n 20232024\n\nNet Sales:\n\nNorth America$352,828 $387,497 \n\nInternational131,200 142,906 \n\nAWS90,757 107,556 \n\nConsolidated$574,785 $637,959 \n\nYear-over-year Percentage Growth:\n\nNorth America12 %10 %\n\nInternational11 9 \n\nAWS13 19 \n\nConsolidated12 11 \n\nYear-over-year Percentage Growth, excluding the effect of foreign exchange rates:\n\nNorth America12 %10 %\n\nInternational11 10 \n\nAWS13 19 \n\nConsolidated12 11 \n\nNet Sales Mix:\n\nNorth America61 %61 %\n\nInternational23 22 \n\nAWS16 17 \n\nConsolidated100 %100 %\n\nSales increased 11% in 2024, compared to the prior year. Changes in foreign exchange rates reduced net sales by $2.3 billion in 2024. For a discussion of the effect of foreign exchange rates on sales growth, see “Effect of Foreign Exchange Rates” below. North America sales increased 10% in 2024, compared to the prior year. The sales growth primarily reflects increased unit sales, including sales by third-party sellers, advertising sales, and subscription services. Increased unit sales were driven largely by our continued focus on price, selection, and convenience for our customers, including from our fast shipping offers. Changes in foreign exchange rates reduced North America net sales by $462 million in 2024. International sales increased 9% in 2024, compared to the prior year.",
+        "[AMZN 10-K period 2024] Net sales include product and service sales. Product sales represent revenue from the sale of products and related shipping fees and digital media content where we record revenue gross. Service sales primarily represent third-party seller f\n\n|  | Year Ended December 31, |  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n|  | 2023 |  | 2024 |  |  |  |  |\n| Net Sales: |  |  |  |  |  |  |  |\n| North America | $ | 352,828 |  |  | $ | 387,497 |  |\n| International | 131,200 |  |  | 142,906 |  |  |  |\n| AWS | 90,757 |  |  | 107,556 |  |  |  |\n| Consolidated | $ | 574,785 |  |  | $ | 637,959 |  |\n| Year-over-year Percentage Growth: |  |  |  |  |  |  |  |\n| North America | 12 | % |  | 10 | % |  |  |\n| International | 11 |  |  | 9 |  |  |  |\n| AWS | 13 |  |  | 19 |  |  |  |\n| Consolidated | 12 |  |  | 11 |  |  |  |\n| Year-over-year Percentage Growth, excluding the effect of foreign exchange rates: |  |  |  |  |  |  |  |\n| North America | 12 | % |  | 10 | % |  |  |\n| International | 11 |  |  | 10 |  |  |  |\n| AWS | 13 |  |  | 19 |  |  |  |\n| Consolidated | 12 |  |  | 11 |  |  |  |\n| Net Sales Mix: |  |  |  |  |  |  |  |\n| North America | 61 | % |  | 61 | % |  |  |\n| International | 23 |  |  | 22 |  |  |  |\n| AWS | 16 |  |  | 17 |  |  |  |\n| Consolidated | 100 | % |  | 100 | % |  |  |",
+        "[AMZN 10-K period 2025] [section: Net Sales] Net Sales\n\nNet sales include product and service sales. Product sales represent revenue from the sale of products and related shipping fees and digital media content where we record revenue gross. Service sales primarily represent third-party seller fees, which includes commissions and any related fulfillment and shipping fees, AWS sales, advertising services, Amazon Prime membership fees, and certain digital media content subscriptions. Net sales information is as follows (in millions):\n\nYear Ended December 31,\n\n 20242025\n\nNet Sales:\n\nNorth America$387,497 $426,305 \n\nInternational142,906 161,894 \n\nAWS107,556 128,725 \n\nConsolidated$637,959 $716,924 \n\nYear-over-year Percentage Growth:\n\nNorth America10 %10 %\n\nInternational9 13 \n\nAWS19 20 \n\nConsolidated11 12 \n\nYear-over-year Percentage Growth, excluding the effect of foreign exchange rates:\n\nNorth America10 %10 %\n\nInternational10 10 \n\nAWS19 20 \n\nConsolidated11 12 \n\nNet Sales Mix:\n\nNorth America61 %59 %\n\nInternational22 23 \n\nAWS17 18 \n\nConsolidated100 %100 %\n\nSales increased 12% in 2025, compared to the prior year. Changes in foreign exchange rates increased net sales by $4.4 billion in 2025. For a discussion of the effect of foreign exchange rates on sales growth, see “Effect of Foreign Exchange Rates” below. North America sales increased 10% in 2025, compared to the prior year. The sales growth primarily reflects increased unit sales, including sales by third-party sellers, advertising sales, and subscription services. Increased unit sales were driven largely by our continued focus on price, selection, and convenience for our customers, including from our fast shipping offers. Changes in foreign exchange rates reduced North America net sales by $454 million in 2025. International sales increased 13% in 2025, compared to the prior year.",
+        "[AMZN 10-Q period 202603] [section: Net Sales] Net Sales\n\nNet sales include product and service sales. Product sales represent revenue from the sale of products and related shipping fees and digital media content where we record revenue gross. Service sales primarily represent third-party seller fees, which includes commissions and any related fulfillment and shipping fees, AWS sales, advertising services, Amazon Prime membership fees, and certain digital media content subscriptions. Net sales information is as follows (in millions):\n\nThree Months EndedMarch 31,\n\n20252026\n\nNet Sales:\n\nNorth America$92,887 $104,143 \n\nInternational33,513 39,789 \n\nAWS29,267 37,587 \n\nConsolidated$155,667 $181,519 \n\nYear-over-year Percentage Growth:\n\nNorth America8 %12 %\n\nInternational5 19 \n\nAWS17 28 \n\nConsolidated9 17 \n\nYear-over-year Percentage Growth, excluding the effect of foreign exchange rates:\n\nNorth America8 %12 %\n\nInternational8 11 \n\nAWS17 28 \n\nConsolidated10 15 \n\nNet Sales Mix:\n\nNorth America60 %57 %\n\nInternational21 22 \n\nAWS19 21 \n\nConsolidated100 %100 %\n\nSales increased 17% in Q1 2026 compared to the comparable prior year period. Changes in foreign exchange rates increased net sales by $2.9 billion for Q1 2026. For a discussion of the effect of foreign exchange rates on sales growth, see “Effect of Foreign Exchange Rates” below. North America sales increased 12% in Q1 2026 compared to the comparable prior year period."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "AWS 在 2022 年的淨銷售額是多少"
+      ],
+      "agentic_n_chunks": 5
+    },
+    {
+      "id": "bh-15",
+      "category": "historical",
+      "query": "NVIDIA 資料中心業務在 FY2023 的營收是多少？",
+      "answerable": true,
+      "answer": "NVIDIA 在 FY2023（截至 2023 年 1 月 29 日）的資料中心營收為 **150.05 億美元（$15,005 百萬）**【NVDA_10K_2024.html, chunk #210】。此數字來自公司 2024 年度 10‑K 報告中列示的「Data Center」營收項目，單位為「以百萬計」【NVDA_10K_2024.html, chunk #210】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2024.html #210 (rerank=0.728)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 210
+        }
+      ],
+      "contexts": [
+        "[NVDA 10-K period 2024] Revenue by geographic areas was as follows: \n\n Year Ended\n\n Jan 28, 2024Jan 29, 2023Jan 30, 2022\n\nRevenue:(In millions)\n\nUnited States$26,966 $8,292 $4,349 \n\nTaiwan13,405 6,986 8,544 \n\nChina (including Hong Kong)10,306 5,785 7,111 \n\nOther countries10,245 5,911 6,910 \n\nTotal revenue$60,922 $26,974 $26,914 \n\nRevenue from sales to customers outside of the United States accounted for 56%, 69%, and 84% of total revenue for fiscal years 2024, 2023, and 2022, respectively. The increase in revenue to the United States for fiscal year 2024 was primarily due to higher U.S.-based Compute & Networking segment demand. Sales to one customer represented 13% of total revenue for fiscal year 2024, which was attributable to the Compute & Networking segment. No customer represented 10% or more of total revenue for fiscal years 2023 and 2022. The following table summarizes information pertaining to our revenue by each of the specialized markets we serve:\n\n Year Ended\n\n Jan 28, 2024Jan 29, 2023Jan 30, 2022\n\nRevenue:(In millions)\n\nData Center$47,525 $15,005 $10,613 \n\nGaming10,447 9,067 12,462 \n\nProfessional Visualization1,553 1,544 2,111 \n\nAutomotive1,091 903 566 \n\nOEM and Other306 455 1,162 \n\nTotal revenue$60,922 $26,974 $26,914 \n\n79\n\n\nNVIDIA Corporation and Subsidiaries\n\nNotes to the Consolidated Financial Statements\n\n(Continued)\n\nThe following table presents summarized information for long-lived assets by country. Long-lived assets consist of property and equipment and exclude other assets, operating lease assets, goodwill, and intangible assets. Jan 28, 2024Jan 29, 2023\n\nLong-lived assets:(In millions)\n\nUnited States$2,595 $2,587 \n\nTaiwan773 702 \n\nIsrael325 283 \n\nOther countries221 235 \n\nTotal long-lived assets$3,914 $3,807 \n\n80\n\nNVIDIA Corporation and Subsidiaries\n\nSchedule II – Valuation and Qualifying Accounts\n\nDescriptionBalance atBeginning of PeriodAdditions Deductions Balance atEnd of Period\n\n (In millions)\n\nFiscal year 2024\n\nAllowance for doubtful accounts$4 $— (1)$— (1)$4 \n\nSales return allowance$26 $213 (2)$(130)(4)$109 \n\nDeferred tax valuation allowance$1,484 $162 (3)$(94)(3)$1,552 \n\nFiscal year 2023\n\nAllowance for doubtful accounts$4 $— (1)$— (1)$4 \n\nSales return allowance$13 $104 (2)$(91)(4)$26 \n\nDeferred tax valuation allowance$907 $577 (3)$— $1,484 \n\nFiscal year 2022\n\nAllowance for doubtful accounts$4 $— (1)$— (1)$4 \n\nSales return allowance$17 $19 (2)$(23)(4)$13 \n\nDeferred tax valuation allowance$728 $179 (3)$— $907 \n\n(1)Additions represent either expense or acquired balances and deductions represent write-offs. (2)Additions represent estimated product returns charged as a reduction to revenue or an acquired balance."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "NVIDIA 資料中心業務在 FY2023 的營收是多少？"
+      ],
+      "agentic_n_chunks": 1
+    },
+    {
+      "id": "bh-16",
+      "category": "historical",
+      "query": "Microsoft 的 Intelligent Cloud 部門在 2024 財年營收是多少？",
+      "answerable": true,
+      "answer": "Microsoft 2024 財年 Intelligent Cloud 部門的營收較 2023 年增長了 **175 億美元（$17.5 billion），增幅 20%**【MSFT_10K_2024.html, chunk #152】。  \n提供的文件只列出此部門的營收增幅與增額，未披露 2024 財年的完整營收金額，因此無法給出絕對值。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10K_2024.html #152 (rerank=0.731)\n  - MSFT_10K_2024.html #148 (rerank=0.731)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 152
+        },
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 148
+        }
+      ],
+      "contexts": [
+        "[MSFT 10-K period 2024] [Fiscal Year 2024 vs 2023] [section: Intelligent Cloud] Intelligent Cloud \n\n  Revenue increased $17.5 billion or 20%. •Server products and cloud services revenue increased $17.8 billion or 22% driven by Azure and other cloud services. Azure and other cloud services revenue grew 30% driven by growth in our consumption-based services. Server products revenue increased 3% driven by continued demand for our hybrid solutions, including Windows Server and SQL Server running in multi-cloud environments. •Enterprise and partner services revenue decreased $306 million or 4% driven by declines in Enterprise Support Services and Industry Solutions.",
+        "[MSFT 10-K period 2024] [Fiscal Year 2024 vs 2023] Fiscal Year 2024 Compared with Fiscal Year 2023\n\n  Revenue increased $33.2 billion or 16% driven by growth across each of our segments. Intelligent Cloud revenue increased driven by Azure.\n\nProductivity and Business Processes revenue increased driven by Office 365 Commercial. More Personal Computing revenue increased driven by Gaming. Cost of revenue increased $8.3 billion or 13% driven by growth in Microsoft Cloud and Gaming, offset in part by a decline in Devices. Gross margin increased $25.0 billion or 17% driven by growth across each of our segments. •Gross margin percentage increased slightly. Excluding the impact of the change in accounting estimate for the useful lives of our server and network equipment, gross margin percentage increased 2 points driven by improvement in More Personal Computing. •Microsoft Cloud gross margin percentage decreased slightly to 71%. Excluding the impact of the change in accounting estimate, Microsoft Cloud gross margin percentage increased slightly driven by improvements in Azure and Office 365 Commercial, inclusive of scaling our AI infrastructure, offset in part by sales mix shift to Azure. Operating expenses increased $4.0 billion or 7% driven by Gaming, with 7 points of growth from the Activision Blizzard acquisition, and investments in cloud engineering, offset in part by the prior year Q2 charge. Operating income increased $20.9 billion or 24% driven by growth across each of our segments."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Microsoft 的 FY2024 Intelligent Cloud 部門營收是多少"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "bh-17",
+      "category": "historical",
+      "query": "Tesla 在 2023 年交付了多少輛車？",
+      "answerable": true,
+      "answer": "Tesla 在 2023 年交付了 **1,808,581 輛** 消費者車輛【TSLA_10K_2023.html, chunk #115】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_10K_2023.html #115 (rerank=0.731)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "TSLA_10K_2023.html",
+          "chunk_index": 115
+        }
+      ],
+      "contexts": [
+        "[TSLA 10-K period 2023] Additionally, we are increasingly focused on products and services based on artificial intelligence, robotics and automation. In 2023, we produced 1,845,985 consumer vehicles and delivered 1,808,581 consumer vehicles. We are currently focused on increasing vehicle production, capacity and delivery capabilities, reducing costs, improving and developing our vehicles and battery technologies, vertically integrating and localizing our supply chain, improving and further deploying our FSD capabilities, increasing the affordability and efficiency of our vehicles, bringing new products to market and expanding our global infrastructure, including our service and charging infrastructure. In 2023, we deployed 14.72 GWh of energy storage products and 223 megawatts of solar energy systems. We are currently focused on ramping production of energy storage products, improving our Solar Roof installation capability and efficiency, and increasing market share of retrofit solar energy systems. In 2023, we recognized total revenues of $96.77 billion, representing an increase of $15.31 billion, compared to the prior year."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Tesla 在 2023 年交付了多少輛車？"
+      ],
+      "agentic_n_chunks": 1
+    },
+    {
+      "id": "bh-18",
+      "category": "historical",
+      "query": "NVIDIA 因為終止收購 Arm 認列了多少收購終止費用？",
+      "answerable": true,
+      "answer": "NVIDIA 因終止收購 Arm，在 2023 財政年度認列了約 **14 億美元（$1.4 billion）** 的收購終止費用【NVDA_10K_2024.html, chunk #144】。  \n\n- 2024 年度 10‑K 報告中明確指出，Arm 交易的收購終止費用為 **14 億美元（$1.4 billion）**，反映了簽約時預付款的核銷【NVDA_10K_2024.html, chunk #148】。  \n- 2025 年度 10‑K 亦重申同樣的金額為 **14 億美元（$1.4 billion）**，同樣屬於 2023 財政年度的費用【NVDA_10K_2025.html, chunk #180】。  \n- 在 2023 財政年度的合併損益表中，該項費用列示為 **13.53 億美元（$1,353 million）**（即 13.53 億美元（$1.353 billion））【NVDA_10K_2025.html, chunk #163】。  \n- 2023 年度的 10‑Q 亦提到 Arm 交易的收購終止成本為 **13.5 億美元（$1.35 billion）**【NVDA_10Q_202310.html, chunk #58】。  \n\n因此，根據不同文件的披露，NVIDIA 為 Arm 收購終止認列的費用在 **13.5 億美元（$1.35 billion） 至 14 億美元（$1.4 billion）** 之間，最常見的報導數字為 **14 億美元（$1.4 billion）**。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10Q_202310.html #58 (rerank=0.726)\n  - NVDA_10K_2024.html #144 (rerank=0.709)\n  - NVDA_10K_2024.html #148 (rerank=0.708)\n  - NVDA_10K_2025.html #180 (rerank=0.677)\n  - NVDA_10K_2025.html #163 (rerank=0.607)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "NVDA_10Q_202310.html",
+          "chunk_index": 58
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 144
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 148
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 180
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 163
+        }
+      ],
+      "contexts": [
+        "[NVDA 10-Q period 202310] [section: Acquisition Termination Cost] Acquisition Termination Cost\n\nWe recorded an acquisition termination cost related to the Arm transaction of $1.35 billion in fiscal year 2023 reflecting the write-off of the prepayment provided at signing.",
+        "[NVDA 10-K period 2024] [section: Results of Operations] Networking was up 133% due to higher shipments of InfiniBand. Graphics revenue – The year-on-year increase was led by growth in Gaming of 15% driven by higher sell-in to partners following the normalization of channel inventory levels. Reportable segment operating income – The year-on-year increase in Compute & Networking and Graphics operating income was driven by higher revenue. 39\n\n\nAll Other operating loss - The year-on-year decrease was due to the $1.4 billion Arm acquisition termination cost in fiscal year 2023, partially offset by a $839 million increase in stock-based compensation expense in fiscal year 2024.",
+        "[NVDA 10-K period 2024] [section: Acquisition Termination Cost] Acquisition Termination Cost\n\nWe recorded an acquisition termination cost related to the Arm transaction of $1.4 billion in fiscal year 2023 reflecting the write-off of the prepayment provided at signing. 40\n\n\nOther Income (Expense), Net\n\n Year Ended\n\n Jan 28, 2024Jan 29, 2023$Change\n\n ($ in millions)\n\nInterest income$866 $267 $599 \n\nInterest expense(257)(262)5 \n\nOther, net237 (48)285 \n\nOther income (expense), net$846 $(43)$889 \n\nInterest income consists of interest earned on cash, cash equivalents and marketable securities.",
+        "[NVDA 10-K period 2025] We recorded an acquisition termination cost of $1.4 billion in fiscal year 2023 reflecting the write-off of the prepayment provided at signing. Note 3 - Stock-Based Compensation\n\nStock-based compensation expense is associated with RSUs, PSUs, market-based PSUs, and our ESPP. Consolidated Statements of Income include stock-based compensation expense, net of amounts capitalized into inventory and subsequently recognized to cost of revenue, as follows:\n\n Year Ended\n\nJan 26, 2025Jan 28, 2024Jan 29, 2023\n\n (In millions)\n\nCost of revenue$178 $141 $138 \n\nResearch and development3,423 2,532 1,892 \n\nSales, general and administrative1,136 876 680 \n\nTotal$4,737 $3,549 $2,710 \n\nStock-based compensation capitalized in inventories was not significant during fiscal years 2025, 2024, and 2023. 62\n\n\nNVIDIA Corporation and Subsidiaries\n\nNotes to the Consolidated Financial Statements\n\n(Continued)\n\nThe following is a summary of equity awards granted under our equity incentive plans:\n\nYear Ended\n\nJan 26, 2025Jan 28, 2024Jan 29, 2023\n\n(In millions, except per share data)\n\nRSUs, PSUs and Market-based PSUs\n\nAwards granted89 140 250 \n\nEstimated total grant-date fair value$7,834 $5,316 $4,505 \n\nWeighted average grant-date fair value per share$87.99 $37.41 $18.37 \n\nESPP\n\nShares purchased30 30 30 \n\nWeighted average price per share$17.74 $15.81 $12.25 \n\nWeighted average grant-date fair value per share$8.61 $6.99 $5.19 \n\nAs of January 26, 2025, aggregate unearned stock-based compensation expense was $11.6 billion, which is expected to be recognized over a weighted average period of 2.2 years for RSUs, PSUs, and market-based PSUs, and one year for ESPP. The fair value of shares issued under our ESPP have been estimated with the following assumptions:\n\n Year Ended\n\n Jan 26, 2025Jan 28, 2024Jan 29, 2023\n\n(Using the Black-Scholes model)\n\nESPP\n\nWeighted average expected life (in years)0.1-2.0\n\n0.1-2.0\n\n0.1-2.0\n\nRisk-free interest rate3.6%-5.4%\n\n3.9%-5.5%\n\n—%-4.6%\n\nVolatility31%-75%\n\n31%-67%\n\n43%-72%\n\nDividend yield0.03%\n\n0.06%\n\n0.09%\n\nFor ESPP shares, the expected term represents the average term from the first day of the offering period to the purchase date. The risk-free interest rate assumption used to value ESPP shares is based upon observed interest rates on Treasury bills appropriate for the expected term. Our expected stock price volatility assumption for ESPP is estimated using historical volatility. For awards granted, we use the dividend yield at grant date. Our RSUs, PSUs, and market-based PSUs are not eligible for cash dividends prior to vesting; therefore, the fair values of RSUs, PSUs, and market-based PSUs are discounted for the dividend yield. Additionally, for RSUs, PSUs, and market-based PSUs, we estimate expected forfeitures based on our historical forfeitures. Equity Incentive Program",
+        "[NVDA 10-K period 2025] /s/ PricewaterhouseCoopers LLP\n\nSan Jose, California\n\nFebruary 26, 2025\n\nWe have served as the Company’s auditor since 2004. 51\n\n\nNVIDIA Corporation and Subsidiaries\n\nConsolidated Statements of Income\n\n(In millions, except per share data)\n\nYear Ended\n\nJan 26, 2025Jan 28, 2024Jan 29, 2023\n\nRevenue$130,497 $60,922 $26,974 \n\nCost of revenue32,639 16,621 11,618 \n\nGross profit97,858 44,301 15,356 \n\nOperating expenses\n\nResearch and development12,914 8,675 7,339 \n\nSales, general and administrative3,491 2,654 2,440 \n\nAcquisition termination cost— — 1,353 \n\nTotal operating expenses16,405 11,329 11,132 \n\nOperating income81,453 32,972 4,224 \n\nInterest income1,786 866 267 \n\nInterest expense(247)(257)(262)\n\nOther, net1,034 237 (48)\n\nOther income (expense), net2,573 846 (43)\n\nIncome before income tax84,026 33,818 4,181 \n\nIncome tax expense (benefit)11,146 4,058 (187)\n\nNet income$72,880 $29,760 $4,368 \n\nNet income per share:\n\nBasic$2.97 $1.21 $0.18 \n\nDiluted$2.94 $1.19 $0.17 \n\nWeighted average shares used in per share computation:\n\nBasic24,555 24,690 24,870 \n\nDiluted24,804 24,940 25,070 \n\nSee accompanying Notes to the Consolidated Financial Statements. 52\n\n\nNVIDIA Corporation and Subsidiaries\n\nConsolidated Statements of Comprehensive Income\n\n(In millions)\n\nYear Ended\n\nJan 26, 2025Jan 28, 2024Jan 29, 2023\n\nNet income$72,880 $29,760 $4,368 \n\nOther comprehensive income (loss), net of tax\n\nAvailable-for-sale securities:\n\nNet change in unrealized gain (loss)1 80 (31)\n\nReclassification adjustments for net realized gain included in net income— — 1 \n\nNet change in unrealized gain (loss)1 80 (30)\n\nCash flow hedges:\n\nNet change in unrealized gain21 38 47 \n\nReclassification adjustments for net realized loss included in net income(21)(48)(49)\n\nNet change in unrealized loss— (10)(2)\n\nOther comprehensive income (loss), net of tax1 70 (32)\n\nTotal comprehensive income$72,881 $29,830 $4,336 \n\nSee accompanying Notes to the Consolidated Financial Statements. 53\n\n\nNVIDIA Corporation and Subsidiaries\n\nConsolidated Balance Sheets\n\n(In millions, except par value)\n\n Jan 26, 2025Jan 28, 2024\n\nAssets  \n\nCurrent assets:  \n\nCash and cash equivalents$8,589 $7,280 \n\nMarketable securities34,621 18,704 \n\nAccounts receivable, net23,065 9,999 \n\nInventories10,080 5,282 \n\nPrepaid expenses and other current assets3,771 3,080 \n\nTotal current assets80,126 44,345 \n\nProperty and equipment, net6,283 3,914 \n\nOperating lease assets1,793 1,346 \n\nGoodwill5,188 4,430 \n\nIntangible assets, net807 1,112 \n\nDeferred income tax assets10,979 6,081 \n\nOther assets6,425 4,500 \n\nTotal assets$111,601 $65,728 \n\nLiabilities and Shareholders' Equity\n\nCurrent liabilities:\n\nAccounts payable$6,310 $2,699 \n\nAccrued and other current liabilities11,737 6,682 \n\nShort-term debt— 1,250 \n\nTotal current liabilities18,047 10,631 \n\nLong-term debt8,463 8,459 \n\nLong-term operating lease liabilities 1,519 1,119"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "NVIDIA 因為終止收購 Arm 認列了多少收購終止費用？"
+      ],
+      "agentic_n_chunks": 5
+    },
+    {
+      "id": "bh-19",
+      "category": "historical",
+      "query": "Alphabet 2023 年的裁員在研發費用裡認列了多少員工資遣費用？",
+      "answerable": true,
+      "answer": "Alphabet 在 2023 年的研發費用中認列了 **8.48 億美元（$848 million）** 的裁員資遣費用【GOOGL_10K_2023.html, chunk #304】。  \n\n此金額來自 10‑K 報告中列出的「Severance and Related」項目於研發（Research and development）分類的金額，表格顯示研發部門的資遣費用為 8.48 億美元（$848 million），辦公空間相關費用為 8.7 億美元（$870 million），合計 17.18 億美元（$1,718 million）【GOOGL_10K_2023.html, chunk #304】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_10K_2023.html #304 (rerank=0.725)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 304
+        }
+      ],
+      "contexts": [
+        "[GOOGL 10-K period 2023] Workforce Reduction and Other Initiatives \n\nWe have a company-wide effort underway to re-engineer our cost base. As part of this program, in January 2023, we announced a reduction of our workforce. As a result, total employee severance and related charges recorded during the year ended December 31, 2023 were $2.1 billion. Substantially all of the employees affected were no longer included in our headcount as of December 31, 2023. In addition, we are taking actions to optimize our global office space. As a result, exit charges recorded during the year ended December 31, 2023, were $1.8 billion as reflected in the table below. In addition to these exit charges, for the year ended December 31, 2023, we incurred $269 million in accelerated rent and accelerated depreciation, which are not included in the table below. Severance and office space exit charges are included within our consolidated statements of income as follows (in millions):\n\nYear Ended December 31, 2023\n\nSeverance and Related (1)\n\nOffice SpaceTotal\n\nCost of revenues$479 $481 $960 \n\nResearch and development848870 1,718 \n\nSales and marketing497257 754 \n\nGeneral and administrative264237 501 \n\nTotal charges$2,088 $1,845 $3,933 \n\n(1)Severance includes amounts to be settled in cash, accounted for as one-time involuntary employee termination benefits, and SBC. For segment reporting, the substantial majority of these charges are included within Alphabet-level activities in our segment results. For the year ended December 31, 2023, changes in liabilities resulting from the severance charges and related accruals were as follows (in millions):\n\nSeverance and Related\n\nBalance as of December 31, 2022$0 \n\nCharges(1)\n\n1,656 \n\nCash payments(1,579)\n\nBalance as of December 31, 2023(2)\n\n$77 \n\n(1)Excludes non-cash SBC of $432 million. (2)Included in accrued compensation and benefits on the Consolidated Balance Sheets."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Alphabet 2023 年的裁員在研發費用裡認列了多少員工資遣費用？"
+      ],
+      "agentic_n_chunks": 1
+    },
+    {
+      "id": "bh-20",
+      "category": "historical",
+      "query": "Meta 在 2023 年 12 月的家族日活躍人數（DAP）是多少？",
+      "answerable": true,
+      "answer": "Meta 在 2023 年 12 月的家族日活躍人數（DAP）為 **31.9 億（3.19 billion）**（以 2023 年 12 月的平均值計算）【META_10K_2023.html, chunk #159】.\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_10K_2023.html #159 (rerank=0.731)\n  - META_10K_2023.html #171 (rerank=0.729)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "META_10K_2023.html",
+          "chunk_index": 159
+        },
+        {
+          "source": "META_10K_2023.html",
+          "chunk_index": 171
+        }
+      ],
+      "contexts": [
+        "[META 10-K period 2023] [section: Family of Apps Metrics] Family of Apps Metrics\n\n•Family daily active people (DAP) was 3.19 billion on average for December 2023, an increase of 8% year-over-year. •Family monthly active people (MAP) was 3.98 billion as of December 31, 2023, an increase of 6% year-over-year. •Facebook daily active users (DAUs) were 2.11 billion on average for December 2023, an increase of 6% year-over-year. •Facebook monthly active users (MAUs) were 3.07 billion as of December 31, 2023, an increase of 3% year-over-year. •Ad impressions delivered across our Family of Apps increased by 28% year-over-year in 2023, and the average price per ad decreased by 9% year-over-year in 2023. Beginning with our Quarterly Report on Form 10-Q to be filed for the first quarter of 2024, we will no longer report DAUs, MAUs, ARPU, and MAP in our periodic reports filed with the Securities and Exchange Commission. We intend to begin reporting year-over-year percentage changes in ad impressions delivered and the average price per ad by geographic region, while continuing to report DAP and ARPP (calculated based on DAP), beginning with our Quarterly Report on Form 10-Q to be filed for the first quarter of 2024. For additional information, see the section entitled \"Limitations of Key Metrics and Other Data\" in this Annual Report on Form 10-K.",
+        "[META 10-K period 2023] [section: Trends in Our Family Metrics] For additional information, see the section entitled \"Limitations of Key Metrics and Other Data\" in this Annual Report on Form 10-K. In the third quarter of 2022, we updated our Family metrics calculations to maintain calibration of our models against recent user survey data, and we estimate such update contributed an aggregate of approximately 30 million DAP to our reported worldwide DAP in September 2022. Beginning in the fourth quarter of 2023, our Family metrics no longer include Messenger Kids users. Worldwide DAP increased 8% to 3.19 billion on average during December 2023 from 2.96 billion during December 2022. •Monthly Active People (MAP)."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Meta 在 2023 年 12 月的家族日活躍人數（DAP）是多少？"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "bc-01",
+      "category": "control",
+      "query": "Apple 最新一個財年的總營收是多少？",
+      "answerable": true,
+      "answer": "Apple 在最新的財政年度（FY2025）總營收為 **4,161.61 億美元（$416,161 million）**【AAPL_10K_2025.html, chunk #115】【AAPL_10K_2025.html, chunk #0】。  \n\n- 這個金額來自 2025 年 9 月 27 日止的完整財政年度，列於合併損益表的「Net sales」項目【AAPL_10K_2025.html, chunk #0】。  \n- 同表亦顯示，2025 年的產品營收為 3,070.03 億美元（$307,003 million），服務營收為 1,091.58 億美元（$109,158 million），合計即為 4,161.61 億美元（$416,161 million）【AAPL_10K_2025.html, chunk #115】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10K_2025.html #115 (rerank=0.726)\n  - AAPL_10K_2025.html #0 (rerank=0.725)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 115
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[AAPL 10-K period 2025] Apple Inc. | 2025 Form 10-K | 35\n\nThe following table shows disaggregated net sales, as well as the portion of total net sales that was previously deferred, for 2025, 2024 and 2023 (in millions):\n\n202520242023\n\niPhone\n\n$209,586 $201,183 $200,583 \n\nMac\n\n33,708 29,984 29,357 \n\niPad\n\n28,023 26,694 28,300 \n\nWearables, Home and Accessories\n\n35,686 37,005 39,845 \n\nServices (1)\n\n109,158 96,169 85,200 \n\nTotal net sales$416,161 $391,035 $383,285 \n\nPortion of total net sales that was included in deferred revenue as of the beginning of the period$8,229 $7,728 $8,169 \n\n(1)Services net sales include amortization of the deferred value of services bundled in the sales price of certain products. The Company’s proportion of net sales by disaggregated revenue source was generally consistent for each reportable segment in Note 13, “Segment Information and Geographic Data” for 2025, 2024 and 2023, except in Greater China, where iPhone revenue represented a moderately higher proportion of net sales. As of September 27, 2025 and September 28, 2024, the Company had total deferred revenue of $13.7 billion and $12.8 billion, respectively. As of September 27, 2025, the Company expects 66% of total deferred revenue to be realized in less than a year, 23% within one-to-two years, 9% within two-to-three years and 2% in greater than three years. Note 3 – Earnings Per Share\n\nThe following table shows the computation of basic and diluted earnings per share for 2025, 2024 and 2023 (net income in millions and shares in thousands):\n\n202520242023\n\nNumerator:\n\nNet income$112,010 $93,736 $96,995 \n\nDenominator:\n\nWeighted-average basic shares outstanding14,948,500 15,343,783 15,744,231 \n\nEffect of dilutive share-based awards56,197 64,312 68,316 \n\nWeighted-average diluted shares15,004,697 15,408,095 15,812,547 \n\nBasic earnings per share$7.49 $6.11 $6.16 \n\nDiluted earnings per share$7.46 $6.08 $6.13 \n\nApproximately 24 million restricted stock units (“RSUs”) were excluded from the computation of diluted earnings per share for 2023 because their effect would have been antidilutive. Apple Inc. | 2025 Form 10-K | 36\n\nNote 4 – Financial Instruments\n\nCash, Cash Equivalents and Marketable Securities\n\nThe following tables show the Company’s cash, cash equivalents and marketable securities by significant investment category as of September 27, 2025 and September 28, 2024 (in millions):\n\n2025\n\nAdjustedCostUnrealizedGainsUnrealizedLossesFairValueCash andCashEquivalentsCurrentMarketableSecuritiesNon-CurrentMarketableSecurities\n\nCash$28,267 $— $— $28,267 $28,267 $— $— \n\nLevel 1:\n\nMoney market funds5,272 — — 5,272 5,272 — — \n\nMutual funds\n\n679 177 (2)854 — 854 — \n\nSubtotal5,951 177 (2)6,126 5,272 854 — \n\nLevel 2 (1):\n\nU.S. Treasury securities16,074 56 (282)15,848 1,190 3,712 10,946 \n\nU.S. agency securities5,269 — (149)5,120 251 2,456 2,413",
+        "[AAPL 10-K period 2025] ## Consolidated Statement of Income\n\n**Apple Inc.** (AAPL)\n\n**Year Ended** *(In millions, except shares in thousands and per share data)*\n\n|  | Sep 27, 2025 | Sep 28, 2024 | Sep 30, 2023 |\n| --- | ---: | ---: | ---: |\n|         Net sales | $416,161 | $391,035 | $383,285 |\n| *        Products* | $307,003 | $294,866 | $298,085 |\n| *        Services* | $109,158 | $96,169 | $85,200 |\n|         Cost of sales | $220,960 | $210,352 | $214,137 |\n| *        Products* | $194,116 | $185,233 | $189,282 |\n| *        Services* | $26,844 | $25,119 | $24,855 |\n|       Gross margin | $195,201 | $180,683 | $169,148 |\n|           Research and development | $34,550 | $31,370 | $29,915 |\n|           Selling, general and administrative | $27,601 | $26,097 | $24,932 |\n|           Total operating expenses | $62,151 | $57,467 | $54,847 |\n|         Operating income | $133,050 | $123,216 | $114,301 |\n|         Other income/(expense), net | $(321) | $269 | $(565) |\n|       Income before provision for income taxes | $132,729 | $123,485 | $113,736 |\n|       Provision for income taxes | $20,719 | $29,749 | $16,741 |\n|       Net income | $112,010 | $93,736 | $96,995 |\n|         Basic (in dollars per share) | 7.49 | 6.11 | 6.16 |\n|         Diluted (in dollars per share) | 7.46 | 6.08 | 6.13 |\n|         Basic (in shares) | 14,948,500 | 15,343,783 | 15,744,231 |\n|         Diluted (in shares) | 15,004,697 | 15,408,095 | 15,812,547 |"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Apple 的 FY2025 總營收是多少"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "bc-02",
+      "category": "control",
+      "query": "NVIDIA 最新一個財年的營收是多少？",
+      "answerable": true,
+      "answer": "NVIDIA 在最新的財政年度（截至 2026 年 1 月 25 日）營收為 **2,159.38 億美元（$215,938 million）**【NVDA_10K_2026.html, chunk #164】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #164 (rerank=0.724)\n  - NVDA_10K_2026.html #203 (rerank=0.722)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 203
+        }
+      ],
+      "contexts": [
+        "[NVDA 10-K period 2026] /s/PricewaterhouseCoopers LLP\n\nSan Jose, California\n\nFebruary 25, 2026\n\nWe have served as the Company’s auditor since 2004. 50\n\n\nNVIDIA Corporation and Subsidiaries\n\nConsolidated Statements of Income\n\n(In millions, except per share data)\n\nYear Ended\n\nJan 25, 2026Jan 26, 2025Jan 28, 2024\n\nRevenue$215,938 $130,497 $60,922 \n\nCost of revenue62,475 32,639 16,621 \n\nGross profit153,463 97,858 44,301 \n\nOperating expenses\n\nResearch and development18,497 12,914 8,675 \n\nSales, general and administrative4,579 3,491 2,654 \n\nTotal operating expenses23,076 16,405 11,329 \n\nOperating income130,387 81,453 32,972 \n\nInterest income2,300 1,786 866 \n\nInterest expense(259)(247)(257)\n\nOther income, net\n\n9,022 1,034 237 \n\nTotal other income, net\n\n11,063 2,573 846 \n\nIncome before income tax141,450 84,026 33,818 \n\nIncome tax expense21,383 11,146 4,058 \n\nNet income$120,067 $72,880 $29,760 \n\nNet income per share:\n\nBasic$4.93 $2.97 $1.21 \n\nDiluted$4.90 $2.94 $1.19 \n\nWeighted average shares used in per share computation:\n\nBasic24,359 24,555 24,690 \n\nDiluted24,514 24,804 24,940 \n\nSee accompanying Notes to the Consolidated Financial Statements. 51\n\n\nNVIDIA Corporation and Subsidiaries\n\nConsolidated Statements of Comprehensive Income\n\n(In millions)\n\nYear Ended\n\nJan 25, 2026Jan 26, 2025Jan 28, 2024\n\nNet income$120,067 $72,880 $29,760 \n\nOther comprehensive income, net of tax\n\nAvailable-for-sale securities:\n\nNet change in unrealized gain107 1 80 \n\nCash flow hedges:\n\nNet change in unrealized gain (loss)43 — (10)\n\nOther comprehensive income, net of tax150 1 70 \n\nTotal comprehensive income$120,217 $72,881 $29,830 \n\nSee accompanying Notes to the Consolidated Financial Statements. 52\n\n\nNVIDIA Corporation and Subsidiaries\n\nConsolidated Balance Sheets\n\n(In millions, except par value)\n\n Jan 25, 2026Jan 26, 2025\n\nAssets  \n\nCurrent assets:  \n\nCash and cash equivalents$10,605 $8,589 \n\nMarketable securities51,951 34,621 \n\nAccounts receivable, net38,466 23,065 \n\nInventories21,403 10,080 \n\nPrepaid expenses and other current assets3,180 3,771 \n\nTotal current assets125,605 80,126 \n\nProperty and equipment, net10,383 6,283 \n\nOperating lease assets2,867 1,793 \n\nGoodwill20,832 5,188 \n\nIntangible assets, net3,306 807 \n\nDeferred income tax assets13,258 10,979 \n\nNon-marketable equity securities\n\n22,251 3,387 \n\nOther assets8,301 3,038 \n\nTotal assets$206,803 $111,601 \n\nLiabilities and Shareholders' Equity\n\nCurrent liabilities:\n\nAccounts payable$9,812 $6,310 \n\nAccrued and other current liabilities21,352 11,737 \n\nShort-term debt999 — \n\nTotal current liabilities32,163 18,047 \n\nLong-term debt7,469 8,463 \n\nLong-term operating lease liabilities 2,572 1,519 \n\nOther long-term liabilities7,306 4,245 \n\nTotal liabilities49,510 32,274 \n\nCommitments and contingencies - see Note 12\n\n— — \n\nShareholders’ equity:",
+        "[NVDA 10-K period 2026] Year Ended\n\n Jan 25, 2026Jan 26, 2025Jan 28, 2024\n\nGeographic Revenue based upon Customer Headquarters Location (1):\n\n(In millions)\n\nUnited States$149,617 $77,482 $31,533 \n\nTaiwan (2)\n\n42,345 23,600 14,912 \n\nChina (including Hong Kong)19,677 25,048 12,330 \n\nOther\n\n4,299 4,367 2,147 \n\nTotal revenue$215,938 $130,497 $60,922 \n\n(1)In the third quarter of fiscal year 2026, we changed to revenue based upon the location of our customers’ headquarters as we believe it provides a better representation of the geographic profile of our revenue. Prior period information has been recast to reflect this change. (2)In fiscal year 2026, we estimate 76% of Data Center revenue from Taiwan-headquartered customers was attributed to end customers based in the United States and Europe. Revenue from sales to customers headquartered outside of the United States accounted for 31%, 41%, and 48% of total revenue for fiscal years 2026, 2025, and 2024, respectively. The increase in revenue to the United States for fiscal years 2026 and 2025 was primarily due to higher U.S.-based Compute & Networking segment demand. We refer to customers who purchase products directly from NVIDIA as direct customers, such as AIBs, distributors, ODMs, OEMs, CSPs, AI model makers, and system integrators. Certain direct customers may use either internal resources or third-party system integrators to complete their build. We refer to indirect customers as those who purchase products through our direct customers; indirect customers include CSPs, Neocloud builders, AI model makers, enterprises, and public sector entities. Our revenue is concentrated among a limited number of direct and indirect customers and this trend may continue. Direct Customers – For fiscal year 2026, sales to one direct customer represented 22% of total revenue and sales to another direct customer represented 14% of total revenue, all of which were primarily attributable to the Compute & Networking segment. For fiscal year 2025, sales to one direct customer represented 12% of total revenue and sales to two direct customers each represented 11% of total revenue, all of which were primarily attributable to the Compute & Networking segment. For fiscal year 2024, sales to one direct customer represented 13% of total revenue, and were primarily attributable to the Compute & Networking segment. 78\n\n\nNVIDIA Corporation and Subsidiaries\n\nNotes to the Consolidated Financial Statements\n\n(Continued)\n\nThe following table summarizes revenue by specialized markets:\n\n Year Ended\n\n Jan 25, 2026Jan 26, 2025Jan 28, 2024\n\nRevenue by End Market:\n\n(In millions)\n\nData Center$193,737 $115,186 $47,525 \n\nCompute162,361 102,196 38,950 \n\nNetworking31,376 12,990 8,575 \n\nGaming16,042 11,350 10,447 \n\nProfessional Visualization3,191 1,878 1,553 \n\nAutomotive2,349 1,694 1,091 \n\nOEM and Other619 389 306 \n\nTotal revenue$215,938 $130,497 $60,922 \n\nThe following table presents summarized information for long-lived assets by country. Long-lived assets consist of property and equipment and exclude other assets, operating lease assets, goodwill, and intangible assets."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "NVIDIA 最新財政年度的營收是多少"
+      ],
+      "agentic_n_chunks": 2
+    },
+    {
+      "id": "bc-03",
+      "category": "control",
+      "query": "Microsoft 最新一個財年的營收是多少？",
+      "answerable": true,
+      "answer": "Microsoft 在最新的財政年度（截至 2026 年 6 月 30 日）營收為 **3,318.39 億美元（$331,839 million）**【MSFT_10K_2026.html, chunk #0】。  \n\n- 這代表 FY2026 的總收入較前一年度 FY2025 的 2,817.24 億美元（$281,724 million） 增長了約 501.15 億美元（$50,115 million）。  \n- 產品部門貢獻 646.96 億美元（$64,696 million），服務與其他部門貢獻 2,671.43 億美元（$267,143 million）。  \n- 成本方面，營收成本為 1,063.74 億美元（$106,374 million），導致毛利為 2,254.65 億美元（$225,465 million）。  \n\n以上數據皆取自 Microsoft 2026 年度 10‑K 報表的合併損益表。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10K_2026.html #0 (rerank=0.714)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[MSFT 10-K period 2026] ## Consolidated Statement of Income\n\n**MICROSOFT CORPORATION** (MSFT)\n\n**Year Ended** *(In millions, except shares and per share data)*\n\n|  | Jun 30, 2026 | Jun 30, 2025 | Jun 30, 2024 |\n| --- | ---: | ---: | ---: |\n|         Revenue | $331,839 | $281,724 | $245,122 |\n| *        Product* | $64,696 | $63,946 | $64,773 |\n| *        Service and Other* | $267,143 | $217,778 | $180,349 |\n|         Cost of revenue | $106,374 | $87,831 | $74,114 |\n| *        Product* | $12,098 | $13,501 | $15,272 |\n| *        Service and Other* | $94,276 | $74,330 | $58,842 |\n|       Gross margin | $225,465 | $193,893 | $171,008 |\n|       Research and development | $35,562 | $32,488 | $29,510 |\n|       Sales and marketing | $26,710 | $25,654 | $24,456 |\n|       General and administrative | $7,956 | $7,223 | $7,609 |\n|         Operating income | $155,237 | $128,528 | $109,433 |\n|         Other income (expense), net | $10,697 | $(4,901) | $(1,646) |\n|       Income before income taxes | $165,934 | $123,627 | $107,787 |\n|       Provision for income taxes | $32,185 | $21,795 | $19,651 |\n|       Net income | $133,749 | $101,832 | $88,136 |\n|         Basic | 18.00 | 13.70 | 11.86 |\n|         Diluted | 17.95 | 13.64 | 11.80 |\n|         Basic | 7,429 | 7,433 | 7,431 |\n|         Diluted | 7,453 | 7,465 | 7,469 |"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Microsoft 最新一個財年的營收是多少"
+      ],
+      "agentic_n_chunks": 1
+    },
+    {
+      "id": "bc-04",
+      "category": "control",
+      "query": "Meta 最新一個財年的營收是多少？",
+      "answerable": true,
+      "answer": "Meta 在最新的財政年度（2025 年）營收為 **2,009.66 億美元（$200,966 百萬）**【META_10K_2025.html, chunk #0】。  \n\n- 這個數字來自 Meta Platforms, Inc. 2025 年度合併損益表，表格標示「Year Ended」且金額單位為「in millions」【META_10K_2025.html, chunk #0】。  \n- 相較於前一年 2024 年的 1,645.01 億美元（$164,501 百萬），營收增加了約 364.65 億美元（$36,465 百萬），顯示出顯著的成長。  \n\n因此，Meta 最新一個完整財年的營收為 2,009.66 億美元（$200,966 百萬）。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_10K_2025.html #0 (rerank=0.729)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "META_10K_2025.html",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[META 10-K period 2025] ## Consolidated Statement of Income\n\n**Meta Platforms, Inc.** (META)\n\n**Year Ended** *(In millions, except shares and per share data)*\n\n|  | Dec 31, 2025 | Dec 31, 2024 | Dec 31, 2023 |\n| --- | ---: | ---: | ---: |\n|   Revenue | $200,966 | $164,501 | $134,902 |\n|       Cost of revenue | $36,175 | $30,161 | $25,959 |\n|       Research and development | $57,372 | $43,873 | $38,483 |\n|       Marketing and sales | $11,991 | $11,347 | $12,301 |\n|       General and administrative | $12,152 | $9,740 | $11,408 |\n|       Total costs and expenses | $117,690 | $95,121 | $88,151 |\n|     Income (loss) from operations | 83,276 | 69,380 | 46,751 |\n|     Interest and other income, net | $2,656 | $1,283 | $677 |\n|   Income before provision for income taxes | $85,932 | $70,663 | $47,428 |\n|   Provision for income taxes | $25,474 | $8,303 | $8,330 |\n|   Net income | $60,458 | $62,360 | $39,098 |\n|     Basic (in dollars per share) | 23.98 | 24.61 | 15.19 |\n|     Diluted (in dollars per share) | 23.49 | 23.86 | 14.87 |\n|     Basic (in shares) | 2,521 | 2,534 | 2,574 |\n| *      Class A Common Stock* | 2,178 | 2,189 | 2,220 |\n| *      Class B Common Stock* | 343 | 345 | 354 |\n|     Diluted (in shares) | 2,574 | 2,614 | 2,629 |"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Meta 的 FY2025 營收是多少"
+      ],
+      "agentic_n_chunks": 1
+    }
+  ]
+}

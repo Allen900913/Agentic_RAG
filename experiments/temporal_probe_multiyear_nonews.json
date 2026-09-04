@@ -1,0 +1,2377 @@
+{
+  "meta": {
+    "collection": "us_stock_rag_edgar_multiyear",
+    "top_k": 5,
+    "baseline_filings": 21,
+    "queries": 45,
+    "routed": [
+      "col-11",
+      "col-12",
+      "col-13",
+      "mix-01",
+      "mix-02",
+      "mix-03",
+      "mix-04",
+      "mix-05",
+      "mix-06",
+      "mix-08",
+      "mix-09",
+      "mix-11",
+      "mix-12",
+      "mix-13",
+      "mix-14"
+    ],
+    "intents": {
+      "explicit": 3,
+      "relative": 17,
+      "none": 25
+    }
+  },
+  "agg": {
+    "filter_on": {
+      "explicit": {
+        "queries": 3,
+        "gold_in_topk": 2,
+        "gold_recall": 0.6667,
+        "gold_rank_median": 2,
+        "gold_never_ranked": 0,
+        "crowding_seats": 6,
+        "crowding_rate": 0.4,
+        "wrong_period": 1,
+        "wrong_period_rate": 0.3333,
+        "sibling_density_max": 8,
+        "sibling_density_mean": 4.67
+      },
+      "relative": {
+        "queries": 17,
+        "gold_in_topk": 17,
+        "gold_recall": 1.0,
+        "gold_rank_median": 1,
+        "gold_never_ranked": 0,
+        "crowding_seats": 3,
+        "crowding_rate": 0.0353,
+        "wrong_period": 0,
+        "wrong_period_rate": 0.0,
+        "sibling_density_max": 8,
+        "sibling_density_mean": 7.71
+      },
+      "none": {
+        "queries": 25,
+        "gold_in_topk": 23,
+        "gold_recall": 0.92,
+        "gold_rank_median": 2,
+        "gold_never_ranked": 0,
+        "crowding_seats": 39,
+        "crowding_rate": 0.312,
+        "wrong_period": 2,
+        "wrong_period_rate": 0.08,
+        "sibling_density_max": 8,
+        "sibling_density_mean": 3.6
+      },
+      "ALL": {
+        "queries": 45,
+        "gold_in_topk": 42,
+        "gold_recall": 0.9333,
+        "gold_rank_median": 1,
+        "gold_never_ranked": 0,
+        "crowding_seats": 48,
+        "crowding_rate": 0.2133,
+        "wrong_period": 3,
+        "wrong_period_rate": 0.0667,
+        "sibling_density_max": 8,
+        "sibling_density_mean": 5.22
+      }
+    },
+    "filter_off": {
+      "explicit": {
+        "queries": 3,
+        "gold_in_topk": 2,
+        "gold_recall": 0.6667,
+        "gold_rank_median": 2,
+        "gold_never_ranked": 0,
+        "crowding_seats": 6,
+        "crowding_rate": 0.4,
+        "wrong_period": 1,
+        "wrong_period_rate": 0.3333,
+        "sibling_density_max": 8,
+        "sibling_density_mean": 4.67
+      },
+      "relative": {
+        "queries": 17,
+        "gold_in_topk": 11,
+        "gold_recall": 0.6471,
+        "gold_rank_median": 4,
+        "gold_never_ranked": 1,
+        "crowding_seats": 23,
+        "crowding_rate": 0.2706,
+        "wrong_period": 6,
+        "wrong_period_rate": 0.3529,
+        "sibling_density_max": 8,
+        "sibling_density_mean": 7.71
+      },
+      "none": {
+        "queries": 25,
+        "gold_in_topk": 23,
+        "gold_recall": 0.92,
+        "gold_rank_median": 2,
+        "gold_never_ranked": 0,
+        "crowding_seats": 39,
+        "crowding_rate": 0.312,
+        "wrong_period": 2,
+        "wrong_period_rate": 0.08,
+        "sibling_density_max": 8,
+        "sibling_density_mean": 3.6
+      },
+      "ALL": {
+        "queries": 45,
+        "gold_in_topk": 36,
+        "gold_recall": 0.8,
+        "gold_rank_median": 2,
+        "gold_never_ranked": 1,
+        "crowding_seats": 68,
+        "crowding_rate": 0.3022,
+        "wrong_period": 9,
+        "wrong_period_rate": 0.2,
+        "sibling_density_max": 8,
+        "sibling_density_mean": 5.22
+      }
+    }
+  },
+  "arms": {
+    "filter_on": {
+      "sem-01": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "NVDA Item_1: 留 NVDA_10K_2026.html，被 ['NVDA_10K_2025.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10K_2025.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2026.html#20",
+          "NVDA_10K_2025.html#19",
+          "NVDA_10K_2026.html#120",
+          "NVDA_10Q_202604.html#40",
+          "NVDA_Fundamentals_20260612.txt#2"
+        ],
+        "query": "NVIDIA 的核心技術護城河是什麼？",
+        "intent": "none",
+        "gold": [
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "sem-02": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "NVDA Item_1: 留 NVDA_10K_2025.html，被 ['NVDA_10K_2026.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10K_2025.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2025.html#19",
+          "NVDA_10K_2026.html#20",
+          "NVDA_Fundamentals_20260612.txt#2",
+          "NVDA_10Q_202604.html#40",
+          "NVDA_10K_2026.html#120"
+        ],
+        "query": "NVIDIA 如何用同一套底層架構同時佈局資料中心、遊戲、專業視覺化與車用市場？",
+        "intent": "none",
+        "gold": [
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "sem-03": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "MSFT Item_1: 留 MSFT_10K_2024.html，被 ['MSFT_10K_2026.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "MSFT_10K_2024.html"
+        ],
+        "topk_sources": [
+          "MSFT_10K_2024.html#35",
+          "MSFT_10K_2026.html#38",
+          "MSFT_10K_2024.html#38",
+          "MSFT_Fundamentals_20260612.txt#1",
+          "MSFT_10K_2024.html#12"
+        ],
+        "query": "Microsoft 如何把 Copilot 整合進 Microsoft 365 的產品策略？",
+        "intent": "none",
+        "gold": [
+          "MSFT_10K_2026.html"
+        ]
+      },
+      "sem-04": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "MSFT Item_1: 留 MSFT_10K_2025.html，被 ['MSFT_10K_2026.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "MSFT_10K_2025.html"
+        ],
+        "topk_sources": [
+          "MSFT_10K_2025.html#40",
+          "MSFT_10K_2026.html#38",
+          "MSFT_Fundamentals_20260612.txt#1",
+          "MSFT_10Q_202509.html#66",
+          "MSFT_10Q_202503.html#9"
+        ],
+        "query": "Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？",
+        "intent": "none",
+        "gold": [
+          "MSFT_10K_2026.html"
+        ]
+      },
+      "sem-05": {
+        "gold_rank": 4,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AMZN Item_7: 留 AMZN_10K_2024.html，被 ['AMZN_10K_2025.html'] 佔 1 席",
+          "AMZN Part_I_Item_1: 留 AMZN_10Q_202603.html，被 ['AMZN_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AMZN_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AMZN_10K_2024.html#97",
+          "AMZN_10Q_202603.html#38",
+          "AMZN_10Q_202606.html#79",
+          "AMZN_10K_2025.html#119",
+          "AMZN_10Q_202606.html#39"
+        ],
+        "query": "Amazon 在 AWS 基礎設施與 AI 領域（含與 Anthropic 的合作）的投資策略是什麼？",
+        "intent": "none",
+        "gold": [
+          "AMZN_10K_2025.html"
+        ]
+      },
+      "sem-06": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AMZN Item_1A: 留 AMZN_10K_2024.html，被 ['AMZN_10K_2025.html'] 佔 1 席",
+          "AMZN Part_II_Item_1A: 留 AMZN_10Q_202603.html，被 ['AMZN_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AMZN_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AMZN_10K_2024.html#80",
+          "AMZN_10K_2025.html#81",
+          "AMZN_10Q_202603.html#124",
+          "AMZN_10Q_202606.html#125",
+          "AMZN_10Q_202409.html#41"
+        ],
+        "query": "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？",
+        "intent": "none",
+        "gold": [
+          "AMZN_10K_2025.html"
+        ]
+      },
+      "sem-07": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 4,
+        "crowding_detail": [
+          "GOOGL Item_1: 留 GOOGL_10K_2025.html，被 ['GOOGL_10K_2024.html'] 佔 4 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10K_2025.html#128",
+          "GOOGL_10K_2024.html#135",
+          "GOOGL_10K_2024.html#131",
+          "GOOGL_10K_2024.html#137",
+          "GOOGL_10K_2024.html#140"
+        ],
+        "query": "Google 如何把 Gemini AI 整合進搜尋與其他產品生態系？",
+        "intent": "none",
+        "gold": [
+          "GOOGL_10K_2025.html"
+        ]
+      },
+      "sem-08": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "GOOGL Item_1: 留 GOOGL_10K_2025.html，被 ['GOOGL_10K_2024.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10K_2025.html#196",
+          "GOOGL_10K_2025.html#132",
+          "GOOGL_10K_2024.html#135",
+          "GOOGL_10K_2024.html#137",
+          "GOOGL_10K_2025.html#127"
+        ],
+        "query": "Google 搜尋如何演變出 AI Overviews 與 AI Mode 來回應生成式 AI 對搜尋的衝擊？",
+        "intent": "none",
+        "gold": [
+          "GOOGL_10K_2025.html"
+        ]
+      },
+      "sem-09": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "META Part_II_Item_1A: 留 META_10Q_202603.html，被 ['META_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "META_10K_2024.html"
+        ],
+        "topk_sources": [
+          "META_10Q_202603.html#165",
+          "META_10K_2025.html#56",
+          "META_10Q_202606.html#168",
+          "META_10K_2025.html#67",
+          "META_10K_2024.html#21"
+        ],
+        "query": "Meta 在 AI 與 Reality Labs 上的長期願景與投資方向是什麼？",
+        "intent": "none",
+        "gold": [
+          "META_10K_2025.html"
+        ]
+      },
+      "sem-10": {
+        "gold_rank": 3,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "META Item_1: 留 META_10K_2024.html，被 ['META_10K_2025.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "META_10K_2024.html"
+        ],
+        "topk_sources": [
+          "META_10K_2024.html#21",
+          "META_Fundamentals_20260612.txt#1",
+          "META_10K_2025.html#22",
+          "META_10Q_202603.html#77",
+          "META_10K_2024.html#190"
+        ],
+        "query": "Meta 的廣告獲利模式與 Meta AI 在旗下 App 中扮演的角色是什麼？",
+        "intent": "none",
+        "gold": [
+          "META_10K_2025.html"
+        ]
+      },
+      "sem-11": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "TSLA Item_1: 留 TSLA_10K_2025.html，被 ['TSLA_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "TSLA_10K_2024.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2025.html#25",
+          "TSLA_10K_2025.html#221",
+          "TSLA_10Q_202603.html#42",
+          "TSLA_10K_2024.html#35",
+          "TSLA_10K_2025.html#155"
+        ],
+        "query": "Tesla 如何把自動駕駛（FSD/Autopilot）技術當作與競爭對手的核心差異化？",
+        "intent": "none",
+        "gold": [
+          "TSLA_10K_2025.html"
+        ]
+      },
+      "sem-12": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "TSLA Item_1: 留 TSLA_10K_2023.html，被 ['TSLA_10K_2025.html'] 佔 1 席",
+          "TSLA Item_1A: 留 TSLA_10K_2025.html，被 ['TSLA_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "TSLA_10K_2023.html",
+          "TSLA_10K_2024.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2023.html#50",
+          "TSLA_10K_2025.html#43",
+          "TSLA_10K_2025.html#59",
+          "TSLA_10K_2024.html#73",
+          "TSLA_Fundamentals_20260612.txt#2"
+        ],
+        "query": "Tesla 在電動車市場面臨什麼樣的競爭態勢？",
+        "intent": "none",
+        "gold": [
+          "TSLA_10K_2025.html"
+        ]
+      },
+      "sem-13": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "TSLA Item_1: 留 TSLA_10K_2025.html，被 ['TSLA_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "TSLA_10K_2024.html"
+        ],
+        "topk_sources": [
+          "TSLA_Fundamentals_20260612.txt#2",
+          "TSLA_10K_2025.html#26",
+          "TSLA_10K_2024.html#39",
+          "TSLA_Fundamentals_20260612.txt#1",
+          "TSLA_10Q_202603.html#47"
+        ],
+        "query": "Tesla 的能源生成與儲能業務在公司整體策略中扮演什麼角色？",
+        "intent": "none",
+        "gold": [
+          "TSLA_10K_2025.html"
+        ]
+      },
+      "sem-14": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "AAPL Item_1: 留 AAPL_10K_2025.html，被 ['AAPL_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AAPL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AAPL_10K_2025.html#22",
+          "AAPL_10K_2024.html#23",
+          "AAPL_10K_2024.html#33",
+          "AAPL_10K_2025.html#21",
+          "AAPL_10K_2025.html#17"
+        ],
+        "query": "Apple 自己在 10-K 中如何描述它在智慧型手機、PC、平板市場面臨的競爭壓力與市佔地位？",
+        "intent": "none",
+        "gold": [
+          "AAPL_10K_2025.html"
+        ]
+      },
+      "sem-15": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "AAPL Item_1A: 留 AAPL_10K_2024.html，被 ['AAPL_10K_2025.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AAPL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AAPL_10K_2024.html#41",
+          "AAPL_10K_2025.html#45",
+          "AAPL_10Q_202606.html#60",
+          "AAPL_10Q_202606.html#63",
+          "AAPL_10Q_202606.html#59"
+        ],
+        "query": "Apple 的第三方開發者生態系相對於 Android、Windows 等平台的黏著度是如何建立的？",
+        "intent": "none",
+        "gold": [
+          "AAPL_10K_2025.html"
+        ]
+      },
+      "mix-01": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "MSFT_10Q_202603.html#75",
+          "MSFT_10Q_202603.html#65",
+          "MSFT_10Q_202603.html#49",
+          "MSFT_10Q_202603.html#62",
+          "MSFT_10Q_202603.html#69"
+        ],
+        "query": "Microsoft Azure 最新一季的營收成長率是多少？",
+        "intent": "relative",
+        "gold": [
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "mix-02": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "MSFT_10Q_202603.html#71",
+          "MSFT_10Q_202603.html#76",
+          "MSFT_10Q_202603.html#63",
+          "MSFT_10Q_202603.html#66",
+          "MSFT_10Q_202603.html#42"
+        ],
+        "query": "Microsoft More Personal Computing 部門最新一季營收表現如何？哪些因素互相抵銷？",
+        "intent": "relative",
+        "gold": [
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "mix-03": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "MSFT_10Q_202603.html#63",
+          "MSFT_Fundamentals_20260612.txt#1",
+          "MSFT_10Q_202603.html#66",
+          "MSFT_10Q_202603.html#74",
+          "MSFT_10Q_202603.html#68"
+        ],
+        "query": "Microsoft 最新一季整體營業利益成長多少？主要由哪些部門帶動？",
+        "intent": "relative",
+        "gold": [
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "mix-04": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "AMZN_10Q_202606.html#12",
+          "AMZN_10Q_202606.html#56",
+          "AMZN_10Q_202606.html#57",
+          "AMZN_Fundamentals_20260612.txt#1",
+          "AMZN_10Q_202606.html#97"
+        ],
+        "query": "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？",
+        "intent": "relative",
+        "gold": [
+          "AMZN_10Q_202606.html"
+        ]
+      },
+      "mix-05": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "AMZN_10Q_202606.html#85",
+          "AMZN_10Q_202606.html#56",
+          "AMZN_10Q_202606.html#57",
+          "AMZN_10Q_202606.html#74",
+          "AMZN_10Q_202606.html#35"
+        ],
+        "query": "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？",
+        "intent": "relative",
+        "gold": [
+          "AMZN_10Q_202606.html"
+        ]
+      },
+      "mix-06": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "GOOGL_10Q_202606.html#120",
+          "GOOGL_10Q_202606.html#130",
+          "GOOGL_10Q_202606.html#50",
+          "GOOGL_10Q_202606.html#91",
+          "GOOGL_10Q_202606.html#111"
+        ],
+        "query": "Google Cloud 部門最新一季的營收成長多少？",
+        "intent": "relative",
+        "gold": [
+          "GOOGL_10Q_202606.html"
+        ]
+      },
+      "mix-07": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "GOOGL Part_I_Item_1: 留 GOOGL_10Q_202606.html，被 ['GOOGL_10Q_202603.html'] 佔 1 席",
+          "GOOGL Part_I_Item_2: 留 GOOGL_10Q_202606.html，被 ['GOOGL_10Q_202603.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10Q_202606.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10Q_202606.html#67",
+          "GOOGL_10Q_202603.html#50",
+          "GOOGL_10K_2025.html#299",
+          "GOOGL_10Q_202606.html#154",
+          "GOOGL_10Q_202603.html#126"
+        ],
+        "query": "Google 收購 Wiz 花了多少錢？這如何影響 Google Cloud 部門？",
+        "intent": "none",
+        "gold": [
+          "GOOGL_10Q_202603.html"
+        ]
+      },
+      "mix-08": {
+        "gold_rank": 3,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "META_Fundamentals_20260612.txt#1",
+          "META_Fundamentals_20260612.txt#0",
+          "META_10Q_202606.html#63",
+          "META_IncomeStatement_20260612.txt#4",
+          "META_10Q_202606.html#0"
+        ],
+        "query": "Meta 最新一季總營收成長多少？主要驅動因素是什麼？",
+        "intent": "relative",
+        "gold": [
+          "META_10Q_202606.html"
+        ]
+      },
+      "mix-09": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "AAPL_10Q_202606.html#37",
+          "AAPL_10Q_202606.html#20",
+          "AAPL_10Q_202606.html#26",
+          "AAPL_10Q_202606.html#22",
+          "AAPL_10Q_202606.html#21"
+        ],
+        "query": "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？",
+        "intent": "relative",
+        "gold": [
+          "AAPL_10Q_202606.html"
+        ]
+      },
+      "mix-10": {
+        "gold_rank": 6,
+        "gold_in_topk": false,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AAPL Item_7: 留 AAPL_10K_2023.html，被 ['AAPL_10K_2025.html'] 佔 1 席",
+          "AAPL Part_I_Item_2: 留 AAPL_10Q_202512.html，被 ['AAPL_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "AAPL_10Q_202512.html",
+          "AAPL_10Q_202606.html"
+        ],
+        "topk_sources": [
+          "AAPL_10K_2023.html#87",
+          "AAPL_10K_2025.html#85",
+          "AAPL_10Q_202512.html#36",
+          "AAPL_10Q_202606.html#38",
+          "AAPL_10K_2024.html#111"
+        ],
+        "query": "Apple iPhone 營收成長主要是由哪些機型帶動的？",
+        "intent": "none",
+        "gold": [
+          "AAPL_10Q_202603.html"
+        ]
+      },
+      "mix-11": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "NVDA_10Q_202604.html#42",
+          "NVDA_10Q_202604.html#47",
+          "NVDA_10Q_202604.html#36",
+          "NVDA_10Q_202604.html#34",
+          "NVDA_Fundamentals_20260612.txt#2"
+        ],
+        "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
+        "intent": "relative",
+        "gold": [
+          "NVDA_10Q_202604.html"
+        ]
+      },
+      "mix-12": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "NVDA_10Q_202604.html#47",
+          "NVDA_10Q_202604.html#36",
+          "NVDA_10Q_202604.html#89",
+          "NVDA_10Q_202604.html#30",
+          "NVDA_10Q_202604.html#14"
+        ],
+        "query": "NVIDIA 這一季在中國市場的資料中心晶片出貨狀況如何？跟去年同期相比有何變化？",
+        "intent": "relative",
+        "gold": [
+          "NVDA_10Q_202604.html"
+        ]
+      },
+      "mix-13": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "TSLA_10Q_202606.html#70",
+          "TSLA_10Q_202606.html#74",
+          "TSLA_10Q_202606.html#0",
+          "TSLA_10Q_202606.html#22",
+          "TSLA_10Q_202606.html#18"
+        ],
+        "query": "Tesla 能源生成與儲能業務最新一季營收表現如何？",
+        "intent": "relative",
+        "gold": [
+          "TSLA_10Q_202606.html"
+        ]
+      },
+      "mix-14": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "TSLA_10Q_202606.html#22",
+          "TSLA_10Q_202606.html#0",
+          "TSLA_10Q_202606.html#18",
+          "TSLA_10Q_202606.html#68",
+          "TSLA_10Q_202606.html#2"
+        ],
+        "query": "Tesla 汽車銷售營收最新一季成長多少？主要驅動因素是什麼？",
+        "intent": "relative",
+        "gold": [
+          "TSLA_10Q_202606.html"
+        ]
+      },
+      "mix-15": {
+        "gold_rank": 6,
+        "gold_in_topk": false,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "TSLA Item_7: 留 TSLA_10K_2023.html，被 ['TSLA_10K_2024.html'] 佔 1 席",
+          "TSLA Part_I_Item_2: 留 TSLA_10Q_202409.html，被 ['TSLA_10Q_202406.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "TSLA_10Q_202406.html",
+          "TSLA_10Q_202409.html",
+          "TSLA_10Q_202603.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2023.html#115",
+          "TSLA_10K_2024.html#116",
+          "TSLA_10Q_202603.html#33",
+          "TSLA_10Q_202409.html#52",
+          "TSLA_10Q_202406.html#49"
+        ],
+        "query": "Tesla 2026 年至今生產與交付了多少輛消費性車輛？",
+        "intent": "explicit",
+        "gold": [
+          "TSLA_10Q_202606.html"
+        ]
+      },
+      "lex-04": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "NVDA Item_1: 留 NVDA_10K_2026.html，被 ['NVDA_10K_2025.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10K_2025.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2026.html#20",
+          "NVDA_10K_2026.html#25",
+          "NVDA_10K_2025.html#19",
+          "NVDA_10K_2025.html#20",
+          "NVDA_10K_2026.html#21"
+        ],
+        "query": "NVIDIA 是哪一年推出 CUDA 開發平台的？",
+        "intent": "none",
+        "gold": [
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "lex-05": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "NVDA Item_1: 留 NVDA_10K_2025.html，被 ['NVDA_10K_2026.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10K_2024.html",
+          "NVDA_10K_2025.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2025.html#20",
+          "NVDA_10K_2026.html#21",
+          "NVDA_10K_2024.html#212",
+          "NVDA_10K_2024.html#188",
+          "NVDA_10Q_202410.html#90"
+        ],
+        "query": "NVIDIA 收購 Mellanox 是哪一年？",
+        "intent": "none",
+        "gold": [
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "lex-10": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AMZN Part_I_Item_2: 留 AMZN_10Q_202509.html，被 ['AMZN_10Q_202506.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "AMZN_10Q_202509.html#61",
+          "AMZN_10K_2025.html#105",
+          "AMZN_10Q_202506.html#60",
+          "AMZN_10Q_202506.html#56",
+          "AMZN_10K_2025.html#2"
+        ],
+        "query": "Amazon 在 2025 年的現金資本支出（cash capital expenditures）是多少？",
+        "intent": "explicit",
+        "gold": [
+          "AMZN_10K_2025.html"
+        ]
+      },
+      "lex-12": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "GOOGL Part_I_Item_1: 留 GOOGL_10Q_202603.html，被 ['GOOGL_10Q_202606.html'] 佔 1 席",
+          "GOOGL Part_I_Item_2: 留 GOOGL_10Q_202603.html，被 ['GOOGL_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10Q_202606.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10Q_202603.html#50",
+          "GOOGL_10Q_202606.html#67",
+          "GOOGL_10Q_202603.html#126",
+          "GOOGL_10Q_202606.html#154",
+          "GOOGL_10Q_202603.html#85"
+        ],
+        "query": "Google 完成收購 Wiz 的確切日期是哪一天？金額是多少？",
+        "intent": "none",
+        "gold": [
+          "GOOGL_10Q_202603.html"
+        ]
+      },
+      "lex-15": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "TSLA Item_1: 留 TSLA_10K_2025.html，被 ['TSLA_10K_2024.html'] 佔 1 席",
+          "TSLA Part_I_Item_1: 留 TSLA_10Q_202603.html，被 ['TSLA_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "TSLA_10K_2024.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2025.html#26",
+          "TSLA_10K_2024.html#41",
+          "TSLA_10Q_202603.html#12",
+          "TSLA_10K_2025.html#6",
+          "TSLA_10Q_202606.html#22"
+        ],
+        "query": "Tesla 在 2026 年 1 月啟用的鋰精煉廠位於哪裡？",
+        "intent": "explicit",
+        "gold": [
+          "TSLA_10K_2025.html"
+        ]
+      },
+      "col-01": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "NVDA Item_1: 留 NVDA_10K_2026.html，被 ['NVDA_10K_2025.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10K_2025.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2026.html#20",
+          "NVDA_10K_2025.html#19",
+          "NVDA_10K_2026.html#28",
+          "NVDA_10K_2025.html#27",
+          "NVDA_10Q_202604.html#40"
+        ],
+        "query": "為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？",
+        "intent": "none",
+        "gold": [
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "col-02": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "MSFT Item_1: 留 MSFT_10K_2025.html，被 ['MSFT_10K_2026.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "MSFT_10K_2025.html"
+        ],
+        "topk_sources": [
+          "MSFT_10K_2025.html#31",
+          "MSFT_10K_2026.html#32",
+          "MSFT_10K_2025.html#35",
+          "MSFT_10K_2026.html#35",
+          "MSFT_10Q_202312.html#142"
+        ],
+        "query": "微軟是怎麼把 AI 塞進 Office 那些軟體裡的？",
+        "intent": "none",
+        "gold": [
+          "MSFT_10K_2026.html"
+        ]
+      },
+      "col-03": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "AMZN Part_I_Item_2: 留 AMZN_10Q_202606.html，被 ['AMZN_10Q_202603.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AMZN_10K_2023.html",
+          "AMZN_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AMZN_10Q_202606.html#44",
+          "AMZN_10Q_202606.html#73",
+          "AMZN_10Q_202603.html#71",
+          "AMZN_10K_2024.html#12",
+          "AMZN_10K_2023.html#97"
+        ],
+        "query": "亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？",
+        "intent": "relative",
+        "gold": [
+          "AMZN_10K_2025.html",
+          "AMZN_10Q_202603.html",
+          "AMZN_10Q_202606.html"
+        ]
+      },
+      "col-04": {
+        "gold_rank": 3,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "GOOGL Item_1: 留 GOOGL_10K_2024.html，被 ['GOOGL_10K_2025.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10K_2023.html",
+          "GOOGL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10K_2023.html#14",
+          "GOOGL_10K_2024.html#135",
+          "GOOGL_10K_2025.html#128",
+          "GOOGL_10K_2024.html#131",
+          "GOOGL_10K_2025.html#132"
+        ],
+        "query": "Google 的 AI 助手現在有整合進搜尋引擎裡嗎？",
+        "intent": "relative",
+        "gold": [
+          "GOOGL_10K_2025.html"
+        ]
+      },
+      "col-05": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "META Item_1: 留 META_10K_2025.html，被 ['META_10K_2024.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "META_10K_2024.html"
+        ],
+        "topk_sources": [
+          "META_10K_2025.html#22",
+          "META_10K_2025.html#25",
+          "META_10K_2024.html#21",
+          "META_10K_2024.html#24",
+          "META_Fundamentals_20260612.txt#1"
+        ],
+        "query": "Meta 搞的那些 VR 眼鏡跟 AI，到底想往哪個方向發展？",
+        "intent": "none",
+        "gold": [
+          "META_10K_2025.html"
+        ]
+      },
+      "col-06": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "TSLA Item_1: 留 TSLA_10K_2025.html，被 ['TSLA_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "TSLA_10K_2024.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2025.html#24",
+          "TSLA_10K_2024.html#35",
+          "TSLA_10K_2025.html#43",
+          "TSLA_10Q_202509.html#19",
+          "TSLA_10K_2025.html#155"
+        ],
+        "query": "特斯拉的自動駕駛跟別家車廠比，厲害在哪裡？",
+        "intent": "none",
+        "gold": [
+          "TSLA_10K_2025.html"
+        ]
+      },
+      "col-07": {
+        "gold_rank": 7,
+        "gold_in_topk": false,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "AAPL Item_1A: 留 AAPL_10K_2023.html，被 ['AAPL_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "AAPL_10K_2023.html",
+          "AAPL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AAPL_10Q_202606.html#59",
+          "AAPL_10K_2023.html#40",
+          "AAPL_10K_2023.html#32",
+          "AAPL_10Q_202603.html#19",
+          "AAPL_10K_2024.html#53"
+        ],
+        "query": "蘋果自己是不是也承認在手機市場其實不算市佔龍頭？",
+        "intent": "none",
+        "gold": [
+          "AAPL_10K_2025.html"
+        ]
+      },
+      "col-11": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "MSFT_10Q_202603.html#9",
+          "MSFT_10Q_202603.html#73",
+          "MSFT_10Q_202603.html#68",
+          "MSFT_10Q_202603.html#66",
+          "MSFT_10Q_202603.html#63"
+        ],
+        "query": "微軟的雲端服務最近成長得快不快？",
+        "intent": "relative",
+        "gold": [
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "col-12": {
+        "gold_rank": 3,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "META_Fundamentals_20260612.txt#0",
+          "META_Fundamentals_20260612.txt#1",
+          "META_10Q_202606.html#63",
+          "META_10Q_202606.html#0",
+          "META_IncomeStatement_20260612.txt#4"
+        ],
+        "query": "Meta 最近這一季賺（營收）成長多少？",
+        "intent": "relative",
+        "gold": [
+          "META_10Q_202606.html"
+        ]
+      },
+      "col-13": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "AAPL_10Q_202606.html#37",
+          "AAPL_10Q_202606.html#20",
+          "AAPL_10Q_202606.html#26",
+          "AAPL_10Q_202606.html#63",
+          "AAPL_10Q_202606.html#0"
+        ],
+        "query": "蘋果在大中華區最近賣得好不好？",
+        "intent": "relative",
+        "gold": [
+          "AAPL_10Q_202606.html"
+        ]
+      }
+    },
+    "filter_off": {
+      "sem-01": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "NVDA Item_1: 留 NVDA_10K_2026.html，被 ['NVDA_10K_2025.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10K_2025.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2026.html#20",
+          "NVDA_10K_2025.html#19",
+          "NVDA_10K_2026.html#120",
+          "NVDA_10Q_202604.html#40",
+          "NVDA_Fundamentals_20260612.txt#2"
+        ],
+        "query": "NVIDIA 的核心技術護城河是什麼？",
+        "intent": "none",
+        "gold": [
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "sem-02": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "NVDA Item_1: 留 NVDA_10K_2025.html，被 ['NVDA_10K_2026.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10K_2025.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2025.html#19",
+          "NVDA_10K_2026.html#20",
+          "NVDA_Fundamentals_20260612.txt#2",
+          "NVDA_10Q_202604.html#40",
+          "NVDA_10K_2026.html#120"
+        ],
+        "query": "NVIDIA 如何用同一套底層架構同時佈局資料中心、遊戲、專業視覺化與車用市場？",
+        "intent": "none",
+        "gold": [
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "sem-03": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "MSFT Item_1: 留 MSFT_10K_2024.html，被 ['MSFT_10K_2026.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "MSFT_10K_2024.html"
+        ],
+        "topk_sources": [
+          "MSFT_10K_2024.html#35",
+          "MSFT_10K_2026.html#38",
+          "MSFT_10K_2024.html#38",
+          "MSFT_Fundamentals_20260612.txt#1",
+          "MSFT_10K_2024.html#12"
+        ],
+        "query": "Microsoft 如何把 Copilot 整合進 Microsoft 365 的產品策略？",
+        "intent": "none",
+        "gold": [
+          "MSFT_10K_2026.html"
+        ]
+      },
+      "sem-04": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "MSFT Item_1: 留 MSFT_10K_2025.html，被 ['MSFT_10K_2026.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "MSFT_10K_2025.html"
+        ],
+        "topk_sources": [
+          "MSFT_10K_2025.html#40",
+          "MSFT_10K_2026.html#38",
+          "MSFT_Fundamentals_20260612.txt#1",
+          "MSFT_10Q_202509.html#66",
+          "MSFT_10Q_202503.html#9"
+        ],
+        "query": "Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？",
+        "intent": "none",
+        "gold": [
+          "MSFT_10K_2026.html"
+        ]
+      },
+      "sem-05": {
+        "gold_rank": 4,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AMZN Item_7: 留 AMZN_10K_2024.html，被 ['AMZN_10K_2025.html'] 佔 1 席",
+          "AMZN Part_I_Item_1: 留 AMZN_10Q_202603.html，被 ['AMZN_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AMZN_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AMZN_10K_2024.html#97",
+          "AMZN_10Q_202603.html#38",
+          "AMZN_10Q_202606.html#79",
+          "AMZN_10K_2025.html#119",
+          "AMZN_10Q_202606.html#39"
+        ],
+        "query": "Amazon 在 AWS 基礎設施與 AI 領域（含與 Anthropic 的合作）的投資策略是什麼？",
+        "intent": "none",
+        "gold": [
+          "AMZN_10K_2025.html"
+        ]
+      },
+      "sem-06": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AMZN Item_1A: 留 AMZN_10K_2024.html，被 ['AMZN_10K_2025.html'] 佔 1 席",
+          "AMZN Part_II_Item_1A: 留 AMZN_10Q_202603.html，被 ['AMZN_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AMZN_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AMZN_10K_2024.html#80",
+          "AMZN_10K_2025.html#81",
+          "AMZN_10Q_202603.html#124",
+          "AMZN_10Q_202606.html#125",
+          "AMZN_10Q_202409.html#41"
+        ],
+        "query": "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？",
+        "intent": "none",
+        "gold": [
+          "AMZN_10K_2025.html"
+        ]
+      },
+      "sem-07": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 4,
+        "crowding_detail": [
+          "GOOGL Item_1: 留 GOOGL_10K_2025.html，被 ['GOOGL_10K_2024.html'] 佔 4 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10K_2025.html#128",
+          "GOOGL_10K_2024.html#135",
+          "GOOGL_10K_2024.html#131",
+          "GOOGL_10K_2024.html#137",
+          "GOOGL_10K_2024.html#140"
+        ],
+        "query": "Google 如何把 Gemini AI 整合進搜尋與其他產品生態系？",
+        "intent": "none",
+        "gold": [
+          "GOOGL_10K_2025.html"
+        ]
+      },
+      "sem-08": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "GOOGL Item_1: 留 GOOGL_10K_2025.html，被 ['GOOGL_10K_2024.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10K_2025.html#196",
+          "GOOGL_10K_2025.html#132",
+          "GOOGL_10K_2024.html#135",
+          "GOOGL_10K_2024.html#137",
+          "GOOGL_10K_2025.html#127"
+        ],
+        "query": "Google 搜尋如何演變出 AI Overviews 與 AI Mode 來回應生成式 AI 對搜尋的衝擊？",
+        "intent": "none",
+        "gold": [
+          "GOOGL_10K_2025.html"
+        ]
+      },
+      "sem-09": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "META Part_II_Item_1A: 留 META_10Q_202603.html，被 ['META_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "META_10K_2024.html"
+        ],
+        "topk_sources": [
+          "META_10Q_202603.html#165",
+          "META_10K_2025.html#56",
+          "META_10Q_202606.html#168",
+          "META_10K_2025.html#67",
+          "META_10K_2024.html#21"
+        ],
+        "query": "Meta 在 AI 與 Reality Labs 上的長期願景與投資方向是什麼？",
+        "intent": "none",
+        "gold": [
+          "META_10K_2025.html"
+        ]
+      },
+      "sem-10": {
+        "gold_rank": 3,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "META Item_1: 留 META_10K_2024.html，被 ['META_10K_2025.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "META_10K_2024.html"
+        ],
+        "topk_sources": [
+          "META_10K_2024.html#21",
+          "META_Fundamentals_20260612.txt#1",
+          "META_10K_2025.html#22",
+          "META_10Q_202603.html#77",
+          "META_10K_2024.html#190"
+        ],
+        "query": "Meta 的廣告獲利模式與 Meta AI 在旗下 App 中扮演的角色是什麼？",
+        "intent": "none",
+        "gold": [
+          "META_10K_2025.html"
+        ]
+      },
+      "sem-11": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "TSLA Item_1: 留 TSLA_10K_2025.html，被 ['TSLA_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "TSLA_10K_2024.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2025.html#25",
+          "TSLA_10K_2025.html#221",
+          "TSLA_10Q_202603.html#42",
+          "TSLA_10K_2024.html#35",
+          "TSLA_10K_2025.html#155"
+        ],
+        "query": "Tesla 如何把自動駕駛（FSD/Autopilot）技術當作與競爭對手的核心差異化？",
+        "intent": "none",
+        "gold": [
+          "TSLA_10K_2025.html"
+        ]
+      },
+      "sem-12": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "TSLA Item_1: 留 TSLA_10K_2023.html，被 ['TSLA_10K_2025.html'] 佔 1 席",
+          "TSLA Item_1A: 留 TSLA_10K_2025.html，被 ['TSLA_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "TSLA_10K_2023.html",
+          "TSLA_10K_2024.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2023.html#50",
+          "TSLA_10K_2025.html#43",
+          "TSLA_10K_2025.html#59",
+          "TSLA_10K_2024.html#73",
+          "TSLA_Fundamentals_20260612.txt#2"
+        ],
+        "query": "Tesla 在電動車市場面臨什麼樣的競爭態勢？",
+        "intent": "none",
+        "gold": [
+          "TSLA_10K_2025.html"
+        ]
+      },
+      "sem-13": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "TSLA Item_1: 留 TSLA_10K_2025.html，被 ['TSLA_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "TSLA_10K_2024.html"
+        ],
+        "topk_sources": [
+          "TSLA_Fundamentals_20260612.txt#2",
+          "TSLA_10K_2025.html#26",
+          "TSLA_10K_2024.html#39",
+          "TSLA_Fundamentals_20260612.txt#1",
+          "TSLA_10Q_202603.html#47"
+        ],
+        "query": "Tesla 的能源生成與儲能業務在公司整體策略中扮演什麼角色？",
+        "intent": "none",
+        "gold": [
+          "TSLA_10K_2025.html"
+        ]
+      },
+      "sem-14": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "AAPL Item_1: 留 AAPL_10K_2025.html，被 ['AAPL_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AAPL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AAPL_10K_2025.html#22",
+          "AAPL_10K_2024.html#23",
+          "AAPL_10K_2024.html#33",
+          "AAPL_10K_2025.html#21",
+          "AAPL_10K_2025.html#17"
+        ],
+        "query": "Apple 自己在 10-K 中如何描述它在智慧型手機、PC、平板市場面臨的競爭壓力與市佔地位？",
+        "intent": "none",
+        "gold": [
+          "AAPL_10K_2025.html"
+        ]
+      },
+      "sem-15": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "AAPL Item_1A: 留 AAPL_10K_2024.html，被 ['AAPL_10K_2025.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AAPL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AAPL_10K_2024.html#41",
+          "AAPL_10K_2025.html#45",
+          "AAPL_10Q_202606.html#60",
+          "AAPL_10Q_202606.html#63",
+          "AAPL_10Q_202606.html#59"
+        ],
+        "query": "Apple 的第三方開發者生態系相對於 Android、Windows 等平台的黏著度是如何建立的？",
+        "intent": "none",
+        "gold": [
+          "AAPL_10K_2025.html"
+        ]
+      },
+      "mix-01": {
+        "gold_rank": 4,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "MSFT Part_I_Item_2: 留 MSFT_10Q_202512.html，被 ['MSFT_10Q_202603.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "MSFT_10Q_202512.html"
+        ],
+        "topk_sources": [
+          "MSFT_10Q_202512.html#71",
+          "MSFT_10K_2025.html#136",
+          "MSFT_10Q_202512.html#77",
+          "MSFT_10Q_202603.html#65",
+          "MSFT_10Q_202512.html#67"
+        ],
+        "query": "Microsoft Azure 最新一季的營收成長率是多少？",
+        "intent": "relative",
+        "gold": [
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "mix-02": {
+        "gold_rank": 6,
+        "gold_in_topk": false,
+        "sibling_density": 8,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "MSFT notes_table: 留 MSFT_10Q_202312.html，被 ['MSFT_10Q_202403.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "MSFT_10Q_202312.html",
+          "MSFT_10Q_202403.html",
+          "MSFT_10Q_202512.html"
+        ],
+        "topk_sources": [
+          "MSFT_10Q_202512.html#78",
+          "MSFT_10K_2024.html#154",
+          "MSFT_10K_2024.html#48",
+          "MSFT_10Q_202312.html#12",
+          "MSFT_10Q_202403.html#10"
+        ],
+        "query": "Microsoft More Personal Computing 部門最新一季營收表現如何？哪些因素互相抵銷？",
+        "intent": "relative",
+        "gold": [
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "mix-03": {
+        "gold_rank": 5,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "MSFT Item_1: 留 MSFT_10K_2025.html，被 ['MSFT_10K_2026.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "MSFT_Fundamentals_20260612.txt#1",
+          "MSFT_10K_2024.html#154",
+          "MSFT_10K_2025.html#31",
+          "MSFT_10K_2026.html#32",
+          "MSFT_10Q_202603.html#48"
+        ],
+        "query": "Microsoft 最新一季整體營業利益成長多少？主要由哪些部門帶動？",
+        "intent": "relative",
+        "gold": [
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "mix-04": {
+        "gold_rank": 3,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AMZN Part_I_Item_1: 留 AMZN_10Q_202509.html，被 ['AMZN_10Q_202606.html'] 佔 1 席",
+          "AMZN notes_table: 留 AMZN_10Q_202603.html，被 ['AMZN_10Q_202403.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AMZN_10Q_202403.html",
+          "AMZN_10Q_202509.html",
+          "AMZN_10Q_202603.html"
+        ],
+        "topk_sources": [
+          "AMZN_10Q_202509.html#52",
+          "AMZN_10Q_202603.html#12",
+          "AMZN_10Q_202606.html#57",
+          "AMZN_Fundamentals_20260612.txt#1",
+          "AMZN_10Q_202403.html#11"
+        ],
+        "query": "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？",
+        "intent": "relative",
+        "gold": [
+          "AMZN_10Q_202606.html"
+        ]
+      },
+      "mix-05": {
+        "gold_rank": null,
+        "gold_in_topk": false,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AMZN Part_I_Item_2: 留 AMZN_10Q_202509.html，被 ['AMZN_10Q_202603.html'] 佔 1 席",
+          "AMZN Item_7: 留 AMZN_10K_2024.html，被 ['AMZN_10K_2025.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "AMZN_10Q_202509.html",
+          "AMZN_10Q_202603.html"
+        ],
+        "topk_sources": [
+          "AMZN_10Q_202509.html#80",
+          "AMZN_10Q_202603.html#73",
+          "AMZN_10K_2024.html#113",
+          "AMZN_10K_2025.html#114",
+          "AMZN_10Q_202509.html#68"
+        ],
+        "query": "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？",
+        "intent": "relative",
+        "gold": [
+          "AMZN_10Q_202606.html"
+        ]
+      },
+      "mix-06": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "GOOGL Part_I_Item_2: 留 GOOGL_10Q_202606.html，被 ['GOOGL_10Q_202603.html'] 佔 1 席",
+          "GOOGL Item_7: 留 GOOGL_10K_2024.html，被 ['GOOGL_10K_2025.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10Q_202603.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10Q_202606.html#120",
+          "GOOGL_10Q_202603.html#95",
+          "GOOGL_10K_2024.html#223",
+          "GOOGL_10Q_202606.html#130",
+          "GOOGL_10K_2025.html#222"
+        ],
+        "query": "Google Cloud 部門最新一季的營收成長多少？",
+        "intent": "relative",
+        "gold": [
+          "GOOGL_10Q_202606.html"
+        ]
+      },
+      "mix-07": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "GOOGL Part_I_Item_1: 留 GOOGL_10Q_202606.html，被 ['GOOGL_10Q_202603.html'] 佔 1 席",
+          "GOOGL Part_I_Item_2: 留 GOOGL_10Q_202606.html，被 ['GOOGL_10Q_202603.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10Q_202606.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10Q_202606.html#67",
+          "GOOGL_10Q_202603.html#50",
+          "GOOGL_10K_2025.html#299",
+          "GOOGL_10Q_202606.html#154",
+          "GOOGL_10Q_202603.html#126"
+        ],
+        "query": "Google 收購 Wiz 花了多少錢？這如何影響 Google Cloud 部門？",
+        "intent": "none",
+        "gold": [
+          "GOOGL_10Q_202603.html"
+        ]
+      },
+      "mix-08": {
+        "gold_rank": 4,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "META_Fundamentals_20260612.txt#1",
+          "META_10K_2025.html#22",
+          "META_Fundamentals_20260612.txt#0",
+          "META_10Q_202606.html#63",
+          "META_10K_2023.html#0"
+        ],
+        "query": "Meta 最新一季總營收成長多少？主要驅動因素是什麼？",
+        "intent": "relative",
+        "gold": [
+          "META_10Q_202606.html"
+        ]
+      },
+      "mix-09": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AAPL Part_I_Item_2: 留 AAPL_10Q_202606.html，被 ['AAPL_10Q_202603.html'] 佔 1 席",
+          "AAPL Item_7: 留 AAPL_10K_2024.html，被 ['AAPL_10K_2025.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AAPL_10Q_202603.html"
+        ],
+        "topk_sources": [
+          "AAPL_10Q_202606.html#37",
+          "AAPL_10Q_202603.html#36",
+          "AAPL_10K_2024.html#81",
+          "AAPL_10K_2024.html#129",
+          "AAPL_10K_2025.html#84"
+        ],
+        "query": "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？",
+        "intent": "relative",
+        "gold": [
+          "AAPL_10Q_202606.html"
+        ]
+      },
+      "mix-10": {
+        "gold_rank": 6,
+        "gold_in_topk": false,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AAPL Item_7: 留 AAPL_10K_2023.html，被 ['AAPL_10K_2025.html'] 佔 1 席",
+          "AAPL Part_I_Item_2: 留 AAPL_10Q_202512.html，被 ['AAPL_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "AAPL_10Q_202512.html",
+          "AAPL_10Q_202606.html"
+        ],
+        "topk_sources": [
+          "AAPL_10K_2023.html#87",
+          "AAPL_10K_2025.html#85",
+          "AAPL_10Q_202512.html#36",
+          "AAPL_10Q_202606.html#38",
+          "AAPL_10K_2024.html#111"
+        ],
+        "query": "Apple iPhone 營收成長主要是由哪些機型帶動的？",
+        "intent": "none",
+        "gold": [
+          "AAPL_10Q_202603.html"
+        ]
+      },
+      "mix-11": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 3,
+        "crowding_detail": [
+          "NVDA Item_7: 留 NVDA_10K_2026.html，被 ['NVDA_10K_2024.html'] 佔 2 席",
+          "NVDA Part_I_Item_2: 留 NVDA_10Q_202604.html，被 ['NVDA_10Q_202510.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10Q_202510.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2026.html#122",
+          "NVDA_10Q_202604.html#42",
+          "NVDA_10Q_202510.html#47",
+          "NVDA_10K_2024.html#129",
+          "NVDA_10K_2024.html#127"
+        ],
+        "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
+        "intent": "relative",
+        "gold": [
+          "NVDA_10Q_202604.html"
+        ]
+      },
+      "mix-12": {
+        "gold_rank": 13,
+        "gold_in_topk": false,
+        "sibling_density": 8,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "NVDA Part_II_Item_1A: 留 NVDA_10Q_202310.html，被 ['NVDA_10Q_202404.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "NVDA_10Q_202310.html",
+          "NVDA_10Q_202404.html",
+          "NVDA_10Q_202510.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2025.html#128",
+          "NVDA_10Q_202310.html#99",
+          "NVDA_10Q_202404.html#86",
+          "NVDA_10K_2025.html#206",
+          "NVDA_10Q_202510.html#40"
+        ],
+        "query": "NVIDIA 這一季在中國市場的資料中心晶片出貨狀況如何？跟去年同期相比有何變化？",
+        "intent": "relative",
+        "gold": [
+          "NVDA_10Q_202604.html"
+        ]
+      },
+      "mix-13": {
+        "gold_rank": 8,
+        "gold_in_topk": false,
+        "sibling_density": 8,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "TSLA Part_I_Item_2: 留 TSLA_10Q_202503.html，被 ['TSLA_10Q_202603.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "TSLA_10Q_202503.html",
+          "TSLA_10Q_202603.html"
+        ],
+        "topk_sources": [
+          "TSLA_10Q_202503.html#54",
+          "TSLA_10Q_202603.html#63",
+          "TSLA_10K_2023.html#0",
+          "TSLA_10Q_202603.html#47",
+          "TSLA_10K_2024.html#159"
+        ],
+        "query": "Tesla 能源生成與儲能業務最新一季營收表現如何？",
+        "intent": "relative",
+        "gold": [
+          "TSLA_10Q_202606.html"
+        ]
+      },
+      "mix-14": {
+        "gold_rank": 8,
+        "gold_in_topk": false,
+        "sibling_density": 8,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "TSLA income_statement: 留 TSLA_10Q_202506.html，被 ['TSLA_10Q_202603.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "TSLA_10Q_202503.html",
+          "TSLA_10Q_202506.html",
+          "TSLA_10Q_202603.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2024.html#159",
+          "TSLA_10Q_202503.html#14",
+          "TSLA_10Q_202506.html#0",
+          "TSLA_10K_2023.html#0",
+          "TSLA_10Q_202603.html#0"
+        ],
+        "query": "Tesla 汽車銷售營收最新一季成長多少？主要驅動因素是什麼？",
+        "intent": "relative",
+        "gold": [
+          "TSLA_10Q_202606.html"
+        ]
+      },
+      "mix-15": {
+        "gold_rank": 6,
+        "gold_in_topk": false,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "TSLA Item_7: 留 TSLA_10K_2023.html，被 ['TSLA_10K_2024.html'] 佔 1 席",
+          "TSLA Part_I_Item_2: 留 TSLA_10Q_202409.html，被 ['TSLA_10Q_202406.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "TSLA_10Q_202406.html",
+          "TSLA_10Q_202409.html",
+          "TSLA_10Q_202603.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2023.html#115",
+          "TSLA_10K_2024.html#116",
+          "TSLA_10Q_202603.html#33",
+          "TSLA_10Q_202409.html#52",
+          "TSLA_10Q_202406.html#49"
+        ],
+        "query": "Tesla 2026 年至今生產與交付了多少輛消費性車輛？",
+        "intent": "explicit",
+        "gold": [
+          "TSLA_10Q_202606.html"
+        ]
+      },
+      "lex-04": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "NVDA Item_1: 留 NVDA_10K_2026.html，被 ['NVDA_10K_2025.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10K_2025.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2026.html#20",
+          "NVDA_10K_2026.html#25",
+          "NVDA_10K_2025.html#19",
+          "NVDA_10K_2025.html#20",
+          "NVDA_10K_2026.html#21"
+        ],
+        "query": "NVIDIA 是哪一年推出 CUDA 開發平台的？",
+        "intent": "none",
+        "gold": [
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "lex-05": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "NVDA Item_1: 留 NVDA_10K_2025.html，被 ['NVDA_10K_2026.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10K_2024.html",
+          "NVDA_10K_2025.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2025.html#20",
+          "NVDA_10K_2026.html#21",
+          "NVDA_10K_2024.html#212",
+          "NVDA_10K_2024.html#188",
+          "NVDA_10Q_202410.html#90"
+        ],
+        "query": "NVIDIA 收購 Mellanox 是哪一年？",
+        "intent": "none",
+        "gold": [
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "lex-10": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AMZN Part_I_Item_2: 留 AMZN_10Q_202509.html，被 ['AMZN_10Q_202506.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [],
+        "topk_sources": [
+          "AMZN_10Q_202509.html#61",
+          "AMZN_10K_2025.html#105",
+          "AMZN_10Q_202506.html#60",
+          "AMZN_10Q_202506.html#56",
+          "AMZN_10K_2025.html#2"
+        ],
+        "query": "Amazon 在 2025 年的現金資本支出（cash capital expenditures）是多少？",
+        "intent": "explicit",
+        "gold": [
+          "AMZN_10K_2025.html"
+        ]
+      },
+      "lex-12": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "GOOGL Part_I_Item_1: 留 GOOGL_10Q_202603.html，被 ['GOOGL_10Q_202606.html'] 佔 1 席",
+          "GOOGL Part_I_Item_2: 留 GOOGL_10Q_202603.html，被 ['GOOGL_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10Q_202606.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10Q_202603.html#50",
+          "GOOGL_10Q_202606.html#67",
+          "GOOGL_10Q_202603.html#126",
+          "GOOGL_10Q_202606.html#154",
+          "GOOGL_10Q_202603.html#85"
+        ],
+        "query": "Google 完成收購 Wiz 的確切日期是哪一天？金額是多少？",
+        "intent": "none",
+        "gold": [
+          "GOOGL_10Q_202603.html"
+        ]
+      },
+      "lex-15": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "TSLA Item_1: 留 TSLA_10K_2025.html，被 ['TSLA_10K_2024.html'] 佔 1 席",
+          "TSLA Part_I_Item_1: 留 TSLA_10Q_202603.html，被 ['TSLA_10Q_202606.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "TSLA_10K_2024.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2025.html#26",
+          "TSLA_10K_2024.html#41",
+          "TSLA_10Q_202603.html#12",
+          "TSLA_10K_2025.html#6",
+          "TSLA_10Q_202606.html#22"
+        ],
+        "query": "Tesla 在 2026 年 1 月啟用的鋰精煉廠位於哪裡？",
+        "intent": "explicit",
+        "gold": [
+          "TSLA_10K_2025.html"
+        ]
+      },
+      "col-01": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "NVDA Item_1: 留 NVDA_10K_2026.html，被 ['NVDA_10K_2025.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "NVDA_10K_2025.html"
+        ],
+        "topk_sources": [
+          "NVDA_10K_2026.html#20",
+          "NVDA_10K_2025.html#19",
+          "NVDA_10K_2026.html#28",
+          "NVDA_10K_2025.html#27",
+          "NVDA_10Q_202604.html#40"
+        ],
+        "query": "為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？",
+        "intent": "none",
+        "gold": [
+          "NVDA_10K_2026.html"
+        ]
+      },
+      "col-02": {
+        "gold_rank": 2,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "MSFT Item_1: 留 MSFT_10K_2025.html，被 ['MSFT_10K_2026.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "MSFT_10K_2025.html"
+        ],
+        "topk_sources": [
+          "MSFT_10K_2025.html#31",
+          "MSFT_10K_2026.html#32",
+          "MSFT_10K_2025.html#35",
+          "MSFT_10K_2026.html#35",
+          "MSFT_10Q_202312.html#142"
+        ],
+        "query": "微軟是怎麼把 AI 塞進 Office 那些軟體裡的？",
+        "intent": "none",
+        "gold": [
+          "MSFT_10K_2026.html"
+        ]
+      },
+      "col-03": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "AMZN Part_I_Item_2: 留 AMZN_10Q_202606.html，被 ['AMZN_10Q_202603.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AMZN_10K_2023.html",
+          "AMZN_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AMZN_10Q_202606.html#44",
+          "AMZN_10Q_202606.html#73",
+          "AMZN_10Q_202603.html#71",
+          "AMZN_10K_2024.html#12",
+          "AMZN_10K_2023.html#97"
+        ],
+        "query": "亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？",
+        "intent": "relative",
+        "gold": [
+          "AMZN_10K_2025.html",
+          "AMZN_10Q_202603.html",
+          "AMZN_10Q_202606.html"
+        ]
+      },
+      "col-04": {
+        "gold_rank": 3,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "GOOGL Item_1: 留 GOOGL_10K_2024.html，被 ['GOOGL_10K_2025.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "GOOGL_10K_2023.html",
+          "GOOGL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "GOOGL_10K_2023.html#14",
+          "GOOGL_10K_2024.html#135",
+          "GOOGL_10K_2025.html#128",
+          "GOOGL_10K_2024.html#131",
+          "GOOGL_10K_2025.html#132"
+        ],
+        "query": "Google 的 AI 助手現在有整合進搜尋引擎裡嗎？",
+        "intent": "relative",
+        "gold": [
+          "GOOGL_10K_2025.html"
+        ]
+      },
+      "col-05": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "META Item_1: 留 META_10K_2025.html，被 ['META_10K_2024.html'] 佔 2 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "META_10K_2024.html"
+        ],
+        "topk_sources": [
+          "META_10K_2025.html#22",
+          "META_10K_2025.html#25",
+          "META_10K_2024.html#21",
+          "META_10K_2024.html#24",
+          "META_Fundamentals_20260612.txt#1"
+        ],
+        "query": "Meta 搞的那些 VR 眼鏡跟 AI，到底想往哪個方向發展？",
+        "intent": "none",
+        "gold": [
+          "META_10K_2025.html"
+        ]
+      },
+      "col-06": {
+        "gold_rank": 1,
+        "gold_in_topk": true,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "TSLA Item_1: 留 TSLA_10K_2025.html，被 ['TSLA_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "TSLA_10K_2024.html"
+        ],
+        "topk_sources": [
+          "TSLA_10K_2025.html#24",
+          "TSLA_10K_2024.html#35",
+          "TSLA_10K_2025.html#43",
+          "TSLA_10Q_202509.html#19",
+          "TSLA_10K_2025.html#155"
+        ],
+        "query": "特斯拉的自動駕駛跟別家車廠比，厲害在哪裡？",
+        "intent": "none",
+        "gold": [
+          "TSLA_10K_2025.html"
+        ]
+      },
+      "col-07": {
+        "gold_rank": 7,
+        "gold_in_topk": false,
+        "sibling_density": 3,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "AAPL Item_1A: 留 AAPL_10K_2023.html，被 ['AAPL_10K_2024.html'] 佔 1 席"
+        ],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "AAPL_10K_2023.html",
+          "AAPL_10K_2024.html"
+        ],
+        "topk_sources": [
+          "AAPL_10Q_202606.html#59",
+          "AAPL_10K_2023.html#40",
+          "AAPL_10K_2023.html#32",
+          "AAPL_10Q_202603.html#19",
+          "AAPL_10K_2024.html#53"
+        ],
+        "query": "蘋果自己是不是也承認在手機市場其實不算市佔龍頭？",
+        "intent": "none",
+        "gold": [
+          "AAPL_10K_2025.html"
+        ]
+      },
+      "col-11": {
+        "gold_rank": 7,
+        "gold_in_topk": false,
+        "sibling_density": 8,
+        "crowding_seats": 0,
+        "crowding_detail": [],
+        "wrong_period": true,
+        "wrong_period_intruders": [
+          "MSFT_10Q_202503.html"
+        ],
+        "topk_sources": [
+          "MSFT_10Q_202503.html#78",
+          "MSFT_10Q_202503.html#52",
+          "MSFT_10K_2025.html#117",
+          "MSFT_10Q_202503.html#63",
+          "MSFT_10K_2026.html#32"
+        ],
+        "query": "微軟的雲端服務最近成長得快不快？",
+        "intent": "relative",
+        "gold": [
+          "MSFT_10Q_202603.html"
+        ]
+      },
+      "col-12": {
+        "gold_rank": 3,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 1,
+        "crowding_detail": [
+          "META Part_I_Item_2: 留 META_10Q_202606.html，被 ['META_10Q_202603.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "META_10Q_202509.html",
+          "META_10Q_202603.html"
+        ],
+        "topk_sources": [
+          "META_Fundamentals_20260612.txt#0",
+          "META_Fundamentals_20260612.txt#1",
+          "META_10Q_202606.html#63",
+          "META_10Q_202603.html#56",
+          "META_10Q_202509.html#0"
+        ],
+        "query": "Meta 最近這一季賺（營收）成長多少？",
+        "intent": "relative",
+        "gold": [
+          "META_10Q_202606.html"
+        ]
+      },
+      "col-13": {
+        "gold_rank": 3,
+        "gold_in_topk": true,
+        "sibling_density": 8,
+        "crowding_seats": 2,
+        "crowding_detail": [
+          "AAPL Item_7: 留 AAPL_10K_2024.html，被 ['AAPL_10K_2025.html'] 佔 1 席",
+          "AAPL Part_I_Item_2: 留 AAPL_10Q_202606.html，被 ['AAPL_10Q_202603.html'] 佔 1 席"
+        ],
+        "wrong_period": false,
+        "wrong_period_intruders": [
+          "AAPL_10Q_202603.html"
+        ],
+        "topk_sources": [
+          "AAPL_10K_2024.html#81",
+          "AAPL_10K_2025.html#84",
+          "AAPL_10Q_202606.html#37",
+          "AAPL_10Q_202603.html#36",
+          "AAPL_10K_2023.html#135"
+        ],
+        "query": "蘋果在大中華區最近賣得好不好？",
+        "intent": "relative",
+        "gold": [
+          "AAPL_10Q_202606.html"
+        ]
+      }
+    }
+  }
+}

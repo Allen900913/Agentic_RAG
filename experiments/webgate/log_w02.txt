@@ -1,0 +1,67 @@
+as-of=2026-08-15  collection=us_stock_rag_edgar_multiyear  題數=1
+
+──[web-02] NVIDIA 現在的股價是多少？
+   （intraday；純即時報價）
+[TRACE] plan(replay): 1 sub-queries → ['NVIDIA 現在的股價是多少']
+[TRACE] ratio-intent: [('NVIDIA 現在的股價是多少', [])]
+[agentic_rag] Loading BGE-M3 + reranker + Qdrant (one-time)...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 2022.20it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:  43%|████▎     | 169/391 [00:00<00:00, 767.86it/s]Loading weights:  63%|██████▎   | 246/391 [00:00<00:00, 486.96it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 751.92it/s]
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 4206.35it/s]
+[INFO] Opening Qdrant server: http://localhost:6333
+[TRACE] coverage: collection='us_stock_rag_edgar_multiyear', sources=91, tickers=['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT', 'NVDA', 'TSLA']
+[TRACE] plan: 1 todos → ['NVIDIA 現在的股價是多少']
+[TRACE] check['NVIDIA 現在的股價是多少'] sufficient=False missing='缺少截至 2026-08-15 的即時或最新的 NVIDIA 股價數值' new_query='NVIDIA current stock price August 15 2026 live pri' relevant_ids=5/5
+[TRACE] execute[0] det round=0 q='NVIDIA 現在的股價是多少' pool=12 sufficient=False missing='缺少截至 2026-08-15 的即時或最新的 NVIDIA 股價數值'
+[TRACE] check['NVIDIA 現在的股價是多少'] sufficient=False missing='NVIDIA 當前的股價數值（截至 2026-08-15 的即時或收盤價）' new_query='NVIDIA current stock price August 15 2026' relevant_ids=0/5
+[TRACE] execute[0] det round=1 q='NVIDIA current stock price Augus' pool=21 sufficient=False missing='NVIDIA 當前的股價數值（截至 2026-08-15 的即時或收盤價）'
+[TRACE] check(replay)['NVIDIA 現在的股價是多少'] sufficient=False
+[TRACE] execute[0] det round=2 q='NVIDIA current stock price Augus' pool=23 sufficient=False missing='NVIDIA 當前的股價數值（截至 2026-08-15 的即時或收盤價）'
+[TRACE] execute[0] deterministic executor 例外 → 降級：FixtureMiss('web fixture miss（replay 模式，絕不連網）：{"depth": "advanced", "domains": ["apnews.com", "barrons.com", "bloomberg.com", "cnbc.com", "companiesmarketcap.com", "finance.yahoo.com", "ft.com", "macrotrends.net", "marketwatch.com", "nasdaq.com", "nyse.com", "reuters.com", "sec.gov", "stockanalysis.com", "wsj.com"], "n": 12, "q": "NVIDIA current stock price August 15 2026"}\n  這份 fixture 沒涵蓋這個請求。要嘛用 RAG_WEB_REPLAY_MODE=record 補錄，要嘛檢查是不是改了 WEB_ALLOWED_DOMAINS／TAVILY_FETCH_RESULTS（那會合法地換 key）。')
+[TRACE] execute wave: 1 todos ([0]) done → collected=5 period_notes=0
+[TRACE] replan: sufficient=False todos=[(0, 'done'), (1, 'pending')]
+[TRACE] check['改用網路搜尋查 NVIDIA 現在的股價'] sufficient=False missing='當前即時的 NVIDIA 股價（2026-08-15 的最新交易價格）' new_query='NVIDIA current stock price live quote' relevant_ids=0/5
+[TRACE] execute[1] det round=0 q='改用網路搜尋查 NVIDIA 現在的股價' pool=13 sufficient=False missing='當前即時的 NVIDIA 股價（2026-08-15 的最新交易價格）'
+[TRACE] check(replay)['改用網路搜尋查 NVIDIA 現在的股價'] sufficient=False
+[TRACE] execute[1] det round=1 q='NVIDIA current stock price live ' pool=15 sufficient=False missing='當前即時的 NVIDIA 股價（2026-08-15 的最新交易價格）'
+[TRACE] check(replay)['改用網路搜尋查 NVIDIA 現在的股價'] sufficient=False
+[TRACE] execute[1] det round=2 q='NVIDIA current stock price live ' pool=15 sufficient=False missing='當前即時的 NVIDIA 股價（2026-08-15 的最新交易價格）'
+[TRACE]   web_search(replay) 'NVIDIA current stock price live quote'
+[TRACE]   web_search('NVIDIA current stock price live quote') 原始 12 → 保留 5（非白名單主機 0、衍生性商品頁 0、同頁重複 0、同域名超額 0、過時 0、可判日期 0；need=intraday）
+[TRACE]     web ← （未標示日期） https://www.macrotrends.net/stocks/charts/NVDA/nvidia/stock-price-history
+[TRACE]       NVIDIA - 27 Year Stock Price History | NVDA
+[TRACE]       ✖ Image 1: Macrotrends Logo Stock ScreenerStart Free TrialSign InManage AccountSubscribe NowSign Out ## NVIDIA - 15 Year Stock Price History | NVDA Prices Financials Revenue & Profit Assets & Liabilities Margins Price Ratios Other Ratios Other Metrics Stock Price History Stock Splits Market Cap Historical daily share price chart and data for NVIDIA since 2011 adjusted for splits and dividends. The latest closing stock price for NVIDIA as of August 12, 2026 is 224.09. The all-time high NVIDIA stock closing price was 235.47 on May 14, 2026. The NVIDIA 52-week high stock price is 236.54, which is 5.6% above the current share price. The NVIDIA 52-week low stock price is 164.07, which is 26.8% below the current share price. The average NVIDIA stock price for the last 52 weeks is 191.55. Unlock Macrotrends Premium 40 years of data Faster, ad-free pages Unlimited data exports Full-width charts Start 7-Day Free Trial | NVIDIA Historical Annual Stock Price Data | | Year | Average Stock Price | Year Open | Year High | Year Low | Year Close | Annual % Change | | 2026 | 196.8165 | 188.6200 | 235.4660 | 164.9780 | 224.0900 | 20.30% | | 2025 | 153.6958 | 138.1040 | 206.7760 | 94.1780 | 186.2730 
+[TRACE]     web ← （未標示日期） https://www.cnbc.com/quotes/NVDA
+[TRACE]       Check out NVIDIA Corp's stock price (NVDA) in real time
+[TRACE]       Skip Navigation CNBC Markets Pre-Markets U.S. Markets Europe Markets China Markets Asia Markets World Markets Currencies Prediction Markets Cryptocurrency Futures & Commodities Bonds Funds & ETFs Business Economy Finance Health & Science Media Real Estate Energy Climate Transportation Investigations Industrials Retail Wealth Sports Life Small Business Investing Personal Finance Fintech Financial Advisors Options Action ETF Street Buffett Archive Earnings Trader Talk Tech Cybersecurity AI Enterprise Internet Media Mobile Social Media CNBC Disruptor 50 Tech Guide Politics & Policy White House Policy Defense Congress Expanding Opportunity Europe Politics China Politics Asia Politics World Politics Video Latest Video Full Episodes Livestream Top Video Live Audio Europe TV Asia TV CNBC Podcasts CEO Interviews Digital Originals Investing Club Trust Portfolio Analysis Trade Alerts Meeting Videos Homestretch Jim's Columns Education Subscribe Join IC PRO Pro News Josh Brown Mike Santoli Calls of the Day My Portfolio Livestream Full Episodes Stock Screener Market Forecast Options Investing Chart Investing Subscribe Join Pro Livestream Make It select USA INTL Livestream Livestream Watchlist S
+[TRACE]     web ← （未標示日期） https://www.marketwatch.com/investing/stock/nvda
+[TRACE]       NVIDIA Corp. Stock Quote (U.S.: Nasdaq) - NVDA
+[TRACE]       ### Account Settings ### | | | | | | --- --- | | Dow | 53,716.99 | -123.00 | -0.23% | | | S&P 500 | 7,781.91 | -17.08 | -0.22% | | | Nasdaq | 26,673.92 | -129.11 | -0.48% | | | VIX | 14.55 | -0.08 | -0.55% | | | Gold | 4,444.60 | 24.20 | 0.55% | | | Oil | 81.76 | 0.51 | 0.63% | ### to be replaced # NVIDIA Corp. ## $ 224.77 | Previous Close | | $225.30 | ## Recently Viewed Tickers ### No Recent Tickers Visit a quote page and your recently viewed tickers will be displayed here. | Symbol | Price | Change | % Chg | --- --- | ### Overview ## NVDA Overview ## Key Data ## Performance | | | --- | | 5 Day | 0.36% | | 1 Month | 10.83% | | 3 Month | -0.24% | | YTD | 20.52% | | 1 Year | 24.56% | ## Analyst Ratings ## Top Stories On NVIDIA Corp. Read full story ### Stock Market Hits Highs; Cisco, Lumentum, Super Micro, Sandisk Key Movers: Weekly Review Read full story ### Chips Nvidia Stock Rises as It Bets on Robots Read full story ### How Big Tech’s Earnings Are Inflated by Other Tech Companies ## News From Dow Jones Read full story ### Stock Market Hits Highs; Cisco, Lumentum, Super Micro, Sandisk Key Movers: Weekly Review Read full story ### Large cryptocurrencies drop on Cardano, Sui decli
+[TRACE]     web ← （未標示日期） https://stockanalysis.com/stocks/nvda
+[TRACE]       NVIDIA (NVDA) Stock Price & Overview
+[TRACE]       logo # NVIDIA Corporation (NVDA) | | | --- | | Market Cap | 5.45T +22.0% | | Revenue (ttm) | 253.49B +70.7% | | Net Income | 159.61B +107.9% | | EPS | 6.53 +110.6% | | Shares Out | 24.22B | | PE Ratio | 34.50 | | Forward PE | 22.61 | | Dividend | $1.00 (0.44%) | | Ex-Dividend Date | Jun 4, 2026 | | | | --- | | Volume | 38,993,155 | | Open | 226.77 | | Previous Close | 225.30 | | Day's Range | 224.50 - 227.49 | | 52-Week Range | 164.07 - 236.54 | | Beta | 2.21 | | Analysts | Strong Buy | | Price Target | 302.83 (+34.51%) | | Earnings Date | Aug 26, 2026 | ## About NVDA NVIDIA Corporation operates as a data center scale AI infrastructure company in the United States, Taiwan, China, Hong Kong, Europe, and internationally. It operates through Compute & Networking, and Graphics segments. The Compute & Networking segment provides data center accelerated computing and networking platforms and artificial intelligence solutions and software, and automotive platforms and autonomous and electric vehicle solutions, including software. The Graphics segment offers GeForce GPUs for gaming and PCs; Quadro/NVIDIA RTX GPUs fo... (/stocks/nvda/company/ "View company profile") ## Financial Performance
+[TRACE]     web ← （未標示日期） https://finance.yahoo.com/quote/NVDA/history
+[TRACE]       Nvidia Corporation (NVDA): Historical Data
+[TRACE]       NasdaqGS - Nasdaq Real Time Price • USD # NVIDIA Corporation (NVDA) Is NVDA a buy now? 224.09 +6.59 (+3.03%) At close: August 12 at 4:00:01 PM EDT 224.40 +0.31 (+0.14%) Pre-Market: 6:15:47 AM EDT Is NVDA a buy now? Currency in USD [...] | Dec 31, 2025 | 189.57 | 190.56 | 186.49 | 186.50 | 186.27 | 120,100,500 | | Dec 30, 2025 | 188.24 | 188.99 | 186.93 | 187.54 | 187.31 | 97,687,300 | | Dec 29, 2025 | 187.71 | 188.76 | 185.91 | 188.22 | 187.99 | 120,006,100 | | Dec 26, 2025 | 189.92 | 192.69 | 188.00 | 190.53 | 190.30 | 139,740,300 | | Dec 24, 2025 | 187.94 | 188.91 | 186.59 | 188.61 | 188.38 | 65,528,500 | | Dec 23, 2025 | 182.97 | 189.33 | 182.90 | 189.21 | 188.98 | 174,873,600 | | Dec 22, 2025 | 183.92 | 184.16 | 182.35 | 183.69 | 183.47 | 129,064,400 | | Dec 19, 2025 | 176.67 | 181.45 | 176.34 | 180.99 | 180.77 | 324,925,900 | | Dec 18, 2025 | 174.53 | 176.15 | 171.82 | 174.14 | 173.93 | 176,096,000 | | Dec 17, 2025 | 176.10 | 176.13 | 170.31 | 170.94 | 170.73 | 222,775,500 | | Dec 16, 2025 | 176.26 | 178.49 | 174.90 | 177.72 | 177.50 | 148,588,100 | | Dec 15, 2025 | 177.94 | 178.42 | 175.03 | 176.29 | 176.08 | 164,775,600 | | Dec 12, 2025 | 181.11 | 182.82 | 174.62 | 175.02 | 
+[TRACE] execute[1] det web fallback → 6573 chars
+[TRACE] execute wave: 1 todos ([1]) done → collected=5 period_notes=0
+[TRACE] replan: sufficient=False todos=[(0, 'done'), (1, 'done'), (2, 'pending')]
+[TRACE] check['使用網路搜尋取得 NVIDIA 當前股價'] sufficient=False missing='缺少 NVIDIA 當前即時股價（2026‑08‑15 的最新價格）' new_query='NVIDIA current stock price August 15 2026' relevant_ids=0/5
+[TRACE] execute[2] det round=0 q='使用網路搜尋取得 NVIDIA 當前股價' pool=12 sufficient=False missing='缺少 NVIDIA 當前即時股價（2026‑08‑15 的最新價格）'
+[TRACE] check['使用網路搜尋取得 NVIDIA 當前股價'] 時效改判 sufficient=True→False (need=intraday, 最新來源 64 天前, KB 補不了)
+[TRACE] check['使用網路搜尋取得 NVIDIA 當前股價'] sufficient=False missing='候選中最新來源已是 64 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）' new_query='使用網路搜尋取得 NVIDIA 當前股價' relevant_ids=2/5
+[TRACE] execute[2] det round=1 q='NVIDIA current stock price Augus' pool=18 sufficient=False missing='候選中最新來源已是 64 天前的資料,而本題需要 intraday 等級的即時性'
+[TRACE] execute[2] 不足原因 KB 補不了（時效）→ 跳過剩餘 1 次改寫，直接走 web
+[TRACE]   web query 英譯：'使用網路搜尋取得 NVIDIA 當前股價' → "Use an online search to obtain NVIDIA's current "
+[TRACE] execute[2] deterministic executor 例外 → 降級：FixtureMiss('web fixture miss（replay 模式，絕不連網）：{"depth": "advanced", "domains": ["apnews.com", "barrons.com", "bloomberg.com", "cnbc.com", "companiesmarketcap.com", "finance.yahoo.com", "ft.com", "macrotrends.net", "marketwatch.com", "nasdaq.com", "nyse.com", "reuters.com", "sec.gov", "stockanalysis.com", "wsj.com"], "n": 12, "q": "Use an online search to obtain NVIDIA\'s current share price"}\n  這份 fixture 沒涵蓋這個請求。要嘛用 RAG_WEB_REPLAY_MODE=record 補錄，要嘛檢查是不是改了 WEB_ALLOWED_DOMAINS／TAVILY_FETCH_RESULTS（那會合法地換 key）。')
+[TRACE] execute wave: 1 todos ([2]) done → collected=5 period_notes=0
+[TRACE] replan: sufficient=False todos=[(0, 'done'), (1, 'done'), (2, 'done')]
+[TRACE] synthesize: facets=1 writer_budget=5 → 5 chunks
+   web 呼叫錄到 1 次｜答案 765 字
+   截至2026年8月12日，NVIDIA（NVDA）的最新收盤股價為 **224.09 美元**【web: https://www.macrotrends.net/stocks/charts/NVDA/nvidia/stock-price-history】。    其他即時行情頁面亦顯示相近價格：MarketWatch 報導的最新報價為 **224.77 美元**（前收盤 225.30 美元）【web: https://www.marke
+
+fixture → experiments/webgate/fix_w02.json（web 回應 0 筆）
+答案 → experiments/webgate/replay_w02.json
+下一步：讀答案，把『這題該成立什麼』寫成斷言檔，再用 replay 模式驗。
+[replay] wrote experiments\webgate\cache_w02.json (hit=9 miss=13)

@@ -1,0 +1,1249 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_prod.json",
+    "arm": "before",
+    "note": "現行生產行為：KB 無條件先撈、web 是 Grader 判不足後的 fallback。4 批合併。"
+  },
+  "records": [
+    {
+      "id": "news-01",
+      "query": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+      "why": "flow",
+      "answer": "Apple 最近涉及兩項與 Siri 相關的訴訟和解——一是 2026 年 5 月 5 日以 **2.5 億美元** 和解的「延遲 Siri AI 功能」消費者集體訴訟；二是先前的 **9,500萬美元** 隱私錄音和解案，允許受影響使用者索取賠償。  \n\n- 2026‑05‑05，Apple 同意以 **2.5 億美元（$250 million）** 了結一宗因公司延遲推出 Siri 人工智慧功能而提起的消費者集體訴訟，並未承認過錯，仍需法院批准。[web: https://www.reuters.com/legal/litigation/apple-settles-lawsuit-over-late-siri-ai-features-250-million-2026-05-05]  \n- 另一宗涉及 Siri 會在未經使用者明確啟動時錄音的隱私訴訟，Apple 同意支付 **0.95 億美元（$95 million）** 以和解，受影響的使用者可根據案件規則申請賠償，且 Apple 否認曾將 Siri 數據用於行銷目的。[web: https://www.nasdaq.com/articles/apple-user-heres-how-get-slice-95-million-siri-lawsuit-payout]  \n\n因此，Apple 近期的 Siri 相關法律動態包括上述兩筆金額分別為 **2.5 億美元** 與 **9,500萬美元** 的和解。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #22 (rerank=0.715)\n  - AAPL_10Q_202606.html #21 (rerank=0.701)\n  - AAPL_10Q_202606.html #20 (rerank=0.699)\n  - AAPL_10Q_202606.html #15 (rerank=0.683)\n  - AAPL_10Q_202606.html #17 (rerank=0.674)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "Apple 最近與 Siri 相關的法律訴訟或和解是什麼？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 21
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 17
+        }
+      ]
+    },
+    {
+      "id": "news-02",
+      "query": "Apple 在最近的 WWDC 上關於 Siri 有什麼新消息？",
+      "why": "flow",
+      "answer": "Apple 在 2026 年的 WWDC 上正式推出了 **Siri AI**，並將其納入全新命名的 iOS 27、iPadOS 27、macOS 27、watchOS 27、visionOS 27 以及 tvOS 27 系統中【AAPL_10Q_202606.html, chunk #32】。  \n\n- 這次發佈同時伴隨 iOS 27、macOS 27（代號 Golden Gate）等作業系統的更新，標誌著 Apple 以「Apple Intelligence」為旗幟的 AI 佈局進入新階段。  \n- 但公司亦指出，歐盟《數位市場法》（DMA）等競爭法規可能迫使 Apple 在部分司法管轄區限制或不推出 Siri AI，進而對其競爭優勢與財務表現產生負面影響【AAPL_10Q_202606.html, chunk #63】。  \n\n因此，最新的 WWDC 消息是 Siri 以 AI 形態重新登場，成為 iOS 27 系列的一部分，同時面臨法規合規風險。\n\n---\n⚠ 資料時效：AAPL 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #32 (rerank=0.659)\n  - AAPL_10Q_202603.html #25 (rerank=0.559)\n  - AAPL_10Q_202606.html #63 (rerank=0.546)\n  - AAPL_10Q_202512.html #15 (rerank=0.541)\n  - AAPL_10Q_202603.html #14 (rerank=0.535)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 在最近的 WWDC 上關於 Siri 的新消息是什麼",
+        "改用網路搜尋查找 WWDC 2026 Apple Siri 新消息",
+        "查找 Apple 官方新聞稿中 WWDC 2026 關於 Siri 的更新資訊",
+        "查找 Bloomberg 報導 WWDC 2026 Apple Siri AI 新功能",
+        "使用網路搜尋查找 The Verge、TechCrunch 等媒體報導 Apple WWDC 2026 Siri AI 新功能",
+        "使用網路搜尋查找 Apple Newsroom 或 MacRumors 報導 WWDC 2026 Siri AI 新功能"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 32
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 63
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 14
+        }
+      ]
+    },
+    {
+      "id": "news-03",
+      "query": "最近分析師對 Apple 股票有哪些利多的看法？",
+      "why": "flow",
+      "answer": "分析師近期普遍看好 Apple，提升目標價、維持或升級為買進，並指出公司營收與獲利持續強勁成長。  \n\n- 多家研究機構在 2026 年 7 月與 6 月的報告中給予 **Apple**「**bullish**」評等，且 **Price Target** 均有上調（如 Argus 於 2026‑07‑31 仍維持 bullish 並 **Price Target: Increased**）[web: https://finance.yahoo.com/research/stock-forecast/AAPL]。  \n- **HSBC** 把目標價調升至 **$366**，相較於當時收盤約 **$333** 暗示約 **10%** 上漲空間 [web: https://finance.yahoo.com/markets/stocks/articles/top-analyst-resets-apple-stock-223300903.html]。  \n- 同篇報導指出，**TipRanks** 追蹤的分析師中 **Buy** 評等達 **19** 位，形成 **Moderate Buy** 共識，且 **平均目標價** 為 **$328.69**，高於當前股價 [web: https://finance.yahoo.com/markets/stocks/articles/top-analyst-resets-apple-stock-223300903.html]。  \n- **StockAnalysis** 網站顯示，Apple 的 **TTM 營收** 為 **4,668.2 億美元（$466.82 billion）**，較前期 **+14.2%**；**淨利** 為 **1,289.3 億美元（$128.93 billion）**，較前期 **+29.9%**；**每股盈餘 (EPS)** 為 **$8.72**，較前期 **+32.6%**，均顯示盈利持續加速 [web: https://stockanalysis.com/stocks/aapl]。  \n- 同站亦列出 **2025 財年** 營收 **4,161.6 億美元（$416.16 billion）**，較上年 **+6.43%**；**盈餘** **1,120.1 億美元（$112.01 billion）**，較上年 **+19.50%**，進一步佐證公司基本面向好 [web: https://stockanalysis.com/stocks/aapl]。  \n- 從 Apple 2026 Q3 10‑Q 可見 **九個月營收** 由 **3,136.95 億美元（$313,695 million）** 增至 **3,643.57 億美元（$364,357 million）**，年增 **16%**，其中 **iPhone** 營收 **+22%**、**Services** 營收 **+14%**，均為正向驅動力 [AAPL_10Q_202606.html, chunk #37]、[AAPL_10Q_202606.html, chunk #38]。  \n- 同期 **基本每股盈餘** 從 **$1.57** 提升至 **$2.03**，**稀釋每股盈餘** 從 **$1.57** 提升至 **$2.02**，顯示獲利率提升 [AAPL_10Q_202606.html, chunk #20]。  \n\n綜合以上，分析師認為 Apple 受益於 iPhone、服務與其他產品線的持續增長，財務指標顯著改善，因而提升目標價並給予買進或持續看好的評等。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #20 (rerank=0.692)\n  - AAPL_10Q_202606.html #37 (rerank=0.689)\n  - AAPL_10Q_202606.html #22 (rerank=0.679)\n  - AAPL_10Q_202606.html #38 (rerank=0.675)\n  - AAPL_10Q_202606.html #26 (rerank=0.617)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "分析師對 Apple 股票的利多看法有哪些"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 26
+        }
+      ]
+    },
+    {
+      "id": "news-04",
+      "query": "NVIDIA 最近跟 IREN 之間有什麼合作的新聞？",
+      "why": "flow",
+      "answer": "NVIDIA 最近與 IREN Limited 簽署了戰略合作協議，將共同推動大規模 AI 基礎建設。  \n\n- 2026 年 5 月 7 日，NVIDIA 宣布與 IREN 建立「戰略夥伴關係」，雙方將合作部署最高 5 GW 的 NVIDIA DSX‑aligned AI 基礎設施，並在 IREN 的全球資料中心管線中逐步擴張【web: https://finance.yahoo.com/sectors/technology/articles/nvidia-iren-announce-strategic-partnership-203400700.html】。  \n- 同日，NVIDIA 獲得 IREN 發行的五年認購權，允許 NVIDIA 以每股 70 美元的價格購買最多 3 000 萬股，最高投資金額可達 21 億美元【web: https://www.reuters.com/business/nvidia-invest-up-21-billion-iren-part-ai-data-center-deal-2026-05-07】。  \n- 依據 IREN 發布的新聞稿，雙方簽署了一份為期五年、價值約 34 億美元的 AI 雲端服務合約，IREN 將為 NVIDIA 內部 AI 與研究工作負責管理式 GPU 雲端服務，部署約 60 MW 的 Air‑cooled Blackwell 平台於德州 Childress 數據中心【web: https://finance.yahoo.com/sectors/technology/articles/iren-partnership-nvidia-expands-3-143642848.html】。  \n- 這項合作同時被列為 NVIDIA 在 2026 年 10‑K 中的「strategic collaboration」之一，與 IREN Limited 共同加速 AI 采購與部署【NVDA_Fundamentals_20260612.txt, chunk #2】。  \n\n簡而言之，NVIDIA 與 IREN 的最新合作包括：一份約 34 億美元、為期五年的 AI 雲端合約；最高 21 億美元的股權認購權；以及目標在未來數年內部署最高 5 GW AI 基礎設施的計畫。\n\n---\n⚠ 資料時效：NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #25 (rerank=0.724)\n  - NVDA_10Q_202604.html #15 (rerank=0.717)\n  - NVDA_10K_2026.html #24 (rerank=0.716)\n  - NVDA_10K_2026.html #20 (rerank=0.711)\n  - NVDA_10Q_202604.html #14 (rerank=0.709)\n  - NVDA_10Q_202604.html #35 (rerank=0.708)\n  - NVDA_10K_2025.html #19 (rerank=0.699)\n  - NVDA_10K_2026.html #16 (rerank=0.690)\n  - NVDA_10Q_202507.html #27 (rerank=0.679)\n  - NVDA_Fundamentals_20260612.txt #2 (rerank=0.672)\n  - NVDA_10K_2026.html #206 (rerank=0.651)\n  - NVDA_10K_2024.html #22 (rerank=0.646)\n  - NVDA_10K_2024.html #212 (rerank=0.616)\n  - NVDA_10K_2024.html #165 (rerank=0.590)\n  - NVDA_10K_2026.html #164 (rerank=0.588)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 與 IREN 最近的合作內容是什麼",
+        "使用網路搜尋查找 NVIDIA 與 IREN 的合作新聞，特別是官方新聞稿或 Bloomberg 報導",
+        "在 NVIDIA 最新的 10‑Q/10‑K 中搜尋 IREN 合作資訊",
+        "在 NVIDIA 官方網站的新聞稿中搜尋與 IREN 的合作公告",
+        "使用網路搜尋查找 IREN 官方網站上關於與 NVIDIA 合作的公告或新聞稿",
+        "使用網路搜尋查找 2026 年 7 月以後 NVIDIA 與 IREN 的合作新聞或官方公告",
+        "在 SEC EDGAR 系統中查找 2026 年 7 月以後的 8‑K 文件，確認是否有 NVIDIA 與 IREN 的合作公告"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 35
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 16
+        },
+        {
+          "source": "NVDA_10Q_202507.html",
+          "chunk_index": 27
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 206
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 212
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 165
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 131
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 15
+        }
+      ]
+    },
+    {
+      "id": "news-05",
+      "query": "關於 NVIDIA 賣 AI 晶片到中國，最近有什麼消息？",
+      "why": "flow",
+      "answer": "最近，NVIDIA 在中國的 AI 晶片銷售仍受嚴格出口管制限制，僅有極少量的 H200 晶片出貨，且公司已否認將於今年底推出專為中國設計的 AI 晶片。  \n\n- Reuters 於 2026‑08‑20 報導，NVIDIA 否認有「在今年底前向中國推出 AI 晶片」的傳聞，稱相關報導不實，且公司已調整軟體以符合美國出口管制規定。 [web: https://www.reuters.com/world/china/nvidia-ship-ai-chip-china-by-year-end-information-reports-2026-08-20]  \n- 同樣在 Reuters 2026‑08‑26 的報導指出，美國在 2025 年 5 月批准約 10 家中國企業（包括阿里巴巴、騰訊、字節跳動）可購買 NVIDIA 最強大的 H200 AI 晶片，但「交付仍停滯」且「出貨量非常少」；公司在財報中未將中國資料中心營收納入未來展望。 [web: https://www.reuters.com/business/media-telecom/nvidia-forecasts-quarterly-revenue-above-estimates-2026-08-26]  \n- Bloomberg 2026‑08‑26 報導稱，NVIDIA 在最近一季（截至 2026‑07‑26）向中國客戶銷售的 H200 晶片佔資料中心營收「不到 1%」，且實際出貨量遠低於美國政府在 1 月授予的許可額度，因需求不足公司已計提約 4 億美元（$400 million） 的庫存減值。 [web: https://www.bloomberg.com/news/articles/2026-08-26/nvidia-steps-back-into-china-market-with-first-h200-chip-sales]  \n- CNBC 2026‑07‑14 引述美國商務部官員稱，H200 晶片已重新開始向中國出貨，但「非常少」的出貨量仍是目前的實際情況。 [web: https://www.cnbc.com/2026/07/14/nvidia-h200-ai-chips-china.html]  \n\n公司文件亦說明出口管制對中國市場的持續影響：  \n\n- 2026 年 10‑K 中指出，出口管制已對 NVIDIA 的全球供應鏈與銷售造成負面衝擊，且「來自美國以外客戶的營收」在 FY2027 第一期佔總營收的 22%，在 FY2026 第一期佔 42%，其中中國貢獻比例已大幅下降。 [NVDA_10K_2026.html, chunk #85]  \n- 同一 10‑K 亦說明，未來若出口管制進一步收緊，可能限制 NVIDIA 向中國及其他受限國家提供 AI 產品與服務，進一步削弱其競爭力。 [NVDA_10K_2026.html, chunk #85]  \n- 2025 年 10‑K 中提到，儘管 NVIDIA 在 2025 財年擴大了針對中國的資料中心產品組合，使中國資料中心營收有所成長，但相對於整體資料中心營收仍「遠低於」出口管制前的水平，且公司持續尋求不需許可的替代產品以維持中國市場供應。 [NVDA_10K_2025.html, chunk #128]  \n\n- 10‑Q（FY2027 第一期）顯示，2026 年 4 月底的三個月內，中國（含香港）客戶總營收為 45.5 億美元（$4,550 million），佔當季總營收 816.15 億美元（$81,615 million） 的約 5.6%；同時「來自美國以外客戶的營收」占比 22%。 [NVDA_10Q_202604.html, chunk #35]  \n\n綜合以上資訊，NVIDIA 近期在中國的 AI 晶片銷售仍非常有限，主要受美國出口管制與許可配額限制，且公司已公開否認將於今年底推出專門針對中國市場的 AI 晶片。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10Q_202604.html #35 (rerank=0.727)\n  - NVDA_10Q_202604.html #0 (rerank=0.727)\n  - NVDA_10Q_202604.html #47 (rerank=0.726)\n  - NVDA_10K_2026.html #85 (rerank=0.661)\n  - NVDA_10K_2025.html #86 (rerank=0.631)\n  - NVDA_10K_2025.html #128 (rerank=0.625)\n  - NVDA_10K_2025.html #85 (rerank=0.624)",
+      "n_web_calls": 2,
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "NVIDIA 最近有關將 AI 晶片銷往中國的消息是什麼？",
+        "查閱 NVDA 202604 10-Q 中關於中國 AI 晶片銷售的最新資訊"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 35
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 47
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 85
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 86
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 128
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 85
+        }
+      ]
+    },
+    {
+      "id": "news-06",
+      "query": "NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？",
+      "why": "flow",
+      "answer": "在財報公布前，新聞主要關注 NVIDIA 正面臨來自 AMD、Intel 以及大型雲端業者自行開發的加速器等激烈競爭，同時聚焦於資料中心與 AI 基礎建設、能源與資本供應、客戶集中度以及全球監管審查等市場焦點。  \n\n**競爭壓力**  \n- AMD 正被視為 AI 資料中心晶片領域的「嚴重競爭者」​[web: https://finance.yahoo.com/markets/stocks/articles/could-nvidia-cheapest-way-own-130023861.html]。  \n- Intel 亦在推出自家晶片，與 NVIDIA 形成直接競爭​[web: https://www.reuters.com/business/retail-consumer/nvidia-faces-growth-test-rubin-debut-meets-ai-financing-scrutiny-2026-08-25]。  \n- 大型雲端服務提供商（hyperscalers）正自行開發客製化加速器，進一步加劇競爭​[web: https://finance.yahoo.com/markets/stocks/articles/could-nvidia-cheapest-way-own-130023861.html]。  \n- 10‑K 中列出「競爭技術與競爭者產品發布、公告或其他行動」可能對 NVIDIA 產生負面影響​[Reference 2: NVDA_10K_2026.html, chunk #54]。  \n\n**市場焦點與風險**  \n- **資料中心與 AI 基礎建設**：2026 財年營收成長主要來自資料中心運算與加速運算平台，Blackwell 架構佔據資料中心營收大部分​[Reference 1: NVDA_10K_2026.html, chunk #122]。  \n- **能源與資本供應**：資料中心、能源與資本的可獲得性被視為支撐 AI 基礎建設的關鍵，任何短缺都可能拖延客戶部署或降低 AI 採用規模​[Reference 1: NVDA_10K_2026.html, chunk #122]；同時 10‑K 強調「可用的資料中心容量或能源」是影響營收時機與規模的重要因素​[Reference 2: NVDA_10K_2026.html, chunk #54]。  \n- **供應鏈與產品轉換風險**：新產品過渡與複雜系統配置可能導致生產延遲、庫存調整、產品良率下降與材料成本上升​[Reference 1: NVDA_10K_2026.html, chunk #122]。  \n- **客戶集中度**：最新報導指出，僅三家客戶就佔超過 50% 銷售，顯示對少數大型客戶的依賴度高​[web: https://finance.yahoo.com/markets/stocks/articles/nvidias-next-earnings-report-aug-165358714.html]。  \n- **監管審查**：歐盟、美國、英國、韓國與中國等多國競爭主管機關已向 NVIDIA 索取資訊，顯示監管壓力持續升溫​[Reference 3: NVDA_10K_2026.html, chunk #24]。  \n\n**主要市場與產品領域**  \n- NVIDIA 的 Compute & Networking（資料中心加速運算、AI 解決方案與網路）與 Graphics（遊戲與企業工作站 GPU）兩大分部，涵蓋資料中心、遊戲、專業視覺化與汽車四大市場​[Reference 4: NVDA_10K_2026.html, chunk #24]。  \n- 2026 財年推出的 Rubin 平台與 Blackwell Ultra 平台是公司在資料中心與 AI 產品線的最新佈局​[Reference 1: NVDA_10K_2026.html, chunk #122]。  \n\n綜合以上，新聞在財報前聚焦於 NVIDIA 必須在激烈的晶片競爭、供應鏈與資本限制、客戶集中風險以及全球監管審查之間，持續維持其在資料中心與 AI 基礎建設市場的領先地位。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #122 (rerank=0.711)\n  - NVDA_10K_2026.html #54 (rerank=0.707)\n  - NVDA_10K_2026.html #81 (rerank=0.707)\n  - NVDA_10K_2026.html #24 (rerank=0.683)\n  - NVDA_10K_2026.html #164 (rerank=0.651)\n  - NVDA_10Q_202507.html #36 (rerank=0.627)\n  - NVDA_10K_2026.html #21 (rerank=0.610)",
+      "n_web_calls": 2,
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "NVIDIA 在財報前的新聞中，面臨哪些競爭與市場焦點？",
+        "改用網路搜尋查找2026年8月的NVIDIA財報前新聞，聚焦競爭與市場焦點"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 122
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 54
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 81
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10Q_202507.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 21
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 34
+        }
+      ]
+    },
+    {
+      "id": "news-07",
+      "query": "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？",
+      "why": "flow",
+      "answer": "微軟最近在 AI 策略上延長了與 OpenAI 的合作，持續投入 AI 基礎設施與產品整合，分析師普遍認為 Azure 與 Copilot 是股價上漲的關鍵，但對 AI 營收變現的時程仍保持謹慎態度。[MSFT_10K_2026.html, chunk #112]  \n\n**最新策略動向**  \n- 微軟於 2025 年 10 月與 2026 年 4 月再次延長與 OpenAI 的長期合作協議，並保留 OpenAI 知識產權（包括模型與基礎設施）以整合至自家產品，Microsoft 亦是 OpenAI 的主要投資者，將持續收到營收分成。[MSFT_10K_2026.html, chunk #112]  \n- 公司在 10‑Q（2026 Q1）中指出，AI 產品與服務的成本結構仍具不確定性，尤其是模型訓練與推論成本、元件價格與能源費用，若成本上升或 AI 服務價格因競爭而下降，將可能侵蝕毛利與營運成果。[MSFT_10K_2026.html, chunk #4]  \n- 同一文件亦提醒，若 AI 工作負載的採用速度低於預期，或客戶將工作轉移至競爭平台、內部部署或其他替代方案，微軟可能無法實現預期的投資回報。[MSFT_10K_2026.html, chunk #4]  \n- 風險披露中提到，AI 演算法、訓練資料與生成內容可能出現偏差、錯誤或不當，若發生此類問題可能導致聲譽、法律或競爭上的損害。[MSFT_10K_2026.html, chunk #9]  \n\n**分析師觀點**  \n- Zacks 分析師在其每日博客中將 Microsoft 列入焦點，雖未給予具體評等，但指出股價當日微跌 0.48%。[web: https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-okta-144500723.html]  \n- Jefferies 分析師 Brent Thill 在 1 月 5 日重申「Buy」評等，目標價 $675，認為投資者應在 AI 營收變現更明朗前保持選股謹慎。[web: https://finance.yahoo.com/news/microsoft-msft-ai-strategy-reinforces-220418792.html]  \n- Morgan Stanley 分析師 Adam Wood 於 7 月 21 日接手 Microsoft，給予「Overweight」評等與 $600 目標價，強調 Azure 與 Microsoft 365 Copilot 為「股價上漲的關鍵」[web: https://www.marketwatch.com/story/microsoft-has-3-secret-weapons-that-could-drive-its-stock-50-higher-analyst-says-f1afb554]。  \n- 另有分析師報告指出，市場對 Microsoft 的 AI 與雲端敘事持「牛市」與「謹慎」混合的看法，認為公司財報強勁且 AI 與雲端動能持續，但對未來 AI 營收的定價與成長仍有分歧。[web: https://finance.yahoo.com/news/analyst-views-shifting-microsofts-ai-071305123.html]  \n\n**總結**  \n微軟正透過延長與 OpenAI 的合作、加大 AI 基礎設施投資以及將 AI 深度嵌入 Azure 與 Copilot 產品，來鞏固其 AI 版圖；分析師普遍看好 Azure 與 Copilot 作為成長引擎，給予正面評等與較高目標價，但同時提醒 AI 營收變現與成本壓力仍是未來不確定因素。\n\n---\n⚠ 資料時效：MSFT 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10K_2026.html #112 (rerank=0.724)\n  - MSFT_10Q_202603.html #50 (rerank=0.723)\n  - MSFT_10Q_202512.html #52 (rerank=0.716)\n  - MSFT_10K_2026.html #60 (rerank=0.705)\n  - MSFT_10K_2026.html #32 (rerank=0.697)\n  - MSFT_10K_2026.html #33 (rerank=0.694)\n  - MSFT_10K_2026.html #110 (rerank=0.678)\n  - MSFT_10K_2026.html #35 (rerank=0.672)\n  - MSFT_10K_2026.html #75 (rerank=0.652)\n  - MSFT_10Q_202603.html #143 (rerank=0.632)\n  - MSFT_10K_2025.html #31 (rerank=0.620)\n  - MSFT_10Q_202603.html #63 (rerank=0.611)\n  - MSFT_10Q_202603.html #142 (rerank=0.605)\n  - MSFT_10K_2025.html #116 (rerank=0.588)\n  - MSFT_10Q_202603.html #66 (rerank=0.587)\n  - MSFT_10Q_202603.html #74 (rerank=0.565)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "微軟最近在 AI 策略上的新消息及分析師的看法",
+        "查詢分析師對微軟 AI 策略的看法",
+        "查詢分析師對微軟 AI 策略的看法於最新的 sell‑side research 報告",
+        "從 Bloomberg 取得分析師對微軟 AI 策略的最新評價",
+        "查詢分析師對微軟 AI 策略的看法於最新的 earnings call transcript",
+        "使用網路搜尋查詢2026年最新分析師對微軟 AI 策略的評價與看法",
+        "在 Yahoo Finance 上搜尋 2026 年最新分析師對微軟 AI 策略的評價與看法"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 50
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 52
+        },
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 118
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 60
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 32
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 33
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 110
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 35
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 127
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 82
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 143
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 31
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 63
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 142
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 68
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 116
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 66
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 74
+        }
+      ]
+    },
+    {
+      "id": "news-08",
+      "query": "有沒有 Microsoft 參與 AI 資安合作的新聞？",
+      "why": "flow",
+      "answer": "是的，近期有多則新聞報導 Microsoft 正與其他組織合作，將 AI 應用於資安領域。  \n\n- 2026 年 7 月 27 日，CNBC 報導 Microsoft 推出名為 **MAI‑Cyber‑1‑Flash** 的 AI 模型，用於偵測程式碼中的資安漏洞，並與 OpenAI 的 GPT‑5.4 結合，聲稱在 CyberGym 基準測試中以 50% 成本提供「世界領先」的效能【web: https://www.cnbc.com/2026/07/27/microsoft-touts-cost-saving-ai-model-for-cybersecurity.html】。  \n- 2026 年 4 月 16 日，Reuters 報導 Microsoft 與 Stellantis 簽署五年 AI 合作協議，雙方將共同打造全球 **AI‑驅動的網路防禦中心**，以防止車輛、客戶資料與營運的資安威脅【web: https://www.reuters.com/business/autos-transportation/stellantis-microsoft-sign-five-year-partnership-ai-push-2026-04-16】。  \n- 2026 年 4 月 23 日，CNBC 報導 Microsoft 在澳洲投入 180 億美元，合作內容包括 **資安**、工作技能提升與 AI 開發，並將與澳洲政府的訊號情報機構及內政部門合作保護關鍵基礎設施【web: https://www.cnbc.com/2026/04/23/microsoft-expands-ai-footprint-in-australia-with-18-billion-investment.html】。  \n\n此外，Microsoft 自 2019 年即與 **OpenAI** 建立長期戰略夥伴關係，並於 2025 年 10 月與 2026 年 4 月延長合作，持續在自家產品中整合 OpenAI 的模型與基礎設施，並透過 **AI‑驅動的安全、合規、身分與隱私解決方案** 為客戶提供資安防護【MSFT_10K_2026.html, chunk #112】、【MSFT_10K_2026.html, chunk #33】。  \n\n因此，從公司年報的合作說明到多則即時新聞，都顯示 Microsoft 正積極參與 AI 與資安的合作計畫。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10K_2026.html #112 (rerank=0.704)\n  - MSFT_10Q_202603.html #50 (rerank=0.698)\n  - MSFT_10K_2025.html #32 (rerank=0.663)\n  - MSFT_10K_2025.html #107 (rerank=0.656)\n  - MSFT_10K_2026.html #33 (rerank=0.654)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "Microsoft 參與 AI 資安合作的新聞有哪些？"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 50
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 32
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 107
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 33
+        }
+      ]
+    },
+    {
+      "id": "news-09",
+      "query": "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+      "why": "flow",
+      "answer": "Alphabet 最近在 2025 與 2026 上半年均進行了大規模的資本支出與籌資活動，主要包括巨額的設備購置、發行債務與可轉換優先股，以及發行普通股等資金來源【GOOGL_10Q_202606.html, chunk #41】。\n\n- **資本支出（CapEx）**：在 2025 年上半年購買不動產與設備的支出為 **396.43 億美元（$39,643 million）**，而在 2026 年上半年則升至 **805.98 億美元（$80,598 million）**【GOOGL_10Q_202606.html, chunk #41】。  \n- **籌資活動**  \n  - **發行債務**：2025 年上半年取得 **313.78 億美元（$31,378 million）** 的債務資金，2026 年上半年則增加至 **562.26 億美元（$56,226 million）**【GOOGL_10Q_202606.html, chunk #41】。  \n  - **發行可轉換優先股**：2026 年上半年取得 **190.63 億美元（$19,063 million）** 的強制可轉換優先股資金（2025 年無此項）【GOOGL_10Q_202606.html, chunk #41】。  \n  - **發行普通股**：2026 年上半年取得 **304.99 億美元（$30,499 million）** 的普通股發行收入（2025 年無此項）【GOOGL_10Q_202606.html, chunk #41】。  \n  - **股票回購**：2025 年上半年回購股票支出為 **283.06 億美元（$28,306 million）**，2026 年上半年則未進行回購【GOOGL_10Q_202606.html, chunk #41】。  \n  - **股息支付**：2025 年上半年支付股息 **49.77 億美元（$4,977 million）**，2026 年上半年支付 **52.31 億美元（$5,231 million）**【GOOGL_10Q_202606.html, chunk #41】。  \n\n這些數據顯示 Alphabet 正在同時加大設備投資與透過債務與股權工具籌集資金，以支撐其業務擴張與營運需求。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_10Q_202606.html #41 (rerank=0.709)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Alphabet（Google）最近的大規模籌資或資本支出消息是什麼"
+      ],
+      "sources": [
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 41
+        }
+      ]
+    },
+    {
+      "id": "news-10",
+      "query": "最近有哪些關於 Meta 的利多分析與 AI 投資消息？",
+      "why": "flow",
+      "answer": "最近的利多分析與 AI 投資消息主要集中在以下幾個面向：\n\n1. **分析師對 Meta 的正面預期**  \n   - Yahoo Finance 報導指出，分析師普遍看好 Meta Q2 營收，預估收入在 **580 億美元（$58 billion） 至 610 億美元（$61 billion）** 之間，年增率超過 **25%**，且長期預期 2027 年盈餘將重新加速成長，AI 投資被視為提升廣告收入的關鍵動能【web: https://finance.yahoo.com/markets/stocks/articles/meta-q2-earnings-strong-revenue-152413998.html】。  \n   - 同樣在 Yahoo Finance 的另一篇文章中，分析師稱 Meta 的 Muse Spark AI 模型具備「**首次提升 AI 產業估值**」的潛力，認為其能提升廣告目標設定與回報率，並將公司估值視為 **18 倍 2027 年 GAAP EPS**（調整後為 15 倍），屬於吸引買入的利多訊號【web: https://finance.yahoo.com/markets/stocks/articles/meta-muse-spark-ai-model-110234797.html】。  \n   - CNBC（2026‑06‑28）報導 Evercore ISI 分析師 Mahaney 稱 Meta 正利用 AI 增強使用者與廣告主的滿意度，提升 ROAS，並預測 2028 年營收將比華爾街共識高 **5%**，同時指出訂閱服務的高利潤潛力【web: https://www.cnbc.com/2026/06/28/top-analysts-bullish-on-these-stocks-for-long-term-growth-potential.html】。\n\n2. **AI 基礎建設與資本支出規模**  \n   - Reuters（2026‑07‑28）報導 Meta 與 BlackRock 合作在德州 El Paso 投資 **140 億美元（$14 billion）** 建置資料中心，並計畫到 2028 年在美國投入 **6,000 億美元（$600 billion）** 用於 AI 基礎建設，包含多座千兆瓦級資料中心，預計總計算能力將擴增至 **5 GW**【web: https://www.reuters.com/technology/meta-blackrock-partner-14-billion-el-paso-data-center-2026-07-28】。  \n   - Reuters（2026‑07‑29）指出 Meta 今年的 AI 相關資本支出上限提升至 **1,300 億美元（$130 billion）‑1,450 億美元（$145 billion）**，相較去年翻倍，並計畫將計算能力在本年度提升至 **7 GW**，明年再增至 **14 GW**【web: https://www.reuters.com/business/meta-narrows-annual-capex-forecast-ai-buildout-grows-2026-07-29】。  \n   - Yahoo Finance（未標示日期）同樣報導 Meta 將 2026 年資本支出範圍調整為 **1,250 億美元（$125 billion）‑1,450 億美元（$145 billion）**，較先前上調 **100 億美元（$10 billion）**，主要用於 AI 基礎設施【web: https://finance.yahoo.com/technology/ai/articles/meta-set-ai-budget-much-161200148.html】。\n\n3. **公司內部對 AI 的投資與策略說明**  \n   - 在 2026 年 6 月的 10‑Q（第 75 段）中，Meta 表示 **87%** 的總成本與費用屬於「Family of Apps」(FoA) 部門，且已大幅提升與 AI 相關的基礎建設投資，包括第三方雲端容量、伺服器與資料中心，以支援生成式 AI 與超級智慧的發展【META_10Q_202606.html, chunk #75】。  \n   - 同一份 10‑Q（第 73 段）說明，Meta 正在 AI 推薦引擎上取得成效，提升使用者參與度與廣告變現，儘管仍面臨年輕族群與其他平台的競爭【META_10Q_202606.html, chunk #73】。  \n   - 10‑Q（第 160 段）提醒，Meta 在消費者硬體與虛擬/擴增實境領域的經驗相對有限，若無法成功開發與行銷相關產品，可能影響 AI 投資的獲利前景；同時公司持續推出新 AI 功能，如對話式 AI、AI 影像編輯工具等【META_10Q_202606.html, chunk #160】。\n\n4. **最新 AI 產品與市場反應**  \n   - CNBC（2026‑07‑29）報導 Meta 最近推出的 **Muse Spark 1.1** 模型，被 AI 主管 Alexandr Wang 稱為「在代理與程式碼工作上最強的模型」，且價格較 OpenAI 與 Anthropic 更具競爭力，顯示公司在 AI 產品化方面取得進展【web: https://www.cnbc.com/2026/07/29/zuckerberg-metas-ai-capacity-dilemma-what-to-sell-vs-what-to-keep.html】。\n\n綜合以上，近期的利多訊號包括分析師對營收與 AI 帶動的長期成長持樂觀態度、公司大幅提升 AI 基礎建設與資本支出、以及在內部文件中明確指出 AI 投資已成為核心策略並已見初步成效。這些因素共同構成了目前市場對 Meta 的正面預期。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_10Q_202606.html #0 (rerank=0.679)\n  - META_10Q_202606.html #2 (rerank=0.677)\n  - META_Fundamentals_20260612.txt #1 (rerank=0.673)\n  - META_10Q_202606.html #15 (rerank=0.664)\n  - META_10Q_202606.html #75 (rerank=0.621)\n  - META_10Q_202606.html #73 (rerank=0.593)\n  - META_10Q_202606.html #160 (rerank=0.578)",
+      "n_web_calls": 2,
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "Meta 最近的利多分析有哪些",
+        "Meta 最近的 AI 投資消息有哪些"
+      ],
+      "sources": [
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 73
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 160
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 168
+        }
+      ]
+    },
+    {
+      "id": "news-11",
+      "query": "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+      "why": "flow",
+      "answer": "亞馬遜最近在歐洲宣布了多項數十億歐元規模的投資計畫，涵蓋雲端基礎建設、物流自動化、波蘭基礎設施以及本地影音製作等領域【web: https://www.nasdaq.com/press-release/aws-launches-aws-european-sovereign-cloud-and-announces-expansion-across-europe-2026】【web: https://finance.yahoo.com/markets/stocks/articles/amazon-com-inc-amzn-plots-032530521.html】【web: https://www.reuters.com/business/retail-consumer/amazon-plans-invest-23-bln-zlotys-poland-2026-2028-2026-03-12】【web: https://finance.yahoo.com/sectors/technology/articles/amazon-pumps-12-billion-european-110000057.html】【web: https://www.reuters.com/business/media-telecom/amazons-prime-video-invest-least-90-mln-euros-2026-local-production-regulator-2026-05-07】。\n\n- **AWS 歐洲主權雲（European Sovereign Cloud）**：亞馬遜宣布在德國投資超過 **€78 億（7.8 billion）**，同時每年創造約 **2,800** 個全職等值工作，並為德國 GDP 增加約 **€172 億（17.2 billion）**【web: https://www.nasdaq.com/press-release/aws-launches-aws-european-sovereign-cloud-and-announces-expansion-across-europe-2026】。  \n- **整體歐洲擴張計畫**：公司計畫投入 **€100 億（10 billion）** 以升級歐洲履行中心，部署新一代機器人（包括 2027 年在歐洲首次使用的 Proteus），並在曼徹斯特與伯明翰推出 Amazon Now 超速配送服務，預計創造 **25,000** 個新職位【web: https://finance.yahoo.com/markets/stocks/articles/amazon-com-inc-amzn-plots-032530521.html】。  \n- **波蘭投資**：亞馬遜將在 2026‑2028 年間於波蘭投資 **230 億（23 billion） zlotys**（約 **62.3 億美元（$6.23 billion）**），以加速當地經濟投入【web: https://www.reuters.com/business/retail-consumer/amazon-plans-invest-23-bln-zlotys-poland-2026-2028-2026-03-12】。  \n- **歐洲供應鏈與自動化**：公司宣布在歐洲供應鏈投入 **€100 億（10 billion）**（約 **116 億美元（$11.6 billion）**），同時新增 **25,000** 名員工，並導入升級版的 Proteus 自主移動機器人與 STARK 托盤系統【web: https://finance.yahoo.com/sectors/technology/articles/amazon-pumps-12-billion-european-110000057.html】。  \n- **Prime Video 本地製作**：Prime Video 於 2026 年在法國投資至少 **€0.9 億（90 million）**（約 **1.0595 億美元（$105.95 million）**）於歐洲影片與電視節目製作，符合法國本地內容規定【web: https://www.reuters.com/business/media-telecom/amazons-prime-video-invest-least-90-mln-euros-2026-local-production-regulator-2026-05-07】。  \n\n以上投資顯示亞馬遜正以多元且大規模的資金在歐洲擴展其雲端、物流、零售與媒體版圖。\n\n---\n⚠ 資料時效：AMZN 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AMZN_10Q_202603.html #26 (rerank=0.722)\n  - AMZN_10Q_202606.html #26 (rerank=0.722)\n  - AMZN_10Q_202603.html #2 (rerank=0.721)\n  - AMZN_10K_2025.html #52 (rerank=0.693)\n  - AMZN_10K_2024.html #51 (rerank=0.683)\n  - AMZN_10K_2025.html #135 (rerank=0.634)\n  - AMZN_10K_2025.html #210 (rerank=0.603)\n  - AMZN_10K_2025.html #45 (rerank=0.569)\n  - AMZN_10Q_202509.html #2 (rerank=0.550)\n  - AMZN_10Q_202606.html #79 (rerank=0.548)\n  - AMZN_10Q_202603.html #93 (rerank=0.542)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "亞馬遜最近在歐洲的大型投資新聞是什麼",
+        "查閱亞馬遜 2026 Q3 10-Q 中有關歐洲大型投資的披露",
+        "在 Bloomberg 上搜尋亞馬遜 歐洲 投資 2026",
+        "在亞馬遜官方投資者關係網站查詢近期歐洲大型投資新聞"
+      ],
+      "sources": [
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 52
+        },
+        {
+          "source": "AMZN_10K_2024.html",
+          "chunk_index": 51
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 135
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 210
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 79
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 93
+        }
+      ]
+    },
+    {
+      "id": "news-12",
+      "query": "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？",
+      "why": "flow",
+      "answer": "最近與 Tesla 或 Elon Musk 相關、可能提升或削弱市場關注度的主要新聞如下：\n\n1. **Elon Musk 在 2026‑06‑18 表示，未來幾個月內 Tesla 的 Full‑Self‑Driving（FSD）系統可能會像 Uber 司機一樣接受即時路徑指示**，此訊息出現在 Yahoo Finance 的報導中【web: https://finance.yahoo.com/markets/stocks/articles/tsla-stock-eyes-red-week-055036804.html】。  \n\n2. **美國國家公路交通安全管理局（NHTSA）於 2026‑03‑19 加強對 Tesla FSD 在「能見度降低」情況下的安全調查，指出系統在霧、強光等條件下可能未能及時偵測或警告駕駛人**，此訊息來自 CNBC 的報導【web: https://www.cnbc.com/2026/03/19/tesla-nhtsa-full-self-driving-fsd-reduced-visibility.html】。  \n\n3. **Reuters（2026‑07‑22）報導指出，Tesla 的能源發電與儲能部門已成為抵消汽車業務波動的關鍵，投資者越來越關注公司在 AI、機器人計程車與自動駕駛技術的實際商業化進展**【web: https://www.reuters.com/business/media-telecom/elon-musks-tesla-posts-cash-burn-capex-surges-ai-robotaxi-push-2026-07-22】。  \n\n4. **CNBC（2026‑07‑01）報導 Tesla 股價在公布第二季交付與產量遠高於華爾街預期後，當日跌幅一度達 7.3%**【web: https://www.cnbc.com/2026/07/01/stock-market-today-live-updates.html】。  \n\n5. **Bloomberg（2026‑07‑01）指出，Tesla 股價突破 $420 後，引發「Meme」投資者大量買入，短期內零售淨買入額從約 0.87 億美元（$87 million） 增至 1.35 億美元（$135 million）**【web: https://www.bloomberg.com/news/articles/2026-07-01/musk-meme-traders-blaze-back-into-tesla-when-the-stock-hits-420】。  \n\n6. **2024‑2025 年期間，Tesla 多次遭遇與 Autopilot、Full‑Self‑Driving（FSD）相關的集體訴訟與法律挑戰，包括 2024‑09‑30、2024‑11‑06、2024‑12‑19、2025‑08‑04 等日期的訴訟，涉及對 FSD 功能的誤導性陳述**【TSLA_10K_2024.html, chunk #232】、【TSLA_10K_2025.html, chunk #222】。  \n\n7. **2026‑04‑21，Tesla 董事會在特別委員會的建議下批准了「Implementation Agreement」，旨在限制 Elon Musk 行使 2018 年 CEO Performance Award 的時機，要求其持續擔任 CEO 或相關高階職務至 2028‑01‑19，並以服務條件取代即時行使，以減少因大量賣股可能對公司股價造成的衝擊**【TSLA_10Q_202603.html, chunk #36】、【TSLA_10Q_202603.html, chunk #86】。  \n\n以上新聞均在近期（2026 年上半年至 7 月）公開，涵蓋產品技術、監管審查、財務表現、股價波動與重大法律風險，對 Tesla 的市場關注度與投資者情緒產生直接影響。\n\n---\n⚠ 資料時效：TSLA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_Fundamentals_20260612.txt #0 (rerank=0.664)\n  - TSLA_10K_2024.html #232 (rerank=0.660)\n  - TSLA_10Q_202606.html #2 (rerank=0.650)\n  - TSLA_10Q_202603.html #85 (rerank=0.650)\n  - TSLA_10K_2025.html #22 (rerank=0.639)\n  - TSLA_10K_2024.html #79 (rerank=0.634)\n  - TSLA_10K_2025.html #71 (rerank=0.633)\n  - TSLA_10K_2025.html #222 (rerank=0.620)\n  - TSLA_10Q_202603.html #31 (rerank=0.615)\n  - TSLA_10Q_202603.html #36 (rerank=0.605)\n  - TSLA_10K_2024.html #229 (rerank=0.605)\n  - TSLA_10K_2025.html #23 (rerank=0.589)\n  - TSLA_10Q_202603.html #86 (rerank=0.582)\n  - TSLA_10Q_202606.html #45 (rerank=0.556)\n  - TSLA_10K_2025.html #91 (rerank=0.525)\n  - TSLA_10Q_202603.html #11 (rerank=0.522)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "最近有什麼與 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？",
+        "改用網路搜尋查2026年7月以後 Tesla 或 Elon Musk 相關的新聞",
+        "改用網路搜尋查2026年8月以後 Tesla 或 Elon Musk 相關的最新新聞，特別關注重大公告或市場影響",
+        "改用網路搜尋查2026年9月 Tesla 或 Elon Musk 相關的新聞，於 Bloomberg",
+        "改用網路搜尋查2026年9月 Tesla 或 Elon Musk 相關的新聞，於 Reuters",
+        "改用網路搜尋查2026年9月 Tesla 或 Elon Musk 相關的新聞，於 Yahoo Finance",
+        "改用網路搜尋查2026年9月 Tesla 或 Elon Musk 相關的新聞，於 MarketWatch"
+      ],
+      "sources": [
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "TSLA_10K_2024.html",
+          "chunk_index": 232
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 85
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 49
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "TSLA_10K_2024.html",
+          "chunk_index": 79
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 71
+        },
+        {
+          "source": "TSLA_10K_2024.html",
+          "chunk_index": 83
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 67
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 222
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 31
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "TSLA_10K_2024.html",
+          "chunk_index": 229
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 23
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 86
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 91
+        },
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 11
+        }
+      ]
+    },
+    {
+      "id": "news-13",
+      "query": "最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？",
+      "why": "flow",
+      "answer": "最近的股價訊號顯示，**Apple (AAPL) 收盤約 $319.70、Microsoft (MSFT) 收盤約 $513.53、Alphabet (GOOGL) 收盤約 $344.72**，而其他六巨頭的即時股價未在本次檢索中出現，只能以市值與基本面指標作為參考。  \n\n**Apple (AAPL)**  \n- 2026‑08‑28 的最新收盤價為 **$319.70**，高於 2026‑07‑08 的收盤 **$313.39**，顯示近期小幅上漲。  \n- UBS 估計 2026‑06 的 App Store 成長約 **3%**。  \n  - [web: https://www.macrotrends.net/stocks/charts/AAPL/apple/stock-price-history]  \n  - [web: https://finance.yahoo.com/quote/AAPL/history]  \n  - [web: https://finance.yahoo.com/markets/stocks/articles/ubs-says-apple-aapl-june-164537076.html]  \n\n**Microsoft (MSFT)**  \n- 2026‑08‑28 的最新收盤價為 **$513.53**，較 2026‑07‑02 的收盤 **$390.49** 有顯著上升。  \n- 同時，Microsoft 與 Amazon 宣布合作推出 **Azure Multicloud Interconnect**，可能進一步支撐股價。  \n  - [web: https://www.macrotrends.net/stocks/charts/MSFT/microsoft/stock-price-history]  \n  - [web: https://finance.yahoo.com/quote/MSFT/history]  \n  - [web: https://finance.yahoo.com/quote/MSFT]（新聞摘要）  \n\n**Alphabet (GOOGL)**  \n- 2026‑08‑19 的最新收盤價為 **$344.72**，低於 2026‑07‑02 的收盤 **$359.91**，呈現小幅回落。  \n  - [web: https://www.macrotrends.net/stocks/charts/GOOGL/alphabet/stock-price-history]  \n  - [web: https://finance.yahoo.com/quote/GOOGL/history]  \n\n**Amazon (AMZN)**  \n- 依 2026‑06‑12 的基本面資料，市值 **25,979.5 億美元（$2,597.95 billion）**、營收 **7,427.8 億美元（$742.78 billion）**、本益比 (TTM) **31.652685**，但即時股價未在本次搜尋結果中提供。  \n  - [Reference 2: AMZN_Fundamentals_20260612.txt, chunk #0]  \n\n**Meta (META)**  \n- 2026‑06‑12 的基本面顯示市值 **14,429.2 億美元（$1,442.92 billion）**、營收 **2,149.6 億美元（$214.96 billion）**、本益比 (TTM) **20.662668**，即時股價同樣缺乏來源。  \n  - [Reference 8: META_Fundamentals_20260612.txt, chunk #0]  \n\n**NVIDIA (NVDA)**  \n- 2026‑06‑12 的基本面列出市值 **49,621.6 億美元（$4,962.16 billion）**、營收 **2,534.9 億美元（$253.49 billion）**、本益比 (TTM) **31.325687**，但未找到最新股價。  \n  - [Reference 10: NVDA_Fundamentals_20260612.txt, chunk #0]  \n\n**Tesla (TSLA)**  \n- 2026‑06‑12 的基本面顯示市值 **14,991 億美元（$1,499.10 billion）**、營收 **978.8 億美元（$97.88 billion）**、本益比 (TTM) **369.5833**，即時股價亦未於本次檢索中出現。  \n  - [Reference 12: TSLA_Fundamentals_20260612.txt, chunk #0]  \n\n**總結**：Apple、Microsoft 與 Alphabet 的股價在近期均呈現上升或波動，且分別伴隨 App Store 成長、跨雲合作等正面消息；其餘五巨頭目前缺乏即時價格資訊，僅能以市值與財務指標觀察其相對估值。\n\n---\n⚠ 資料時效：AMZN 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）; META 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）; NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）; TSLA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_10Q_202606.html #1 (rerank=0.729)\n  - AMZN_Fundamentals_20260612.txt #0 (rerank=0.728)\n  - AMZN_10Q_202606.html #1 (rerank=0.727)\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.724)\n  - GOOGL_Fundamentals_20260612.txt #0 (rerank=0.723)\n  - AAPL_10Q_202606.html #20 (rerank=0.723)\n  - AAPL_10Q_202606.html #16 (rerank=0.723)\n  - META_Fundamentals_20260612.txt #0 (rerank=0.721)\n  - META_10Q_202606.html #1 (rerank=0.716)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.706)\n  - TSLA_10K_2025.html #100 (rerank=0.691)\n  - TSLA_Fundamentals_20260612.txt #0 (rerank=0.688)\n  - NVDA_10Q_202510.html #25 (rerank=0.681)\n  - MSFT_10Q_202603.html #1 (rerank=0.676)\n  - MSFT_10K_2026.html #1 (rerank=0.666)\n  - MSFT_10K_2026.html #2 (rerank=0.659)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 最近的股價有什麼值得注意的消息？",
+        "Microsoft 最近的股價有什麼值得注意的消息？",
+        "Alphabet 最近的股價有什麼值得注意的消息？",
+        "Amazon 最近的股價有什麼值得注意的消息？",
+        "Nvidia 最近的股價有什麼值得注意的消息？",
+        "Meta 最近的股價有什麼值得注意的消息？",
+        "Tesla 最近的股價有什麼值得注意的消息？"
+      ],
+      "sources": [
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "AMZN_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 16
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 74
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 34
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 88
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "TSLA_10K_2025.html",
+          "chunk_index": 100
+        },
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 218
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 28
+        }
+      ]
+    },
+    {
+      "id": "news-14",
+      "query": "新聞如何評價 Apple 服務業務的成長與獲利能力？",
+      "why": "flow",
+      "answer": "新聞普遍將 Apple 的服務業務描述為「高速成長且獲利豐厚」的核心驅動力，因為其營收持續創新高且毛利率遠高於產品部門【web: https://finance.yahoo.com/markets/stocks/articles/apple-continues-expand-services-business-151500230.html】。\n\n**成長面向**  \n- 2026 財年第二季，服務營收達 **309.76 億美元（$30,976 million）**，較去年同期 **成長 16 %**，創下公司史上最高紀錄【AAPL_10Q_202603.html, chunk #37】。  \n- 同季服務營收佔全公司淨銷售的 **27.9 %**【web: https://finance.yahoo.com/markets/stocks/articles/apple-continues-expand-services-business-151500230.html】。  \n- 2026 財年第三季（截至 2026‑07‑30）服務營收 **超過 300 億美元（$30 billion）**，較去年同期 **上升 12 %**【web: https://www.cnbc.com/2026/07/30/apple-earnings-live-updates.html】。  \n- 2025 財年第四季（截至 2025‑09‑27）服務營收 **288 億美元（$28.8 billion）**，較前一年 **上升 15 %**，全年度服務營收 **1,092 億美元（$109.2 billion）**，較 2024 年 **增長 14 %**【web: https://finance.yahoo.com/news/apples-services-business-major-catalyst-182600661.html】。  \n- 2025 財年全年度服務營收 **1,091.58 億美元（$109,158 million）**，較 2024 年的 **961.69 億美元（$96,169 million）** 增加，顯示連續兩年兩位數成長【AAPL_10K_2025.html, chunk #115】。  \n- 2026 財年第一季服務營收 **300.13 億美元（$30,013 million）**，較 2025 年同季 **增長 14 %**【AAPL_10Q_202512.html, chunk #36】。  \n\n**獲利能力**  \n- 2025 財年第二季（2025‑03‑29）服務部門毛利率 **75.7 %**，高於產品部門的 **35.9 %**，且整體毛利率為 **47.1 %**【AAPL_10Q_202503.html, chunk #41】。  \n- 2026 財年第二季整體毛利率提升至 **49.3 %**，較前一期的 **48.2 %** 上升，主要受服務營收高毛利的帶動【web: https://www.cnbc.com/2026/04/30/apple-aapl-q2-2026-earnings-report.html】。  \n- 媒體指出，服務業務「帶來更高的利潤率」，因為服務的毛利長期維持在 **高 30 % 以上**，而近期已逼近 **50 %** 的公司整體毛利水平【web: https://www.cnbc.com/2026/04/30/apple-aapl-q2-2026-earnings-report.html】。  \n\n**綜合評價**  \n- 多篇報導稱服務已成為 Apple 「關鍵增長動能」與「現金牛」，不僅營收雙位數成長，亦因毛利率遠高於硬體，提升了整體獲利品質【web: https://finance.yahoo.com/news/apples-services-growth-ride-strong-153000251.html】。  \n- 服務的多元組合（廣告、App Store、Apple Care、iCloud、Apple Music、Apple TV、Apple Pay 等）在 2026 財年持續擴張，預期未來隨 AI 功能加持將進一步推升營收與利潤【web: https://finance.yahoo.com/markets/stocks/articles/apple-continues-expand-services-business-151500230.html】。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202503.html #41 (rerank=0.711)\n  - AAPL_10K_2024.html #111 (rerank=0.700)\n  - AAPL_10K_2025.html #115 (rerank=0.698)\n  - AAPL_10Q_202603.html #37 (rerank=0.682)\n  - AAPL_10Q_202606.html #38 (rerank=0.675)\n  - AAPL_10Q_202512.html #36 (rerank=0.675)\n  - AAPL_10K_2025.html #20 (rerank=0.671)",
+      "n_web_calls": 2,
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "新聞如何評價 Apple 服務業務的成長？",
+        "新聞如何評價 Apple 服務業務的獲利能力？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202503.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 111
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 115
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 85
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 57
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "news-15",
+      "query": "新聞報導 Apple 為什麼被視為值得長期持有的股票？",
+      "why": "flow",
+      "answer": "Apple 被視為值得長期持有，因為它持續展現營收與服務收入雙位數增長、每股盈餘提升、龐大現金與可預期的遞延收入，以及 AI 與生態系統的長期競爭優勢。[AAPL_10K_2025.html, chunk #115]  \n\n- **營收規模持續擴大**：2025 年全年度淨銷售總額為 **4,161.61 億美元（$416,161 million）**，較 2024 年的 **3,910.35 億美元（$391,035 million）** 增長約 **6.4%**；其中 Services（服務）營收從 2024 年的 **961.69 億美元（$96,169 million）** 上升至 2025 年的 **1,091.58 億美元（$109,158 million）**，顯示服務部門以 **約 13.5%** 的速度成長。[AAPL_10K_2025.html, chunk #115]  \n\n- **每股盈餘持續提升**：2025 年稀釋每股盈餘 (Diluted EPS) 為 **$7.46**，較 2024 年的 **$6.08** 增長 **約 22.6%**，顯示盈利能力顯著改善。[AAPL_10K_2025.html, chunk #115]  \n\n- **現金與流動資產充裕**：截至 2025 年 9 月 27 日，Apple 持有現金與現金等價物 **282.67 億美元（$28,267 million）**，較前一年增加約 **10.68 億美元（$1,068 million）**，為公司提供充足的資金緩衝與回購、派息空間。[AAPL_10K_2025.html, chunk #115]  \n\n- **遞延收入提供可預測的未來收入**：截至同日，遞延收入總額為 **137 億美元（$13.7 billion）**，其中 **66%** 預期在一年內實現，顯示未來短期內有穩定的現金流入。[AAPL_10K_2025.html, chunk #115]  \n\n- **最新季報顯示持續動能**：2026 年第二季（截至 2026 年 6 月 27 日）三個月淨銷售 **1,094.17 億美元（$109,417 million）**，較去年同期 **940.36 億美元（$94,036 million）** 增長 **約 16.5%**；服務收入亦從 **274.23 億美元（$27,423 million）** 提升至 **307.39 億美元（$30,739 million）**，增幅約 **12%**。[AAPL_10Q_202606.html, chunk #20]  \n\n- **季季每股盈餘持續上升**：同一期間稀釋每股盈餘從去年同期的 **$1.57** 提升至 **$2.02**，顯示盈利增速在季季持續加速。[AAPL_10Q_202606.html, chunk #20]  \n\n- **分析師認為生態系統與 AI 為長期成長動能**：多位分析師指出，Apple 透過 iPhone 17e、MacBook Neo、Apple Business 等新產品擴大生態系統，同時投資 Apple Intelligence、客製化晶片與隱私導向的 AI 架構，將提升使用者黏著度與未來營收機會。[web: https://finance.yahoo.com/markets/stocks/articles/top-analyst-reports-alphabet-apple-201300052.html]  \n\n- **股東回饋機制穩健**：分析師亦提到 Apple 持續以派息與股票回購方式返還現金，當營運表現穩定時可為股價提供支撐，降低投資風險。[web: https://finance.yahoo.com/markets/stocks/articles/top-analyst-reports-alphabet-apple-201300052.html]  \n\n- **長期競爭優勢來自硬體、軟體與服務的完整整合**：Apple Intelligence 跨硬體平台的 AI 應用、客製化 Apple Silicon 以及隱私優先的 AI 架構，預計將促進裝置升級與新商業模式，為公司未來的收入與利潤提供持續動能。[web: https://finance.yahoo.com/markets/stocks/articles/buy-sell-hold-apple-stock-161500214.html]  \n\n綜合以上財務指標與策略性優勢，Apple 展現出穩健的營收成長、強勁的現金流與盈利能力，加上持續的生態系統擴張與 AI 投資，使其被視為具備長期投資價值的股票。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10K_2025.html #115 (rerank=0.670)\n  - AAPL_10K_2024.html #111 (rerank=0.657)\n  - AAPL_10K_2025.html #137 (rerank=0.651)\n  - AAPL_10Q_202512.html #19 (rerank=0.647)\n  - AAPL_10Q_202606.html #20 (rerank=0.637)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "新聞報導中，Apple 被視為值得長期持有的原因是什麼？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 115
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 111
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 137
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 20
+        }
+      ]
+    },
+    {
+      "id": "col-14",
+      "query": "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？",
+      "why": "flow",
+      "answer": "NVIDIA 最近與 **Bitdeer Technologies**（代號 BTDR）這家比特幣礦機公司合作，攜手推動 AI 訓練平台的業務。  \n\nBitdeer AI 以 NVIDIA DGX SuperPOD 搭載 H100 GPU、DDN 儲存與 InfiniBand 網路建置 AI/ML 推論服務，並已宣布將與 NVIDIA 進一步合作發展其 AI Training Platform【web: https://www.nasdaq.com/articles/bitdeer-technologies-btdr-not-just-bitcoin-mining-company】。\n\n---\n⚠ 資料時效：NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #16 (rerank=0.726)\n  - NVDA_10K_2025.html #15 (rerank=0.722)\n  - NVDA_10K_2026.html #25 (rerank=0.681)\n  - NVDA_10K_2026.html #164 (rerank=0.668)\n  - NVDA_10K_2024.html #22 (rerank=0.664)\n  - NVDA_10K_2026.html #20 (rerank=0.657)\n  - NVDA_10K_2026.html #21 (rerank=0.635)\n  - NVDA_10K_2025.html #19 (rerank=0.628)\n  - NVDA_10K_2026.html #81 (rerank=0.610)\n  - NVDA_10K_2025.html #82 (rerank=0.604)\n  - NVDA_10K_2026.html #23 (rerank=0.603)\n  - NVDA_10K_2026.html #85 (rerank=0.594)\n  - NVDA_Fundamentals_20260612.txt #2 (rerank=0.576)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.504)\n  - NVDA_IncomeStatement_20260612.txt #0 (rerank=0.501)\n  - NVDA_Fundamentals_20260612.txt #1 (rerank=0.500)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 最近與哪家比特幣挖礦公司合作進行 AI 生意？",
+        "在 NVIDIA 2026 年 10-Q 或 10-K 中查找與比特幣挖礦公司合作的資訊",
+        "在 NVIDIA 官方新聞稿或投資者關係頁面查找與比特幣挖礦公司的合作資訊（截至 2026-09-01）",
+        "在主要比特幣挖礦公司（如 Marathon Digital、Riot Platforms、Hive Blockchain）官方公告或新聞稿中查找與 NVIDIA 合作的資訊",
+        "改用網路搜尋查找 2026‑07 至 2026‑09 期間於 Bloomberg、Reuters 等金融新聞平台上有關 NVIDIA 與比特幣挖礦公司合作的 AI 生意報導",
+        "改用網路搜尋查找 2026‑07 至 2026‑09 期間於 CNBC、TechCrunch 等科技新聞平台上有關 NVIDIA 與比特幣挖礦公司合作的 AI 生意報導",
+        "在 NVIDIA 2026‑08 之後的 SEC 8‑K 文件中查找與比特幣挖礦公司合作的資訊"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 16
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 206
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 209
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 21
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "NVDA_10Q_202504.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 191
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 81
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 82
+        },
+        {
+          "source": "NVDA_10Q_202504.html",
+          "chunk_index": 79
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 23
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 85
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 161
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_IncomeStatement_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_IncomeStatement_20260612.txt",
+          "chunk_index": 4
+        }
+      ]
+    },
+    {
+      "id": "lex-03",
+      "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
+      "why": "record",
+      "answer": "NVIDIA 在 2026 財政年度的稀釋每股盈餘（Diluted EPS）為 **$4.90**【NVDA_10K_2026.html, chunk #164】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #164 (rerank=0.729)\n  - NVDA_10K_2026.html #181 (rerank=0.722)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 181
+        }
+      ]
+    },
+    {
+      "id": "lex-07",
+      "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+      "why": "record",
+      "answer": "Apple 在 2025 財政年度的每股攤薄盈餘 (Diluted EPS) 為 **$7.46**【AAPL_10K_2025.html, chunk #0】【AAPL_10K_2025.html, chunk #115】。  \n\n此數字來自公司 10‑K 報表中列示的「Diluted (in dollars per share)」欄位，對應 FY2025 的財務結果。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10K_2025.html #0 (rerank=0.727)\n  - AAPL_10K_2025.html #115 (rerank=0.725)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 115
+        }
+      ]
+    },
+    {
+      "id": "sem-01",
+      "query": "NVIDIA 的核心技術護城河是什麼？",
+      "why": "record",
+      "answer": "NVIDIA 的核心技術護城河在於其 **硬體‑軟體全堆疊平台、廣大的 CUDA 生態系統以及結合 GPU、CPU、DPU 的資料中心級算力與 AI 軟體套件**，這些要素共同形成難以被競爭者快速複製的競爭優勢。[NVDA_10K_2026.html, chunk #20]。\n\n- **全堆疊平台策略**：NVIDIA 以「硬體、系統、軟體、演算法、函式庫、AI 模型與訓練資料集」以及服務等多層面結合，提供端到端的加速運算平台，讓同一套技術可服務多個數十億美元的終端市場。[NVDA_10K_2026.html, chunk #20]。  \n- **GPU 為核心硬體**：GPU 具備數萬個運算核心，支援深度學習與大規模 AI 工作負載，是平台的基礎。[NVDA_10K_2026.html, chunk #20]。  \n- **資料中心級算力與多元處理單元**：NVIDIA 的資料中心解決方案同時整合 **GPU、CPU、DPU**，可將數十萬顆 GPU 互相連接成單一巨型電腦，提供訓練與推論所需的彈性與規模。[NVDA_10K_2026.html, chunk #28]、[NVDA_10K_2025.html, chunk #27]。  \n- **AI 軟體套件**：NVIDIA AI Enterprise 包含 **NVIDIA NIM、NeMo、AI Blueprints** 等完整軟體套件，簡化企業部署生成式 AI 應用，並在 NIM 中實現 **2.5 倍的 token 吞吐量提升**（在 2025 年文件中）[NVDA_10K_2025.html, chunk #27]。  \n- **CUDA 生態系統**：CUDA 作為所有 NVIDIA GPU 的基礎程式模型，配合數百項領域專屬函式庫、SDK、API，讓開發者能快速在 GPU 上部署各類計算密集型工作負載。[NVDA_10K_2026.html, chunk #20]。  \n- **龐大開發者基礎**：截至 2026 年，全球使用 CUDA 及其他 NVIDIA 軟體工具的開發者已超過 **0.075 億（7.5 百萬）人**，2025 年則為 **0.059 億（5.9 百萬）人**，此規模的生態系統提升平台黏著度並擴大網路效應。[NVDA_10K_2026.html, chunk #28]、[NVDA_10K_2025.html, chunk #27]。  \n- **持續研發投入**：自公司成立以來，NVIDIA 已累計投入 **超過 767 億美元（$76.7 billion）** 於研發，確保硬體與軟體持續領先並產出新技術與產品。[NVDA_10K_2026.html, chunk #20]。  \n\n以上要素—全堆疊硬體與軟體、跨處理單元的資料中心規模、領先的 AI 軟體套件、廣大的 CUDA 開發者社群與巨額研發投入—共同構成 NVIDIA 在加速運算與 AI 市場的核心護城河。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #20 (rerank=0.638)\n  - NVDA_10K_2025.html #19 (rerank=0.609)\n  - NVDA_10K_2026.html #28 (rerank=0.547)\n  - NVDA_10K_2025.html #27 (rerank=0.524)\n  - NVDA_10K_2026.html #120 (rerank=0.519)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "NVIDIA 的核心技術護城河是什麼？"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 27
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 120
+        }
+      ]
+    },
+    {
+      "id": "sem-06",
+      "query": "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？",
+      "why": "record",
+      "answer": "Amazon 正在面臨多項與反壟斷及監管相關的風險，主要集中在其電商平台（包括履行網路與 Prime 服務）以及 AWS 雲端業務上：\n\n* **競爭與消費者保護調查**：美國及其他國家的政府與監管機構正對 Amazon 的電商店面、履行網路、Prime 會員服務以及 AWS 雲端服務的營運提出「侵犯競爭或消費者保護規則」的指控，並展開正式或非正式的審查與調查【AMZN_10K_2024.html, chunk #80】、【AMZN_10K_2025.html, chunk #81】。  \n* **反壟斷訴訟**：自 2020 年以來，私人原告、州檢察長與聯邦貿易委員會在美國、加拿大與英國等地提起多起訴訟，指稱 Amazon 涉及「價格固定、濫用支配地位、壟斷或企圖壟斷」等反競爭行為，並涉及其定價政策、Featured Offers、賣家資料使用、廣告做法、Prime 結構以及自有商品的推廣方式【AMZN_10Q_202606.html, chunk #45】。  \n* **巨額賠償與罰金風險**：上述訴訟要求的賠償金額包括「數十億美元的指稱損害、三倍賠償、懲罰性賠償、禁令、結構性救濟、民事罰金以及律師費」等，若訴訟成功，將對 Amazon 的財務造成重大衝擊【AMZN_10Q_202606.html, chunk #45】。  \n* **合規成本上升**：監管機構持續擴大對「線上門戶」的監管範圍，導致合規成本增加，並可能迫使 Amazon 必須改變營運慣例，對其業務模式產生實質不利影響【AMZN_10K_2024.html, chunk #80】、【AMZN_10K_2025.html, chunk #81】。  \n* **聲譽與成長受阻**：不利的監管決策、法律判決或罰款可能損害 Amazon 的品牌形象，抑制需求，並阻礙未來的成長與擴張【AMZN_10K_2024.html, chunk #80】、【AMZN_10K_2025.html, chunk #81】。  \n\n綜合以上，Amazon 在電商（包括履行網路與 Prime）以及 AWS 雲端服務上，正面臨來自競爭法、消費者保護法以及反壟斷訴訟的多重監管與法律風險，這些風險可能導致巨額罰款、合規成本上升、營運模式調整以及聲譽受損。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AMZN_10K_2024.html #80 (rerank=0.709)\n  - AMZN_10K_2025.html #81 (rerank=0.707)\n  - AMZN_10Q_202509.html #119 (rerank=0.678)\n  - AMZN_10Q_202506.html #115 (rerank=0.677)\n  - AMZN_10Q_202603.html #124 (rerank=0.656)\n  - AMZN_10Q_202606.html #125 (rerank=0.653)\n  - AMZN_10Q_202606.html #45 (rerank=0.634)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼",
+        "Amazon 在 Prime 服務上面臨的反壟斷或監管風險是什麼",
+        "Amazon 在電商業務上面臨的反壟斷或監管風險是什麼"
+      ],
+      "sources": [
+        {
+          "source": "AMZN_10K_2024.html",
+          "chunk_index": 80
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 81
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 119
+        },
+        {
+          "source": "AMZN_10Q_202506.html",
+          "chunk_index": 115
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 124
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 125
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 45
+        }
+      ]
+    },
+    {
+      "id": "mix-01",
+      "query": "Microsoft Azure 最新一季的營收成長率是多少？",
+      "why": "record",
+      "answer": "Microsoft Azure 在最新公布的 2026 財年第四季（截至 2026‑06‑30）營收年增長率為 **43%**【web: https://www.cnbc.com/2026/07/29/microsoft-msft-q4-earnings-report-2026.html】。  \n\n- 這一增長較前一季（2026 財年第三季，截至 2026‑03‑31）提升，第三季 Azure 與其他雲端服務收入增長 **40%**【MSFT_10Q_202603.html, chunk #75】。  \n- 第三季的 40% 成長同樣在 2026‑03‑31 結束的三個月內於 10‑Q 中報告，說明 Azure 持續保持高速成長【MSFT_10Q_202603.html, chunk #69】。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202603.html #75 (rerank=0.698)\n  - MSFT_10Q_202603.html #69 (rerank=0.687)\n  - MSFT_10Q_202603.html #49 (rerank=0.650)\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.515)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "Microsoft Azure 目前的營收成長率是多少"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 69
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 49
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mix-11",
+      "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
+      "why": "record",
+      "answer": "NVIDIA 最新一季資料中心（Data Center）營收較去年同期成長 **92%**，主要由 Blackwell 300 產品的出貨推動，同時受益於 InfiniBand、Spectrum‑X Ethernet 與 NVLink 解決方案的需求提升【NVDA_10Q_202604.html, chunk #47】。此外，Blackwell 仍佔系統出貨的多數，進一步說明其在本季營收成長中的關鍵角色【NVDA_10Q_202604.html, chunk #42】。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10Q_202604.html #42 (rerank=0.720)\n  - NVDA_10Q_202604.html #47 (rerank=0.698)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.596)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "NVIDIA 最新一季資料中心營收成長多少",
+        "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 47
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mh-03",
+      "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+      "why": "record",
+      "answer": "NVIDIA 以 85.20% 的營收年增率領先於 Meta 與 Alphabet，而其最近十二個月（TTM）的淨利為 1,596.1 億美元（$159.61 billion）【NVDA_Fundamentals_20260612.txt, chunk #0】。\n\n- NVIDIA 的 YoY 營收增長為 85.20%【NVDA_Fundamentals_20260612.txt, chunk #0】；TTM 淨利為 1,596.1 億美元（$159.61 billion）【NVDA_Fundamentals_20260612.txt, chunk #0】。  \n- Meta 的 YoY 營收增長為 33.10%【META_Fundamentals_20260612.txt, chunk #0】；TTM 淨利為 705.9 億美元（$70.59 billion）【META_Fundamentals_20260612.txt, chunk #0】。  \n- Alphabet 的 YoY 營收增長為 21.80%【GOOGL_Fundamentals_20260612.txt, chunk #0】；TTM 淨利為 1,602.1 億美元（$160.21 billion）【GOOGL_Fundamentals_20260612.txt, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_Fundamentals_20260612.txt #0 (rerank=0.727)\n  - GOOGL_Fundamentals_20260612.txt #0 (rerank=0.726)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.724)\n  - GOOGL_10K_2025.html #268 (rerank=0.705)\n  - NVDA_10K_2026.html #164 (rerank=0.682)",
+      "n_web_calls": 2,
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "NVIDIA 最近一年營收年增率是多少？",
+        "Meta 最近一年營收年增率是多少？",
+        "Alphabet 最近一年營收年增率是多少？",
+        "NVIDIA 最近十二個月（TTM）的淨利是多少？",
+        "Meta 最近十二個月（TTM）的淨利是多少？",
+        "Alphabet 最近十二個月（TTM）的淨利是多少？"
+      ],
+      "sources": [
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 268
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        }
+      ]
+    }
+  ]
+}

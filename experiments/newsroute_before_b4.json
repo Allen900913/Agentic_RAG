@@ -1,0 +1,340 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_prod.json"
+  },
+  "records": [
+    {
+      "id": "col-14",
+      "query": "NVIDIA 最近跟哪家挖比特幣的公司搭上線做 AI 生意？",
+      "why": "flow",
+      "answer": "NVIDIA 最近與 **Bitdeer Technologies**（代號 BTDR）這家比特幣礦機公司合作，攜手推動 AI 訓練平台的業務。  \n\nBitdeer AI 以 NVIDIA DGX SuperPOD 搭載 H100 GPU、DDN 儲存與 InfiniBand 網路建置 AI/ML 推論服務，並已宣布將與 NVIDIA 進一步合作發展其 AI Training Platform【web: https://www.nasdaq.com/articles/bitdeer-technologies-btdr-not-just-bitcoin-mining-company】。\n\n---\n⚠ 資料時效：NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #16 (rerank=0.726)\n  - NVDA_10K_2025.html #15 (rerank=0.722)\n  - NVDA_10K_2026.html #25 (rerank=0.681)\n  - NVDA_10K_2026.html #164 (rerank=0.668)\n  - NVDA_10K_2024.html #22 (rerank=0.664)\n  - NVDA_10K_2026.html #20 (rerank=0.657)\n  - NVDA_10K_2026.html #21 (rerank=0.635)\n  - NVDA_10K_2025.html #19 (rerank=0.628)\n  - NVDA_10K_2026.html #81 (rerank=0.610)\n  - NVDA_10K_2025.html #82 (rerank=0.604)\n  - NVDA_10K_2026.html #23 (rerank=0.603)\n  - NVDA_10K_2026.html #85 (rerank=0.594)\n  - NVDA_Fundamentals_20260612.txt #2 (rerank=0.576)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.504)\n  - NVDA_IncomeStatement_20260612.txt #0 (rerank=0.501)\n  - NVDA_Fundamentals_20260612.txt #1 (rerank=0.500)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 最近與哪家比特幣挖礦公司合作進行 AI 生意？",
+        "在 NVIDIA 2026 年 10-Q 或 10-K 中查找與比特幣挖礦公司合作的資訊",
+        "在 NVIDIA 官方新聞稿或投資者關係頁面查找與比特幣挖礦公司的合作資訊（截至 2026-09-01）",
+        "在主要比特幣挖礦公司（如 Marathon Digital、Riot Platforms、Hive Blockchain）官方公告或新聞稿中查找與 NVIDIA 合作的資訊",
+        "改用網路搜尋查找 2026‑07 至 2026‑09 期間於 Bloomberg、Reuters 等金融新聞平台上有關 NVIDIA 與比特幣挖礦公司合作的 AI 生意報導",
+        "改用網路搜尋查找 2026‑07 至 2026‑09 期間於 CNBC、TechCrunch 等科技新聞平台上有關 NVIDIA 與比特幣挖礦公司合作的 AI 生意報導",
+        "在 NVIDIA 2026‑08 之後的 SEC 8‑K 文件中查找與比特幣挖礦公司合作的資訊"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 16
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 206
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 209
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 22
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "NVDA_10K_2024.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 21
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "NVDA_10Q_202504.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 191
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 81
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 82
+        },
+        {
+          "source": "NVDA_10Q_202504.html",
+          "chunk_index": 79
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 23
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 85
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 161
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_IncomeStatement_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "NVDA_IncomeStatement_20260612.txt",
+          "chunk_index": 4
+        }
+      ]
+    },
+    {
+      "id": "lex-03",
+      "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
+      "why": "record",
+      "answer": "NVIDIA 在 2026 財政年度的稀釋每股盈餘（Diluted EPS）為 **$4.90**【NVDA_10K_2026.html, chunk #164】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #164 (rerank=0.729)\n  - NVDA_10K_2026.html #181 (rerank=0.722)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 181
+        }
+      ]
+    },
+    {
+      "id": "lex-07",
+      "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+      "why": "record",
+      "answer": "Apple 在 2025 財政年度的每股攤薄盈餘 (Diluted EPS) 為 **$7.46**【AAPL_10K_2025.html, chunk #0】【AAPL_10K_2025.html, chunk #115】。  \n\n此數字來自公司 10‑K 報表中列示的「Diluted (in dollars per share)」欄位，對應 FY2025 的財務結果。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10K_2025.html #0 (rerank=0.727)\n  - AAPL_10K_2025.html #115 (rerank=0.725)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 115
+        }
+      ]
+    },
+    {
+      "id": "sem-01",
+      "query": "NVIDIA 的核心技術護城河是什麼？",
+      "why": "record",
+      "answer": "NVIDIA 的核心技術護城河在於其 **硬體‑軟體全堆疊平台、廣大的 CUDA 生態系統以及結合 GPU、CPU、DPU 的資料中心級算力與 AI 軟體套件**，這些要素共同形成難以被競爭者快速複製的競爭優勢。[NVDA_10K_2026.html, chunk #20]。\n\n- **全堆疊平台策略**：NVIDIA 以「硬體、系統、軟體、演算法、函式庫、AI 模型與訓練資料集」以及服務等多層面結合，提供端到端的加速運算平台，讓同一套技術可服務多個數十億美元的終端市場。[NVDA_10K_2026.html, chunk #20]。  \n- **GPU 為核心硬體**：GPU 具備數萬個運算核心，支援深度學習與大規模 AI 工作負載，是平台的基礎。[NVDA_10K_2026.html, chunk #20]。  \n- **資料中心級算力與多元處理單元**：NVIDIA 的資料中心解決方案同時整合 **GPU、CPU、DPU**，可將數十萬顆 GPU 互相連接成單一巨型電腦，提供訓練與推論所需的彈性與規模。[NVDA_10K_2026.html, chunk #28]、[NVDA_10K_2025.html, chunk #27]。  \n- **AI 軟體套件**：NVIDIA AI Enterprise 包含 **NVIDIA NIM、NeMo、AI Blueprints** 等完整軟體套件，簡化企業部署生成式 AI 應用，並在 NIM 中實現 **2.5 倍的 token 吞吐量提升**（在 2025 年文件中）[NVDA_10K_2025.html, chunk #27]。  \n- **CUDA 生態系統**：CUDA 作為所有 NVIDIA GPU 的基礎程式模型，配合數百項領域專屬函式庫、SDK、API，讓開發者能快速在 GPU 上部署各類計算密集型工作負載。[NVDA_10K_2026.html, chunk #20]。  \n- **龐大開發者基礎**：截至 2026 年，全球使用 CUDA 及其他 NVIDIA 軟體工具的開發者已超過 **0.075 億（7.5 百萬）人**，2025 年則為 **0.059 億（5.9 百萬）人**，此規模的生態系統提升平台黏著度並擴大網路效應。[NVDA_10K_2026.html, chunk #28]、[NVDA_10K_2025.html, chunk #27]。  \n- **持續研發投入**：自公司成立以來，NVIDIA 已累計投入 **超過 767 億美元（$76.7 billion）** 於研發，確保硬體與軟體持續領先並產出新技術與產品。[NVDA_10K_2026.html, chunk #20]。  \n\n以上要素—全堆疊硬體與軟體、跨處理單元的資料中心規模、領先的 AI 軟體套件、廣大的 CUDA 開發者社群與巨額研發投入—共同構成 NVIDIA 在加速運算與 AI 市場的核心護城河。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #20 (rerank=0.638)\n  - NVDA_10K_2025.html #19 (rerank=0.609)\n  - NVDA_10K_2026.html #28 (rerank=0.547)\n  - NVDA_10K_2025.html #27 (rerank=0.524)\n  - NVDA_10K_2026.html #120 (rerank=0.519)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "NVIDIA 的核心技術護城河是什麼？"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 27
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 120
+        }
+      ]
+    },
+    {
+      "id": "sem-06",
+      "query": "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？",
+      "why": "record",
+      "answer": "Amazon 正在面臨多項與反壟斷及監管相關的風險，主要集中在其電商平台（包括履行網路與 Prime 服務）以及 AWS 雲端業務上：\n\n* **競爭與消費者保護調查**：美國及其他國家的政府與監管機構正對 Amazon 的電商店面、履行網路、Prime 會員服務以及 AWS 雲端服務的營運提出「侵犯競爭或消費者保護規則」的指控，並展開正式或非正式的審查與調查【AMZN_10K_2024.html, chunk #80】、【AMZN_10K_2025.html, chunk #81】。  \n* **反壟斷訴訟**：自 2020 年以來，私人原告、州檢察長與聯邦貿易委員會在美國、加拿大與英國等地提起多起訴訟，指稱 Amazon 涉及「價格固定、濫用支配地位、壟斷或企圖壟斷」等反競爭行為，並涉及其定價政策、Featured Offers、賣家資料使用、廣告做法、Prime 結構以及自有商品的推廣方式【AMZN_10Q_202606.html, chunk #45】。  \n* **巨額賠償與罰金風險**：上述訴訟要求的賠償金額包括「數十億美元的指稱損害、三倍賠償、懲罰性賠償、禁令、結構性救濟、民事罰金以及律師費」等，若訴訟成功，將對 Amazon 的財務造成重大衝擊【AMZN_10Q_202606.html, chunk #45】。  \n* **合規成本上升**：監管機構持續擴大對「線上門戶」的監管範圍，導致合規成本增加，並可能迫使 Amazon 必須改變營運慣例，對其業務模式產生實質不利影響【AMZN_10K_2024.html, chunk #80】、【AMZN_10K_2025.html, chunk #81】。  \n* **聲譽與成長受阻**：不利的監管決策、法律判決或罰款可能損害 Amazon 的品牌形象，抑制需求，並阻礙未來的成長與擴張【AMZN_10K_2024.html, chunk #80】、【AMZN_10K_2025.html, chunk #81】。  \n\n綜合以上，Amazon 在電商（包括履行網路與 Prime）以及 AWS 雲端服務上，正面臨來自競爭法、消費者保護法以及反壟斷訴訟的多重監管與法律風險，這些風險可能導致巨額罰款、合規成本上升、營運模式調整以及聲譽受損。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AMZN_10K_2024.html #80 (rerank=0.709)\n  - AMZN_10K_2025.html #81 (rerank=0.707)\n  - AMZN_10Q_202509.html #119 (rerank=0.678)\n  - AMZN_10Q_202506.html #115 (rerank=0.677)\n  - AMZN_10Q_202603.html #124 (rerank=0.656)\n  - AMZN_10Q_202606.html #125 (rerank=0.653)\n  - AMZN_10Q_202606.html #45 (rerank=0.634)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼",
+        "Amazon 在 Prime 服務上面臨的反壟斷或監管風險是什麼",
+        "Amazon 在電商業務上面臨的反壟斷或監管風險是什麼"
+      ],
+      "sources": [
+        {
+          "source": "AMZN_10K_2024.html",
+          "chunk_index": 80
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 81
+        },
+        {
+          "source": "AMZN_10Q_202509.html",
+          "chunk_index": 119
+        },
+        {
+          "source": "AMZN_10Q_202506.html",
+          "chunk_index": 115
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 124
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 125
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 45
+        }
+      ]
+    },
+    {
+      "id": "mix-01",
+      "query": "Microsoft Azure 最新一季的營收成長率是多少？",
+      "why": "record",
+      "answer": "Microsoft Azure 在最新公布的 2026 財年第四季（截至 2026‑06‑30）營收年增長率為 **43%**【web: https://www.cnbc.com/2026/07/29/microsoft-msft-q4-earnings-report-2026.html】。  \n\n- 這一增長較前一季（2026 財年第三季，截至 2026‑03‑31）提升，第三季 Azure 與其他雲端服務收入增長 **40%**【MSFT_10Q_202603.html, chunk #75】。  \n- 第三季的 40% 成長同樣在 2026‑03‑31 結束的三個月內於 10‑Q 中報告，說明 Azure 持續保持高速成長【MSFT_10Q_202603.html, chunk #69】。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202603.html #75 (rerank=0.698)\n  - MSFT_10Q_202603.html #69 (rerank=0.687)\n  - MSFT_10Q_202603.html #49 (rerank=0.650)\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.515)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "Microsoft Azure 目前的營收成長率是多少"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 69
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 49
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mix-11",
+      "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
+      "why": "record",
+      "answer": "NVIDIA 最新一季資料中心（Data Center）營收較去年同期成長 **92%**，主要由 Blackwell 300 產品的出貨推動，同時受益於 InfiniBand、Spectrum‑X Ethernet 與 NVLink 解決方案的需求提升【NVDA_10Q_202604.html, chunk #47】。此外，Blackwell 仍佔系統出貨的多數，進一步說明其在本季營收成長中的關鍵角色【NVDA_10Q_202604.html, chunk #42】。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10Q_202604.html #42 (rerank=0.720)\n  - NVDA_10Q_202604.html #47 (rerank=0.698)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.596)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "NVIDIA 最新一季資料中心營收成長多少",
+        "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 42
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 47
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mh-03",
+      "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+      "why": "record",
+      "answer": "NVIDIA 以 85.20% 的營收年增率領先於 Meta 與 Alphabet，而其最近十二個月（TTM）的淨利為 1,596.1 億美元（$159.61 billion）【NVDA_Fundamentals_20260612.txt, chunk #0】。\n\n- NVIDIA 的 YoY 營收增長為 85.20%【NVDA_Fundamentals_20260612.txt, chunk #0】；TTM 淨利為 1,596.1 億美元（$159.61 billion）【NVDA_Fundamentals_20260612.txt, chunk #0】。  \n- Meta 的 YoY 營收增長為 33.10%【META_Fundamentals_20260612.txt, chunk #0】；TTM 淨利為 705.9 億美元（$70.59 billion）【META_Fundamentals_20260612.txt, chunk #0】。  \n- Alphabet 的 YoY 營收增長為 21.80%【GOOGL_Fundamentals_20260612.txt, chunk #0】；TTM 淨利為 1,602.1 億美元（$160.21 billion）【GOOGL_Fundamentals_20260612.txt, chunk #0】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_Fundamentals_20260612.txt #0 (rerank=0.727)\n  - GOOGL_Fundamentals_20260612.txt #0 (rerank=0.726)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.724)\n  - GOOGL_10K_2025.html #268 (rerank=0.705)\n  - NVDA_10K_2026.html #164 (rerank=0.682)",
+      "n_web_calls": 2,
+      "n_web_calls_recorded": 2,
+      "sub_queries": [
+        "NVIDIA 最近一年營收年增率是多少？",
+        "Meta 最近一年營收年增率是多少？",
+        "Alphabet 最近一年營收年增率是多少？",
+        "NVIDIA 最近十二個月（TTM）的淨利是多少？",
+        "Meta 最近十二個月（TTM）的淨利是多少？",
+        "Alphabet 最近十二個月（TTM）的淨利是多少？"
+      ],
+      "sources": [
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 268
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        }
+      ]
+    }
+  ]
+}

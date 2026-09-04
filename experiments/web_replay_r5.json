@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "as_of": "2026-09-02",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture.json",
+    "replay_cache": "eval/web_replay_llm.json"
+  },
+  "records": [
+    {
+      "id": "web-01",
+      "query": "Apple 目前的市值是多少？",
+      "why": "intraday；KB 結構上沒有即時市值",
+      "answer": "Apple 目前的市值約為 **47,500 億美元（$4.75 兆）**（即 47,500 億美元（$4.75 trillion）），此數據來自 2026 年 9 月 1 日的最新報告【web: https://stockanalysis.com/stocks/aapl/market-cap】。  \n\n（供參考：根據 2026‑06‑12 的公司基本面資料，Apple 的市值為 43,420.2 億美元（$4342.02 billion），約 43,400 億美元（$4.34 兆）【AAPL_Fundamentals_20260612.txt, chunk #0】。）\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.719)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "Apple 目前的市值是多少"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "web-02",
+      "query": "NVIDIA 現在的股價是多少？",
+      "why": "intraday；純即時報價",
+      "answer": "截至目前，NVIDIA（NVDA）的最新成交價為 **$215.38**（盤後價格），前一交易日收盤價為 **$214.72**【web: https://finance.yahoo.com/quote/NVDA】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #118 (rerank=0.728)\n  - NVDA_10K_2026.html #10 (rerank=0.724)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 現在的股價是多少"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 118
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 10
+        }
+      ]
+    },
+    {
+      "id": "web-03",
+      "query": "Microsoft 最新一季的 Azure 營收成長率是多少？",
+      "why": "KB 有舊值、web 可能更新 → 權威衝突",
+      "answer": "Microsoft 在最新一季（截至 2026 年 3 月 31 日的三個月）Azure 及其他雲端服務營收成長率為 **40%**【MSFT_10Q_202603.html, chunk #69】。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202603.html #75 (rerank=0.721)\n  - MSFT_10Q_202603.html #69 (rerank=0.714)\n  - MSFT_10Q_202603.html #49 (rerank=0.712)\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.518)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Microsoft 最新一季的 Azure 營收成長率是多少"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 69
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 49
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "web-04",
+      "query": "Tesla 最近有什麼重要消息？",
+      "why": "新聞時效",
+      "answer": "Tesla 最近的主要消息是：Elon Musk 預測未來十年內將生產 **10 億（1 Billion）** 類人機器人；同時在 2026 年 **Ather Energy** 股價飆升 **130%**，使 Tesla 被甩在後面；此外，Tesla 股價在最新交易中上漲 **+1.35%**【web: https://finance.yahoo.com】。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Tesla 最近有什麼重要消息？"
+      ],
+      "sources": []
+    },
+    {
+      "id": "web-05",
+      "query": "Apple 在 FY2025 全年的總營收是多少？",
+      "why": "陰性對照：純歷史財報，不該打 web",
+      "answer": "Apple 在 FY2025 全年的總營收為 **4,161.61 億美元（$416,161 million）**【AAPL_10K_2025.html, chunk #0】。  \n\n- 依 2025 年 10‑K 合併損益表，2025 年 9 月 27 日止年度的 Net sales 為 4,161.61 億美元（$416,161 百萬）【AAPL_10K_2025.html, chunk #0】。  \n- 同樣在分項淨銷售表中，2025 年的 Total net sales 亦列示 4,161.61 億美元（$416,161 百萬）【AAPL_10K_2025.html, chunk #115】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10K_2025.html #115 (rerank=0.726)\n  - AAPL_10K_2025.html #0 (rerank=0.725)\n  - AAPL_10K_2025.html #85 (rerank=0.719)\n  - AAPL_10K_2025.html #84 (rerank=0.715)",
+      "n_web_calls": 0,
+      "n_web_calls_recorded": 0,
+      "sub_queries": [
+        "Apple 在 FY2025 全年的總營收是多少？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 115
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 85
+        },
+        {
+          "source": "AAPL_10K_2025.html",
+          "chunk_index": 84
+        }
+      ]
+    }
+  ]
+}

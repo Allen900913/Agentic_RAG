@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "as_of": "2026-09-02",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_mixed_prod.json",
+    "replay_cache": "eval/web_replay_llm_mixed_prod.json"
+  },
+  "records": [
+    {
+      "id": "mi-06",
+      "query": "Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？",
+      "why": "multi_intent",
+      "answer": "（子問題「Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？」的生成步驟發生錯誤，以下為檢索到的原始片段）\n[MSFT_Fundamentals_20260612.txt, chunk #0] [MSFT] === MSFT Company Fundamentals === Generated: 2026-06-12 --- Company Overview --- Name : Microsoft Corporation Sector : Technology Industry : Software - Infrastructure Employees: 228,000 --- Val…\n[MSFT_10K_2026.html, chunk #96] … tools to report suspected incidents and assess their own security posture, and conduct real-time simulated employee education exercises, such as phishing email campaigns designed to emulate real-worl…\n[MSFT_10K_2026.html, chunk #28] … | | Microsoft Corporation 2026 Stock Plan | | | | 10-Q | | 3/31/2026 | | 10.1 | | 4/29/2026 | | | 10.9* | | Form of Stock Award Agreement Under the Microsoft Corporation 2026 Stock Plan | | | | 10-Q …\n[MSFT_10K_2026.html, chunk #33] …measurable business outcomes from AI. •Providing a unified intelligence layer for enterprise AI to ground AI in a continuously evolving understanding of an organization’s data. •Providing training on …\n[MSFT_10K_2026.html, chunk #65] …d spray attack to compromise a legacy test account and, in turn, gain access to Microsoft email accounts. The threat actor used information it obtained to gain unauthorized access to some of our sourc…\n[MSFT_10K_2026.html, chunk #26] …57, dated as of February 6, 2017, between Microsoft Corporation and The Bank of New York Mellon Trust Company, N.A., as Trustee, to the Indenture, dated as of May 18, 2009, between Microsoft Corporati…\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; MSFT 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n⚠ 網路結果未採用：本次已取得網路搜尋結果，但最終答案未引用其中任何來源；以上內容僅根據知識庫的 SEC 財報與基本面資料，**不代表涵蓋至查詢日**。\n\n---\n⚠ 口徑說明：上文引用的 TTM（最近十二個月）口徑數值為 **Profit Margin 39.34%**，與文中的財報期間（財年／單季）數字不是同一個口徑——兩者數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.718)\n  - MSFT_10K_2026.html #96 (rerank=0.678)\n  - MSFT_10K_2026.html #28 (rerank=0.659)\n  - MSFT_10K_2026.html #33 (rerank=0.659)\n  - MSFT_10K_2026.html #65 (rerank=0.648)\n  - MSFT_10K_2026.html #26 (rerank=0.637)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？\n  - Microsoft 加入 Anthropic Mythos 資安計畫的最新消息與相關布局\n  - 查找 Microsoft 加入 Anthropic Mythos 資安計畫的最新新聞及其在 AI 資安領域的布局\n  - 查找最新新聞，Microsoft 加入 Anthropic Mythos 資安計畫的細節與公司在 AI 資安領域的布局",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Microsoft 目前的淨利率是多少",
+        "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？",
+        "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息與相關布局",
+        "查找 Microsoft 加入 Anthropic Mythos 資安計畫的最新新聞及其在 AI 資安領域的布局",
+        "查找最新新聞，Microsoft 加入 Anthropic Mythos 資安計畫的細節與公司在 AI 資安領域的布局",
+        "在 Microsoft 2026 年 10-K 中搜尋與 Anthropic Mythos 資安計畫相關的描述"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 96
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 33
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 65
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 26
+        }
+      ]
+    }
+  ]
+}

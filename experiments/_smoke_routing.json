@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "as_of": "2026-08-19",
+    "collection": "us_stock_rag_edgar_mdna",
+    "checker_model": "openai/gpt-oss-120b",
+    "repeat": 1,
+    "control_ids": [
+      "lex-03",
+      "lex-07",
+      "sem-01",
+      "sem-06",
+      "mix-01",
+      "mix-11",
+      "col-08",
+      "mh-03"
+    ],
+    "note": "web 呼叫由計數樁攔截，未連網；本檔只量路由，不量答案品質"
+  },
+  "records": [
+    {
+      "round": 0,
+      "id": "news-01",
+      "arm": "news_set",
+      "category": "news",
+      "query": "Apple 最近有什麼跟 Siri 有關的法律訴訟或和解消息？",
+      "n_web": 3,
+      "web_queries": [
+        "[none] Apple Siri lawsuit settlement 2026",
+        "[days] Apple Siri lawsuit June 2026 August 2026 settlement news",
+        "[days] Apple Siri lawsuit settlement June 2026 August 2026 news"
+      ],
+      "sub_queries": [
+        "Apple 最近與 Siri 相關的法律訴訟或和解消息是什麼",
+        "使用網路搜尋查找 2026-06-13 至 2026-08-19 期間 Apple 與 Siri 相關的法律訴訟或和解消息",
+        "使用網路搜尋查找 2026-06-13 至 2026-08-19 Apple 與 Siri 相關的法律訴訟或和解消息"
+      ],
+      "answer_len": 757,
+      "answer_head": "Apple 最近在公開文件中沒有披露任何具體針對 Siri 的訴訟或和解案件；文件只提到因歐盟《數位市場法》（DMA）及人工智慧相關風險，可能導致公司在某些司法管轄區無法推出或維持包括 Siri 在內的產品與服務【AAPL_10Q_202606.html, chunk #63】。同時，文件指出人工智慧技術（其中亦涵蓋 Siri）可能帶來法律、監管與聲譽風險，但未列出任何已發生的 Siri 專屬訴訟",
+      "error": ""
+    }
+  ]
+}

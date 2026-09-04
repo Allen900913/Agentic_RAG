@@ -1,0 +1,1101 @@
+{
+  "meta": {
+    "collection": "us_stock_rag_edgar_multiyear",
+    "top_k": 5,
+    "arms": [
+      "collapse_off",
+      "k1_rank",
+      "k1_newest",
+      "k2_rank",
+      "k2_newest"
+    ],
+    "queries": 8
+  },
+  "arms": {
+    "collapse_off": {
+      "tr-01": {
+        "periods_covered": 5,
+        "periods": [
+          "202412",
+          "202503",
+          "202506",
+          "202603",
+          "202606"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202412",
+            "202503",
+            "202506",
+            "202603",
+            "202606"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "AAPL_10Q_202503.html#20",
+          "AAPL_10Q_202606.html#20",
+          "AAPL_10Q_202603.html#19",
+          "AAPL_10Q_202506.html#20",
+          "AAPL_10Q_202412.html#18"
+        ],
+        "query": "Apple 過去三個財年的營收與毛利率走勢如何變化？"
+      },
+      "tr-02": {
+        "periods_covered": 1,
+        "periods": [
+          "202604"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202604"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "NVDA_10Q_202604.html#42",
+          "NVDA_10Q_202604.html#36",
+          "NVDA_10Q_202604.html#47",
+          "NVDA_10Q_202604.html#34",
+          "NVDA_10Q_202604.html#14"
+        ],
+        "query": "NVIDIA 資料中心業務的營收在最近幾季是怎麼一路成長上來的？"
+      },
+      "tr-03": {
+        "periods_covered": 5,
+        "periods": [
+          "2024",
+          "202403",
+          "2025",
+          "202503",
+          "202509"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2024",
+            "2025"
+          ],
+          "10-Q": [
+            "202403",
+            "202503",
+            "202509"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "MSFT_10K_2025.html#132",
+          "MSFT_10Q_202509.html#65",
+          "MSFT_10Q_202503.html#52",
+          "MSFT_10Q_202403.html#40",
+          "MSFT_10K_2024.html#148"
+        ],
+        "query": "比較 Microsoft 2024、2025、2026 三個財年的營業利益率變化。"
+      },
+      "tr-04": {
+        "periods_covered": 5,
+        "periods": [
+          "2023",
+          "2025",
+          "202503",
+          "202603",
+          "202606"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202503",
+            "202603",
+            "202606"
+          ],
+          "10-K": [
+            "2023",
+            "2025"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "TSLA_10Q_202606.html#41",
+          "TSLA_10Q_202603.html#33",
+          "TSLA_10K_2023.html#115",
+          "TSLA_10Q_202503.html#52",
+          "TSLA_10K_2025.html#202"
+        ],
+        "query": "Tesla 的車輛交付量逐季變化趨勢是什麼？"
+      },
+      "tr-05": {
+        "periods_covered": 5,
+        "periods": [
+          "202403",
+          "202406",
+          "202409",
+          "2025",
+          "202606"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2025"
+          ],
+          "10-Q": [
+            "202403",
+            "202406",
+            "202409",
+            "202606"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "GOOGL_10K_2025.html#232",
+          "GOOGL_10Q_202406.html#110",
+          "GOOGL_10Q_202606.html#130",
+          "GOOGL_10Q_202403.html#99",
+          "GOOGL_10Q_202409.html#114"
+        ],
+        "query": "Google Cloud 的營收與獲利在過去幾年是如何逐步改善的？"
+      },
+      "tr-06": {
+        "periods_covered": 4,
+        "periods": [
+          "2023",
+          "202409",
+          "2025",
+          "202509"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2023",
+            "2025"
+          ],
+          "10-Q": [
+            "202409",
+            "202509"
+          ]
+        },
+        "own_filing_seats": 4,
+        "topk_sources": [
+          "AMZN_10K_2023.html#2",
+          "AMZN_Fundamentals_20260612.txt#1",
+          "AMZN_10Q_202409.html#2",
+          "AMZN_10Q_202509.html#2",
+          "AMZN_10K_2025.html#2"
+        ],
+        "query": "Amazon 的資本支出在最近三個年度分別是多少？增減趨勢如何？"
+      },
+      "tr-07": {
+        "periods_covered": 4,
+        "periods": [
+          "202406",
+          "202409",
+          "2025",
+          "202503"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202406",
+            "202409",
+            "202503"
+          ],
+          "10-K": [
+            "2025"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "META_10Q_202406.html#91",
+          "META_10Q_202409.html#91",
+          "META_10K_2025.html#210",
+          "META_10Q_202503.html#86",
+          "META_10Q_202406.html#161"
+        ],
+        "query": "Meta 的 Reality Labs 部門虧損逐年擴大還是收斂？"
+      },
+      "tr-08": {
+        "periods_covered": 5,
+        "periods": [
+          "2024",
+          "2025",
+          "202503",
+          "202506",
+          "202512"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202503",
+            "202506",
+            "202512"
+          ],
+          "10-K": [
+            "2024",
+            "2025"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "AAPL_10Q_202506.html#37",
+          "AAPL_10K_2024.html#81",
+          "AAPL_10K_2025.html#84",
+          "AAPL_10Q_202503.html#39",
+          "AAPL_10Q_202512.html#35"
+        ],
+        "query": "Apple 在大中華區的營收這幾季是成長還是衰退？"
+      }
+    },
+    "k1_rank": {
+      "tr-01": {
+        "periods_covered": 3,
+        "periods": [
+          "2023",
+          "202503",
+          "202606"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202503",
+            "202606"
+          ],
+          "10-K": [
+            "2023"
+          ]
+        },
+        "own_filing_seats": 3,
+        "topk_sources": [
+          "AAPL_10Q_202503.html#20",
+          "AAPL_10Q_202606.html#38",
+          "AAPL_10K_2023.html#77",
+          "AAPL_Fundamentals_20260612.txt#0",
+          "AAPL_Fundamentals_20260612.txt#1"
+        ],
+        "query": "Apple 過去三個財年的營收與毛利率走勢如何變化？"
+      },
+      "tr-02": {
+        "periods_covered": 1,
+        "periods": [
+          "202604"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202604"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "NVDA_10Q_202604.html#42",
+          "NVDA_10Q_202604.html#36",
+          "NVDA_10Q_202604.html#47",
+          "NVDA_10Q_202604.html#34",
+          "NVDA_10Q_202604.html#14"
+        ],
+        "query": "NVIDIA 資料中心業務的營收在最近幾季是怎麼一路成長上來的？"
+      },
+      "tr-03": {
+        "periods_covered": 4,
+        "periods": [
+          "202403",
+          "2025",
+          "202509",
+          "2026"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2025",
+            "2026"
+          ],
+          "10-Q": [
+            "202403",
+            "202509"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "MSFT_10K_2025.html#132",
+          "MSFT_10Q_202509.html#65",
+          "MSFT_10Q_202403.html#40",
+          "MSFT_10K_2026.html#218",
+          "MSFT_10K_2025.html#142"
+        ],
+        "query": "比較 Microsoft 2024、2025、2026 三個財年的營業利益率變化。"
+      },
+      "tr-04": {
+        "periods_covered": 4,
+        "periods": [
+          "2023",
+          "2025",
+          "202503",
+          "202606"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202503",
+            "202606"
+          ],
+          "10-K": [
+            "2023",
+            "2025"
+          ]
+        },
+        "own_filing_seats": 4,
+        "topk_sources": [
+          "TSLA_10Q_202606.html#41",
+          "TSLA_10K_2023.html#115",
+          "TSLA_10Q_202503.html#52",
+          "TSLA_10K_2025.html#202",
+          "TSLA_Fundamentals_20260612.txt#2"
+        ],
+        "query": "Tesla 的車輛交付量逐季變化趨勢是什麼？"
+      },
+      "tr-05": {
+        "periods_covered": 2,
+        "periods": [
+          "202406",
+          "2025"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2025"
+          ],
+          "10-Q": [
+            "202406"
+          ]
+        },
+        "own_filing_seats": 4,
+        "topk_sources": [
+          "GOOGL_10K_2025.html#232",
+          "GOOGL_10Q_202406.html#110",
+          "GOOGL_10Q_202406.html#96",
+          "GOOGL_10K_2025.html#222"
+        ],
+        "query": "Google Cloud 的營收與獲利在過去幾年是如何逐步改善的？"
+      },
+      "tr-06": {
+        "periods_covered": 3,
+        "periods": [
+          "2023",
+          "202409",
+          "202503"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2023"
+          ],
+          "10-Q": [
+            "202409",
+            "202503"
+          ]
+        },
+        "own_filing_seats": 4,
+        "topk_sources": [
+          "AMZN_10K_2023.html#2",
+          "AMZN_Fundamentals_20260612.txt#1",
+          "AMZN_10Q_202409.html#2",
+          "AMZN_10K_2023.html#138",
+          "AMZN_10Q_202503.html#25"
+        ],
+        "query": "Amazon 的資本支出在最近三個年度分別是多少？增減趨勢如何？"
+      },
+      "tr-07": {
+        "periods_covered": 2,
+        "periods": [
+          "202406",
+          "2025"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202406"
+          ],
+          "10-K": [
+            "2025"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "META_10Q_202406.html#91",
+          "META_10K_2025.html#210",
+          "META_10Q_202406.html#161",
+          "META_10K_2025.html#67",
+          "META_10Q_202406.html#80"
+        ],
+        "query": "Meta 的 Reality Labs 部門虧損逐年擴大還是收斂？"
+      },
+      "tr-08": {
+        "periods_covered": 4,
+        "periods": [
+          "2023",
+          "2024",
+          "202506",
+          "202512"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202506",
+            "202512"
+          ],
+          "10-K": [
+            "2023",
+            "2024"
+          ]
+        },
+        "own_filing_seats": 4,
+        "topk_sources": [
+          "AAPL_10Q_202506.html#37",
+          "AAPL_10K_2024.html#81",
+          "AAPL_10Q_202512.html#25",
+          "AAPL_Fundamentals_20260612.txt#0",
+          "AAPL_10K_2023.html#58"
+        ],
+        "query": "Apple 在大中華區的營收這幾季是成長還是衰退？"
+      }
+    },
+    "k1_newest": {
+      "tr-01": {
+        "periods_covered": 2,
+        "periods": [
+          "2023",
+          "202606"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202606"
+          ],
+          "10-K": [
+            "2023"
+          ]
+        },
+        "own_filing_seats": 3,
+        "topk_sources": [
+          "AAPL_10Q_202606.html#20",
+          "AAPL_10Q_202606.html#38",
+          "AAPL_10K_2023.html#77",
+          "AAPL_Fundamentals_20260612.txt#0",
+          "AAPL_Fundamentals_20260612.txt#1"
+        ],
+        "query": "Apple 過去三個財年的營收與毛利率走勢如何變化？"
+      },
+      "tr-02": {
+        "periods_covered": 1,
+        "periods": [
+          "202604"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202604"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "NVDA_10Q_202604.html#42",
+          "NVDA_10Q_202604.html#36",
+          "NVDA_10Q_202604.html#47",
+          "NVDA_10Q_202604.html#34",
+          "NVDA_10Q_202604.html#14"
+        ],
+        "query": "NVIDIA 資料中心業務的營收在最近幾季是怎麼一路成長上來的？"
+      },
+      "tr-03": {
+        "periods_covered": 3,
+        "periods": [
+          "202409",
+          "2026",
+          "202603"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202409",
+            "202603"
+          ],
+          "10-K": [
+            "2026"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "MSFT_10Q_202603.html#49",
+          "MSFT_10Q_202409.html#35",
+          "MSFT_10Q_202603.html#62",
+          "MSFT_10K_2026.html#218",
+          "MSFT_10K_2026.html#23"
+        ],
+        "query": "比較 Microsoft 2024、2025、2026 三個財年的營業利益率變化。"
+      },
+      "tr-04": {
+        "periods_covered": 3,
+        "periods": [
+          "2025",
+          "202503",
+          "202606"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202503",
+            "202606"
+          ],
+          "10-K": [
+            "2025"
+          ]
+        },
+        "own_filing_seats": 4,
+        "topk_sources": [
+          "TSLA_10Q_202606.html#41",
+          "TSLA_10Q_202503.html#52",
+          "TSLA_10K_2025.html#202",
+          "TSLA_10K_2025.html#102",
+          "TSLA_Fundamentals_20260612.txt#2"
+        ],
+        "query": "Tesla 的車輛交付量逐季變化趨勢是什麼？"
+      },
+      "tr-05": {
+        "periods_covered": 2,
+        "periods": [
+          "2025",
+          "202606"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2025"
+          ],
+          "10-Q": [
+            "202606"
+          ]
+        },
+        "own_filing_seats": 4,
+        "topk_sources": [
+          "GOOGL_10K_2025.html#232",
+          "GOOGL_10Q_202606.html#130",
+          "GOOGL_10Q_202606.html#120",
+          "GOOGL_10K_2025.html#222"
+        ],
+        "query": "Google Cloud 的營收與獲利在過去幾年是如何逐步改善的？"
+      },
+      "tr-06": {
+        "periods_covered": 3,
+        "periods": [
+          "2025",
+          "202503",
+          "202509"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202503",
+            "202509"
+          ],
+          "10-K": [
+            "2025"
+          ]
+        },
+        "own_filing_seats": 4,
+        "topk_sources": [
+          "AMZN_Fundamentals_20260612.txt#1",
+          "AMZN_10Q_202509.html#2",
+          "AMZN_10K_2025.html#2",
+          "AMZN_10K_2025.html#142",
+          "AMZN_10Q_202503.html#25"
+        ],
+        "query": "Amazon 的資本支出在最近三個年度分別是多少？增減趨勢如何？"
+      },
+      "tr-07": {
+        "periods_covered": 3,
+        "periods": [
+          "202406",
+          "2025",
+          "202606"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2025"
+          ],
+          "10-Q": [
+            "202406",
+            "202606"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "META_10K_2025.html#210",
+          "META_10Q_202406.html#161",
+          "META_10Q_202606.html#94",
+          "META_10K_2025.html#67",
+          "META_10Q_202606.html#86"
+        ],
+        "query": "Meta 的 Reality Labs 部門虧損逐年擴大還是收斂？"
+      },
+      "tr-08": {
+        "periods_covered": 3,
+        "periods": [
+          "2025",
+          "202512",
+          "202606"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2025"
+          ],
+          "10-Q": [
+            "202512",
+            "202606"
+          ]
+        },
+        "own_filing_seats": 3,
+        "topk_sources": [
+          "AAPL_10K_2025.html#84",
+          "AAPL_10Q_202606.html#37",
+          "AAPL_10Q_202512.html#25",
+          "AAPL_Fundamentals_20260612.txt#0",
+          "AAPL_Fundamentals_20260612.txt#1"
+        ],
+        "query": "Apple 在大中華區的營收這幾季是成長還是衰退？"
+      }
+    },
+    "k2_rank": {
+      "tr-01": {
+        "periods_covered": 4,
+        "periods": [
+          "2023",
+          "202503",
+          "202506",
+          "202606"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202503",
+            "202506",
+            "202606"
+          ],
+          "10-K": [
+            "2023"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "AAPL_10Q_202503.html#20",
+          "AAPL_10Q_202606.html#20",
+          "AAPL_10Q_202606.html#38",
+          "AAPL_10Q_202506.html#38",
+          "AAPL_10K_2023.html#77"
+        ],
+        "query": "Apple 過去三個財年的營收與毛利率走勢如何變化？"
+      },
+      "tr-02": {
+        "periods_covered": 1,
+        "periods": [
+          "202604"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202604"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "NVDA_10Q_202604.html#42",
+          "NVDA_10Q_202604.html#36",
+          "NVDA_10Q_202604.html#47",
+          "NVDA_10Q_202604.html#34",
+          "NVDA_10Q_202604.html#14"
+        ],
+        "query": "NVIDIA 資料中心業務的營收在最近幾季是怎麼一路成長上來的？"
+      },
+      "tr-03": {
+        "periods_covered": 5,
+        "periods": [
+          "2024",
+          "202403",
+          "2025",
+          "202503",
+          "202509"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2024",
+            "2025"
+          ],
+          "10-Q": [
+            "202403",
+            "202503",
+            "202509"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "MSFT_10K_2025.html#132",
+          "MSFT_10Q_202509.html#65",
+          "MSFT_10Q_202503.html#52",
+          "MSFT_10Q_202403.html#40",
+          "MSFT_10K_2024.html#148"
+        ],
+        "query": "比較 Microsoft 2024、2025、2026 三個財年的營業利益率變化。"
+      },
+      "tr-04": {
+        "periods_covered": 5,
+        "periods": [
+          "2023",
+          "2025",
+          "202503",
+          "202603",
+          "202606"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202503",
+            "202603",
+            "202606"
+          ],
+          "10-K": [
+            "2023",
+            "2025"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "TSLA_10Q_202606.html#41",
+          "TSLA_10Q_202603.html#33",
+          "TSLA_10K_2023.html#115",
+          "TSLA_10Q_202503.html#52",
+          "TSLA_10K_2025.html#202"
+        ],
+        "query": "Tesla 的車輛交付量逐季變化趨勢是什麼？"
+      },
+      "tr-05": {
+        "periods_covered": 4,
+        "periods": [
+          "2023",
+          "202406",
+          "2025",
+          "202606"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2023",
+            "2025"
+          ],
+          "10-Q": [
+            "202406",
+            "202606"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "GOOGL_10K_2025.html#232",
+          "GOOGL_10Q_202406.html#110",
+          "GOOGL_10Q_202606.html#130",
+          "GOOGL_10K_2023.html#224",
+          "GOOGL_10Q_202406.html#96"
+        ],
+        "query": "Google Cloud 的營收與獲利在過去幾年是如何逐步改善的？"
+      },
+      "tr-06": {
+        "periods_covered": 4,
+        "periods": [
+          "2023",
+          "202409",
+          "2025",
+          "202509"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2023",
+            "2025"
+          ],
+          "10-Q": [
+            "202409",
+            "202509"
+          ]
+        },
+        "own_filing_seats": 4,
+        "topk_sources": [
+          "AMZN_10K_2023.html#2",
+          "AMZN_Fundamentals_20260612.txt#1",
+          "AMZN_10Q_202409.html#2",
+          "AMZN_10Q_202509.html#2",
+          "AMZN_10K_2025.html#2"
+        ],
+        "query": "Amazon 的資本支出在最近三個年度分別是多少？增減趨勢如何？"
+      },
+      "tr-07": {
+        "periods_covered": 4,
+        "periods": [
+          "2023",
+          "202406",
+          "202409",
+          "2025"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202406",
+            "202409"
+          ],
+          "10-K": [
+            "2023",
+            "2025"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "META_10Q_202406.html#91",
+          "META_10Q_202409.html#91",
+          "META_10K_2025.html#210",
+          "META_10Q_202406.html#161",
+          "META_10K_2023.html#196"
+        ],
+        "query": "Meta 的 Reality Labs 部門虧損逐年擴大還是收斂？"
+      },
+      "tr-08": {
+        "periods_covered": 5,
+        "periods": [
+          "2024",
+          "2025",
+          "202503",
+          "202506",
+          "202512"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202503",
+            "202506",
+            "202512"
+          ],
+          "10-K": [
+            "2024",
+            "2025"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "AAPL_10Q_202506.html#37",
+          "AAPL_10K_2024.html#81",
+          "AAPL_10K_2025.html#84",
+          "AAPL_10Q_202503.html#39",
+          "AAPL_10Q_202512.html#25"
+        ],
+        "query": "Apple 在大中華區的營收這幾季是成長還是衰退？"
+      }
+    },
+    "k2_newest": {
+      "tr-01": {
+        "periods_covered": 4,
+        "periods": [
+          "2023",
+          "202506",
+          "202603",
+          "202606"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202506",
+            "202603",
+            "202606"
+          ],
+          "10-K": [
+            "2023"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "AAPL_10Q_202606.html#20",
+          "AAPL_10Q_202603.html#19",
+          "AAPL_10Q_202606.html#38",
+          "AAPL_10Q_202506.html#38",
+          "AAPL_10K_2023.html#77"
+        ],
+        "query": "Apple 過去三個財年的營收與毛利率走勢如何變化？"
+      },
+      "tr-02": {
+        "periods_covered": 1,
+        "periods": [
+          "202604"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202604"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "NVDA_10Q_202604.html#42",
+          "NVDA_10Q_202604.html#36",
+          "NVDA_10Q_202604.html#47",
+          "NVDA_10Q_202604.html#34",
+          "NVDA_10Q_202604.html#14"
+        ],
+        "query": "NVIDIA 資料中心業務的營收在最近幾季是怎麼一路成長上來的？"
+      },
+      "tr-03": {
+        "periods_covered": 5,
+        "periods": [
+          "202403",
+          "202409",
+          "2025",
+          "202509",
+          "202603"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2025"
+          ],
+          "10-Q": [
+            "202403",
+            "202409",
+            "202509",
+            "202603"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "MSFT_10K_2025.html#132",
+          "MSFT_10Q_202509.html#65",
+          "MSFT_10Q_202403.html#40",
+          "MSFT_10Q_202603.html#49",
+          "MSFT_10Q_202409.html#35"
+        ],
+        "query": "比較 Microsoft 2024、2025、2026 三個財年的營業利益率變化。"
+      },
+      "tr-04": {
+        "periods_covered": 5,
+        "periods": [
+          "2023",
+          "2025",
+          "202503",
+          "202603",
+          "202606"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202503",
+            "202603",
+            "202606"
+          ],
+          "10-K": [
+            "2023",
+            "2025"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "TSLA_10Q_202606.html#41",
+          "TSLA_10Q_202603.html#33",
+          "TSLA_10K_2023.html#115",
+          "TSLA_10Q_202503.html#52",
+          "TSLA_10K_2025.html#202"
+        ],
+        "query": "Tesla 的車輛交付量逐季變化趨勢是什麼？"
+      },
+      "tr-05": {
+        "periods_covered": 3,
+        "periods": [
+          "2025",
+          "202603",
+          "202606"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2025"
+          ],
+          "10-Q": [
+            "202603",
+            "202606"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "GOOGL_10K_2025.html#232",
+          "GOOGL_10Q_202606.html#130",
+          "GOOGL_10Q_202603.html#105",
+          "GOOGL_10Q_202606.html#120",
+          "GOOGL_10K_2025.html#222"
+        ],
+        "query": "Google Cloud 的營收與獲利在過去幾年是如何逐步改善的？"
+      },
+      "tr-06": {
+        "periods_covered": 4,
+        "periods": [
+          "2024",
+          "202409",
+          "2025",
+          "202509"
+        ],
+        "by_kind": {
+          "10-Q": [
+            "202409",
+            "202509"
+          ],
+          "10-K": [
+            "2024",
+            "2025"
+          ]
+        },
+        "own_filing_seats": 4,
+        "topk_sources": [
+          "AMZN_Fundamentals_20260612.txt#1",
+          "AMZN_10Q_202409.html#2",
+          "AMZN_10Q_202509.html#2",
+          "AMZN_10K_2025.html#2",
+          "AMZN_10K_2024.html#2"
+        ],
+        "query": "Amazon 的資本支出在最近三個年度分別是多少？增減趨勢如何？"
+      },
+      "tr-07": {
+        "periods_covered": 5,
+        "periods": [
+          "2023",
+          "202406",
+          "2025",
+          "202603",
+          "202606"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2023",
+            "2025"
+          ],
+          "10-Q": [
+            "202406",
+            "202603",
+            "202606"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "META_10K_2025.html#210",
+          "META_10Q_202406.html#161",
+          "META_10Q_202603.html#87",
+          "META_10Q_202606.html#94",
+          "META_10K_2023.html#196"
+        ],
+        "query": "Meta 的 Reality Labs 部門虧損逐年擴大還是收斂？"
+      },
+      "tr-08": {
+        "periods_covered": 5,
+        "periods": [
+          "2024",
+          "2025",
+          "202512",
+          "202603",
+          "202606"
+        ],
+        "by_kind": {
+          "10-K": [
+            "2024",
+            "2025"
+          ],
+          "10-Q": [
+            "202512",
+            "202603",
+            "202606"
+          ]
+        },
+        "own_filing_seats": 5,
+        "topk_sources": [
+          "AAPL_10K_2024.html#81",
+          "AAPL_10K_2025.html#84",
+          "AAPL_10Q_202603.html#36",
+          "AAPL_10Q_202606.html#37",
+          "AAPL_10Q_202512.html#25"
+        ],
+        "query": "Apple 在大中華區的營收這幾季是成長還是衰退？"
+      }
+    }
+  },
+  "totals": {
+    "collapse_off": 34,
+    "k1_rank": 23,
+    "k1_newest": 20,
+    "k2_rank": 32,
+    "k2_newest": 32
+  }
+}

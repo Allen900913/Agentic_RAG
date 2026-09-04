@@ -1,0 +1,329 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_after.json"
+  },
+  "records": [
+    {
+      "id": "news-06",
+      "query": "NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？",
+      "why": "flow",
+      "answer": "在財報公布前，新聞主要關注 NVIDIA 正在面臨來自其他晶片廠商與大型雲端客戶的激烈競爭，以及全球監管機構對其 AI 相關業務的審查與出口管制【NVDA_10Q_202604.html, chunk #78】【NVDA_10Q_202507.html, chunk #82】。\n\n**競爭對手與市場挑戰**  \n- AMD 及 Qualcomm 正在爭奪 GPU 市場，AMD 佔約 7% 市佔率且持續成長，Qualcomm 則推出針對較低階 AI 用戶的晶片【web: https://finance.yahoo.com/news/nvidias-85-gpu-market-share-210500376.html】。  \n- 亞馬遜（Amazon）與其他雲端服務供應商正自行開發內部矽晶片，甚至對外銷售，直接挑戰 NVIDIA 作為最大客戶的地位【web: https://finance.yahoo.com/technology/ai/articles/nvidia-trillion-dollar-chip-market-120003930.html】。  \n- Advanced Micro Devices（AMD）透過 2024 年 8 月收購 ZT Systems，強化其 AI 基礎設施能力，意圖在資料中心領域與 NVIDIA 競爭【web: https://www.marketwatch.com/story/heres-how-nvidia-can-keep-crushing-its-ai-rivals-and-the-stock-market-67cb2bf1】。  \n- Google、Amazon 以及其他大型雲端廠商正推出自家 AI 晶片，試圖取代 NVIDIA 的 GPU，且 OpenAI 與 Meta 也在研發自有晶片，進一步削弱 NVIDIA 的供應鏈依賴【web: https://www.cnbc.com/2024/06/02/nvidia-dominates-the-ai-chip-market-but-theres-rising-competition-.html】。  \n- Broadcom、Marvell 等客製化元件供應商協助 hyperscaler（如 Google）開發 AI 晶片，擴大競爭者基礎【web: https://finance.yahoo.com/technology/ai/articles/nvidia-trillion-dollar-chip-market-120003930.html】。  \n- 中國本土晶片公司亦在美國出口管制下尋求替代方案，對 NVIDIA 的中國市場造成壓力【web: https://finance.yahoo.com/technology/ai/articles/nvidia-trillion-dollar-chip-market-120003930.html】。\n\n**監管與合規風險**  \n- 歐盟、美國、英國、韓國、日本與中國等多國的競爭主管機關持續向 NVIDIA 索取資訊，涉及 GPU、雲端服務供應商（CSP）市場、供應鏈配置與基礎模型投資等議題【NVDA_10Q_202604.html, chunk #78】。  \n- 法國競爭管理局已就圖形卡與 CSP 市場展開調查，屬於持續的反壟斷審查【NVDA_10Q_202604.html, chunk #78】。  \n- 美國政府的出口管制已限制 NVIDIA 向中國客戶銷售高階產品，未來可能擴大至更多產品與技術，增加合規成本並削減營收機會【NVDA_10Q_202507.html, chunk #82】。  \n\n**市場焦點與業務定位**  \n- NVIDIA 自稱為「資料中心規模的 AI 基礎設施公司」，其核心業務已從 PC 圖形卡擴展至資料中心、AI、機器人與數位孿生等高運算領域【NVDA_10Q_202604.html, chunk #40】。  \n- 公司的 Compute & Networking 事業部提供資料中心加速運算、AI 解決方案與自動駕駛平台，Graphics 事業部則供應 GeForce 與 RTX GPU 給遊戲與企業工作站【NVDA_Fundamentals_20260612.txt, chunk #2】。  \n- 市場報導指出 NVIDIA 在 GPU 市場的佔有率高達 85%，但上述競爭者的崛起正挑戰其「幾乎壟斷」的地位【web: https://finance.yahoo.com/news/nvidias-85-gpu-market-share-210500376.html】。  \n\n綜合以上，新聞在財報前聚焦於 NVIDIA 必須應對的多元競爭者（AMD、Qualcomm、Amazon、Google、Broadcom、以及自有晶片的客戶）以及全球監管機構對其 AI、資料中心與出口行為的持續審查與可能的管制。\n\n---\n⚠ 資料時效：NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10Q_202604.html #40 (rerank=0.715)\n  - NVDA_10Q_202504.html #37 (rerank=0.658)\n  - NVDA_10K_2026.html #81 (rerank=0.649)\n  - NVDA_10Q_202510.html #89 (rerank=0.618)\n  - NVDA_10K_2026.html #16 (rerank=0.602)\n  - NVDA_Fundamentals_20260612.txt #2 (rerank=0.602)\n  - NVDA_10K_2025.html #90 (rerank=0.599)\n  - NVDA_10Q_202604.html #78 (rerank=0.556)\n  - NVDA_10Q_202507.html #82 (rerank=0.534)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 面臨哪些競爭對手或競爭情況",
+        "NVIDIA 目前的市場焦點是什麼",
+        "改用網路搜尋查近期新聞中對 NVIDIA 競爭與市場焦點的報導"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 40
+        },
+        {
+          "source": "NVDA_10Q_202504.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 81
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 89
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 16
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 90
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 166
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 78
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "NVDA_10Q_202507.html",
+          "chunk_index": 82
+        }
+      ]
+    },
+    {
+      "id": "news-07",
+      "query": "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？",
+      "why": "flow",
+      "answer": "微軟最近在 AI 策略上推出多項新舉措，包括推出更高價位、內建聊天機器人與圖像生成工具的 Microsoft 365 AI 版、將 Anthropic 模型納入 Copilot、發表自家高效能轉錄與影像模型以及第一個推理模型 MAI Thinking‑1，並於 2026‑07‑02 成立協助企業導入 AI 的新公司，同時在 2026‑06‑02 的 Build 開發者大會上宣示要以 AI 代理人與自有硬體打造端到端 AI stack，分析師普遍對此持正面看法，已上調目標價並預期 AI 會成為營收高增的主要動力【web: https://finance.yahoo.com/news/analyst-views-shifting-microsofts-ai-071305123.html】、【web: https://www.reuters.com/world/china/microsoft-expected-showcase-new-pc-cloud-ai-tools-developer-conference-2026-06-02】、【web: https://www.reuters.com/business/retail-consumer/microsoft-launches-firm-help-companies-adopt-ai-with-25-billion-2026-07-02】。\n\n- **新產品與技術**  \n  - 微軟宣布推出一個價格較高的 Microsoft 365 AI 版，內建聊天機器人與圖像生成功能，並在 Copilot 中加入 Anthropic 的生成式 AI 模型【web: https://finance.yahoo.com/news/analyst-views-shifting-microsofts-ai-071305123.html】。  \n  - 在 2026‑06‑02 的 Build 大會上，微軟 AI 單位展示了「最有效率的轉錄模型」與「影像模型」，以及首個推理模型 MAI Thinking‑1，該模型的表現與 Anthropic 的 Claude Opus 4.6 相當【web: https://www.reuters.com/world/china/microsoft-expected-showcase-new-pc-cloud-ai-tools-developer-conference-2026-06-02】。  \n  - 2026‑07‑02 微軟成立新公司，協助大型企業導入 AI，並指出過去三年 Copilot 只綁定 OpenAI 模型，現在已加入 Anthropic 模型以因應企業需求【web: https://www.reuters.com/business/retail-consumer/microsoft-launches-firm-help-companies-adopt-ai-with-25-billion-2026-07-02】。  \n\n- **分析師的看法**  \n  - 多位分析師在本季上調了微軟的目標價，摩根士丹利將目標價從 **$620** 提升至 **$670**，顯示對 AI 推動的營收動能更有信心【web: https://finance.yahoo.com/news/analyst-views-shifting-microsofts-ai-071305123.html】。  \n  - 分析師指出 Azure 在第四季的營收增速已加速，Copilot 企業採用率持續提升，AI 投資正從短期的利潤壓力轉變為長期的增長催化劑，預期微軟未來可維持「中至高兩位數」的營收成長【web: https://finance.yahoo.com/markets/stocks/articles/microsoft-eases-ai-spending-concerns-141037033.html】。  \n  - 市場觀點認為 Copilot 以及更廣泛的「E7」機會（AI 代理人、推理與工作流程自動化）可能成為微軟歷史上最重要的 ARPU（每使用者平均收入）擴張來源，甚至有分析師預測此舉可使股價上漲 **50%**【web: https://www.marketwatch.com/story/microsoft-has-3-secret-weapons-that-could-drive-its-stock-50-higher-analyst-says-f1afb554】。  \n  - 另有分析師指出，市場低估了 Azure 作為「不只是裸機」的 AI 基礎設施供應商的價值，認為微軟能將基礎設施需求「拉入」更高價值的服務，進一步提升獲利空間【web: https://www.marketwatch.com/story/microsoft-has-3-secret-weapons-that-could-drive-its-stock-50-higher-analyst-says-f1afb554】。  \n\n綜合上述，微軟正透過新產品、內部模型研發與生態系統建設加速 AI 佈局，分析師普遍認為這些舉措已開始顯現財務回報，提升了對公司未來營收與股價表現的樂觀預期。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "微軟最近在 AI 策略上的新消息及分析師的看法"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-08",
+      "query": "有沒有 Microsoft 參與 AI 資安合作的新聞？",
+      "why": "flow",
+      "answer": "有，近期有多則新聞報導 Microsoft 正與其他公司或內部專案合作，將 AI 應用於資安領域。[web: https://finance.yahoo.com/sectors/technology/articles/microsoft-deepens-ai-cybersecurity-reach-050417967.html]\n\n- Microsoft 參與了 **Project Glasswing**，與產業夥伴一起使用 Anthropic 的 AI 模型來強化資安，針對 AI 產生的程式碼與漏洞風險進行防護。[web: https://finance.yahoo.com/sectors/technology/articles/microsoft-deepens-ai-cybersecurity-reach-050417967.html]  \n- Microsoft 在 2026 年 7 月 27 日公布了全新 AI 模型 **MAI‑Cyber‑1‑Flash**，用於偵測資安漏洞，並將透過 **Project Perception**（一套 AI 代理人）在公開預覽版中提供給客戶使用。[web: https://www.cnbc.com/2026/07/27/microsoft-touts-cost-saving-ai-model-for-cybersecurity.html]  \n- Microsoft 與汽車製造商 **Stellantis** 簽署了為期五年的 AI 與資安合作協議，雙方將共同開發超過 100 個 AI 專案，並設立一個以 AI 為核心的全球網路資安防禦中心，以提升威脅偵測與資料保護能力。[web: https://www.reuters.com/business/autos-transportation/stellantis-microsoft-sign-five-year-partnership-ai-push-2026-04-16]  \n- 同樣的 Stellantis 合作也在 Yahoo 文章中說明，該協議包括 AI‑驅動的全球資安防禦中心，涵蓋連網車輛、製造廠、IT 系統與數位產品，旨在加強威脅偵測與營運韌性。[web: https://finance.yahoo.com/sectors/technology/articles/stellantis-microsoft-sign-five-ai-104346007.html]\n\n---\n⚠ 資料時效：MSFT 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202512.html #52 (rerank=0.724)\n  - MSFT_10K_2025.html #118 (rerank=0.722)\n  - MSFT_10K_2026.html #112 (rerank=0.719)\n  - MSFT_10Q_202603.html #2 (rerank=0.714)\n  - MSFT_10K_2026.html #65 (rerank=0.700)\n  - MSFT_10Q_202603.html #152 (rerank=0.686)\n  - MSFT_10K_2025.html #25 (rerank=0.682)\n  - MSFT_10Q_202603.html #131 (rerank=0.675)\n  - MSFT_10K_2026.html #32 (rerank=0.653)\n  - MSFT_10K_2026.html #101 (rerank=0.634)\n  - MSFT_10K_2026.html #75 (rerank=0.608)\n  - MSFT_10Q_202409.html #126 (rerank=0.599)\n  - MSFT_10K_2024.html #87 (rerank=0.594)\n  - MSFT_10K_2026.html #33 (rerank=0.591)\n  - MSFT_10Q_202512.html #151 (rerank=0.581)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Microsoft 參與 AI 資安合作的新聞有哪些",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Microsoft 參與 AI 資安合作的新聞有哪些",
+        "查找 Microsoft AI 資安合作的官方新聞稿或公告",
+        "Search SEC filings (e.g., 8‑K) for Microsoft AI security partnership announcements",
+        "查找合作夥伴公司（如 OpenAI、Palo Alto Networks、CrowdStrike 等）的公告或新聞稿，是否提及與 Microsoft 的 AI 資安合作",
+        "搜尋最近的投資者簡報、財報電話會議文字稿或 SEC 8‑K 附件，是否包含 Microsoft AI 資安合作的資訊",
+        "在 2026 年 7 月至 9 月期間，搜尋 Microsoft 官方安全部落格（Microsoft Security Blog）是否有關於 AI 資安合作的文章或公告",
+        "搜尋 2026 年第三季（Q3）Microsoft 投資者簡報或新聞稿，檢查是否提及 AI 資安合作"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 52
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 118
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 112
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 50
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 65
+        },
+        {
+          "source": "MSFT_10Q_202509.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 152
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 138
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 25
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 143
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 131
+        },
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 23
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 131
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 142
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 32
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 101
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10Q_202409.html",
+          "chunk_index": 126
+        },
+        {
+          "source": "MSFT_10K_2024.html",
+          "chunk_index": 87
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 110
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 33
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "MSFT_10Q_202512.html",
+          "chunk_index": 151
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 107
+        },
+        {
+          "source": "MSFT_10K_2025.html",
+          "chunk_index": 88
+        }
+      ]
+    },
+    {
+      "id": "news-09",
+      "query": "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+      "why": "flow",
+      "answer": "Alphabet（Google）最近展開了多項大規模籌資與資本支出行動，包括發行股權、發行債券、Waymo 融資以及巨額技術基礎建設投資。  \n\n- 2026 年第一季（截至 2026‑03‑31）Alphabet 宣布「資本支出」主要投資於技術基礎建設，金額為 **357 億美元（$35.7 billion）**【GOOGL_10Q_202603.html, chunk #87】。同季亦發行了 **311 億美元（$31.1 billion）** 的 senior unsecured notes，用於一般企業用途【GOOGL_10Q_202603.html, chunk #87】。  \n- 2026 年上半年（截至 2026‑06‑30）公司購置不動產、廠房與設備的支出累計 **805.98 億美元（$80,598 million）**（約 806 億美元（$80.6 billion））【GOOGL_10Q_202606.html, chunk #2】；同期間透過發行債務籌得 **562.26 億美元（$56,226 million）**（約 562 億美元（$56.2 billion））【GOOGL_10Q_202606.html, chunk #2】。  \n- Waymo（Alphabet 子公司）於 2026‑02‑02 完成 **160 億美元（$16 billion）** 融資輪，主要由 Alphabet 及多家投資者共同出資【web: https://www.cnbc.com/2026/02/02/waymo-announced-16-billion-fundraising-round.html】。  \n- 2026 年 6 月的《華爾街日報》報導指出，Alphabet 宣布將 **850 億美元（$85 billion）** 的股權籌資計畫，同時今年已在全球發行 **1,590 億美元（$159 billion）** 的債券【web: https://www.wsj.com/finance/investing/global-stocks-markets-dow-news-06-08-2026-aac7c547】。  \n- 《金融時報》則提到 Alphabet 正在進行 **100 億美元（$10 billion）** 的私募配售給 Berkshire Hathaway【web: https://www.ft.com/stream/6656b3e4-1a78-4960-90a0-8d422450f9a6】。  \n\n以上資訊顯示，Alphabet 近期正透過股權、債務與內部資本支出三大管道，動用數十億美元規模的資金以支撐 AI、資料中心與自動駕駛等關鍵業務的快速擴張。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_10Q_202603.html #31 (rerank=0.729)\n  - GOOGL_10K_2023.html #247 (rerank=0.727)\n  - GOOGL_10Q_202603.html #87 (rerank=0.716)\n  - GOOGL_10Q_202606.html #2 (rerank=0.695)\n  - GOOGL_10Q_202606.html #34 (rerank=0.686)\n  - GOOGL_10Q_202603.html #29 (rerank=0.684)\n  - GOOGL_10Q_202603.html #30 (rerank=0.682)\n  - GOOGL_10Q_202606.html #41 (rerank=0.679)\n  - GOOGL_10Q_202606.html #37 (rerank=0.618)\n  - GOOGL_10K_2025.html #264 (rerank=0.611)\n  - GOOGL_10K_2025.html #9 (rerank=0.608)\n  - GOOGL_10K_2025.html #214 (rerank=0.600)\n  - GOOGL_10Q_202606.html #38 (rerank=0.599)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+        "改用網路搜尋查找Alphabet近期資本支出新聞於 Bloomberg",
+        "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 Reuters",
+        "改用網路搜尋查找Alphabet近期資本支出新聞於 Yahoo Finance",
+        "改用網路搜尋查找Alphabet近期籌資新聞於 CNBC",
+        "改用網路搜尋查找Alphabet 2026 Q3 10‑Q 中的資本支出資訊於 SEC.gov",
+        "改用網路搜尋查找Alphabet近期籌資與資本支出新聞於 The Wall Street Journal"
+      ],
+      "sources": [
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 31
+        },
+        {
+          "source": "GOOGL_10K_2023.html",
+          "chunk_index": 247
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 87
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 34
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 29
+        },
+        {
+          "source": "GOOGL_10Q_202603.html",
+          "chunk_index": 30
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 41
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 264
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 9
+        },
+        {
+          "source": "GOOGL_10K_2025.html",
+          "chunk_index": 214
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 38
+        }
+      ]
+    },
+    {
+      "id": "news-10",
+      "query": "最近有哪些關於 Meta 的利多分析與 AI 投資消息？",
+      "why": "flow",
+      "answer": "最近的利多包括分析師對 META 股價的看好以及公司持續加大 AI 基礎設施與產品投資，並且財務指標顯示現金充裕與高 ROE【META_Fundamentals_20260612.txt, chunk #1】。\n\n**分析師看好與市場情緒**  \n- 多篇報導指出，儘管股價近期下跌，華爾街仍維持「Strong Buy」共識，認為 META 具備回彈空間【web: https://finance.yahoo.com/markets/stocks/articles/meta-stock-sinks-32-analysts-150427583.html】。  \n- 另一篇分析認為 META 股價已被過度拋售，技術面呈現超賣，且營收與盈餘再度加速，若公司能如期執行 AI 資本支出計畫，將支撐未來成長【web: https://finance.yahoo.com/markets/stocks/articles/meta-recent-pullback-creates-attractive-154509860.html】。\n\n**AI 投資與產品布局**  \n- META 在 2026 年上半年的財報中說明，87% 的成本與費用屬於「Family of Apps」(FoA) 部門，投資重點包括人員、資料中心與技術基礎設施，特別是 AI 相關的基礎設施與第三方雲端容量，且預期未來投資將持續增加【META_10Q_202606.html, chunk #75】。  \n- 公司同時在 AI 產品上持續推出新功能，例如 AI 驅動的內容推薦引擎已提升使用者參與度與變現效果【META_10Q_202606.html, chunk #73】；此外，META 正在推出 AI Business Agent，覆蓋 WhatsApp、Instagram 與 Messenger，並規劃全球訂閱方案，以打造非廣告的直接收入來源【web: https://finance.yahoo.com/markets/stocks/articles/meta-meta-investment-story-shifting-140951492.html】。  \n- 為支撐 AI 需求，META 正在裁減約 8,000 個職位、凍結約 6,000 個新職缺，並將約 7,000 名員工重新分配至 AI 團隊，顯示公司正將資源集中於 AI 研發與基礎設施【web: https://finance.yahoo.com/markets/stocks/articles/meta-meta-investment-story-shifting-140951492.html】。\n\n**財務面支撐**  \n- 公司的自由現金流達 255.6 億美元（$25.56 billion），現金儲備 811.8 億美元（$81.18 billion），負債相對較低，且 ROE 為 32.93%、ROA 為 16.40%，顯示資本結構健康且能支撐大規模的 AI 投資【META_Fundamentals_20260612.txt, chunk #1】。\n\n綜合以上，市場對 META 的股價持樂觀態度，且公司正透過大量 AI 基礎設施與新產品投入，配合穩健的現金流與高回報率，為近期的利多因素。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_10Q_202606.html #75 (rerank=0.652)\n  - META_10Q_202606.html #73 (rerank=0.630)\n  - META_10Q_202606.html #160 (rerank=0.619)\n  - META_Fundamentals_20260612.txt #1 (rerank=0.537)\n  - META_10Q_202606.html #132 (rerank=0.528)\n  - META_10Q_202606.html #37 (rerank=0.526)\n  - META_10Q_202606.html #7 (rerank=0.525)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Meta 最近的利多分析有哪些",
+        "Meta 最近的 AI 投資消息有哪些"
+      ],
+      "sources": [
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 73
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 160
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 168
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 132
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 7
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 15
+        }
+      ]
+    }
+  ]
+}

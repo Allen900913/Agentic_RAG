@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "as_of": "2026-08-15",
+    "collection": "us_stock_rag_edgar_mdna",
+    "fixture": "eval/web_fixture.json",
+    "replay_cache": "eval/web_replay_llm.json"
+  },
+  "records": [
+    {
+      "id": "web-04",
+      "query": "Tesla 最近有什麼重要消息？",
+      "why": "新聞時效",
+      "answer": "Tesla 最近的主要消息包括：市場傳聞與 SpaceX 合併的可能性、交付量意外好於預期、公司正把焦點放在 Optimus 自動駕駛機器人計畫上，同時面臨供應鏈縮減、前財務長加入電池回收公司、以及計畫在德州 SpaceX 設施上進行「飛行」Roadster 示範，此外董事會正為 Elon Musk 最高可達 10,000 億美元（$1 兆）的薪酬方案爭取股東支持【TSLA_News_20260721_01.txt, chunk #0】、【TSLA_News_20260721_01.txt, chunk #1】、【TSLA_News_20260721_01.txt, chunk #2】、[web: https://finance.yahoo.com/news/tesla-supplier-sees-99-cut-121442078.html]、[web: https://www.cnbc.com/2026/05/11/redwood-materials-deepak-ahuja-tesla-straubel.html]、[web: https://finance.yahoo.com/markets/stocks/articles/tesla-plans-flying-roadster-stunt-135838106.html]、[web: https://www.sec.gov/Archives/edgar/data/1318605/000110465925103255/tm252289d43_defa14a.htm]。\n\n- **合併傳聞**：在 2026 年 7 月 20 日的 Yahoo Finance 影片中，主持人提到「Tesla 的下一件大事可能是合併」，暗示與 SpaceX 的合併已被多次口頭提及【TSLA_News_20260721_01.txt, chunk #0】。  \n- **交付量驚喜**：同一影片的另一位講者指出，Tesla 最近公布的交付量「好於預期」且「出乎意料」【TSLA_News_20260721_01.txt, chunk #1】。  \n- **Optimus 與自駕**：影片中還強調，投資人將關注「Optimus」與「自動駕駛」兩大驅動因素，認為公司未來的營收重點在於機器人計程車與機器人本身【TSLA_News_20260721_01.txt, chunk #2】。  \n- **供應鏈大幅縮減**：根據 Yahoo Finance 報導，韓國電池材料供應商 L&F 與 Tesla 的合約被削減 99%，從原本的 38,300 億（3.83 兆）韓元（約 26.7 億美元）降至 0.0973 億（9.73 百萬）韓元，主要影響 Cybertruck 電池供應【web: https://finance.yahoo.com/news/tesla-supplier-sees-99-cut-121442078.html】。  \n- **前 CFO 加入回收公司**：前 Tesla 財務長 Deepak Ahuja 已於 2026 年 5 月 11 日加入由前 CTO JB Straubel 創立的電池回收公司 Redwood Materials，擔任 CFO【web: https://www.cnbc.com/2026/05/11/redwood-materials-deepak-ahuja-tesla-straubel.html】。  \n- **飛行 Roadster 示範**：Tesla 正在計畫於德州 SpaceX 設施上執行「飛行」Roadster 示範，並可能讓超級粉絲以類似法拉利「XX Programme」的方式購買賽道版 Roadster，顯示 Tesla 與 SpaceX 的合作日益深化【web: https://finance.yahoo.com/markets/stocks/articles/tesla-plans-flying-roadster-stunt-135838106.html】。  \n- **股東支持 Musk 薪酬**：Tesla 董事會主席 Robyn Denholm 正在與主要機構投資人會面，爭取股東在 2025 年 11 月 6 日投票支持 Elon Musk 最高可達 10,000 億美元（$1 兆）的薪酬方案【web: https://www.sec.gov/Archives/edgar/data/1318605/000110465925103255/tm252289d43_defa14a.htm】。  \n\n以上各項構成了截至 2026 年 7 月底 Tesla 所傳出的最重要的近期訊息。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_News_20260721_01.txt #0 (rerank=0.521)\n  - GOOGL_News_20260721_01.txt #0 (rerank=0.502)\n  - TSLA_News_20260721_01.txt #1 (rerank=0.501)\n  - TSLA_News_20260721_01.txt #2 (rerank=0.501)",
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "Tesla 最近的重大新聞是什麼",
+        "改用網路搜尋查 Tesla 最近的最新消息（2026-07-22至2026-08-15）"
+      ],
+      "sources": [
+        {
+          "source": "TSLA_News_20260721_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_News_20260721_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "TSLA_News_20260721_01.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "TSLA_News_20260721_01.txt",
+          "chunk_index": 2
+        }
+      ]
+    }
+  ]
+}

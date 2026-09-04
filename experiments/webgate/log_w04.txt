@@ -1,0 +1,105 @@
+as-of=2026-08-15  collection=us_stock_rag_edgar_multiyear  題數=1
+
+──[web-04] Tesla 最近有什麼重要消息？
+   （新聞時效）
+[TRACE] plan(replay): 1 sub-queries → ['Tesla 最近的重大新聞是什麼']
+[TRACE] ratio-intent: [('Tesla 最近的重大新聞是什麼', [])]
+[agentic_rag] Loading BGE-M3 + reranker + Qdrant (one-time)...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 1526.94it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:  52%|█████▏    | 203/391 [00:00<00:00, 1999.68it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 2036.42it/s]
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 4156.49it/s]
+[INFO] Opening Qdrant server: http://localhost:6333
+[TRACE] coverage: collection='us_stock_rag_edgar_multiyear', sources=91, tickers=['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT', 'NVDA', 'TSLA']
+[TRACE] plan: 1 todos → ['Tesla 最近的重大新聞是什麼']
+[TRACE] check['Tesla 最近的重大新聞是什麼'] 時效改判 sufficient=True→False (need=days, 最新來源 -1 天前, KB 補不了)
+[TRACE] check['Tesla 最近的重大新聞是什麼'] sufficient=False missing='候選中沒有任何能證明時效的來源（KB 只有財報期間資料，財報期間不是發布日）,而本題需要 days ' new_query='Tesla 最近的重大新聞是什麼' relevant_ids=2/5
+[TRACE] execute[0] det round=0 q='Tesla 最近的重大新聞是什麼' pool=20 sufficient=False missing='候選中沒有任何能證明時效的來源（KB 只有財報期間資料，財報期間不是發布日）,而'
+[TRACE] execute[0] 不足原因 KB 補不了（時效）→ 跳過剩餘 2 次改寫，直接走 web
+[TRACE]   web query 英譯：'Tesla 最近的重大新聞是什麼' → "What are Tesla's recent material news?"
+[TRACE]   web_search(replay) "What are Tesla's recent material news?"
+[TRACE]     web ✗ 過時 229 天（>180）reuters.com https://www.reuters.com/world/asia-pacific/south-koreas-lf-s
+[TRACE]     web ✗ 過時 3392 天（>180）cnbc.com https://www.cnbc.com/2017/05/02/tesla-investment-supply-chai
+[TRACE]   web_search("What are Tesla's recent material news?") 原始 12 → 保留 5（非白名單主機 0、衍生性商品頁 0、同頁重複 0、同域名超額 3、過時 2、可判日期 3；need=days）
+[TRACE]     web ← （未標示日期） https://www.sec.gov/Archives/edgar/data/1318605/000162828024002390/tsla-20231231.htm
+[TRACE]       tsla-20231231
+[TRACE]       | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | Year Ended December 31, | | | | | | | | | | | | | | | | | | 2023 vs. 2022 Change | | | | | | | | | | | | 2022 vs. 2021 Change | | | | | | | | | | (Dollars in millions) | | | | | | 2023 | | | | | | 2022 | | | | | | 2021 | | | | | | $ | | | | | | % | | | | | | $ | | | | | | % | | | | Selling, general and administrative | | | | | | $ | 4,800 | | | | | $ | 3,946 | | | | | $ | 4,517 | | | | | $ | 854 | | | | | 22 | | % | | | | $ | (571) | | | | | (13) | | % | | As a percentage of revenues | | | | | | 5 | | % | | | | 5 | | % | | | | 8 | | % | | | | | | | | | | | | | | | | | | | | | | | | | [...] | | | | | | | | | | | | | --- --- --- --- --- --- | | | | | | | | | | | | | | | | | | December 31, 2023 | | | | | | December 31, 2022 | | | | Assets | | | | | | | | | | | | | Current assets | | | | | | | | | | | | | Cash and cash equivalents | | | $ | 16,398 | | | | | $ | 16,253 | | | Short-term investments | | | 12
+[TRACE]     web ← （未標示日期） https://www.sec.gov/Archives/edgar/data/1318605/000156459022011875/tsla-8k_20220328.htm
+[TRACE]       tsla-8k_20220328.htm
+[TRACE]       Item 8.01Other Events. Stock Dividend On March 28, 2022, Tesla, Inc. (the “Company” or “Tesla”) announced its plan to request stockholder approval at the upcoming 2022 Annual Meeting of Stockholders (the “Annual Meeting”) for an increase in the number of authorized shares of common stock through an amendment to the Company’s Amended and Restated Certificate of Incorporation (the “Amendment”) in order to enable a stock split of the Company’s common stock in the form of a stock dividend. Tesla’s Board of Directors (“Board”) has approved the management proposal, but the stock dividend will be contingent on final Board approval. The Company’s definitive proxy statement relating to the Annual Meeting will include additional details regarding the Amendment, as well as the record date, date and location of the Annual Meeting. Tesla Disclosure Channels To Disseminate Information Tesla investors and others should note that we announce material information to the public about our company, products and services and other issues through a variety of means, including Tesla’s website, press releases, Securities and Exchange Commission filings, blogs and social media, including our and our Chief 
+[TRACE]     web ← （未標示日期） https://finance.yahoo.com/news/tesla-supplier-sees-99-cut-121442078.html
+[TRACE]       Tesla supplier sees 99% cut in battery material contract amid Cybertru
+[TRACE]       ... Investing.com # Tesla supplier sees 99% cut in battery material contract amid Cybertruck woes Vlad Schepkov 1 min read TSLA -2.08% 066970.KS -8.08% Investing.com -- South Korean battery material supplier L&F Co's contract with Tesla Inc has been reduced by 99%, from 3.83 trillion won ($2.67 billion) to just 9.73 million won, the company disclosed on Monday. The dramatic reduction in the supply agreement, which was originally announced in February 2023, was attributed to a "change in supply quantity," according to L&F's regulatory filing. The contract involved high-nickel cathode material that L&F was scheduled to supply from January 2024 through December 2025. This material was intended for use in Cybertruck batteries, according to a Bloomberg report on Monday that cited a person familiar with the matter. Only minimal material was delivered as Cybertruck development faced repeated delays. Consumers instead opted for other Tesla vehicles, including the Model 3 sedan and Model Y sport utility vehicle. The supply agreement was also impacted by broader policy and economic factors, including the elimination of Inflation Reduction Act subsidies, the report added. Related articles Tes
+[TRACE]     web ← （未標示日期） https://finance.yahoo.com/quote/TSLA/news
+[TRACE]       Tesla, Inc. (TSLA) Latest Stock News & Headlines - Yahoo Finance
+[TRACE]       NasdaqGS - Nasdaq Real Time Price • USD # Tesla, Inc. (TSLA) TSLA: Risk or rebound? 342.27 +2.31 (+0.68%) At close: August 14 at 4:00:00 PM EDT 341.65 -0.62 (-0.18%) After hours: August 14 at 7:59:59 PM EDT TSLA: Risk or rebound? ## News headlines Tesla faces challenges with a 24% year-to-date decline amid margin pressures and delivery plateaus. Recent news highlights a potential merger with SpaceX that could impact CEO Elon Musk's pay structure, alongside optimistic outlooks for AI and EV developments. Tesla faces challenges with a 24% year-to-date decline amid margin pressures and delivery plateaus. Recent news highlights a potential merger with SpaceX that could impact CEO Elon Musk's pay structure, alongside optimistic outlooks for AI and EV developments. Updated 18m ago · Powered by Yahoo Scout All News Earnings Calls Press Releases SEC Filings Elon Musk Admits He Underestimated Anthropic's AI -- Why Amazon Investors Should Care ### Elon Musk Admits He Underestimated Anthropic's AI -- Why Amazon Investors Should Care Motley Fool • 6h ago AMZNNVDASPCX Could a Tesla (TSLA)-Space Exploration Technologies (SPCX) Merger Help Elon Musk Unlock his Massive Tesla Pay Package?-Space Exp
+[TRACE]     web ← （發布日 2026-05-11） https://www.cnbc.com/2026/05/11/redwood-materials-deepak-ahuja-tesla-straubel.html
+[TRACE]       Former Tesla CFO Ahuja joins EV battery recycler Redwood Materials
+[TRACE]       Join Pro Livestream Tech # Former Tesla CFO Deepak Ahuja joins EV battery recycler Redwood Materials thumbnail Lora Kolodny@in/lorakolodny/ WATCH LIVE Key Points Redwood Materials hires former Tesla CFO Deepak Ahuja as finance chief. Founded by Tesla board member and ex-CTO JB Straubel in 2017, Redwood Materials produces critical minerals from recycled batteries, and battery energy storage systems used at data centers. Before joining Redwood Materials, Ahuja served as chief financial and business officer at the drone delivery startup Zipline for about three years. Deepak Ahuja Source: Verily Redwood Materials, the electric vehicle battery recycling business started by Tesla board member and former CTO JB Straubel, is bringing on another former Tesla executive, Deepak Ahuja, as CFO, the company announced Monday. Ahuja served as finance chief at Tesla from March 2017 to March 2019, his second term at Elon Musk's EV and clean energy company. He first joined Tesla in 2008, navigated it through an IPO in 2010, briefly resigned in 2015 and was recruited back two years later. Ahuja told CNBC that his relationship with Straubel primarily influenced his decision to join the recycling startu
+[TRACE] execute[0] det web fallback → 6732 chars
+[TRACE] execute wave: 1 todos ([0]) done → collected=2 period_notes=0
+[TRACE] replan: sufficient=False todos=[(0, 'done'), (1, 'pending')]
+[TRACE] check['改用網路搜尋查找 Tesla 2026 年 6 '] sufficient=False missing='缺少2026年6月12日之後的最新重要新聞、公告或重大事件的具體資訊' new_query='Tesla latest news after June 12 2026 press release' relevant_ids=0/5
+[TRACE] execute[1] det round=0 q='改用網路搜尋查找 Tesla 2026 年 6 月 12 日之後' pool=20 sufficient=False missing='缺少2026年6月12日之後的最新重要新聞、公告或重大事件的具體資訊'
+[TRACE] check(replay)['改用網路搜尋查找 Tesla 2026 年 6 '] sufficient=False
+[TRACE] execute[1] det round=1 q='Tesla latest news after June 12 ' pool=27 sufficient=False missing='缺少2026年6月12日之後的最新重要新聞、公告或重大事件的具體資訊'
+[TRACE] check(replay)['改用網路搜尋查找 Tesla 2026 年 6 '] sufficient=False
+[TRACE] execute[1] det round=2 q='Tesla latest news after June 12 ' pool=27 sufficient=False missing='缺少2026年6月12日之後的最新重要新聞、公告或重大事件的具體資訊'
+Traceback (most recent call last):
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\eval\record_web_fixture.py", line 142, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\eval\record_web_fixture.py", line 113, in main
+    out = ar.run_agentic(query, freshness_mode=ar.FRESHNESS_LIVE)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3818, in run_agentic
+    final = graph.invoke(init, config={"recursion_limit": recursion_limit})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\pregel\main.py", line 3913, in invoke
+    for chunk in self.stream(
+                 ^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\pregel\main.py", line 2967, in stream
+    for _ in runner.tick(
+             ^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\pregel\_runner.py", line 207, in tick
+    run_with_retry(
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\pregel\_retry.py", line 617, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 707, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\.venv\Lib\site-packages\langgraph\_internal\_runnable.py", line 447, in invoke
+    ret = self.func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3556, in _node_execute
+    results[i] = fut.result()
+                 ^^^^^^^^^^^^
+  File "C:\Users\p76141495\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\p76141495\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3468, in _run_one_todo
+    summary, web_notes, realtime_need, period_notes = _run_executor(
+                                                      ^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3399, in _run_executor
+    return _run_executor_deterministic(task, temporal_scope, freshness_mode, subq_index, verbose,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3372, in _run_executor_deterministic
+    note = _tavily_search(_web_query_en(verdict.get("new_query") or task),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3057, in _tavily_search
+    resp = _tavily_raw(query)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\agentic_rag_v2.py", line 3022, in _tavily_raw
+    hit = _web_replay.get(key)          # replay 模式 miss 會在這裡直接報錯，不會偷偷連網
+          ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\p76141495\Desktop\Agentic_RAG\web_replay.py", line 140, in get
+    raise FixtureMiss(
+web_replay.FixtureMiss: web fixture miss（replay 模式，絕不連網）：{"depth": "advanced", "domains": ["apnews.com", "barrons.com", "bloomberg.com", "cnbc.com", "companiesmarketcap.com", "finance.yahoo.com", "ft.com", "macrotrends.net", "marketwatch.com", "nasdaq.com", "nyse.com", "reuters.com", "sec.gov", "stockanalysis.com", "wsj.com"], "n": 12, "q": "Tesla latest news after June 12 2026 press release major developments"}
+  這份 fixture 沒涵蓋這個請求。要嘛用 RAG_WEB_REPLAY_MODE=record 補錄，要嘛檢查是不是改了 WEB_ALLOWED_DOMAINS／TAVILY_FETCH_RESULTS（那會合法地換 key）。
+[replay] wrote experiments\webgate\cache_w04.json (hit=6 miss=7)

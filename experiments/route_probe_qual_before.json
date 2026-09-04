@@ -1,0 +1,966 @@
+[
+ {
+  "id": "lex-03",
+  "kind": "record",
+  "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "lex-07",
+  "kind": "record",
+  "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple FY2025 的 Diluted EPS 是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple FY2025 的 Diluted EPS 是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple fiscal year 2025 的 Diluted EPS 是多少？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "sem-01",
+  "kind": "record",
+  "query": "NVIDIA 的核心技術護城河是什麼？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的核心技術護城河是什麼？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的核心技術護城河是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的核心技術護城河是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的核心技術護城河是什麼？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 的核心技術護城河是什麼？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "sem-06",
+  "kind": "record",
+  "query": "Amazon 在 AWS、Prime 與電商業務上面臨哪些反壟斷或監管風險？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "both"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 在 AWS、Prime 與電商業務上面臨的反壟斷或監管風險有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 3,
+    "tasks": [
+     "Amazon 在 AWS 業務上面臨的反壟斷或監管風險是什麼",
+     "Amazon 在 Prime 業務上面臨的反壟斷或監管風險是什麼",
+     "Amazon 在電商業務上面臨的反壟斷或監管風險是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "both"
+    ],
+    "n_sub": 3,
+    "tasks": [
+     "Amazon 在 AWS 事業上面臨的反壟斷或監管風險有哪些",
+     "Amazon 在 Prime 服務上面臨的反壟斷或監管風險有哪些",
+     "Amazon 在電商業務上面臨的反壟斷或監管風險有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "both"
+    ],
+    "n_sub": 3,
+    "tasks": [
+     "Amazon 在 AWS 方面面臨哪些反壟斷或監管風險？",
+     "Amazon 在 Prime 服務上面臨哪些反壟斷或監管風險？",
+     "Amazon 在電商業務上面臨哪些反壟斷或監管風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 3,
+    "tasks": [
+     "Amazon 在 AWS 業務上面臨的反壟斷或監管風險有哪些",
+     "Amazon 在 Prime 服務上面臨的反壟斷或監管風險有哪些",
+     "Amazon 在電商業務上面臨的反壟斷或監管風險有哪些"
+    ]
+   }
+  ],
+  "verdicts": [
+   "waste",
+   "ok",
+   "waste",
+   "waste",
+   "ok"
+  ],
+  "unstable": true
+ },
+ {
+  "id": "mix-01",
+  "kind": "record",
+  "query": "Microsoft Azure 最新一季的營收成長率是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft Azure 最新一季的營收成長率是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft Azure 最新一季的營收成長率是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft Azure 最新一季的營收成長率是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft Azure 目前的營收成長率是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft Azure 最新一季的營收成長率是多少"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mix-11",
+  "kind": "record",
+  "query": "NVIDIA 最新一季資料中心（Data Center）營收成長多少？主要驅動產品是什麼？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新一季資料中心營收的成長率是多少",
+     "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新一季資料中心營收成長多少",
+     "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新一季資料中心營收的成長率是多少",
+     "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新一季資料中心營收成長多少",
+     "NVIDIA 最新一季資料中心的主要驅動產品是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新一季資料中心營收的成長率是多少",
+     "NVIDIA 最新一季資料中心營收的主要驅動產品是什麼"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mh-03",
+  "kind": "record",
+  "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "在 NVIDIA、Meta、Alphabet 中，哪一家在最近一年營收年增率（YoY revenue growth）最高？",
+     "NVIDIA、Meta、Alphabet 各自最近十二個月（TTM）的淨利（net income）是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 6,
+    "tasks": [
+     "NVIDIA 目前的營收年增率是多少",
+     "Meta 目前的營收年增率是多少",
+     "Alphabet 目前的營收年增率是多少",
+     "NVIDIA 最近十二個月的淨利是多少",
+     "Meta 最近十二個月的淨利是多少",
+     "Alphabet 最近十二個月的淨利是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 6,
+    "tasks": [
+     "NVIDIA 最近一年營收年增率（YoY revenue growth）是多少",
+     "Meta 最近一年營收年增率（YoY revenue growth）是多少",
+     "Alphabet 最近一年營收年增率（YoY revenue growth）是多少",
+     "NVIDIA 最近十二個月（TTM）的淨利（net income）是多少",
+     "Meta 最近十二個月（TTM）的淨利（net income）是多少",
+     "Alphabet 最近十二個月（TTM）的淨利（net income）是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 6,
+    "tasks": [
+     "NVIDIA 最近一年營收年增率（YoY revenue growth）是多少",
+     "Meta 最近一年營收年增率（YoY revenue growth）是多少",
+     "Alphabet 最近一年營收年增率（YoY revenue growth）是多少",
+     "NVIDIA 最近十二個月（TTM）的淨利（net income）是多少",
+     "Meta 最近十二個月（TTM）的淨利（net income）是多少",
+     "Alphabet 最近十二個月（TTM）的淨利（net income）是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 6,
+    "tasks": [
+     "NVIDIA 最近一年營收年增率是多少",
+     "Meta 最近一年營收年增率是多少",
+     "Alphabet 最近一年營收年增率是多少",
+     "NVIDIA 最近十二個月的淨利是多少",
+     "Meta 最近十二個月的淨利是多少",
+     "Alphabet 最近十二個月的淨利是多少"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-01",
+  "kind": "record",
+  "query": "Apple 的主要競爭對手有哪些，競爭壓力來自哪些面向？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 的主要競爭對手有哪些",
+     "Apple 面臨的競爭壓力來自哪些面向"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 的主要競爭對手有哪些",
+     "Apple 面臨的競爭壓力來自哪些面向"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 的主要競爭對手有哪些",
+     "Apple 面臨的競爭壓力來自哪些面向"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 的主要競爭對手有哪些",
+     "Apple 的競爭壓力來自哪些面向"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 的主要競爭對手有哪些",
+     "Apple 面臨的競爭壓力來自哪些面向"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "waste",
+   "ok"
+  ],
+  "unstable": true
+ },
+ {
+  "id": "qual-02",
+  "kind": "record",
+  "query": "Meta 在隱私與資料保護方面面臨哪些監管風險？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 在隱私與資料保護方面面臨哪些監管風險？"
+    ]
+   },
+   {
+    "routes": [
+     "both"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 在隱私與資料保護方面面臨哪些監管風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 在 10‑K／10‑Q 中披露的隱私與資料保護相關的監管風險有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "both"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 在隱私與資料保護方面面臨哪些監管風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Meta 在隱私與資料保護方面面臨哪些監管風險？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "waste",
+   "ok",
+   "waste",
+   "ok"
+  ],
+  "unstable": true
+ },
+ {
+  "id": "qual-03",
+  "kind": "record",
+  "query": "Tesla 的商業模式為什麼與傳統車廠不同？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Tesla 的商業模式是什麼",
+     "傳統車廠的商業模式有哪些特徵"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Tesla 的商業模式與傳統車廠有何不同"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Tesla 的商業模式是什麼",
+     "傳統車廠的商業模式是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Tesla 的商業模式是什麼",
+     "傳統車廠的商業模式通常是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Tesla 的商業模式是什麼",
+     "傳統車廠的商業模式有哪些特徵"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "waste",
+   "ok",
+   "ok"
+  ],
+  "unstable": true
+ },
+ {
+  "id": "qual-04",
+  "kind": "record",
+  "query": "Microsoft 靠什麼維持在雲端市場的競爭優勢？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 靠什麼維持在雲端市場的競爭優勢？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 在雲端市場的競爭優勢是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 在雲端市場維持競爭優勢的關鍵因素是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 靠什麼維持在雲端市場的競爭優勢？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Microsoft 在雲端市場的競爭優勢是什麼"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-05",
+  "kind": "record",
+  "query": "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet 目前面臨的反壟斷訴訟與監管審查風險有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Alphabet 在最新的財報（10-K/10-Q）中披露的反壟斷訴訟與監管審查風險有哪些",
+     "Alphabet 最近的反壟斷訴訟與監管審查相關新聞有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？"
+    ]
+   },
+   {
+    "routes": [
+     "web"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Alphabet 面臨哪些反壟斷訴訟與監管審查的風險？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "waste",
+   "waste",
+   "waste",
+   "waste",
+   "waste"
+  ],
+  "unstable": true
+ },
+ {
+  "id": "qual-06",
+  "kind": "record",
+  "query": "NVIDIA 為何在供應鏈上高度依賴少數代工廠？這帶來什麼風險？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 為何在供應鏈上高度依賴少數代工廠？",
+     "NVIDIA 因高度依賴少數代工廠而面臨哪些風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 為何在供應鏈上高度依賴少數代工廠？",
+     "NVIDIA 這種供應鏈依賴會帶來哪些風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 在供應鏈上高度依賴少數代工廠的原因及其帶來的風險是什麼？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 在供應鏈上高度依賴少數代工廠的原因及其帶來的風險是什麼？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 在供應鏈上高度依賴少數代工廠的情況說明是什麼"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-07",
+  "kind": "record",
+  "query": "Amazon 的營運利潤率為什麼會受履約成本影響？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 的營運利潤率受履約成本影響的原因是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 的營運利潤率受履約成本影響的原因是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 的營運利潤率受履約成本影響的原因是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 的營運利潤率受履約成本影響的原因是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Amazon 的營運利潤率受履約成本影響的原因是什麼"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "qual-08",
+  "kind": "record",
+  "query": "Apple 在中國市場面臨哪些地緣政治與法規風險？",
+  "probe_only": true,
+  "rounds": [
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在中國市場面臨哪些地緣政治與法規風險？"
+    ]
+   },
+   {
+    "routes": [
+     "both"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在中國市場面臨的地緣政治與法規風險有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在中國市場面臨哪些地緣政治與法規風險？"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 在最新的 10‑K（或 10‑Q）中提到的中國市場地緣政治風險有哪些",
+     "Apple 在最新的 10‑K（或 10‑Q）中提到的中國市場法規風險有哪些"
+    ]
+   },
+   {
+    "routes": [
+     "kb"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "Apple 在最新的 10‑K（或 10‑Q）中提到的中國市場的地緣政治與法規風險有哪些？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "waste",
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": true
+ }
+]

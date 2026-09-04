@@ -1,0 +1,186 @@
+{
+  "meta": {
+    "producer": "run_agentic_on_evalset.py",
+    "module": "agentic_rag_v2",
+    "collection": "us_stock_rag_edgar_mdna",
+    "retrieval_model": "openai/gpt-oss-20b",
+    "checker_model": "openai/gpt-oss-120b",
+    "gen_model": "openai/gpt-oss-120b",
+    "validator": true,
+    "web_search": false,
+    "freshness_mode": "snapshot",
+    "eval_set": "eval\\eval_set.json"
+  },
+  "records": [
+    {
+      "id": "mi-05",
+      "category": "multi_intent",
+      "query": "Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？",
+      "answerable": true,
+      "answer": "Microsoft 在 FY2026（相較 FY2025）整體營收成長 18%，即增加 501 億美元（$50.1 billion）【MSFT_10K_2026.html, chunk #124】；其中「Productivity and Business Processes」部門營收亦提升 16%，增加 192 億美元（$19.2 billion）【MSFT_10K_2026.html, chunk #127】。  \n\n- 這樣的雙位數成長顯示 Microsoft 的雲端與生產力服務仍是收入的主要驅動力。  \n- 同時，新聞指出 Microsoft 正在自行開發七個全新 AI 模型，著重於微調（fine‑tuning）與成本最佳化，並將大量 GPU 資源配置給內部研發團隊，以減少對外部前沿實驗室的依賴【MSFT_News_20260612_01.txt, chunk #0】。  \n- 這些自研模型與「OpenClaw」的自家版本、AI 代理人部署計畫一起，透露出 Microsoft 正在構建自有的 AI 堆疊（AI stack）與 DIY 應用生態，意圖在 AI 基礎設施與服務上取得更高的掌控力與毛利空間。  \n\n總結來說，Microsoft 以 18% 的營收成長證明其核心雲端與生產力業務持續擴張，而自研七模型的策略則顯示公司正從「使用外部 AI」轉向「自建 AI」的長期布局，旨在提升技術自主性、降低成本，並在 AI 市場中建立更具競爭力的產品與平台。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_News_20260612_01.txt #0 (rerank=0.725)\n  - MSFT_10K_2026.html #127 (rerank=0.651)\n  - MSFT_10K_2026.html #124 (rerank=0.612)\n  - MSFT_Fundamentals_20260612.txt #1 (rerank=0.532)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "MSFT_News_20260612_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 127
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 124
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        }
+      ],
+      "contexts": [
+        "[MSFT] Title    : Here’s why Microsoft Corporation (MSFT) is one of the Best Forever Stock to Buy\nSource   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/why-microsoft-corporation-msft-one-032536838.html\nPublished: 2026-06-12T03:25:36Z\n\nHere’s why Microsoft Corporation (MSFT) is one of the Best Forever Stock to Buy\nAbdul Rahman\nFri, June 12, 2026 at 11:25 AM GMT+8\n2 min read\nMSFT\n-1.77%\nMicrosoft (NASDAQ:\nMSFT\n) is\none of the best forever stocks to buy, according to analysts\n. On June 4, TD Cowen reiterated its Buy rating on Microsoft (NASDAQ:MSFT) and set a $540 price target. The bullish stance is in response to the company asserting its AI strategy with seven new self-built models focused on fine-tuning and cost optimization. Photo by Microsoft 365 on Unsplash\nThe new self-built models signal a shift in the software giant’s approach to AI development as the company moves to reduce its reliance on frontier labs for AI capabilities. The tech giant has made significant advances as it seeks to position itself around AI models, AI stack layers, and do-it-yourself applications. As part of the new strategy, Microsoft has already allocated a significant graphics processing unit’s capacity to its internal research and development teams. The allocation underscores a new phase in the company’s ambitions for its AI portfolio. During the Build 2026 conference, the company was the center of attention, showcasing advancements in its AI platform. The company reiterated plans to help people deploy AI agents as it also builds its own version of OpenClaw. Microsoft Corporation (NASDAQ:MSFT) is a global technology giant that develops, licenses, and supports software, services, devices, and cloud solutions. It operates Microsoft Azure, a major cloud computing platform, and also develops productivity software, including the Microsoft 365 suite. While we acknowledge the potential of MSFT as an investment, we believe certain AI stocks offer greater upside potential and carry less downside risk. If you're looking for an extremely undervalued AI stock that also stands to benefit significantly from Trump-era tariffs and the onshoring trend, see our free report on the\nbest short-term AI stock\n. READ NEXT:\n8 Most Profitable Crypto-Exposed Stocks to Buy Now\nand\n10 Best Robinhood Stocks Under $20 to Buy Now\n.",
+        "[MSFT 10-K period 2026] [Fiscal Year 2026 vs 2025] [section: Productivity and Business Processes] Fiscal Year 2026 Compared with Fiscal Year 2025 \n\nProductivity and Business Processes \n\nRevenue increased $19.2 billion or 16%. •Microsoft 365 Commercial products and cloud services revenue increased $14.2 billion or 16%. Microsoft 365 Commercial cloud revenue grew 17% with growth in revenue per user driven by Microsoft 365 Copilot and Microsoft 365 E5. Microsoft 365 Commercial seats grew 6% driven by small and medium businesses and frontline worker offerings. Microsoft 365 Commercial products revenue grew 13% driven by growth in the Windows Commercial on-premises components of Microsoft 365 suite sales, as well as an increase in Office 2024 transactional purchasing. •Microsoft 365 Consumer products and cloud services revenue increased $1.8 billion or 24%. Microsoft 365 Consumer cloud revenue grew 28% driven by growth in revenue per user and Microsoft 365 Consumer subscriber growth of 7%. •LinkedIn revenue increased $2.0 billion or 11% with growth across all lines of business. •Dynamics products and cloud services revenue increased $1.2 billion or 15% driven by growth in Dynamics 365. Dynamics 365 revenue grew 18% with growth across all workloads.",
+        "[MSFT 10-K period 2026] [Fiscal Year 2026 vs 2025] Fiscal Year 2026 Compared with Fiscal Year 2025\n\nRevenue increased $50.1 billion or 18% driven by growth in Microsoft Cloud. Intelligent Cloud revenue increased driven by Azure. Productivity and Business Processes revenue increased driven by Microsoft 365 Commercial cloud. More Personal Computing revenue decreased driven by XBOX (formerly Gaming), offset in part by growth in Search advertising. Cost of revenue increased $18.5 billion or 21% driven by growth in Microsoft Cloud.",
+        "[MSFT] --\n\nBalance Sheet --\n\nTotal Cash : $78.23B\n\nTotal Debt : $125.43B\n\nDebt/Equity: 30.271\n\nCurrent Ratio: 1.283\n\n--- Dividends & Returns --- Dividend Yield : 0.93% Return on Equity: 34.01% Return on Assets: 14.81% Free Cash Flow : $37.01B\n\n--- Business Summary --- Microsoft Corporation develops and supports software, services, devices, and solutions worldwide. The Productivity and Business Processes segment offers Microsoft 365 commercial, enterprise mobility + security, windows commercial, power BI, exchange, sharepoint, Microsoft teams, security and compliance, and copilot; Microsoft 365 commercial products, such as Windows commercial on-premises and office licensed services; Microsoft 365 consumer products and cloud services, including Microsoft 365 consumer subscriptions, office licensed on-premises, and other consumer services; LinkedIn; dynamics products and cloud services, such as dynamics 365, cloud-based applications, and on-premises ERP and CRM applications. Its Intelligent Cloud segment provides Server products and cloud services comprising Azure and other cloud services, GitHub, Nuance Healthcare, virtual desktop offerings, and other cloud services; server products, including SQL and windows server, visual studio and system center related client access licenses, and other on-premises offerings; enterprise and partner services, such as enterprise support and nuance professional services, industry solutions, Microsoft partner network, and learning experience. The Personal Computing segment provides windows and devices, such as Windows OEM licensing and devices and surface and PC accessories; gaming services and solutions, such as Xbox hardware, content, and services, first- and third-party content Xbox game pass, subscriptions, and cloud gaming, advertising, and other cloud services; search and news advertising services that includes Bing and Copilot, Microsoft News and Edge, and third-party affiliates. It sells its products through OEMs, distributors, and resellers; and online and retail stores."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Microsoft 的營收成長率表現如何",
+        "Microsoft 在新聞中自研七個 AI 模型的策略進展及其對公司 AI 布局的訊息是什麼"
+      ],
+      "agentic_n_chunks": 4
+    },
+    {
+      "id": "mix-03",
+      "category": "mixed",
+      "query": "Microsoft 最新一季整體營業利益成長多少？主要由哪些部門帶動？",
+      "answerable": true,
+      "answer": "Microsoft 在最新一季（截至 2026 年 3 月 31 日的三個月）營業利益增加 **64 億美元，成長 20%**【MSFT_10Q_202603.html, chunk #63】。此成長主要來自 **「Productivity and Business Processes」** 以及 **「Intelligent Cloud」** 兩大事業部的營收與營運貢獻【MSFT_10Q_202603.html, chunk #63】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202603.html #63 (rerank=0.713)\n  - MSFT_10Q_202603.html #67 (rerank=0.703)\n  - MSFT_10Q_202603.html #70 (rerank=0.694)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 63
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 67
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 70
+        }
+      ],
+      "contexts": [
+        "[MSFT 10-Q period 202603] [Three Months Ended March 31, 2026 vs March 31, 2025] Productivity and Business Processes revenue increased driven by Microsoft 365 Commercial cloud. More Personal Computing revenue decreased with lower hardware sales across Devices and Gaming, offset in part by growth in Search advertising. Cost of revenue increased $4.9 billion or 22% driven by growth in Microsoft Cloud. Gross margin increased $7.9 billion or 16% with growth across each of our segments. •Gross margin percentage decreased driven by continued investments in AI infrastructure and growing AI product usage, offset in part by efficiency gains across the Microsoft Cloud. •Microsoft Cloud gross margin percentage decreased to 66% driven by continued investments in AI infrastructure and growing AI product usage, offset in part by efficiency gains in Azure and Microsoft 365 Commercial cloud. Operating expenses increased $1.5 billion or 9% primarily driven by continued investments in research and development compute capacity, AI talent, and data to support product development across the portfolio. Total company headcount declined year-over-year. Operating income increased $6.4 billion or 20% driven by growth in Productivity and Business Processes and Intelligent Cloud. Revenue, gross margin, and operating income included a favorable foreign currency impact of 3%, 3%, and 4%, respectively.",
+        "[MSFT 10-Q period 202603] [Nine Months Ended March 31, 2026 vs March 31, 2025] Operating income increased $20.4 billion or 22% driven by growth in Productivity and Business Processes and Intelligent Cloud. Revenue, gross margin, and operating income included a favorable foreign currency impact of 2%, 3%, and 3%, respectively. Operating expenses included an unfavorable foreign currency impact of 2%. Current year net income and diluted EPS were positively impacted by net gains from investments in OpenAI, which resulted in an increase in net income and diluted EPS of $4.5 billion and $0.60, respectively. Prior year net income and diluted EPS were negatively impacted by net losses from investments in OpenAI, which resulted in a decrease in net income and diluted EPS of $2.0 billion and $0.28, respectively. SEGMENT RESULTS OF OPERATIONS\n\n     (In millions, except percentages)\n\n     Three Months Ended\n\nMarch 31,\n\n     Percentage\n\nChange\n\n     Nine Months Ended\n\nMarch 31,\n\n     Percentage\n\nChange\n\n     2026\n\n     2025\n\n     2026\n\n     2025\n\n     Productivity and Business Processes\n\n     Revenue\n\n     $\n\n     35,013\n\n     $\n\n     29,944\n\n     17%\n\n     $\n\n     102,149\n\n     $\n\n     87,698\n\n     16%\n\n     Cost of revenue\n\n     6,197\n\n     5,517\n\n     12%\n\n     18,028\n\n     16,380\n\n     10%\n\n     Operating expenses\n\n     7,843\n\n     7,048\n\n     11%\n\n     22,142\n\n     20,538\n\n     8%\n\n     Operating income\n\n     $\n\n     20,973\n\n     $\n\n     17,379\n\n     21%\n\n     $\n\n     61,979\n\n     $\n\n     50,780\n\n     22%\n\n     Intelligent Cloud\n\n     Revenue\n\n     $\n\n     34,681\n\n     $\n\n     26,751\n\n     30%\n\n     $\n\n     98,485\n\n     $\n\n     76,387\n\n     29%\n\n     Cost of revenue\n\n     15,120\n\n     10,307\n\n     47%\n\n     41,000\n\n     28,326\n\n     45%\n\n     Operating expenses\n\n     5,808\n\n     5,349\n\n     9%\n\n     16,468\n\n     15,612\n\n     5%\n\n     Operating income\n\n     $\n\n     13,753\n\n     $\n\n     11,095\n\n     24%\n\n     $\n\n     41,017\n\n     $\n\n     32,449\n\n     26%\n\n     More Personal Computing\n\n     Revenue\n\n     $\n\n     13,192\n\n     $\n\n     13,371\n\n     (1)%\n\n     $\n\n     41,198\n\n     $\n\n     41,198\n\n     0%\n\n     Cost of revenue\n\n     5,511\n\n     6,095\n\n     (10)%\n\n     17,821\n\n     19,111\n\n     (7)%\n\n     Operating expenses\n\n     4,009\n\n     3,750\n\n     7%\n\n     11,739\n\n     11,111\n\n     6%\n\n     Operating income\n\n     $\n\n     3,672\n\n     $\n\n     3,526\n\n     4%\n\n     $\n\n     11,638\n\n     $\n\n     10,976\n\n     6%\n\n     Total\n\n     Revenue\n\n     $\n\n     82,886\n\n     $\n\n     70,066\n\n     18%\n\n     $\n\n     241,832\n\n     $\n\n     205,283\n\n     18%\n\n     Cost of revenue\n\n     26,828\n\n     21,919\n\n     22%\n\n     76,849\n\n     63,817\n\n     20%\n\n     Operating expenses\n\n     17,660\n\n     16,147\n\n     9%\n\n     50,349\n\n     47,261\n\n     7%\n\n     Operating income\n\n     $\n\n     38,398\n\n     $\n\n     32,000\n\n     20%\n\n     $\n\n     114,634\n\n     $\n\n     94,205\n\n     22%\n\nReportable Segments",
+        "[MSFT 10-Q period 202603] [Three Months Ended March 31, 2026 vs March 31, 2025] [section: Intelligent Cloud] Operating income increased $2.7 billion or 24%. •Cost of revenue increased $4.8 billion or 47% driven by investments in AI infrastructure to support growing customer demand and increased GitHub Copilot usage. •Gross margin increased $3.1 billion or 19% driven by growth in Azure. Gross margin percentage decreased driven by the continued investments in AI infrastructure, offset in part by efficiency gains in Azure. •Operating expenses increased $459 million or 9% primarily driven by continued investments in research and development compute capacity, AI talent, and data to support product development that benefits the entire portfolio. Revenue included a favorable foreign currency impact of 2%.\n\nCost of revenue and operating expenses included an unfavorable foreign currency impact of 3% and 2%, respectively."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Microsoft 最新一季的營業利益成長多少",
+        "Microsoft 最新一季的營業利益成長主要由哪些部門帶動"
+      ],
+      "agentic_n_chunks": 3
+    },
+    {
+      "id": "mix-07",
+      "category": "mixed",
+      "query": "Google 收購 Wiz 花了多少錢？這如何影響 Google Cloud 部門？",
+      "answerable": true,
+      "answer": "我沒有足夠的資訊來回答 Google 收購 Wiz 的金額以及此交易對 Google Cloud 部門的影響。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_News_20260612_02.txt #0 (rerank=0.512)\n  - AAPL_News_20260612_01.txt #2 (rerank=0.510)\n  - GOOGL_News_20260721_01.txt #0 (rerank=0.504)\n  - NVDA_News_20260519_01.txt #4 (rerank=0.504)\n  - AAPL_News_20260612_03.txt #0 (rerank=0.502)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "GOOGL_News_20260612_02.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_News_20260612_01.txt",
+          "chunk_index": 2
+        },
+        {
+          "source": "GOOGL_News_20260721_01.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_News_20260519_01.txt",
+          "chunk_index": 4
+        },
+        {
+          "source": "AAPL_News_20260612_03.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[GOOGL] Title    : Is Alphabet Inc. (GOOGL) One of the Best Forever Stocks to Buy on $85B Capital Raise? Source   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/alphabet-inc-googl-one-best-032550927.html\nPublished: 2026-06-12T03:25:50Z\n\nIs Alphabet Inc. (GOOGL) One of the Best Forever Stocks to Buy on $85B Capital Raise? Abdul Rahman\nFri, June 12, 2026 at 11:25 AM GMT+8\n2 min read\nGOOG\n+0.92%\nBRK-B\n+0.44%\nAlphabet Inc. (NASDAQ:\nGOOGL\n) is\none of the best forever stocks to buy, according to analysts\n. On June 5, Moody’s Ratings touted Alphabet Inc.’s (NASDAQ:GOOGL) move to raise $84.75 billion, affirming it as credit-positive. According to the ratings firm, the massive equity raise underscores Alphabet’s strong financial profile, which is capable of funding incremental investment through equity rather than adding debt. In addition, the move asserts commitment towards disciplined financial policies capable of ensuring a strong balance sheet. Moody’s expects the company’s capital expenditure to reach $185 billion this year, up from $91.5 billion last year. Alphabet plans to raise about $34.75 billion through an underwritten public offering of common equity and 6.25% mandatory convertible preferred securities. It’s also eyeing a $40 billion market equity issuance program and a $10 billion private placement with Berkshire Hathaway. The company is to use net proceeds from the offerings for general corporate purposes, including artificial intelligence infrastructure, and for global compute capacity expansion. Alphabet Inc. (NASDAQ:GOOGL) is a multinational technology conglomerate and the parent holding company of Google. It generates the bulk of its revenue through internet advertising, cloud computing, and consumer hardware, while also operating highly speculative, forward-looking ventures known as “Other Bets. While we acknowledge the potential of GOOGL as an investment, we believe certain AI stocks offer greater upside potential and carry less downside risk. If you're looking for an extremely undervalued AI stock that also stands to benefit significantly from Trump-era tariffs and the onshoring trend, see our free report on the\nbest short-term AI stock\n. READ NEXT:\n8 Most Profitable Crypto-Exposed Stocks to Buy Now\nand\n10 Best Robinhood Stocks Under $20 to Buy Now\n.",
+        "[AAPL] So it's it's things like that that kind of surfacing uh ability, uh you can see right here what the uh what it'll pop up. There's also that new Siri app and that's where you can get all of your various conversations. And and so I think that that's really kind of the the push here is that it's going to be a lot more personal. Uh they're really leaning into the security aspect as well and the privacy aspect. And so, you know, that that's kind of the the thrust of it. 00:41\nSpeaker A\nThe demo was impressive, I got to say. But you know, 2024 was when they announced this. It's 2026. It's going to launch as a beta in the fall, so it's not a full launch. So, you know, I mean, I think kind of uh temper expectations a little bit. It's still going to be a beta. So it's it's hard to to, you know, judge. It's also going to launch in uh uh uh I think the US uh at first in English. So it's, you know, it's it's still seems as though it's early days, but, you know, it's based on uh Google's technology, you know, Apple kind of judged with it a little bit. Um and, you know,\n1:09\nSpeaker A\nI I think that gives it a leg up. But it is hard to say exactly, you know, this is going to be a win. It's, you know, it's going to dominate. Terms\nand\nPrivacy Policy\nPrivacy Dashboard\nMore Info",
+        "[GOOGL] Title    : Earnings live: AMC stock soars 26% on 'superb' Q2, Domino's stock rises\nSource   : Yahoo Finance [full]\nURL      : https://finance.yahoo.com/markets/live/earnings-live-second-quarter-results-tesla-google-july-115324842.html\nPublished: 2026-07-20T11:53:24Z\n\nLIVE\nEarnings live: AMC stock soars 26% on 'superb' Q2, Domino's stock rises\nYahoo Finance\nUpdated\nMon, July 20, 2026 at 9:08 PM GMT+8\n1 min read\nIBM\n+0.16%\nGOOG\n+1.52%\n^GSPC\n-0.19%\nINTC\n+2.13%\nTSLA\n-2.96%\nA big quarter for AMC (\nAMC\n) showed the movie industry is finally regaining its footing after years of a stilted post-pandemic recovery. The results kick off a stacked week of earnings, with Big Tech companies Alphabet (\nGOOG\n,\nGOOGL\n) and Tesla (\nTSLA\n) highlighting the calendar. The pair, along with US chipmaker Intel (\nINTC\n), will offer a crucial update on artificial intelligence demand as investors remain torn about huge capex commitments for the AI build-out. IBM (\nIBM\n), meanwhile, will provide a fuller picture of its Q2 results after its stock plunged on pre-announced earnings. Rounding out the docket this week are reports from General Motors (\nGM\n), GE Vernova (\nGEV\n), AT&T (\nT\n), Lockheed Martin (\nLMT\n), and American Express (\nAXP\n). Overall, it's shaping up to be a\nstrong earnings season\nfor the S&P 500 (\n^GSPC\n). According to\nFactSet data\n, analysts estimate the year-over-year S&P 500 earnings growth rate for the second quarter will be 24.7% — above the five-year average of 16.4% and the 10-year average of 10.3%. If that holds, it will mark the second consecutive quarter of earnings growth above 20% for the index and the seventh straight quarter of double-digit growth.",
+        "[NVDA] Read more here. Mon, May 18, 2026 at 11:10 AM UTC\nGrace O'Donnell\nNvidia to report Q1 earnings as chip competition grows\nAI heavyweight Nvidia (\nNVDA\n) will report its first quarter results on May 20, in what is easily one of the most anticipated announcements of the earnings season. Yahoo Finance’s\nDaniel Howley\npreviews what to expect:\nIn addition to its China woes, Nvidia is contending with increasing competition in the AI chip space. Chip company Cerebras (\nCBRS\n) held its initial public offering on Thursday,\nwith shares climbing 68%\n. Cerebras sells a\ndifferent form of AI processor than Nvidia\n, which the company says offers faster overall performance speeds. Nvidia is also facing ever-increasing competition from AMD (\nAMD\n), which will launch a competing rack-scale server system later this year, as well as from customers, including Amazon (\nAMZN\n) and Google (\nGOOG\n,\nGOOGL\n), which are offering their AI chips to third-party customers. In its latest earnings report, Amazon announced that its chip business now has an annual revenue run rate of more than $20 billion and is growing at triple-digit percentages year over year. Read more here.",
+        "[AAPL] Title    : AI Integration and iPhone Growth Assert Apple Inc. (AAPL) as One of the Best Forever Stocks to Buy\nSource   : Insider Monkey [full]\nURL      : https://finance.yahoo.com/markets/stocks/articles/ai-integration-iphone-growth-assert-032616166.html\nPublished: 2026-06-12T03:26:16Z\n\nAI Integration and iPhone Growth Assert Apple Inc. (AAPL) as One of the Best Forever Stocks to Buy\nAbdul Rahman\nFri, June 12, 2026 at 11:26 AM GMT+8\n2 min read\nAAPL\n+1.39%\nGOOG\n+0.92%\nApple Inc. (NASDAQ:\nAAPL\n) is\none of the best forever stocks to buy, according to analysts\n. On June 6, Deep Asset Management’s Gene Munster reiterated that Apple Inc. (NASDAQ:AAPL) is on the cusp of edging higher. Munster expects the company’s sentiment to receive a significant boost from the Worldwide Developers Conference, terming it the most important conference in the company’s 43-year history. The tech giant is expected to showcase a redesigned Siri feature that has been in development for the past two years, further asserting its AI strategy. Enhanced AI integration is expected to enable the digital assistant to leverage personal context securely while improving information retrieval and third-party app automation. Munster expects Apple to position the Siri app to better compete against ChatGPT, Grok, and Gemini while featuring Search or Ask Prompt powered by Google. While Apple has come under pressure for what many believe are underwhelming AI offerings, its iPhone growth has surged to 16% over the past four quarters, affirming customer loyalty. The recent sales increase has come on the back of significant upgrades to the company’s core product. Apple Inc. (NASDAQ:AAPL) is a global technology company that designs, manufactures, and markets consumer electronics, software, and online services. Its primary goal is creating seamless, intuitive hardware and digital services designed for everyday work, communication, and entertainment. While we acknowledge the potential of AAPL as an investment, we believe certain AI stocks offer greater upside potential and carry less downside risk. If you're looking for an extremely undervalued AI stock that also stands to benefit significantly from Trump-era tariffs and the onshoring trend, see our free report on the\nbest short-term AI stock\n. READ NEXT:\n8 Most Profitable Crypto-Exposed Stocks to Buy Now\nand\n10 Best Robinhood Stocks Under $20 to Buy Now\n."
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Google 收購 Wiz 的相關新聞內容是什麼"
+      ],
+      "agentic_n_chunks": 5
+    },
+    {
+      "id": "mix-09",
+      "category": "mixed",
+      "query": "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？",
+      "answerable": true,
+      "answer": "Apple 大中華區在最新一季（截至 2026 年 6 月 27 日的三個月）營收較去年同期成長 **22%**【AAPL_10Q_202606.html, chunk #37】。  \n\n此成長主要來自 iPhone 銷售的提升，以及人民幣相對美元的升值帶來的匯率正面效應，兩者共同推動了大中華區的淨銷售額從 2025 年的 153.69 億美元（$15,369 百萬）增至 2026 年的 188.16 億美元（$18,816 百萬）【AAPL_10Q_202606.html, chunk #37】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #37 (rerank=0.729)\n  - AAPL_10Q_202606.html #26 (rerank=0.722)\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.539)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[AAPL 10-Q period 202606] [section: Segment Operating Performance] Segment Operating Performance\n\nThe following table shows net sales by reportable segment for the three- and nine-month periods ended June 27, 2026 and June 28, 2025 (dollars in millions):\n\nThree Months EndedNine Months Ended\n\nJune 27,2026June 28,2025ChangeJune 27,2026June 28,2025Change\n\nAmericas$45,781 $41,198 11%$149,403 $134,161 11%\n\nEurope29,395 24,014 22%95,596 82,329 16%\n\nGreater China18,816 15,369 22%64,839 49,884 30%\n\nJapan6,554 5,782 13%24,368 22,067 10%\n\nRest of Asia Pacific8,871 7,673 16%30,151 25,254 19%\n\nTotal net sales$109,417 $94,036 16%$364,357 $313,695 16%\n\nAmericas\n\nAmericas net sales increased during the third quarter and first nine months of 2026 compared to the same periods in 2025 primarily due to higher net sales of iPhone, Services and Mac. Europe\n\nEurope net sales increased during the third quarter and first nine months of 2026 compared to the same periods in 2025 primarily due to higher net sales of iPhone, Services and Mac.\n\nThe strength in foreign currencies relative to the U.S. dollar had a net favorable year-over-year impact on Europe net sales during the first nine months of 2026. Greater China\n\nGreater China net sales increased during the third quarter and first nine months of 2026 compared to the same periods in 2025 primarily due to higher net sales of iPhone. The strength in the renminbi relative to the U.S. dollar had a favorable year-over-year impact on Greater China net sales during the third quarter and first nine months of 2026.\n\nApple Inc. | Q3 2026 Form 10-Q | 14\n\nJapan\n\nJapan net sales increased during the third quarter and first nine months of 2026 compared to the same periods in 2025 due to higher net sales of iPhone. The weakness in the yen relative to the U.S. dollar had an unfavorable year-over-year impact on Japan net sales during the third quarter and first nine months of 2026. Rest of Asia Pacific\n\nRest of Asia Pacific net sales increased during the third quarter and first nine months of 2026 compared to the same periods in 2025 primarily due to higher net sales of iPhone, Services and Mac. The strength in foreign currencies relative to the U.S. dollar had a net favorable year-over-year impact on Rest of Asia Pacific net sales during the third quarter of 2026.",
+        "[AAPL 10-Q period 202606] Apple Inc. | Q3 2026 Form 10-Q | 11\n\nNote 10 – Segment Information\n\nThe following tables show information by reportable segment for the three- and nine-month periods ended June 27, 2026 and June 28, 2025 (in millions):\n\nThree Months Ended June 27, 2026\n\nAmericasEuropeGreater\n\nChina\n\nJapanRest ofAsia PacificCorporateTotal\n\nNet sales$45,781 $29,395 $18,816 $6,554 $8,871 $— $109,417 \n\nCost of sales(21,507)(14,732)(10,771)(3,310)(4,327)— (54,647)\n\nResearch and development— — — — — (11,729)(11,729)\n\nSelling and marketing(2,573)(1,220)(639)(240)(362)— (5,034)\n\nGeneral and administrative— — — — — (2,312)(2,312)\n\nOperating income/(loss)$21,701 $13,443 $7,406 $3,004 $4,182 $(14,041)$35,695 \n\nThree Months Ended June 28, 2025\n\nAmericasEuropeGreaterChinaJapanRest ofAsia PacificCorporateTotal\n\nNet sales$41,198 $24,014 $15,369 $5,782 $7,673 $— $94,036 \n\nCost of sales(22,174)(12,379)(8,970)(2,695)(4,100)— (50,318)\n\nResearch and development— — — — — (8,866)(8,866)\n\nSelling and marketing(2,513)(1,134)(577)(215)(330)— (4,769)\n\nGeneral and administrative— — — — — (1,881)(1,881)\n\nOperating income/(loss)$16,511 $10,501 $5,822 $2,872 $3,243 $(10,747)$28,202 \n\nNine Months Ended June 27, 2026\n\nAmericasEuropeGreater\n\nChina\n\nJapanRest ofAsia PacificCorporateTotal\n\nNet sales$149,403 $95,596 $64,839 $24,368 $30,151 $— $364,357 \n\nCost of sales(76,470)(47,549)(34,434)(12,088)(15,034)— (185,575)\n\nResearch and development— — — — — (34,035)(34,035)\n\nSelling and marketing(7,906)(3,762)(2,018)(824)(1,122)— (15,632)\n\nGeneral and administrative— — — — — (6,683)(6,683)\n\nOperating income/(loss)$65,027 $44,285 $28,387 $11,456 $13,995 $(40,718)$122,432 \n\nNine Months Ended June 28, 2025\n\nAmericasEuropeGreater\n\nChina\n\nJapanRest ofAsia PacificCorporateTotal\n\nNet sales$134,161 $82,329 $49,884 $22,067 $25,254 $— $313,695 \n\nCost of sales(71,763)(43,447)(27,523)(10,698)(13,404)— (166,835)\n\nResearch and development— — — — — (25,684)(25,684)\n\nSelling and marketing(7,604)(3,458)(1,753)(749)(1,037)— (14,601)\n\nGeneral and administrative— — — — — (5,952)(5,952)\n\nOperating income/(loss)$54,794 $35,424 $20,608 $10,620 $10,813 $(31,636)$100,623 \n\nApple Inc. | Q3 2026 Form 10-Q | 12",
+        "[AAPL] === AAPL Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Apple Inc. Sector : Technology Industry : Consumer Electronics Employees: 166,000\n\n--- Valuation Metrics --- Market Cap : $4342.02B Enterprise Value : $4358.23B P/E Ratio Trailing: 35.83394 P/E Ratio Forward : 30.810581 Price/Sales (TTM) : 9.618119 Price/Book : 40.720387 EV/EBITDA : 27.243\n\n--- Profitability --- Revenue (TTM) : $451.44B Gross Profit : $216.07B EBITDA : $159.98B Net Income : $122.58B Profit Margin : 27.15% Operating Margin: 32.27% Gross Margin : 47.86%\n\n--- Growth --- Revenue Growth (YoY): 16.60% Earnings Growth : 21.80% EPS Trailing : 8.25 EPS Forward : 9.59508"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "Apple 大中華區最新一季營收成長多少？",
+        "Apple 大中華區最新一季營收的主要驅動因素是什麼？"
+      ],
+      "agentic_n_chunks": 3
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_after2.json"
+  },
+  "records": [
+    {
+      "id": "news-11",
+      "query": "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+      "why": "flow",
+      "answer": "亞馬遜最近在歐洲的最大投資是 2026 年 3 月宣布的 **在西班牙再投入 18 億歐元（約 210 億美元）擴建資料中心並推動 AI，讓其在西班牙的總投資累計達到 33.7 億歐元**【web: https://www.reuters.com/business/retail-consumer/amazon-invest-additional-21-billion-spain-data-centres-ai-2026-03-02】。  \n\n- 這筆額外投資將支援 **至 2035 年最多 30,000 個工作機會**，並宣稱「把西班牙打造為我們在歐洲的 AI 中心」【web: https://www.reuters.com/business/retail-consumer/amazon-invest-additional-21-billion-spain-data-centres-ai-2026-03-02】。  \n- 先前，AWS 已於去年宣布在西班牙阿拉貢地區投資 **15.7 億歐元** 建置資料中心，預計每年為當地企業創造約 **17,500 個工作機會**，持續到 2033 年【web: https://www.reuters.com/business/retail-consumer/amazon-invest-additional-21-billion-spain-data-centres-ai-2026-03-02】。  \n\n其他近期的歐洲大型投資包括：\n\n1. **意大利**：2024 年 5 月的報導指出，AWS 正在與意大利談判「數十億歐元」規模的雲端擴張投資，雖未確定最終金額，但規模預計不會超過西班牙的規模【web: https://www.cnbc.com/2024/05/28/amazon-reportedly-in-talks-with-italy-to-invest-billions-of-euros-in-cloud-expansion.html】。  \n2. **德國**：同一篇 2024 年報導提到，AWS 計畫在德國 **7.8 億歐元** 的投資，持續到 2040 年【web: https://www.cnbc.com/2024/05/28/amazon-reportedly-in-talks-with-italy-to-invest-billions-of-euros-in-cloud-expansion.html】。  \n3. **荷蘭**：2025 年 10 月的報導顯示，亞馬遜將在荷蘭未來三年投資 **1.4 億歐元**（約 1.63 億美元），此為其在歐元區第五大經濟體的最大投資，並將支援 AI 相關服務【web: https://www.reuters.com/business/retail-consumer/amazon-invest-16-billion-dutch-operations-fd-reports-2025-10-27】。  \n\n總結來說，2026 年 3 月的西班牙追加投資是目前亞馬遜在歐洲公布的最大金額，主要聚焦於資料中心擴建與 AI 能力提升，同時配合先前在西班牙、意大利、德國與荷蘭的多項大型雲端與 AI 基礎建設計畫。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+        "查找2026年最新的亞馬遜在歐洲的大型投資新聞，聚焦於物流、數據中心或其他重大項目"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-12",
+      "query": "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？",
+      "why": "flow",
+      "answer": "Tesla 最近因多則與 Elon Musk 相關的報導而受到市場高度關注，主要包括「飛行車傳聞」導致股價大跌、探索中國事業拆分、Musk 減少參與政治與加密貨幣工作、以及首批全自動 Robotaxi 上路等消息。  \n\n- **傳聞將於 2026 年 8 月在德州測試「飛行」Roadster**：分析師指出，Tesla 今年以來股價下跌 24%（YTD），原因包括自 2023 年起交付量停滯、營運利潤率在過去 12 個月壓縮至約 4.6%（較歷史高點 15% 以上下降），且公司預計 2026 年資本支出約為 **250 億美元（$25 billion）**，約為前一年雙倍，進一步壓縮短期獲利空間【web: https://finance.yahoo.com/markets/stocks/articles/elon-musk-rumored-unveil-flying-173439844.html】。  \n- **探索將中國業務拆分以應對監管與供應鏈挑戰**：報導稱，Tesla 正討論將中國工廠獨立，雖然 Musk 否認會與 SpaceX 合併，但此舉可能影響全球產能布局；同時利潤率已從去年 **6.3%** 下降至 **3.7%**，且股東面臨稀釋風險，市場對此結構性變動保持高度關注【web: https://finance.yahoo.com/markets/stocks/articles/tesla-tsla-explores-china-split-020749681.html】。  \n- **Musk 承諾減少參與政治與 DOGE 相關工作**：2025 年 4 月 22 日的 Reuters 報導指出，Musk 表示將大幅縮減在「政府效率部」的時間，並把更多精力放在旗下多家公司上，投資人因此擔憂他對 Tesla 的管理投入不足，尤其在銷售下滑的背景下【web: https://www.reuters.com/business/autos-transportation/tesla-investors-await-details-affordable-electric-car-plans-boost-sales-2025-04-22】。  \n- **Tesla 股價因 Musk「分心」而下跌**：2025 年 2 月 11 日的 Reuters 影片說明，分析師認為 Musk 同時經營多項事業（包括 SpaceX、Twitter 等）導致投資者對 Tesla 前景產生疑慮，股價出現顯著波動【web: https://www.reuters.com/video/watch/idRW066611022025RP1】。  \n- **首批全自動 Robotaxi 於 2025 年 6 月 22 日在德州奧斯汀上路**：SEC 文件顯示，Tesla 在 Musk 領導下於 2025 年 6 月 22 日正式啟動首批無人駕駛出租車服務，標誌著公司在自動駕駛商業化方面取得里程碑式進展【web: https://www.sec.gov/Archives/edgar/data/1318605/000110465925087598/tm252289-4_pre14a.htm】。  \n- **市值大幅成長至約 10,800 億美元（$1.08 trillion）**：同一 SEC 文件亦披露，Tesla 市值從 2018 年約 **535 億美元（$53.5 billion）** 成長至 **10,800 億美元（$1.08 trillion）**（截至 2025 年 8 月 29 日），顯示即使面臨上述挑戰，市場仍對其長期價值抱持高度期待【web: https://www.sec.gov/Archives/edgar/data/1318605/000110465925087598/tm252289-4_pre14a.htm】。  \n\n以上新聞皆直接影響 Tesla 在投資者與大眾中的關注度，從股價波動、利潤率變化、結構調整，到技術里程碑與公司市值，都呈現出近期與 Elon Musk 相關的多元動態。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-13",
+      "query": "最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？",
+      "why": "flow",
+      "answer": "截至最近，蘋果 (AAPL) 股價在 300 美元以上徘徊，收於約 314.58 美元；微軟 (MSFT) 股價則在 390 美元左右，收於約 392.74 美元；其餘五大科技股（Amazon、Alphabet、Meta、Nvidia、Tesla）在提供的資料中未見即時價格資訊，故無法給予具體報導【知識庫中查無足夠資料】。\n\n**蘋果 (AAPL)**\n- 2026 年 8 月 27 日收盤 314.58 美元，為最近一筆有日期的收盤價【web: https://finance.yahoo.com/quote/AAPL/history】。  \n- 同日收盤後的盤後行情顯示 318.89 美元，跌幅 0.25%【web: https://www.cnbc.com/quotes/AAPL】。  \n- 近期股價呈現下跌趨勢：過去一個月跌幅約 9%【web: https://finance.yahoo.com/news/buy-dip-apple-stock-january-202025128.html】。  \n- 7 月 31 日的 Reuters 報導指出，蘋果股價單日跌近 10%，市值蒸發近 5000 億美元【web: https://www.reuters.com/business/retail-consumer/apple-slides-supply-snags-cloud-outlook-putting-iphone-demand-focus-2026-07-31】。\n\n**微軟 (MSFT)**\n- 最近報導的收盤價為 392.74 美元【web: https://finance.yahoo.com/news/microsoft-msft-still-attractive-recent-121316210.html】。  \n- 近 7 天跌幅 1.1%，近 30 天跌幅 8.7%，年初至今跌幅 17.0%【web: https://finance.yahoo.com/news/microsoft-msft-still-attractive-recent-121316210.html】。  \n\n**Amazon (AMZN)**\n- 目前的參考資料未提供 Amazon 的即時或近期股價資訊，故無法報導【知識庫中查無足夠資料】。\n\n**Alphabet / Google (GOOGL)**\n- 參考資料未包含 Alphabet 的最新股價資訊，故無法報導【知識庫中查無足夠資料】。\n\n**Meta (META)**\n- 參考資料未提供 Meta 的即時股價資訊，故無法報導【知識庫中查無足夠資料】。\n\n**Nvidia (NVDA)**\n- 參考資料未列出 Nvidia 的最新股價資訊，故無法報導【知識庫中查無足夠資料】。\n\n**Tesla (TSLA)**\n- 參考資料未提供 Tesla 的即時股價資訊，故無法報導【知識庫中查無足夠資料】。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 最近的股價有什麼值得注意的消息",
+        "Microsoft 最近的股價有什麼值得注意的消息",
+        "Amazon 最近的股價有什麼值得注意的消息",
+        "Alphabet 最近的股價有什麼值得注意的消息",
+        "Meta 最近的股價有什麼值得注意的消息",
+        "Nvidia 最近的股價有什麼值得注意的消息",
+        "Tesla 最近的股價有什麼值得注意的消息"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-14",
+      "query": "新聞如何評價 Apple 服務業務的成長與獲利能力？",
+      "why": "flow",
+      "answer": "新聞普遍將 Apple 的服務業務描述為「快速擴張且具高獲利貢獻」的關鍵成長動能，並指出它正提升整體毛利與營業利潤。  \n\n- Yahoo 報導指出，服務業務的「快速擴張與多元化」已成為公司表現的主要成長驅動力，並稱其正處於「強勁向上軌跡」[web: https://finance.yahoo.com/markets/stocks/articles/apple-continues-expand-services-business-151500230.html]。  \n- CNBC 在 2025 年 7 月的財報說明中提到，管理層強調 iCloud 訂閱的成長，且 App Store 營收呈「雙位數」增長，顯示服務收入正以雙位數速度上升[web: https://www.cnbc.com/2025/07/31/apple-aapl-q3-earnings-report-2025.html]。  \n- 同樣在 CNBC 2025 年 1 月的報導裡，財務長 Kevan Parekh 表示「服務業務整體上對公司毛利具加成效果」，說明服務部門的成長已抵消 iPhone 銷售放緩，並提升整體毛利率[web: https://www.cnbc.com/2025/01/30/apples-gross-margin-hits-record-as-services-business-keeps-growing.html]。  \n- Yahoo 另一篇未標示日期的分析文章稱，服務業務「規模持續擴大」，主要受廣告、App Store 與雲端服務的銷售推動，進一步說明服務已成為公司獲利的重要來源[web: https://finance.yahoo.com/news/apples-services-business-major-catalyst-182600661.html]。  \n- Reuters 2026 年 7 月的報導把服務業務稱為「第二大收入領域」，強調其在公司營收結構中的重要位置[web: https://www.reuters.com/business/retail-consumer/apple-revenue-profits-beat-expectations-iphone-mac-sales-2026-07-30]。  \n\n從公司整體財務角度看，Apple 2026 年 TTM 的**營業利潤率 32.27%**、**毛利率 47.86%**，以及**淨利率 27.15%**，顯示整體獲利能力相當健康，服務業務的正向貢獻是提升這些指標的主要因素之一[Reference 1: AAPL_Fundamentals_20260612.txt, chunk #0]。  \n\n綜合上述，新聞一致認為 Apple 的服務部門正以雙位數的速度持續成長，且因其高毛利特性而對公司整體獲利與毛利率產生顯著的正向影響。\n\n---\n⚠ 口徑說明：上文引用的 TTM（最近十二個月）口徑數值為 **Revenue Growth 16.60%**，與文中的財報期間（財年／單季）數字不是同一個口徑——兩者數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.511)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 新聞如何評價 Apple 服務業務的成長與獲利能力？",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "新聞如何評價 Apple 服務業務的成長與獲利能力？"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "news-15",
+      "query": "新聞報導 Apple 為什麼被視為值得長期持有的股票？",
+      "why": "flow",
+      "answer": "Apple 被視為值得長期持有，因為它擁有超過 25 億（2.5 billion） 部活躍裝置的龐大基礎、持續成長且高毛利的 Services 營收，以及營收與獲利均保持兩位數成長的強勁財務表現。[web: https://finance.yahoo.com/markets/stocks/articles/apple-rises-20-3-months-130800574.html]  \n\n- **龐大且黏著的用戶基礎**：Apple 目前的活躍裝置超過 25 億（2.5 billion） 部，為公司提供穩定的硬體銷售與後續升級機會。[web: https://finance.yahoo.com/markets/stocks/articles/apple-rises-20-3-months-130800574.html]  \n- **服務營收的高成長與高佔比**：在 FY2026 第二季，Services 佔總淨銷售的 27.9%，營收較去年同期成長 16.3%，達到 309.8 億美元（$30.98 billion），創下公司史上最高紀錄，顯示訂閱、支付、雲端、廣告等高毛利、經常性收入持續擴大。[web: https://finance.yahoo.com/markets/stocks/articles/apple-rises-20-3-months-130800574.html]  \n- **產品需求與 AI 策略**：iPhone 17 需求強勁，且 Apple 正加速 on‑device AI（Apple Intelligence）與自研 Apple Silicon 的佈局，預期能提升使用者黏著度、促進設備升級並開啟新營收來源。[web: https://finance.yahoo.com/markets/stocks/articles/apple-rises-20-3-months-130800574.html]  \n- **財務表現與獲利能力**：截至 2026‑06‑12 的 TTM，Apple 營收 4,514.4 億美元（$451.44 billion），毛利率 47.86%，營業利益率 32.27%，淨利率 27.15%；營收年增率 16.60%，盈餘年增率 21.80%，顯示公司在高價值硬體與高毛利服務雙引擎下持續快速成長。[AAPL_Fundamentals_20260612.txt, chunk #0]  \n- **現金流與資本回饟**：在最近九個月（截至 2026‑06‑27）營運產生的現金 1,169.96 億美元（$116,996 million），顯示強大的現金生成能力，為未來研發、併購及股東回饋提供充足資金。[AAPL_10Q_202606.html, chunk #2]  \n\n綜合以上因素：龐大的裝置生態系、持續擴張且高毛利的 Services、強勁的硬體需求與 AI 前瞻布局，以及穩健的營收與獲利成長，使 Apple 被視為具備長期投資價值的股票。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #2 (rerank=0.729)\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.729)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Apple 為什麼被視為值得長期持有的股票？\n  - 查找近期新聞與分析師觀點，說明 Apple 為何被視為值得長期持有的股票\n  - 查找2024年至2026年期間的新聞與分析師報告，說明 Apple 為何被視為值得長期持有的股票",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 為什麼被視為值得長期持有的股票？",
+        "Apple 的最新基本面數據（營收、淨利、自由現金流等）截至 2026-06-12",
+        "查找近期新聞與分析師觀點，說明 Apple 為何被視為值得長期持有的股票",
+        "查找2024年至2026年期間的新聞與分析師報告，說明 Apple 為何被視為值得長期持有的股票"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    }
+  ]
+}

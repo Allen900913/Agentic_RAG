@@ -1,0 +1,175 @@
+[
+ {
+  "case": "apple_mktcap",
+  "kind": "market_cap",
+  "form": "A 問句・無ticker（＝生產現況）",
+  "query": "What is Apple's current market capitalization?",
+  "n_raw": 12,
+  "n_allowed": 2,
+  "n_with_value": 0,
+  "top_score": 0.377,
+  "hosts": [
+   "finance.yahoo.com"
+  ]
+ },
+ {
+  "case": "apple_mktcap",
+  "kind": "market_cap",
+  "form": "B 問句・有ticker",
+  "query": "What is Apple (AAPL) current market capitalization?",
+  "n_raw": 12,
+  "n_allowed": 3,
+  "n_with_value": 0,
+  "top_score": 0.241,
+  "hosts": [
+   "finance.yahoo.com",
+   "www.cnbc.com"
+  ]
+ },
+ {
+  "case": "apple_mktcap",
+  "kind": "market_cap",
+  "form": "C 關鍵詞・無ticker",
+  "query": "Apple market cap",
+  "n_raw": 10,
+  "n_allowed": 2,
+  "n_with_value": 0,
+  "top_score": 0.48,
+  "hosts": [
+   "finance.yahoo.com"
+  ]
+ },
+ {
+  "case": "apple_mktcap",
+  "kind": "market_cap",
+  "form": "D 關鍵詞・有ticker",
+  "query": "AAPL market cap today",
+  "n_raw": 12,
+  "n_allowed": 3,
+  "n_with_value": 0,
+  "top_score": 0.543,
+  "hosts": [
+   "finance.yahoo.com",
+   "www.marketwatch.com"
+  ]
+ },
+ {
+  "case": "msft_mktcap",
+  "kind": "market_cap",
+  "form": "A 問句・無ticker（＝生產現況）",
+  "query": "What is Microsoft's current market capitalization?",
+  "n_raw": 12,
+  "n_allowed": 2,
+  "n_with_value": 0,
+  "top_score": 0.085,
+  "hosts": [
+   "finance.yahoo.com"
+  ]
+ },
+ {
+  "case": "msft_mktcap",
+  "kind": "market_cap",
+  "form": "B 問句・有ticker",
+  "query": "What is Microsoft (MSFT) current market capitalization?",
+  "n_raw": 12,
+  "n_allowed": 2,
+  "n_with_value": 0,
+  "top_score": 0.124,
+  "hosts": [
+   "finance.yahoo.com"
+  ]
+ },
+ {
+  "case": "msft_mktcap",
+  "kind": "market_cap",
+  "form": "C 關鍵詞・無ticker",
+  "query": "Microsoft market cap",
+  "n_raw": 11,
+  "n_allowed": 3,
+  "n_with_value": 0,
+  "top_score": 0.085,
+  "hosts": [
+   "apnews.com",
+   "finance.yahoo.com"
+  ]
+ },
+ {
+  "case": "msft_mktcap",
+  "kind": "market_cap",
+  "form": "D 關鍵詞・有ticker",
+  "query": "MSFT market cap today",
+  "n_raw": 12,
+  "n_allowed": 11,
+  "n_with_value": 6,
+  "top_score": 0.864,
+  "hosts": [
+   "companiesmarketcap.com",
+   "finance.yahoo.com",
+   "stockanalysis.com",
+   "www.macrotrends.net"
+  ]
+ },
+ {
+  "case": "nvda_price",
+  "kind": "price",
+  "form": "A 問句・無ticker（＝生產現況）",
+  "query": "What is NVIDIA's current stock price?",
+  "n_raw": 12,
+  "n_allowed": 12,
+  "n_with_value": 7,
+  "top_score": 0.881,
+  "hosts": [
+   "finance.yahoo.com",
+   "www.cnbc.com",
+   "www.macrotrends.net",
+   "www.nasdaq.com",
+   "www.reuters.com",
+   "www.wsj.com"
+  ]
+ },
+ {
+  "case": "nvda_price",
+  "kind": "price",
+  "form": "B 問句・有ticker",
+  "query": "What is NVIDIA (NVDA) current stock price?",
+  "n_raw": 12,
+  "n_allowed": 12,
+  "n_with_value": 8,
+  "top_score": 0.937,
+  "hosts": [
+   "finance.yahoo.com",
+   "www.cnbc.com",
+   "www.macrotrends.net",
+   "www.nasdaq.com",
+   "www.reuters.com",
+   "www.wsj.com"
+  ]
+ },
+ {
+  "case": "nvda_price",
+  "kind": "price",
+  "form": "C 關鍵詞・無ticker",
+  "query": "NVIDIA stock price",
+  "n_raw": 12,
+  "n_allowed": 2,
+  "n_with_value": 0,
+  "top_score": 0.265,
+  "hosts": [
+   "finance.yahoo.com"
+  ]
+ },
+ {
+  "case": "nvda_price",
+  "kind": "price",
+  "form": "D 關鍵詞・有ticker",
+  "query": "NVDA stock price today",
+  "n_raw": 12,
+  "n_allowed": 12,
+  "n_with_value": 6,
+  "top_score": 0.937,
+  "hosts": [
+   "finance.yahoo.com",
+   "www.marketwatch.com"
+  ]
+ }
+]
