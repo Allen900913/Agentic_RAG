@@ -380,7 +380,7 @@ def _mentioned_tickers(text: str) -> set[str]:
 #     一模一樣；候選池雖然會換（Jaccard 0.897 vs 噪音 0.947）但換掉的都是無關 chunk。
 # ⚠ 這會讓本次之後的 agentic 跑分與 2026-08-14 以前的前處理不同（雖已量到無作用）。
 #   要重現舊跑分請設 env `AGENTIC_RETRIEVAL_MODEL=openai/gpt-oss-20b`。
-RETRIEVAL_MODEL = os.getenv("AGENTIC_RETRIEVAL_MODEL", "openai/gpt-oss-120b")
+RETRIEVAL_MODEL = os.getenv("AGENTIC_RETRIEVAL_MODEL", "nvidia/nemotron-3-super-120b-a12b")  # ⚠ 2026-09-03 換：gpt-oss-120b 被 NVIDIA 退役（410 Gone）。選型見 experiments/_model_bakeoff_20260903.log
 
 # ── ratio 題財務錨源保底（doc_type 版的 _ensure_ticker_coverage）─────────────────────
 # 病灶（見 trace/probe）：毛利率/淨利率/成長率等「可從 10-K/10-Q 原始行自行計算」的指標，池中

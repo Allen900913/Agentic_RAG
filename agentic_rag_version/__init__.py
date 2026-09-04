@@ -79,7 +79,7 @@ import rag_query as rq
 #   而這個模組的公開介面幾乎全是底線名（eval 與閘門直接吃 `ar._xxx`）。
 # CHECKER_MODEL：planner 拆解 / sufficiency 判斷 / reflection 幻覺稽核共用（要結構化 JSON 可靠 + 快）。
 # gpt-oss-120b：tool-call/結構化輸出快又合法、無下架風險。
-CHECKER_MODEL   = os.getenv("AGENTIC_CHECKER_MODEL", "openai/gpt-oss-120b")
+CHECKER_MODEL   = os.getenv("AGENTIC_CHECKER_MODEL", "nvidia/nemotron-3-super-120b-a12b")  # ⚠ 2026-09-03 換：gpt-oss-120b 被 NVIDIA 退役（410 Gone）。選型見 experiments/_model_bakeoff_20260903.log
 
 POOL_RETURN_K     = int(os.getenv("AGENTIC_POOL_RETURN_K", "5"))   # 餵給 Checker 看的候選片段數（top-k by rerank）。env 可覆蓋供 ablation。
 
@@ -562,11 +562,10 @@ def _retrieve_chunks(query: str, *, attributable: bool) -> list[dict]:
 
 # agentic 輸出語言硬約束(繁中產品定位):整段敘述繁體中文,但依 Rule 11 保留來源 "$X billion/million"
 # 單位詞與英文術語/代號原文不改(數字後續由 rq.convert_usd_units_to_yi 雙寫成「億(＄X billion)」)。
-_ZH_ANSWER_DIRECTIVE = (
-    "\n\nLANGUAGE — 你的整段回答必須用【繁體中文】書寫,不得用英文段落、不得用簡體字。"
-    "保留英文金融術語、股票代號(NVDA/MSFT/…)、以及來源的 \"$X billion / $Y million\" 單位詞【照原文】"
-    "(依 Rule 11,不要自己換算成億);只有敘述文字要繁體中文,數字與其單位詞不改。"
-)
+# ⚠ 2026-09-03 起**唯一定義點在 `rq.ZH_ANSWER_DIRECTIVE`**：單發管線也需要同一段文字
+#   （它原本沒附 → 換模型後整篇英文）。這裡保留這個名字是因為 eval 直接讀它
+#   （`verify_web_gate_isolation` 閘門③ 的 baseline ＝ `rq.SYSTEM_PROMPT + ar._ZH_ANSWER_DIRECTIVE`）。
+_ZH_ANSWER_DIRECTIVE = rq.ZH_ANSWER_DIRECTIVE
 
 
 # 只在**真的有 web 結果時**才附加到 system message 的修訂條款（2026-08-13）。

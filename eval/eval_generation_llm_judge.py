@@ -48,7 +48,7 @@ load_dotenv(override=True)
 import rag_query as rq
 
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
-DEFAULT_GEN_MODEL = rq.DEFAULT_MODEL   # "openai/gpt-oss-120b"，與生產 rag_query.py 一致
+DEFAULT_GEN_MODEL = rq.DEFAULT_MODEL   # 與生產 rag_query.py 一致（刻意不複述模型名，會漂）
 # 2026-07-19：judge 預設從 qwen3-32b 換成 gpt-oss-20b。qwen/qwen3-32b 已下架
 # （404 model_not_found），NVIDIA 目錄亦無任何可用的 Qwen 替身：qwen3-next-80b /
 # seed-oss-36b 都帶 Deprecation:2026-07-27、nemotron-nano-3-30b 直接 404。

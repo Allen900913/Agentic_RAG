@@ -8,6 +8,55 @@
 
 ---
 
+## 未換完：三支 eval 腳本的預設仍指向已退役的模型（2026-09-03 起）
+
+`openai/gpt-oss-120b` 於 2026-09-03T08:00Z 被 NVIDIA 退役（`410 Gone`）。
+**生產側五個定義點當天已全數換成 `nvidia/nemotron-3-super-120b-a12b`**
+（`rq.DEFAULT_MODEL`／`DEFAULT_GEN_MODEL`、`CHECKER_MODEL`／`GEN_MODEL`／`RETRIEVAL_MODEL`），
+選型證據 `experiments/_model_bakeoff_20260903.log`——**生產管線是活的**（2026-09-04 端到端確認）。
+**沒換完的是 eval 側，而且每一支的卡點都不同**：
+
+- `eval/eval_ragas_vs_rubric.py:65` `DEFAULT_RAGAS_MODEL` — **卡在「換成誰」，不是「換不換」**。
+  ⚠ **不要寫成「留著是為了保住可比性」**（2026-09-04 一度這樣寫，是錯的）：舊 judge 已經
+  410，**產不出任何新數字**，可比性在退役那一刻就沒了。留著死常數保不住任何東西。
+  ⚠ **也不要順手改成 `nemotron-3-super`**——那正是現在的 `GEN_MODEL`，而
+  `eval_generation_llm_judge.py:54-57` 記著 `judge_regression.py` 的 11 案例實測：
+  `gpt-oss-20b` 10/11 vs `gpt-oss-120b` 9/11，**後者被判掉的理由之一就是「與 gen_model
+  同一支（自評偏誤）」**。judge 與 generator 同源是這個 repo 量過並否決的形狀。
+  ⚠ 2026-09-03 的 bake-off **只量了三個結構化角色**（plan／check／filter），判準是輸出
+  穩定性與延遲——**它沒有量判定品質**，外推到 judge 沒有根據。
+  **可行起點**：`gpt-oss-20b` 還活著、且已是 correctness judge 的預設；換過去之後跑
+  `judge_regression.py`（`--repeat 3` 以上、看逐題 k/n）確認判別力，再重跑一個錨點基準。
+  📌 **correctness judge 沒有壞**：它 2026-07-19 就換成 `gpt-oss-20b` 了。死的只有 RAGAS judge
+  ——原條目寫「判定角色一起斷」是把兩個 judge 混為一談。
+- `eval/gen_reference_answers.py:38` `GEN_MODEL` — 參考答案的生成模型。**這支該換**
+  （不換的話第一次跑就 410），換本身安全：現有 `reference_answers.json` 已納版控，
+  不重生成就不會被動到。
+  ⚠ **真正的代價是 gold 混血**：現有 65 題是舊模型生的 ＋ 24 處人工校正；換模型後補新題，
+  gold 就變成兩代模型的混合物。要嘛接受並記錄哪幾題是新的，要嘛全量重生成＋重做人工校正。
+  ⚠ **任何重生成都要帶 `--ids`**：`--force` 不帶它會洗掉那 24 處。
+- `eval/ablate_retrieval_model.py:61` `MODEL_BIG` — 檢索側換模型的零噪音對照。
+  ⚠ **這支現在整個跑不起來**（大臂指向 410 的模型）。它正好是下面那條「拆開換」需要的
+  harness，要用之前得先把兩臂重新定義。
+
+**範圍已確認完整**（2026-09-04 全庫 AST 掃描，只認真正的字串常值、排除註解與 docstring）：
+live 的就是上面三支。另有 `eval/diagnose_crit_miss.py:32` 與 `eval/rejudge_with_model.py:73`
+也指向死模型，但那兩支是**已退役的舊 harness**（CLAUDE.md 檔案地圖明列不維護）→ 不修。
+⚠ 用 `grep gpt-oss-120b` 會撈到 19 個檔，其中絕大多數是**記錄當時選型理由的註解**，
+那些是正確的歷史、不該改（`eval_ragas_vs_rubric.py:229` 就是一例：它記的是舊常數綁在
+舊 judge ＋ 100 題上，改掉反而抹掉可比性的警告）。
+
+**仍然成立的三條判準**（換任何一支之前先讀）：
+
+- ⚠ **跨 2026-09-03 比任何跑分都是無效的**：`experiments/` 下所有結果檔與
+  `eval/web_replay_llm*.json` 的**生成端**產物都失效（中間產物有快取、生成沒有）。
+- ⚠ **五個角色不必然要用同一個模型**。現在是同一個純屬歷史。
+  判定側換模型會動到 judge 基準，檢索側不會 → **拆開換 ＝ 兩個獨立的 A/B，不要綁在一起做。**
+- ⚠ 「**LLM 太小導致生成錯誤**」那個假設仍然沒被量到。**要先有生成端的消融 harness**
+  （見上一項的 `ablate_retrieval_model.py`），否則量不出來。
+
+---
+
 ## 量尺缺口（做別的事之前先看這裡：這件事現在量得到嗎）
 
 - **RAGAS 的 `GOLD_BASELINE` 已在 65 題上重量，但 `NOISE` 只量過 1~2 對。**

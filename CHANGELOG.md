@@ -5,6 +5,31 @@
 
 ## 2026-09-03
 
+### 預設 LLM 被退役當天換掉：五個定義點 → `nemotron-3-super`
+
+`openai/gpt-oss-120b` 於 2026-09-03T08:00Z 被 NVIDIA 退役（`410 Gone`）。它是**檢索／判定／
+生成三側共用**的預設 → 當天整條管線的 LLM 全死。發現方式：重構驗收跑到一半，答案從某一題
+起全部變成 `_fallback_local_summary` 的「生成步驟發生錯誤」，時間邊界乾淨得可疑。
+
+**五個定義點**全部換成 `nvidia/nemotron-3-super-120b-a12b`：`rq.DEFAULT_MODEL`／
+`DEFAULT_GEN_MODEL`、`CHECKER_MODEL`／`GEN_MODEL`／`RETRIEVAL_MODEL`（後三者可 env 覆蓋）。
+
+**選型判準是輸出穩定性與延遲，不是模型大小**（同表格摘要模型換兩次的教訓）。
+證據 `experiments/_model_bakeoff_20260903.log`：nemotron-3-super 三個結構化角色 3/3 且最快
+（plan 10.4s／check 6.5s／filter 2.8s）；`deepseek-v4-pro` plan 一次 **604 秒**（一題 50~60 次
+呼叫 → 不可用）；`llama-3.1-nemotron-ultra-253b` 在 NIM 上 **404**。
+
+**換模型帶出來的一個既有缺陷**：單發管線的 system message **沒有附語言指示**，agentic 有。
+舊模型碰巧都吐中文所以看不出來，換成 nemotron 之後當場現形——單發路徑 12 題有 8 題整篇英文。
+`_ZH_ANSWER_DIRECTIVE` 因此上移成 `rq.ZH_ANSWER_DIRECTIVE`（唯一定義點），單發與 API 都接上；
+`ar._ZH_ANSWER_DIRECTIVE` 保留為別名，因為 `verify_web_gate_isolation` 閘門③ 直接讀它。
+
+⚠ **這次換模型讓所有既有基準與 replay fixture 的生成端失效**（中間產物有快取、生成沒有），
+且**沒有辦法與舊模型 A/B**——舊的已經下架。跨 2026-09-03 比任何 RAGAS 聚合值都是無效比較。
+
+⚠ eval 側還有三支的預設仍指向死模型，各自卡點不同（含 RAGAS judge 不可順手改成
+`nemotron-3-super`：那正是現在的 generator，自評偏誤是量過並否決的形狀）。見 `BACKLOG.md`。
+
 ### 套件化的端到端驗收：兩輪 fixture 重放，與重構前無法區分
 
 閘門是零 LLM 的**結構**驗證，覆蓋不到「答案品質有沒有變」。所以補跑

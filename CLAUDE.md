@@ -15,7 +15,7 @@
 | **生產 collection** | `us_stock_rag_edgar_multiyear`（77 份 filing／13,022 chunks／**無新聞**）。每家 3×10-K ＋ 8×10-Q，橫跨 ~2.5 年 |
 | **題庫** | [`eval/eval_set.json`](eval/eval_set.json) **65 題**（semantic 15／mixed 15／lexical 17／colloquial 13／multi_hop 5）。**0 題帶 rubric** |
 | **冷凍題庫** | [`eval/eval_set_news.json`](eval/eval_set_news.json) 37 題（2026-08-19 拔除新聞時移出）。**現在不要拿它跑分** |
-| **預設 LLM** | NVIDIA NIM `openai/gpt-oss-120b`（檢索側／判定側／生成側**三個都是**）。ingest 表格摘要走 Groq `openai/gpt-oss-20b` |
+| **預設 LLM** | `nvidia/nemotron-3-super-120b-a12b`（2026-09-03 換）。前一代 `openai/gpt-oss-120b` 於 2026-09-03T08:00Z 被 NVIDIA 退役（HTTP 410 Gone），而它是**檢索／判定／生成三側共用**的預設 → 當天整條管線的 LLM 全死。**五個定義點**：[`rag_query.py`](rag_query.py) `DEFAULT_MODEL`／`DEFAULT_GEN_MODEL`、`agentic_rag_version/` 的 `CHECKER_MODEL`／`GEN_MODEL`／`RETRIEVAL_MODEL`（後三者可用 env 覆蓋）。選型證據 `experiments/_model_bakeoff_20260903.log`：**判準是輸出穩定性與延遲，不是模型大小**——nemotron-3-super 三個結構化角色 3/3 且最快（plan 10.4s／check 6.5s／filter 2.8s），`deepseek-v4-pro` plan 一次 **604 秒**（一題 50~60 次呼叫 → 不可用）、`llama-3.1-nemotron-ultra-253b` 在 NIM 上 **404**。⚠ **換模型讓所有既有基準與 replay fixture 失效**（中間產物全變），且**沒有辦法與舊模型 A/B**（舊的已下架）。⚠ 「LLM 自己把 `$X million` 換算成億且算錯位數」**舊模型同病**（2026-08-07 稽核 13 題 23 處），**尚未修**（三層防線目前只裝在 eval，生產管線是漏的），見 [`BACKLOG.md`](BACKLOG.md)。ingest 表格摘要走 Groq `openai/gpt-oss-20b`，不受影響 |
 | **確定性閘門** | `verify_period_intent_routing` 85／`verify_answer_validators` **239**／`verify_cross_period_collapse` 17／`verify_web_gate_isolation` **181** — **全 PASS** |
 | **量尺狀態** | RAGAS 六指標**五個已達或超過 gold 上限**；唯一有空間的是 `answer_correctness`（0.642 vs 0.972），而那 0.33 落差對 retrieval 免疫 |
 | **已知帶著上線的缺陷** | `MSFT_10K_2024.html#158` 幅度接地漏一筆（1/1009＝0.1%），見 [`BACKLOG.md`](BACKLOG.md) |

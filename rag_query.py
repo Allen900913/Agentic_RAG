@@ -61,11 +61,11 @@ RERANK_MAX_LENGTH  = 2048 # cross-encoder 每筆輸入截斷 token 數；預設(
                            # 因為該候選相關內容不在前 512 token 內。全庫 2367 chunk 的 token 分布
                            # p99=2278、僅 1.6% 超過 2048 token；2048 在 sem-11 測試中與未截斷（8192）
                            # top-5 逐位分數完全一致，仍有 ~1.8 倍加速（見 CHANGELOG 2026-07-13）。
-DEFAULT_MODEL   = "openai/gpt-oss-120b"       # retrieval 側預設（filter/rewrite/translate）；2026-07-21 統一改走 NVIDIA NIM
+DEFAULT_MODEL   = "nvidia/nemotron-3-super-120b-a12b"       # retrieval 側預設（filter/rewrite/translate）；2026-07-21 統一改走 NVIDIA NIM  # ⚠ 2026-09-03 換：gpt-oss-120b 被 NVIDIA 退役（410 Gone）。選型見 experiments/_model_bakeoff_20260903.log
                                                # （單一 OpenAI-compatible endpoint、單把 NVIDIA_API_KEY，取代 Groq 4-key TPD
                                                # 輪換）。見 agentic_rag_nv.py 已驗證的模型選型：gpt-oss-120b 在 NVIDIA 上快
                                                # 且合法；meta/llama-3.3-70b-instruct 反而會 timeout，不可用。
-DEFAULT_GEN_MODEL = "openai/gpt-oss-120b"     # 生成答案側預設（見 CHANGELOG 2026-07-09 乾淨隔離 A/B：
+DEFAULT_GEN_MODEL = "nvidia/nemotron-3-super-120b-a12b"     # 生成答案側預設（見 CHANGELOG 2026-07-09 乾淨隔離 A/B：  # ⚠ 2026-09-03 換：gpt-oss-120b 被 NVIDIA 退役（410 Gone）。選型見 experiments/_model_bakeoff_20260903.log
                                                # retrieval 固定 70b、只換 gen model，120b 對 k=3 全量 11 題 semantic
                                                # 零回歸、mean 0.627→0.870 且更穩定，故轉正式預設）。此 model id 在 NVIDIA NIM
                                                # 目錄下同名，換 backend 不必換 id。
@@ -285,6 +285,18 @@ dropping the other with a false "no info".
 # opt-in：預設不使用，需呼叫端主動選用 SYSTEM_PROMPT_EVIDENCE_FIRST 並在生成後
 # 呼叫 extract_final_answer() 剝除 Evidence Log、只把 Answer 區塊留給使用者/judge。
 # ══════════════════════════════════════════════════════════════════════════════
+
+
+
+ZH_ANSWER_DIRECTIVE = (
+    "\n\nLANGUAGE — 你的整段回答必須用【繁體中文】書寫,不得用英文段落、不得用簡體字。"
+    "保留英文金融術語、股票代號(NVDA/MSFT/…)、以及來源的 \"$X billion / $Y million\" 單位詞【照原文】"
+    "(依 Rule 11,不要自己換算成億);只有敘述文字要繁體中文,數字與其單位詞不改。"
+)
+# ⚠ **唯一定義點**（2026-09-03 從 agentic 提上來）。原本只有 agentic 附這段，單發管線用裸
+#   SYSTEM_PROMPT —— 而 SYSTEM_PROMPT **從來沒有規定過輸出語言**，舊模型回繁中純屬它自己的傾向。
+#   換成 nemotron-3-super 之後當場現形：單發路徑 12 題有 8 題整篇英文，而那正是
+#   api_server / app 產品線走的那條路。新的消費端一律用這個常數，不要再抄一份。
 
 SYSTEM_PROMPT_EVIDENCE_FIRST = SYSTEM_PROMPT + """
 14. Before writing your answer, you MUST first produce an Evidence Log: go through
@@ -2358,7 +2370,7 @@ def run_single_query(query, retrieval_model, gen_model, top_k, bge_m3, rerank_mo
 
     user_prompt = build_user_prompt(query, chunks, fallback_note)
     messages    = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": SYSTEM_PROMPT + ZH_ANSWER_DIRECTIVE},
         {"role": "user",   "content": user_prompt},
     ]
 
@@ -2455,7 +2467,8 @@ Examples:
     parser.add_argument("--model", "-m", type=str, default=DEFAULT_MODEL,
                         help="Retrieval 模型（filter/rewrite/translate 用）。生成模型獨立由 --gen-model 控制。")
     parser.add_argument("--gen-model", type=str, default=DEFAULT_GEN_MODEL,
-                        help="生成答案用的模型；預設 openai/gpt-oss-120b（見 CHANGELOG 2026-07-09 "
+                        help="生成答案用的模型；預設 DEFAULT_GEN_MODEL（不在這裡寫死模型名——"
+                             "2026-09-03 換過一次，寫死的那份當場就過時了）（見 CHANGELOG 2026-07-09 "
                              "乾淨隔離 A/B：retrieval 固定 70b、k=3 全量 11 題 semantic 零回歸、"
                              "mean 0.627→0.870）。retrieval 側維持 --model 不變——兩者是獨立維度。")
     parser.add_argument("--rewrite", action=argparse.BooleanOptionalAction,

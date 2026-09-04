@@ -385,7 +385,7 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
 #   gpt-oss-120b       1~8s、且高負載下仍不被限速（NVIDIA 主推開放模型、額度寬）→ 唯一能撐 eval 量的
 # 代價：gpt-oss-120b 偶爾吐全形【】引用，靠下游 _validate_and_fix_citations 校正（已端到端驗證）。
 # 與 _pkg.CHECKER_MODEL 同模型無妨（不同 prompt、不同任務）。benchmark 見 experiments/agentic/_bench_gen.txt。
-GEN_MODEL       = os.getenv("AGENTIC_GEN_MODEL", "openai/gpt-oss-120b")
+GEN_MODEL       = os.getenv("AGENTIC_GEN_MODEL", "nvidia/nemotron-3-super-120b-a12b")  # ⚠ 2026-09-03 換：gpt-oss-120b 被 NVIDIA 退役（410 Gone）。選型見 experiments/_model_bakeoff_20260903.log
 
 MAX_REWRITES      = 2     # 每個子問題的補救改寫上限（防迴圈 / 省 token）。
 

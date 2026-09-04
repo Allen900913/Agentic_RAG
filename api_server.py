@@ -50,7 +50,7 @@ NVIDIA_BASE_URL = rq.NVIDIA_BASE_URL
 # 以及 CLAUDE.md「model_name 陷阱」）：
 #   - retrieval_model：retrieve() 內部 filter/rewrite/translate 用，必須跟 eval 的
 #     retrieval side（rq.DEFAULT_MODEL）一致，否則 web 路徑量到的檢索行為會與 eval 不符。
-#   - gen_model：生成答案用，預設 rq.DEFAULT_GEN_MODEL（gpt-oss-120b，見 CHANGELOG 07-09）。
+#   - gen_model：生成答案用，預設 rq.DEFAULT_GEN_MODEL（模型名不在這裡複述——2026-09-03 換過一次）。
 DEFAULT_RETRIEVAL_MODEL = os.getenv("LLM_MODEL", rq.DEFAULT_MODEL)
 DEFAULT_GEN_MODEL       = os.getenv("LLM_GEN_MODEL", rq.DEFAULT_GEN_MODEL)
 
@@ -241,7 +241,7 @@ async def chat(req: ChatRequest):
 
                 # 組 prompt（沿用 CLI 的 SYSTEM_PROMPT / build_user_prompt / 多輪截斷）
                 user_prompt = rq.build_user_prompt(req.query, chunks, fallback_note)
-                messages = [{"role": "system", "content": rq.SYSTEM_PROMPT}]
+                messages = [{"role": "system", "content": rq.SYSTEM_PROMPT + rq.ZH_ANSWER_DIRECTIVE}]
                 messages.extend(req.history[-(rq.MAX_HISTORY * 2):])
                 messages.append({"role": "user", "content": user_prompt})
 
