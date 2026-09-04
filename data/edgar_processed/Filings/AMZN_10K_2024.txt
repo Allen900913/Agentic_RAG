@@ -1,0 +1,683 @@
+=== AMZN 10-K | accession=0001018724-25-000004 | fiscal_year=2024 fiscal_period=FY period_code=2024 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**AMAZON.COM, INC.** (AMZN)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2024 | Dec 31, 2023 | Dec 31, 2022 |
+| --- | ---: | ---: | ---: |
+|       Total net sales | $637,959 | $574,785 | $513,983 |
+| *        Net product sales* | $272,311 | $255,887 | $242,901 |
+| *        Net service sales* | $365,648 | $318,898 | $271,082 |
+|         Cost of sales | $326,288 | $304,739 | $288,831 |
+|         Fulfillment | $98,505 | $90,619 | $84,299 |
+|         Technology and infrastructure | $88,544 | $85,622 | $73,213 |
+|         Sales and marketing | $43,907 | $44,370 | $42,238 |
+|         General and administrative | $11,359 | $11,816 | $11,891 |
+|         Other operating expense (income), net | $763 | $767 | $1,263 |
+|           Total operating expenses | $569,366 | $537,933 | $501,735 |
+|         Operating income | $68,593 | $36,852 | $12,248 |
+|         Interest income | $4,677 | $2,949 | $989 |
+|         Interest expense | $(2,406) | $(3,182) | $(2,367) |
+|         Other income (expense), net | $(2,250) | $938 | $(16,806) |
+|         Total non-operating income (expense) | $21 | $705 | $(18,184) |
+|       Income (loss) before income taxes | $68,614 | $37,557 | $(5,936) |
+|       Benefit (provision) for income taxes | $(9,265) | $(7,120) | $3,217 |
+|       Equity-method investment activity, net of tax | $(101) | $(12) | $(3) |
+|       Net income (loss) | $59,248 | $30,425 | $(2,722) |
+|       Basic earnings per share (in dollars per share) | 5.66 | 2.95 | -0.27 |
+|       Diluted earnings per share (in dollars per share) | 5.53 | 2.90 | -0.27 |
+|         Basic (in shares) | 10,473 | 10,304 | 10,189 |
+|         Diluted (in shares) | 10,721 | 10,492 | 10,189 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**AMAZON.COM, INC.** (AMZN)
+
+**As of December 31, 2024 and December 31, 2023** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2024 | Dec 31, 2023 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $78,779 | $73,387 |
+|         Marketable securities | $22,423 | $13,393 |
+|         Inventories | $34,214 | $33,318 |
+|         Accounts receivable, net and other | $55,451 | $52,253 |
+| *        Customer receivables* | $34,300 | $34,100 |
+| *        Vendor receivables* | $11,600 | $8,500 |
+| *        Other Receivables* | $3,400 | $4,300 |
+|         Total current assets | $190,867 | $172,351 |
+|     Property and equipment, net | $252,665 | $204,177 |
+|     Operating leases | $76,141 | $72,513 |
+|     Goodwill | $23,074 | $22,789 |
+|     Other assets | $82,147 | $56,024 |
+|     Total assets | $624,894 | $527,854 |
+|         Accounts payable | $94,363 | $84,981 |
+|         Accrued expenses and other | $66,965 | $64,709 |
+|         Unearned revenue | $18,103 | $15,227 |
+|       Total current liabilities | $179,431 | $164,917 |
+|       Long-term lease liabilities | $78,277 | $77,297 |
+|       Long-term debt | $52,623 | $58,314 |
+|       Other long-term liabilities | $28,593 | $25,451 |
+|       Commitments and contingencies (Note 7) |  |  |
+|       Preferred stock ($0.01 par value; 500 shares authorized; no shares issued or outstanding) |  |  |
+|       Common stock ($0.01 par value; 100,000 shares authorized; 10,898 and 11,108 shares issued; 10,383 and 10,593 shares outstanding) | $111 | $109 |
+|       Treasury stock, at cost | $(7,837) | $(7,837) |
+|       Additional paid-in capital | $120,864 | $99,025 |
+|       Accumulated other comprehensive income (loss) | $(34) | $(3,040) |
+|       Retained earnings | $172,866 | $113,618 |
+|       Total stockholders’ equity | $285,970 | $201,875 |
+|     Total liabilities and stockholders’ equity | $624,894 | $527,854 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**AMAZON.COM, INC.** (AMZN)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2024 | Dec 31, 2023 | Dec 31, 2022 |
+| --- | ---: | ---: | ---: |
+|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, BEGINNING OF PERIOD | $73,890 | $54,253 | $36,477 |
+|       Net income (loss) | $59,248 | $30,425 | $(2,722) |
+|       Depreciation and amortization of property and equipment and capitalized content costs, operating lease assets, and other | $52,795 | $48,663 | $41,921 |
+|       Stock-based compensation | $22,011 | $24,023 | $19,621 |
+|       Non-operating expense (income), net | $2,012 | $(748) | $16,966 |
+|       Deferred income taxes | $(4,648) | $(5,876) | $(8,148) |
+|         Inventories | $(1,884) | $1,449 | $(2,592) |
+|         Accounts receivable, net and other | $(3,249) | $(8,348) | $(8,622) |
+|         Other assets | $(14,483) | $(12,265) | $(13,275) |
+|         Accounts payable | $2,972 | $5,473 | $2,945 |
+|         Accrued expenses and other | $(2,904) | $(2,428) | $(1,558) |
+|         Unearned revenue | $4,007 | $4,578 | $2,216 |
+|     Net cash provided by (used in) operating activities | $115,877 | $84,946 | $46,752 |
+|       Purchases of property and equipment | $(82,999) | $(52,729) | $(63,645) |
+|       Proceeds from property and equipment sales and incentives | $5,341 | $4,596 | $5,324 |
+|       Acquisitions, net of cash acquired, non-marketable investments, and other | $(7,082) | $(5,839) | $(8,316) |
+|       Sales and maturities of marketable securities | $16,403 | $5,627 | $31,601 |
+|       Purchases of marketable securities | $(26,005) | $(1,488) | $(2,565) |
+|     Net cash provided by (used in) investing activities | $(94,342) | $(49,833) | $(37,601) |
+|       Common stock repurchased |  |  | $(6,000) |
+|       Proceeds from short-term debt, and other | $5,142 | $18,129 | $41,553 |
+|       Repayments of short-term debt, and other | $(5,060) | $(25,677) | $(37,554) |
+|       Proceeds from long-term debt |  |  | $21,166 |
+|       Repayments of long-term debt | $(9,182) | $(3,676) | $(1,258) |
+|       Principal repayments of finance leases | $(2,043) | $(4,384) | $(7,941) |
+|       Principal repayments of financing obligations | $(669) | $(271) | $(248) |
+|     Net cash provided by (used in) financing activities | $(11,812) | $(15,879) | $9,718 |
+|     Foreign currency effect on cash, cash equivalents, and restricted cash | $(1,301) | $403 | $(1,093) |
+|   Net increase (decrease) in cash, cash equivalents, and restricted cash | $8,422 | $19,637 | $17,776 |
+|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, END OF PERIOD | $82,312 | $73,890 | $54,253 |
+
+--- [TABLE extra #0] ---
+(Mark One)
+
+| ☒ | ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #1] ---
+For the fiscal year ended
+
+| ☐ | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #2] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware |  | 91-1646860 |
+| --- | --- | --- |
+| (State or other jurisdiction of incorporation or organization) |  | (I.R.S. Employer Identification No.) |...
+
+--- [TABLE extra #3] ---
+Securities registered pursuant to Section 12(b) of the Act:
+
+| Title of Each Class | Trading Symbol(s) | Name of Each Exchange on Which Registered |
+| --- | --- | --- |
+| Common Stock, par value $.01 per share | AMZN | Nasdaq Global Select Market |...
+
+--- [TABLE extra #4] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large accelerated filer |  | ☒ | Accelerated filer |  | ☐ |
+| --- | --- | --- | --- | --- | --- |
+| Non-accelerated filer |  | ☐ | Smaller reporting company...
+
+--- [TABLE extra #5] ---
+Indicate by check mark whether the registrant is a shell company (as defined in Rule 12b-2 of the Exchange Act). Yes ☐ No
+
+| Aggregate market value of voting stock held by non-affiliates of the registrant as of June 30, 2024 | $ | 1,815,014,489,485 |  |
+| --- | --- | --- | --- |
+| Number of shares of common stock outstanding as of January 29, 2025 | 10,597,729,352 |  |  |...
+
+--- [TABLE extra #6] ---
+INDEX
+
+|  |  | Page |
+| --- | --- | --- |
+| PART I |  |  |
+| Item 1. | Business | 3 |
+| Item 1A. | Risk Factors | 6 |
+| Item 1B. | Unresolved Staff Comments | 16 |
+| Item 1C. | Cybersecurity | 17 |
+| Item 2. | Properties | 18 |
+| Item 3. | Legal Proceedings | 18 |
+| Item 4. | Mine Safety Disclosures | 18 |
+| PART II |  |  |
+| Item 5. | Market for the Registrant’s Common Stock, Related Shareholder ...
+
+--- [TABLE extra #7] ---
+PART I
+
+| Item 1. | Business |
+| --- | --- |...
+
+--- [TABLE extra #8] ---
+Information About Our Executive Officers
+
+| Name |  | Age |  | Position |
+| --- | --- | --- | --- | --- |
+| Jeffrey P. Bezos |  | 61 |  | Executive Chair |
+| Andrew R. Jassy |  | 57 |  | President and Chief Executive Officer |
+| Matthew S. Garman |  | 48 |  | CEO Amazon Web Services |
+| Douglas J. Herrington |  | 58 |  | CEO Worldwide Amazon Stores |
+| Brian T. Olsavsky |  | 61 |  | Senior Vice Pr...
+
+--- [TABLE extra #9] ---
+Board of Directors
+
+| Name |  | Age |  | Position |
+| --- | --- | --- | --- | --- |
+| Jeffrey P. Bezos |  | 61 |  | Executive Chair |
+| Andrew R. Jassy |  | 57 |  | President and Chief Executive Officer |
+| Keith B. Alexander |  | 73 |  | Former Chair and CEO of IronNet, Inc. |
+| Edith W. Cooper |  | 63 |  | Former Executive Vice President, Goldman Sachs Group, Inc. |
+| Jamie S. Gorelick |  | 74 |...
+
+--- [TABLE extra #10] ---
+| Item 1A. | Risk Factors |
+| --- | --- |...
+
+--- [TABLE extra #11] ---
+Our contracts with U.S., as well as state, local, and foreign, government entities are subject to various procurement regulations and other requirements relating to their formation, administration, and performance. We are subject to audits 
+
+| Item 1B. | Unresolved Staff Comments |
+| --- | --- |...
+
+--- [TABLE extra #12] ---
+Table of Contents
+
+| Item 1C. | Cybersecurity |
+| --- | --- |...
+
+--- [TABLE extra #13] ---
+Table of Contents
+
+| Item 2. | Properties |
+| --- | --- |...
+
+--- [TABLE extra #14] ---
+As of December 31, 2024, we operated the following facilities (in thousands):
+
+| Description of Use |  | Leased Square Footage (1) |  | Owned Square Footage |  | Location |
+| --- | --- | --- | --- | --- | --- | --- |
+| Office space |  | 29,551 |  | 9,104 |  | North America |
+| Office space |  | 23,771 |  | 1,802 |  | International |
+| Physical stores (2) |  | 23,975 |  | 707 |  | North America |
+|...
+
+--- [TABLE extra #15] ---
+(2)This includes 618 North America and 27 International stores as of December 31, 2024.
+
+| Segment |  | Leased Square Footage (1) |  | Owned Square Footage (1) |
+| --- | --- | --- | --- | --- |
+| North America |  | 457,104 |  | 20,741 |
+| International |  | 166,673 |  | 11,741 |
+| AWS |  | 24,875 |  | 24,052 |
+| Total |  | 648,652 |  | 56,534 |...
+
+--- [TABLE extra #16] ---
+We own and lease our corporate headquarters in Washington’s Puget Sound region and Arlington, Virginia.
+
+| Item 3. | Legal Proceedings |
+| --- | --- |...
+
+--- [TABLE extra #17] ---
+See Item 8 of Part II, “Financial Statements and Supplementary Data — Note 7 — Commitments and Contingencies — Legal Proceedings.”
+
+| Item 4. | Mine Safety Disclosures |
+| --- | --- |...
+
+--- [TABLE extra #18] ---
+PART II
+
+| Item 5. | Market for the Registrant’s Common Stock, Related Shareholder Matters, and Issuer Purchases of Equity Securities |
+| --- | --- |...
+
+--- [TABLE extra #19] ---
+None.
+
+| Item 6. | Reserved |
+| --- | --- |...
+
+--- [TABLE extra #20] ---
+Table of Contents
+
+| Item 7. | Management’s Discussion and Analysis of Financial Condition and Results of Operations |
+| --- | --- |...
+
+--- [TABLE extra #21] ---
+Net sales include product and service sales. Product sales represent revenue from the sale of products and related shipping fees and digital media content where we record revenue gross. Service sales primarily represent third-party seller f
+
+|  | Year Ended December 31, |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2023 |  | 2024 |  |  |  |  |
+| Net Sales: |  |  |  |  ...
+
+--- [TABLE extra #22] ---
+Operating income (loss) by segment is as follows (in millions):
+
+|  | Year Ended December 31, |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2023 |  | 2024 |  |  |  |  |
+| Operating Income (Loss) |  |  |  |  |  |  |  |
+| North America | $ | 14,877 |  |  | $ | 24,967 |  |
+| International | (2,656) |  |  | 3,792 |  |  |  |
+| AWS | 24,631 |  |  | 39,834 |  |  |  |
+| Consol...
+
+--- [TABLE extra #23] ---
+Table of Contents
+
+| Item 7A. | Quantitative and Qualitative Disclosures About Market Risk |
+| --- | --- |...
+
+--- [TABLE extra #24] ---
+We generally invest our excess cash in investment grade short- to intermediate-term marketable debt securities and AAA-rated money market funds. Marketable debt securities with fixed interest rates may have their fair market value adversely
+
+|  |  | 2025 |  | 2026 |  | 2027 |  | 2028 |  | 2029 |  | Thereafter |  | Total |  | Estimated Fair Value as of December 31, 2024 |  |  |  |  |  |  |  |  |  |...
+
+--- [TABLE extra #25] ---
+Table of Contents
+
+| Item 8. | Financial Statements and Supplementary Data |
+| --- | --- |...
+
+--- [TABLE extra #26] ---
+INDEX TO CONSOLIDATED FINANCIAL STATEMENTS
+
+|  | Page |
+| --- | --- |
+| Report of Ernst & Young LLP , Independent Registered Public Accounting Firm (PCAOB ID: 42 ) | 34 |
+| Consolidated Statements of Cash Flows | 36 |
+| Consolidated Statements of Operations | 37 |
+| Consolidated Statements of Comprehensive Income (Loss) | 38 |
+| Consolidated Balance Sheets | 39 |
+| Consolidated Statements of Stock...
+
+--- [TABLE extra #27] ---
+Table of Contents
+
+|  | Uncertain Tax Positions |
+| --- | --- |
+| Description of the Matter | As discussed in Notes 1 and 9 of the consolidated financial statements, the Company is subject to income taxes in the U.S. and numerous foreign jurisdictions and during the ordinary course of business, there are many tax positions for which the ultimate tax determination is uncertain. As a result, signifi...
+
+--- [TABLE extra #28] ---
+(in millions)
+
+|  | Year Ended December 31, |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2022 |  | 2023 |  | 2024 |  |  |  |  |  |  |
+| Net income (loss) | $ | ( 2,722 ) |  |  | $ | 30,425 |  |  | $ | 59,248 |  |
+| Other comprehensive income (loss): |  |  |  |  |  |  |  |  |  |  |  |
+| Foreign currency translation adjustments, net o...
+
+--- [TABLE extra #29] ---
+(in millions)
+
+|  | Common Stock |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Shares |  | Amount |  | Treasury Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Income (Loss)...
+
+--- [TABLE extra #30] ---
+Table of Contents
+
+| Item 9. | Changes in and Disagreements with Accountants On Accounting and Financial Disclosure |
+| --- | --- |...
+
+--- [TABLE extra #31] ---
+None.
+
+| Item 9A. | Controls and Procedures |
+| --- | --- |...
+
+--- [TABLE extra #32] ---
+Table of Contents
+
+| Item 9B. | Other Information |
+| --- | --- |...
+
+--- [TABLE extra #33] ---
+| Item 9C. | Disclosure Regarding Foreign Jurisdictions that Prevent Inspections |
+| --- | --- |...
+
+--- [TABLE extra #34] ---
+PART III
+
+| Item 10. | Directors, Executive Officers, and Corporate Governance |
+| --- | --- |...
+
+--- [TABLE extra #35] ---
+Information regarding our Executive Officers required by Item 10 of Part III is set forth in Item 1 of Part I “Business — Information About Our Executive Officers.” Information required by Item 10 of Part III regarding our Directors and any
+
+| Item 11. | Executive Compensation |
+| --- | --- |...
+
+--- [TABLE extra #36] ---
+Information required by Item 11 of Part III is included in our Proxy Statement relating to our 2025 Annual Meeting of Shareholders and is incorporated herein by reference.
+
+| Item 12. | Security Ownership of Certain Beneficial Owners and Management and Related Shareholder Matters |
+| --- | --- |...
+
+--- [TABLE extra #37] ---
+Information required by Item 12 of Part III is included in our Proxy Statement relating to our 2025 Annual Meeting of Shareholders and is incorporated herein by reference.
+
+| Item 13. | Certain Relationships and Related Transactions, and Director Independence |
+| --- | --- |...
+
+--- [TABLE extra #38] ---
+Table of Contents
+
+| Item 14. | Principal Accountant Fees and Services |
+| --- | --- |...
+
+--- [TABLE extra #39] ---
+PART IV
+
+| Item 15. | Exhibits, Financial Statement Schedules |
+| --- | --- |...
+
+--- [TABLE extra #40] ---
+(b) Exhibits:
+
+| Exhibit Number |  | Description |
+| --- | --- | --- |
+| 3.1 |  | Amended and Restated Certificate of Incorporation of Amazon.com, Inc. (incorporated by reference to the Company’s Current Report on Form 8-K, filed May 27, 2022). |
+| 3.2 |  | Amended and Restated Bylaws of Amazon.com, Inc. (incorporated by reference to the Company’s Current Report on Form 8-K, filed May 3, 2024). |
+...
+
+--- [TABLE extra #41] ---
+Table of Contents
+
+| 4.6 |  | Officers’ Certificate of Amazon.com, Inc., dated as of June 3, 2020, containing Form of 0.400% Note due 2023, Form of 0.800% Note due 2025, Form of 1.200% Note due 2027, Form of 1.500% Note due 2030, Form of 2.500% Note due 2050, and Form of 2.700% Note due 2060 (incorporated by reference to the Company’s Current Report on Form 8-K, filed June 3, 2020). |
+| --- | --- ...
+
+--- [TABLE extra #42] ---
+Table of Contents
+
+| 32.2 |  | Certification of Brian T. Olsavsky, Senior Vice President and Chief Financial Officer of Amazon.com, Inc., pursuant to 18 U.S.C. Section 1350. |
+| --- | --- | --- |
+| 97.1 |  | Amazon.com, Inc. Clawback Policy (incorporated by reference to the Company's Annual Report on Form 10-K for the Year ended December 31, 2023). |
+| 101 |  | The following financial statements f...
+
+--- [TABLE extra #43] ---
+† Executive Compensation Plan or Agreement.
+
+| Item 16. | Form 10-K Summary |
+| --- | --- |...
+
+--- [TABLE extra #44] ---
+Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the registrant has duly caused this Report to be signed on its behalf by the undersigned, thereunto duly authorized, as of February 6, 2025.
+
+|  | AMAZON.COM, INC. |  |
+| --- | --- | --- |
+|  | By: | /s/ Andrew R. Jassy |
+|  |  | Andrew R. Jassy |
+|  |  | President and Chief Executive Officer |...
+
+--- [TABLE extra #45] ---
+Pursuant to the requirements of the Securities Exchange Act of 1934, this Report has been signed below by the following persons on behalf of the registrant and in the capacities indicated as of February 6, 2025.
+
+| Signature |  | Title |
+| --- | --- | --- |
+| /s/ Andrew R. Jassy |  |  |
+| Andrew R. Jassy |  | President and Chief Executive Officer (Principal Executive Officer) and Director |
+| /s/ ...
+
+[INFO] extra tables kept=46 (去重後，來自 unstructured)
+
+--- [ITEM] Item 1 (len=13188 chars) ---
+Item 1.Business
+
+This Annual Report on Form 10-K and the documents incorporated herein by reference contain forward-looking statements based on expectations, estimates, and projections as of the date of this filing. Actual results and outcomes may differ materially from those expressed in forward-looking statements. See Item 1A of Part I — “Risk Factors.” As used herein, “Amazon.com,” “we,” “our,”...
+
+[MIN-MERGE] item=Item_1 section=None 8 → 7 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1 原 chunk 2128 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 1A (len=59388 chars) ---
+Item 1A.Risk Factors
+
+Please carefully consider the following discussion of significant factors, events, and uncertainties that make an investment in our securities risky. The events and consequences discussed in these risk factors could, in circumstances we may or may not be able to accurately predict, recognize, or control, have a material adverse effect on our business, growth, reputation, pros...
+
+[MIN-MERGE] item=Item_1A section=None 23 → 22 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1A 原 chunk 1332 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 1522 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1512 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 1B (len=40 chars) ---
+Item 1B.Unresolved Staff Comments
+
+None....
+
+--- [ITEM] Item 1C (len=4013 chars) ---
+Table of Contents
+
+Item 1C.Cybersecurity
+
+We have processes in place for assessing, identifying, and managing material risks from potential unauthorized occurrences on or through our electronic information systems that could adversely affect the confidentiality, integrity, or availability of our information systems or the information residing on those systems. These include a wide variety of mecha...
+
+--- [ITEM] Item 2 (len=1266 chars) ---
+Table of Contents
+
+Item 2.Properties
+
+As of December 31, 2024, we operated the following facilities (in thousands):
+
+Description of UseLeased Square Footage (1)Owned Square FootageLocation
+
+Office space29,5519,104North America
+
+Office space23,7711,802International
+
+Physical stores (2)23,975707North America
+
+Physical stores (2)222—International
+
+Fulfillment, data centers, and other448,16836,869Nort...
+
+--- [ITEM] Item 3 (len=156 chars) ---
+Item 3.Legal Proceedings
+
+See Item 8 of Part II, “Financial Statements and Supplementary Data — Note 7 — Commitments and Contingencies — Legal Proceedings.”...
+
+--- [ITEM] Item 4 (len=56 chars) ---
+Item 4.Mine Safety Disclosures
+
+Not applicable.
+
+PART II...
+
+--- [ITEM] Item 5 (len=479 chars) ---
+Item 5.Market for the Registrant’s Common Stock, Related Shareholder Matters, and Issuer Purchases of Equity Securities
+
+Market Information
+
+Our common stock is traded on the Nasdaq Global Select Market under the symbol “AMZN.” 
+
+Holders
+
+As of January 29, 2025, there were 12,135 shareholders of record of our common stock, although there is a much larger number of beneficial owners.
+
+Recent Sales ...
+
+[MIN-MERGE] item=Item_5 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 7 (len=48494 chars) ---
+Table of Contents
+
+Item 7.Management’s Discussion and Analysis of Financial Condition and Results of Operations
+
+Forward-Looking Statements
+
+This Annual Report on Form 10-K includes forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995. All statements other than statements of historical fact, including statements regarding guidance, industry prospect...
+
+[SECTION] item=Item_7 period=None 依小標切成 24 段：Forward-Looking Statements | Overview | Critical Accounting Estimates | Inventories | Income Taxes | Liquidity and Capital Resources | Results of Operations | Overview | Net Sales | Operating Expenses | Cost of Sales | Fulfillment | Technology and Infrastructure | Sales and Marketing | General and Administrative | Other Operating Expense (Income), Net | Operating Income (Loss) | Interest Income and Expense | Other Income (Expense), Net | Income Taxes | Non-GAAP Financial Measures | Free Cash Flow | Effect of Foreign Exchange Rates | Guidance
+
+[MIN-MERGE] item=Item_7 section=Inventories 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Liquidity and Capital Resources 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Results of Operations 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Overview 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Guidance 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 7A (len=6188 chars) ---
+Table of Contents
+
+Item 7A.Quantitative and Qualitative Disclosures About Market Risk
+
+We are exposed to market risk for the effect of interest rate changes, foreign currency fluctuations, and changes in the market values of our investments. Information relating to quantitative and qualitative disclosures about market risk is set forth below and in Item 7 of Part II, “Management’s Discussion and A...
+
+--- [ITEM] Item 8 (len=118715 chars) ---
+Table of Contents
+
+Item 8.Financial Statements and Supplementary Data
+
+INDEX TO CONSOLIDATED FINANCIAL STATEMENTS
+
+ Page
+
+Report of Ernst & Young LLP, Independent Registered Public Accounting Firm (PCAOB ID: 42)
+
+34
+
+Consolidated Statements of Cash Flows
+
+36
+
+Consolidated Statements of Operations
+
+37
+
+Consolidated Statements of Comprehensive Income (Loss)
+
+38
+
+Consolidated Balance Sheets
+
+39
+
+Cons...
+
+[MIN-MERGE] item=Item_8 section=None 58 → 52 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_8 原 chunk 1468 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_8 原 chunk 1501 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_8 原 chunk 1700 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 1671 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 1975 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 1486 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_8 原 chunk 1259 token > 1200 → 補切成 2 份
+
+--- [ITEM] Item 9 (len=117 chars) ---
+Table of Contents
+
+Item 9.Changes in and Disagreements with Accountants On Accounting and Financial Disclosure
+
+None....
+
+--- [ITEM] Item 9A (len=7365 chars) ---
+Item 9A.Controls and Procedures
+
+Evaluation of Disclosure Controls and Procedures 
+
+We carried out an evaluation required by the Securities Exchange Act of 1934 (the “1934 Act”), under the supervision and with the participation of our principal executive officer and principal financial officer, of the effectiveness of the design and operation of our disclosure controls and procedures, as defined i...
+
+--- [ITEM] Item 9B (len=1424 chars) ---
+Table of Contents
+
+Item 9B.Other Information
+
+On November 7, 2024, Douglas Herrington, CEO Worldwide Amazon Stores, adopted a trading plan intended to satisfy Rule 10b5-1(c) to sell up to 158,970 shares of Amazon.com, Inc. common stock over a period ending on December 31, 2025, subject to certain conditions.
+
+On November 7, 2024, Shelley Reynolds, Vice President, Worldwide Controller, adopted a tr...
+
+--- [ITEM] Item 9C (len=102 chars) ---
+Item 9C.Disclosure Regarding Foreign Jurisdictions that Prevent Inspections
+
+Not applicable.
+
+PART III...
+
+--- [ITEM] Item 10 (len=1115 chars) ---
+Item 10.Directors, Executive Officers, and Corporate Governance
+
+Information regarding our Executive Officers required by Item 10 of Part III is set forth in Item 1 of Part I “Business — Information About Our Executive Officers.” Information required by Item 10 of Part III regarding our Directors and any material changes to the process by which security holders may recommend nominees to the Board ...
+
+--- [ITEM] Item 11 (len=203 chars) ---
+Item 11.Executive Compensation
+
+Information required by Item 11 of Part III is included in our Proxy Statement relating to our 2025 Annual Meeting of Shareholders and is incorporated herein by reference....
+
+--- [ITEM] Item 12 (len=275 chars) ---
+Item 12.Security Ownership of Certain Beneficial Owners and Management and Related Shareholder Matters
+
+Information required by Item 12 of Part III is included in our Proxy Statement relating to our 2025 Annual Meeting of Shareholders and is incorporated herein by reference....
+
+--- [ITEM] Item 13 (len=254 chars) ---
+Item 13.Certain Relationships and Related Transactions, and Director Independence
+
+Information required by Item 13 of Part III is included in our Proxy Statement relating to our 2025 Annual Meeting of Shareholders and is incorporated herein by reference....
+
+--- [ITEM] Item 14 (len=248 chars) ---
+Table of Contents
+
+Item 14.Principal Accountant Fees and Services
+
+Information required by Item 14 of Part III is included in our Proxy Statement relating to our 2025 Annual Meeting of Shareholders and is incorporated herein by reference. 
+
+PART IV...
+
+--- [ITEM] Item 15 (len=8405 chars) ---
+Item 15.Exhibits, Financial Statement Schedules
+
+(a) List of Documents Filed as a Part of This Report: 
+
+(1) Index to Consolidated Financial Statements: 
+
+Report of Ernst & Young LLP, Independent Registered Public Accounting Firm 
+
+Consolidated Statements of Cash Flows for each of the three years ended December 31, 2024 
+
+Consolidated Statements of Operations for each of the three years ended Dece...
+
+[MIN-MERGE] item=Item_15 section=None 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 16 (len=32 chars) ---
+Item 16.Form 10-K Summary
+
+None....

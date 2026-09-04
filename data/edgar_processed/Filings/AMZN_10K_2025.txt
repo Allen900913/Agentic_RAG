@@ -81,7 +81,7 @@
 
 |  | Dec 31, 2025 | Dec 31, 2024 | Dec 31, 2023 |
 | --- | ---: | ---: | ---: |
-|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, END OF PERIOD |  |  |  |
+|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, BEGINNING OF PERIOD | $82,312 | $73,890 | $54,253 |
 |       Net income | $77,670 | $59,248 | $30,425 |
 |       Depreciation and amortization of property and equipment and capitalized content costs, operating lease assets, and other | $65,756 | $52,795 | $48,663 |
 |       Stock-based compensation | $19,467 | $22,011 | $24,023 |
@@ -109,7 +109,7 @@
 |     Net cash provided by (used in) financing activities | $9,661 | $(11,812) | $(15,879) |
 |     Foreign currency effect on cash, cash equivalents, and restricted cash | $1,164 | $(1,301) | $403 |
 |   Net increase (decrease) in cash, cash equivalents, and restricted cash | $7,794 | $8,422 | $19,637 |
-|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, END OF PERIOD |  |  |  |
+|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, END OF PERIOD | $90,106 | $82,312 | $73,890 |
 
 --- [TABLE extra #0] ---
 (Mark One)
@@ -452,14 +452,111 @@ Pursuant to the requirements of the Securities Exchange Act of 1934, this Report
 
 [INFO] extra tables kept=47 (去重後，來自 unstructured)
 
+--- [ITEM] Item 1 (len=13497 chars) ---
+Item 1.Business
+
+This Annual Report on Form 10-K and the documents incorporated herein by reference contain forward-looking statements based on expectations, estimates, and projections as of the date of this filing. Actual results and outcomes may differ materially from those expressed in forward-looking statements. See Item 1A of Part I — “Risk Factors.” As used herein, “Amazon.com,” “we,” “our,”...
+
+[MIN-MERGE] item=Item_1 section=None 8 → 7 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1 原 chunk 2152 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 1A (len=60660 chars) ---
+Item 1A.Risk Factors
+
+Please carefully consider the following discussion of significant factors, events, and uncertainties that make an investment in our securities risky. The events and consequences discussed in these risk factors could, in circumstances we may or may not be able to accurately predict, recognize, or control, have a material adverse effect on our business, growth, reputation, pros...
+
+[MIN-MERGE] item=Item_1A section=None 23 → 20 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1A 原 chunk 1230 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 1283 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 1270 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 1523 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1516 token > 1200 → 補切成 2 份
+
+--- [ITEM] Item 1B (len=40 chars) ---
+Item 1B.Unresolved Staff Comments
+
+None....
+
+--- [ITEM] Item 1C (len=4066 chars) ---
+Item 1C.Cybersecurity
+
+We have processes in place for assessing, identifying, and managing material risks from potential unauthorized occurrences on or through our electronic information systems that could adversely affect the confidentiality, integrity, or availability of our information systems or the information residing on those systems. These include a wide variety of mechanisms, controls, te...
+
+--- [ITEM] Item 2 (len=1265 chars) ---
+Table of Contents
+
+Item 2.Properties
+
+As of December 31, 2025, we operated the following facilities (in thousands):
+
+Description of UseLeased Square Footage (1)Owned Square FootageLocation
+
+Office space31,0289,160North America
+
+Office space26,4951,802International
+
+Physical stores (2)23,932706North America
+
+Physical stores (2)148—International
+
+Fulfillment, data centers, and other474,12845,803Nort...
+
+--- [ITEM] Item 3 (len=156 chars) ---
+Item 3.Legal Proceedings
+
+See Item 8 of Part II, “Financial Statements and Supplementary Data — Note 7 — Commitments and Contingencies — Legal Proceedings.”...
+
+--- [ITEM] Item 4 (len=56 chars) ---
+Item 4.Mine Safety Disclosures
+
+Not applicable.
+
+PART II...
+
+--- [ITEM] Item 5 (len=479 chars) ---
+Item 5.Market for the Registrant’s Common Stock, Related Shareholder Matters, and Issuer Purchases of Equity Securities
+
+Market Information
+
+Our common stock is traded on the Nasdaq Global Select Market under the symbol “AMZN.” 
+
+Holders
+
+As of January 28, 2026, there were 12,165 shareholders of record of our common stock, although there is a much larger number of beneficial owners.
+
+Recent Sales ...
+
+[MIN-MERGE] item=Item_5 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 7 (len=46296 chars) ---
+Table of Contents
+
+Item 7.Management’s Discussion and Analysis of Financial Condition and Results of Operations
+
+Forward-Looking Statements
+
+This Annual Report on Form 10-K includes forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995. All statements other than statements of historical fact, including statements regarding guidance, industry prospect...
+
+[SECTION] item=Item_7 period=None 依小標切成 25 段：Forward-Looking Statements | Overview | Critical Accounting Estimates | Inventories | Income Taxes | Liquidity and Capital Resources | Results of Operations | Overview | Net Sales | Operating Expenses | Cost of Sales | Fulfillment | Technology and Infrastructure | Sales and Marketing | General and Administrative | Other Operating Expense (Income), Net | Operating Income | Interest Income and Expense | Other Income (Expense), Net | Income Taxes | Equity-Method Investment Activity, Net of Tax | Non-GAAP Financial Measures | Free Cash Flow | Effect of Foreign Exchange Rates | Guidance
+
+[MIN-MERGE] item=Item_7 section=Inventories 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Liquidity and Capital Resources 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Results of Operations 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 --- [ITEM] Item 7A (len=6128 chars) ---
 Table of Contents
 
 Item 7A.Quantitative and Qualitative Disclosures About Market Risk
 
 We are exposed to market risk for the effect of interest rate changes, foreign currency fluctuations, and changes in the market values of our investments. Information relating to quantitative and qualitative disclosures about market risk is set forth below and in Item 7 of Part II, “Management’s Discussion and A...
-
-[SECTION] item=Item_7A period=None 依小標切成 4 段：(小標前=章節層) | Interest Rate Risk | Foreign Exchange Risk | Equity Investment Risk
 
 --- [ITEM] Item 8 (len=121717 chars) ---
 Table of Contents
@@ -506,79 +603,6 @@ Consolidate...
 
 [RCTS] item=Item_8 原 chunk 1262 token > 1200 → 補切成 2 份
 
---- [ITEM] Item 1 (len=13497 chars) ---
-Item 1.Business
-
-This Annual Report on Form 10-K and the documents incorporated herein by reference contain forward-looking statements based on expectations, estimates, and projections as of the date of this filing. Actual results and outcomes may differ materially from those expressed in forward-looking statements. See Item 1A of Part I — “Risk Factors.” As used herein, “Amazon.com,” “we,” “our,”...
-
-[SECTION] item=Item_1 period=None 依小標切成 13 段：(小標前=章節層) | General | Consumers | Sellers | Developers and Enterprises | Content Creators | Advertisers | Competition | Intellectual Property | Seasonality | Human Capital | Available Information | Executive Officers and Directors
-
-[MIN-MERGE] item=Item_1 section=General 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Sellers 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Competition 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Intellectual Property 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 1A (len=60660 chars) ---
-Item 1A.Risk Factors
-
-Please carefully consider the following discussion of significant factors, events, and uncertainties that make an investment in our securities risky. The events and consequences discussed in these risk factors could, in circumstances we may or may not be able to accurately predict, recognize, or control, have a material adverse effect on our business, growth, reputation, pros...
-
-[SECTION] item=Item_1A period=None 依小標切成 7 段：(小標前=章節層) | We Face Intense Competition | We Have Foreign Exchange Risk | Operating Risks | We Face Significant Inventory Risk | We Are Subject to Payments-Related Risks | Legal and Regulatory Risks
-
-[MIN-MERGE] item=Item_1A section=We Have Foreign Exchange Risk 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1A section=Operating Risks 8 → 7 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[RCTS] item=Item_1A 原 chunk 1245 token > 1200 → 補切成 2 份
-
-[RCTS] item=Item_1A 原 chunk 1503 token > 1200 → 補切成 3 份
-
-[MIN-MERGE] item=Item_1A section=Legal and Regulatory Risks 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 1B (len=40 chars) ---
-Item 1B.Unresolved Staff Comments
-
-None....
-
---- [ITEM] Item 1C (len=4066 chars) ---
-Item 1C.Cybersecurity
-
-We have processes in place for assessing, identifying, and managing material risks from potential unauthorized occurrences on or through our electronic information systems that could adversely affect the confidentiality, integrity, or availability of our information systems or the information residing on those systems. These include a wide variety of mechanisms, controls, te...
-
---- [ITEM] Item 2 (len=1265 chars) ---
-Table of Contents
-
-Item 2.Properties
-
-As of December 31, 2025, we operated the following facilities (in thousands):
-
-Description of UseLeased Square Footage (1)Owned Square FootageLocation
-
-Office space31,0289,160North America
-
-Office space26,4951,802International
-
-Physical stores (2)23,932706North America
-
-Physical stores (2)148—International
-
-Fulfillment, data centers, and other474,12845,803Nort...
-
---- [ITEM] Item 3 (len=156 chars) ---
-Item 3.Legal Proceedings
-
-See Item 8 of Part II, “Financial Statements and Supplementary Data — Note 7 — Commitments and Contingencies — Legal Proceedings.”...
-
---- [ITEM] Item 4 (len=56 chars) ---
-Item 4.Mine Safety Disclosures
-
-Not applicable.
-
-PART II...
-
 --- [ITEM] Item 9 (len=117 chars) ---
 Table of Contents
 
@@ -593,10 +617,6 @@ Evaluation of Disclosure Controls and Procedures
 
 We carried out an evaluation required by the Securities Exchange Act of 1934 (the “1934 Act”), under the supervision and with the participation of our principal executive officer and principal financial officer, of the effectiveness of the design and operation of our disclosure controls and procedures, as defined i...
 
-[SECTION] item=Item_9A period=None 依小標切成 4 段：Evaluation of Disclosure Controls and Procedures | Limitations on Controls | The Board of Directors and Shareholders | Basis for Opinion
-
-[MIN-MERGE] item=Item_9A section=Limitations on Controls 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
 --- [ITEM] Item 9B (len=1986 chars) ---
 Table of Contents
 
@@ -605,21 +625,6 @@ Item 9B.Other Information
 On November 3, 2025, David A. Zapolsky, Senior Vice President, Chief Global Affairs and Legal Officer, adopted a trading plan intended to satisfy Rule 10b5-1(c) to sell up to 64,059 shares of Amazon.com, Inc. common stock over a period ending on November 30, 2026, subject to certain conditions.
 
 On November 10, 2025, Douglas J. Herrington, CEO Worldwid...
-
---- [ITEM] Item 5 (len=479 chars) ---
-Item 5.Market for the Registrant’s Common Stock, Related Shareholder Matters, and Issuer Purchases of Equity Securities
-
-Market Information
-
-Our common stock is traded on the Nasdaq Global Select Market under the symbol “AMZN.” 
-
-Holders
-
-As of January 28, 2026, there were 12,165 shareholders of record of our common stock, although there is a much larger number of beneficial owners.
-
-Recent Sales ...
-
-[SECTION] item=Item_5 period=None 依小標切成 4 段：Market Information | Holders | Recent Sales of Unregistered Securities | Issuer Purchases of Equity Securities
 
 --- [ITEM] Item 9C (len=102 chars) ---
 Item 9C.Disclosure Regarding Foreign Jurisdictions that Prevent Inspections
@@ -650,6 +655,13 @@ Item 13.Certain Relationships and Related Transactions, and Director Independenc
 
 Information required by Item 13 of Part III is included in our Proxy Statement relating to our 2026 Annual Meeting of Shareholders and is incorporated herein by reference....
 
+--- [ITEM] Item 14 (len=229 chars) ---
+Item 14.Principal Accountant Fees and Services
+
+Information required by Item 14 of Part III is included in our Proxy Statement relating to our 2026 Annual Meeting of Shareholders and is incorporated herein by reference. 
+
+PART IV...
+
 --- [ITEM] Item 15 (len=8654 chars) ---
 Item 15.Exhibits, Financial Statement Schedules
 
@@ -665,44 +677,7 @@ Consolidated Statements of Operations for each of the three years ended Dece...
 
 [MIN-MERGE] item=Item_15 section=None 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
---- [ITEM] Item 16 (len=1518 chars) ---
+--- [ITEM] Item 16 (len=32 chars) ---
 Item 16.Form 10-K Summary
 
-None.
-
-SIGNATURES
-
-Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the registrant has duly caused this Report to be signed on its behalf by the undersigned, thereunto duly authorized, as of February 5, 2026. 
-
-AMAZON.COM, INC.
-
-By:/s/ Andrew R. Jassy
-
-Andrew R. Jassy
-
-President and Chief Executive Officer
-
-Pursuant to the requi...
-
-[SECTION] item=Item_16 period=None 依小標切成 2 段：(小標前=章節層) | President and Chief Executive Officer
-
-[MIN-MERGE] item=Item_16 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_16 section=President and Chief Executive Officer 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 7 (len=46296 chars) ---
-Table of Contents
-
-Item 7.Management’s Discussion and Analysis of Financial Condition and Results of Operations
-
-Forward-Looking Statements
-
-This Annual Report on Form 10-K includes forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995. All statements other than statements of historical fact, including statements regarding guidance, industry prospect...
-
-[SECTION] item=Item_7 period=None 依小標切成 25 段：Forward-Looking Statements | Overview | Critical Accounting Estimates | Inventories | Income Taxes | Liquidity and Capital Resources | Results of Operations | Overview | Net Sales | Operating Expenses | Cost of Sales | Fulfillment | Technology and Infrastructure | Sales and Marketing | General and Administrative | Other Operating Expense (Income), Net | Operating Income | Interest Income and Expense | Other Income (Expense), Net | Income Taxes | Equity-Method Investment Activity, Net of Tax | Non-GAAP Financial Measures | Free Cash Flow | Effect of Foreign Exchange Rates | Guidance
-
-[MIN-MERGE] item=Item_7 section=Inventories 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_7 section=Liquidity and Capital Resources 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_7 section=Results of Operations 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+None....

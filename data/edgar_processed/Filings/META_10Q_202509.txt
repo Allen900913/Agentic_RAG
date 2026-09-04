@@ -103,9 +103,9 @@
 |     Net cash used in financing activities | $(45,519) | $(35,316) |
 |     Effect of exchange rate changes on cash, cash equivalents, and restricted cash equivalents | $252 | $(72) |
 |   Net increase (decrease) in cash, cash equivalents, and restricted cash equivalents | $(33,497) | $2,300 |
-|     Total cash, cash equivalents, and restricted cash equivalents |  |  |
-|     Total cash, cash equivalents, and restricted cash equivalents |  |  |
-|       Cash and cash equivalents |  |  |
+|     Cash, cash equivalents, and restricted cash equivalents at beginning of the period | $45,438 | $42,827 |
+|     Cash, cash equivalents, and restricted cash equivalents at end of the period | $11,941 | $45,127 |
+|       Cash and cash equivalents | $10,187 | $43,852 |
 |       Restricted cash equivalents, included in prepaid expenses and other current assets |  |  |
 |       Restricted cash equivalents, included in other assets |  |  |
 |     Total cash, cash equivalents, and restricted cash equivalents |  |  |
@@ -141,13 +141,11 @@ We report our financial results for our two reportable segments: Family of Apps 
 | --- | --- | --- | --- | --- | ---...
 
 --- [TABLE extra #4] ---
-790
-
 |  |  |  |  |  |  |  |  | Ad Revenue |  | Non-Ad Revenue |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
 
 --- [TABLE extra #5] ---
-3228
+Average Revenue Per Person (ARPP). Our Family of Apps (FoA) revenue represents the substantial majority of our total revenue. We define ARPP as our FoA revenue during a given quarter, divided by the average of the number of DAP at the begin
 
 | ARPP: | $10.93 | $12.33 | $11.20 | $11.89 | $12.29 | $14.25 | $12.36 | $13.65 | $14.46 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
@@ -182,7 +180,57 @@ Item 6.Exhibits
 
 [INFO] extra tables kept=10 (去重後，來自 unstructured)
 
-[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
+--- [ITEM] Part I, Item 1 (len=76598 chars) ---
+Item 1.Financial Statements
+
+META PLATFORMS, INC.
+
+CONDENSED CONSOLIDATED BALANCE SHEETS
+
+(In millions, except number of shares and par value)
+
+(Unaudited)
+
+September 30,2025December 31, 2024
+
+Assets
+
+Current assets:
+
+Cash and cash equivalents$10,187 $43,889 
+
+Marketable securities34,261 33,926 
+
+Accounts receivable, net17,297 16,994 
+
+Prepaid expenses and other current assets11,373 5,236 
+
+Total ...
+
+[MIN-MERGE] item=Part_I_Item_1 section=None 39 → 31 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_I_Item_1 原 chunk 1937 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1427 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 2607 token > 1200 → 補切成 6 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1494 token > 1200 → 補切成 2 份
+
+--- [ITEM] Part I, Item 2 (len=50302 chars) ---
+Table of Contents
+
+Item 2.Management's Discussion and Analysis of Financial Condition and Results of Operations
+
+You should read the following discussion of our financial condition and results of operations in conjunction with our condensed consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q and with our audited consolidated financial st...
+
+[GROUND] item=Part_I_Item_2 period=None 40 → 39 段（無幅度數字的段併回帶表格的前一段）
+
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 39 段：(小標前=章節層) | Executive Overview of Third Quarter Results | Consolidated and Segment Results | Family of AppsReality LabsTotal | Family of Apps Metrics | Developments in Advertising | Other Business and Macroeconomic Conditions | Investment Philosophy | Non-Ad Revenue | Trends in Our Family Metrics | Family of Apps (FoA) | Reality Labs (RL) | Cost of Revenue and Operating Expenses | Results of Operations | Revenue | Family of Apps | Advertising | Other revenue | Reality Labs | Foreign Exchange Impact on Revenue | Cost of revenue | Research and development | Marketing and sales | General and administrative | Segment profitability | Family of Apps | Reality Labs | NM — not meaningful | Liquidity and Capital Resources | Cash Provided by Operating Activities | Cash Used in Investing Activities | Cash Used in Financing Activities | Leases and Contractual Commitments | Long-term Debt | Share Repurchase | Dividend | Taxes | Loss Contingencies | Critical Accounting Estimates
+
+[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps Metrics 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Long-term Debt 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part I, Item 3 (len=1021 chars) ---
 Table of Contents
@@ -193,12 +241,21 @@ Equity Price Risk
 
 In the nine months ended September 30, 2025, we made additional investments in marketable equity securities and non-marketable equity investments that could have a material impact on the fair value or carrying value of our holdings. For additional information about our marketable equity securit...
 
+--- [ITEM] Part I, Item 4 (len=2150 chars) ---
+Item 4.Controls and Procedures
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our chief executive officer (CEO) and chief financial officer (CFO), has evaluated the effectiveness of our disclosure controls and procedures (as defined in Rules 13a- 15(e) and 15d- 15(e) under the Securities Exchange Act of 1934, as amended (Exchange Act)), as of the end o...
+
 --- [ITEM] Part II, Item 1 (len=37805 chars) ---
 Item 1.Legal Proceedings
 
 As a multinational company with a complex and evolving business, we are, and expect to continue to be, subject to numerous claims, litigation, regulatory, tax, and government inquiries and investigations, and other legal proceedings in jurisdictions around the world. Although we believe many of these matters are without merit and are vigorously defending them, we may not ...
 
-[RCTS] item=Part_II_Item_1 原 chunk 2192 token > 1200 → 補切成 6 份
+[MIN-MERGE] item=Part_II_Item_1 section=None 22 → 15 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_II_Item_1 原 chunk 2232 token > 1200 → 補切成 7 份
 
 --- [ITEM] Part II, Item 1A (len=194590 chars) ---
 Table of Contents
@@ -207,13 +264,15 @@ Item 1A. Risk Factors
 
 Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Quarterly Report on Form 10-Q, including our condensed consolidated financial statements and related notes. The ris...
 
+[MIN-MERGE] item=Part_II_Item_1A section=None 75 → 69 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 [RCTS] item=Part_II_Item_1A 原 chunk 2232 token > 1200 → 補切成 6 份
 
 [RCTS] item=Part_II_Item_1A 原 chunk 1393 token > 1200 → 補切成 4 份
 
 [RCTS] item=Part_II_Item_1A 原 chunk 3238 token > 1200 → 補切成 7 份
 
-[RCTS] item=Part_II_Item_1A 原 chunk 1223 token > 1200 → 補切成 2 份
+[RCTS] item=Part_II_Item_1A 原 chunk 1270 token > 1200 → 補切成 2 份
 
 [RCTS] item=Part_II_Item_1A 原 chunk 1318 token > 1200 → 補切成 2 份
 
@@ -245,7 +304,9 @@ Rule 10b5-1 Trading Plans
 
 On August 15, 2025, Robert M. Kimmitt, a member of our board of directors, entered into a trading plan intended to satisfy the affirmative defense conditions of Rule 10b5-1(c) under the Securities Exchange Act of 1934, as amended. The trading plan provides for the sale of an aggregate of 3,500 shares of our Class A common stock. The plan will te...
 
---- [ITEM] Part II, Item 6 (len=2292 chars) ---
+[MIN-MERGE] item=Part_II_Item_5 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Part II, Item 6 (len=1754 chars) ---
 Table of Contents
 
 Item 6.Exhibits 
@@ -259,49 +320,3 @@ Exhibit DescriptionFormFile No.ExhibitFiling Date
 X
 
 31.2Certification of Susan Li, Chief Financial Officer, pursuant to Rule 13a-14(a)/1...
-
---- [ITEM] Part I, Item 1 (len=76598 chars) ---
-Item 1.Financial Statements
-
-META PLATFORMS, INC.
-
-CONDENSED CONSOLIDATED BALANCE SHEETS
-
-(In millions, except number of shares and par value)
-
-(Unaudited)
-
-September 30,2025December 31, 2024
-
-Assets
-
-Current assets:
-
-Cash and cash equivalents$10,187 $43,889 
-
-Marketable securities34,261 33,926 
-
-Accounts receivable, net17,297 16,994 
-
-Prepaid expenses and other current assets11,373 5,236 
-
-Total ...
-
-[RCTS] item=Part_I_Item_1 原 chunk 1937 token > 1200 → 補切成 3 份
-
-[RCTS] item=Part_I_Item_1 原 chunk 1427 token > 1200 → 補切成 2 份
-
-[RCTS] item=Part_I_Item_1 原 chunk 2567 token > 1200 → 補切成 5 份
-
-[RCTS] item=Part_I_Item_1 原 chunk 1494 token > 1200 → 補切成 2 份
-
---- [ITEM] Part I, Item 2 (len=50302 chars) ---
-Table of Contents
-
-Item 2.Management's Discussion and Analysis of Financial Condition and Results of Operations
-
-You should read the following discussion of our financial condition and results of operations in conjunction with our condensed consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q and with our audited consolidated financial st...
-
-[RCTS] item=Part_I_Item_2 原 chunk 1969 token > 1200 → 補切成 3 份
-
-[RCTS] item=Part_I_Item_2 原 chunk 2109 token > 1200 → 補切成 3 份

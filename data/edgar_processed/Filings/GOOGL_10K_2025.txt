@@ -110,8 +110,8 @@
 |     Net cash used in financing activities | $(37,388) | $(79,733) | $(72,093) |
 |     Effect of exchange rate changes on cash and cash equivalents | $208 | $(612) | $(421) |
 |   Net increase (decrease) in cash and cash equivalents | $7,242 | $(582) | $2,169 |
-|   Cash and cash equivalents at end of period |  |  |  |
-|   Cash and cash equivalents at end of period |  |  |  |
+|   Cash and cash equivalents at beginning of period | $23,466 | $24,048 | $21,879 |
+|   Cash and cash equivalents at end of period | $30,708 | $23,466 | $24,048 |
 |     Purchases of property and equipment included in accrued liabilities and accounts payable | $15,090 | $10,326 | $7,435 |
 
 --- [TABLE extra #0] ---
@@ -802,37 +802,36 @@ The information required by this item will be included under the caption "Indepe
 | --- | --- |...
 
 --- [TABLE extra #113] ---
-Exhibit index lists agreements and notes incorporated by reference.
+The table lists exhibits referenced in the SEC filing, including agreements, indentures, and note forms, with their filing dates and associated Form 8‑K or S‑3 submissions.
 
 | Exhibit Number |  |  | Description |  | Incorporated by reference herein |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | Form |  | Date |  |  |  |  |
-| 4.07 |  |  | Transfer Restriction Agreement, dated October 2, 2015, between the Registrant and Eric E. Schmidt and certain of its affiliates |  | Current Report o...
+| 4.07 |  |  | Transfer Restriction Agreement, dated Octobe...
 
 --- [TABLE extra #114] ---
 | Table of Contents | Alphabet Inc. |
 | --- | --- |...
 
 --- [TABLE extra #115] ---
-Exhibit index of notes and agreements incorporated by reference.
+The table lists exhibits referenced in the filing, including global note forms, securities descriptions, and various agreements, with dates ranging from 2015 to 2025.
 
 | Exhibit Number |  |  | Description |  | Incorporated by reference herein |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | Form |  | Date |  |  |  |  |
-| 4.32 |  |  | Form of Global Note representing the Registrant’s 4.375% notes due 2064 |  | Current Report on Form 8-K (File No. 001-37580) |  | November 6, 2025 |
-| 4...
+| 4.32 |  |  | Form of Global Note representing the Registrant’s ...
 
 --- [TABLE extra #116] ---
 | Table of Contents | Alphabet Inc. |
 | --- | --- |...
 
 --- [TABLE extra #117] ---
-Exhibit index for Alphabet Inc's annual report filings.
+The table lists Alphabet Inc.’s exhibits referenced in its SEC filings, including stock plan agreements, bonus and clawback policies, insider‑trading policy, and XBRL documents, covering filings up to February 2025.
 
 | Exhibit Number |  |  | Description |  | Incorporated by reference herein |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | Form |  | Date |  |  |  |  |
-| 10.08.5 | u |  | Alphabet Inc. Amended and Restated 2021 Stock Plan – Form of Alphabet CEO Performance Stock Unit Agreement |  | Quarterly Report on Form 10-Q (File No. 001-3...
+| 10.08.5 | u | ...
 
 --- [TABLE extra #118] ---
 | Table of Contents | Alphabet Inc. |
@@ -866,15 +865,13 @@ Pursuant to the requirements of the Securities Exchange Act of 1934, this Annual
 | --- | --- |...
 
 --- [TABLE extra #123] ---
-Signatures of executive officers and directors.
+The table lists signatures, titles, and the signing date of each director and officer for the company, as disclosed in the notes section of the SEC filing dated February 4, 2026.
 
 | Signature | Title | Date |
 | --- | --- | --- |
 | / S / S UNDAR P ICHAI | Chief Executive Officer and Director (Principal Executive Officer) | February 4, 2026 |
 | Sundar Pichai |  |  |
-| / S / A NAT A SHKENAZI | Senior Vice President and Chief Financial Officer (Principal Financial Officer) | February 4, 2026 |
-| Anat Ashkenazi |  |  |
-| / S / A M...
+| / S / A NAT A SHKENAZI | Senior...
 
 [INFO] extra tables kept=124 (去重後，來自 unstructured)
 
@@ -885,13 +882,106 @@ Overview
 
 As our founders Larry and Sergey wrote in the original founders' letter, "Google is not a conventional company. We do not intend to become one." That unconventional spirit has been a driving force throughout our history, inspiring us to tackle big problems and invest in moonshots. It led us to be a pioneer in the development of artificial intelligence (AI) and, since 201...
 
-[SECTION] item=Item_1 period=None 依小標切成 15 段：Overview | Access and Technology for Everyone | Making AI Helpful for Everyone | Moonshots | Privacy and Security | Google | Serving Our Users | How We Make Money | Google Cloud | Other Bets | Competition | Culture and Workforce | Government Regulation | Intellectual Property | Available Information
+[RCTS] item=Item_1 原 chunk 1262 token > 1200 → 補切成 2 份
 
-[MIN-MERGE] item=Item_1 section=Access and Technology for Everyone 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+--- [ITEM] Item 1A (len=85311 chars) ---
+Table of Contents
 
-[MIN-MERGE] item=Item_1 section=Making AI Helpful for Everyone 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+Alphabet Inc.
 
-[MIN-MERGE] item=Item_1 section=Serving Our Users 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+ITEM 1A.RISK FACTORS
+
+Our operations and financial results are subject to various risks and uncertainties, including but not limited to those described below, which could harm our business, reputation, financial condition, and operating results, and may affect the trading price and price volatility of our Class A and Class C stock.
+
+Risks Specific to our Company
+
+...
+
+[RCTS] item=Item_1A 原 chunk 1228 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 1370 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 1297 token > 1200 → 補切成 4 份
+
+[RCTS] item=Item_1A 原 chunk 1505 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 1B (len=50 chars) ---
+ITEM 1B.UNRESOLVED STAFF COMMENTS
+
+Not applicable....
+
+--- [ITEM] Item 1C (len=3369 chars) ---
+ITEM 1C.     CYBERSECURITY
+
+23.  
+
+Table of Contents
+
+Alphabet Inc.
+
+We maintain a comprehensive process for identifying, assessing, and managing material risks from cybersecurity threats as part of our broader risk management system and processes. For example, some risks include our software supply chain and other third-party dependencies, vulnerabilities in our products and services, theft of ou...
+
+--- [ITEM] Item 2 (len=296 chars) ---
+ITEM 2.PROPERTIES
+
+Our headquarters are located in Mountain View, California. We own and lease office facilities and data centers around the world, primarily in Asia, Europe, and North America. We believe our existing facilities are in good condition and suitable for the conduct of our business....
+
+[MIN-MERGE] item=Item_2 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 3 (len=272 chars) ---
+ITEM 3.LEGAL PROCEEDINGS
+
+For a description of our material pending legal proceedings, see Legal Matters in Note 10 of the Notes to Consolidated Financial Statements included in Part II, Item 8 of this Annual Report on Form 10-K, which is incorporated herein by reference....
+
+--- [ITEM] Item 4 (len=97 chars) ---
+ITEM 4.MINE SAFETY DISCLOSURES
+
+Not applicable.
+
+24.  
+
+Table of Contents
+
+Alphabet Inc.
+
+PART II...
+
+[MIN-MERGE] item=Item_4 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 5 (len=5130 chars) ---
+ITEM 5.MARKET FOR REGISTRANT’S COMMON EQUITY, RELATED STOCKHOLDER MATTERS, AND ISSUER PURCHASES OF EQUITY SECURITIES
+
+As of October 2, 2015, Alphabet Inc. became the successor issuer of Google Inc. pursuant to Rule 12g-3(a) under the Exchange Act. Our Class A stock has been listed on the Nasdaq Global Select Market under the symbol “GOOG” since August 19, 2004, and under the symbol "GOOGL" since A...
+
+--- [ITEM] Item 6 (len=22 chars) ---
+ITEM 6.[Reserved]
+
+27....
+
+--- [ITEM] Item 7 (len=52545 chars) ---
+Table of Contents
+
+Alphabet Inc.
+
+ITEM 7.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+Please read the following discussion and analysis of our financial condition and results of operations together with “Note about Forward-Looking Statements,” Part I, Item 1 "Business," Part I, Item 1A "Risk Factors," and our consolidated financial statements and related n...
+
+[GROUND] item=Item_7 period=None 50 → 47 段（無幅度數字的段併回帶表格的前一段）
+
+[SECTION] item=Item_7 period=None 依小標切成 47 段：(小標前=章節層) | Understanding Alphabet’s Financial Results | Revenues and Monetization Metrics | Google Services | Google Advertising | Google Subscriptions, Platforms, and Devices | Google Cloud | Other Bets | Costs and Expenses | Cost of Revenues | Operating Expenses | Other Income (Expense), Net | Provision for Income Taxes | Executive Overview | Revenues | Google Search & other | YouTube ads | Google Network | Monetization Metrics | Google Subscriptions, Platforms, and Devices | Google Cloud | Revenues by Geography | Cost of Revenues | Research and Development | Sales and Marketing | General and Administrative | Segment Profitability | Google Services | Google Cloud | Other Bets | Provision for Income Taxes | Cash, Cash Equivalents, and Marketable Securities | Liquidity and Material Cash Requirements | Capital Expenditures and Leases | Capital Expenditures | Leases | Financing | Share Repurchase Program | Dividend Program | Accrued Legal and Regulatory | Taxes | Purchase Commitments and Other Contractual Obligations | Pending Acquisitions | Critical Accounting Estimates | Property and Equipment | Income Taxes | Loss Contingencies
+
+[MIN-MERGE] item=Item_7 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Google Subscriptions, Platforms, and Devices 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Revenues by Geography 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Leases 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Financing 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Purchase Commitments and Other Contractual Obligations 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 7A (len=7988 chars) ---
 ITEM 7A.QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
@@ -902,11 +992,7 @@ Foreign Currency Exchange Risk
 
 We transact business globally in multiple currencies. International revenues, foreign-denominated monetary assets and liabilities, and investments in foreign...
 
-[SECTION] item=Item_7A period=None 依小標切成 4 段：(小標前=章節層) | Foreign Currency Exchange Risk | Interest Rate Risk | Equity Investment Risk
-
-[MIN-MERGE] item=Item_7A section=Foreign Currency Exchange Risk 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_7A section=Equity Investment Risk 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+[MIN-MERGE] item=Item_7A section=None 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 8 (len=130361 chars) ---
 Table of Contents
@@ -974,8 +1060,20 @@ During the quarter ended December 31, 2025, the following Section 16 director an
 
 •John Hennessy, Chair of the Board of Directors, through the John L. Hennessy & Andrea J. Hennessy Revocable Trust, adopted a n...
 
---- [ITEM] Item 9C (len=624 chars) ---
-ITEM 9C.     DISCLOSURE REGARDING FOREIGN JURISDICTIONS THAT PREVENT INSPECTIONSNot applicable.90.  Table of ContentsAlphabet Inc.PART IIIITEM 10.DIRECTORS, EXECUTIVE OFFICERS, AND CORPORATE GOVERNANCEThe information required by this item will be included under the caption "Directors, Executive Officers, and Corporate Governance" in our Proxy Statement for the 2026 Annual Meeting of Stockholders t...
+--- [ITEM] Item 9C (len=148 chars) ---
+ITEM 9C.     DISCLOSURE REGARDING FOREIGN JURISDICTIONS THAT PREVENT INSPECTIONS
+
+Not applicable.
+
+90.  
+
+Table of Contents
+
+Alphabet Inc.
+
+PART III...
+
+[MIN-MERGE] item=Item_9C section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 10 (len=1451 chars) ---
 ITEM 10.DIRECTORS, EXECUTIVE OFFICERS, AND CORPORATE GOVERNANCE
@@ -996,6 +1094,21 @@ The information required by this item will be included under the captions "Commo
 ITEM 13.CERTAIN RELATIONSHIPS AND RELATED TRANSACTIONS, AND DIRECTOR INDEPENDENCE
 
 The information required by this item will be included under the captions "Certain Relationships and Related Transactions" and "Directors, Executive Officers, and Corporate Governance—Corporate Governance and Board Matters—Director Independence" in the 2026 Proxy Statement and is incorporated herein by reference....
+
+--- [ITEM] Item 14 (len=287 chars) ---
+ITEM 14.PRINCIPAL ACCOUNTANT FEES AND SERVICES
+
+The information required by this item will be included under the caption "Independent Registered Public Accounting Firm" in the 2026 Proxy Statement and is incorporated herein by reference.
+
+91.  
+
+Table of Contents
+
+Alphabet Inc.
+
+PART IV...
+
+[MIN-MERGE] item=Item_14 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 15 (len=12885 chars) ---
 ITEM 15.EXHIBITS, FINANCIAL STATEMENT SCHEDULES
@@ -1028,138 +1141,9 @@ Consolidated Stateme...
 
 [RCTS] item=Item_15 原 chunk 1925 token > 1200 → 補切成 3 份
 
---- [ITEM] Item 16 (len=2532 chars) ---
+--- [ITEM] Item 16 (len=37 chars) ---
 ITEM 16.FORM 10-K SUMMARY
 
 None.
 
-96.  
-
-Table of Contents
-
-Alphabet Inc.
-
-SIGNATURES
-
-Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the Registrant has duly caused this Annual Report on Form 10-K to be signed on its behalf by the undersigned, thereunto duly authorized.
-
-Date: February 4, 2026 
-
-ALPHABET INC.
-
-By:/S/    SUNDAR PICHAI        
-
-Sundar Pic...
-
-[SECTION] item=Item_16 period=None 依小標切成 3 段：(小標前=章節層) | Sundar Pichai | L. John Doerr
-
-[MIN-MERGE] item=Item_16 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_16 section=L. John Doerr 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 1A (len=85311 chars) ---
-Table of Contents
-
-Alphabet Inc.
-
-ITEM 1A.RISK FACTORS
-
-Our operations and financial results are subject to various risks and uncertainties, including but not limited to those described below, which could harm our business, reputation, financial condition, and operating results, and may affect the trading price and price volatility of our Class A and Class C stock.
-
-Risks Specific to our Company
-
-...
-
-[SECTION] item=Item_1A period=None 依小標切成 4 段：(小標前=章節層) | Risks Specific to our Company | Risks Related to our Industry | General Risks
-
-[RCTS] item=Item_1A 原 chunk 1228 token > 1200 → 補切成 2 份
-
-[RCTS] item=Item_1A 原 chunk 1712 token > 1200 → 補切成 4 份
-
-[RCTS] item=Item_1A 原 chunk 1505 token > 1200 → 補切成 3 份
-
---- [ITEM] Item 1B (len=50 chars) ---
-ITEM 1B.UNRESOLVED STAFF COMMENTS
-
-Not applicable....
-
---- [ITEM] Item 1C (len=3369 chars) ---
-ITEM 1C.     CYBERSECURITY
-
-23.  
-
-Table of Contents
-
-Alphabet Inc.
-
-We maintain a comprehensive process for identifying, assessing, and managing material risks from cybersecurity threats as part of our broader risk management system and processes. For example, some risks include our software supply chain and other third-party dependencies, vulnerabilities in our products and services, theft of ou...
-
---- [ITEM] Item 2 (len=296 chars) ---
-ITEM 2.PROPERTIES
-
-Our headquarters are located in Mountain View, California. We own and lease office facilities and data centers around the world, primarily in Asia, Europe, and North America. We believe our existing facilities are in good condition and suitable for the conduct of our business....
-
-[MIN-MERGE] item=Item_2 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 3 (len=272 chars) ---
-ITEM 3.LEGAL PROCEEDINGS
-
-For a description of our material pending legal proceedings, see Legal Matters in Note 10 of the Notes to Consolidated Financial Statements included in Part II, Item 8 of this Annual Report on Form 10-K, which is incorporated herein by reference....
-
---- [ITEM] Item 4 (len=97 chars) ---
-ITEM 4.MINE SAFETY DISCLOSURES
-
-Not applicable.
-
-24.  
-
-Table of Contents
-
-Alphabet Inc.
-
-PART II...
-
-[MIN-MERGE] item=Item_4 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 5 (len=5130 chars) ---
-ITEM 5.MARKET FOR REGISTRANT’S COMMON EQUITY, RELATED STOCKHOLDER MATTERS, AND ISSUER PURCHASES OF EQUITY SECURITIES
-
-As of October 2, 2015, Alphabet Inc. became the successor issuer of Google Inc. pursuant to Rule 12g-3(a) under the Exchange Act. Our Class A stock has been listed on the Nasdaq Global Select Market under the symbol “GOOG” since August 19, 2004, and under the symbol "GOOGL" since A...
-
-[SECTION] item=Item_5 period=None 依小標切成 5 段：(小標前=章節層) | Holders of Record | Dividend Program | Issuer Purchases of Equity Securities | Stock Performance Graphs
-
-[MIN-MERGE] item=Item_5 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_5 section=Dividend Program 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_5 section=Issuer Purchases of Equity Securities 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 6 (len=22 chars) ---
-ITEM 6.[Reserved]
-
-27....
-
---- [ITEM] Item 7 (len=52545 chars) ---
-Table of Contents
-
-Alphabet Inc.
-
-ITEM 7.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
-
-Please read the following discussion and analysis of our financial condition and results of operations together with “Note about Forward-Looking Statements,” Part I, Item 1 "Business," Part I, Item 1A "Risk Factors," and our consolidated financial statements and related n...
-
-[GROUND] item=Item_7 period=None 50 → 47 段（無幅度數字的段併回帶表格的前一段）
-
-[SECTION] item=Item_7 period=None 依小標切成 47 段：(小標前=章節層) | Understanding Alphabet’s Financial Results | Revenues and Monetization Metrics | Google Services | Google Advertising | Google Subscriptions, Platforms, and Devices | Google Cloud | Other Bets | Costs and Expenses | Cost of Revenues | Operating Expenses | Other Income (Expense), Net | Provision for Income Taxes | Executive Overview | Revenues | Google Search & other | YouTube ads | Google Network | Monetization Metrics | Google Subscriptions, Platforms, and Devices | Google Cloud | Revenues by Geography | Cost of Revenues | Research and Development | Sales and Marketing | General and Administrative | Segment Profitability | Google Services | Google Cloud | Other Bets | Provision for Income Taxes | Cash, Cash Equivalents, and Marketable Securities | Liquidity and Material Cash Requirements | Capital Expenditures and Leases | Capital Expenditures | Leases | Financing | Share Repurchase Program | Dividend Program | Accrued Legal and Regulatory | Taxes | Purchase Commitments and Other Contractual Obligations | Pending Acquisitions | Critical Accounting Estimates | Property and Equipment | Income Taxes | Loss Contingencies
-
-[MIN-MERGE] item=Item_7 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_7 section=Google Subscriptions, Platforms, and Devices 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_7 section=Revenues by Geography 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_7 section=Leases 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_7 section=Financing 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_7 section=Purchase Commitments and Other Contractual Obligations 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+96....

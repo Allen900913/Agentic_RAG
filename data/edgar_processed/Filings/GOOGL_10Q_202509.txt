@@ -111,19 +111,233 @@
 |     Net cash used in financing activities | $(44,416) | $(60,697) |
 |     Effect of exchange rate changes on cash and cash equivalents | $244 | $(222) |
 |   Net increase (decrease) in cash and cash equivalents | $(376) | $(4,089) |
-|   Cash and cash equivalents at end of period |  |  |
-|   Cash and cash equivalents at end of period |  |  |
+|   Cash and cash equivalents at beginning of period | $23,466 | $24,048 |
+|   Cash and cash equivalents at end of period | $23,090 | $19,959 |
 
---- [ITEM] Part I, Item 2 (len=52282 chars) ---
-ITEM 2.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+--- [TABLE extra #0] ---
+(Mark One)
 
-Please read the following discussion and analysis of our financial condition and results of operations together with "Note About Forward-Looking Statements" and our consolidated financial statements and related notes included under Item 1 of this Quarterly Report on Form 10-Q as well as our Annual Report ...
+| ☒ | QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
 
-[RCTS] item=Part_I_Item_2 原 chunk 1249 token > 1200 → 補切成 2 份
+--- [TABLE extra #1] ---
+For the quarterly period ended
 
-[RCTS] item=Part_I_Item_2 原 chunk 1573 token > 1200 → 補切成 3 份
+| ☐ | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
 
-[RCTS] item=Part_I_Item_2 原 chunk 1230 token > 1200 → 補切成 2 份
+--- [TABLE extra #2] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware | 61-1767919 |
+| --- | --- |
+| (State or other jurisdiction of incorporation or organization) | (I.R.S. Employer Identification Number) |...
+
+--- [TABLE extra #3] ---
+(Registrant's telephone number, including area code)
+
+| Securities registered pursuant to Section 12(b) of the Act: |  |  |
+| --- | --- | --- |
+| Title of each class | Trading Symbol(s) | Name of each exchange on which registered |
+| Class A Common Stock, $0.001 par value | GOOGL | Nasdaq Stock Market LLC |
+|  |  | (Nasdaq Global Select Market) |
+| Class C Capital Stock, $0.001 par value | GOOG | ...
+
+--- [TABLE extra #4] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large accelerated filer | ☒ |  | Accelerated filer | ☐ |
+| --- | --- | --- | --- | --- |
+| Non-accelerated filer | ☐ |  | Smaller reporting company | ☐ |
+| ...
+
+--- [TABLE extra #5] ---
+As of October 22, 2025, there were million shares of Alphabet’s Class A stock outstanding, million shares of Alphabet's Class B stock outstanding, and million shares of Alphabet's Class C stock outstanding.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #6] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #7] ---
+our potential exposure in connection with new and pending investigations, proceedings, and other contingencies, including the possibility that certain legal proceedings to which we are a party could harm our business, financial condition, a
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #8] ---
+"Alphabet," "Google," and other trademarks of ours appearing in this report are our property. We do not intend our use or display of other companies' trade names or trademarks to imply an endorsement or sponsorship of us by such companies, 
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #9] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #10] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #11] ---
+(in millions; unaudited)
+
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Net income | $ | 26,301 |  |  | $ | 34,979 |  |...
+
+--- [TABLE extra #12] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #13] ---
+(in millions; unaudited)
+
+|  | Three Months Ended September 30, 2024 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Class A, Class B, Class C Stock and Additional Paid-In Capital |  | Accumulated Other Comprehensive Income (Loss) |  | Retained Earnings |  | Total Stockhold...
+
+--- [TABLE extra #14] ---
+The table shows the nine‑month statement of stockholders’ equity for Class A, B, and C stock and additional paid‑in capital, retained earnings, and total equity, covering September 30, 2024.
+
+|  | Nine Months Ended September 30, 2024 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---...
+
+--- [TABLE extra #15] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #16] ---
+The table shows the balance sheet components of Class A, B, C stock and additional paid‑in capital, accumulated OCI, retained earnings, and total stockholders’ equity for the three months ended September 30, 2025.
+
+|  | Three Months Ended September 30, 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---...
+
+--- [TABLE extra #17] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #18] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #19] ---
+Note 1.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #20] ---
+Note 3.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #21] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #22] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #23] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #24] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #25] ---
+The following table presents revenues by type (in millions):
+
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Google Sear...
+
+--- [TABLE extra #26] ---
+The following table presents the foreign currency exchange effect on international revenues and total revenues (in millions, except percentages):
+
+|  |  |  |  |  | Three Months Ended September 30, 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
+
+--- [TABLE extra #27] ---
+Other Americas revenue growth was unfavorably affected by changes in foreign currency exchange rates, primarily due to the U.S. dollar strengthening relative to the Argentine peso.
+
+|  |  |  |  |  | Nine Months Ended September 30, 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | -...
+
+--- [TABLE extra #28] ---
+The following table presents cost of revenues, including TAC (in millions, except percentages):
+
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |...
+
+--- [TABLE extra #29] ---
+The following table presents segment operating income (loss) (in millions):
+
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  ...
+
+--- [TABLE extra #30] ---
+The following table presents OI&E (in millions):
+
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, |  | September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | 2024 |  | 2025 |  | 2024 |  | 2025 |  |  |  |  |  |  |  |  |
+| Interest income | $ | 1...
+
+--- [TABLE extra #31] ---
+The following table presents Class A and Class C shares repurchased and subsequently retired (in millions):
+
+|  | Three Months Ended |  | Nine Months Ended |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | September 30, 2025 |  | September 30, 2025 |  |  |  |  |  |  |  |  |
+|  | Shares |  | Amount |  | Shares |  | Amount |  |  |  |  |
+| Class ...
+
+--- [TABLE extra #32] ---
+The following table presents information with respect to Alphabet's repurchases of Class A and Class C stock during the quarter ended September 30, 2025.
+
+| Period |  | Total Number of Class A Shares Purchased (in thousands) (1) |  | Total Number of Class C Shares Purchased (in thousands) (1) |  | Average Price Paid per Class A Share (2) |  | Average Price Paid per Class C Share (2) |  | Total Num...
+
+--- [TABLE extra #33] ---
+ITEM 6.EXHIBITS
+
+| Exhibit Number |  |  | Description |  | Incorporated by reference herein |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  | Form |  | Date |  |  |  |
+| 31.01 | * |  | Certification of Chief Executive Officer pursuant to Exchange Act Rules 13a-14(a) and 15d-14(a), as adopted pursuant to Section 302 of the Sarbanes-Oxley Act of 2002 |  |  |  |  |
+| 31.02 | * |  | Ce...
+
+--- [TABLE extra #34] ---
+| * | Filed herewith. |
+| --- | --- |
+| ‡ | Furnished herewith. |...
+
+[INFO] extra tables kept=35 (去重後，來自 unstructured)
 
 --- [ITEM] Part I, Item 1 (len=83213 chars) ---
 ITEM 1.FINANCIAL STATEMENTS
@@ -151,6 +365,8 @@ Total cash, cash equivalents, and marketable securities95,657 98,496 
 Accounts receivable, net52,340 57,148 
 ...
 
+[MIN-MERGE] item=Part_I_Item_1 section=None 37 → 35 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 [RCTS] item=Part_I_Item_1 原 chunk 1696 token > 1200 → 補切成 3 份
 
 [RCTS] item=Part_I_Item_1 原 chunk 1292 token > 1200 → 補切成 2 份
@@ -159,10 +375,32 @@ Accounts receivable, net52,340 57,148 
 
 [RCTS] item=Part_I_Item_1 原 chunk 1672 token > 1200 → 補切成 3 份
 
+--- [ITEM] Part I, Item 2 (len=52282 chars) ---
+ITEM 2.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+Please read the following discussion and analysis of our financial condition and results of operations together with "Note About Forward-Looking Statements" and our consolidated financial statements and related notes included under Item 1 of this Quarterly Report on Form 10-Q as well as our Annual Report ...
+
+[GROUND] item=Part_I_Item_2 period=None 49 → 46 段（無幅度數字的段併回帶表格的前一段）
+
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 46 段：(小標前=章節層) | Understanding Alphabet’s Financial Results | Revenues and Monetization Metrics | Google Services | Google Advertising | Google Cloud | Other Bets | Costs and Expenses | Cost of Revenues | Operating Expenses | Other Income (Expense), Net | Provision for Income Taxes | Executive Overview | Revenues | Google Search & other | YouTube ads | Google Network | Monetization Metrics | Google Cloud | Revenues by Geography | Use of Non-GAAP Constant Currency Information | % Change from Prior Period | % Change from Prior Period | Cost of Revenues | Research and Development | Sales and Marketing | General and Administrative | Segment Profitability | Google Services | Google Cloud | Other Bets | Provision for Income Taxes | Cash, Cash Equivalents, and Marketable Securities | Liquidity and Material Cash Requirements | Capital Expenditures and Leases | Capital Expenditures | Leases | Financing | Share Repurchase Program | Dividend Program | European Commission Fines | Taxes | Purchase Commitments and Other Contractual Obligations | Pending Acquisition | Critical Accounting Estimates | Available Information
+
+[MIN-MERGE] item=Part_I_Item_2 section=Monetization Metrics 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Financing 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 --- [ITEM] Part I, Item 3 (len=290 chars) ---
 ITEM 3.QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
 
 For quantitative and qualitative disclosures about market risk, refer to Part II, Item 7A, "Quantitative and Qualitative Disclosures About Market Risk" in our Annual Report on Form 10-K for the year ended December 31, 2024....
+
+--- [ITEM] Part I, Item 4 (len=1948 chars) ---
+ITEM 4.CONTROLS AND PROCEDURES
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our chief executive officer and chief financial officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Exchange Act, as of the end of the period covered by this Quarterly Report on Form 10-Q.
+
+Based on this evaluation,...
 
 --- [ITEM] Part II, Item 1 (len=305 chars) ---
 ITEM 1.LEGAL PROCEEDINGS
@@ -210,5 +448,3 @@ FormDate
 31.01*Certification of Chief Executive Officer pursuant to Exchange Act Rules 13a-14(a) and 15d-14(a), as adopted pursuant to Section 302 of the Sarbanes-Oxley Act of 2002
 
 31.02*Certification of Chief Financial Officer pursuant to Exchange Act Rules 13a-14(a) and 15d-14(a), as adopted pursuant to Section 302 of...
-
-[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過

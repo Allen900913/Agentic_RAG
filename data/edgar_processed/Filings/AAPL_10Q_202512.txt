@@ -77,7 +77,7 @@
 
 |  | Dec 27, 2025 (Q1) | Dec 28, 2024 (Q1) |
 | --- | ---: | ---: |
-|   Cash, cash equivalents, and restricted cash and cash equivalents, ending balances |  |  |
+|   Cash, cash equivalents, and restricted cash and cash equivalents, beginning balances | $35,934 | $29,943 |
 |       Net income | $42,097 | $36,330 |
 |       Depreciation and amortization | $3,214 | $3,080 |
 |       Share-based compensation expense | $3,594 | $3,286 |
@@ -104,7 +104,7 @@
 |       Other | $(38) | $(35) |
 |     Cash used in financing activities | $(39,656) | $(39,371) |
 |   Increase in cash, cash equivalents, and restricted cash and cash equivalents | $9,383 | $356 |
-|   Cash, cash equivalents, and restricted cash and cash equivalents, ending balances |  |  |
+|   Cash, cash equivalents, and restricted cash and cash equivalents, ending balances | $45,317 | $30,299 |
 |     Cash paid for income taxes, net | $3,434 | $18,651 |
 
 --- [TABLE extra #0] ---
@@ -240,12 +240,39 @@ Cost of sales:
 
 [RCTS] item=Part_I_Item_1 原 chunk 2226 token > 1200 → 補切成 3 份
 
+--- [ITEM] Part I, Item 2 (len=17841 chars) ---
+Item 2.    Management’s Discussion and Analysis of Financial Condition and Results of Operations
+
+This Item and other sections of this Quarterly Report on Form 10-Q (“Form 10-Q”) contain forward-looking statements, within the meaning of the Private Securities Litigation Reform Act of 1995, that involve risks and uncertainties. Forward-looking statements provide current expectations of future event...
+
+[GROUND] item=Part_I_Item_2 period=None 29 → 20 段（無幅度數字的段併回帶表格的前一段）
+
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 20 段：(小標前=章節層) | Available Information | Business Seasonality and Product Introductions | Macroeconomic Conditions | Tariffs and Other Measures | Segment Operating Performance | Products and Services Performance | Gross Margin | Operating Expenses | Research and Development | Selling, General and Administrative | Provision for Income Taxes | Liquidity and Capital Resources | Manufacturing Purchase Obligations | Other Purchase Obligations | Capital Return Program | Internal-Use Software | Disaggregation of Income Statement Expenses | Income Taxes | Critical Accounting Estimates
+
+[MIN-MERGE] item=Part_I_Item_2 section=Macroeconomic Conditions 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Tariffs and Other Measures 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Segment Operating Performance 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Products and Services Performance 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Gross Margin 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Selling, General and Administrative 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Capital Return Program 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Internal-Use Software 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Critical Accounting Estimates 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 --- [ITEM] Part I, Item 3 (len=395 chars) ---
 Item 3.    Quantitative and Qualitative Disclosures About Market Risk
 
 There have been no material changes to the Company’s market risk during the first three months of 2026. For a discussion of the Company’s exposure to market risk, refer to the Company’s market risk disclosures set forth in Part II, Item 7A, “Quantitative and Qualitative Disclosures About Market Risk” of the 2025 Form 10-K....
 
---- [ITEM] Part I, Item 4 (len=1425 chars) ---
+--- [ITEM] Part I, Item 4 (len=1394 chars) ---
 Item 4.    Controls and Procedures
 
 Evaluation of Disclosure Controls and Procedures
@@ -258,6 +285,8 @@ Item 1.    Legal Proceedings
 Digital Markets Act Investigations
 
 On March 25, 2024, the European Commission (“Commission”) announced that it had opened a formal noncompliance investigation against the Company under Article 5(4) of the EU Digital Markets Act (“DMA”) (“Article 5(4) Investigation”). The Article 5(4) Investigation relates to how developers may communicate and promote offers to end us...
+
+[MIN-MERGE] item=Part_II_Item_1 section=None 5 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 1A (len=414 chars) ---
 Item 1A.    Risk Factors
@@ -285,12 +314,16 @@ Not applicable.
 
 Apple Inc. | Q1 2026 Form 10-Q | 20...
 
+[MIN-MERGE] item=Part_II_Item_4 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 --- [ITEM] Part II, Item 5 (len=2002 chars) ---
 Item 5.    Other Information
 
 Insider Trading Arrangements
 
 On November 21, 2025, Kevan Parekh, the Company’s Senior Vice President and Chief Financial Officer, entered into a trading plan intended to satisfy the affirmative defense conditions of Rule 10b5-1(c) under the Exchange Act. The plan provides for the sale, subject to certain price limits, of shares vesting between April 15, 2026 and Octo...
+
+[MIN-MERGE] item=Part_II_Item_5 section=None 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 6 (len=1126 chars) ---
 Item 6.    Exhibits
@@ -319,9 +352,4 @@ Section 1350 Certifications of Chief Executive Officer and Chief Financial Offic
 
 Inline XBRL Document Se...
 
---- [ITEM] Part I, Item 2 (len=17841 chars) ---
-Item 2.    Management’s Discussion and Analysis of Financial Condition and Results of Operations
-
-This Item and other sections of this Quarterly Report on Form 10-Q (“Form 10-Q”) contain forward-looking statements, within the meaning of the Private Securities Litigation Reform Act of 1995, that involve risks and uncertainties. Forward-looking statements provide current expectations of future event...
-
-[RCTS] item=Part_I_Item_2 原 chunk 1948 token > 1200 → 補切成 3 份
+[MIN-MERGE] item=Part_II_Item_6 section=None 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

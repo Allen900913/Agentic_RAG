@@ -1,0 +1,1145 @@
+=== GOOGL 10-K | accession=0001652044-24-000022 | fiscal_year=2023 fiscal_period=FY period_code=2023 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**Alphabet Inc.** (GOOG)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2023 | Dec 31, 2022 | Dec 31, 2021 |
+| --- | ---: | ---: | ---: |
+|   Revenues | $307,394 | $282,836 | $257,637 |
+|       Cost of revenues | $133,332 | $126,203 | $110,939 |
+|       Research and development | $45,427 | $39,500 | $31,562 |
+|       Sales and marketing | $27,917 | $26,567 | $22,912 |
+|       General and administrative | $16,425 | $15,724 | $13,510 |
+|       Total costs and expenses | $223,101 | $207,994 | $178,923 |
+|     Income from operations | 84,293 | 74,842 | 78,714 |
+|     Other income (expense), net | $1,424 | $(3,514) | $12,020 |
+|   Total | $85,717 | $71,328 | $90,734 |
+|   Provision for income taxes | $11,922 | $11,356 | $14,701 |
+|   Net income | $73,795 | $59,972 | $76,033 |
+|   Basic net income per share of Class A, Class B, and Class C stock (in dollars per share) | 5.84 | 4.59 | 5.69 |
+| *    Class A Common Stock* | 5.84 | 4.59 | 5.69 |
+| *    Class B Common Stock* | 5.84 | 4.59 | 5.69 |
+| *    Class C Capital Stock* | 5.84 | 4.59 | 5.69 |
+|   Diluted net income per share of Class A, Class B, and Class C stock (in dollars per share) | 5.80 | 4.56 | 5.61 |
+| *    Class A Common Stock* | 5.80 | 4.56 | 5.61 |
+| *    Class B Common Stock* | 5.80 | 4.56 | 5.61 |
+| *    Class C Capital Stock* | 5.80 | 4.56 | 5.61 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**Alphabet Inc.** (GOOG)
+
+**As of December 31, 2023 and December 31, 2022** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2023 | Dec 31, 2022 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $24,048 | $21,879 |
+|         Marketable securities | $86,868 | $91,883 |
+| *        Net Income* | $12,572 | $11,152 |
+|         Total cash, cash equivalents, and marketable securities | $110,916 | $113,762 |
+|         Accounts receivable, net | $47,964 | $40,258 |
+|         Other current assets | $12,650 | $10,775 |
+|         Total current assets | $171,530 | $164,795 |
+|     Non-marketable securities | $31,008 | $30,492 |
+|     Deferred income taxes | $12,169 | $5,261 |
+|     Property and equipment, net | $134,345 | $112,668 |
+|     Operating lease assets | $14,091 | $14,381 |
+|     Goodwill | $29,198 | $28,960 |
+|     Other non-current assets | $10,051 | $8,707 |
+|     Total assets | $402,392 | $365,264 |
+|         Accounts payable | $7,493 | $5,128 |
+|         Accrued compensation and benefits | $15,140 | $14,028 |
+|         Accrued expenses and other current liabilities | $46,168 | $37,866 |
+|         Accrued revenue share | $8,876 | $8,370 |
+|         Deferred revenue | $4,137 | $3,908 |
+|         Total current liabilities | $81,814 | $69,300 |
+|     Long-term debt | $13,253 | $14,701 |
+|     Deferred revenue, non-current | $911 | $599 |
+|     Income taxes payable, non-current | $8,474 | $9,258 |
+|     Deferred income taxes | $485 | $514 |
+|     Operating lease liabilities | $12,460 | $12,501 |
+|     Other long-term liabilities | $1,616 | $2,247 |
+|       Total liabilities | $119,013 | $109,120 |
+|       Commitments and Contingencies (Note 10) |  |  |
+|       Preferred stock, $0.001 par value per share, 100 shares authorized; no shares issued and outstanding |  |  |
+|       Class A, Class B, and Class C stock and additional paid-in capital, $0.001 par value per share: 300,000 shares authorized (Class A 180,000, Class B 60,000, Class C 60,000); 12,849 (Class A 5,964, Class B 883, Class C 6,002) and 12,460 (Class A 5,899, Class B 870, Class C 5,691) shares issued and outstanding | $76,534 | $68,184 |
+|       Accumulated other comprehensive income (loss) | $(4,402) | $(7,603) |
+|       Retained earnings | $211,247 | $195,563 |
+|       Total stockholders’ equity | $283,379 | $256,144 |
+|     Total liabilities and stockholders’ equity | $402,392 | $365,264 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**Alphabet Inc.** (GOOG)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2023 | Dec 31, 2022 | Dec 31, 2021 |
+| --- | ---: | ---: | ---: |
+|       Net income | $73,795 | $59,972 | $76,033 |
+|       Depreciation of property and equipment | $11,946 | $13,475 | $10,273 |
+|       Stock-based compensation expense | $22,460 | $19,362 | $15,376 |
+| *        Severance and Related* | $432 |  |  |
+|       Deferred income taxes | $(7,763) | $(8,081) | $1,808 |
+|       (Gain) loss on debt and equity securities, net | $823 | $5,519 | $(12,270) |
+|       Other | $4,330 | $3,483 | $1,955 |
+|         Accounts receivable, net | $(7,833) | $(2,317) | $(9,095) |
+|         Income taxes, net | $523 | $584 | $(625) |
+|         Other assets | $(2,143) | $(5,046) | $(1,846) |
+|         Accounts payable | $664 | $707 | $283 |
+|         Accrued expenses and other liabilities | $3,937 | $3,915 | $7,304 |
+|         Accrued revenue share | $482 | $(445) | $1,682 |
+|         Deferred revenue | $525 | $367 | $774 |
+|     Net cash provided by operating activities | $101,746 | $91,495 | $91,652 |
+|       Purchases of property and equipment | $(32,251) | $(31,485) | $(24,640) |
+|       Purchases of marketable securities | $(77,858) | $(78,874) | $(135,196) |
+|       Maturities and sales of marketable securities | $86,672 | $97,822 | $128,294 |
+|       Purchases of non-marketable securities | $(3,027) | $(2,531) | $(2,838) |
+|       Maturities and sales of non-marketable securities | $947 | $150 | $934 |
+|       Acquisitions, net of cash acquired, and purchases of intangible assets | $(495) | $(6,969) | $(2,618) |
+|       Other investing activities | $(1,051) | $1,589 | $541 |
+|     Net cash used in investing activities | $(27,063) | $(20,298) | $(35,523) |
+|       Net payments related to stock-based award activities | $(9,837) | $(9,300) | $(10,162) |
+|       Repurchases of stock | $(61,504) | $(59,296) | $(50,274) |
+|       Proceeds from issuance of debt, net of costs | $10,790 | $52,872 | $20,199 |
+|       Repayments of debt | $(11,550) | $(54,068) | $(21,435) |
+|       Proceeds from sale of interest in consolidated entities, net | $8 | $35 | $310 |
+|     Net cash used in financing activities | $(72,093) | $(69,757) | $(61,362) |
+|     Effect of exchange rate changes on cash and cash equivalents | $(421) | $(506) | $(287) |
+|   Net increase (decrease) in cash and cash equivalents | $2,169 | $934 | $(5,520) |
+|   Cash and cash equivalents at beginning of period | $21,879 | $20,945 | $26,465 |
+|   Cash and cash equivalents at end of period | $24,048 | $21,879 | $20,945 |
+|     Cash paid for income taxes, net of refunds | $19,164 | $18,892 | $13,412 |
+
+--- [TABLE extra #0] ---
+(Mark One)
+
+| ☒ | ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #1] ---
+For the fiscal year ended
+
+| ☐ | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #2] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware | 61-1767919 |
+| --- | --- |
+| (State or other jurisdiction of incorporation or organization) | (I.R.S. Employer Identification No.) |...
+
+--- [TABLE extra #3] ---
+(Registrant's telephone number, including area code)
+
+| Securities registered pursuant to Section 12(b) of the Act: |  |  |
+| --- | --- | --- |
+| Title of each class | Trading Symbol(s) | Name of each exchange on which registered |
+| Class A Common Stock, $0.001 par value | GOOGL | Nasdaq Stock Market LLC |
+|  |  | (Nasdaq Global Select Market) |
+| Class C Capital Stock, $0.001 par value | GOOG | ...
+
+--- [TABLE extra #4] ---
+Securities registered pursuant to Section 12(g) of the Act:
+
+| Title of each class |
+| --- |
+| None |...
+
+--- [TABLE extra #5] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large accelerated filer | ☒ |  | Accelerated filer | ☐ |
+| --- | --- | --- | --- | --- |
+| Non-accelerated filer | ☐ |  | Smaller reporting company | ☐ |
+| ...
+
+--- [TABLE extra #6] ---
+As of January 23, 2024, there were million shares of Alphabet’s Class A stock outstanding, million shares of Alphabet’s Class B stock outstanding, and million shares of the Alphabet’s Class C stock outstanding.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #7] ---
+TABLE OF CONTENTS
+
+|  |  | Page |
+| --- | --- | --- |
+| Note About Forward-Looking Statements | 3 |  |
+| PART I |  |  |
+| Item 1. | Business | 4 |
+| Item 1A. | Risk Factors | 11 |
+| Item 1B. | Unresolved Staff Comments | 24 |
+| Item 1C. | Cybersecurity | 24 |
+| Item 2. | Properties | 25 |
+| Item 3. | Legal Proceedings | 25 |
+| Item 4. | Mine Safety Disclosures | 25 |
+| PART II |  |  |
+| Item 5. | ...
+
+--- [TABLE extra #8] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #9] ---
+our expectation that we will continue to face heightened regulatory scrutiny and changes in regulatory conditions, laws, and public policies, which could affect our business practices and financial results;
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #10] ---
+AI is a transformational technology that can bring meaningful and positive change to people and societies across the world, and for our business. At Google, we have been bringing AI into our products and services for more than a decade and 
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #11] ---
+While we have been integrating AI into our products for years, we are now embedding the power of generative AI to continue helping our users express themselves and get things done. For example, Duet AI in Google Workspace helps users write,
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #12] ---
+This drive to make information more accessible and helpful has led us over the years to improve the discovery and creation of digital content both on the web and through platforms like Google Play and YouTube. People are consuming many form
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #13] ---
+Databases and Analytics: provides a variety of different types of databases — relational, key-value, in-memory — to store and manage data for different types of applications. Our Data Cloud also unifies data lakes, data warehouses, data gov
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #14] ---
+content providers, primarily based on the quality of our advertiser base, our ability to help these partners generate revenues from advertising, and the terms of our agreements with them.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #15] ---
+At Alphabet, we are committed to making diversity, equity, and inclusion part of everything we do and to growing a workforce that is representative of the users we serve. More information on Google’s approach to diversity can be found in ou
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #16] ---
+We webcast via our investor relations website our earnings calls and certain events we participate in or host with members of the investment community. Our investor relations website also provides notifications of news or announcements rega
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #17] ---
+Our financial condition and operating results may also suffer if our products and services are not responsive to the evolving needs and desires of our users, advertisers, publishers, customers, and content providers. As new and existing tec
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #18] ---
+In addition, we may experience downward pressure on our operating margin resulting from a variety of factors, such as an increase in the mix of lower-margin products and services, in particular from the continued expansion of our business i
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #19] ---
+We rely on contract manufacturers to manufacture or assemble our devices and servers and networking equipment used in our technical infrastructure, and we may supply the contract manufacturers with components to assemble the devices and equ
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #20] ---
+Our international operations expose us to additional risks that could harm our business, financial condition, and operating results.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #21] ---
+People access our products and services through a growing variety of devices such as desktop computers, mobile phones, smartphones, laptops and tablets, video game consoles, voice-activated speakers, wearables (including virtual reality and
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #22] ---
+We may experience security issues, whether due to employee or insider error or malfeasance, system errors, or vulnerabilities in our or other parties’ systems. While we may not determine some of these issues to be material at the
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #23] ---
+We, like others in the industry, face violations of our content guidelines across our platforms, including sophisticated attempts by bad actors to manipulate our hosting and advertising systems to fraudulently generate revenues, or to other
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #24] ---
+Competition and technology platforms’ business practices: Laws and regulations focused on large technology platforms, including the Digital Markets Act in the European Union (EU); regulations and legal
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #25] ---
+We are subject to claims, lawsuits, regulatory and government investigations, other proceedings, and orders involving competition, intellectual property, data privacy and security, tax and related compliance, labor and employment, commercia
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #26] ---
+The EU’s Digital Markets Act, which will require in-scope companies to obtain user consent for combining data across certain products and require search engines to share anonymized data with rival companies, among other changes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #27] ---
+We are subject to a variety of taxes and tax collection obligations in the U.S. and numerous foreign jurisdictions. Our effective tax rates are affected by a variety of factors, including changes in the mix of earnings in jurisdictions with
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #28] ---
+Our certificate of incorporation prohibits cumulative voting in the election of directors. This limits the ability of minority stockholders to elect director candidates.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #29] ---
+failure to realize the value of investments and joint ventures due to a lack of liquidity;
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #30] ---
+As part of our cybersecurity risk management system, our incident management teams track and log privacy and security incidents across Alphabet, our vendors, and other third-party service providers to remediate and resolve any such incident
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #31] ---
+We have never declared or paid any cash dividend on our common or capital stock. The primary use of capital continues to be to invest for the long-term growth of the business. We regularly evaluate our cash and capital structure, including 
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #32] ---
+The following table presents information with respect to Alphabet's repurchases of Class A and Class C stock during the quarter ended December 31, 2023:
+
+| Period |  | Total Number of Class A Shares Purchased (in thousands) (1) |  | Total Number of Class C Shares Purchased (in thousands) (1) |  | Average Price Paid per Class A Share (2) |  | Average Price Paid per Class C Share (2) |  | Total Numb...
+
+--- [TABLE extra #33] ---
+(2) Average price paid per share includes costs associated with the repurchases.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #34] ---
+Copyright© 2024 S&P, a division of The McGraw-Hill Companies Inc. All rights reserved.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #35] ---
+ITEM 6.[Reserved]
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #36] ---
+As users in developing economies increasingly come online, our revenues from international markets continue to increase, and may require continued investments. In addition, movements in foreign exchange rates affect such revenues.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #37] ---
+changes in foreign currency exchange rates;
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #38] ---
+traffic growth in emerging markets compared to more mature markets and across various verticals and channels.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #39] ---
+inventory and other costs related to the devices we sell.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #40] ---
+For additional information, including a reconciliation of the U.S. federal statutory rate to our effective tax rate, see Note 14 of the Notes to Consolidated Financial Statements included in Item 8 of this Annual Report on Form 10-K.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #41] ---
+In January 2023, we completed an assessment of the useful lives of our servers and network equipment, resulting in a change in the estimated useful life of our servers and certain network equipment to six years. The effect of this change wa
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #42] ---
+The following table presents revenues by type (in millions):
+
+|  |  |  | Year Ended December 31, |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  | 2022 |  | 2023 |  |  |  |  |
+| Google Search & other |  |  | $ | 162,450 |  |  | $ | 175,033 |  |
+| YouTube ads |  |  | 29,243 |  |  | 31,510 |  |  |  |
+| Google Network |  |  | 32,780 |  |  | 31,312 |  |  |  |...
+
+--- [TABLE extra #43] ---
+Google Network revenues decreased $1.5 billion from 2022 to 2023, primarily driven by a decrease in Google Ad Manager and AdSense revenues.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #44] ---
+The following table presents changes in monetization metrics for Google Search & other revenues (paid clicks and cost-per-click) and Google Network revenues (impressions and cost-per-impression), expressed as a percentage, from 2022 to 2023
+
+| Google Search & other |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- |
+| Paid clicks change |  |  |  |  | 7 | % |
+| Cost-per-click change |  ...
+
+--- [TABLE extra #45] ---
+For additional information, see Note 2 of the Notes to Consolidated Financial Statements included in Item 8 of this Annual Report on Form 10-K.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #46] ---
+The following table presents the foreign currency exchange effect on international revenues and total revenues (in millions, except percentages):
+
+|  |  |  |  |  | Year Ended December 31, 2023 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --...
+
+--- [TABLE extra #47] ---
+Other Americas revenue growth was unfavorably affected by changes in foreign currency exchange rates, primarily due to the U.S. dollar strengthening relative to the Argentine peso.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #48] ---
+Sales and marketing expenses increased $1.4 billion from 2022 to 2023, primarily driven by an increase in compensation expenses of $1.6 billion, partially offset by a decrease in advertising and promotional activities of $441 million. The $
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #49] ---
+The following table presents segment operating income (loss) (in millions).
+
+|  |  |  | Year Ended December 31, |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  | 2022 |  | 2023 |  |  |  |  |
+| Operating income (loss): |  |  |  |  |  |  |  |  |  |
+| Google Services |  |  | $ | 82,699 |  |  | $ | 95,858 |  |
+| Google Cloud |  |  | (1,922) |  |  | 1,716 |  |...
+
+--- [TABLE extra #50] ---
+The following table presents OI&E, (in millions):
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #51] ---
+The table lists interest, foreign‑currency, securities, performance fee, equity‑method, and other income/expense items for the years ended December 31, 2022 and 2023.
+
+|  |  |  | Year Ended December 31, |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  |  | 2022 |  | 2023 |  |  |  |  |
+| Interest income |  |  | $ | 2,174 |  |  | $ | 3,865 |  |
+| Interest expen...
+
+--- [TABLE extra #52] ---
+Our principal sources of liquidity are cash, cash equivalents, and marketable securities, as well as the cash flow that we generate from operations. The primary use of capital continues to be to invest for the long-term growth of the busine
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #53] ---
+Construction in progress consists primarily of technical infrastructure and office facilities which have not yet been placed in service. The time frame from date of purchase to placement in service of these assets may extend from months to 
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #54] ---
+The following table presents Class A and Class C shares repurchased and subsequently retired (in millions):
+
+|  | Year Ended December 31, 2022 |  | Year Ended December 31, 2023 |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Shares |  | Amount |  | Shares |  | Amount |  |  |  |  |
+| Class A share repurchases | 61 |  | $ | 6,719 |  |  | 78 | ...
+
+--- [TABLE extra #55] ---
+For additional information, see Note 11 of the Notes to Consolidated Financial Statements included in Item 8 of this Annual Report on Form 10-K.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #56] ---
+Non-marketable equity securities are also evaluated for impairment, based on qualitative factors including the companies' financial and liquidity position and access to capital resources, among others. When indicators of impairment exist, w
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #57] ---
+In January 2023, we completed an assessment of the useful lives of our servers and network equipment resulting in a change in the estimated useful life of our servers and certain network equipment to six years. This change in accounting est
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #58] ---
+Our Corporate Treasury investment strategy is to achieve a return that will allow us to preserve capital and maintain liquidity. We invest primarily in debt securities, including government bonds, corporate debt securities, mortgage-backed 
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #59] ---
+For additional information about our equity investments, see Note 1 and Note 3 of the Notes to Consolidated Financial Statements included in Item 8 of this Annual Report on Form 10-K.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #60] ---
+INDEX TO CONSOLIDATED FINANCIAL STATEMENTS
+
+|  | Page |
+| --- | --- |
+| Reports of Independent Registered Public Accounting Firm (PCAOB ID: 42 ) | 48 |
+| Financial Statements: |  |
+| Consolidated Balance Sheets | 51 |
+| Consolidated Statements of Income | 52 |
+| Consolidated Statements of Comprehensive Income | 53 |
+| Consolidated Statements of Stockholders’ Equity | 54 |
+| Consolidated Statements...
+
+--- [TABLE extra #61] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #62] ---
+The critical audit matter communicated below is a matter arising from the current period audit of the financial statements that was communicated or required to be communicated to the audit committee and that: (1) relates to accounts or disc
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #63] ---
+Loss Contingencies
+
+| Description of the Matter | The Company is regularly subject to claims, lawsuits, regulatory and government investigations, other proceedings, and consent orders involving competition, intellectual property, data privacy and security, tax and related compliance, labor and employment, commercial disputes, content generated by its users, goods and services offered by advertiser...
+
+--- [TABLE extra #64] ---
+| /s/ Ernst & Young LLP |  |
+| --- | --- |
+| We have served as the Company's auditor since 1999. |  |
+| San Jose, California |  |
+| January 30, 2024 |  |...
+
+--- [TABLE extra #65] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #66] ---
+Because of its inherent limitations, internal control over financial reporting may not prevent or detect misstatements. Also, projections of any evaluation of effectiveness to future periods are subject to the risk that controls may become 
+
+| /s/ Ernst & Young LLP |  |
+| --- | --- |
+| San Jose, California |  |
+| January 30, 2024 |  |...
+
+--- [TABLE extra #67] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #68] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #69] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #70] ---
+(in millions)
+
+|  | Year Ended December 31, |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2021 |  | 2022 |  | 2023 |  |  |  |  |  |  |
+| Net income | $ | 76,033 |  |  | $ | 59,972 |  |  | $ | 73,795 |  |
+| Other comprehensive income (loss): |  |  |  |  |  |  |  |  |  |  |  |
+| Change in foreign currency translation adjustment | ( 1,4...
+
+--- [TABLE extra #71] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #72] ---
+(in millions)
+
+|  | Class A, Class B, Class C Stock and Additional Paid-In Capital |  | Accumulated Other Comprehensive Income (Loss) |  | Retained Earnings |  | Total Stockholders’ Equity |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Shares |  | Amount |  |  |  |  |  |  |  |  |  |  |  |  ...
+
+--- [TABLE extra #73] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #74] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #75] ---
+Note 1.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #76] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #77] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #78] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #79] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #80] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #81] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #82] ---
+Note 3.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #83] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #84] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #85] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #86] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #87] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #88] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #89] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #90] ---
+Note 4.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #91] ---
+Note 6.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #92] ---
+Note 7.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #93] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #94] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #95] ---
+Note 8.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #96] ---
+Note 10.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #97] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #98] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #99] ---
+Note 12.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #100] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #101] ---
+Note 13.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #102] ---
+Note 14.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #103] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #104] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #105] ---
+Note 15.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #106] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #107] ---
+In designing and evaluating the disclosure controls and procedures, management recognizes that any controls and procedures, no matter how well designed and operated, can provide only reasonable assurance of achieving the desired control obj
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #108] ---
+Not applicable.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #109] ---
+The information required by this item will be included under the caption “Independent Registered Public Accounting Firm” in the 2024 Proxy Statement and is incorporated herein by reference.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #110] ---
+1. Consolidated Financial Statements
+
+| Reports of Independent Registered Public Accounting Firm | 48 |
+| --- | --- |
+| Financial Statements: |  |
+| Consolidated Balance Sheets | 51 |
+| Consolidated Statements of Income | 52 |
+| Consolidated Statements of Comprehensive Income | 53 |
+| Consolidated Statements of Stockholders’ Equity | 54 |
+| Consolidated Statements of Cash Flows | 55 |
+| Notes to C...
+
+--- [TABLE extra #111] ---
+3. Exhibits
+
+| Exhibit Number |  |  | Description |  | Incorporated by reference herein |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Form |  | Date |  |  |  |  |
+| 2.01 |  |  | Agreement and Plan of Merger, dated October 2, 2015, by and among Google Inc., the Registrant and Maple Technologies Inc. |  | Current Report on Form 8-K (File No. 001-37580) |  | October 2, 2015 |
+| 3.01 ...
+
+--- [TABLE extra #112] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #113] ---
+The table lists exhibits referenced in the SEC filing, including agreements, indentures, note forms, and securities descriptions, with dates ranging from 2015 to 2023.
+
+| Exhibit Number |  |  | Description |  | Incorporated by reference herein |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Form |  | Date |  |  |  |  |
+| 4.07 |  |  | Transfer Restriction Agreement, dated October 2, ...
+
+--- [TABLE extra #114] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #115] ---
+Table lists exhibits referenced in Alphabet Inc.’s SEC filing, including stock plans, bonus plan, subsidiaries, certifications, and XBRL documents, covering filings up to July 2023.
+
+| Exhibit Number |  |  | Description |  | Incorporated by reference herein |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Form |  | Date |  |  |  |  |
+| 10.08 | u |  | Alphabet Inc. Amended and Restate...
+
+--- [TABLE extra #116] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #117] ---
+| Exhibit Number |  |  | Description |  | Incorporated by reference herein |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Form |  | Date |  |  |  |  |
+| 101.PRE | * |  | Inline XBRL Taxonomy Extension Presentation Linkbase Document |  |  |  |  |
+| 104 |  |  | Cover Page Interactive Data File (embedded within the Inline XBRL document and contained in Exhibit 101) |  |  |  |  |...
+
+--- [TABLE extra #118] ---
+| u | Indicates management compensatory plan, contract, or arrangement. |
+| --- | --- |
+| * | Filed herewith. |
+| ‡ | Furnished herewith. |...
+
+--- [TABLE extra #119] ---
+None.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #120] ---
+Date: January 30, 2024
+
+| ALPHABET INC. |  |
+| --- | --- |
+| By: | / S / S UNDAR P ICHAI |
+|  | Sundar Pichai |
+|  | Chief Executive Officer (Principal Executive Officer of the Registrant) |...
+
+--- [TABLE extra #121] ---
+Pursuant to the requirements of the Securities Exchange Act of 1934, this Annual Report on Form 10-K has been signed below by the following persons on behalf of the Registrant and in the capacities and on the dates indicated.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #122] ---
+Table lists signatures, titles, and dates of the company’s directors and officers, covering the filing date of January 30, 2024.
+
+| Signature | Title | Date |
+| --- | --- | --- |
+| / S / S UNDAR P ICHAI | Chief Executive Officer and Director (Principal Executive Officer) | January 30, 2024 |
+| Sundar Pichai |  |  |
+| / S / R UTH M. P ORAT | President and Chief Investment Officer; Chief Financial O...
+
+[INFO] extra tables kept=123 (去重後，來自 unstructured)
+
+--- [ITEM] Item 1 (len=32507 chars) ---
+ITEM 1.BUSINESS
+
+Overview
+
+As our founders Larry and Sergey wrote in the original founders' letter, "Google is not a conventional company. We do not intend to become one." That unconventional spirit has been a driving force throughout our history, inspiring us to tackle big problems and invest in moonshots. It led us to be a pioneer in the development of AI and, since 2016, an AI-first company. We...
+
+--- [ITEM] Item 1A (len=76171 chars) ---
+Table of Contents
+
+Alphabet Inc.
+
+ITEM 1A.RISK FACTORS
+
+Our operations and financial results are subject to various risks and uncertainties, including but not limited to those described below, which could harm our business, reputation, financial condition, and operating results, and affect the trading price of our Class A and Class C stock.
+
+Risks Specific to our Company
+
+We generate a significant...
+
+[MIN-MERGE] item=Item_1A section=None 37 → 30 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1A 原 chunk 1872 token > 1200 → 補切成 4 份
+
+[RCTS] item=Item_1A 原 chunk 1233 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 1256 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1348 token > 1200 → 補切成 2 份
+
+--- [ITEM] Item 1B (len=50 chars) ---
+ITEM 1B.UNRESOLVED STAFF COMMENTS
+
+Not applicable....
+
+--- [ITEM] Item 1C (len=3041 chars) ---
+ITEM 1C.     CYBERSECURITY
+
+We maintain a comprehensive process for identifying, assessing, and managing material risks from cybersecurity threats as part of our broader risk management system and processes. We obtain input, as appropriate, for our cybersecurity risk management program on the security industry and threat trends from multiple external experts and internal threat intelligence teams....
+
+[MIN-MERGE] item=Item_1C section=None 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 2 (len=296 chars) ---
+ITEM 2.PROPERTIES
+
+Our headquarters are located in Mountain View, California. We own and lease office facilities and data centers around the world, primarily in Asia, Europe, and North America. We believe our existing facilities are in good condition and suitable for the conduct of our business....
+
+[MIN-MERGE] item=Item_2 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 3 (len=272 chars) ---
+ITEM 3.LEGAL PROCEEDINGS
+
+For a description of our material pending legal proceedings, see Legal Matters in Note 10 of the Notes to Consolidated Financial Statements included in Part II, Item 8 of this Annual Report on Form 10-K, which is incorporated herein by reference....
+
+--- [ITEM] Item 4 (len=56 chars) ---
+ITEM 4.MINE SAFETY DISCLOSURES
+
+Not applicable.
+
+PART II...
+
+--- [ITEM] Item 5 (len=4736 chars) ---
+ITEM 5.MARKET FOR REGISTRANT’S COMMON EQUITY, RELATED STOCKHOLDER MATTERS, AND ISSUER PURCHASES OF EQUITY SECURITIES
+
+As of October 2, 2015, Alphabet Inc. became the successor issuer of Google Inc. pursuant to Rule 12g-3(a) under the Exchange Act. Our Class A stock has been listed on the Nasdaq Global Select Market under the symbol “GOOG” since August 19, 2004, and under the symbol "GOOGL" since A...
+
+--- [ITEM] Item 6 (len=22 chars) ---
+ITEM 6.[Reserved]
+
+28....
+
+--- [ITEM] Item 7 (len=59669 chars) ---
+Table of Contents
+
+Alphabet Inc.
+
+ITEM 7.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+Please read the following discussion and analysis of our financial condition and results of operations together with “Note about Forward-Looking Statements,” Part I, Item 1 "Business," Part I, Item 1A "Risk Factors," and our consolidated financial statements and related n...
+
+[GROUND] item=Item_7 period=None 51 → 48 段（無幅度數字的段併回帶表格的前一段）
+
+[SECTION] item=Item_7 period=None 依小標切成 48 段：(小標前=章節層) | Understanding Alphabet’s Financial Results | Revenues and Monetization Metrics | Google Services | Google Advertising | Google Subscriptions, Platforms, and Devices | Google Cloud | Other Bets | Costs and Expenses | Cost of Revenues | Operating Expenses | Other Income (Expense), Net | Provision for Income Taxes | Executive Overview | NM = Not Meaningful | Revenues | Google Search & other | YouTube ads | Google Network | Monetization Metrics | Google Cloud | Revenues by Geography | Use of Non-GAAP Constant Currency Information | % Change from Prior Period | Cost of Revenues | Research and Development | Sales and Marketing | General and Administrative | Segment Profitability | Google Services | Google Cloud | Other Bets | Provision for Income Taxes | Cash, Cash Equivalents, and Marketable Securities | Liquidity and Material Cash Requirements | Capital Expenditures and Leases | Capital Expenditures | Leases | Financing | Share Repurchase Program | European Commission Fines | Taxes | Purchase Commitments and Other Contractual Obligations | Critical Accounting Estimates | Property and Equipment | Income Taxes | Loss Contingencies | Change in Accounting Estimate
+
+[MIN-MERGE] item=Item_7 section=Google Cloud 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=% Change from Prior Period 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Segment Profitability 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Google Services 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Google Cloud 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Purchase Commitments and Other Contractual Obligations 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Income Taxes 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 7A (len=9708 chars) ---
+Table of Contents
+
+Alphabet Inc.
+
+ITEM 7A.QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+We are exposed to financial market risks, including changes in foreign currency exchange rates, interest rates, and equity investment risks. 
+
+Foreign Currency Exchange Risk
+
+We transact business globally in multiple currencies. International revenues, as well as costs and expenses denominated in ...
+
+[MIN-MERGE] item=Item_7A section=None 7 → 6 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 8 (len=120406 chars) ---
+Table of Contents
+
+Alphabet Inc.
+
+ITEM 8.FINANCIAL STATEMENTS AND SUPPLEMENTARY DATA
+
+Alphabet Inc.
+
+INDEX TO CONSOLIDATED FINANCIAL STATEMENTS
+
+ Page
+
+Reports of Independent Registered Public Accounting Firm (PCAOB ID: 42)
+
+48
+
+Financial Statements:
+
+Consolidated Balance Sheets
+
+51
+
+Consolidated Statements of Income
+
+52
+
+Consolidated Statements of Comprehensive Income
+
+53
+
+Consolidated Statements...
+
+[MIN-MERGE] item=Item_8 section=None 49 → 45 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_8 原 chunk 1204 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_8 原 chunk 4862 token > 1200 → 補切成 8 份
+
+[RCTS] item=Item_8 原 chunk 1465 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_8 原 chunk 1564 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 9 (len=132 chars) ---
+Table of Contents
+
+Alphabet Inc.
+
+ITEM 9.CHANGES IN AND DISAGREEMENTS WITH ACCOUNTANTS ON ACCOUNTING AND FINANCIAL DISCLOSURE
+
+None....
+
+--- [ITEM] Item 9A (len=2947 chars) ---
+ITEM 9A.CONTROLS AND PROCEDURES
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our chief executive officer and chief financial officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Exchange Act, as of the end of the period covered by this Annual Report on Form 10-K.
+
+Based on this evaluation, o...
+
+--- [ITEM] Item 9B (len=2542 chars) ---
+Table of Contents
+
+Alphabet Inc.
+
+ITEM 9B.OTHER INFORMATION
+
+10b5-1 Trading Plans
+
+During the fiscal quarter ended December 31, 2023, the following Section 16 officer and directors adopted, modified or terminated a “Rule 10b5-1 trading arrangement” (as defined in Item 408 of Regulation S-K of the Exchange Act):
+
+•John Hennessy, Chair of the Board of Directors, through the John L. Hennessy & Andrea...
+
+--- [ITEM] Item 9C (len=148 chars) ---
+ITEM 9C.     DISCLOSURE REGARDING FOREIGN JURISDICTIONS THAT PREVENT INSPECTIONS
+
+Not applicable.
+
+89.  
+
+Table of Contents
+
+Alphabet Inc.
+
+PART III...
+
+[MIN-MERGE] item=Item_9C section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 10 (len=654 chars) ---
+ITEM 10.DIRECTORS, EXECUTIVE OFFICERS, AND CORPORATE GOVERNANCE
+
+The information required by this item will be included under the caption “Directors, Executive Officers, and Corporate Governance” in our Proxy Statement for the 2024 Annual Meeting of Stockholders to be filed with the SEC within 120 days of the fiscal year ended December 31, 2023 (2024 Proxy Statement) and is incorporated herein by ...
+
+--- [ITEM] Item 11 (len=506 chars) ---
+ITEM 11.EXECUTIVE COMPENSATION
+
+The information required by this item will be included under the captions “Director Compensation,” “Executive Compensation” and “Directors, Executive Officers, and Corporate Governance—Corporate Governance and Board Matters—Compensation Committee Interlocks and Insider Participation” in the 2024 Proxy Statement and is incorporated herein by reference, except as to i...
+
+--- [ITEM] Item 12 (len=358 chars) ---
+ITEM 12.SECURITY OWNERSHIP OF CERTAIN BENEFICIAL OWNERS AND MANAGEMENT AND RELATED STOCKHOLDER MATTERS
+
+The information required by this item will be included under the captions “Common Stock Ownership of Certain Beneficial Owners and Management” and “Equity Compensation Plan Information” in the 2024 Proxy Statement and is incorporated herein by reference....
+
+--- [ITEM] Item 13 (len=397 chars) ---
+ITEM 13.CERTAIN RELATIONSHIPS AND RELATED TRANSACTIONS, AND DIRECTOR INDEPENDENCE
+
+The information required by this item will be included under the captions “Certain Relationships and Related Transactions” and “Directors, Executive Officers, and Corporate Governance—Corporate Governance and Board Matters—Director Independence” in the 2024 Proxy Statement and is incorporated herein by reference....
+
+--- [ITEM] Item 14 (len=287 chars) ---
+ITEM 14.PRINCIPAL ACCOUNTANT FEES AND SERVICES
+
+The information required by this item will be included under the caption “Independent Registered Public Accounting Firm” in the 2024 Proxy Statement and is incorporated herein by reference.
+
+90.  
+
+Table of Contents
+
+Alphabet Inc.
+
+PART IV...
+
+[MIN-MERGE] item=Item_14 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 15 (len=9110 chars) ---
+ITEM 15.EXHIBITS, FINANCIAL STATEMENT SCHEDULES
+
+We have filed the following documents as part of this Annual Report on Form 10-K:
+
+1. Consolidated Financial Statements
+
+Reports of Independent Registered Public Accounting Firm
+
+48
+
+Financial Statements:
+
+Consolidated Balance Sheets
+
+51
+
+Consolidated Statements of Income
+
+52
+
+Consolidated Statements of Comprehensive Income
+
+53
+
+Consolidated Stateme...
+
+[MIN-MERGE] item=Item_15 section=None 7 → 6 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_15 原 chunk 1560 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 16 (len=37 chars) ---
+ITEM 16.FORM 10-K SUMMARY
+
+None.
+
+94....

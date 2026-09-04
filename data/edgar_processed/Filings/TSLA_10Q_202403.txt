@@ -1,0 +1,324 @@
+=== TSLA 10-Q | accession=0001628280-24-017503 | fiscal_year=2024 fiscal_period=Q1 period_code=202403 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**Tesla, Inc.** (TSLA)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2024 (Q1) | Mar 31, 2023 (Q1) |
+| --- | ---: | ---: |
+|           Revenues | $21,301 | $23,329 |
+| *          Automotive Revenues* | $17,378 | $19,963 |
+| *          Energy generation and storage* | 1,635 | 1,529 |
+| *          Services and other* | $2,288 | $1,837 |
+|           Total cost of revenues | $17,605 | $18,818 |
+| *          Automotive Revenues* | $14,166 | $15,755 |
+| *          Energy generation and storage* | 1,232 | 1,361 |
+| *          Services and other* | $2,207 | $1,702 |
+|         Gross profit | $3,696 | $4,511 |
+|           Research and development | $1,151 | $771 |
+|           Selling, general and administrative | $1,374 | $1,076 |
+|         Total operating expenses | $2,525 | $1,847 |
+|         Income from operations | 1,171 | 2,664 |
+|         Interest income | $350 | $213 |
+|         Interest expense | $(76) | $(29) |
+|         Other income (expense), net | $108 | $(48) |
+|         Income before income taxes | $1,553 | $2,800 |
+|         (Benefit from) provision for income taxes | $409 | $261 |
+|         Net income | $1,144 | $2,539 |
+|         Net income attributable to noncontrolling interests and redeemable noncontrolling interests in subsidiaries | $15 | $26 |
+|       Net income attributable to common stockholders | $1,129 | $2,513 |
+|         Basic (in dollars per share) | 0.37 | 0.80 |
+|         Diluted (in dollars per share) | 0.34 | 0.73 |
+|         Basic (in shares) | 3,186 | 3,166 |
+|         Diluted (in shares) | 3,484 | 3,468 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**Tesla, Inc.** (TSLA)
+
+**As of March 31, 2024 and December 31, 2023** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2024 | Dec 31, 2023 |
+| --- | ---: | ---: |
+|           Cash and cash equivalents | $11,805 | $16,398 |
+|           Short-term investments | $15,058 | $12,696 |
+|           Accounts receivable, net | $3,887 | $3,508 |
+|           Inventory | $16,033 | $13,626 |
+|           Prepaid expenses and other current assets | $3,752 | $3,388 |
+|             Total current assets | $50,535 | $49,616 |
+|         Operating lease vehicles, net | $5,736 | $5,989 |
+| *          Operating Lease Vehicles* | $5,736 | $5,989 |
+|         Solar energy systems, net | $5,162 | $5,229 |
+| *          Solar energy systems, net* | $5,162 | $5,229 |
+|         Property, plant and equipment, net | $31,436 | $29,725 |
+|         Operating lease right-of-use assets | $4,367 | $4,180 |
+|         Digital assets, net | $184 | $184 |
+|         Intangible assets, net | $171 | $178 |
+|         Goodwill | $250 | $253 |
+|         Deferred tax assets | $6,769 | $6,733 |
+|         Other non-current assets | $4,616 | $4,531 |
+|         Total assets | $109,226 | $106,618 |
+|           Accounts payable | $14,725 | $14,431 |
+|           Accrued liabilities and other | $9,243 | $9,080 |
+|           Deferred revenue | $3,024 | $2,864 |
+|           Current portion of debt and finance leases | $2,461 | $2,373 |
+|             Total current liabilities | $29,453 | $28,748 |
+|         Debt and finance leases, net of current portion | $2,899 | $2,857 |
+|         Deferred revenue, net of current portion | $3,214 | $3,251 |
+|         Other long-term liabilities | $8,480 | $8,153 |
+|         Total liabilities | $44,046 | $43,009 |
+|         Commitments and contingencies (Note 10) |  |  |
+|         Redeemable noncontrolling interests in subsidiaries | $73 | $242 |
+|             Preferred stock; $0.001 par value; 100 shares authorized; no shares issued and outstanding |  |  |
+|             Common stock; $0.001 par value; 6,000 shares authorized; 3,189 and 3,185 shares issued and outstanding as of March 31, 2024 and December 31, 2023, respectively | $3 | $3 |
+|             Additional paid-in capital | $35,763 | $34,892 |
+|             Accumulated other comprehensive loss | $(399) | $(143) |
+|             Retained earnings | $29,011 | $27,882 |
+|           Total stockholders’ equity | $64,378 | $62,634 |
+|         Noncontrolling interests in subsidiaries | $729 | $733 |
+|       Total liabilities and equity | $109,226 | $106,618 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**Tesla, Inc.** (TSLA)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2024 (Q1) | Mar 31, 2023 (Q1) |
+| --- | ---: | ---: |
+|       Net income | $1,144 | $2,539 |
+|       Depreciation, amortization and impairment | $1,246 | $1,046 |
+|       Stock-based compensation | $524 | $418 |
+|       Inventory and purchase commitments write-downs | $68 | $50 |
+| *        Cost of revenues* | $39 | $39 |
+|       Foreign currency transaction net unrealized gain | $(63) | $(25) |
+|       Deferred income taxes | $(11) | $(55) |
+|       Non-cash interest and other operating activities | $(5) | $15 |
+|         Accounts receivable | $(422) | $(32) |
+|         Inventory | $(2,697) | $(1,540) |
+|         Operating lease vehicles | $(12) | $(675) |
+|         Prepaid expenses and other assets | $(972) | $(737) |
+|         Accounts payable, accrued and other liabilities | $1,247 | $1,403 |
+|         Deferred revenue | $195 | $106 |
+|     Net cash provided by operating activities | $242 | $2,513 |
+|       Purchases of property and equipment excluding finance leases, net of sales | $(2,773) | $(2,072) |
+|       Purchases of solar energy systems, net of sales | $(4) | $(1) |
+|       Purchases of investments | $(6,622) | $(2,015) |
+|       Proceeds from maturities of investments | $4,315 | $1,604 |
+|     Net cash used in investing activities | $(5,084) | $(2,484) |
+|       Proceeds from issuances of debt | $776 |  |
+|       Repayments of debt | $(591) | $(302) |
+|       Proceeds from exercises of stock options and other stock issuances | $251 | $231 |
+|       Principal payments on finance leases | $(106) | $(106) |
+|       Debt issuance costs | $(3) | $(13) |
+|       Distributions paid to noncontrolling interests in subsidiaries | $(30) | $(36) |
+|       Payments for buy-outs of noncontrolling interests in subsidiaries | $(101) | $(7) |
+|     Net cash provided by (used in) financing activities | $196 | $(233) |
+|     Effect of exchange rate changes on cash and cash equivalents and restricted cash | $(79) | $50 |
+|   Net increase (decrease) in cash and cash equivalents and restricted cash | $(4,725) | $(154) |
+|   Cash and cash equivalents and restricted cash, beginning of period | $17,189 | $16,924 |
+|   Cash and cash equivalents and restricted cash, end of period | $12,464 | $16,770 |
+|     Acquisitions of property and equipment included in liabilities | $1,431 | $1,193 |
+|     Leased assets obtained in exchange for finance lease liabilities | $20 |  |
+|     Leased assets obtained in exchange for operating lease liabilities | $406 | $362 |
+
+--- [TABLE extra #0] ---
+(Mark One)
+
+| x | QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #1] ---
+For the quarterly period ended
+
+| o | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #2] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware |  | 91-2197729 |
+| --- | --- | --- |
+| (State or other jurisdiction of incorporation or organization) |  | (I.R.S. Employer Identification No.) |...
+
+--- [TABLE extra #3] ---
+| 1 Tesla Road Austin , Texas |  | 78725 |
+| --- | --- | --- |
+| (Address of principal executive offices) |  | (Zip Code) |...
+
+--- [TABLE extra #4] ---
+Securities registered pursuant to Section 12(b) of the Act:
+
+| Title of each class | Trading Symbol(s) | Name of each exchange on which registered |
+| --- | --- | --- |
+| Common stock | TSLA | The Nasdaq Global Select Market |...
+
+--- [TABLE extra #5] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large accelerated filer |  | x |  | Accelerated filer |  | o |
+| --- | --- | --- | --- | --- | --- | --- |
+| Non-accelerated filer |  | o |  | Smaller repor...
+
+--- [TABLE extra #6] ---
+INDEX
+
+|  |  | Page |
+| --- | --- | --- |
+| PART I. FINANCIAL INFORMATION |  |  |
+| Item 1. | Financial Statements | 4 |
+|  | Consolidated Balance Sheets | 4 |
+|  | Consolidated Statements of Operations | 5 |
+|  | Consolidated Statements of Comprehensive Income | 6 |
+|  | Consolidated Statements of Redeemable Noncontrolling Interests and Equity | 7 |
+|  | Consolidated Statements of Cash Flows | 8 ...
+
+--- [TABLE extra #7] ---
+The table shows the balance sheet of stockholders’ equity for the three months ended March 31 2023, including common stock, additional paid‑in capital, retained earnings, and noncontrolling interests.
+
+| Three Months Ended March 31, 2023 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Loss |  | Retained Earnings |  | T...
+
+--- [TABLE extra #8] ---
+The following is a summary of the status of production of each of our announced vehicle models in production and under development, as of the date of this Quarterly Report on Form 10-Q:
+
+| Production Location |  | Vehicle Model(s) |  | Production Status |
+| --- | --- | --- | --- | --- |
+| Fremont Factory |  | Model S / Model X |  | Active |
+|  |  | Model 3 / Model Y |  | Active |
+| Gigafactory Sha...
+
+--- [TABLE extra #9] ---
+INDEX TO EXHIBITS
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
+| 31.1 |  | Rule 13a-14(a) / 15(d)-14(a) Certification of Principal Executive Officer |  | — |  | — |  | — |  | — |  ...
+
+[INFO] extra tables kept=10 (去重後，來自 unstructured)
+
+--- [ITEM] Part I, Item 1 (len=56587 chars) ---
+ITEM 1. FINANCIAL STATEMENTS
+
+Tesla, Inc.
+
+Consolidated Balance Sheets
+
+(in millions, except per share data)
+
+(unaudited)
+
+March 31,2024December 31,2023
+
+Assets
+
+Current assets
+
+Cash and cash equivalents$11,805 $16,398 
+
+Short-term investments15,058 12,696 
+
+Accounts receivable, net3,887 3,508 
+
+Inventory16,033 13,626 
+
+Prepaid expenses and other current assets3,752 3,388 
+
+Total current assets50,...
+
+[MIN-MERGE] item=Part_I_Item_1 section=None 26 → 22 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_I_Item_1 原 chunk 3282 token > 1200 → 補切成 5 份
+
+--- [ITEM] Part I, Item 2 (len=28984 chars) ---
+Table of Contents
+
+ITEM 2. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+The following discussion and analysis should be read in conjunction with the consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q.
+
+Overview
+
+Our mission is to accelerate the world’s transition to sustainable energy. We design...
+
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 18 段：(小標前=章節層) | Overview | Automotive—Production | TBD RoadsterIn development | Automotive—Demand, Sales, Deliveries and Infrastructure | Cash Flow and Capital Expenditure Trends | Critical Accounting Policies and Estimates | Recent Accounting Pronouncements | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Liquidity and Capital Resources | Material Cash Requirements | Sources and Conditions of Liquidity | Cash Flows from Operating Activities | Cash Flows from Investing Activities | Cash Flows from Financing Activities
+
+[MIN-MERGE] item=Part_I_Item_2 section=Overview 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Cash Flows from Financing Activities 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Part I, Item 3 (len=1641 chars) ---
+Table of Contents
+
+ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+Foreign Currency Risk
+
+We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). ...
+
+--- [ITEM] Part I, Item 4 (len=1876 chars) ---
+ITEM 4. CONTROLS AND PROCEDURES
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our Chief Executive Officer and our Chief Financial Officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Securities Exchange Act of 1934, as amended (the “Exchange Act”). In designing and evaluating the disclosure c...
+
+--- [ITEM] Part II, Item 1 (len=1101 chars) ---
+ITEM 1. LEGAL PROCEEDINGS
+
+For a description of our material pending legal proceedings, please see Note 10, Commitments and Contingencies, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q.
+
+In addition, each of the matters below is being disclosed pursuant to Item 103 of Regulation S-K because it relates to environmental regulations and aggregate ci...
+
+--- [ITEM] Part II, Item 1A (len=328 chars) ---
+ITEM 1A. RISK FACTORS
+
+Our operations and financial results are subject to various risks and uncertainties, including the factors discussed in Part I, Item 1A, Risk Factors in our Annual Report on Form 10-K for the year ended December 31, 2023, which could adversely affect our business, financial conditions and future results....
+
+--- [ITEM] Part II, Item 2 (len=74 chars) ---
+ITEM 2. UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
+
+None....
+
+--- [ITEM] Part II, Item 3 (len=46 chars) ---
+ITEM 3. DEFAULTS UPON SENIOR SECURITIES
+
+None....
+
+--- [ITEM] Part II, Item 4 (len=48 chars) ---
+ITEM 4. MINE SAFETY DISCLOSURES
+
+Not applicable....
+
+--- [ITEM] Part II, Item 5 (len=584 chars) ---
+ITEM 5. OTHER INFORMATION
+
+None of the Company’s directors or officers adopted, modified or terminated a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended March 31, 2024, as such terms are defined under Item 408(a) of Regulation S-K, except as follows:
+
+On February 5, 2024, Kathleen Wilson-Thompson, one of our directors, adopted a Ru...
+
+--- [ITEM] Part II, Item 6 (len=1161 chars) ---
+Table of Contents
+
+ITEM 6. EXHIBITS
+
+See Index to Exhibits at the end of this Quarterly Report on Form 10-Q for the information required by this Item.
+
+INDEX TO EXHIBITS
+
+ExhibitNumber Incorporated by ReferenceFiledHerewith
+
+Exhibit DescriptionFormFile No.ExhibitFiling Date
+
+31.1Rule 13a-14(a) / 15(d)-14(a) Certification of Principal Executive Officer
+
+————X
+
+31.2Rule 13a-14(a) / 15(d)-14(a) Certi...
+
+[MIN-MERGE] item=Part_II_Item_6 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

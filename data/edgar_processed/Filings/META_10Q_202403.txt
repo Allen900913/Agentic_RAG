@@ -1,0 +1,312 @@
+=== META 10-Q | accession=0001326801-24-000049 | fiscal_year=2024 fiscal_period=Q1 period_code=202403 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**Meta Platforms, Inc.** (META)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2024 (Q1) | Mar 31, 2023 (Q1) |
+| --- | ---: | ---: |
+|   Revenue: | $36,455 | $28,645 |
+|       Cost of revenue | $6,640 | $6,108 |
+|       Research and development | $9,978 | $9,381 |
+|       Marketing and sales | $2,564 | $3,044 |
+|       General and administrative | $3,455 | $2,885 |
+|       Total costs and expenses | $22,637 | $21,418 |
+|     Income from operations | 13,818 | 7,227 |
+|     Interest and other income, net | $365 | $80 |
+|   Income before provision for income taxes | $14,183 | $7,307 |
+|   Provision for income taxes | $1,814 | $1,598 |
+|   Net income | $12,369 | $5,709 |
+|     Basic (in dollars per share) | 4.86 | 2.21 |
+|     Diluted (in dollars per share) | 4.71 | 2.20 |
+|     Basic (in shares) | 2,545 | 2,587 |
+| *      Class A Common Stock* | 2,197 | 2,223 |
+| *      Class B Common Stock* | 348 | 364 |
+|     Diluted (in shares) | 2,625 | 2,596 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**Meta Platforms, Inc.** (META)
+
+**As of March 31, 2024 and December 31, 2023** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2024 | Dec 31, 2023 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $32,307 | $41,862 |
+|         Marketable securities | $25,813 | $23,541 |
+|         Accounts receivable, net | $13,430 | $16,169 |
+|         Prepaid expenses and other current assets | $3,780 | $3,793 |
+|       Total current assets | $75,330 | $85,365 |
+|       Non-marketable equity securities | $6,218 | $6,141 |
+|       Property and equipment, net | $98,908 | $96,587 |
+|       Operating lease right-of-use assets | $13,555 | $13,294 |
+|       Goodwill | $20,654 | $20,654 |
+|       Other assets | $8,179 | $7,582 |
+|     Total assets | $222,844 | $229,623 |
+|         Accounts payable | $3,785 | $4,849 |
+|         Operating lease liabilities, current | $1,676 | $1,623 |
+|         Accrued expenses and other current liabilities | $22,640 | $25,488 |
+|       Total current liabilities | $28,101 | $31,960 |
+|       Operating lease liabilities, non-current | $17,570 | $17,226 |
+|       Long-term debt | $18,387 | $18,385 |
+|       Long-term income taxes | $7,795 | $7,514 |
+|       Other liabilities | $1,462 | $1,370 |
+|       Total liabilities | $73,315 | $76,455 |
+|       Commitments and contingencies |  |  |
+|       Common stock, $0.000006 par value; 5,000 million Class A shares authorized, 2,192 million and 2,211 million shares issued and outstanding, as of March 31, 2024 and December 31, 2023, respectively; 4,141 million Class B shares authorized, 345 million and 350 million shares issued and outstanding, as of March 31, 2024 and December 31, 2023, respectively |  |  |
+|       Additional paid-in capital | $75,391 | $73,253 |
+|       Accumulated other comprehensive loss | $(2,655) | $(2,155) |
+|       Retained earnings | $76,793 | $82,070 |
+|       Total stockholders' equity | $149,529 | $153,168 |
+|     Total liabilities and stockholders' equity | $222,844 | $229,623 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**Meta Platforms, Inc.** (META)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2024 (Q1) | Mar 31, 2023 (Q1) |
+| --- | ---: | ---: |
+|           Net income | $12,369 | $5,709 |
+|           Depreciation and amortization | $3,374 | $2,524 |
+|           Share-based compensation | $3,562 | $3,051 |
+|           Deferred income taxes | $(456) | $(620) |
+|           Impairment charges for facilities consolidation, net | $240 | $770 |
+|           Other | $(66) | $(7) |
+|             Accounts receivable | $2,520 | $2,546 |
+|             Prepaid expenses and other current assets | $100 | $821 |
+|             Other assets | $(94) | $30 |
+|             Accounts payable | $(1,112) | $(1,104) |
+|             Accrued expenses and other current liabilities | $(1,274) | $94 |
+|             Other liabilities | $83 | $184 |
+|         Net cash provided by operating activities | $19,246 | $13,998 |
+|           Purchases of property and equipment, net | $(6,400) | $(6,823) |
+|           Purchases of marketable debt securities | $(6,887) | $(85) |
+|           Sales and maturities of marketable debt securities | $4,625 | $534 |
+|           Acquisitions of businesses and intangible assets | $(72) | $(444) |
+|           Other investing activities |  | $75 |
+|         Net cash used in investing activities | $(8,734) | $(6,743) |
+|           Taxes paid related to net share settlement of equity awards | $(3,162) | $(1,009) |
+|           Repurchases of Class A common stock | $(15,008) | $(9,365) |
+|           Dividends payments | $(1,273) |  |
+|           Principal payments on finance leases | $(315) | $(264) |
+|           Other financing activities | $(9) | $122 |
+|         Net cash used in financing activities | $(19,767) | $(10,516) |
+|         Effect of exchange rate changes on cash, cash equivalents, and restricted cash | $(288) | $85 |
+|       Net decrease in cash, cash equivalents, and restricted cash | $(9,543) | $(3,176) |
+|         Cash, cash equivalents, and restricted cash at beginning of the period | $42,827 | $15,596 |
+|         Cash, cash equivalents, and restricted cash at end of the period | $33,284 | $12,420 |
+|         Cash and cash equivalents | $32,307 | $11,551 |
+|         Restricted cash and cash equivalents |  |  |
+| *          Restricted cash, included in prepaid expenses and other current assets* |  |  |
+| *          Restricted cash, included in other assets* |  |  |
+|         Total cash, cash equivalents, and restricted cash |  |  |
+|         Cash paid for income taxes, net | $630 | $405 |
+|         Cash paid for interest, net of amounts capitalized | $121 | $182 |
+|           Property and equipment in accounts payable and accrued expenses and other current liabilities | $4,217 | $4,466 |
+|           Acquisition of businesses in accrued expenses and other current liabilities and other liabilities | $116 | $263 |
+
+--- [TABLE extra #0] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware | 20-1665019 |
+| --- | --- |
+| (State or other jurisdiction of incorporation or organization) | (I.R.S. Employer Identification Number) |...
+
+--- [TABLE extra #1] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of "large accelerated filer," "accele
+
+| Large accelerated filer |  | ☒ | Accelerated filer |  | ☐ |
+| --- | --- | --- | --- | --- | --- |
+| Non-accelerated filer |  | ☐ | Smaller reporting company...
+
+--- [TABLE extra #2] ---
+(Unaudited)
+
+|  | Three Months Ended March 31, 2024 |  | Three Months Ended March 31, 2023 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
+
+--- [TABLE extra #3] ---
+We report our financial results for our two reportable segments: Family of Apps (FoA) and Reality Labs (RL). FoA includes Facebook, Instagram, Messenger, WhatsApp, and other services. RL includes our virtual, augmented, and mixed reality re
+
+|  | Family of Apps |  | Reality Labs |  | Total |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | ---...
+
+--- [TABLE extra #4] ---
+|  |  |  |  |  |  |  |  | Ad Revenue |  | Non-Ad Revenue |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
+
+--- [TABLE extra #5] ---
+Average Revenue Per Person (ARPP). Our Family of Apps (FoA) revenue represents the substantial majority of our total revenue. We define ARPP as our FoA revenue during a given quarter, divided by the average of the number of DAP at the begin
+
+| ARPP: | $9.57 | $9.87 | $9.44 | $10.68 | $9.47 | $10.42 | $10.93 | $12.33 | $11.20 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
+
+--- [TABLE extra #6] ---
+The following table summarizes the share repurchase activity for the three months ended March 31, 2024:
+
+|  | Total Number of Shares Purchased |  | Average Price Paid per Share (2) |  | Total Number of Shares Purchased as Part of Publicly Announced Programs (1) |  | Approximate Dollar Value of Shares that May Yet Be Purchased Under the Programs (1) |  |  |  |  |  |  |
+| --- | --- | --- | --- | ---...
+
+--- [TABLE extra #7] ---
+Item 6.Exhibits
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
+| 10.1* |  | Aircraft Time Sharing Agreement, dated March 27, 2024, between Registrant and Mark Zuckerberg. |  |  |  | ...
+
+[INFO] extra tables kept=8 (去重後，來自 unstructured)
+
+--- [ITEM] Part I, Item 1 (len=59480 chars) ---
+Item 1.Financial Statements
+
+META PLATFORMS, INC.
+
+CONDENSED CONSOLIDATED BALANCE SHEETS
+
+(In millions, except for number of shares and par value)
+
+(Unaudited)
+
+March 31,2024December 31,2023
+
+Assets
+
+Current assets:
+
+Cash and cash equivalents$32,307 $41,862 
+
+Marketable securities25,813 23,541 
+
+Accounts receivable, net13,430 16,169 
+
+Prepaid expenses and other current assets3,780 3,793 
+
+Total cu...
+
+[MIN-MERGE] item=Part_I_Item_1 section=None 27 → 22 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_I_Item_1 原 chunk 2743 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1822 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1697 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1936 token > 1200 → 補切成 5 份
+
+--- [ITEM] Part I, Item 2 (len=44956 chars) ---
+Table of Contents
+
+Item 2.Management's Discussion and Analysis of Financial Condition and Results of Operations
+
+You should read the following discussion of our financial condition and results of operations in conjunction with our condensed consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q and with our audited consolidated financial st...
+
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 35 段：(小標前=章節層) | Executive Overview of First Quarter Results | Consolidated and Segment Results | Family of AppsReality LabsTotal | Family of Apps Metrics | Developments in Advertising | Other Business and Macroeconomic Conditions | Investment Philosophy | Non-Ad Revenue | Trends in Our Family Metrics | Family of Apps (FoA) | Reality Labs (RL) | Cost of Revenue and Operating Expenses | Results of Operations | Revenue | Family of Apps | Advertising | Other revenue | Reality Labs | Foreign Exchange Impact on Revenue | Segment profitability | Family of Apps | Reality Labs | NM    - not meaningful | Liquidity and Capital Resources | Cash Provided by Operating Activities | Cash Used in Investing Activities | Cash Used in Financing Activities | Material Cash Requirements | Leases and Contractual Commitments | Long-term Debt | Capital Return Program | Taxes | Loss Contingencies | Critical Accounting Estimates
+
+[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps Metrics 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Family of Apps (FoA) 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=NM    - not meaningful 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Part I, Item 3 (len=399 chars) ---
+Item 3.Quantitative and Qualitative Disclosures About Market Risk
+
+There have been no material changes to our market risk during the three months ended March 31, 2024. For quantitative and qualitative disclosures about market risk, refer to Part II, Item 7A, Quantitative and Qualitative Disclosures About Market Risk, from our Annual Report on Form 10-K for the fiscal year ended December 31, 2023....
+
+--- [ITEM] Part I, Item 4 (len=2146 chars) ---
+Item 4.Controls and Procedures
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our chief executive officer (CEO) and chief financial officer (CFO), has evaluated the effectiveness of our disclosure controls and procedures (as defined in Rules 13a- 15(e) and 15d- 15(e) under the Securities Exchange Act of 1934, as amended (Exchange Act)), as of the end o...
+
+--- [ITEM] Part II, Item 1 (len=27229 chars) ---
+Item 1.Legal Proceedings
+
+As a multinational company with a complex and evolving business, we are, and expect to continue to be, subject to numerous claims, litigation, regulatory, tax, and government inquiries and investigations, and other legal proceedings in jurisdictions around the world. Although we believe many of these matters are without merit and are vigorously defending them, we may not ...
+
+[MIN-MERGE] item=Part_II_Item_1 section=None 17 → 12 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_II_Item_1 原 chunk 1771 token > 1200 → 補切成 5 份
+
+[RCTS] item=Part_II_Item_1 原 chunk 1229 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1 原 chunk 1459 token > 1200 → 補切成 2 份
+
+--- [ITEM] Part II, Item 1A (len=182604 chars) ---
+Table of Contents
+
+Item 1A. Risk Factors 
+
+Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Quarterly Report on Form 10-Q, including our condensed consolidated financial statements and related notes. The ris...
+
+[MIN-MERGE] item=Part_II_Item_1A section=None 71 → 64 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1307 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 2018 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 2707 token > 1200 → 補切成 6 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1235 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1295 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1953 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 2639 token > 1200 → 補切成 5 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1253 token > 1200 → 補切成 2 份
+
+--- [ITEM] Part II, Item 2 (len=1791 chars) ---
+Table of Contents
+
+Item 2.Unregistered Sales of Equity Securities and Use of Proceeds 
+
+a)    Sales of Unregistered Securities 
+
+None.
+
+c)    Issuer Purchases of Equity Securities
+
+The following table summarizes the share repurchase activity for the three months ended March 31, 2024:
+
+Total Number of Shares PurchasedAverage Price Paid per Share (2)
+
+Total Number of Shares Purchased as Part of Publ...
+
+--- [ITEM] Part II, Item 5 (len=1825 chars) ---
+Table of Contents
+
+Item 5.Other Information
+
+Rule 10b5-1 Trading Plans
+
+During the quarter ended March 31, 2024, the officers and directors listed below adopted, modified, or terminated trading plans intended to satisfy the affirmative defense conditions of Rule 10b5-1(c) under the Securities Exchange Act of 1934, as amended. References to "net shares received" below refer to net shares received b...
+
+--- [ITEM] Part II, Item 6 (len=2040 chars) ---
+Table of Contents
+
+Item 6.Exhibits 
+
+ExhibitNumberIncorporated by ReferenceFiledHerewith
+
+Exhibit DescriptionFormFile No.ExhibitFiling Date
+
+10.1*Aircraft Time Sharing Agreement, dated March 27, 2024, between Registrant and Mark Zuckerberg.
+
+X
+
+10.22012 Equity Incentive Plan forms of award agreements (Additional Forms).
+
+X
+
+31.1Certification of Mark Zuckerberg, Chief Executive Officer, pursuant to...

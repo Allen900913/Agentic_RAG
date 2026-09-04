@@ -114,8 +114,8 @@
 |     Net cash used in investing | $(22,705) | $(14,112) | $(57,264) | $(29,313) |
 |     Effect of foreign exchange rates on cash and cash equivalents | $11 | $(294) | $(81) | $(172) |
 |   Net change in cash and cash equivalents | $(4,553) | $(3,358) | $(5,946) | $(833) |
-|   Cash and cash equivalents, end of period |  |  |  |  |
-|   Cash and cash equivalents, end of period |  |  |  |  |
+|   Cash and cash equivalents, beginning of period | $28,849 | $20,840 | $30,242 | $18,315 |
+|   Cash and cash equivalents, end of period | $24,296 | $17,482 | $24,296 | $17,482 |
 
 --- [TABLE extra #0] ---
 Commission File Number
@@ -251,8 +251,6 @@ Pursuant to the requirements of the Securities Exchange Act of 1934, the registr
 
 [INFO] extra tables kept=17 (去重後，來自 unstructured)
 
-[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
-
 --- [ITEM] Part I, Item 1 (len=88338 chars) ---
 ITEM 1. FINANCIAL STATEMENTS
 
@@ -312,26 +310,6 @@ INCOME STATEMENTS
 
 [RCTS] item=Part_I_Item_1 原 chunk 1447 token > 1200 → 補切成 2 份
 
---- [ITEM] Part II, Item 1 (len=201 chars) ---
-ITEM 1. LEGAL PROCEEDINGS
-
-Refer to Note 13 – Contingencies of the Notes to Financial Statements (Part I, Item 1 of this Form 10-Q) for information regarding legal proceedings in which we are involved....
-
---- [ITEM] Part II, Item 1A (len=69797 chars) ---
-ITEM 1A. RISK FACTORS
-
-Our operations and financial results are subject to various risks and uncertainties, including those described below, that could adversely affect our business, operations, financial condition, results of operations, liquidity, and the trading price of our common stock.
-
-STRATEGIC AND COMPETITIVE RISKS
-
-We face intense competition across all markets for our products and servi...
-
-[SECTION] item=Part_II_Item_1A period=None 依小標切成 7 段：(小標前=章節層) | STRATEGIC AND COMPETITIVE RISKS | Business model competition | OPERATIONAL RISKS | LEGAL, REGULATORY, AND LITIGATION RISKS | INTELLECTUAL PROPERTY RISKS | GENERAL RISKS
-
-[MIN-MERGE] item=Part_II_Item_1A section=Business model competition 19 → 17 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Part_II_Item_1A section=LEGAL, REGULATORY, AND LITIGATION RISKS 10 → 9 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
 --- [ITEM] Part I, Item 2 (len=59793 chars) ---
 ITEM 2. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
 
@@ -362,6 +340,40 @@ This report includes estimates, projections, statements relating to our business
 [MIN-MERGE] item=Part_I_Item_2 section=Research and Development Costs 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [MIN-MERGE] item=Part_I_Item_2 section=Income Taxes 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Part I, Item 3 (len=2122 chars) ---
+ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+RISKS
+
+We are exposed to economic risk from foreign exchange rates, interest rates, credit risk, and equity prices. We use derivatives instruments to manage these risks, however, they may still impact our consolidated financial statements.
+
+Foreign Currencies
+
+Certain forecasted transactions, assets, and liabilities are exposed to...
+
+--- [ITEM] Part I, Item 4 (len=737 chars) ---
+ITEM 4. CONTROLS AND PROCEDURES
+
+Under the supervision and with the participation of our management, including the Chief Executive Officer and Chief Financial Officer, we have evaluated the effectiveness of our disclosure controls and procedures as required by Exchange Act Rule 13a-15(b) as of the end of the period covered by this report. Based on that evaluation, the Chief Executive Officer and C...
+
+--- [ITEM] Part II, Item 1 (len=201 chars) ---
+ITEM 1. LEGAL PROCEEDINGS
+
+Refer to Note 13 – Contingencies of the Notes to Financial Statements (Part I, Item 1 of this Form 10-Q) for information regarding legal proceedings in which we are involved....
+
+--- [ITEM] Part II, Item 1A (len=69797 chars) ---
+ITEM 1A. RISK FACTORS
+
+Our operations and financial results are subject to various risks and uncertainties, including those described below, that could adversely affect our business, operations, financial condition, results of operations, liquidity, and the trading price of our common stock.
+
+STRATEGIC AND COMPETITIVE RISKS
+
+We face intense competition across all markets for our products and servi...
+
+[MIN-MERGE] item=Part_II_Item_1A section=None 41 → 37 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1401 token > 1200 → 補切成 4 份
 
 --- [ITEM] Part II, Item 2 (len=1761 chars) ---
 ITEM 2. UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
@@ -398,21 +410,6 @@ or Programs
 
 Dollar Val...
 
---- [ITEM] Part I, Item 3 (len=2122 chars) ---
-ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
-
-RISKS
-
-We are exposed to economic risk from foreign exchange rates, interest rates, credit risk, and equity prices. We use derivatives instruments to manage these risks, however, they may still impact our consolidated financial statements.
-
-Foreign Currencies
-
-Certain forecasted transactions, assets, and liabilities are exposed to...
-
-[SECTION] item=Part_I_Item_3 period=None 依小標切成 7 段：RISKS | Foreign Currencies | Interest Rate | Credit | Equity | SENSITIVITY ANALYSIS | Interest rate
-
-[MIN-MERGE] item=Part_I_Item_3 section=Foreign Currencies 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
 --- [ITEM] Part II, Item 5 (len=1248 chars) ---
 ITEM 5. OTHER INFORMATION
 
@@ -422,7 +419,7 @@ None of our officers or directors, as defined in Rule 16a-1(f) of the Securities
 
 Disclosure Pursuant to Section 13(r...
 
-[MIN-MERGE] item=Part_II_Item_5 section=Insider Trading Arrangements 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+[MIN-MERGE] item=Part_II_Item_5 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 6 (len=1609 chars) ---
 ITEM 6. EXHIBITS
@@ -462,5 +459,3 @@ Ending
      X
 
      31.2...
-
-[SECTION] item=Part_II_Item_6 period=None 依小標切成 2 段：(小標前=章節層) | Alice L. Jolla

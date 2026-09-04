@@ -1,0 +1,572 @@
+=== TSLA 10-K | accession=0001628280-25-003063 | fiscal_year=2024 fiscal_period=FY period_code=2024 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**Tesla, Inc.** (TSLA)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2024 | Dec 31, 2023 | Dec 31, 2022 |
+| --- | ---: | ---: | ---: |
+|           Revenues | $97,690 | $96,773 | $81,462 |
+| *          Automotive Revenues* | $77,070 | $82,419 | $71,462 |
+| *          Energy generation and storage* | 10,086 | 6,035 | 3,909 |
+| *          Services and other* | $10,534 | $8,319 | $6,091 |
+|           Total cost of revenues | $80,240 | $79,113 | $60,609 |
+| *          Automotive Revenues* | $62,873 | $66,389 | $51,108 |
+| *          Energy generation and storage* | 7,446 | 4,894 | 3,621 |
+| *          Services and other* | $9,921 | $7,830 | $5,880 |
+|         Gross profit | $17,450 | $17,660 | $20,853 |
+|           Research and development | $4,540 | $3,969 | $3,075 |
+|           Selling, general and administrative | $5,150 | $4,800 | $3,946 |
+|           Restructuring and other | $684 |  | $176 |
+|         Total operating expenses | $10,374 | $8,769 | $7,197 |
+|         Income from operations | 7,076 | 8,891 | 13,656 |
+|         Interest income | $1,569 | $1,066 | $297 |
+|         Interest expense | $(350) | $(156) | $(191) |
+|         Other income (expense), net | $695 | $172 | $(43) |
+|         Income before income taxes | $8,990 | $9,973 | $13,719 |
+|         Provision for (benefit from) income taxes | $1,837 | $(5,001) | $1,132 |
+|       Net income | $7,153 | $14,974 | $12,587 |
+|       Net income (loss) attributable to noncontrolling interests and redeemable noncontrolling interests in subsidiaries | $62 | $(23) | $31 |
+|       Net income attributable to common stockholders | $7,091 | $14,997 | $12,556 |
+|         Basic (in dollars per share) | 2.23 | 4.73 | 4.02 |
+|         Diluted (in dollars per share) | 2.04 | 4.30 | 3.62 |
+|         Basic (in shares) | 3,197 | 3,174 | 3,130 |
+|         Diluted (in shares) | 3,498 | 3,485 | 3,475 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**Tesla, Inc.** (TSLA)
+
+**As of December 31, 2024 and December 31, 2023** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2024 | Dec 31, 2023 |
+| --- | ---: | ---: |
+|           Cash and cash equivalents | $16,139 | $16,398 |
+|           Short-term investments | $20,424 | $12,696 |
+|           Accounts receivable, net | $4,418 | $3,508 |
+|           Inventory | $12,017 | $13,626 |
+|           Prepaid expenses and other current assets | $5,362 | $3,388 |
+|             Total current assets | $58,360 | $49,616 |
+|         Operating lease vehicles, net | $5,581 | $5,989 |
+| *          Operating Lease Vehicles* | $5,581 | $5,989 |
+|         Solar energy systems, net | $4,924 | $5,229 |
+| *          Solar energy systems, net* | $4,924 | $5,229 |
+|         Property, plant and equipment, net | $35,836 | $29,725 |
+|         Operating lease right-of-use assets | $5,160 | $4,180 |
+|         Digital assets, net | $1,076 | $184 |
+|         Intangible assets, net | $150 | $178 |
+|         Goodwill | $244 | $253 |
+|         Deferred tax assets | $6,524 | $6,733 |
+|         Other non-current assets | $4,215 | $4,531 |
+|         Total assets | $122,070 | $106,618 |
+|           Accounts payable | $12,474 | $14,431 |
+|           Accrued liabilities and other | $10,723 | $9,080 |
+|           Deferred revenue | $3,168 | $2,864 |
+|           Current portion of debt and finance leases | $2,456 | $2,373 |
+|             Total current liabilities | $28,821 | $28,748 |
+|         Debt and finance leases, net of current portion | $5,757 | $2,857 |
+|         Deferred revenue, net of current portion | $3,317 | $3,251 |
+|         Other long-term liabilities | $10,495 | $8,153 |
+|         Total liabilities | $48,390 | $43,009 |
+|         Commitments and contingencies (Note 14) |  |  |
+|         Redeemable noncontrolling interests in subsidiaries | $63 | $242 |
+|             Preferred stock; $0.001 par value; 100 shares authorized; no shares issued and outstanding |  |  |
+|             Common stock; $0.001 par value; 6,000 shares authorized; 3,216 and 3,185 shares issued and outstanding as of December 31, 2024 and December 31, 2023, respectively | $3 | $3 |
+|             Additional paid-in capital | $38,371 | $34,892 |
+|             Accumulated other comprehensive loss | $(670) | $(143) |
+|             Retained earnings | $35,209 | $27,882 |
+|           Total stockholders’ equity | $72,913 | $62,634 |
+|         Noncontrolling interests in subsidiaries | $704 | $733 |
+|       Total liabilities and equity | $122,070 | $106,618 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**Tesla, Inc.** (TSLA)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2024 | Dec 31, 2023 | Dec 31, 2022 |
+| --- | ---: | ---: | ---: |
+|       Net income | $7,153 | $14,974 | $12,587 |
+|       Depreciation, amortization and impairment | $5,368 | $4,667 | $3,747 |
+|       Stock-based compensation | $1,999 | $1,812 | $1,560 |
+| *        Performance Based Restricted Stock Units And Stock Options* |  |  |  |
+|       Inventory and purchase commitments write-downs | $335 | $463 | $177 |
+| *        Cost of revenues* | $190 | $233 | $144 |
+|       Foreign currency transaction net unrealized loss (gain) | $(73) | $(144) | $81 |
+|       Deferred income taxes | $477 | $(6,349) | $(196) |
+|       Non-cash interest and other operating activities | $172 | $81 | $340 |
+|       Digital assets (gain) loss, net | $(589) |  | $140 |
+|         Accounts receivable | $(1,083) | $(586) | $(1,124) |
+|         Inventory | $937 | $(1,195) | $(6,465) |
+|         Operating lease vehicles | $(590) | $(1,952) | $(1,570) |
+|         Prepaid expenses and other assets | $(3,273) | $(2,652) | $(3,713) |
+|         Accounts payable, accrued and other liabilities | $3,588 | $2,605 | $8,029 |
+|         Deferred revenue | $502 | $1,532 | $1,131 |
+|     Net cash provided by operating activities | $14,923 | $13,256 | $14,724 |
+|       Purchases of property and equipment excluding finance leases, net of sales | $(11,339) | $(8,898) | $(7,158) |
+|       Purchases of solar energy systems, net of sales | $(3) | $(1) | $(5) |
+|       Proceeds from sales of digital assets |  |  | $936 |
+|       Purchase of intangible assets |  |  | $(9) |
+|       Purchases of investments | $(35,955) | $(19,112) | $(5,835) |
+|       Proceeds from maturities of investments | $28,310 | $12,353 | $22 |
+|       Proceeds from sales of investments | $200 | $138 |  |
+|       Receipt of government grants |  |  | $76 |
+|       Business combinations, net of cash acquired |  | $(64) |  |
+|     Net cash used in investing activities | $(18,787) | $(15,584) | $(11,973) |
+|       Proceeds from issuances of debt | $5,744 | $3,931 |  |
+|       Repayments of debt | $(2,500) | $(1,351) | $(3,364) |
+|       Proceeds from exercises of stock options and other stock issuances | $1,241 | $700 | $541 |
+|       Principal payments on finance leases | $(381) | $(464) | $(502) |
+|       Debt issuance costs | $(14) | $(29) |  |
+|       Distributions paid to noncontrolling interests in subsidiaries | $(104) | $(144) | $(157) |
+|       Payments for buy-outs of noncontrolling interests in subsidiaries | $(133) | $(54) | $(45) |
+|     Net cash provided by (used in) financing activities | $3,853 | $2,589 | $(3,527) |
+|     Effect of exchange rate changes on cash and cash equivalents and restricted cash | $(141) | $4 | $(444) |
+|   Net increase (decrease) in cash and cash equivalents and restricted cash | $(152) | $265 | $(1,220) |
+|   Cash and cash equivalents and restricted cash, beginning of period | $17,189 | $16,924 | $18,144 |
+|   Cash and cash equivalents and restricted cash, end of period | $17,037 | $17,189 | $16,924 |
+|     Acquisitions of property and equipment included in liabilities | $1,410 | $2,272 | $2,148 |
+|     Cash paid during the period for interest | $277 | $126 | $152 |
+|     Cash paid during the period for income taxes, net of refunds | $1,331 | $1,119 | $1,203 |
+
+--- [TABLE extra #0] ---
+(Mark One)
+
+| x | ANNUAL REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #1] ---
+For the fiscal year ended
+
+| o | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #2] ---
+(Exact name of registrant as specified in its charter)
+
+| Texas |  | 91-2197729 |
+| --- | --- | --- |
+| (State or other jurisdiction of incorporation or organization) |  | (I.R.S. Employer Identification No.) |...
+
+--- [TABLE extra #3] ---
+| 1 Tesla Road Austin , Texas |  | 78725 |
+| --- | --- | --- |
+| (Address of principal executive offices) |  | (Zip Code) |...
+
+--- [TABLE extra #4] ---
+Securities registered pursuant to Section 12(b) of the Act:
+
+| Title of each class | Trading Symbol(s) | Name of each exchange on which registered |
+| --- | --- | --- |
+| Common stock | TSLA | The Nasdaq Global Select Market |...
+
+--- [TABLE extra #5] ---
+| Securities registered pursuant to Section 12(g) of the Act: |
+| --- |
+| None |...
+
+--- [TABLE extra #6] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large accelerated filer | x |  | Accelerated filer | o |
+| --- | --- | --- | --- | --- |
+| Non-accelerated filer | o |  | Smaller reporting company | o |
+| ...
+
+--- [TABLE extra #7] ---
+INDEX
+
+|  |  | Page |
+| --- | --- | --- |
+| PART I. |  |  |
+| Item 1. | Business | 2 |
+| Item 1A. | Risk Factors | 13 |
+| Item 1B. | Unresolved Staff Comments | 27 |
+| Item 1 C. | Cybersecurity | 28 |
+| Item 2. | Properties | 29 |
+| Item 3. | Legal Proceedings | 29 |
+| Item 4. | Mine Safety Disclosures | 29 |
+| PART II. |  |  |
+| Item 5. | Market for Registrant's Common Equity, Related Stockholder...
+
+--- [TABLE extra #8] ---
+We are headquartered in Austin, Texas. Our principal facilities include a large number of properties in North America, Europe and Asia utilized for manufacturing and assembly, warehousing, engineering, retail and service locations, Supercha
+
+| Primary Manufacturing Facilities |  | Location |  | Owned or Leased |
+| --- | --- | --- | --- | --- |
+| Gigafactory Texas |  | Austin, Texas |  | Owned |
+| ...
+
+--- [TABLE extra #9] ---
+The following is a summary of the status of production of each of our announced vehicle models in production and under development, as of the date of this Annual Report on Form 10-K:
+
+| Region |  | Vehicle Model(s) |  | Production Status |
+| --- | --- | --- | --- | --- |
+| California |  | Model S / Model X |  | Active |
+|  |  | Model 3 / Model Y |  | Active |
+| Shanghai |  | Model 3 / Model Y |  |...
+
+--- [TABLE extra #10] ---
+Revenues
+
+|  |  | Year Ended December 31, |  | 2024 vs. 2023 Change |  | 2023 vs. 2022 Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) |  | 2024 |  | 2023 |  | 2022 |  | $ |  | % |  | $ |  | ...
+
+--- [TABLE extra #11] ---
+Cost of Revenues and Gross Margin
+
+|  |  | Year Ended December 31, |  | 2024 vs. 2023 Change |  | 2023 vs. 2022 Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) |  | 2024 |  | 2023 |  | 2022 |...
+
+--- [TABLE extra #12] ---
+Index to Consolidated Financial Statements
+
+|  | Page |
+| --- | --- |
+| Report of Independent Registered Public Accounting Firm (PCAOB ID: 238 ) | 46 |
+| Consolidated Balance Sheets | 48 |
+| Consolidated Statements of Operations | 49 |
+| Consolidated Statements of Comprehensive Income | 50 |
+| Consolidated Statements of Redeemable Noncontrolling Interests and Equity | 51 |
+| Consolidated Statement...
+
+--- [TABLE extra #13] ---
+(in millions)
+
+|  | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Income (Loss) |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---...
+
+--- [TABLE extra #14] ---
+INDEX TO EXHIBITS
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
+| 3.1 |  | Certificate of Formation of the Re gistrant |  | 10-Q |  | 001-34756 |  | 3.1 |  | July 24, 2024 |  |  |
+|...
+
+--- [TABLE extra #15] ---
+The table lists exhibits filed with the SEC, including amendments, waivers, and indentures to the Investor’s Rights Agreement and related bonds, covering dates from 2011 to 2019.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File N...
+
+--- [TABLE extra #16] ---
+Table lists supplemental indentures for SolarCity’s 2015 solar bond series, filed in Form 8‑K, covering March–April 2015.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
+| 4.18 |  | E...
+
+--- [TABLE extra #17] ---
+The table lists SolarCity supplemental indentures filed in 2015, detailing each indenture’s description, form, filing date, and exhibit number.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date | ...
+
+--- [TABLE extra #18] ---
+The table lists SolarCity supplemental indentures filed in 2015, detailing each indenture’s description, form, filing date, and related bond series.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Da...
+
+--- [TABLE extra #19] ---
+The table lists SolarCity supplemental indentures filed in 2015, detailing each indenture’s description, form, file number, exhibit number, and filing date.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | F...
+
+--- [TABLE extra #20] ---
+The table lists SolarCity supplemental indentures referenced in the notes section, covering indentures dated September to November 2015.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  ...
+
+--- [TABLE extra #21] ---
+The table lists exhibits filed with the SEC, including supplemental indentures for SolarCity bonds and various equity incentive plan documents, covering dates from December 2015 to March 2017.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Fo...
+
+--- [TABLE extra #22] ---
+The table lists exhibits referenced in the filing, showing each exhibit’s description, SEC form type, file number, exhibit number, and filing date.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Dat...
+
+--- [TABLE extra #23] ---
+The table lists exhibits referenced in the filing, showing each exhibit’s description, form type, file number, exhibit number, and filing date, covering agreements from 2014 to 2021.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | Fi...
+
+--- [TABLE extra #24] ---
+The table lists exhibits of amendments (10.31‑10.36) to the Research & Development Alliance agreement, appearing in the notes section and covering effective dates from September 2014 to June 2015.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  ...
+
+--- [TABLE extra #25] ---
+The table lists exhibits of amendments to the Research & Development Alliance agreement, appearing in the notes section, covering amendments effective from September 2015 to July 2020.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | ...
+
+--- [TABLE extra #26] ---
+The table lists exhibits referenced in the filing, showing each exhibit’s description, form type, file number, and filing date, as part of the notes section.
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | ...
+
+--- [TABLE extra #27] ---
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
+| 101.PRE |  | Inline XBRL Taxonomy Extension Presentation Linkbase Document |  | — |  | — |  | — |  | — |  | X |
+| 104 |  | Cover Page ...
+
+--- [TABLE extra #28] ---
+Pursuant to the requirements of Section 13 or 15(d) the Securities Exchange Act of 1934, the registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized.
+
+|  | Tesla, Inc. |
+| --- | --- |
+| Date: January 29, 2025 | /s/ Elon Musk |
+|  | Elon Musk |
+|  | Chief Executive Officer |
+|  | (Principal Executive Officer) |...
+
+--- [TABLE extra #29] ---
+Pursuant to the requirements of the Securities Exchange Act of 1934, this report has been signed below by the following persons on behalf of the registrant and in the capacities and on the dates indicated.
+
+| Signature |  | Title |  | Date |
+| --- | --- | --- | --- | --- |
+| /s/ Elon Musk |  | Chief Executive Officer and Director (Principal Executive Officer) |  | January 29, 2025 |
+| Elon Musk | ...
+
+[INFO] extra tables kept=30 (去重後，來自 unstructured)
+
+[MERGE] 'Item 15' 內容 29027 字元 > 門檻 25000，判定為 edgartools 邊界誤判（財報附註溢出），併回 Item 8
+
+--- [ITEM] Item 1 (len=49629 chars) ---
+ITEM 1. BUSINESS
+
+Overview
+
+We design, develop, manufacture, sell and lease high-performance fully electric vehicles and energy generation and storage systems, and offer services related to our products. We generally sell our products directly to customers, and continue to grow our customer-facing infrastructure through a global network of vehicle showrooms and service centers, Mobile Service, bod...
+
+[MIN-MERGE] item=Item_1 section=None 31 → 30 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1 原 chunk 1524 token > 1200 → 補切成 2 份
+
+--- [ITEM] Item 1A (len=79676 chars) ---
+ITEM 1A. RISK FACTORS 
+
+You should carefully consider the risks described below together with the other information set forth in this report, which could materially affect our business, financial condition and future results. The risks described below are not the only risks facing our company. Risks and uncertainties not currently known to us or that we currently deem to be immaterial also may mat...
+
+[MIN-MERGE] item=Item_1A section=None 39 → 34 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1A 原 chunk 1512 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1787 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1222 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1505 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 1B (len=5792 chars) ---
+ITEM 1B. UNRESOLVED STAFF COMMENTS
+
+None.
+
+27
+
+ITEM 1C. CYBERSECURITY 
+
+Cybersecurity Risk Management and Strategy
+
+We recognize the importance of assessing, identifying, and managing material risks associated with cybersecurity threats, as such term is defined in Item 106(a) of Regulation S-K. These risks include, among other things: operational risks, intellectual property theft, fraud, extortio...
+
+[MIN-MERGE] item=Item_1B section=None 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 2 (len=1185 chars) ---
+ITEM 2. PROPERTIES
+
+We are headquartered in Austin, Texas. Our principal facilities include a large number of properties in North America, Europe and Asia utilized for manufacturing and assembly, warehousing, engineering, retail and service locations, Supercharger sites and administrative and sales offices. Our facilities are used to support both of our reporting segments, and are suitable and ade...
+
+--- [ITEM] Item 3 (len=234 chars) ---
+ITEM 3. LEGAL PROCEEDINGS
+
+For a description of our material pending legal proceedings, please see Note 14, Commitments and Contingencies, to the consolidated financial statements included elsewhere in this Annual Report on Form 10-K....
+
+--- [ITEM] Item 4 (len=61 chars) ---
+ITEM 4. MINE SAFETY DISCLOSURES
+
+Not applicable.
+
+29
+
+PART II...
+
+--- [ITEM] Item 5 (len=3322 chars) ---
+ITEM 5. MARKET FOR REGISTRANT’S COMMON EQUITY, RELATED STOCKHOLDER MATTERS AND ISSUER PURCHASES OF EQUITY SECURITIES
+
+Market Information
+
+Our common stock has traded on The NASDAQ Global Select Market under the symbol “TSLA” since it began trading on June 29, 2010. Our initial public offering was priced at approximately $1.13 per share on June 28, 2010 as adjusted to give effect to the three-for-o...
+
+[MIN-MERGE] item=Item_5 section=None 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 7 (len=48601 chars) ---
+ITEM 7. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS 
+
+The following discussion and analysis should be read in conjunction with the consolidated financial statements and the related notes included elsewhere in this Annual Report on Form 10-K. For further discussion of our products and services, technology and competitive strengths, refer to Item 1- Business...
+
+[SECTION] item=Item_7 period=None 依小標切成 22 段：(小標前=章節層) | Automotive—Production | TBD RoadsterIn development | Automotive—Demand, Sales, Deliveries and Infrastructure | Cash Flow and Capital Expenditure Trends | Critical Accounting Policies and Estimates | Automotive Sales | Inventory Valuation | Warranties | Stock-Based Compensation | Income Taxes | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Liquidity and Capital Resources | Material Cash Requirements | Sources and Conditions of Liquidity | Cash Flows from Operating Activities | Cash Flows from Investing Activities | Cash Flows from Financing Activities | Recent Accounting Pronouncements
+
+[MIN-MERGE] item=Item_7 section=Critical Accounting Policies and Estimates 3 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Inventory Valuation 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Energy Generation and Storage Segment 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 7A (len=1626 chars) ---
+ITEM 7A. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+Foreign Currency Risk
+
+We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). In general, we are...
+
+--- [ITEM] Item 8 (len=178500 chars) ---
+ITEM 8. FINANCIAL STATEMENTS AND SUPPLEMENTARY DATA
+
+Index to Consolidated Financial Statements
+
+Page
+
+Report of Independent Registered Public Accounting Firm (PCAOB ID: 238)
+
+46
+
+Consolidated Balance Sheets
+
+48
+
+Consolidated Statements of Operations
+
+49
+
+Consolidated Statements of Comprehensive Income
+
+50
+
+Consolidated Statements of Redeemable Noncontrolling Interests and Equity
+
+51
+
+Consolidated...
+
+[MIN-MERGE] item=Item_8 section=None 82 → 74 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_8 原 chunk 1321 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_8 原 chunk 1512 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 2640 token > 1200 → 補切成 5 份
+
+[RCTS] item=Item_8 原 chunk 1275 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_8 原 chunk 1688 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 2262 token > 1200 → 補切成 4 份
+
+[RCTS] item=Item_8 原 chunk 1518 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 1634 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 4681 token > 1200 → 補切成 7 份
+
+[RCTS] item=Item_8 原 chunk 2582 token > 1200 → 補切成 4 份
+
+--- [ITEM] Item 9 (len=99 chars) ---
+ITEM 9. CHANGES IN AND DISAGREEMENTS WITH ACCOUNTANTS ON ACCOUNTING AND FINANCIAL DISCLOSURE
+
+None....
+
+--- [ITEM] Item 9A (len=4296 chars) ---
+ITEM 9A. CONTROLS AND PROCEDURES
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our Chief Executive Officer and our Chief Financial Officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Securities Exchange Act of 1934, as amended (the “Exchange Act”). In designing and evaluating the disclosure ...
+
+--- [ITEM] Item 9B (len=800 chars) ---
+ITEM 9B. OTHER INFORMATION
+
+None of the Company’s directors or officers adopted, modified or terminated a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended December 31, 2024, as such terms are defined under Item 408(a) of Regulation S-K, except as follows:
+
+On December 6, 2024, Ira Ehrenpreis, one of our directors, adopted a Rule 10b...
+
+[MIN-MERGE] item=Item_9B section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 9C (len=107 chars) ---
+ITEM 9C. DISCLOSURE REGARDING FOREIGN JURISDICTIONS THAT PREVENT INSPECTIONS
+
+Not applicable.
+
+92
+
+PART III...
+
+--- [ITEM] Item 10 (len=513 chars) ---
+ITEM 10. DIRECTORS, EXECUTIVE OFFICERS AND CORPORATE GOVERNANCE
+
+The information required by this Item 10 of Form 10-K will be included in our 2025 Proxy Statement to be filed with the Securities and Exchange Commission in connection with the solicitation of proxies for our 2025 Annual Meeting of Stockholders and is incorporated herein by reference. The 2025 Proxy Statement will be filed with the ...
+
+--- [ITEM] Item 11 (len=172 chars) ---
+ITEM 11. EXECUTIVE COMPENSATION
+
+The information required by this Item 11 of Form 10-K will be included in our 2025 Proxy Statement and is incorporated herein by reference....
+
+--- [ITEM] Item 12 (len=244 chars) ---
+ITEM 12. SECURITY OWNERSHIP OF CERTAIN BENEFICIAL OWNERS AND MANAGEMENT AND RELATED STOCKHOLDER MATTERS
+
+The information required by this Item 12 of Form 10-K will be included in our 2025 Proxy Statement and is incorporated herein by reference....
+
+--- [ITEM] Item 13 (len=222 chars) ---
+ITEM 13. CERTAIN RELATIONSHIPS AND RELATED TRANSACTIONS AND DIRECTOR INDEPENDENCE
+
+The information required by this Item 13 of Form 10-K will be included in our 2025 Proxy Statement and is incorporated herein by reference....
+
+--- [ITEM] Item 14 (len=201 chars) ---
+ITEM 14. PRINCIPAL ACCOUNTANT FEES AND SERVICES
+
+The information required by this Item 14 of Form 10-K will be included in our 2025 Proxy Statement and is incorporated herein by reference.
+
+93
+
+PART IV...
+
+--- [ITEM] Item 16 (len=33 chars) ---
+ITEM 16. FORM 10-K SUMMARY
+
+None....

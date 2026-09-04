@@ -1,0 +1,533 @@
+=== META 10-K | accession=0001326801-25-000017 | fiscal_year=2024 fiscal_period=FY period_code=2024 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**Meta Platforms, Inc.** (META)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2024 | Dec 31, 2023 | Dec 31, 2022 |
+| --- | ---: | ---: | ---: |
+|   Revenue | $164,501 | $134,902 | $116,609 |
+|       Cost of revenue | $30,161 | $25,959 | $25,249 |
+|       Research and development | $43,873 | $38,483 | $35,338 |
+|       Marketing and sales | $11,347 | $12,301 | $15,262 |
+|       General and administrative | $9,740 | $11,408 | $11,816 |
+|       Total costs and expenses | $95,121 | $88,151 | $87,665 |
+|     Income (loss) from operations | 69,380 | 46,751 | 28,944 |
+|     Interest and other income (expense), net | $1,283 | $677 | $(125) |
+|   Income before provision for income taxes | $70,663 | $47,428 | $28,819 |
+|   Provision for income taxes | $8,303 | $8,330 | $5,619 |
+|   Net income | $62,360 | $39,098 | $23,200 |
+|     Basic (in dollars per share) | 24.61 | 15.19 | 8.63 |
+|     Diluted (in dollars per share) | 23.86 | 14.87 | 8.59 |
+|     Basic (in shares) | 2,534 | 2,574 | 2,687 |
+| *      Class A Common Stock* | 2,189 | 2,220 | 2,285 |
+| *      Class B Common Stock* | 345 | 354 | 402 |
+|     Diluted (in shares) | 2,614 | 2,629 | 2,702 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**Meta Platforms, Inc.** (META)
+
+**As of December 31, 2024 and December 31, 2023** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2024 | Dec 31, 2023 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $43,889 | $41,862 |
+|         Marketable securities | $33,926 | $23,541 |
+|         Accounts receivable, net | $16,994 | $16,169 |
+|         Prepaid expenses and other current assets | $5,236 | $3,793 |
+|       Total current assets | $100,045 | $85,365 |
+|       Non-marketable equity securities | $6,070 | $6,141 |
+|       Property and equipment, net | $121,346 | $96,587 |
+|       Operating lease right-of-use assets | $14,922 | $13,294 |
+|       Goodwill | $20,654 | $20,654 |
+|       Other assets | $13,017 | $7,582 |
+|     Total assets | $276,054 | $229,623 |
+|         Accounts payable | $7,687 | $4,849 |
+|         Operating lease liabilities, current | $1,942 | $1,623 |
+|         Accrued expenses and other current liabilities | $23,967 | $25,488 |
+|       Total current liabilities | $33,596 | $31,960 |
+|       Operating lease liabilities, non-current | $18,292 | $17,226 |
+|       Long-term debt | $28,826 | $18,385 |
+|       Long-term income taxes | $9,987 | $7,514 |
+|       Other liabilities | $2,716 | $1,370 |
+|       Total liabilities | $93,417 | $76,455 |
+|       Commitments and contingencies |  |  |
+|       Common stock, $0.000006 par value; 5,000 million Class A shares authorized, 2,190 million and 2,211 million shares issued and outstanding, as of December 31, 2024 and 2023, respectively; 4,141 million Class B shares authorized, 344 million and 350 million shares issued and outstanding, as of December 31, 2024 and 2023, respectively |  |  |
+|       Additional paid-in capital | $83,228 | $73,253 |
+|       Accumulated other comprehensive loss | $(3,097) | $(2,155) |
+|       Retained earnings | $102,506 | $82,070 |
+|       Total stockholders' equity | $182,637 | $153,168 |
+|     Total liabilities and stockholders' equity | $276,054 | $229,623 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**Meta Platforms, Inc.** (META)
+
+**Year Ended** *(In millions, except shares and per share data)*
+
+|  | Dec 31, 2024 | Dec 31, 2023 | Dec 31, 2022 |
+| --- | ---: | ---: | ---: |
+|           Net income | $62,360 | $39,098 | $23,200 |
+|           Depreciation and amortization | $15,498 | $11,178 | $8,686 |
+|           Share-based compensation | $16,690 | $14,027 | $11,992 |
+|           Deferred income taxes | $(4,738) | $131 | $(3,286) |
+|           Impairment charges for facilities consolidation | $383 | $2,432 | $2,218 |
+|           Restructuring charges |  | $(224) | $1,341 |
+| *            Data center assets abandonment* |  | $(224) | $1,341 |
+|           Other | $87 | $635 | $641 |
+|             Accounts receivable | $(1,485) | $(2,399) | $231 |
+|             Prepaid expenses and other current assets | $(698) | $559 | $162 |
+|             Other assets | $(270) | $(80) | $(106) |
+|             Accounts payable | $373 | $51 | $210 |
+|             Accrued expenses and other current liabilities | $323 | $5,081 | $4,300 |
+|             Other liabilities | $2,805 | $624 | $886 |
+|         Net cash provided by operating activities | $91,328 | $71,113 | $50,475 |
+|           Purchases of property and equipment | $(37,256) | $(27,045) | $(31,186) |
+|           Purchases of marketable securities | $(25,542) | $(2,982) | $(9,626) |
+|           Sales and maturities of marketable securities | $15,789 | $6,184 | $13,158 |
+|           Acquisitions of businesses and intangible assets | $(270) | $(629) | $(1,312) |
+|           Other investing activities | $129 | $(23) | $(4) |
+|         Net cash used in investing activities | $(47,150) | $(24,495) | $(28,970) |
+|           Taxes paid related to net share settlement of equity awards | $(13,770) | $(7,012) | $(3,595) |
+|           Repurchases of Class A common stock | $(30,125) | $(19,774) | $(27,956) |
+|           Payments for dividends and dividend equivalents | $(5,072) |  |  |
+|           Proceeds from issuance of long-term debt, net | $10,432 | $8,455 | $9,921 |
+|           Principal payments on finance leases | $(1,969) | $(1,058) | $(850) |
+|           Other financing activities | $(277) | $(111) | $344 |
+|         Net cash used in financing activities | $(40,781) | $(19,500) | $(22,136) |
+|         Effect of exchange rate changes on cash, cash equivalents, and restricted cash | $(786) | $113 | $(638) |
+|       Net increase (decrease) in cash, cash equivalents, and restricted cash | $2,611 | $27,231 | $(1,269) |
+|         Cash, cash equivalents, and restricted cash at beginning of the period | $42,827 | $15,596 | $16,865 |
+|         Cash, cash equivalents, and restricted cash at end of the period | $45,438 | $42,827 | $15,596 |
+|           Cash and cash equivalents |  |  |  |
+|           Restricted cash, included in prepaid expenses and other current assets |  |  |  |
+|           Restricted cash, included in other assets |  |  |  |
+|         Total cash, cash equivalents, and restricted cash |  |  |  |
+|         Cash paid for income taxes, net | $10,554 | $6,607 | $6,407 |
+|         Cash paid for interest, net of amounts capitalized | $486 | $448 |  |
+|           Property and equipment in accounts payable and accrued expenses and other current liabilities | $7,127 | $4,105 | $3,319 |
+|           Acquisition of businesses and intangible assets in accrued expenses and other current liabilities and other liabilities | $172 | $119 | $291 |
+|           Repurchases of Class A common stock in accrued expenses and other current liabilities |  | $474 | $310 |
+
+--- [TABLE extra #0] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware | 20-1665019 |
+| --- | --- |
+| (State or other jurisdiction of incorporation or organization) | (I.R.S. Employer Identification Number) |...
+
+--- [TABLE extra #1] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of "large accelerated filer," "accele
+
+| Large accelerated filer | ☒ | Accelerated filer | ☐ |
+| --- | --- | --- | --- |
+| Non-accelerated filer | ☐ | Smaller reporting company | ☐ |
+|  |  | Emergi...
+
+--- [TABLE extra #2] ---
+TABLE OF CONTENTS
+
+|  |  | Page |
+| --- | --- | --- |
+| Note About Forward-Looking Statements | 3 |  |
+| Limitations of Key Metrics and Other Data | 4 |  |
+| PART I |  |  |
+| Item 1. | Business | 6 |
+| Item 1A. | Risk Factors | 14 |
+| Item 1B. | Unresolved Staff Comments | 49 |
+| Item 1C. | Cybersecurity | 49 |
+| Item 2. | Properties | 50 |
+| Item 3. | Legal Proceedings | 51 |
+| Item 4. | Mine Saf...
+
+--- [TABLE extra #3] ---
+We report our financial results for our two reportable segments: Family of Apps (FoA) and Reality Labs (RL). FoA includes Facebook, Instagram, Messenger, WhatsApp, and other services. RL includes our virtual, augmented, and mixed reality re
+
+|  | Family of Apps |  | Reality Labs |  | Total |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | ---...
+
+--- [TABLE extra #4] ---
+|  |  |  |  |  |  |  |  | Ad Revenue |  | Non-Ad Revenue |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |...
+
+--- [TABLE extra #5] ---
+Average Revenue Per Person (ARPP). Our Family of Apps (FoA) revenue represents the substantial majority of our total revenue. We define ARPP as our FoA revenue during a given quarter, divided by the average of the number of DAP at the begin
+
+| ARPP: | $10.68 | $9.47 | $10.42 | $10.93 | $12.33 | $11.20 | $11.89 | $12.29 | $14.25 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  ...
+
+--- [TABLE extra #6] ---
+The following table sets forth our revenue by source and by segment:
+
+|  | Year Ended December 31, |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2024 |  | 2023 |  | 2022 |  | 2024 vs 2023 % change |  | 2023 vs 2022 % change |  |  |  |  |  |  |  |  |
+|  | (in millions, except perce...
+
+--- [TABLE extra #7] ---
+INDEX TO CONSOLIDATED FINANCIAL STATEMENTS
+
+|  | Page |
+| --- | --- |
+| Reports of Independent Registered Public Accounting Firm (PCAOB ID No. 42 ) | 82 |
+| Consolidated Financial Statements: |  |
+| Consolidated Balance Sheets | 86 |
+| Consolidated Statements of Income | 87 |
+| Consolidated Statements of Comprehensive Income | 88 |
+| Consolidated Statements of Stockholders' Equity | 89 |
+| Consoli...
+
+--- [TABLE extra #8] ---
+Table of Contents
+
+|  | Loss Contingencies |
+| --- | --- |
+| Description of the Matter | As described in Note 12 to the consolidated financial statements, the Company is party to various legal proceedings, claims, and regulatory or government inquiries and investigations. The Company accrues a liability when it believes a loss is probable and the amount can be reasonably estimated. In addition, th...
+
+--- [TABLE extra #9] ---
+Table of Contents
+
+|  | Uncertain Tax Positions |
+| --- | --- |
+| Description of the Matter | As discussed in Note 15 to the consolidated financial statements, the Company has received certain notices from the Internal Revenue Service (IRS) related to transfer pricing agreements with the Company's foreign subsidiaries for certain periods examined. The IRS has stated that it will also apply its pos...
+
+--- [TABLE extra #10] ---
+(In millions, except per share amounts)
+
+|  | Class A and Class B Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Income (Loss) |  | Retained Earnings |  | Total Stockholders' Equity |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ...
+
+--- [TABLE extra #11] ---
+1. Consolidated Financial Statements:
+
+|  | Page |
+| --- | --- |
+| Reports of Independent Registered Public Accounting Firm (PCAOB ID No. 42) | 82 |
+| Consolidated Balance Sheets | 86 |
+| Consolidated Statements of Income | 87 |
+| Consolidated Statements of Comprehensive Income | 88 |
+| Consolidated Statements of Stockholders' Equity | 89 |
+| Consolidated Statements of Cash Flows | 90 |
+| Notes to...
+
+--- [TABLE extra #12] ---
+3. Exhibits
+
+| Exhibit |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Number |  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |
+| 3.1 |  | Amended and Restated Certificate of Incorporation (including all amendments thereto) . |  | 10-Q |  | 001-35551 |...
+
+--- [TABLE extra #13] ---
+Table of Contents
+
+| Exhibit |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Number |  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |
+| 10.2(A)+ |  | 2012 Equity Incentive Plan, as amended. |  | 10-K |  | 001-35551 |  | 10.2(A) |  | February 2, 2023 | ...
+
+--- [TABLE extra #14] ---
+Table of Contents
+
+| Exhibit |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Number |  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |
+| 31.1 |  | Certification of Mark Zuckerberg, Chief Executive Officer, pursuant to Rule 13a-14(a)/15d-14(a), as adopte...
+
+--- [TABLE extra #15] ---
+Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the Registrant has duly caused this Annual Report on Form 10-K to be signed on its behalf by the undersigned, thereunto duly authorized, in the City
+
+|  |  |  | META PLATFORMS, INC. |
+| --- | --- | --- | --- |
+| Date: | January 29, 2025 |  | /s/ Susan Li |
+|  |  |  | Susan Li |
+|  |  |  | Chief Financial Of...
+
+--- [TABLE extra #16] ---
+Pursuant to the requirements of the Securities Exchange Act of 1934, this Annual Report on Form 10-K has been signed by the following persons on behalf of the Registrant and in the capacities and on the dates indicated:
+
+| Signature + |  | Title |  | Date |
+| --- | --- | --- | --- | --- |
+| /s/ Mark Zuckerberg |  | Chairman and Chief Executive Officer (Principal Executive Officer) |  | January 29,...
+
+--- [TABLE extra #17] ---
+Table of Contents
+
+| Signature |  | Title |  | Date |
+| --- | --- | --- | --- | --- |
+| /s/ Hock E. Tan |  | Director |  | January 29, 2025 |
+| Hock E. Tan |  |  |  |  |
+| /s/ Tracey T. Travis |  | Director |  | January 29, 2025 |
+| Tracey T. Travis |  |  |  |  |
+|  |  | Director |  |  |
+| Dana White |  |  |  |  |
+| /s/ Tony Xu |  | Director |  | January 29, 2025 |
+| Tony Xu |  |  |  |  |...
+
+[INFO] extra tables kept=18 (去重後，來自 unstructured)
+
+--- [ITEM] Item 1 (len=40273 chars) ---
+Item 1.Business 
+
+Overview
+
+Our mission is to build the future of human connection and the technology that makes it possible. 
+
+We build technology that helps people connect and share, find and build communities, and grow businesses. Our products enable people to connect and share with friends and family through mobile devices, personal computers, virtual reality (VR) and mixed reality (MR) headse...
+
+[MIN-MERGE] item=Item_1 section=None 22 → 18 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1 原 chunk 1537 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 1A (len=188466 chars) ---
+Table of Contents
+
+Item 1A. Risk Factors
+
+Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Annual Report on Form 10-K, including our consolidated financial statements and related notes. The risks and uncerta...
+
+[MIN-MERGE] item=Item_1A section=None 72 → 66 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1A 原 chunk 2157 token > 1200 → 補切成 4 份
+
+[RCTS] item=Item_1A 原 chunk 2135 token > 1200 → 補切成 5 份
+
+[RCTS] item=Item_1A 原 chunk 1259 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 1224 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1419 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1522 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1629 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 2551 token > 1200 → 補切成 5 份
+
+[RCTS] item=Item_1A 原 chunk 1252 token > 1200 → 補切成 2 份
+
+--- [ITEM] Item 1B (len=41 chars) ---
+Item 1B.Unresolved Staff Comments 
+
+None....
+
+--- [ITEM] Item 1C (len=6671 chars) ---
+Item 1C.Cybersecurity
+
+At Meta, cybersecurity risk management is an important part of our overall risk management efforts. Our industry is prone to cybersecurity threats and attacks, and we regularly experience cybersecurity incidents of varying degrees. We believe we are a particularly attractive target as a result of our prominence and scale, the types and volume of personal data and content on ...
+
+--- [ITEM] Item 2 (len=942 chars) ---
+Item 2.Properties 
+
+Our corporate headquarters are located in Menlo Park, California. As of December 31, 2024, we owned and leased approximately 11 million square feet of office and building space for our corporate headquarters and in the surrounding areas, which included approximately two million square feet of unoccupied office and building space that we plan to either sublease, early terminate,...
+
+--- [ITEM] Item 3 (len=32248 chars) ---
+Table of Contents
+
+Item 3.Legal Proceedings
+
+As a multinational company with a complex and evolving business, we are, and expect to continue to be, subject to numerous claims, litigation, regulatory, tax, and government inquiries and investigations, and other legal proceedings in jurisdictions around the world. Although we believe many of these matters are without merit and are vigorously defendin...
+
+[MIN-MERGE] item=Item_3 section=None 20 → 14 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_3 原 chunk 2009 token > 1200 → 補切成 5 份
+
+[RCTS] item=Item_3 原 chunk 1682 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 4 (len=56 chars) ---
+Item 4.Mine Safety Disclosures
+
+Not applicable.
+
+PART II...
+
+--- [ITEM] Item 5 (len=3444 chars) ---
+Item 5.Market for Registrant's Common Equity, Related Stockholder Matters and Issuer Purchases of Equity Securities
+
+Market Information for Common Stock
+
+Our Class A common stock is trading on the Nasdaq Global Select Market under the ticker symbol 'META'. 
+
+Our Class B common stock is not listed on any stock exchange nor traded on any public market.
+
+Holders of Record
+
+As of December 31, 2024, th...
+
+[MIN-MERGE] item=Item_5 section=None 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 7 (len=61019 chars) ---
+Table of Contents
+
+Item 7.Management's Discussion and Analysis of Financial Condition and Results of Operations
+
+You should read the following discussion of our financial condition and results of operations in conjunction with our consolidated financial statements and the related notes included in Part II, Item 8, "Financial Statements and Supplementary Data" of this Annual Report on Form 10-K. In...
+
+[SECTION] item=Item_7 period=None 依小標切成 43 段：(小標前=章節層) | Consolidated and Segment Results | Dividend | Family of Apps Metrics | Developments in Advertising | Other Business and Macroeconomic Conditions | Investment Philosophy | Non-Ad Revenue | Trends in Our Family Metrics | Non-Ad Revenue | Critical Accounting Estimates | Loss Contingencies | Income Taxes | Valuation of Assets | Change in Accounting Estimate | Family of Apps (FoA) | Reality Labs (RL) | Cost of Revenue and Operating Expenses | Results of Operations | Revenue | Family of Apps | Advertising | Other revenue | Reality Labs | Revenue Seasonality | Foreign Exchange Impact on Revenue | Segment profitability | Family of Apps | Reality Labs | NM    - not meaningful | Liquidity and Capital Resources | Cash Provided by Operating Activities | Cash Used in Investing Activities | Cash Used in Financing Activities | Free Cash Flow | Material Cash Requirements | Leases and Contractual Commitments | Long-term Debt | Share Repurchase | Dividend | Taxes | Loss Contingencies | Recently Issued Accounting Pronouncements
+
+[MIN-MERGE] item=Item_7 section=Valuation of Assets 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Change in Accounting Estimate 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Results of Operations 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Long-term Debt 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 7A (len=5942 chars) ---
+Item 7A.Quantitative and Qualitative Disclosures About Market Risk
+
+We are exposed to market risks, including changes to foreign currency exchange rates, interest rates, and equity price risk.
+
+Foreign Currency Exchange Risk
+
+We have foreign currency risks related to our revenue and operating expenses denominated in currencies other than the U.S. dollar, primarily the Euro. Accordingly, changes in...
+
+[MIN-MERGE] item=Item_7A section=None 5 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 8 (len=124532 chars) ---
+Table of Contents
+
+Item 8.Financial Statements and Supplementary Data
+
+META PLATFORMS, INC. 
+
+INDEX TO CONSOLIDATED FINANCIAL STATEMENTS 
+
+Page
+
+Reports of Independent Registered Public Accounting Firm (PCAOB ID No. 42)
+
+82
+
+Consolidated Financial Statements:
+
+Consolidated Balance Sheets
+
+86
+
+Consolidated Statements of Income
+
+87
+
+Consolidated Statements of Comprehensive Income
+
+88
+
+Consolidated S...
+
+[MIN-MERGE] item=Item_8 section=None 63 → 56 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_8 原 chunk 1365 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_8 原 chunk 1435 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_8 原 chunk 1207 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_8 原 chunk 1733 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 1608 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_8 原 chunk 2064 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 9 (len=117 chars) ---
+Table of Contents
+
+Item 9.Changes in and Disagreements with Accountants on Accounting and Financial Disclosure
+
+None....
+
+--- [ITEM] Item 9A (len=3197 chars) ---
+Item 9A.Controls and Procedures
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our chief executive officer (CEO) and chief financial officer (CFO), has evaluated the effectiveness of our disclosure controls and procedures (as defined in Rules 13a- 15(e) and 15d- 15(e) under the Securities Exchange Act of 1934, as amended (Exchange Act)), as of the end ...
+
+--- [ITEM] Item 9B (len=970 chars) ---
+Item 9B.Other Information
+
+Rule 10b5-1 Trading Plans
+
+During the quarter ended December 31, 2024, the officers and directors listed below adopted, modified, or terminated trading plans intended to satisfy the affirmative defense conditions of Rule 10b5-1(c) under the Securities Exchange Act of 1934, as amended.
+
+On November 27, 2024, Peggy Alford, a member of our board of directors, entered into a...
+
+--- [ITEM] Item 9C (len=121 chars) ---
+Table of Contents
+
+Item 9C.Disclosure Regarding Foreign Jurisdictions that Prevent Inspections
+
+Not Applicable.
+
+PART III...
+
+--- [ITEM] Item 10 (len=1235 chars) ---
+Item10.Directors, Executive Officers and Corporate Governance
+
+The information required by this item is incorporated by reference to our Proxy Statement for the 2025 Annual Meeting of Stockholders to be filed with the SEC within 120 days of the fiscal year ended December 31, 2024.
+
+Our board of directors has adopted a Code of Conduct applicable to all officers, directors, and employees, which is a...
+
+[MIN-MERGE] item=Item_10 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 11 (len=250 chars) ---
+Item 11.Executive Compensation
+
+The information required by this item is incorporated by reference to our Proxy Statement for the 2025 Annual Meeting of Stockholders to be filed with the SEC within 120 days of the fiscal year ended December 31, 2024....
+
+--- [ITEM] Item 12 (len=322 chars) ---
+Item 12.Security Ownership of Certain Beneficial Owners and Management and Related Stockholder Matters
+
+The information required by this item is incorporated by reference to our Proxy Statement for the 2025 Annual Meeting of Stockholders to be filed with the SEC within 120 days of the fiscal year ended December 31, 2024....
+
+--- [ITEM] Item 13 (len=301 chars) ---
+Item 13.Certain Relationships and Related Transactions, and Director Independence
+
+The information required by this item is incorporated by reference to our Proxy Statement for the 2025 Annual Meeting of Stockholders to be filed with the SEC within 120 days of the fiscal year ended December 31, 2024....
+
+--- [ITEM] Item 14 (len=275 chars) ---
+Item 14.Principal Accountant Fees and Services
+
+The information required by this item is incorporated by reference to our Proxy Statement for the 2025 Annual Meeting of Stockholders to be filed with the SEC within 120 days of the fiscal year ended December 31, 2024.
+
+PART IV...
+
+--- [ITEM] Item 15 (len=6906 chars) ---
+Item 15.  Exhibit and Financial Statement Schedules
+
+We have filed the following documents as part of this Form 10-K:
+
+1. Consolidated Financial Statements:
+
+Page
+
+Reports of Independent Registered Public Accounting Firm (PCAOB ID No. 42)
+
+82
+
+Consolidated Balance Sheets
+
+86
+
+Consolidated Statements of Income
+
+87
+
+Consolidated Statements of Comprehensive Income
+
+88
+
+Consolidated Statements of Stoc...
+
+--- [ITEM] Item 16 (len=33 chars) ---
+Item 16. Form 10-K Summary
+
+None....

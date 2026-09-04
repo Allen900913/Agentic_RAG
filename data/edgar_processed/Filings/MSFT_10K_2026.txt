@@ -115,8 +115,8 @@
 |     Net cash used in investing | $(139,500) | $(72,599) | $(96,970) |
 |     Effect of foreign exchange rates on cash and cash equivalents | $(196) | $63 | $(210) |
 |   Net change in cash and cash equivalents | $(9,307) | $11,927 | $(16,389) |
-|   Cash and cash equivalents, end of period |  |  |  |
-|   Cash and cash equivalents, end of period |  |  |  |
+|   Cash and cash equivalents, beginning of period | $30,242 | $18,315 | $34,704 |
+|   Cash and cash equivalents, end of period | $20,935 | $30,242 | $18,315 |
 
 --- [TABLE extra #0] ---
 FORM
@@ -362,83 +362,6 @@ Pursuant to the requirements of the Securities Exchange Act of 1934, this report
 
 [INFO] extra tables kept=29 (去重後，來自 unstructured)
 
---- [ITEM] Item 5 (len=1978 chars) ---
-ITEM 5. MARKET FOR REGISTRANT’S COMMON EQUITY, RELATED STOCKHOLDER MATTERS, AND ISSUER PURCHASES OF EQUITY SECURITIES
-
-MARKET AND STOCKHOLDERS 
-
-Our common stock is traded on the NASDAQ Stock Market under the symbol MSFT. On July 23, 2026, there were 74,199 registered holders of record of our common stock.
-
-SHARE REPURCHASES AND DIVIDENDS
-
-Following are our monthly share repurchases for the fourth...
-
-[SECTION] item=Item_5 period=None 依小標切成 2 段：MARKET AND STOCKHOLDERS | SHARE REPURCHASES AND DIVIDENDS
-
---- [ITEM] Item 10 (len=1612 chars) ---
-ITEM 10. DIRECTORS, EXECUTIVE OFFICERS, AND CORPORATE GOVERNANCE
-
-A list of our executive officers and biographical information appears in Part I, Item 1 of this Form 10-K. Information about our directors may be found under the caption “Our Director Nominees” in our Proxy Statement for the Annual Meeting of Shareholders to be held December 8, 2026 (the “Proxy Statement”). Information about our Aud...
-
---- [ITEM] Item 11 (len=352 chars) ---
-ITEM 11. EXECUTIVE COMPENSATION
-
-The information in the Proxy Statement set forth under the captions “Director Compensation,” “Named Executive Officer Compensation,” “Compensation Committee Report,” and, if required, “Compensation Committee Interlocks and Insider Participation,” is incorporated herein by reference. 
-
-  91
-
-  PART III
-
-Item 12, 13, 14...
-
---- [ITEM] Item 12 (len=309 chars) ---
-ITEM 12. SECURITY OWNERSHIP OF CERTAIN BENEFICIAL OWNERS AND MANAGEMENT AND RELATED STOCKHOLDER MATTERS
-
-The information in the Proxy Statement set forth under the captions “Stock Ownership Information,” “Principal Shareholders,” and “Equity Compensation Plan Information” is incorporated herein by reference....
-
---- [ITEM] Item 13 (len=265 chars) ---
-ITEM 13. CERTAIN RELATIONSHIPS AND RELATED TRANSACTIONS, AND DIRECTOR INDEPENDENCE
-
-The information set forth in the Proxy Statement under the captions “Director Independence” and “Certain Relationships and Related Transactions” is incorporated herein by reference....
-
---- [ITEM] Item 15 (len=14686 chars) ---
-ITEM 15. EXHIBIT AND FINANCIAL STATEMENT SCHEDULES 
-
-(a)Financial Statements and Schedules 
-
-The financial statements are set forth under Part II, Item 8 of this Form 10-K, as indexed below. Financial statement schedules have been omitted since they either are not required, not applicable, or the information is otherwise included. 
-
-     Index to Financial Statements
-
-     Page
-
-     Income Statem...
-
-[MIN-MERGE] item=Item_15 section=None 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[RCTS] item=Item_15 原 chunk 1316 token > 1200 → 補切成 2 份
-
-[RCTS] item=Item_15 原 chunk 2020 token > 1200 → 補切成 3 份
-
---- [ITEM] Item 16 (len=1917 chars) ---
-ITEM 16. FORM 10-K SUMMARY
-
-None.
-
-  100
-
-  SIGNATURES
-
-Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned; thereunto duly authorized, in the City of Redmond, State of Washington, on July 29, 2026. 
-
-     MICROSOFT CORPORATION
-
-     /s/ ALICE L. JOLLA
-
-     Alice L. Jol...
-
-[SECTION] item=Item_16 period=None 依小標切成 2 段：(小標前=章節層) | Alice L. Jolla
-
 --- [ITEM] Item 1 (len=41280 chars) ---
 ITEM 1. BUSINESS
 
@@ -448,28 +371,16 @@ Microsoft is a technology company committed to making digital technology and art
 
 We develop and support a broad portfolio of technology solutions for individuals and businesses, focusing on secure, trusted, ...
 
-[SECTION] item=Item_1 period=None 依小標切成 29 段：GENERAL | What We Offer | The Ambitions That Drive Us | Our Future Opportunity | Commitment to Sustainability | OPERATING SEGMENTS | Productivity and Business Processes | LinkedIn | Dynamics Products and Cloud Services | Competition | Intelligent Cloud | Server Products and Cloud Services | Enterprise and Partner Services | Competition | More Personal Computing | Windows and Devices | XBOX | Search Advertising | Competition | HUMAN CAPITAL RESOURCES | OPERATIONS | Product and Service Development | Intellectual Property | DISTRIBUTION, SALES, AND MARKETING | LICENSING OPTIONS | GOVERNMENT REGULATION | INFORMATION ABOUT OUR EXECUTIVE OFFICERS | Vice Chair and President | AVAILABLE INFORMATION
+[MIN-MERGE] item=Item_1 section=None 27 → 21 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Item_1 section=Commitment to Sustainability 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Search Advertising 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Vice Chair and President 6 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+[RCTS] item=Item_1 原 chunk 1653 token > 1200 → 補切成 3 份
 
 --- [ITEM] Item 1A (len=81066 chars) ---
 ITEM 1A. RISK FACTORS
 
 Our operations and financial results are subject to various risks and uncertainties, including those described below, that could adversely affect our business, operations, financial condition, results of operations, liquidity, and the trading price of our common stock. Statements in this section reflect our beliefs and opinions as to matters that could adversely affect us in...
 
-[SECTION] item=Item_1A period=None 依小標切成 7 段：(小標前=章節層) | STRATEGIC AND COMPETITIVE RISKS | Business model competition | OPERATIONAL RISKS | LEGAL, REGULATORY, AND LITIGATION RISKS | INTELLECTUAL PROPERTY RISKS | GENERAL RISKS
-
-[MIN-MERGE] item=Item_1A section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1A section=Business model competition 20 → 18 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1A section=LEGAL, REGULATORY, AND LITIGATION RISKS 10 → 9 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1A section=GENERAL RISKS 8 → 7 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+[MIN-MERGE] item=Item_1A section=None 46 → 40 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 1B (len=272 chars) ---
 ITEM 1B. UNRESOLVED STAFF COMMENTS 
@@ -483,16 +394,10 @@ RISK MANAGEMENT AND STRATEGY
 
 Microsoft plays a central role in the world’s digital ecosystem. We have made it a top corporate priority to protect the computing environment used by our customers and employees and to support the resiliency of our cloud infrastructure and services, products, devices, and our internal corporate resources from determined adversaries. In respon...
 
-[SECTION] item=Item_1C period=None 依小標切成 2 段：RISK MANAGEMENT AND STRATEGY | GOVERNANCE
-
-[MIN-MERGE] item=Item_1C section=GOVERNANCE 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
 --- [ITEM] Item 2 (len=1315 chars) ---
 ITEM 2. PROPERTIES 
 
 Our corporate headquarters are located in Redmond, Washington. We have approximately 14 million square feet of space located in King County, Washington that is used for engineering, sales, marketing, and operations, among other general and administrative purposes. These facilities include approximately 12 million square feet of owned space situated on approximately 520 acres o...
-
-[SECTION] item=Item_2 period=None 依小標切成 2 段：(小標前=章節層) | Total
 
 --- [ITEM] Item 3 (len=203 chars) ---
 ITEM 3. LEGAL PROCEEDINGS 
@@ -505,6 +410,17 @@ ITEM 4. MINE SAFETY DISCLOSURES
 Not applicable.
 
   PART II...
+
+--- [ITEM] Item 5 (len=1978 chars) ---
+ITEM 5. MARKET FOR REGISTRANT’S COMMON EQUITY, RELATED STOCKHOLDER MATTERS, AND ISSUER PURCHASES OF EQUITY SECURITIES
+
+MARKET AND STOCKHOLDERS 
+
+Our common stock is traded on the NASDAQ Stock Market under the symbol MSFT. On July 23, 2026, there were 74,199 registered holders of record of our common stock.
+
+SHARE REPURCHASES AND DIVIDENDS
+
+Following are our monthly share repurchases for the fourth...
 
 --- [ITEM] Item 7 (len=53403 chars) ---
 ITEM 7. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
@@ -541,10 +457,6 @@ We are exposed to economic risk from foreign exchange rates, interest rates, cre
 Foreign Currencies 
 
 Certain forecasted transactions, assets, and liabilities are expose...
-
-[SECTION] item=Item_7A period=None 依小標切成 7 段：RISKS | Foreign Currencies | Interest Rate | Credit | Equity | SENSITIVITY ANALYSIS | Interest rate
-
-[MIN-MERGE] item=Item_7A section=Foreign Currencies 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 8 (len=131116 chars) ---
 ITEM 8. FINANCIAL STATEMENTS AND SUPPLEMENTARY DATA 
@@ -617,8 +529,6 @@ ITEM 9A. CONTROLS AND PROCEDURES
 
 Under the supervision and with the participation of our management, including the Chief Executive Officer and Chief Financial Officer, we have evaluated the effectiveness of our disclosure controls and procedures as required by Exchange Act Rule 13a-15(b) as of the end of the period covered by this report. Based on that evaluation, the Chief Executive Officer and...
 
-[SECTION] item=Item_9A period=None 依小標切成 2 段：(小標前=章節層) | Basis for Opinion
-
 --- [ITEM] Item 9B (len=1499 chars) ---
 ITEM 9B. OTHER INFORMATION 
 
@@ -632,3 +542,58 @@ ITEM 9C. DISCLOSURE REGARDING FOREIGN JURISDICTIONS THAT PREVENT INSPECTIONS
 Not applicable.
 
 PART III...
+
+--- [ITEM] Item 10 (len=1612 chars) ---
+ITEM 10. DIRECTORS, EXECUTIVE OFFICERS, AND CORPORATE GOVERNANCE
+
+A list of our executive officers and biographical information appears in Part I, Item 1 of this Form 10-K. Information about our directors may be found under the caption “Our Director Nominees” in our Proxy Statement for the Annual Meeting of Shareholders to be held December 8, 2026 (the “Proxy Statement”). Information about our Aud...
+
+--- [ITEM] Item 11 (len=352 chars) ---
+ITEM 11. EXECUTIVE COMPENSATION
+
+The information in the Proxy Statement set forth under the captions “Director Compensation,” “Named Executive Officer Compensation,” “Compensation Committee Report,” and, if required, “Compensation Committee Interlocks and Insider Participation,” is incorporated herein by reference. 
+
+  91
+
+  PART III
+
+Item 12, 13, 14...
+
+--- [ITEM] Item 12 (len=309 chars) ---
+ITEM 12. SECURITY OWNERSHIP OF CERTAIN BENEFICIAL OWNERS AND MANAGEMENT AND RELATED STOCKHOLDER MATTERS
+
+The information in the Proxy Statement set forth under the captions “Stock Ownership Information,” “Principal Shareholders,” and “Equity Compensation Plan Information” is incorporated herein by reference....
+
+--- [ITEM] Item 13 (len=265 chars) ---
+ITEM 13. CERTAIN RELATIONSHIPS AND RELATED TRANSACTIONS, AND DIRECTOR INDEPENDENCE
+
+The information set forth in the Proxy Statement under the captions “Director Independence” and “Certain Relationships and Related Transactions” is incorporated herein by reference....
+
+--- [ITEM] Item 14 (len=418 chars) ---
+ITEM 14. PRINCIPAL ACCOUNTANT FEES AND SERVICES
+
+Information concerning fees and services provided by our principal accountant, Deloitte & Touche LLP (PCAOB ID No. 34), appears in the Proxy Statement under the headings “Fees Billed by Deloitte & Touche” and “Policy on Audit Committee Pre-Approval of Audit and Permissible Non-Audit Services of Independent Auditor” and is incorporated herein by refe...
+
+--- [ITEM] Item 15 (len=14686 chars) ---
+ITEM 15. EXHIBIT AND FINANCIAL STATEMENT SCHEDULES 
+
+(a)Financial Statements and Schedules 
+
+The financial statements are set forth under Part II, Item 8 of this Form 10-K, as indexed below. Financial statement schedules have been omitted since they either are not required, not applicable, or the information is otherwise included. 
+
+     Index to Financial Statements
+
+     Page
+
+     Income Statem...
+
+[MIN-MERGE] item=Item_15 section=None 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_15 原 chunk 1316 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_15 原 chunk 2020 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 16 (len=33 chars) ---
+ITEM 16. FORM 10-K SUMMARY
+
+None....
