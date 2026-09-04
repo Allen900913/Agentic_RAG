@@ -1,23 +1,0 @@
-[INFO] freshness_mode=snapshot: v2 在工程層不掛載 web_search，維持 closed-corpus eval
-[agentic_rag] Loading BGE-M3 + reranker + Qdrant (one-time)...
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 1314.36it/s]
-Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   4%|▍         | 17/391 [00:00<00:02, 132.96it/s]Loading weights:  45%|████▌     | 176/391 [00:00<00:00, 900.78it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 1201.33it/s]
-Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 4942.48it/s]
-[INFO] Opening Qdrant server: http://localhost:6333
-[INFO] module=agentic_rag_v2 collection=us_stock_rag_edgar_multiyear retrieval=openai/gpt-oss-120b checker=openai/gpt-oss-120b gen=openai/gpt-oss-120b
-[INFO] 3 題選中，0 題已完成（resume 跳過），本輪要跑 3 題 → experiments\webgate\smoke_after.json
-
-[1/3] lex-17 (lexical): Microsoft 的營收成長率表現如何？
-    ✓ 52s | sub_queries=1 | chunks=6 | answer_len=789 | refusal=False
-
-[2/3] col-10 (colloquial): 微軟每年能自由運用的現金大概有多少？
-    ✓ 33s | sub_queries=1 | chunks=1 | answer_len=238 | refusal=False
-
-[3/3] mh-01 (multi_hop): 在 Amazon、Microsoft、Alphabet、Meta 這四家公司中，最近十二個月（TTM）總營收規
-    ✓ 92s | sub_queries=4 | chunks=4 | answer_len=378 | refusal=False
-
-────────────────────────────────────────────────────────────
-[DONE] 完成 3/3 題落盤 → experiments\webgate\smoke_after.json
-下一步（.venv-ragas）：
-  .venv-ragas/Scripts/python.exe eval/eval_ragas_vs_rubric.py --from-results experiments\webgate\smoke_after.json --output experiments\webgate/ragas_scores.json

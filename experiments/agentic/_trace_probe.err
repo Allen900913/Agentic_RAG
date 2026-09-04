@@ -1,38 +1,0 @@
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 5444.79it/s]
-Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:00<00:08, 48.13it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 2229.14it/s]
-Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 7703.92it/s]
-[TRACE] coverage: collection='us_stock_rag_edgar_exp4', sources=59, tickers=['AAPL', 'AMZN', 'GOOGL', 'META', 'MSFT', 'NVDA', 'TSLA']
-[TRACE] plan: 2 sub-queries → ['Microsoft 的營收成長率是多少', 'Microsoft 自研七個 AI 模型的新聞內容及其對 AI 布局透露的訊息是什麼']
-[TRACE] plan: 2 todos → ['Microsoft 的營收成長率是多少', 'Microsoft 自研七個 AI 模型的新聞內容及其對 AI 布局透露的訊息是什麼']
-[TRACE] check['Microsoft 的營收成長率是多少'] sufficient=True missing='' new_query='' relevant_ids=1/5
-[TRACE] execute[0] det round=0 q='Microsoft 的營收成長率是多少' pool=20 sufficient=True missing=''
-[TRACE] check['Microsoft 自研七個 AI 模型的新聞內'] sufficient=False missing='缺少對 Microsoft 自研的七個 AI 模型的具體名稱、功能或簡介，以及這些模型所透露的 AI' new_query='Microsoft self‑developed seven AI models announcem' relevant_ids=1/5
-[TRACE] execute[1] det round=0 q='Microsoft 自研七個 AI 模型的新聞內容及其對 AI ' pool=20 sufficient=False missing='缺少對 Microsoft 自研的七個 AI 模型的具體名稱、功能或簡介，以及這'
-[TRACE] check['Microsoft 自研七個 AI 模型的新聞內'] sufficient=False missing='缺少七個自研 AI 模型的具體名稱、功能或特點，以及這些模型透露出的微軟 AI 布局與策略訊息（如自' new_query='Microsoft 自研 七 個 AI 模型 名稱 功能 2026 Build 會議 新聞 AI 布' relevant_ids=1/5
-[TRACE] execute[1] det round=1 q='Microsoft self‑developed seven A' pool=22 sufficient=False missing='缺少七個自研 AI 模型的具體名稱、功能或特點，以及這些模型透露出的微軟 AI '
-[TRACE] check['Microsoft 自研七個 AI 模型的新聞內'] sufficient=False missing='缺少七個自研 AI 模型的名稱或列表，以及它們的功能/定位，亦缺少這些模型透露的具體 AI 布局訊息' new_query='Microsoft self-developed seven AI models announcem' relevant_ids=1/5
-[TRACE] execute[1] det round=2 q='Microsoft 自研 七 個 AI 模型 名稱 功能 202' pool=23 sufficient=False missing='缺少七個自研 AI 模型的名稱或列表，以及它們的功能/定位，亦缺少這些模型透露的'
-[TRACE] execute wave: 2 todos ([0, 1]) done → collected=2
-[TRACE] replan: sufficient=True todos=[(0, 'done'), (1, 'done')]
-[TRACE] synthesize: facets=2 writer_budget=7 → 2 chunks
-[TRACE] plan: 1 sub-queries → ['Tesla 的能源生成與儲能業務在公司整體策略中扮演什麼角色？']
-[TRACE] plan: 1 todos → ['Tesla 的能源生成與儲能業務在公司整體策略中扮演什麼角色？']
-[TRACE] check['Tesla 的能源生成與儲能業務在公司整體策略中'] sufficient=True missing='' new_query='' relevant_ids=3/5
-[TRACE] execute[0] det round=0 q='Tesla 的能源生成與儲能業務在公司整體策略中扮演什麼角色？' pool=20 sufficient=True missing=''
-[TRACE] execute wave: 1 todos ([0]) done → collected=3
-[TRACE] replan: sufficient=True todos=[(0, 'done')]
-[TRACE] synthesize: facets=1 writer_budget=5 → 3 chunks
-[TRACE] reflect: 發現幻覺,重生成一次 → 'Tesla 將能源生成與儲能業務定位為公司整體策略的核心支柱之一 ← 來源根本沒有此說法  \n透過與汽車事業的技術互補、軟體平台整合以及全球基礎建設擴張，實現長'
-[TRACE] plan: 1 sub-queries → ['Amazon AWS 部門最新一季營業利益的成長驅動因素是什麼']
-[TRACE] plan: 1 todos → ['Amazon AWS 部門最新一季營業利益的成長驅動因素是什麼']
-[TRACE] check['Amazon AWS 部門最新一季營業利益的成長'] sufficient=False missing='缺少 AWS 部門營業利益（Operating Income）在最新一季的具體增長數字以及明確說明驅' new_query='Amazon 2026 Q1 10-Q AWS operating income growth dr' relevant_ids=4/5
-[TRACE] execute[0] det round=0 q='Amazon AWS 部門最新一季營業利益的成長驅動因素是什麼' pool=20 sufficient=False missing='缺少 AWS 部門營業利益（Operating Income）在最新一季的具體增'
-[TRACE] check['Amazon AWS 部門最新一季營業利益的成長'] sufficient=False missing='缺少直接說明 AWS 部門營業利益（Operating Income）成長的具體驅動因素，如營收增長' new_query='Amazon 2026 Q1 AWS operating income growth drivers' relevant_ids=3/5
-[TRACE] execute[0] det round=1 q='Amazon 2026 Q1 10-Q AWS operatin' pool=29 sufficient=False missing='缺少直接說明 AWS 部門營業利益（Operating Income）成長的具體'
-[TRACE] check['Amazon AWS 部門最新一季營業利益的成長'] sufficient=False missing='缺少 AWS 部門營業利益（Operating Income/Operating Profit）的具' new_query='Amazon 2026 Q1 10-Q AWS operating income growth dr' relevant_ids=2/5
-[TRACE] execute[0] det round=2 q='Amazon 2026 Q1 AWS operating inc' pool=29 sufficient=False missing='缺少 AWS 部門營業利益（Operating Income/Operating'
-[TRACE] execute wave: 1 todos ([0]) done → collected=2
-[TRACE] replan: sufficient=True todos=[(0, 'done')]
-[TRACE] synthesize: facets=1 writer_budget=5 → 2 chunks
-[TRACE] reflect: 發現幻覺,重生成一次 → 'AWS 營業利益在最新一季的成長，主要是因為客戶使用量顯著提升 ← 來源僅提及 AWS 銷售額成長，未提及營業利益的成長原因  \n文件提到公司將持續投入人工智慧'

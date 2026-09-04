@@ -1,38 +1,0 @@
-as-of=2026-08-15  collection=us_stock_rag_edgar_multiyear  題數=5
-
-──[web-01] Apple 目前的市值是多少？
-   （intraday；KB 結構上沒有即時市值）
-[agentic_rag] Loading BGE-M3 + reranker + Qdrant (one-time)...
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 1706.04it/s]
-Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:00<00:29, 13.09it/s]Loading weights:  41%|████      | 161/391 [00:00<00:00, 422.66it/s]Loading weights:  74%|███████▍  | 289/391 [00:00<00:00, 656.88it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 452.65it/s]
-Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights:  58%|█████▊    | 228/393 [00:00<00:00, 2272.55it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 2967.82it/s]
-[INFO] Opening Qdrant server: http://localhost:6333
-   web 呼叫錄到 2 次｜答案 577 字
-   Apple 目前的市值約為 **44,600 億美元（$4.46 兆）**（即 $4,460 億）【web: https://stockanalysis.com/stocks/aapl/market-cap】。    - 依 Yahoo Finance 的最新統計（截至 2026‑06‑30），市值為 **44,500 億美元（$4.45 trillion）**【web: https://finance.yahoo.com/quote/
-
-──[web-02] NVIDIA 現在的股價是多少？
-   （intraday；純即時報價）
-[replay] wrote eval\web_replay_llm.json (hit=16 miss=20)
-   web 呼叫錄到 0 次｜答案 194 字
-   根據提供的所有參考資料，沒有列出 NVIDIA (NVDA) 的即時股價或最近的每股價格數值，因此無法給出目前的股價【NVDA_Fundamentals_20260612.txt, chunk #0】。  --- ⚠ 資料時效：NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-15）；Web 未提供可用補充，因此以上內容不代表涵蓋至查詢日。
-
-──[web-03] Microsoft 最新一季的 Azure 營收成長率是多少？
-   （KB 有舊值、web 可能更新 → 權威衝突）
-   web 呼叫錄到 0 次｜答案 635 字
-   Microsoft 在最新公布的 2026 財年第三季（截至 2026 年 3 月 31 日的三個月）中，Azure 及其他雲端服務的營收成長 **40%**【MSFT_10Q_202603.html, chunk #69】。    * 這是目前參考資料中最接近「最新一季」的數據；完整的 2026 財年 10‑K 只提供全年度的雲端營收成長（未列出單季 Azure 成長率），因此只能以此季的 40% 成長率作答。  --- ⚠ 口徑說明
-
-──[web-04] Tesla 最近有什麼重要消息？
-   （新聞時效）
-   web 呼叫錄到 0 次｜答案 1184 字
-   Tesla 最近面臨兩起重大訴訟，同時完成一筆約 **19.5 億美元** 的 AI 硬體公司收購，並在 2026 年第二季錄得顯著的庫存減值。    - 2025 年 8 月 4 日，德州西區聯邦法院對 Tesla、Elon Musk 以及部分現任與前任高層提起一項集體訴訟，指控其在公開文件中對 Autopilot、Full‑Self‑Driving（受監督）及 Robotaxi 的效能作出實質性虛假陳述；公司表示將全力抗辯，且無法預
-
-──[web-05] Apple 在 FY2025 全年的總營收是多少？
-   （陰性對照：純歷史財報，不該打 web）
-   web 呼叫錄到 0 次｜答案 235 字
-   Apple 在 FY2025 全年的總營收為 **4,161.61 億美元（$416,161 百萬）**【AAPL_10K_2025.html, chunk #115】【AAPL_10K_2025.html, chunk #0】。  --- 📚 引用來源（Generator 實際依據的 chunk）:   - AAPL_10K_2025.html #115 (rerank=0.726)   - AAPL_10K_2025.html #0
-
-fixture → eval/web_fixture.json（web 回應 0 筆）
-答案 → experiments/webgate/replay_multiyear.json
-下一步：讀答案，把『這題該成立什麼』寫成斷言檔，再用 replay 模式驗。
-[replay] wrote eval\web_replay_llm.json (hit=32 miss=32)

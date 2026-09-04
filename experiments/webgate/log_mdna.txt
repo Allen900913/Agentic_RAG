@@ -1,39 +1,0 @@
-as-of=2026-08-15  collection=us_stock_rag_edgar_mdna  題數=5
-
-──[web-01] Apple 目前的市值是多少？
-   （intraday；KB 結構上沒有即時市值）
-[agentic_rag] Loading BGE-M3 + reranker + Qdrant (one-time)...
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 977.38it/s]
-Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:00<00:13, 28.88it/s]Loading weights:  17%|█▋        | 65/391 [00:00<00:01, 219.82it/s]Loading weights:  23%|██▎       | 88/391 [00:00<00:01, 169.37it/s]Loading weights:  44%|████▍     | 173/391 [00:00<00:00, 348.72it/s]Loading weights:  62%|██████▏   | 241/391 [00:00<00:00, 430.76it/s]Loading weights:  75%|███████▍  | 292/391 [00:00<00:00, 364.83it/s]Loading weights:  90%|█████████ | 353/391 [00:01<00:00, 410.96it/s]Loading weights: 100%|██████████| 391/391 [00:01<00:00, 355.54it/s]
-Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights:  64%|██████▍   | 252/393 [00:00<00:00, 2517.63it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 3490.13it/s]
-[INFO] Opening Qdrant server: http://localhost:6333
-[replay] wrote eval\web_replay_llm.json (hit=6 miss=20)
-   web 呼叫錄到 2 次｜答案 1077 字
-   Apple 目前的市值大約在 **44,600 億美元（$4.46 兆）** 左右【web: https://stockanalysis.com/stocks/aapl/market-cap】。    - 依據 2026‑06‑12 產出的公司基本面檔案，Apple 的市值為 **43,420.2 億美元（$4342.02 billion）**（即 43,420 億美元（$4.342 兆））【AAPL_Fundamentals_2026
-
-──[web-02] NVIDIA 現在的股價是多少？
-   （intraday；純即時報價）
-[replay] wrote eval\web_replay_llm.json (hit=14 miss=60)
-   web 呼叫錄到 1 次｜答案 323 字
-   NVIDIA 現在的股價約為 **224.97 美元**（即時報價）【web: https://www.cnbc.com/quotes/NVDA】。   作為參考，Macrotrends 記錄的最新收盤價（截至 2026‑08‑12）為 **224.09 美元**【web: https://www.macrotrends.net/stocks/charts/NVDA/nvidia/stock-price-history】。  --- ⚠
-
-──[web-03] Microsoft 最新一季的 Azure 營收成長率是多少？
-   （KB 有舊值、web 可能更新 → 權威衝突）
-   web 呼叫錄到 0 次｜答案 626 字
-   根據最新的財季（截至 2026 年 3 月 31 日的 2026 財年第三季），Microsoft 的 Azure 及其他雲端服務營收成長率為 **40%**【MSFT_10Q_202603.html, chunk #69】。    * 2026 財年完整的 10‑K 報告僅提供全年 Azure 成長概況，未揭露單季的 Azure 營收成長率【MSFT_10K_2026.html, chunk #129】。因此，能取得的最近一期季度成長
-
-──[web-04] Tesla 最近有什麼重要消息？
-   （新聞時效）
-   web 呼叫錄到 0 次｜答案 1711 字
-   Tesla 最近的重大消息包括：在 2026 年第二季完成一筆 **19.5 億美元（$1.95 billion）** 的 AI 硬體公司資產收購、持續面臨多起與自動駕駛功能相關的集體訴訟，以及 2025‑2026 年間與律師費用與和解金額的最新進展【TSLA_10Q_202606.html, chunk #35】、【TSLA_10Q_202606.html, chunk #49】、【TSLA_10K_2025.html, chunk 
-
-──[web-05] Apple 在 FY2025 全年的總營收是多少？
-   （陰性對照：純歷史財報，不該打 web）
-   web 呼叫錄到 0 次｜答案 292 字
-   Apple 在 FY2025 全年的總營收為 **4,161.61 億美元（$416,161 million）**【AAPL_10K_2025.html, chunk #115】。此金額亦在合併損益表中列示為 2025 年 9 月 27 日止的「Net sales」$416,161【AAPL_10K_2025.html, chunk #0】。  --- 📚 引用來源（Generator 實際依據的 chunk）:   - AAPL_10
-
-fixture → eval/web_fixture.json（web 回應 0 筆）
-答案 → experiments/webgate/replay_mdna.json
-下一步：讀答案，把『這題該成立什麼』寫成斷言檔，再用 replay 模式驗。
-[replay] wrote eval\web_replay_llm.json (hit=23 miss=75)

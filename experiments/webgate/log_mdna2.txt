@@ -1,38 +1,0 @@
-as-of=2026-08-15  collection=us_stock_rag_edgar_mdna  題數=5
-
-──[web-01] Apple 目前的市值是多少？
-   （intraday；KB 結構上沒有即時市值）
-[agentic_rag] Loading BGE-M3 + reranker + Qdrant (one-time)...
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 1077.21it/s]
-Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:00<00:25, 15.01it/s]Loading weights:  25%|██▍       | 97/391 [00:00<00:01, 274.16it/s]Loading weights:  44%|████▍     | 173/391 [00:00<00:00, 411.03it/s]Loading weights:  60%|█████▉    | 233/391 [00:00<00:00, 310.89it/s]Loading weights:  71%|███████   | 278/391 [00:00<00:00, 308.90it/s]Loading weights:  94%|█████████▍| 367/391 [00:01<00:00, 434.15it/s]Loading weights: 100%|██████████| 391/391 [00:01<00:00, 354.39it/s]
-Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights:  71%|███████   | 279/393 [00:00<00:00, 2784.04it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 3565.81it/s]
-[INFO] Opening Qdrant server: http://localhost:6333
-   web 呼叫錄到 2 次｜答案 949 字
-   Apple 目前的市值大約是 **44,600 億美元（$4.46 兆）**【web: https://stockanalysis.com/stocks/aapl/market-cap】。    - 依據 StockAnalysis 的即時資料，Apple 在 2026‑08‑14 的市值為 **44,600 億美元（$4.46 trillion）**【web: https://stockanalysis.com/stocks/aapl
-
-──[web-02] NVIDIA 現在的股價是多少？
-   （intraday；純即時報價）
-   web 呼叫錄到 0 次｜答案 118 字
-   我沒有足夠的資訊來提供 NVIDIA 目前的股價。  --- ⚠ 資料時效：NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-08-15）；Web 未提供可用補充，因此以上內容不代表涵蓋至查詢日。
-
-──[web-03] Microsoft 最新一季的 Azure 營收成長率是多少？
-   （KB 有舊值、web 可能更新 → 權威衝突）
-   web 呼叫錄到 0 次｜答案 632 字
-   根據最新可得的單季資料，Microsoft 在截至 **2025 年 12 月 31 日** 的季度（即 FY2026 Q2）中，Azure 及其他雲端服務營收成長率為 **39%**【MSFT_10Q_202512.html, chunk #71】。    - 之後的 **2026 年 3 月 31 日止九個月** 期間（FY2026 Q3）只披露了 Azure 及其他雲端服務營收 **成長 40%** 的九個月累計數據，未提供單一季
-
-──[web-04] Tesla 最近有什麼重要消息？
-   （新聞時效）
-[replay] wrote experiments\webgate\cache_A.json (hit=16 miss=40)
-   web 呼叫錄到 0 次｜答案 2445 字
-   Tesla 最近的重大消息包括多項與自動駕駛相關的訴訟進展、約 20 億美元（$2 billion） 的 xAI 投資、遞延收入規模以及 2026 年第二季的營收與獲利提升【TSLA_10Q_202603.html, chunk #42】【TSLA_10Q_202606.html, chunk #49】【TSLA_10K_2025.html, chunk #237】【TSLA_10Q_202606.html, chunk #22】【TS
-
-──[web-05] Apple 在 FY2025 全年的總營收是多少？
-   （陰性對照：純歷史財報，不該打 web）
-   web 呼叫錄到 0 次｜答案 436 字
-   Apple 在 FY2025 全年的總營收為 **4,161.61 億美元（$416,161 million）**【AAPL_10K_2025.html, chunk #115】【AAPL_10K_2025.html, chunk #0】。    - 這個金額來自 2025 財政年度的「Total net sales」欄位，列示為以百萬美元計算的營收總額【AAPL_10K_2025.html, chunk #115】。   - 同樣的數
-
-fixture → experiments/webgate/fix_A.json（web 回應 0 筆）
-答案 → experiments/webgate/replay_mdna.json
-下一步：讀答案，把『這題該成立什麼』寫成斷言檔，再用 replay 模式驗。
-[replay] wrote experiments\webgate\cache_A.json (hit=21 miss=54)
