@@ -1799,6 +1799,128 @@ def gate18_web_fetched_but_uncited() -> None:
         _assert("⑱f2/⑱f3 跨量尺誤報對照", False, f"import 失敗 {e!r}（不要靜默跳過斷言）")
 
 
+
+def gate19_unit_finalization():
+    """⑲ 金額單位三層後處理（`rq.finalize_answer_units`）。零 LLM、零網路、零 Qdrant。
+
+    ⚠ **這道的價值幾乎全在誤報對照與接線斷言**：陽性那三條，一個「一律把億剝掉」的
+      粗暴實作也會過；真正會出事的是它**動到不該動的東西**（非金額計數、敘述性括號）、
+      或**擾動既有基準**（LLM 照 Rule 11 寫的正常路徑必須逐字不變）。
+    ⚠ **⑲g 是這道最重要的一條**：三層的正確性完全建立在「順序」上，而順序是註解裡的
+      宣稱。⑲g 把順序調換、證明它當場壞掉——沒有它，那個宣稱無法被證偽。
+      ⚠ 這條的**症狀是我第一版猜錯的**：原本斷言「調換會吐巢狀」，實跑發現 `repair_paired_yi`
+        會把巢狀自己拆掉、於是**乾淨地留下 LLM 那個錯值**（84.75 而非 847.5）。
+        後者危險得多——外觀完全正常。所以現在斷言的是**值**，不是格式。
+    """
+    print()
+    print("⑲ finalize_answer_units：金額單位三層後處理")
+    F = ar.rq.finalize_answer_units
+    KB = [{"content": "Total revenue was $84.75 billion for the quarter."}]
+
+    # ── 陽性：三個逐字驗證過的真實形狀（2026-09-03）
+    _assert("⑲a ① million 換算差 10 倍 → 修成 828.86 億（原答案寫 82.9）",
+            F("營收為 $82,886 百萬美元（約 $82.9 億美元）") ==
+            "營收為 828.86 億美元（$82,886 百萬）")
+    _assert("⑲b ② 同形狀（716,924 百萬 → 7,169.24 億，原答案寫 716.924）",
+            F("總營收為 716,924 百萬美元（即 716.924 億美元）") ==
+            "總營收為 7,169.24 億美元（$716,924 百萬）")
+    _assert("⑲c ③ LLM 自寫雙寫：值改對且**不巢狀**（舊版會吐 `84.75 億美元（847.5 億美元（…））`）",
+            F("營收為 84.75 億美元（$84.75 billion）") == "營收為 847.5 億美元（$84.75 billion）")
+
+    # ── 誤報對照①：正常路徑必須**逐字**與舊版相同 ＝ 既有基準不被這層動到的證明
+    for txt in ("營收為 $84.75 billion，較去年成長",
+                "淨利為 58,321 百萬美元",
+                "市值 $4962.16B"):
+        _assert(f"⑲d 正常路徑逐字等於單獨跑 convert_usd_units_to_yi：{txt[:18]}",
+                F(txt) == ar.rq.convert_usd_units_to_yi(txt),
+                f"新 {F(txt)!r} vs 舊 {ar.rq.convert_usd_units_to_yi(txt)!r}")
+
+    # ── 誤報對照②：非金額計數。回測踩過 news-10 / mi-11，幣別標記是承重條件
+    NON_MONEY = "月活躍使用者達 10 億人，裝置 25 億部，流通股數 2.57 億股"
+    _assert("⑲e 非金額計數（10 億使用者/25 億部/2.57 億股）一個字都不能動",
+            F(NON_MONEY, KB) == NON_MONEY, f"實得 {F(NON_MONEY, KB)!r}")
+
+    # ── 誤報對照③：敘述性括號不是單位雙寫，不可誤刪
+    NARR = "營收為 $84.75 billion（其中雲端佔大宗）"
+    _assert("⑲f 敘述性括號保留（只有『括號內是換算成億』才剝）",
+            "（其中雲端佔大宗）" in F(NARR), f"實得 {F(NARR)!r}")
+
+    # ── ⑲g **順序承重的證明**：調換 → 巢狀當場重現。少了這條，「順序不可調換」只是註解。
+    wrong_order = ar.rq.repair_paired_yi(
+        ar.rq.convert_usd_units_to_yi("營收為 84.75 億美元（$84.75 billion）"))[0]
+    _right = F("營收為 84.75 億美元（$84.75 billion）")
+    _assert("⑲g 誤報對照：順序調換 → 錯值**靜默留著**（證明順序是承重的）",
+            wrong_order != _right and "847.5" not in wrong_order,
+            f"調換順序實得 {wrong_order!r} vs 正確 {_right!r}（若相同，這條沒有判別力）")
+
+    # ── ⑲h 孤立的億：沒有來源時不准動（判準需要來源，無來源＝無從定罪）
+    SOLO = "營收為 84.75 億美元，年增 12%"
+    _assert("⑲h 無來源時孤立的億不動", F(SOLO) == SOLO, f"實得 {F(SOLO)!r}")
+    _assert("⑲h2 有來源且可定罪時才修（證明 ⑲h 不是因為這層根本沒接上）",
+            F(SOLO, KB) == "營收為 847.5 億美元（$84.75 billion），年增 12%",
+            f"實得 {F(SOLO, KB)!r}")
+
+    # ── ⑲k 證據 B：② 自己的產出當權威（2026-09-04 端到端跑出來才補的路）
+    #     背景：⑲h/⑲h2 走的是證據 A（來源有 "$N billion"），而 SEC 的數字幾乎都住在
+    #     markdown 表格裡（`| Revenue | $82,886 |`，"In millions" 只在表頭）→ `_src_has`
+    #     要求單位詞緊貼數字，對表格來源**兩個方向都是 False**（實測）。於是這個真實形狀
+    #     三層全漏：`828.86 億美元（$82,886 百萬），相當於 $82.886 億美元`——同句自相矛盾、
+    #     後半差 10 倍。⑲k 驗的是換掉證據源之後它會被接住。
+    TBL = [{"content": "| Revenue | $82,886 | $70,066 |\n(In millions, except per share amounts)"}]
+    E2E = "總營收為 $82,886 百萬美元，相當於 $82.886 億美元。"
+    _assert("⑲k 表格來源：② 產出的億值可當證據，孤立的 82.886 億被修成 828.86",
+            F(E2E, TBL) == "總營收為 828.86 億美元（$82,886 百萬），相當於 828.86 億美元。",
+            f"實得 {F(E2E, TBL)!r}")
+    _assert("⑲k2 前提：證據 A 對這份表格來源確實兩個方向都失明（否則 ⑲k 測到的是別條路）",
+            not ar.rq._src_has(TBL[0]["content"], 82.886, r"billion|B\b")
+            and not ar.rq._src_has(TBL[0]["content"], 82886, r"million|M\b"))
+    _assert("⑲k3 證據 B **不補 `（$N billion）`**：那字串不在來源裡，補了會被判無法溯源",
+            "billion" not in F(E2E, TBL))
+    # 誤報對照①：兩個**真的**差 10 倍的獨立金額 → 都由 ② 產出、都帶括號雙寫 → 一個都不准動。
+    TWO = "雲端部門為 $8,288.6 百萬美元，總營收為 $82,886 百萬美元。"
+    _assert("⑲k4 誤報對照：真的差 10 倍的兩筆獨立金額不得被改（`_DUAL_PAREN_RE` 擋）",
+            F(TWO, TBL) == "雲端部門為 82.886 億美元（$8,288.6 百萬），總營收為 828.86 億美元（$82,886 百萬）。",
+            f"實得 {F(TWO, TBL)!r}")
+    # 誤報對照②：② 一個億值都沒產出時，證據 B 必須整條靜默（不能退化成「看到億就乘 10」）。
+    _assert("⑲k5 誤報對照：② 無產出時證據 B 靜默（無來源）",
+            F("營收為 82.886 億美元。") == "營收為 82.886 億美元。")
+    _assert("⑲k6 誤報對照：② 無產出且來源也定不了罪 → 不動",
+            F("營收為 82.886 億美元。", TBL) == "營收為 82.886 億美元。")
+    # 誤報對照③：非金額計數仍不得動——即使 ② 剛好產出了它的 10 倍值。
+    CNT = "該平台有 10 億使用者。總營收為 $10,000 百萬美元。"
+    _assert("⑲k7 誤報對照：非金額計數不因 ② 產出 100 億而被改",
+            "10 億使用者" in F(CNT, TBL), f"實得 {F(CNT, TBL)!r}")
+    # ⑲k8 尾綴裸「元」：LLM 寫 `$X 百萬元` 時，「元」不可被留成孤兒。
+    _assert("⑲k8 尾綴裸「元」被吃掉（舊版吐 `1,197.96 億美元（$119,796 百萬）元`）",
+            F("總營收為 $119,796 百萬元。") == "總營收為 1,197.96 億美元（$119,796 百萬）。",
+            f"實得 {F('總營收為 $119,796 百萬元。')!r}")
+
+    # ── ⑲i 接線：兩條生產路徑都必須走 finalize，且**不得**再裸呼叫 convert
+    #     （⑮e 的教訓：呼叫點寫了名字不代表值真的流過去 → 上面 ⑲a~⑲h 已經是行為測試，
+    #      這裡補的是「有沒有別的路徑繞過這層」，那是 AST 才看得到的）
+    import ast as _ast
+    for path, want in (("rag_query.py", "finalize_answer_units"),
+                       ("agentic_rag_version/graph.py", "finalize_answer_units"),
+                       ("api_server.py", "finalize_answer_units")):   # ← 產品線走的那條
+        src = Path(path).read_text(encoding="utf-8")
+        tree = _ast.parse(src)
+        calls = [n for n in _ast.walk(tree) if isinstance(n, _ast.Call)]
+        def _name(n):
+            f = n.func
+            return f.attr if isinstance(f, _ast.Attribute) else getattr(f, "id", "")
+        n_final = sum(1 for c in calls if _name(c) == want)
+        n_bare = sum(1 for c in calls if _name(c) == "convert_usd_units_to_yi")
+        _assert(f"⑲i {path} 呼叫 {want}", n_final >= 1, f"實得 {n_final} 次")
+        allowed = 1 if path == "rag_query.py" else 0   # rq 只准 finalize 內部那一次
+        _assert(f"⑲i2 {path} 裸呼叫 convert_usd_units_to_yi 次數 == {allowed}",
+                n_bare == allowed,
+                f"實得 {n_bare} 次（繞過三層組裝＝那條路徑重新失明）")
+
+    # ── ⑲j 拒答不受影響（拒答沒有數字，但這層跑在所有路徑上）
+    REF = "I don't have enough information in my knowledge base to answer this."
+    _assert("⑲j 拒答文字逐字不變", F(REF, KB) == REF)
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -1827,6 +1949,7 @@ def main() -> int:
     gate16_round0_query_is_verbatim()
     gate17_dual_source_timepoints()
     gate18_web_fetched_but_uncited()
+    gate19_unit_finalization()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")

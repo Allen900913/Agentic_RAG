@@ -128,6 +128,11 @@ if query := st.chat_input("問點什麼，例如：NVDA 最新一季毛利率是
                 elif event == "token":
                     answer += data["text"]
                     answer_holder.markdown(answer + "▌")
+                elif event == "revision":
+                    # 後端的確定性後處理（金額單位換算）改寫了答案 → 整段換掉。
+                    # 串流時看到的是模型原文，這一步才是定稿。
+                    answer = data["text"]
+                    answer_holder.markdown(answer)
                 elif event == "error":
                     error = data["message"]
                     break

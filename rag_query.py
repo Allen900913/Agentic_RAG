@@ -343,7 +343,10 @@ def extract_final_answer(raw: str) -> str:
 _USD_UNIT_RE = re.compile(
     r'(?:((?:US)?\$)\s?)?([0-9][0-9,]*(?:\.[0-9]+)?)\s*'
     r'(billion|trillion|million|bn|mn|十億|百萬|兆)(?![A-Za-z])'
-    r'(?:\s*(?:美元|美金|dollars?|USD))?',
+    # 尾綴含裸「元」：LLM 常寫「$119,796 百萬元」，只吃到「百萬」會把「元」留成孤兒
+    # （實測輸出 `1,197.96 億美元（$119,796 百萬）元`）。「元」放最後，`美元` 仍優先匹配。
+    # 幣別語意不受影響：has_ccy 只認 $／美元／美金／dollar／USD，裸「元」不足以判定為美元。
+    r'(?:\s*(?:美元|美金|dollars?|USD|元))?',
     re.IGNORECASE)
 # 含中文單位詞安全網：LLM 若沒照 Rule 11、寫成「$13.63 十億 / 890 百萬」也一律歸成億。
 _UNIT_TO_YI = {"billion": 10.0, "bn": 10.0, "trillion": 10000.0, "million": 0.01, "mn": 0.01,
@@ -385,6 +388,182 @@ def convert_usd_units_to_yi(text: str) -> str:
         return f"{_fmt_yi(yi)} 億{'美元' if has_ccy else ''}（{src}）"
     text = _DOLLAR_ABBR_RE.sub(lambda m: m.group(1) + _ABBR_WORD[m.group(2)], text or "")
     return _USD_UNIT_RE.sub(_repl, text)
+
+
+# ── LLM 先斬後奏的「億」：剝掉，讓上面那支獨佔換算 ───────────────────────────────
+# **為什麼是「剝掉」而不是「改對」**：Rule 11 的契約是 *Writer 完全不要寫億*，換算由
+# `convert_usd_units_to_yi` 獨佔。LLM 一旦自己寫了，正解是把它的算術拿掉、讓程式重算——
+# 「改對它」等於承認兩個權威，而其中一個會算錯。
+#
+# 三個實測形狀（2026-09-03 逐字驗證；**舊模型同病**，見 `eval/gen_reference_answers.py`
+# 註解記載的 2026-08-07 稽核 13 題 23 處 → 這不是換模型造成的回歸）：
+#   ① `$82,886 百萬美元（約 $82.9 億美元）`   → 換算差 10 倍（該是 828.86 億）
+#   ② `716,924 百萬美元（即 716.924 億美元）`  → 同上
+#   ③ `84.75 億美元（$84.75 billion）`         → **值對不對另說，它會讓轉換器吐巢狀**：
+#      實測輸出 `84.75 億美元（847.5 億美元（$84.75 billion））`
+# ③ 證明這一層不只修錯值，**它同時是巢狀的解**。所以判準刻意不看值對不對、一律剝掉：
+# 「這個億緊貼著一個來源單位數字」＝它必然是 LLM 自己算的，而程式待會就會重算一次。
+#
+# ⚠ **只處理「緊貼配對」的億，孤立的億不碰**（那是 `repair_yi_against_source` 的活，
+#   要有來源才判得動）。配對寫在同一個括號結構裡 → 零歧義。這正是「取同句最近的數字」
+#   當配對法會死的地方：實測它把期別碼 `202512`、年份 `2026` 當成配對值，128 筆全誤報。
+# ⚠ **必須跑在 `convert_usd_units_to_yi` 之前**：那支不冪等（見它自己的 docstring），
+#   跑在後面會匹配到它自己的產出而巢狀。順序由 `finalize_answer_units` 保證，不要各自組。
+_SRC_UNIT_ALT = r"(?:billion|trillion|million|bn|mn|十億|百萬|兆)"
+# 形狀 A：來源單位數字 → 緊跟一個「換算成億」的括號。動作＝刪掉那個括號，留來源數字。
+_PAIRED_YI_AFTER_RE = re.compile(
+    r"([0-9][0-9,]*(?:\.[0-9]+)?\s*" + _SRC_UNIT_ALT + r"(?![A-Za-z])"
+    r"(?:\s*(?:美元|美金|dollars?|USD|元))?)"  # 裸「元」同 `_USD_UNIT_RE`，否則括號隔著它匹配不到
+    r"\s*[（(]\s*(?:約|約為|即|亦即|等於|≈|=|~)?\s*(?:US)?\$?\s*"
+    r"[0-9][0-9,]*(?:\.[0-9]+)?\s*億(?:美元|美金)?\s*[)）]",
+    re.IGNORECASE)
+# 形狀 B：LLM 自己寫的億 → 緊跟一個來源單位數字的括號。動作＝刪掉前面那個億，留來源數字。
+_PAIRED_YI_BEFORE_RE = re.compile(
+    r"[0-9][0-9,]*(?:\.[0-9]+)?\s*億(?:美元|美金)?\s*"
+    r"[（(]\s*((?:US)?\$?\s?[0-9][0-9,]*(?:\.[0-9]+)?\s*" + _SRC_UNIT_ALT + r"(?![A-Za-z]))"
+    r"\s*[)）]",
+    re.IGNORECASE)
+
+
+def repair_paired_yi(text: str) -> tuple:
+    """剝掉 LLM 自己算的「億」——**只剝與來源單位數字緊貼配對的那些**。零 LLM、零來源查詢。
+
+    回傳 `(處理後文字, [被剝掉的原字串, ...])`。孤立的億一律不動（漏修無害，改壞有害）。
+    ⚠ 必須跑在 `convert_usd_units_to_yi` 之前，見上方註解。
+    """
+    stripped: list = []
+
+    def _strip_paren(m):
+        stripped.append(m.group(0))
+        return m.group(1)
+
+    out = _PAIRED_YI_AFTER_RE.sub(_strip_paren, text or "")
+    out = _PAIRED_YI_BEFORE_RE.sub(_strip_paren, out)
+    return out, stripped
+
+
+# ── 確定性 backstop：LLM 勸不動時，直接拿來源把「億」算對 ────────────────────────
+# 為什麼需要這層：上面的 prompt(CRITICAL 規則) + gen_reference_clean(重試) 都只是「勸」，
+# 勸不動時舊碼只 print 一行「需人工檢查」就放行——2026-08-07 稽核抓到 13 題 23 處錯，
+# 全部是這樣漏出去的（警告在 100 題輸出裡捲過去，沒人回頭看）。
+# rq.convert_usd_units_to_yi 也救不了：它只認「數字+英文單位詞」，LLM 一旦先斬後奏寫成
+# 「253.49 億美元」，那支轉換器明文「不碰已經是億的值」→ 結構性失明。
+#
+# 判準必須自足，不能拿答案的 N 億去撞來源的 $N billion 就定罪（來源同時有 $2.5B 與
+# $250 million 時會誤判）。因此三個條件同時成立才動手：
+#   ① 來源有 "$N billion"  ② 來源沒有 "$N/10 billion"  ③ 來源沒有 "$N*100 million"
+# ②③ 排掉「答案其實是對的、只是來源另有一個數字長得像」的情況。
+# 實測：對本 eval 的 29 處雙寫 + 15 處 millions 表格推導，零誤報。
+# 幣別標記【必填】：不可寫成可選。「10 億使用者」「25 億部裝置」「2.57 億股」都是
+# 非金額計數，若允許無幣別匹配，來源剛好有 "$10 billion" 就會把「10 億使用者」改成
+# 「100 億美元（$10 billion）使用者」——回測實際踩到（news-10 / mi-11）。
+# 漏修無害（人工稽核還在），改壞有害，故一律從嚴。
+_YI_SOLO_RE = re.compile(r"(?:(?:US)?\$\s?)?([0-9][0-9,]*(?:\.[0-9]+)?)[\s  ]*億[\s  ]*(美元|歐元)")
+# 後接括號是否為「單位雙寫」（$X billion / 12,345 百萬），而非敘述性括號（如「（其中…」）。
+_DUAL_PAREN_RE = re.compile(r"^[\s  ]*[（(][\s  ]*(?:US)?\$?[\s  ]*[0-9]")
+
+
+def _yi_values(text: str) -> set:
+    """文本裡所有「N 億(美元)」的數值（round 到 6 位供集合比對，避開浮點尾差）。
+    刻意與 `_YI_SOLO_RE` 共用同一支正則：能被拿來當證據的形狀，與會被修的形狀必須一致。"""
+    out = set()
+    for m in _YI_SOLO_RE.finditer(text or ""):
+        try:
+            out.add(round(float(m.group(1).replace(",", "")), 6))
+        except ValueError:
+            pass
+    return out
+
+
+def _num_variants(v: float) -> set:
+    """一個數值在文本中可能的字面寫法（含千分位）。"""
+    s = f"{v:.10f}".rstrip("0").rstrip(".")
+    out = {s}
+    if abs(v - round(v)) < 1e-9:
+        out |= {f"{int(round(v)):,}", str(int(round(v)))}
+    if "." in s:
+        ip, dp = s.split(".")
+        out.add(f"{int(ip):,}.{dp}")
+    return out
+
+
+def _src_has(context: str, v: float, unit: str) -> bool:
+    return any(re.search(rf"\$\s?{re.escape(x)}\s*(?:{unit})", context)
+               for x in _num_variants(v))
+
+
+def repair_yi_against_source(text: str, context: str, known_yi=frozenset()) -> tuple:
+    """把答案裡「LLM 手轉且確定錯」的 N 億，修成 (N*10) 億美元。
+    回傳 (修好的文字, [(原字串, 新字串), ...])。無法判定的一律不動（寧可漏修不可錯改）。
+
+    **兩種互相獨立的證據**，任一成立即可定罪（排除條款對兩者一律先跑）：
+      A. 來源有 "$N billion" —— 原始判準，需要來源是**文字**形態。
+      B. `known_yi` 含 N*10 —— `convert_usd_units_to_yi` 已從來源形態的數字算出 N*10 億
+         並寫進同一份答案，所以那個值是程式算的、是權威的；LLM 另外寫的 N 億就是對
+         **同一個量**做的音譯錯誤（把「billion」直譯成「億」）。
+    ⚠ B 是 2026-09-04 端到端跑出來才補的：A 要求單位詞**緊貼**數字，而 SEC 的數字幾乎
+      都住在 markdown 表格裡（`| Revenue | $82,886 |`，"In millions" 只寫在表頭）→
+      `_src_has` 對表格來源**結構性失明**，實測 billion 與 million 兩個方向都是 False。
+      修法不是去教 `_src_has` 讀表頭（哪個表頭管哪個儲存格是感知不是規則，判錯會把對的
+      數字改壞），而是換一個自足的證據源：② 自己的產出。
+    """
+    repairs = []
+
+    def _repl(m):
+        # 已經是雙寫「N 億美元（$X billion）」的不碰：那是 post-processor 算好的。
+        # 但只認「括號內以數字/$ 開頭」的單位雙寫——敘述性括號（「（其中 34.75…」）不算，
+        # 否則會漏修（回測：mi-09 的 84.75 就是這樣被跳過的）。
+        if _DUAL_PAREN_RE.match(text[m.end():m.end() + 8]):
+            return m.group(0)
+        n = float(m.group(1).replace(",", ""))
+        # 排除條款（對 A/B 兩種證據都先跑）：來源另有對應值 → 答案可能本來就對。
+        if _src_has(context, n / 10, r"billion|B\b") or _src_has(context, n * 100, r"million|M\b"):
+            return m.group(0)
+        if _src_has(context, n, r"billion|B\b"):
+            new = f"{_fmt_yi(n * 10)} 億{m.group(2) or '美元'}（${m.group(1)} billion）"
+        elif round(n * 10, 6) in known_yi:
+            # 證據 B **不補 `（$N billion）`**：那個字串不在來源裡（來源寫的是 millions
+            # 表格），補了會被 agentic 的 `find_untraceable_numbers` 判成無法溯源。
+            # 正確的雙寫已經由 ② 寫在同一份答案的別處了，這裡只要把值修對。
+            new = f"{_fmt_yi(n * 10)} 億{m.group(2) or '美元'}"
+        else:
+            return m.group(0)                      # 兩種證據都沒有 → 無從定罪
+        repairs.append((m.group(0), new))
+        return new
+
+    return _YI_SOLO_RE.sub(_repl, text or ""), repairs
+
+
+
+def finalize_answer_units(answer: str, chunks=None, *, web_extra: str = "", verbose: bool = False) -> str:
+    """金額單位的**唯一後處理入口**（agentic 與單發管線共用）。三層，順序不可調換：
+
+      ① `repair_paired_yi`         — 剝掉 LLM 緊貼配對的億（順帶解掉巢狀）
+      ② `convert_usd_units_to_yi`  — 程式獨佔換算，產出「X 億美元（$Y unit）」雙寫
+      ③ `repair_yi_against_source` — 剩下的**孤立**億，拿來源**或 ② 自己的產出**判定並修 10x 音譯
+
+    ⚠ **順序是這支存在的理由**：② 不冪等且會匹配自己的產出 → ① 必須在前；
+      ③ 靠 `_DUAL_PAREN_RE` 認出「已經是雙寫的不要碰」，那個形態要 ② 跑完才定型。
+    ⚠ **只能呼叫一次**（② 重入會巢狀）。新的消費端一律呼叫這支，不要自己組三層。
+    ⚠ `chunks`／`web_extra` 都給不出來時 ③ 自動跳過（判準需要來源，沒有來源就無從定罪）。
+    """
+    text, stripped = repair_paired_yi(answer or "")
+    # ② 的產出即證據 B（見 `repair_yi_against_source`）：跑前跑後的億值差集＝**程式算的**那些。
+    # 用差集而不是改 ② 的簽章，是為了不動那支的既有契約（⑲d 凍結了它的正常路徑逐字輸出）。
+    _yi_before = _yi_values(text)
+    text = convert_usd_units_to_yi(text)
+    produced_yi = _yi_values(text) - _yi_before
+    fixes = []
+    # 乾草堆同時含 KB chunk 與 web 結果——與 `find_untraceable_numbers` 同一個定義：
+    # 要問「來源到底有沒有這個數」，不需要先解出它掛在誰名下。
+    context = "\n".join([(c.get("content") or "") for c in (chunks or [])] + [web_extra or ""])
+    # 證據 B 不需要來源，所以 chunks 全空時 ③ 仍要跑（只是那時排除條款一律真空成立）。
+    if context.strip() or produced_yi:
+        text, fixes = repair_yi_against_source(text, context, produced_yi)
+    if verbose and (stripped or fixes):
+        print(f"[units] 剝掉 LLM 自算的億 {len(stripped)} 處、依來源修正 {len(fixes)} 處")
+    return text
+
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -2376,6 +2555,9 @@ def run_single_query(query, retrieval_model, gen_model, top_k, bge_m3, rerank_mo
 
     print(f"🤖 Calling {gen_model}...")
     answer = call_llm(messages, gen_model, temperature=GEN_TEMPERATURE)
+    # 金額單位後處理（三層，見 `finalize_answer_units`）。⚠ 2026-09-03 之前**單發管線完全沒有
+    # 這一層**——它只裝在 agentic synthesize 與 gen_reference_answers，而單發才是產品線走的路。
+    answer = finalize_answer_units(answer, chunks)
 
     print(f"\n{'═'*60}")
     print("💡 Answer:")
@@ -2430,6 +2612,7 @@ def run_interactive(retrieval_model, gen_model, top_k, bge_m3, rerank_model, cli
 
         print(f"🤖 Generating answer ({gen_model})...")
         answer = call_llm(messages, gen_model, temperature=GEN_TEMPERATURE)
+        answer = finalize_answer_units(answer, chunks)   # 同 run_single_query
 
         print(f"\n{'─'*60}")
         print("💡 Answer:")

@@ -101,71 +101,14 @@ def gen_reference_clean(msgs: list, model: str, max_retries: int = 2) -> str:
     return txt
 
 
-# ── 確定性 backstop：LLM 勸不動時，直接拿來源把「億」算對 ────────────────────────
-# 為什麼需要這層：上面的 prompt(CRITICAL 規則) + gen_reference_clean(重試) 都只是「勸」，
-# 勸不動時舊碼只 print 一行「需人工檢查」就放行——2026-08-07 稽核抓到 13 題 23 處錯，
-# 全部是這樣漏出去的（警告在 100 題輸出裡捲過去，沒人回頭看）。
-# rq.convert_usd_units_to_yi 也救不了：它只認「數字+英文單位詞」，LLM 一旦先斬後奏寫成
-# 「253.49 億美元」，那支轉換器明文「不碰已經是億的值」→ 結構性失明。
-#
-# 判準必須自足，不能拿答案的 N 億去撞來源的 $N billion 就定罪（來源同時有 $2.5B 與
-# $250 million 時會誤判）。因此三個條件同時成立才動手：
-#   ① 來源有 "$N billion"  ② 來源沒有 "$N/10 billion"  ③ 來源沒有 "$N*100 million"
-# ②③ 排掉「答案其實是對的、只是來源另有一個數字長得像」的情況。
-# 實測：對本 eval 的 29 處雙寫 + 15 處 millions 表格推導，零誤報。
-# 幣別標記【必填】：不可寫成可選。「10 億使用者」「25 億部裝置」「2.57 億股」都是
-# 非金額計數，若允許無幣別匹配，來源剛好有 "$10 billion" 就會把「10 億使用者」改成
-# 「100 億美元（$10 billion）使用者」——回測實際踩到（news-10 / mi-11）。
-# 漏修無害（人工稽核還在），改壞有害，故一律從嚴。
-_YI_SOLO_RE = _re.compile(r"([0-9][0-9,]*(?:\.[0-9]+)?)[\s  ]*億[\s  ]*(美元|歐元)")
-# 後接括號是否為「單位雙寫」（$X billion / 12,345 百萬），而非敘述性括號（如「（其中…」）。
-_DUAL_PAREN_RE = _re.compile(r"^[\s  ]*[（(][\s  ]*(?:US)?\$?[\s  ]*[0-9]")
-
-
-def _num_variants(v: float) -> set:
-    """一個數值在文本中可能的字面寫法（含千分位）。"""
-    s = f"{v:.10f}".rstrip("0").rstrip(".")
-    out = {s}
-    if abs(v - round(v)) < 1e-9:
-        out |= {f"{int(round(v)):,}", str(int(round(v)))}
-    if "." in s:
-        ip, dp = s.split(".")
-        out.add(f"{int(ip):,}.{dp}")
-    return out
-
-
-def _src_has(context: str, v: float, unit: str) -> bool:
-    return any(_re.search(rf"\$\s?{_re.escape(x)}\s*(?:{unit})", context)
-               for x in _num_variants(v))
-
-
-def repair_yi_against_source(text: str, context: str) -> tuple:
-    """把答案裡「LLM 手轉且確定錯」的 N 億，依來源修成 (N*10) 億美元（$N billion）。
-    回傳 (修好的文字, [(原字串, 新字串), ...])。無法判定的一律不動（寧可漏修不可錯改）。"""
-    repairs = []
-
-    def _repl(m):
-        # 已經是雙寫「N 億美元（$X billion）」的不碰：那是 post-processor 算好的。
-        # 但只認「括號內以數字/$ 開頭」的單位雙寫——敘述性括號（「（其中 34.75…」）不算，
-        # 否則會漏修（回測：mi-09 的 84.75 就是這樣被跳過的）。
-        if _DUAL_PAREN_RE.match(text[m.end():m.end() + 8]):
-            return m.group(0)
-        n = float(m.group(1).replace(",", ""))
-        if not _src_has(context, n, r"billion|B\b"):
-            return m.group(0)                      # 來源沒這個 billion 數字 → 無從定罪
-        if _src_has(context, n / 10, r"billion|B\b") or _src_has(context, n * 100, r"million|M\b"):
-            return m.group(0)                      # 來源另有對應值 → 答案可能本來就對
-        new = f"{_fmt_yi_local(n * 10)} 億{m.group(2) or '美元'}（${m.group(1)} billion）"
-        repairs.append((m.group(0), new))
-        return new
-
-    return _YI_SOLO_RE.sub(_repl, text or ""), repairs
-
-
-def _fmt_yi_local(v: float) -> str:
-    if abs(v - round(v)) < 1e-9:
-        return f"{int(round(v)):,}"
-    return f"{v:,.4f}".rstrip("0").rstrip(".")
+# ── 確定性 backstop：**定義已於 2026-09-03 提升到 `rag_query.py`** ─────────────────
+# 為什麼搬：這一層原本只活在本檔，於是**生產管線完全沒有它**——agentic 只有
+# `convert_usd_units_to_yi`（對 LLM 先斬後奏的「億」結構性失明），單發管線連那支都沒有。
+# 現在 `rq.finalize_answer_units` 是三層的唯一組裝點，本檔改成 import 同一份實作。
+# ⚠ 本檔的呼叫順序**刻意維持原樣**（repair → convert），不改成 finalize_answer_units：
+#   參考答案含 24 處人工校正，換順序等於動到 gold 的產生方式。
+repair_yi_against_source = rq.repair_yi_against_source
+_YI_SOLO_RE = rq._YI_SOLO_RE   # 第 336 行還在用（列出「勸不動又修不掉」的殘留億）
 
 
 def detect_lang(text: str) -> str:

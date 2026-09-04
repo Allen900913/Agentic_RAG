@@ -1222,7 +1222,10 @@ def _node_synthesize(state: SupervisorState) -> dict:
 
     # 確定性單位換算：Rule 11 要 Writer 原樣保留 "$X billion"，這裡由純程式把 billion/million→億
     # 乘算正確（程式算不會錯、零誤報），根治 LLM 的 billion→億 音譯 10x 病（reflect 共用同盲點靠不住）。
-    answer = rq.convert_usd_units_to_yi(answer)
+    # ⚠ 2026-09-03 改走 `finalize_answer_units`：`convert_usd_units_to_yi` 單獨用有兩個洞——
+    #   LLM 先斬後奏寫「億」時它明文不碰（結構性失明），而它自己又不冪等 → LLM 寫的雙寫
+    #   會被它吐成巢狀。新入口在它前面先剝、後面再依來源補，順序由那支保證。
+    answer = rq.finalize_answer_units(answer, chunks, web_extra=web_extra)
 
     # 時效聲明由 Python 機械式附加，不要求 Writer 自己記得，也不讓 citation validator 把這段
     # collection metadata 誤當成無引用的回答事實。snapshot 的 todos 不會帶 freshness_gaps。
