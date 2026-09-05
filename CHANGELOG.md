@@ -3,6 +3,233 @@
 紀錄本專案每次有意義的程式修改（架構調整、參數變更、新增功能、放棄的實驗）。新條目加在最上面。
 **每筆條目只留「改了什麼、關鍵數字、結論」**，診斷過程與推導細節見 `docs/` 與 git log，不重述。
 
+## 2026-09-06
+
+### RAGAS 量尺在新 judge 上重量完畢：gold 上限整組換新，噪音兩格被推高
+
+換 judge（`gpt-oss-120b` 退役 → `google/gemma-4-31b-it`）之後，`GOLD_BASELINE` 與 `NOISE`
+兩組常數綁的都是死掉的舊 judge，本檔自己印著「一律不可引用」。這次把它們補回來。
+**三輪依序跑**（`--max-workers 2`，NVIDIA 限速，併發不是槓桿；每輪約 2 小時）：
+
+| 臂 | 輸出 | 用途 |
+|---|---|---|
+| A2 | `experiments/ragas_65q_gemma_sysA2.json` | 系統分數 ＋ 噪音對的一半 |
+| B | `experiments/ragas_65q_gemma_sysB.json` | **同一份結果檔**再判一次 ＝ 噪音對的另一半 |
+| C | `experiments/ragas_65q_gemma_goldceiling.json` | gold 當答案（只換 answer，contexts 不動）＝ 上限 |
+
+**① gold 上限：判別力沒有變差。** `answer_correctness` **.972 → .987**（擔心的是「連標準答案
+都認不出來」，沒有發生）。整組換新（不取新舊較大值——那是噪音門檻的規則；上限要跟**同一輪**
+系統分數比，拿 gemma 判的分數去比 120b 判的上限正是本檔明令禁止的跨 judge 比較）：
+
+| | correctness | faith | relevancy | recall | precision | nv |
+|---|---|---|---|---|---|---|
+| 舊（120b／65 題） | .972 | .659 | .871 | .788 | .843 | .969 |
+| **新（gemma／65 題）** | **.987** | **.726** | **.888** | **.826** | **.780** | **.923** |
+
+**② 噪音：兩格被推高。** |A2−B| ＝ recall .006／precision .006／**nv .012**／**faith .021**／
+relevancy .002／correctness .008。照既有規則取新舊較大值 → **`nv` .008→.012、`faithfulness`
+.010→.021**，其餘不動（correctness 這次比舊值小，維持 .012）。
+⚠ faithfulness 那 .021 不只是均值抖動：逐題最大 |Δ| 是 **`mix-15` 1.000 → 0.500**（整題砍半），
+`mix-07` .867→.500、`lex-06` 1.000→.667 同一形狀 → **這個 judge 在 faithfulness 上比舊的抖**。
+⚠ 只有**一對**。同一支腳本寫著「一對是抽樣不是上界」，這條仍然成立，別拿它往下調門檻。
+⚠ 三對噪音樣本裡**有兩對推翻了前一對的某一格**（.007→.012、.008→.012／.010→.021），
+那句警告的實證從此有三筆。
+
+**③ 判讀結論不變：量尺仍然飽和。** 五個指標已達或超過上限（faithfulness 是 gold **自己比
+系統低 .149**，成因與 2026-08 相同：gold 依 `gold_files` 生成、與 agentic 撈到的 contexts
+不同源）；唯一有空間的仍是 `answer_correctness`，系統 **.654** vs 上限 **.987 ＝ 落差 .333**。
+`answer_relevancy` 有一條 +.029 的細縫（高於 .004 門檻），很窄。
+
+**④ 順手修掉護欄自己製造的誤讀。** `_print_interpretation_guide` 判「已達上限」的容差寫死
+`0.005`，於是 `context_precision`（噪音 **.046**）會印出「距 gold 上限 +0.008」——而那 .008
+依定義就讀不出來。改成 `max(0.005, 該指標的噪音門檻)`。
+
+**⑤ `--timeout 420` 在 gemma 上不夠，而失敗是靜默的。** 第一輪全量（`ragas_65q_gemma_sysA.json`）
+**11 筆 NaN**（correctness 5／precision 3／faith 2／nv 1）→ 那輪的 correctness 均值是 **60 列**
+算出來的，**不可當基準**。改用 `--timeout 900 --nvidia-passes 2` 之後：A2 剩 1 筆（`mix-13`
+的 correctness）、B 與 C 都是 0 筆。⚠ 這兩個值目前**只在 CLI 傳，預設仍是 420／1**。
+
+**⑥ 併發不是槓桿（一條 null result）。** `--max-workers 6` 探針：沒有加速，且出現 3 次
+500/503（`--max-workers 2` 是 0 次）。`--max-workers 2` 本來就是預設，help 字串早就寫著
+「NVIDIA 限速，別開太高」——這 40 分鐘重新推導了 repo 已經知道的事。
+牆鐘時間是算術不是模型問題：390 個 metric-row × 88s ÷ 2 workers ≈ 4.8 小時。
+
+## 2026-09-05
+
+### 65 題端到端：「億」的頻率有分母了，同一輪也揪出後處理的第三個缺口
+
+**這是「億」修法上線後的第一次全量跑**（`experiments/agentic/gj_multiyear_r2_unitstats.json`，
+65/65 完成、零錯誤、**零 `unit_stats=None`**）。
+
+**① 頻率（BACKLOG 欠的那個分母，現在有了）**
+
+| | |
+|---|---|
+| 分母 | **65 題** |
+| 觸發後處理 | **10 題（15.4%）／共 14 筆** |
+| ① 剝掉 LLM 緊貼配對的億 | 2 筆 |
+| ③ 孤立的億判定為 10x 音譯而修掉 | 12 筆 |
+
+＝ **LLM 大約每 6~7 題就違反一次 Rule 11 自己寫億**。不是偶發，backstop 是必要的。
+逐筆明細可稽核（`unit_stats.*_detail`），抽查三題對得上來源：`lex-01`（`Market Cap : $4962.16B`
+→ `49,621.6 億美元`）、`sem-09`（19.19）、`col-10`（37.01）。
+
+**② 修法在真實輸出上成立**：掃 65 題全部**相鄰**雙寫金額配對 **92 處、0 筆不一致**
+——⑲k 那個「同句自相矛盾差 10 倍」的病徵不再出現。
+⚠ 掃描的第一版報 95 筆 FAIL，是**量尺錯**：它把同句所有億值與所有美元值做笛卡兒積，
+於是正確的 `767 億美元($76.7 billion)` 會去跟同句別的金額比。**金額比對必須相鄰配對。**
+
+**③ 但 `check_number_defects` 的 col-11 FAIL 是真的，而且揭出第三個缺口**
+
+```
+答案：Microsoft Cloud 收入在 2026 財政年度第三季增加 29% 至 $54.5 億
+來源：Microsoft Cloud revenue increased 29% to $54.5 billion      ← 差 10 倍
+```
+
+`_YI_SOLO_RE` 把幣別詞寫成**無條件必填**（`億[\s]*(美元|歐元)`），所以 `$54.5 億` 這種
+「有 `$` 但沒幣別詞」的寫法**一個都匹配不到**——實測該答案匹配數 **0**，同題共 **5 處**
+（`$22.1/$21.8/$7.9/$7.8/$54.5 億`），而 `_src_has(..., billion)` 對 5 處**全部為 True**
+＝③ 手上證據齊全，只是從來沒看到它們。
+
+**修法刻意很窄：幣別詞可省，但只在有 `$`／`US$` 前綴時。** 必填原本是刻意的
+（回測踩過 news-10／mi-11：「10 億使用者」被改成「100 億美元（$10 billion）使用者」），
+而那個回歸的前提是「**沒有**幣別標記」——`$` 本身就是幣別標記，沒有人把使用者數寫成 `$10 億`。
+金額資格收斂成單一判準 `_is_monetary_yi()`，`_yi_values()`（產生證據 B）與
+`repair_yi_against_source()`（執行修改）**共用它**。
+
+**同一跑順帶修掉 `repair_paired_yi` 的 `$` 孤兒**：`_PAIRED_YI_BEFORE_RE` 從 `[0-9]` 起頭、
+不吃前綴 `$` → 剝掉億之後 `$` 留下來，吐出 `$$54.5 billion`、再經 ② 成為 `$545 億美元(...)`。
+值是對的但多一個 `$`。這是既有的潛在 bug，舊的 ③ 看不到 `$N 億` 所以從沒觸發過。
+
+**閘門⑲m（14 項）**，277 → **291**。⚠ **判別力幾乎全在誤報對照**：⑲m3~⑲m6 逐字凍結四種
+非金額計數、⑲m9 排除條款、⑲m10 既有正確雙寫不動。**⑲m8 是最重要的一條**——證據端與修改端
+必須共用同一個資格判準，各判各的會出現「被當成證據卻不會被修」，而那是靜默的。
+4/4 變異全抓到：N1 幣別詞退回必填 → ⑲m1/m2/m2b/m8；N2 `_is_monetary_yi` 恆真 → ⑲m3/m4/m8；
+N3 `_yi_values` 不過判準 → ⑲m8；N4 ① 不吃 `$` → ⑲m11。
+⚠ **⑲m7 的第一版斷言是寫錯的**（斷言「`545 億` 不得出現」，但那正是 ①＋② 算出來的**正確**值，
+錯的是期望值不是系統）；改成驗「③ 一次都不觸發 ＋ 值正確」，而那一跑才揭出 ⑲m11。
+
+**三次了，每一次都是端到端跑出來的，不是想出來的**（證據 B ← 表格來源失明；⑲k ← 測資是英文
+句子而生產是 markdown 表格；⑲m ← 測資寫 `N 億美元` 而 LLM 寫 `$N 億`）。共同形狀是
+**測資的形狀與生產不同，那條路等於從來沒被測過**。
+
+## 2026-09-04
+
+### chunk 層 gold：三條卡住的量尺缺口，卡在同一個前提上
+
+`eval_set.json` 的 `relevant` 只到**檔名**，而 BACKLOG 有三條線同時卡在「沒有 chunk 粒度的
+gold」：lexical 承接數 1.93、`relevant_ids` 的損害判不出來、Grader 責任剝離的復活條件。
+
+**新增 [`eval/chunk_gold.py`](eval/chunk_gold.py) ＋ `chunk_gold.json`：41/65 題、83 顆 gold chunk。**
+gold **由 `literal` 定義、不寫死 `chunk_index`**——理由是同一次查到的兩種漂移：
+① 重建會位移索引 ② **`eval_set.json` 的 `pin_chunks` 已經漂了 8 題**（`relevant` 於 `10a0caa`／
+`53d4baf` 更新到新一季，pin 沒跟著改 → `fetch_gold_chunks` 只撈 `relevant` 的檔，那 8 題的 pin
+一顆都比對不到 → `gen_reference_answers.py:305` 印一行警告然後**退回 dense-only**）。
+
+**候選來自 `reference_answers.json` 的數字，兩個門檻篩特異性**（`n_in_relevant<=3`、
+`n_same_ticker<=8`），再**逐題人工驗證**（判準：這個數字在命中 chunk 裡扮演的角色，就是題目
+問的那個量）。剔掉三種形狀：脈絡值（`lex-10` 的 `3,499` 是投資活動現金流不是資本支出）、
+同表鄰居（`col-10` 的 `78.23` 總現金 vs 答案 `37.01` 自由現金流）、純巧合（`mix-13` 的 `3.5`
+是市值里程碑表格）。⚠ **沒有加「排除年份」的形狀規則**——兩個數值門檻自己就濾掉了年份，
+而唯一存活的 `2006` 是 `lex-04` 的 CUDA 推出年、**真的是答案**。
+
+**消費語意是 union ＋ all-dropped**：一題的 gold 是所有 literal 命中 chunk 的聯集，留住任何
+一顆就不算全滅 → 聯集偏大只會讓判定**更難**觸發＝ false-negative 方向。
+
+`literal_matcher` 三處收攏成一個定義點（`probe_historical_benefit.py` 改成 import，它的 10/10
+雙向自測因此變成測共用實作）。
+
+### 這條缺口第一次量得到，而第一輪就撈出兩個量尺缺陷
+
+`probe_relevant_ids.py` 多一欄 `答案全滅`。12 題 × 3 輪：**`答案全滅` 0 題**（7 題量得到），
+平均圈選率 0.48 → **「Grader 濾掉的是離題 chunk 不是答案」不再是被缺口擋住的問題，有證據了**。
+
+同一輪撈出兩個**量尺**（不是系統）的缺陷：
+
+1. **`lex-17` 檔層 `gold全滅` 3/3、chunk 層 `答案全滅` N/A**——答案那顆
+   （`MSFT_Fundamentals_20260612#0` 的 `Revenue Growth (YoY): 18.30%`）**根本沒進候選池**。
+   舊指標會把「檢索沒撈到」記成「Grader 丟掉了」，兩件完全不同的病。
+2. **檔層 gold 用精確比對，而 14 題的 `relevant` 是萬用字元**（`AAPL_Fundamentals_*.txt`），
+   **且那 14 題全部是 lexical／colloquial**——正好是這支最該量的一類。它們的檔層指標
+   一直是結構性 N/A。已改用 `fnmatch`。⚠ 是加了 chunk 層 gold（用 fnmatch）之後**兩欄
+   對不上**才被逼出來的，不是想出來的。
+
+### 「億」發生頻率的分母：從只 print 變成落地到結果檔
+
+`rq.finalize_answer_units(..., stats=dict)` 填兩個計數（`yi_stripped`／`yi_repaired`）與逐筆
+明細，經 graph state → `run_agentic` → record 的 `unit_stats` 欄位寫進結果檔。跑一批就有分母
+（① 與 ③ 觸發的每一筆都代表 LLM 違反 Rule 11 自己寫了億）。
+
+- **刻意用 out-param 不用模組層全域**：`_node_execute` 是 ThreadPoolExecutor，全域會被別的
+  執行緒蓋掉，而蓋掉後的外觀與「這一題沒觸發」完全相同。
+- **刻意不改回傳型別**：三個呼叫端，改成 tuple 會讓漏改的那個安靜地把 tuple 當字串接下去。
+- **`None` 與 `{}` 不可合併**：`None` ＝ 沒經過後處理（崩潰降級那條路確實不經過），
+  `{}`／全 0 ＝ 經過但沒觸發。合併會把降級題算進分母＝頻率被系統性低估。
+
+**閘門⑲l（12 項）**，265 → **277**。⚠ 判別力全在誤報對照——陽性那兩條，一個「stats 一律
+填 1」的實作也會過。3/3 變異全抓到：① stats 只在觸發時才填 → ⑲l4 ② record 把缺席填成 `{}`
+→ ⑲l10 ③ 呼叫點拿掉 `stats=` → ⑲l6。
+⚠ **⑲l3 的測資第一版寫反了**（拿 `8.475 億` 去找 `8.475 billion`），自測當場 FAIL。
+
+### RAGAS judge 換掉，並揭出一個會靜默吃掉主指標的預設值
+
+`DEFAULT_RAGAS_MODEL`：`openai/gpt-oss-120b`（410 Gone）→ **`openai/gpt-oss-20b`**。
+
+**為什麼不是現在的 `GEN_MODEL` `nemotron-3-super`**：`judge_regression.py` 11 案例實測
+`gpt-oss-20b` 10/11 vs `gpt-oss-120b` 9/11，而後者被判掉的理由之一就是**與 gen_model 同一支
+（自評偏誤）**——judge 與 generator 同源是本 repo 量過並否決的形狀。09-03 的 bake-off 只量了
+三個結構化角色（判準是輸出穩定性與延遲），**沒有量判定品質**，外推到 judge 沒有根據。
+liveness 逐一實測：20b ALIVE／120b **410 Gone**／nemotron ALIVE。
+
+**換完暴露出的東西**：`--timeout` 預設 120 秒對新 judge 不夠，`answer_correctness`
+（六個指標裡最貴，要拆 claim 逐條比對）**逾時 → 靜默變 NaN**，而輸出裡 NaN 印成 `n/a`、
+外觀與「這個指標算不出來」相同。**那正是 CLAUDE.md 說唯一還有空間的指標** → 一整輪跑分
+會在最重要的那格上無聲歸零。預設拉到 **420**，同兩題就算得出來（0.615／0.513）。
+
+⚠ **所有既有 RAGAS 聚合值就此失去可比性**：`GOLD_BASELINE`／`NOISE` 都是舊 judge 量的，
+新 judge 上重量之前**一律不可引用**（腳本自己會印這句）。重量本身還沒做，留在 BACKLOG。
+
+### 同日再換一次 judge：`gpt-oss-20b` → `google/gemma-4-31b-it`（兩支 judge 一起）
+
+上一條換完幾小時就發現**太慢**——一輪 65 題 RAGAS 六指標是幾百次呼叫，judge 的中位延遲
+直接決定跑不跑得完。`gpt-oss-20b` 沒跑過任何一輪全量，所以這次換**不損失任何可比性**。
+
+**bake-off**（5 模型 × 3 個 judge 角色 × 3 輪；角色＝NLI 裁決／rubric 評分／長 context
+faithfulness，判準沿用本 repo 的**輸出穩定性 ＋ 延遲**）：
+
+| 模型 | parse | 判定對 | 中位 | max | 事故 |
+|---|---|---|---|---|---|
+| `openai/gpt-oss-20b`（前任） | 9/9 | 9/9 | 8.8s | 18.6s | — |
+| `minimaxai/minimax-m3` | 7/9 | 7/9 | 10.5s | 16.2s | **429 ×2** |
+| **`google/gemma-4-31b-it`** | 9/9 | 9/9 | **3.0s** | 24.0s | — |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | 8/9 | 8/9 | 9.0s | 16.0s | 503 ×1 |
+| `nvidia/nemotron-3.5-lightning-30b-a3b` | 9/9 | 9/9 | **33.1s** | 38.3s | — |
+
+**⚠ 這場 bake-off 對「判定品質」零判別力**——五個全 9/9，那三個角色太容易。它量到的
+**只有延遲與可用性**，不可拿來說 gemma 判得準；判別力仍要靠 gold 上限重量（BACKLOG）。
+
+**⚠ TTFT 榜與真實 judge 負載是反的。** 候選是照一份「1+1=?」的 TTFT 榜挑的，而那個量法
+量不到 judge 真正會失敗的方式：TTFT 榜首 `minimax-m3`（131ms）第 8 次呼叫就 429；TTFT 第五
+的 `nemotron-3.5-lightning`（2.1s）把思考過程寫進 content → 中位變 **33 秒＝比前任慢 4 倍**。
+**單 token 延遲量不到 judge 會失敗的方式。**
+
+**選非推理模型是刻意的**：本 repo 栽過兩次「reasoning token 吃光正文額度 → 靜默吐空字串」
+（`TABLE_SUMMARY_MAX_TOKENS`，`gpt-oss-120b` @200 是 10/10 全空），而 `gpt-oss-20b` 在那份
+TTFT 榜上正是回「無內容」。`gemma-4-31b-it` 是 instruct 模型，沒有這條路。
+
+**同時換的還有 `eval_generation_llm_judge.DEFAULT_JUDGE_MODEL`**（correctness judge）。
+⚠ 該檔記著的 `20b 10/11 vs 120b 9/11` **是綁在 20b 上的，對 gemma 不成立**，要拿新的就跑
+`judge_regression.py`——而那支不是零噪音（同碼同模型三個單輪 10/11、9/11、11/11）。
+
+**沒換的兩個 20b，理由不同**：`unstructured_components.TABLE_SUMMARY_MODEL` 走 **Groq 不是
+NIM**（gemma 不在 Groq 上），且是 ingest 專用、換了要 `--rebuild` 才生效，CLAUDE.md 明訂換它
+要先 bake-off ＋ `verify_table_captions.py`；`ablate_retrieval_model.MODEL_SMALL` 是 **A/B 臂的
+定義**不是預設值，而 `MODEL_BIG` 已是死的 120b——換一半會讓那支從此沒有意義。
+
+**驗收**：RAGAS 端 2 題 smoke（`sem-01`／`lex-03`）**六指標全部算得出來、零 NaN**
+（`answer_correctness` 0.643／0.609）。⚠ `--timeout` 420 是在 20b 上量的，**gemma 上沒有重量**
+——420 只是上界，留著無害，要往下調得先量。
+
 ## 2026-09-04
 
 ### 端到端跑出來的洞：backstop 的證據判準對「表格來源」結構性失明

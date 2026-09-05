@@ -1133,6 +1133,11 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
         # 是同一個消費端。⚠ 刻意不併進 `answer` 字串：那會動到既有結果檔的答案文字，而顯示這件事
         # 由呼叫端負責（CLI 印、SSE 送事件），跟「注入生成」是兩個獨立的通道。
         "period_notes": final.get("period_notes", []),
+        # 金額單位後處理的計數與明細（見 `rq.finalize_answer_units` 的 stats）。
+        # ⚠ 降級路徑（graph.invoke 崩潰那條）**不會有這一格**——它走 `_fallback_local_summary`，
+        #   根本沒經過 `finalize_answer_units`。消費端要把「缺這格」與「這格是 0」分開讀，
+        #   否則崩潰降級的題會被算進「LLM 這次沒寫億」的分母裡。
+        "unit_stats": final.get("unit_stats") or {},
     }
 
 

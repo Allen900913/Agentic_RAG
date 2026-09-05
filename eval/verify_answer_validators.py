@@ -1916,6 +1916,163 @@ def gate19_unit_finalization():
                 n_bare == allowed,
                 f"實得 {n_bare} 次（繞過三層組裝＝那條路徑重新失明）")
 
+    # ── ⑲l `stats` out-param：「億」發生頻率的分母（2026-09-04 加）
+    #     BACKLOG〈量不到：先斬後奏的「億」發生頻率〉缺的就是這個分母。① 與 ③ 觸發的每一筆
+    #     都代表 **LLM 違反 Rule 11 自己寫了億**，所以計數就是分子、跑過的題數就是分母。
+    #     ⚠ **判別力幾乎全在誤報對照**：陽性那兩條，一個「stats 一律填 1」的實作也會過；
+    #       會出事的是它把「沒觸發」與「沒經過」混成同一格，或動到不傳 stats 時的既有行為。
+    _st: dict = {}
+    F("營收為 $82,886 百萬美元（約 $82.9 億美元）", KB, stats=_st)
+    _assert("⑲l1 ① 觸發時 yi_stripped 計數正確",
+            _st.get("yi_stripped") == 1, f"實得 {_st.get('yi_stripped')!r}")
+    _assert("⑲l2 明細逐筆可稽核（不是只有計數）",
+            len(_st.get("yi_stripped_detail") or []) == _st.get("yi_stripped"),
+            f"實得 {_st.get('yi_stripped_detail')!r}")
+
+    # ⚠ 測資必須是**孤立**的億且來源有 `$N billion`（證據 A 的形狀）。第一版寫成
+    #   `8.475 億` 去找 `8.475 billion`，方向搞反 → 當場 FAIL。
+    _st3: dict = {}
+    F("營收為 84.75 億美元。", KB, stats=_st3)
+    _assert("⑲l3 ③ 觸發時 yi_repaired 計數正確且明細帶 before/after",
+            _st3.get("yi_repaired") == 1
+            and set((_st3.get("yi_repaired_detail") or [{}])[0]) == {"before", "after"},
+            f"實得 {_st3!r}")
+
+    # 誤報對照①：**沒觸發**必須是 0，不是「這一格不存在」。少了它，一個「只在觸發時才
+    # 填 stats」的實作也會通過 ⑲l1/⑲l3——而那會讓消費端分不出「LLM 這次乖」與「這一題
+    # 根本沒經過後處理」（崩潰降級走 `_fallback_local_summary`，確實不經過）。
+    _st0: dict = {}
+    F("營收為 $84.75 billion。", KB, stats=_st0)
+    _assert("⑲l4 誤報對照：沒觸發時兩個計數都是 0 而**不是缺席**",
+            _st0.get("yi_stripped") == 0 and _st0.get("yi_repaired") == 0,
+            f"實得 {_st0!r}")
+
+    # 誤報對照②：不傳 stats 時**輸出逐字不變**。這是加參數這件事本身的回歸護欄
+    #（同 ⑲d 的理由：既有基準不可被這層動到）。
+    for _txt in ("營收為 $82,886 百萬美元（約 $82.9 億美元）",
+                 "總營收為 716,924 百萬美元（即 716.924 億美元）",
+                 "營收為 84.75 億美元（$84.75 billion）"):
+        _probe: dict = {}
+        _assert(f"⑲l5 誤報對照：帶不帶 stats 的輸出逐字相同（{_txt[:14]}…）",
+                F(_txt, KB) == F(_txt, KB, stats=_probe))
+
+    # 接線（同 ⑮e 的教訓：呼叫點寫了 `stats=` 不代表值真的流到結果檔）。
+    _g = Path("agentic_rag_version/graph.py").read_text(encoding="utf-8")
+    _assert("⑲l6 graph 的 finalize 呼叫點有傳 stats=",
+            "finalize_answer_units(answer, chunks, web_extra=web_extra, stats=" in _g)
+    _assert("⑲l7 synthesize 把 unit_stats 放進回傳 state（否則 stats 收了也上不去）",
+            '"unit_stats": _unit_stats' in _g)
+    _assert("⑲l8 run_agentic 對外吐 unit_stats",
+            '"unit_stats": final.get("unit_stats")'
+            in Path("agentic_rag_version/__init__.py").read_text(encoding="utf-8"))
+
+    # ⑲l9 是這一組最重要的一條：**值真的流進結果檔**。⑲l6~⑲l8 只問「有沒有寫這個名字」，
+    # 那照樣可能傳一個永遠是空的變數（⑮e 就是被這件事教的）→ 這裡拿真實 stats 餵
+    # **生產的 record 建構子**，驗欄位值。
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("_runagentic_eval", "eval/run_agentic_on_evalset.py")
+    _mod = _ilu.module_from_spec(_spec)
+    try:
+        _spec.loader.exec_module(_mod)
+        _rec = _mod._record_from_agentic(
+            {"id": "t", "category": "lexical", "query": "q"}, "ans", [], [], [], _st)
+        _assert("⑲l9 真實 stats 經生產 record 建構子後仍讀得到 yi_stripped",
+                (_rec.get("unit_stats") or {}).get("yi_stripped") == 1, f"實得 {_rec.get('unit_stats')!r}")
+        _rec_none = _mod._record_from_agentic(
+            {"id": "t", "category": "lexical", "query": "q"}, "ans", [], [], [], None)
+        # 誤報對照③：崩潰降級那條路沒有 stats，必須留 None 而**不可**被填成 {} 或 0——
+        # 併成同一格會把降級題算進分母，讓「億」頻率被系統性低估。
+        _assert("⑲l10 誤報對照：沒有 stats 時記成 None，與『有經過但沒觸發』區分得開",
+                _rec_none.get("unit_stats") is None, f"實得 {_rec_none.get('unit_stats')!r}")
+    except Exception as _e:      # noqa: BLE001 — import 失敗也是一種接線壞掉
+        _assert("⑲l9 真實 stats 經生產 record 建構子後仍讀得到 yi_stripped", False, repr(_e))
+        _assert("⑲l10 誤報對照：沒有 stats 時記成 None", False, repr(_e))
+
+    # ── ⑲m `$N 億`：幣別詞可省，但只在有 `$` 前綴時（2026-09-05 加）
+    # **這一組是端到端跑出來才補的，不是想出來的**——⑲a~⑲l 全綠時，真實答案
+    # （`gj_multiyear_r2_unitstats.json` 的 col-11）仍吐出「增加 29% 至 $54.5 億」，
+    # 而來源逐字寫著 `Microsoft Cloud revenue increased 29% to $54.5 billion`＝差 10 倍。
+    # 成因是舊 `_YI_SOLO_RE` 把幣別詞寫成**無條件必填**，於是那份答案匹配到 0 個。
+    # ⚠ 教訓同 ⑲k：**測資的形狀與生產不同，那條路等於從來沒被測過**。⑲a~⑲l 的
+    #   測資全部寫成 `N 億美元`，而 LLM 實際會寫 `$N 億`。
+    # ⚠ **判別力幾乎全在誤報對照**：陽性那兩條，一個「看到億就乘 10」的實作也會過；
+    #   會出事的是它把非金額計數改掉——那正是這條規則當初從嚴的理由（news-10 / mi-11）。
+    _M_SRC = [{"content": "Microsoft Cloud revenue increased 29% to $54.5 billion. "
+                          "Intelligent Cloud revenue increased $22.1 billion or 29%."}]
+
+    _assert("⑲m1 陽性：`$54.5 億` 依來源修成 `545 億美元（$54.5 billion）`",
+            F("Microsoft Cloud 收入增加 29% 至 $54.5 億。", _M_SRC)
+            == "Microsoft Cloud 收入增加 29% 至 545 億美元（$54.5 billion）。")
+
+    # ⑲m2：col-11 的五處逐字凍結。**凍在測試檔裡、不讀 `experiments/`**（同 ② 的教訓：
+    # 讀產物的話，修法一生效陽性就消失，量尺就跟著被測物一起動了）。
+    _M_REAL = ("Intelligent Cloud 收入增加 $22.1 億或 29%，其中 Server products 收入增加 $21.8 億或 31%。"
+               "三個月內 Intelligent Cloud 收入增加 $7.9 億，Server products 增加 $7.8 億。"
+               "Microsoft Cloud 收入增加 29% 至 $54.5 億。")
+    _M_SRC5 = [{"content": "increased $22.1 billion or 29%; increased $21.8 billion or 31%; "
+                           "increased $7.9 billion; increased $7.8 billion; "
+                           "Microsoft Cloud revenue increased 29% to $54.5 billion."}]
+    _m_stats = {}
+    _m_out = F(_M_REAL, _M_SRC5, stats=_m_stats)
+    _assert("⑲m2 陽性：col-11 的五處 `$N 億` 全部被修（真實答案逐字）",
+            _m_stats.get("yi_repaired") == 5, f"實得 {_m_stats.get('yi_repaired')}")
+    _assert("⑲m2b 五處的值都是 ×10（不是只改了格式）",
+            all(x in _m_out for x in ("221 億美元", "218 億美元", "79 億美元",
+                                      "78 億美元", "545 億美元")), _m_out[:160])
+
+    # ⑲m3~⑲m6 誤報對照：**沒有 `$` 前綴的一律不准動**。
+    # ⑲m3 是逐字的歷史回歸（news-10 / mi-11）：來源剛好有 `$10 billion` 時，
+    # 舊的「幣別詞可選」實作會把「10 億使用者」改成「100 億美元（$10 billion）使用者」。
+    _M_NEG_SRC = [{"content": "revenue of $10 billion and $2.57 billion; 10 billion users."}]
+    for _t, _why in [("我們的平台有 10 億使用者。", "⑲m3 非金額計數（news-10 / mi-11 的逐字回歸）"),
+                     ("流通在外股數 2.57 億股。", "⑲m4 非金額計數（股數）"),
+                     ("出貨量達 25 億部裝置。", "⑲m5 非金額計數（裝置數）"),
+                     ("營收 10 億元。", "⑲m6 `億元` 不是本層的幣別（無 `$` 亦無 美元/歐元）")]:
+        _assert(f"{_why} → 逐字不變", F(_t, _M_NEG_SRC) == _t, f"實得 {F(_t, _M_NEG_SRC)!r}")
+
+    # ⑲m7 誤報對照：`$N 億（$N billion）` 這種**已配對**的形狀由 ① 負責（剝掉 LLM 的億）、
+    # ② 重算，③ **一次都不該觸發**。少了這條，一個「③ 也去處理配對形狀」的實作會兩層都動，
+    # 而 ② 不冪等 → 值會被乘兩次。
+    # ⚠ **這一條的第一版斷言是我寫錯的**（原本斷言「`545 億` 不得出現」）：`545 億美元` 正是
+    #   ① ＋ ② 算出來的**正確**結果，錯的是期望值不是系統。改成驗「③ 不觸發 ＋ 值正確」。
+    _M_DUAL = "Microsoft Cloud 收入增加至 $54.5 億（$54.5 billion）。"
+    _m_d = {}
+    _m_dout = F(_M_DUAL, _M_SRC, stats=_m_d)
+    _assert("⑲m7 誤報對照：已配對的 `$N 億（...）` 由 ①②處理，③ 一次都不觸發",
+            _m_d.get("yi_repaired") == 0 and _m_d.get("yi_stripped") == 1,
+            f"stripped={_m_d.get('yi_stripped')} repaired={_m_d.get('yi_repaired')}")
+    _assert("⑲m7b 值正確（54.5 billion → 545 億美元，不是乘兩次）",
+            "545 億美元（$54.5 billion）" in _m_dout, _m_dout)
+
+    # ⑲m11 ① 剝掉億時，前綴的 `$` 不可留成孤兒（舊版吐 `$$54.5 billion` → `$545 億美元`）。
+    _assert("⑲m11 ① 吃掉前綴 `$`，輸出不得出現 `$$` 或 `$N 億美元`",
+            "$$" not in _m_dout and "$545 億" not in _m_dout, _m_dout)
+
+    # ⑲m8 **這一組最重要的一條**：`_yi_values`（產生證據 B）與 `repair_yi_against_source`
+    # （執行修改）必須用**同一個**資格判準。兩邊各判各的，就會出現「被當成證據卻不會被修」
+    # 或反過來的形狀——而那是靜默的：外觀與「這一題沒觸發」完全相同。
+    _M_MIX = "有 10 億使用者，營收 $3.5 億，另有 12.5 億美元的投資。"
+    _m_vals = ar.rq._yi_values(_M_MIX)
+    _assert("⑲m8 `_yi_values` 只收金額形狀（`$3.5 億` 與 `12.5 億美元` 收，`10 億使用者` 不收）",
+            _m_vals == {3.5, 12.5}, f"實得 {_m_vals}")
+    _m_repaired = {b for b, _ in ar.rq.repair_yi_against_source(
+        _M_MIX, "revenue $3.5 billion; investment $12.5 billion; 10 billion users")[1]}
+    _assert("⑲m8b 會被修的形狀 ⊆ 被當成證據的形狀（同一個判準，不是兩套）",
+            all(("$3.5" in b or "12.5" in b) for b in _m_repaired) and
+            not any("使用者" in b for b in _m_repaired), f"實得 {_m_repaired}")
+
+    # ⑲m9 誤報對照：排除條款對 `$` 前綴形狀一樣要生效——來源另有 n/10 的 billion 值時，
+    # 代表答案可能本來就對，不准改。少了這條，新放行的形狀就沒有「無從定罪則不動」的保護。
+    _assert("⑲m9 誤報對照：來源有 `$5.45 billion` 時 `$54.5 億` 不動（排除條款）",
+            F("金額為 $54.5 億。", [{"content": "amount was $5.45 billion"}]) == "金額為 $54.5 億。",
+            F("金額為 $54.5 億。", [{"content": "amount was $5.45 billion"}]))
+
+    # ⑲m10 回歸護欄：新放行的形狀不得擾動既有的正常路徑（同 ⑲d 的作法）。
+    _M_OK = "營收為 84.75 億美元（$8.475 billion）。"
+    _assert("⑲m10 誤報對照：既有的正確雙寫逐字不變",
+            F(_M_OK, [{"content": "revenue was $8.475 billion"}]) == _M_OK,
+            F(_M_OK, [{"content": "revenue was $8.475 billion"}]))
+
     # ── ⑲j 拒答不受影響（拒答沒有數字，但這層跑在所有路徑上）
     REF = "I don't have enough information in my knowledge base to answer this."
     _assert("⑲j 拒答文字逐字不變", F(REF, KB) == REF)

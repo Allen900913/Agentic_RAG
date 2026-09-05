@@ -16,19 +16,39 @@
 選型證據 `experiments/_model_bakeoff_20260903.log`——**生產管線是活的**（2026-09-04 端到端確認）。
 **沒換完的是 eval 側，而且每一支的卡點都不同**：
 
-- `eval/eval_ragas_vs_rubric.py:65` `DEFAULT_RAGAS_MODEL` — **卡在「換成誰」，不是「換不換」**。
-  ⚠ **不要寫成「留著是為了保住可比性」**（2026-09-04 一度這樣寫，是錯的）：舊 judge 已經
-  410，**產不出任何新數字**，可比性在退役那一刻就沒了。留著死常數保不住任何東西。
-  ⚠ **也不要順手改成 `nemotron-3-super`**——那正是現在的 `GEN_MODEL`，而
-  `eval_generation_llm_judge.py:54-57` 記著 `judge_regression.py` 的 11 案例實測：
-  `gpt-oss-20b` 10/11 vs `gpt-oss-120b` 9/11，**後者被判掉的理由之一就是「與 gen_model
-  同一支（自評偏誤）」**。judge 與 generator 同源是這個 repo 量過並否決的形狀。
-  ⚠ 2026-09-03 的 bake-off **只量了三個結構化角色**（plan／check／filter），判準是輸出
-  穩定性與延遲——**它沒有量判定品質**，外推到 judge 沒有根據。
-  **可行起點**：`gpt-oss-20b` 還活著、且已是 correctness judge 的預設；換過去之後跑
-  `judge_regression.py`（`--repeat 3` 以上、看逐題 k/n）確認判別力，再重跑一個錨點基準。
-  📌 **correctness judge 沒有壞**：它 2026-07-19 就換成 `gpt-oss-20b` 了。死的只有 RAGAS judge
-  ——原條目寫「判定角色一起斷」是把兩個 judge 混為一談。
+- ~~`eval/eval_ragas_vs_rubric.py` `DEFAULT_RAGAS_MODEL`~~ → **2026-09-04 換成 `google/gemma-4-31b-it`，見 CHANGELOG。**
+  （同日先換 `gpt-oss-20b`，中位 8.8s 太慢，當天再換掉；20b 沒跑過任何一輪全量。）
+  選它不選 `nemotron-3-super` 的理由（judge 與 generator 同源＝本 repo 量過並否決的形狀）
+  逐條寫在該檔常數上方。⚠ **換完暴露出一個沒人預期的東西**：`--timeout` 預設 120 秒
+  對新 judge 不夠，`answer_correctness` 會逾時 → **靜默變 NaN**，而那正是唯一還有空間的
+  指標。預設已拉到 420。⚠ **所有既有 RAGAS 聚合值就此失去可比性**（換 judge ＝ 換量尺）。
+  ~~`GOLD_BASELINE`／`NOISE` 兩組常數在新 judge 上重量之前一律不可引用~~
+  → **2026-09-06 兩組都已在 gemma ＋ 65 題上重量完畢**（見 [`CHANGELOG.md`](CHANGELOG.md)）：
+  ① **gold 當答案餵回去**（`experiments/ragas_65q_gemma_goldceiling.json`）：`answer_correctness`
+     **.987**（舊 judge 是 .972）→ **判別力沒有變差**，「連標準答案都認不出來」這個擔心不成立。
+     六個指標 0 筆 NaN，gold 上限整組換新。
+  ② **同一份輸入評兩次量噪音**（`ragas_65q_gemma_sysA2` vs `sysB`，n=65）：correctness **.008**
+     → 比舊值小，取較大值後**維持 .012**。真正被推高的是另外兩個：**nv .008 → .012**、
+     **faithfulness .010 → .021**（逐題最大是 `mix-15` 1.000 → 0.500，整題砍半）。
+     擔心的「MDE 粗一倍以上」只在 faithfulness 這一格成真，correctness 那格沒有。
+  ⚠ **判讀結論不變**：五個指標已達或超過 gold 上限，唯一有空間的仍是 `answer_correctness`
+    （系統 .654 vs 上限 .987 ＝ 落差 **.333**，舊 judge 上是 .33）。換 judge 沒有動搖「量尺飽和」。
+  ⚠ **不要用 `judge_regression.py` 驗這件事**（2026-09-04 一度這樣建議，是錯的）：那支打的是
+    `eval_generation_llm_judge.DEFAULT_JUDGE_MODEL` ＝ **correctness judge**，與 RAGAS judge
+    是不同的 prompt、不同的任務。它那組 11 案例的 `20b 10/11 vs 120b 9/11` **也不能外推**——
+    該支自己記著同一份碼三個單輪跑出 10/11、9/11、11/11，**那個差在噪音裡**。
+  ⚠ **實務訊號已經有一個**：`answer_correctness` 在 20b 上單次呼叫要 >120 秒（120b 時代的
+    預設值夠用）。那是成本，不是品質判定，但要跑全量之前先知道。~~`--timeout` 420 是在 20b 上
+    量的，換 gemma 之後沒有重量~~ → **2026-09-06 量到了，而且 420 不夠**：全量第一輪
+    （`ragas_65q_gemma_sysA.json`）有 **11 筆 NaN**（correctness 5、precision 3、faith 2、nv 1）
+    ＝ 那一輪的均值是 60 列算出來的、不可當基準。改用 `--timeout 900 --nvidia-passes 2` 之後
+    降到 **1 筆／0 筆／0 筆**。⚠ 這兩個值是用 CLI 旗標傳的，**預設仍是 420／1**——要不要改預設
+    還沒決定（改了每輪都會多花重跑那一趟的時間）。
+  ⚠ **選型 bake-off 不能拿來回答「判得準不準」**：5 個候選 × 3 個 judge 角色 × 3 輪全部 9/9，
+    那三個角色太容易＝**零判別力**。它只證明了 gemma 不會 429、不會吐空字串、比較快。
+  ⚠ **correctness judge（`eval_generation_llm_judge.DEFAULT_JUDGE_MODEL`）同日一起換成 gemma**，
+    那一支的驗收才是 `judge_regression.py`（11 凍結案例），且它**不是零噪音**：同碼同模型
+    三個單輪 10/11、9/11、11/11 → 看逐題 k/n，不要拿單輪比大小。
 - `eval/gen_reference_answers.py:38` `GEN_MODEL` — 參考答案的生成模型。**這支該換**
   （不換的話第一次跑就 410），換本身安全：現有 `reference_answers.json` 已納版控，
   不重生成就不會被動到。
@@ -57,24 +77,46 @@ live 的就是上面三支。另有 `eval/diagnose_crit_miss.py:32` 與 `eval/re
 
 ---
 
-## 量不到：先斬後奏的「億」發生**頻率**（2026-09-03；接線已修，見 CHANGELOG）
+## ~~量不到：先斬後奏的「億」發生**頻率**~~ → **2026-09-05 量到了，見 CHANGELOG**
 
 修法已完成（`rq.finalize_answer_units` 三層 ＋ 閘門⑲ 26 項，2026-09-04 補證據 B）。
 **剩下的是一個量尺缺口**：
 
-- **新模型犯這個錯的頻率是否高於舊模型，目前沒有答案。**
-  目前唯一的數據點是 2026-09-04 端到端的 **4 次跑觀察到 1 次**（間歇，非零）——樣本太小，
-  只夠說明「不是一次性的」，不夠比較兩代模型。
+- ~~**新模型犯這個錯的頻率是否高於舊模型，目前沒有答案。**~~
+  → **2026-09-05 的 65 題端到端（`gj_multiyear_r2_unitstats.json`）：分母 65、
+  觸發 10 題（15.4%）／共 14 筆（① 2 ＋ ③ 12）、`unit_stats=None` 0 題。**
+  ＝ nemotron-3-super 大約**每 6~7 題違反一次 Rule 11**。
+  ⚠ **與舊模型的比較仍然做不到**（`gpt-oss-120b` 已 410，產不出對照臂）。這個分母能回答的是
+  「backstop 該不該存在」（答：該，這不是偶發），不是「哪一代模型比較糟」。
+  ⚠ 這是**單輪**。要拿它當基準線之前至少再跑一輪——`check_number_defects` 的 ≥2 輪規則
+  同樣適用（Plan 子問題變異會改變答案，也就會改變 LLM 寫不寫億）。
   `X 億美元（$Y million）` 這種**生產契約自帶配對**的形態可以零歧義驗，但**它量不到這個病**——
   既有 147 個結果檔 4543 份答案掃出 **1578 組緊配對、1578 組全對**，因為那些是
   `convert_usd_units_to_yi` **產生的**，不是 LLM 寫的。它量的是「後處理有沒有壞」。
-- 要量「LLM 自己寫了幾次億」，判準是 `repair_yi_against_source` 的三條件（需要來源在手）。
-  **可行做法**：讓 `finalize_answer_units` 在 `verbose` 時把剝掉／修掉的筆數寫進結果檔，
-  跑一批就有分母。目前它只 print，沒有落地。
+- ~~要量「LLM 自己寫了幾次億」…目前它只 print，沒有落地。~~
+  → **2026-09-04 落地了**：`rq.finalize_answer_units(..., stats=dict)` 會填上兩個計數
+  （`yi_stripped`／`yi_repaired`）與逐筆明細，經 graph state → `run_agentic` →
+  `run_agentic_on_evalset` 的 record `unit_stats` 欄位寫進結果檔。閘門⑲l 12 項守它
+  （3/3 變異全抓到）。~~**剩下的只是跑一批**~~ → **2026-09-05 跑完了**，見上。
+  ⚠ **`None` 與 `{}` 不可合併**：`None` ＝ 那一題沒經過後處理（graph 崩潰降級走
+  `_fallback_local_summary`，確實不經過），`{}`／全 0 ＝ 經過但沒觸發。合併會把降級題
+  算進分母，讓頻率被系統性**低估**。⑲l10 就是守這一條。
+  ⚠ 明細**不是判定**：③ 的證據 B 有已知的殘餘誤報方向（見下），要下「新模型比舊模型糟」
+  這種結論之前，明細必須人工讀過。
 - ⚠ **不要用「取同句最近的數字」當配對法**：實測它把期別碼 `202512`、年份 `2026` 當成配對值，
   44＋84 筆**全是誤報**。這是 2026-09-03 那一輪的第六次量尺失效。
 
 **復活條件**：有人要主張「該換回別的模型」或「該加強 prompt」時——那兩個主張都需要這個分母。
+現在分母有了，缺的是**第二輪**與（做不到的）舊模型對照臂。
+
+### 已知極限：後處理的缺口只能靠端到端跑出來（2026-09-05）
+
+三次了，每一次都是全綠的閘門 ＋ 一次真實跑：證據 B（③ 對表格來源失明）、⑲k（測資是英文句子
+而生產是 markdown 表格）、⑲m（測資寫 `N 億美元` 而 LLM 寫 `$N 億`）。
+**共同形狀：測資的形狀與生產不同，那條路等於從來沒被測過。**
+⚠ 這**不是**「多寫幾條斷言就好」——三次的形狀都是事前想不到的，因為要先看到 LLM 實際怎麼寫。
+**可操作的結論**：每次換 LLM 或改 `SYSTEM_PROMPT` 的金額規則之後，跑一輪全量並**人工讀
+`unit_stats` 的逐筆明細**，那是目前唯一會揭露新形狀的動作。
 
 ### 已接受的極限：證據 B 的殘餘誤報方向（2026-09-04）
 
@@ -96,9 +138,10 @@ live 的就是上面三支。另有 `eval/diagnose_crit_miss.py:32` 與 `eval/re
 
 ## 量尺缺口（做別的事之前先看這裡：這件事現在量得到嗎）
 
-- **RAGAS 的 `GOLD_BASELINE` 已在 65 題上重量，但 `NOISE` 只量過 1~2 對。**
-  `NOISE["answer_correctness"]` 從 .007 改成 .012 就是因為第二對推翻了第一對（見 [`docs/EVAL.md`](docs/EVAL.md)〈量尺重建〉）。`context_precision` 那格更不可信：新測 .005 vs 舊值 .046，而 .046 的成因（最高排名那筆判定翻面 → 整題 1.0→0.0）隨時會再發生，現在取的是兩者較大值。
-  **卡點是成本**：要收斂門檻得在 `.venv-ragas` 多跑幾對同輸入重評。**引用任何 `NOISE` 常數之前，先看它是幾對量出來的。**
+- **RAGAS 的 `GOLD_BASELINE` 與 `NOISE` 都已在新 judge（gemma ＋ 65 題）上重量，但 `NOISE` 仍只有一對。**
+  `NOISE["answer_correctness"]` 從 .007 改成 .012 就是因為第二對推翻了第一對（見 [`docs/EVAL.md`](docs/EVAL.md)〈量尺重建〉）；2026-09-06 這一對（gemma）又把 **nv .008 → .012、faithfulness .010 → .021** 推高，correctness 這次量到 .008、取較大值後維持 .012。**三對裡有兩對推翻了前一對的某一格**——這就是「一對是抽樣不是上界」的實證。
+  `context_precision` 那格最不可信：三對量到 .046 / .005 / .006，而 .046 的成因（最高排名那筆判定翻面 → 整題 1.0→0.0）隨時會再發生，現在取的仍是最大的 .046。
+  **卡點是成本**：一輪全量在 `.venv-ragas` 要 ~2 小時（`--max-workers 2`，NVIDIA 限速不能再高），要收斂門檻得多跑幾對同輸入重評。**引用任何 `NOISE` 常數之前，先看它是幾對量出來的。**
 
 - **`check_number_defects` 全 PASS ＝ 沒有進度指標。** 零噪音量尺目前只剩護欄功能，任何生成層改動都「量不出變好」。
   做法：用結果檔的頭條百分比候選篩新缺陷，**人工讀完確認是真缺陷才登錄**（實測 6 個旗標有 3 個不是錯）。
@@ -108,7 +151,17 @@ live 的就是上面三支。另有 `eval/diagnose_crit_miss.py:32` 與 `eval/re
   **復活條件**：① 累積到事件數 ≥5；或 ② **造一批必然觸發的題**——gold 是 Fundamentals 的兩位小數比率、且同公司 10-K 有相近整數值的那種（`lex-17` 就是這個形狀）。
   ⚠ 那批題**只用來量這條規則**，不要併進 `eval_set.json`（分母再變一次，跨日分數就再也比不了）。
 
-- **lexical 的缺口在 chunk 層，而 gold 只到檔名。** agentic 在 lexical 平均只承接 **1.93 個 chunk**（全類最低），而 lexical 正是 `context_recall` 唯一明顯輸單發的類別（−0.078）；但**檔案層命中 12/15 與單發完全相同** → 病灶是「同一個檔裡收太少／收錯 chunk」，不是撈錯檔。
+- **lexical 的缺口在 chunk 層，~~而 gold 只到檔名~~** → **chunk 層 gold 2026-09-04 建好了**
+  （[`eval/chunk_gold.py`](eval/chunk_gold.py) ＋ `chunk_gold.json`：41/65 題、83 顆，literal 定位、
+  逐題人工驗證）。`probe_relevant_ids` 多一欄 `答案全滅`，**這條缺口本身已解除**。
+  **第一輪實測（12 題 × 3 輪，2026-09-04）**：`答案全滅` **0 題**（7 題量得到）、平均圈選率 0.48。
+  → **「Grader 濾掉的是離題 chunk 不是答案」現在有證據了**，不再是「被缺口擋住的問題」。
+  ⚠ **樣本小（7 題可量、3 輪）**，且 semantic 那類結構上沒有這把尺（見 chunk_gold `_meta`）。
+  ⚠ **同一輪撈出兩個量尺缺陷**：① `lex-17` 的檔層 `gold全滅` 是 3/3，但 `答案全滅` 是 **N/A**
+  ——答案那顆 chunk **根本沒進候選池**，所以那不是圈選問題是檢索問題（舊指標會把它算成
+  Grader 的錯）② `probe_relevant_ids` 的檔層 gold 用精確比對，而 **14 題的 `relevant` 是萬用字元
+  且全部是 lexical／colloquial** → 那 14 題的檔層指標一直是結構性 N/A，已改用 fnmatch。
+  〔以下為 2026-08-28 的原始診斷，保留〕 agentic 在 lexical 平均只承接 **1.93 個 chunk**（全類最低），而 lexical 正是 `context_recall` 唯一明顯輸單發的類別（−0.078）；但**檔案層命中 12/15 與單發完全相同** → 病灶是「同一個檔裡收太少／收錯 chunk」，不是撈錯檔。
   **卡點＝量尺**：要驗證得先有 chunk 層 gold，而 `eval_set.json` 的 `relevant` 只到檔名。
   附帶事實：`lex-03`／`lex-07`／`lex-14` 三題**兩條管線都撈不到 gold**，那是檢索層問題不是 agentic 問題。
   **2026-08-28 找到很可能的機制**（`probe_relevant_ids.py --repeat 3`）：Grader 的 `relevant_ids` 平均只圈選 **0.53** 的候選，而 `mix-01`／`mix-03` 都是 **0.33**（5 取 ~1.65）——**低承接數很可能就是這個欄位造成的**，不是檢索少撈。

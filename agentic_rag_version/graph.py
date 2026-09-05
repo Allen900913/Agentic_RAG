@@ -755,6 +755,7 @@ class SupervisorState(TypedDict, total=False):
     iterations: int            # execute↔replan 已迭代幾次（防無限迴圈）
     sufficient: bool           # Replanner 判定證據已足、可提前收斂
     answer: str                # 最終答案（未附引用清單；附錄在 run_agentic 收尾加）
+    unit_stats: dict           # `rq.finalize_answer_units` 這一次剝掉／修掉了幾處億（見那支的 stats 說明）
 
 
 _REPLANNER_PROMPT = f"""你是美股情報 RAG 的動態重規劃器。給你「原始問題」與「目前待辦清單（含各自狀態與
@@ -1225,7 +1226,10 @@ def _node_synthesize(state: SupervisorState) -> dict:
     # ⚠ 2026-09-03 改走 `finalize_answer_units`：`convert_usd_units_to_yi` 單獨用有兩個洞——
     #   LLM 先斬後奏寫「億」時它明文不碰（結構性失明），而它自己又不冪等 → LLM 寫的雙寫
     #   會被它吐成巢狀。新入口在它前面先剝、後面再依來源補，順序由那支保證。
-    answer = rq.finalize_answer_units(answer, chunks, web_extra=web_extra)
+    # `unit_stats` 是 BACKLOG〈「億」發生頻率〉缺的分母：① 與 ③ 觸發的每一筆都代表
+    # LLM 違反 Rule 11 自己寫了億。**只在這裡收集、原樣往上傳，不在這裡下判定**。
+    _unit_stats: dict = {}
+    answer = rq.finalize_answer_units(answer, chunks, web_extra=web_extra, stats=_unit_stats)
 
     # 時效聲明由 Python 機械式附加，不要求 Writer 自己記得，也不讓 citation validator 把這段
     # collection metadata 誤當成無引用的回答事實。snapshot 的 todos 不會帶 freshness_gaps。
@@ -1246,7 +1250,7 @@ def _node_synthesize(state: SupervisorState) -> dict:
              if (c.get("source"), c.get("chunk_index")) in _cited]
     answer = answer.rstrip() + _basis_disclosure_notice(
         state.get("query", ""), _used, answer, _todos_ratio_fields(state.get("todos")))
-    return {"answer": answer}
+    return {"answer": answer, "unit_stats": _unit_stats}
 
 
 def build_graph():

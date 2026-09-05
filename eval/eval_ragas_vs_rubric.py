@@ -37,7 +37,8 @@ contexts 的話，context 系指標會是 NaN（answer_relevancy/answer_correctn
         --reference-file eval/reference_answers.json \
         --output eval/ragas_vs_rubric.json
 
-RAGAS 判定 LLM = NVIDIA NIM openai/gpt-oss-120b（對齊 eval 生產判定）。
+RAGAS 判定 LLM = 下方 `DEFAULT_RAGAS_MODEL`（走 NVIDIA NIM）。**刻意不在這裡複述模型名**：
+2026-09-03/04 十二小時內換了兩次，而這一行留在 120b 沒跟上。
 RAGAS 語意相似 embedding = BAAI/bge-m3（對齊生產 dense embedding）。
 
 2026-07-23：拿掉 Groq 支援（GROQ_BASE_URL、EVAL_LLM_PROVIDER 切換、4-key 輪換），全部改走
@@ -62,7 +63,39 @@ import numpy as np
 from dotenv import load_dotenv
 
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
-DEFAULT_RAGAS_MODEL = "openai/gpt-oss-120b"   # NVIDIA NIM，單一 key、無 Groq 免費層 TPD 硬牆
+# RAGAS judge。**2026-09-04 從 `openai/gpt-oss-120b` 換過來**——那支於 2026-09-03T08:00Z
+# 被 NVIDIA 退役（`410 Gone`），留著死常數第一次跑就炸，而且它**保不住任何可比性**：
+# 舊 judge 產不出新數字，可比性在退役那一刻就沒了（2026-09-04 一度把「留著是為了可比性」
+# 寫進 BACKLOG，那是錯的，已更正）。
+# **同日再從 `gpt-oss-20b` 換成 `google/gemma-4-31b-it`**（20b 只當了幾小時的預設，
+# 沒有跑過任何一輪全量，所以這一次換不損失任何可比性）。理由是**跑太慢**：一輪 65 題
+# RAGAS 六指標是幾百次呼叫，judge 的中位延遲直接決定能不能跑。
+# **選型證據**（`scratchpad/judge_bakeoff.py`，5 模型 × 3 個 judge 角色 × 3 輪，
+# 角色是 NLI 裁決／rubric 評分／長 context faithfulness，判準沿用本 repo 的
+# **輸出穩定性 ＋ 延遲**）：
+#   | 模型                              | parse | 判定對 | 中位   | max    | 事故     |
+#   |-----------------------------------|-------|-------|--------|--------|----------|
+#   | openai/gpt-oss-20b（前任）         | 9/9   | 9/9   | 8.8s   | 18.6s  | —        |
+#   | minimaxai/minimax-m3              | 7/9   | 7/9   | 10.5s  | 16.2s  | **429×2**|
+#   | **google/gemma-4-31b-it**         | 9/9   | 9/9   | **3.0s**| 24.0s | —        |
+#   | nemotron-3-nano-omni-…-reasoning  | 8/9   | 8/9   | 9.0s   | 16.0s  | 503×1    |
+#   | nemotron-3.5-lightning-30b-a3b    | 9/9   | 9/9   | 33.1s  | 38.3s  | —        |
+# ⚠ **這場 bake-off 對「判定品質」零判別力**——五個全 9/9，那三個角色太容易。
+#   它量到的**只有延遲與可用性**，不要拿它說 gemma 判得準；判別力要靠下面兩條重量。
+# ⚠ **TTFT 榜與真實 judge 負載是反的**：`minimax-m3`（TTFT 131ms，榜首）第 8 次呼叫就 429，
+#   而 RAGAS 一輪要打幾百次；`nemotron-3.5-lightning`（TTFT 2.1s）把思考過程寫進 content，
+#   中位變 **33 秒**＝比前任慢 4 倍。**單 token 延遲量不到 judge 會失敗的方式。**
+# **為什麼不是現在的 GEN_MODEL `nemotron-3-super`**：`eval_generation_llm_judge.py` 記著
+#   `judge_regression.py` 11 案例實測 `gpt-oss-20b` 10/11 vs `gpt-oss-120b` 9/11，而後者被
+#   判掉的理由之一就是**與 gen_model 同一支（自評偏誤）**——judge 與 generator 同源是本 repo
+#   量過並否決的形狀，換成 nemotron 會原封不動地把它搬回來。gemma 與 nemotron 不同源。
+# **為什麼刻意選非推理模型**：本 repo 栽過兩次「reasoning token 吃光正文額度 → **靜默吐空
+#   字串**」（`unstructured_components.py` 的 `TABLE_SUMMARY_MAX_TOKENS`，gpt-oss-120b @200
+#   是 10/10 全空）。20b 自己在使用者的 TTFT 榜上就回「無內容」。gemma-4-31b-it 是 instruct
+#   模型，沒有這條路。
+# ⚠ **換 judge ＝ 所有既有 RAGAS 聚合值失去可比性**。下面 `print_guardrails` 印的
+#   gold 上限與噪音門檻是綁在**更早的 gpt-oss-120b** 上量的，**在新 judge 上重量之前不可引用**。
+DEFAULT_RAGAS_MODEL = "google/gemma-4-31b-it"   # NVIDIA NIM，單一 key、無 Groq 免費層 TPD 硬牆
 EVAL_SET_PATH = Path("eval/eval_set.json")
 
 # RAGAS 六指標的欄位名（df 欄位 = metric.name）。context_relevance 的實際名稱依 ragas
@@ -190,19 +223,40 @@ _INLINE_CITATION = re.compile(r"\s*【[^】]*?\.(?:html|txt)[^】]*?】")
 #   兩個教訓：① **跨輪比較 RAGAS 分數等於把 judge 噪音算進系統差異**——A/B 兩臂要在
 #   同一批判分裡比，或至少各自附一個同期基準；② 上面①「一對不是上界」那句話寫得很對，
 #   但寫下它的同一支腳本仍然用一對定了 correctness 的門檻。**寫下警告不等於服從警告。**
-NOISE = {"context_recall": 0.017, "context_precision": 0.046, "nv_context_relevance": 0.008,
-         "context_relevance": 0.008, "faithfulness": 0.010, "answer_relevancy": 0.004,
+# 2026-09-06 **換 judge（google/gemma-4-31b-it）之後重量一對**：同一份結果檔
+# experiments/agentic/gj_multiyear_r2_unitstats.json 餵給同一個 judge 兩次
+#（experiments/ragas_65q_gemma_sysA2.json vs ragas_65q_gemma_sysB.json，n=65）。實測 |A2−B|：
+#   recall .006 / precision .006 / **nv .012** / **faith .021** / relevancy .002 / correctness .008
+# → 照上面那條規則取新舊較大值，**兩個被推高**：nv .008 → .012、faithfulness .010 → .021。
+#   faithfulness 那 .021 不是均值的抖動而已——逐題最大 |Δ| 是 **mix-15 的 1.000 → 0.500**（整題砍半），
+#   mix-07 .867 → .500、lex-06 1.000 → .667 同一形狀 → **這個 judge 在 faithfulness 上比舊的抖**。
+# ⚠ 新舊兩組不同源（舊：gpt-oss-120b／100 題；新：gemma／65 題），所以「取較大值」在這裡不是
+#   「兩份證據取聯集」而是**保守**：門檻取大只會要求更多證據，錯的方向是安全的那一邊。
+# ⚠ 一樣只有**一對**。上面 ① 那句「一對是抽樣不是上界」對這一對逐字成立，**不要拿它往下調門檻**。
+# ⚠ A2 臂有 1 題（`mix-13`）的 answer_correctness 仍是 NaN（`--nvidia-passes 2 --timeout 900`
+#   之後剩的唯一一筆；同一支腳本預設值那輪是 11 筆）→ correctness 的 |Δ| 算在 n=64 的交集上。
+NOISE = {"context_recall": 0.017, "context_precision": 0.046, "nv_context_relevance": 0.012,
+         "context_relevance": 0.012, "faithfulness": 0.021, "answer_relevancy": 0.004,
          "answer_correctness": 0.012}
-# 2026-08-20 在 **65 題**上重量（experiments/ragas_gold_baseline_65q.json）。
-# 作法：把 reference_answers.json 原文當成系統答案，**contexts 沿用同一份 agentic 跑分結果**
-# （experiments/agentic/gj_mdna_65q_r1.json）→ 只換 answer 這一個變因。
-# ⚠ 舊的 n=100 常數保留在下方註解供對照，**不要再引用**：題目組成變了，分母與難度分佈都不同。
-#   舊值：correctness .989 / faith .656 / relevancy .842 / recall .766 / precision .822 / nv .965
-#   換算下來最大的變化是 **answer_correctness .989 → .972**——gold 在 65 題上沒有像在 100 題上
-#   那麼容易拿滿分，所以「距上限還有多少」這個判讀在新舊之間**不可直接比**。
-GOLD_BASELINE = {"answer_correctness": 0.972, "faithfulness": 0.659, "answer_relevancy": 0.871,
-                 "context_recall": 0.788, "context_precision": 0.843,
-                 "nv_context_relevance": 0.969, "context_relevance": 0.969}
+# 2026-09-06 **換 judge 之後在 gemma 上重量**（experiments/ragas_65q_gemma_goldceiling.json，
+# 輸入 experiments/ragas_gold_as_answer_65q_gemma_input.json）。作法與 2026-08-20 那次**逐字相同**：
+# 把 reference_answers.json 原文當成系統答案、**contexts 沿用同一份 agentic 結果**
+#（experiments/agentic/gj_multiyear_r2_unitstats.json）→ 只換 answer 這一個變因。六個指標 **0 筆 NaN**。
+# ⚠ 這裡**不取新舊較大值**（那是噪音門檻的規則，理由不同）：gold 上限是拿來跟**同一輪**系統分數比的，
+#   拿 gemma 判的系統分數去比 gpt-oss-120b 判的上限，正是本檔明令禁止的跨 judge 比較 → **整組換掉**。
+#   舊值（gpt-oss-120b／65 題）留著供對照，**不要引用**：
+#     correctness .972 / faith .659 / relevancy .871 / recall .788 / precision .843 / nv .969
+#   更舊的 n=100：correctness .989 / faith .656 / relevancy .842 / recall .766 / precision .822 / nv .965
+# 判讀（系統臂＝A2/B 兩輪均值）：
+#   · answer_correctness .987 vs 系統 .654 → **唯一還有空間的指標，落差 .333**（舊 judge 上是 .33，
+#     換 judge 沒有改變這個結論——那 0.33 對 retrieval 免疫這件事也跟著不變）
+#   · faithfulness .726 vs 系統 .876 → **gold 自己比系統低 .149**，成因與 2026-08 同一個
+#    （gold 依 gold_files 生成、與 agentic 實際撈到的 contexts 不同源）→ 沒有可追空間
+#   · recall .826／precision .780／nv .923 → 系統與上限的差全部落在各自噪音門檻內 ＝ 已到頂
+#   · answer_relevancy .888 vs 系統 .859 → +.029，高於 .004 門檻 ＝ **唯一的第二條細縫**（很窄）
+GOLD_BASELINE = {"answer_correctness": 0.987, "faithfulness": 0.726, "answer_relevancy": 0.888,
+                 "context_recall": 0.826, "context_precision": 0.780,
+                 "nv_context_relevance": 0.923, "context_relevance": 0.923}
 
 
 def _print_interpretation_guide(overall: dict, present: list[str]) -> None:
@@ -220,20 +274,26 @@ def _print_interpretation_guide(overall: dict, present: list[str]) -> None:
         if noise is not None:
             notes.append(f"跑分差異 <{noise:.3f} 不可解讀")
         if gold is not None:
-            if v >= gold - 0.005:
+            # 「差多少才算真的有空間」的容差＝該指標自己的噪音門檻（下限 .005）。
+            # ⚠ 寫死 .005 會讓 context_precision（噪音 .046）印出「距上限 +0.008」,
+            #   而那個 .008 依定義就讀不出來——護欄自己製造了它要擋的那種誤讀。
+            tol = max(0.005, noise or 0.0)
+            if v >= gold - tol:
                 notes.append("已達/超過 gold 水準 → 無可追空間")
             else:
                 notes.append(f"距 gold 上限 {gold - v:+.3f}")
         print(f"  {m:<24}{v:>8.3f}{(f'{noise:.3f}' if noise else 'n/a'):>10}"
               f"{(f'{gold:.3f}' if gold else 'n/a'):>11}   {'；'.join(notes)}")
-    print("  ⚠ 這些常數綁定「NVIDIA gpt-oss-120b judge + **100 題** eval_set + 當時的 reference」。")
-    print("    換 judge 模型、換題庫、或大改 reference 之後必須重量,別沿用。")
-    print("  ✔ 2026-08-20：gold 上限與噪音門檻**都已在 65 題上重量**，可以引用。")
-    print("     ⚠ 噪音量了**兩對**（correctness 已因第二對從 .007 上調到 .012）。門檻取較大值——")
-    print("        ⛔ **不要拿本次分數去比別輪跑出來的聚合值**：實測同一份結果檔兩次判分，")
-    print("           correctness 就差 .012。跨輪比＝把 judge 噪音算進系統差異（2026-08-21 誤判過一次）。")
-    print("        尤其 context_precision：最高排名判定翻面整題就 1.0→0.0，這次剛好沒翻。")
-    print("     ⛔ 跨 2026-08-19 的分數一律不可直接比：題庫從 100 題變成 65 題，分母與難度分佈都不同。")
+    print("  ⚠ 這些常數綁定「judge 模型 ＋ 題庫 ＋ 當時的 reference」三者。換掉任何一個都必須重量,別沿用。")
+    print(f"  ✔ **2026-09-06 已在 {DEFAULT_RAGAS_MODEL} ＋ 65 題上重量**（judge 於 2026-09-04 換掉,")
+    print("     因為 gpt-oss-120b 被 NVIDIA 退役、410）：gold 上限**整組換新**,六個指標 0 筆 NaN；")
+    print("     噪音門檻照既有規則取新舊較大值 → nv .008→.012、faithfulness .010→.021 被推高,其餘不動。")
+    print("     ⚠ 只量了**一對**。「一對是抽樣不是噪音的上界」對這一對逐字成立,別拿它往下調門檻。")
+    print("  ⛔ **不要拿本次分數去比別輪跑出來的聚合值**：實測同一份結果檔判兩次,")
+    print("     faithfulness 就差 .021（mix-15 整題 1.000→0.500）。跨輪比＝把 judge 噪音算進系統差異")
+    print("     （2026-08-21 誤判過一次）。A/B 兩臂要在同一批判分裡比,或各自附一個同期基準。")
+    print("     尤其 context_precision：最高排名判定翻面整題就 1.0→0.0。")
+    print("  ⛔ 跨 2026-08-19（題庫 100→65 題）與跨 2026-09-04（換 judge）的分數,一律不可直接比。")
 
 
 def strip_citation_footer(text: str) -> str:
@@ -447,7 +507,15 @@ def main():
                     help="只評指定 query id。RAGAS 每題獨立評分，改了少數題的 reference 時"
                          "可只重跑那幾題再拼接回原結果，避免整份重跑多吃 judge 噪音。")
     ap.add_argument("--max-workers", type=int, default=2, help="RAGAS 併發（NVIDIA 限速，別開太高）")
-    ap.add_argument("--timeout", type=int, default=120, help="RAGAS 每次 judge 呼叫的逾時秒數")
+    # ⚠ **預設 2026-09-04 從 120 拉到 420，跟著換 judge 一起做的**（量在 `gpt-oss-20b` 上，
+    #   同日 judge 再換成 gemma 之後**沒有重量**——420 只是上界，留著不會有害，
+    #   要往下調得先量）：`gpt-oss-20b` 上
+    #   `answer_correctness`（六個指標裡最貴——要把答案拆成 claim 逐條比對）在 120 秒
+    #   **會逾時**，實測 `Exception raised in Job[3]: TimeoutError()` → 該題該指標變 NaN。
+    #   **危險的是它靜默**：NaN 在輸出裡印成 `n/a`，外觀與「這個指標算不出來」相同，
+    #   而 `answer_correctness` 正是 CLAUDE.md 說唯一還有空間的那一個 → 一整輪跑分會
+    #   在最重要的那一格上無聲歸零。420 秒下同樣兩題 0.615／0.513，全部算得出來。
+    ap.add_argument("--timeout", type=int, default=420, help="RAGAS 每次 judge 呼叫的逾時秒數")
     ap.add_argument("--max-retries", type=int, default=1, help="RAGAS 單次呼叫內部重試次數")
     ap.add_argument("--nvidia-passes", type=int, default=1,
                     help="把逾時/失敗的列重跑幾輪（同一把 NVIDIA key，沒有多 key 輪換可用）")

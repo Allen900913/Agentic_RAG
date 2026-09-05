@@ -1,0 +1,1334 @@
+{
+ "_meta": {
+  "這是什麼": "**chunk 層 gold**：參考答案裡那個數字，落在生產 collection 的哪幾顆 chunk 上。設計理由、消費語意（union ＋ all-dropped）、literal 的來源與偏誤方向，全部寫在 eval/chunk_gold.py 檔頭，這裡不重複。",
+  "為什麼不併進 eval_set.json": "① eval_set 的分母 2026-08-19 已經變動兩次，動它會讓所有歷史分數更難比 ② 這裡只涵蓋 43/65 題（見〈涵蓋率〉），塞進主題庫會讓 `relevant` 這個欄位變成兩種粒度混用 ③ eval_set 的 `pin_chunks` 已經示範過『第二種粒度住在同一個檔裡會漂移到沒人發現』。",
+  "涵蓋率": "41/65 題。分類別：lexical 15/17、mixed 10/15、multi_hop 5/5、colloquial 6/13、semantic 5/15。**semantic 低是定義使然不是缺陷**——『核心技術護城河是什麼』這種定性題沒有一個可定位的數值答案，硬造 gold 等於用斷言獎勵一個沒有根據的偏好。未涵蓋的 24 題在本檔就是 N/A，**N/A 不能併進 PASS**（同 check_number_defects.py 的紀律）。每題 gold chunk 數：1 顆 18 題／2 顆 8 題／3 顆 11 題／4 顆 4 題，共 83 顆。",
+  "門檻": {
+   "n_in_relevant<=": 3,
+   "n_same_ticker<=": 8,
+   "說明": "兩個門檻自己就濾掉了日曆年份，所以沒有另外加『排除年份』的形狀規則——唯一存活的年份型 literal 是 2006（CUDA 推出年）而那真的是答案。"
+  },
+  "rejected": {
+   "整題不登錄": {
+    "mix-13": "唯一候選 3.5 命中 TSLA_10Q_202606#40 的『市值里程碑』表格（$3.5 trillion），與『能源生成與儲能營收』無關＝巧合。剔掉後本題無 literal → 不登錄",
+    "col-11": "候選 54.5 與 7.9 都不是題目問的量（7.9 是整體毛利增額、54.5 摘錄抽不出角色）。gold 應為 Microsoft Cloud 成長率 29%，但該值在參考答案裡以百分比出現、不符本檔的數值 literal 形狀 → 不登錄，改由 number_claims.json col-11 承擔"
+   },
+   "被剔掉的三種形狀": {
+    "脈絡值": "lex-10 的 3,499／131,819 是投資活動現金流，不是題目問的資本支出",
+    "同表鄰居": "col-10 的 78.23（總現金）／125.43（總負債）與答案 37.01（自由現金流）同住一顆 chunk——那正是口語題最容易答錯的方向，留著會讓 gold 失去判別力",
+    "純巧合": "mix-13 的 3.5 命中『市值里程碑 $3.5 trillion』表格，與能源儲能營收無關"
+   }
+  },
+  "維護": "**改 eval_set.json 的 `relevant` 時必須同時跑 `chunk_gold.py --selftest`**（③ 會抓到不一致）。重建 collection 之後跑 `--check`；確認漂移是正當的才 `--rebuild-snapshot`。",
+  "resolved_against": {
+   "collection": "us_stock_rag_edgar_multiyear",
+   "n_chunks": 13022
+  }
+ },
+ "queries": [
+  {
+   "id": "sem-01",
+   "category": "semantic",
+   "query": "NVIDIA 的核心技術護城河是什麼？",
+   "relevant": [
+    "NVDA_10K_2026.html"
+   ],
+   "ticker_scope": [
+    "NVDA"
+   ],
+   "literals": [
+    {
+     "literal": "2006",
+     "verified": "2026-09-04 讀 NVDA_10K_2026#16 原文：CUDA 於 2006 年推出，是護城河敘述的錨點。⚠ 同一個 literal 另中 #206（股權激勵計畫表格）＝巧合，union 語意下只會讓判定更保守"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "NVDA_10K_2026.html",
+     "chunk_index": "16"
+    },
+    {
+     "source": "NVDA_10K_2026.html",
+     "chunk_index": "206"
+    }
+   ]
+  },
+  {
+   "id": "sem-03",
+   "category": "semantic",
+   "query": "Microsoft 如何把 Copilot 整合進 Microsoft 365 的產品策略？",
+   "relevant": [
+    "MSFT_10K_2026.html"
+   ],
+   "ticker_scope": [
+    "MSFT"
+   ],
+   "literals": [
+    {
+     "literal": "16.6",
+     "verified": "2026-09-04 讀 MSFT_10K_2026#128：`Gross margin increased $16.6 billion ... driven by growth in Microsoft 365 Commercial` 與 `Cost of revenue increased $2.6 billion ... to support Microsoft 365 Copilot seat and usage growth`，兩者都是 Copilot 整合策略的量化落點"
+    },
+    {
+     "literal": "2.6",
+     "verified": "2026-09-04 讀 MSFT_10K_2026#128：`Gross margin increased $16.6 billion ... driven by growth in Microsoft 365 Commercial` 與 `Cost of revenue increased $2.6 billion ... to support Microsoft 365 Copilot seat and usage growth`，兩者都是 Copilot 整合策略的量化落點"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "MSFT_10K_2026.html",
+     "chunk_index": "128"
+    },
+    {
+     "source": "MSFT_10K_2026.html",
+     "chunk_index": "200"
+    }
+   ]
+  },
+  {
+   "id": "sem-04",
+   "category": "semantic",
+   "query": "Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？",
+   "relevant": [
+    "MSFT_10K_2026.html"
+   ],
+   "ticker_scope": [
+    "MSFT"
+   ],
+   "literals": [
+    {
+     "literal": "16.6",
+     "verified": "同 sem-03（同一段 MD&A，題目換成 Windows→雲端/Copilot 的帶動關係）"
+    },
+    {
+     "literal": "2.6",
+     "verified": "同 sem-03（同一段 MD&A，題目換成 Windows→雲端/Copilot 的帶動關係）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "MSFT_10K_2026.html",
+     "chunk_index": "128"
+    },
+    {
+     "source": "MSFT_10K_2026.html",
+     "chunk_index": "200"
+    }
+   ]
+  },
+  {
+   "id": "sem-05",
+   "category": "semantic",
+   "query": "Amazon 在 AWS 基礎設施與 AI 領域（含與 Anthropic 的合作）的投資策略是什麼？",
+   "relevant": [
+    "AMZN_10K_2025.html"
+   ],
+   "ticker_scope": [
+    "AMZN"
+   ],
+   "literals": [
+    {
+     "literal": "5.3",
+     "verified": "2026-09-04 讀 AMZN_10K_2025#161/#162：Anthropic 可轉債投資 $5.3B、公允價值 $13.8B/$45.8B、OCI $39.5B，全部是 Anthropic 合作的量化敘述。剔除 15.2（other income，與 AI 投資無關）"
+    },
+    {
+     "literal": "13.8",
+     "verified": "2026-09-04 讀 AMZN_10K_2025#161/#162：Anthropic 可轉債投資 $5.3B、公允價值 $13.8B/$45.8B、OCI $39.5B，全部是 Anthropic 合作的量化敘述。剔除 15.2（other income，與 AI 投資無關）"
+    },
+    {
+     "literal": "45.8",
+     "verified": "2026-09-04 讀 AMZN_10K_2025#161/#162：Anthropic 可轉債投資 $5.3B、公允價值 $13.8B/$45.8B、OCI $39.5B，全部是 Anthropic 合作的量化敘述。剔除 15.2（other income，與 AI 投資無關）"
+    },
+    {
+     "literal": "39.5",
+     "verified": "2026-09-04 讀 AMZN_10K_2025#161/#162：Anthropic 可轉債投資 $5.3B、公允價值 $13.8B/$45.8B、OCI $39.5B，全部是 Anthropic 合作的量化敘述。剔除 15.2（other income，與 AI 投資無關）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AMZN_10K_2025.html",
+     "chunk_index": "161"
+    },
+    {
+     "source": "AMZN_10K_2025.html",
+     "chunk_index": "162"
+    }
+   ]
+  },
+  {
+   "id": "sem-09",
+   "category": "semantic",
+   "query": "Meta 在 AI 與 Reality Labs 上的長期願景與投資方向是什麼？",
+   "relevant": [
+    "META_10K_2025.html"
+   ],
+   "ticker_scope": [
+    "META"
+   ],
+   "literals": [
+    {
+     "literal": "21.40",
+     "verified": "2026-09-04 讀 META_10K_2025#28/#67：`total RL investments were $21.40 billion in 2025`、`investments in Reality Labs reduced our 2025 overall operating profit by approximately $19.19 billion`。剔除 214（利息收入變動百分比）"
+    },
+    {
+     "literal": "19.19",
+     "verified": "2026-09-04 讀 META_10K_2025#28/#67：`total RL investments were $21.40 billion in 2025`、`investments in Reality Labs reduced our 2025 overall operating profit by approximately $19.19 billion`。剔除 214（利息收入變動百分比）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "META_10K_2025.html",
+     "chunk_index": "175"
+    },
+    {
+     "source": "META_10K_2025.html",
+     "chunk_index": "28"
+    },
+    {
+     "source": "META_10K_2025.html",
+     "chunk_index": "67"
+    }
+   ]
+  },
+  {
+   "id": "mix-02",
+   "category": "mixed",
+   "query": "Microsoft More Personal Computing 部門最新一季營收表現如何？哪些因素互相抵銷？",
+   "relevant": [
+    "MSFT_10Q_202603.html"
+   ],
+   "ticker_scope": [
+    "MSFT"
+   ],
+   "literals": [
+    {
+     "literal": "179",
+     "verified": "2026-09-04 讀 MSFT_10Q_202603#71：MPC 營收減少 $179M，Gaming 減少 $380M＝題目問的『互相抵銷的因素』之一"
+    },
+    {
+     "literal": "380",
+     "verified": "2026-09-04 讀 MSFT_10Q_202603#71：MPC 營收減少 $179M，Gaming 減少 $380M＝題目問的『互相抵銷的因素』之一"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "MSFT_10Q_202603.html",
+     "chunk_index": "71"
+    }
+   ]
+  },
+  {
+   "id": "mix-03",
+   "category": "mixed",
+   "query": "Microsoft 最新一季整體營業利益成長多少？主要由哪些部門帶動？",
+   "relevant": [
+    "MSFT_10Q_202603.html"
+   ],
+   "ticker_scope": [
+    "MSFT"
+   ],
+   "literals": [
+    {
+     "literal": "6.4",
+     "verified": "2026-09-04 讀 MSFT_10Q_202603#63：`Operating income increased $6.4 billion or 20%`＝題目問的合併營業利益成長。與 number_claims.json mix-03 的 expect_text 同一個值"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "MSFT_10Q_202603.html",
+     "chunk_index": "63"
+    }
+   ]
+  },
+  {
+   "id": "mix-04",
+   "category": "mixed",
+   "query": "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？",
+   "relevant": [
+    "AMZN_10Q_202606.html"
+   ],
+   "ticker_scope": [
+    "AMZN"
+   ],
+   "literals": [
+    {
+     "literal": "42,197",
+     "verified": "2026-09-04 讀 AMZN_10Q_202606#74/#12/#56 的分部淨銷售表：International 當季 42,197。剔除 200,606（六個月累計，非最新一季）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AMZN_10Q_202606.html",
+     "chunk_index": "12"
+    },
+    {
+     "source": "AMZN_10Q_202606.html",
+     "chunk_index": "56"
+    },
+    {
+     "source": "AMZN_10Q_202606.html",
+     "chunk_index": "74"
+    }
+   ]
+  },
+  {
+   "id": "mix-05",
+   "category": "mixed",
+   "query": "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？",
+   "relevant": [
+    "AMZN_10Q_202606.html"
+   ],
+   "ticker_scope": [
+    "AMZN"
+   ],
+   "literals": [
+    {
+     "literal": "10,160",
+     "verified": "2026-09-04 讀 AMZN_10Q_202606 營業利益分部表：AWS 去年同期 10,160 → 本季 16,621＝題目問的營業利益成長。剔除 30,873/42,232（那是淨銷售不是營業利益）"
+    },
+    {
+     "literal": "16,621",
+     "verified": "2026-09-04 讀 AMZN_10Q_202606 營業利益分部表：AWS 去年同期 10,160 → 本季 16,621＝題目問的營業利益成長。剔除 30,873/42,232（那是淨銷售不是營業利益）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AMZN_10Q_202606.html",
+     "chunk_index": "13"
+    },
+    {
+     "source": "AMZN_10Q_202606.html",
+     "chunk_index": "56"
+    },
+    {
+     "source": "AMZN_10Q_202606.html",
+     "chunk_index": "85"
+    }
+   ]
+  },
+  {
+   "id": "mix-07",
+   "category": "mixed",
+   "query": "Google 收購 Wiz 花了多少錢？這如何影響 Google Cloud 部門？",
+   "relevant": [
+    "GOOGL_10Q_202603.html"
+   ],
+   "ticker_scope": [
+    "GOOGL"
+   ],
+   "literals": [
+    {
+     "literal": "29.5",
+     "verified": "2026-09-04 讀 GOOGL_10Q_202603#50/#51：收購金額 $29.5B、購買價分配總計 29,467、商譽 22,689（原文明寫記入 Google Cloud 分部＝題目後半問的影響）"
+    },
+    {
+     "literal": "29,467",
+     "verified": "2026-09-04 讀 GOOGL_10Q_202603#50/#51：收購金額 $29.5B、購買價分配總計 29,467、商譽 22,689（原文明寫記入 Google Cloud 分部＝題目後半問的影響）"
+    },
+    {
+     "literal": "22,689",
+     "verified": "2026-09-04 讀 GOOGL_10Q_202603#50/#51：收購金額 $29.5B、購買價分配總計 29,467、商譽 22,689（原文明寫記入 Google Cloud 分部＝題目後半問的影響）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "GOOGL_10Q_202603.html",
+     "chunk_index": "126"
+    },
+    {
+     "source": "GOOGL_10Q_202603.html",
+     "chunk_index": "50"
+    },
+    {
+     "source": "GOOGL_10Q_202603.html",
+     "chunk_index": "51"
+    },
+    {
+     "source": "GOOGL_10Q_202603.html",
+     "chunk_index": "85"
+    }
+   ]
+  },
+  {
+   "id": "mix-08",
+   "category": "mixed",
+   "query": "Meta 最新一季總營收成長多少？主要驅動因素是什麼？",
+   "relevant": [
+    "META_10Q_202606.html"
+   ],
+   "ticker_scope": [
+    "META"
+   ],
+   "literals": [
+    {
+     "literal": "59,363",
+     "verified": "2026-09-04 讀 META_10Q_202606 營收表：廣告營收 46,563 → 59,363（+27%）＝題目問的總營收成長主體"
+    },
+    {
+     "literal": "46,563",
+     "verified": "2026-09-04 讀 META_10Q_202606 營收表：廣告營收 46,563 → 59,363（+27%）＝題目問的總營收成長主體"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "META_10Q_202606.html",
+     "chunk_index": "11"
+    },
+    {
+     "source": "META_10Q_202606.html",
+     "chunk_index": "20"
+    },
+    {
+     "source": "META_10Q_202606.html",
+     "chunk_index": "90"
+    }
+   ]
+  },
+  {
+   "id": "mix-09",
+   "category": "mixed",
+   "query": "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？",
+   "relevant": [
+    "AAPL_10Q_202606.html"
+   ],
+   "ticker_scope": [
+    "AAPL"
+   ],
+   "literals": [
+    {
+     "literal": "18,816",
+     "verified": "2026-09-04 讀 AAPL_10Q_202606#26/#37/#9 分部表：Greater China 去年同期 15,369 → 本季 18,816。與 number_claims.json mix-09 的 22% 同一組數字"
+    },
+    {
+     "literal": "15,369",
+     "verified": "2026-09-04 讀 AAPL_10Q_202606#26/#37/#9 分部表：Greater China 去年同期 15,369 → 本季 18,816。與 number_claims.json mix-09 的 22% 同一組數字"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AAPL_10Q_202606.html",
+     "chunk_index": "26"
+    },
+    {
+     "source": "AAPL_10Q_202606.html",
+     "chunk_index": "37"
+    },
+    {
+     "source": "AAPL_10Q_202606.html",
+     "chunk_index": "9"
+    }
+   ]
+  },
+  {
+   "id": "mix-12",
+   "category": "mixed",
+   "query": "NVIDIA 這一季在中國市場的資料中心晶片出貨狀況如何？跟去年同期相比有何變化？",
+   "relevant": [
+    "NVDA_10Q_202604.html"
+   ],
+   "ticker_scope": [
+    "NVDA"
+   ],
+   "literals": [
+    {
+     "literal": "75,246",
+     "verified": "2026-09-04 讀 NVDA_10Q_202604#0/#36/#47：Data Center 39,112 → 75,246＝題目問的資料中心營收與年增比較。剔除 4,550/9,659（分部表其他欄位，角色不明）"
+    },
+    {
+     "literal": "39,112",
+     "verified": "2026-09-04 讀 NVDA_10Q_202604#0/#36/#47：Data Center 39,112 → 75,246＝題目問的資料中心營收與年增比較。剔除 4,550/9,659（分部表其他欄位，角色不明）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "NVDA_10Q_202604.html",
+     "chunk_index": "0"
+    },
+    {
+     "source": "NVDA_10Q_202604.html",
+     "chunk_index": "36"
+    },
+    {
+     "source": "NVDA_10Q_202604.html",
+     "chunk_index": "47"
+    }
+   ]
+  },
+  {
+   "id": "mix-14",
+   "category": "mixed",
+   "query": "Tesla 汽車銷售營收最新一季成長多少？主要驅動因素是什麼？",
+   "relevant": [
+    "TSLA_10Q_202606.html"
+   ],
+   "ticker_scope": [
+    "TSLA"
+   ],
+   "literals": [
+    {
+     "literal": "4,219",
+     "verified": "2026-09-04 讀 TSLA_10Q_202606#14/#67：汽車銷售營收增加 4,219（+27%）＝題目問的成長額"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "TSLA_10Q_202606.html",
+     "chunk_index": "14"
+    },
+    {
+     "source": "TSLA_10Q_202606.html",
+     "chunk_index": "67"
+    }
+   ]
+  },
+  {
+   "id": "mix-15",
+   "category": "mixed",
+   "query": "Tesla 2026 年至今生產與交付了多少輛消費性車輛？",
+   "relevant": [
+    "TSLA_10Q_202606.html"
+   ],
+   "ticker_scope": [
+    "TSLA"
+   ],
+   "literals": [
+    {
+     "literal": "860",
+     "verified": "2026-09-04 讀 TSLA_10Q_202606#55：`produced approximately 860 thousand ... delivered approximately 838 thousand consumer vehicles`＝題目逐字問的兩個量"
+    },
+    {
+     "literal": "838",
+     "verified": "2026-09-04 讀 TSLA_10Q_202606#55：`produced approximately 860 thousand ... delivered approximately 838 thousand consumer vehicles`＝題目逐字問的兩個量"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "TSLA_10Q_202606.html",
+     "chunk_index": "55"
+    }
+   ]
+  },
+  {
+   "id": "lex-01",
+   "category": "lexical",
+   "query": "NVIDIA 目前的 Market Cap（市值）是多少？",
+   "relevant": [
+    "NVDA_Fundamentals_*.txt"
+   ],
+   "ticker_scope": [
+    "NVDA"
+   ],
+   "literals": [
+    {
+     "literal": "4962.16",
+     "verified": "2026-09-04 讀 NVDA_Fundamentals_20260612#0：`Market Cap : $4962.16B`"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "NVDA_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "lex-02",
+   "category": "lexical",
+   "query": "NVIDIA 的 trailing P/E Ratio 是多少？",
+   "relevant": [
+    "NVDA_Fundamentals_*.txt"
+   ],
+   "ticker_scope": [
+    "NVDA"
+   ],
+   "literals": [
+    {
+     "literal": "31.325687",
+     "verified": "2026-09-04 讀 NVDA_Fundamentals_20260612#0：`P/E Ratio Trailing: 31.325687`"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "NVDA_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "lex-03",
+   "category": "lexical",
+   "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
+   "relevant": [
+    "NVDA_IncomeStatement_*.txt"
+   ],
+   "ticker_scope": [
+    "NVDA"
+   ],
+   "literals": [
+    {
+     "literal": "4.90",
+     "verified": "2026-09-04 讀 NVDA_IncomeStatement_20260612#1：`Diluted EPS: $4.90`。剔除 24.51/120.07/215.94/130.39（同表其他列，非題目問的量）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "NVDA_IncomeStatement_20260612.txt",
+     "chunk_index": "1"
+    }
+   ]
+  },
+  {
+   "id": "lex-04",
+   "category": "lexical",
+   "query": "NVIDIA 是哪一年推出 CUDA 開發平台的？",
+   "relevant": [
+    "NVDA_10K_2026.html"
+   ],
+   "ticker_scope": [
+    "NVDA"
+   ],
+   "literals": [
+    {
+     "literal": "2006",
+     "verified": "同 sem-01：CUDA 推出年。⚠ 這是唯一存活的年份型 literal，而它真的是答案——兩個數值門檻自己濾掉了日曆年份，不需要另加『排除年份』的硬規則"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "NVDA_10K_2026.html",
+     "chunk_index": "16"
+    },
+    {
+     "source": "NVDA_10K_2026.html",
+     "chunk_index": "206"
+    }
+   ]
+  },
+  {
+   "id": "lex-06",
+   "category": "lexical",
+   "query": "Apple 目前的 Market Cap（市值）是多少？",
+   "relevant": [
+    "AAPL_Fundamentals_*.txt"
+   ],
+   "ticker_scope": [
+    "AAPL"
+   ],
+   "literals": [
+    {
+     "literal": "4342.02",
+     "verified": "2026-09-04 讀 AAPL_Fundamentals_20260612#0：`Market Cap : $4342.02B`"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AAPL_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "lex-07",
+   "category": "lexical",
+   "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+   "relevant": [
+    "AAPL_IncomeStatement_*.txt"
+   ],
+   "ticker_scope": [
+    "AAPL"
+   ],
+   "literals": [
+    {
+     "literal": "7.46",
+     "verified": "2026-09-04 讀 AAPL_IncomeStatement_20260612#1：`Diluted EPS: $7.46`。剔除 15.00（股數）、112.01（淨利）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AAPL_IncomeStatement_20260612.txt",
+     "chunk_index": "1"
+    }
+   ]
+  },
+  {
+   "id": "lex-08",
+   "category": "lexical",
+   "query": "Microsoft 目前的 Free Cash Flow 是多少？",
+   "relevant": [
+    "MSFT_Fundamentals_*.txt"
+   ],
+   "ticker_scope": [
+    "MSFT"
+   ],
+   "literals": [
+    {
+     "literal": "37.01",
+     "verified": "2026-09-04 讀 MSFT_Fundamentals_20260612#1：`Free Cash Flow : $37.01B`"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "MSFT_Fundamentals_20260612.txt",
+     "chunk_index": "1"
+    }
+   ]
+  },
+  {
+   "id": "lex-09",
+   "category": "lexical",
+   "query": "Amazon 目前的 Total Debt 是多少？",
+   "relevant": [
+    "AMZN_Fundamentals_*.txt"
+   ],
+   "ticker_scope": [
+    "AMZN"
+   ],
+   "literals": [
+    {
+     "literal": "235.54",
+     "verified": "2026-09-04 讀 AMZN_Fundamentals_20260612#1：`Total Debt : $235.54B`"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AMZN_Fundamentals_20260612.txt",
+     "chunk_index": "1"
+    }
+   ]
+  },
+  {
+   "id": "lex-10",
+   "category": "lexical",
+   "query": "Amazon 在 2025 年的現金資本支出（cash capital expenditures）是多少？",
+   "relevant": [
+    "AMZN_10K_2025.html"
+   ],
+   "ticker_scope": [
+    "AMZN"
+   ],
+   "literals": [
+    {
+     "literal": "128.3",
+     "verified": "2026-09-04 讀 AMZN_10K_2025#105（`Cash capital expenditures were $77.7 billion, and $128.3 billion in 2024 and 2025`）與 #131（現金流量表的 128,320）。剔除 777（股酬費用）、3,499／131,819（投資活動現金流，非資本支出）"
+    },
+    {
+     "literal": "77.7",
+     "verified": "2026-09-04 讀 AMZN_10K_2025#105（`Cash capital expenditures were $77.7 billion, and $128.3 billion in 2024 and 2025`）與 #131（現金流量表的 128,320）。剔除 777（股酬費用）、3,499／131,819（投資活動現金流，非資本支出）"
+    },
+    {
+     "literal": "128,320",
+     "verified": "2026-09-04 讀 AMZN_10K_2025#105（`Cash capital expenditures were $77.7 billion, and $128.3 billion in 2024 and 2025`）與 #131（現金流量表的 128,320）。剔除 777（股酬費用）、3,499／131,819（投資活動現金流，非資本支出）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AMZN_10K_2025.html",
+     "chunk_index": "105"
+    },
+    {
+     "source": "AMZN_10K_2025.html",
+     "chunk_index": "131"
+    }
+   ]
+  },
+  {
+   "id": "lex-11",
+   "category": "lexical",
+   "query": "Alphabet（Google）目前的員工人數是多少？",
+   "relevant": [
+    "GOOGL_Fundamentals_*.txt"
+   ],
+   "ticker_scope": [
+    "GOOGL"
+   ],
+   "literals": [
+    {
+     "literal": "194,668",
+     "verified": "2026-09-04 讀 GOOGL_Fundamentals_20260612#0：`Employees: 194,668`"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "GOOGL_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "lex-12",
+   "category": "lexical",
+   "query": "Google 完成收購 Wiz 的確切日期是哪一天？金額是多少？",
+   "relevant": [
+    "GOOGL_10Q_202603.html"
+   ],
+   "ticker_scope": [
+    "GOOGL"
+   ],
+   "literals": [
+    {
+     "literal": "29.5",
+     "verified": "2026-09-04 讀 GOOGL_10Q_202603#50（`On March 11, 2026, we completed our acquisition of Wiz for $29.5 billion`——日期與金額同句）與 #51（Total purchase price 29,467）"
+    },
+    {
+     "literal": "29,467",
+     "verified": "2026-09-04 讀 GOOGL_10Q_202603#50（`On March 11, 2026, we completed our acquisition of Wiz for $29.5 billion`——日期與金額同句）與 #51（Total purchase price 29,467）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "GOOGL_10Q_202603.html",
+     "chunk_index": "126"
+    },
+    {
+     "source": "GOOGL_10Q_202603.html",
+     "chunk_index": "50"
+    },
+    {
+     "source": "GOOGL_10Q_202603.html",
+     "chunk_index": "51"
+    },
+    {
+     "source": "GOOGL_10Q_202603.html",
+     "chunk_index": "85"
+    }
+   ]
+  },
+  {
+   "id": "lex-13",
+   "category": "lexical",
+   "query": "Meta 目前的 Return on Equity（股東權益報酬率）是多少？",
+   "relevant": [
+    "META_Fundamentals_*.txt"
+   ],
+   "ticker_scope": [
+    "META"
+   ],
+   "literals": [
+    {
+     "literal": "32.93",
+     "verified": "2026-09-04 讀 META_Fundamentals_20260612#1：`Return on Equity: 32.93%`"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "META_Fundamentals_20260612.txt",
+     "chunk_index": "1"
+    }
+   ]
+  },
+  {
+   "id": "lex-14",
+   "category": "lexical",
+   "query": "Meta fiscal year 2025 的 Diluted EPS 是多少？",
+   "relevant": [
+    "META_IncomeStatement_*.txt"
+   ],
+   "ticker_scope": [
+    "META"
+   ],
+   "literals": [
+    {
+     "literal": "23.49",
+     "verified": "2026-09-04 讀 META_IncomeStatement_20260612#1：`Diluted EPS: $23.49`。剔除 60.46（淨利）、2.57（股數）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "META_IncomeStatement_20260612.txt",
+     "chunk_index": "1"
+    }
+   ]
+  },
+  {
+   "id": "lex-16",
+   "category": "lexical",
+   "query": "Apple 近一年的整體營收成長率是多少？",
+   "relevant": [
+    "AAPL_Fundamentals_*.txt",
+    "AAPL_IncomeStatement_*.txt"
+   ],
+   "ticker_scope": [
+    "AAPL"
+   ],
+   "literals": [
+    {
+     "literal": "16.60",
+     "verified": "2026-09-04 讀 AAPL_Fundamentals_20260612#0：`Revenue Growth (YoY): 16.60%`。剔除 451.44（Revenue TTM，是分母不是成長率）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AAPL_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "lex-17",
+   "category": "lexical",
+   "query": "Microsoft 的營收成長率表現如何？",
+   "relevant": [
+    "MSFT_Fundamentals_20260612.txt"
+   ],
+   "ticker_scope": [
+    "MSFT"
+   ],
+   "literals": [
+    {
+     "literal": "18.30",
+     "verified": "2026-09-04 讀 MSFT_Fundamentals_20260612#0：`Revenue Growth (YoY): 18.30%`。與 number_claims.json lex-17 的 TTM 18.30% 同一格"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "MSFT_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "col-01",
+   "category": "colloquial",
+   "query": "為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？",
+   "relevant": [
+    "NVDA_10K_2026.html"
+   ],
+   "ticker_scope": [
+    "NVDA"
+   ],
+   "literals": [
+    {
+     "literal": "2006",
+     "verified": "同 sem-01（col-01 maps_to sem-01）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "NVDA_10K_2026.html",
+     "chunk_index": "16"
+    },
+    {
+     "source": "NVDA_10K_2026.html",
+     "chunk_index": "206"
+    }
+   ]
+  },
+  {
+   "id": "col-03",
+   "category": "colloquial",
+   "query": "亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？",
+   "relevant": [
+    "AMZN_10K_2025.html",
+    "AMZN_10Q_202603.html",
+    "AMZN_10Q_202606.html"
+   ],
+   "ticker_scope": [
+    "AMZN"
+   ],
+   "literals": [
+    {
+     "literal": "35.0",
+     "verified": "2026-09-04 讀 AMZN_10Q_202606#40/#65 與 AMZN_10Q_202603#38：Anthropic Series C 承諾 $35.0B、Q2 2026 投入 $13.7B、帳上 $28.7B＝題目問的『砸錢做了什麼／跟哪家 AI 公司』。剔除 287（融資租賃利息）"
+    },
+    {
+     "literal": "13.7",
+     "verified": "2026-09-04 讀 AMZN_10Q_202606#40/#65 與 AMZN_10Q_202603#38：Anthropic Series C 承諾 $35.0B、Q2 2026 投入 $13.7B、帳上 $28.7B＝題目問的『砸錢做了什麼／跟哪家 AI 公司』。剔除 287（融資租賃利息）"
+    },
+    {
+     "literal": "28.7",
+     "verified": "2026-09-04 讀 AMZN_10Q_202606#40/#65 與 AMZN_10Q_202603#38：Anthropic Series C 承諾 $35.0B、Q2 2026 投入 $13.7B、帳上 $28.7B＝題目問的『砸錢做了什麼／跟哪家 AI 公司』。剔除 287（融資租賃利息）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AMZN_10Q_202603.html",
+     "chunk_index": "38"
+    },
+    {
+     "source": "AMZN_10Q_202603.html",
+     "chunk_index": "65"
+    },
+    {
+     "source": "AMZN_10Q_202606.html",
+     "chunk_index": "40"
+    },
+    {
+     "source": "AMZN_10Q_202606.html",
+     "chunk_index": "65"
+    }
+   ]
+  },
+  {
+   "id": "col-08",
+   "category": "colloquial",
+   "query": "NVIDIA 現在值多少錢（市值）？",
+   "relevant": [
+    "NVDA_Fundamentals_*.txt"
+   ],
+   "ticker_scope": [
+    "NVDA"
+   ],
+   "literals": [
+    {
+     "literal": "4962.16",
+     "verified": "同 lex-01（col-08 maps_to lex-01）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "NVDA_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "col-09",
+   "category": "colloquial",
+   "query": "蘋果公司現在市值多少？",
+   "relevant": [
+    "AAPL_Fundamentals_*.txt"
+   ],
+   "ticker_scope": [
+    "AAPL"
+   ],
+   "literals": [
+    {
+     "literal": "4342.02",
+     "verified": "同 lex-06（col-09 maps_to lex-06）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AAPL_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "col-10",
+   "category": "colloquial",
+   "query": "微軟每年能自由運用的現金大概有多少？",
+   "relevant": [
+    "MSFT_Fundamentals_*.txt"
+   ],
+   "ticker_scope": [
+    "MSFT"
+   ],
+   "literals": [
+    {
+     "literal": "37.01",
+     "verified": "同 lex-08：`Free Cash Flow : $37.01B`＝題目『每年能自由運用的現金』。剔除 78.23（總現金）、125.43（總負債）——兩者是同一顆 chunk 裡的鄰居，正是口語題最容易答錯的方向"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "MSFT_Fundamentals_20260612.txt",
+     "chunk_index": "1"
+    }
+   ]
+  },
+  {
+   "id": "col-13",
+   "category": "colloquial",
+   "query": "蘋果在大中華區最近賣得好不好？",
+   "relevant": [
+    "AAPL_10Q_202606.html"
+   ],
+   "ticker_scope": [
+    "AAPL"
+   ],
+   "literals": [
+    {
+     "literal": "18,816",
+     "verified": "同 mix-09（col-13 maps_to mix-09）。剔除 64,839／49,884（九個月累計）、5,822／7,406（其他分部欄位）"
+    },
+    {
+     "literal": "15,369",
+     "verified": "同 mix-09（col-13 maps_to mix-09）。剔除 64,839／49,884（九個月累計）、5,822／7,406（其他分部欄位）"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AAPL_10Q_202606.html",
+     "chunk_index": "26"
+    },
+    {
+     "source": "AAPL_10Q_202606.html",
+     "chunk_index": "37"
+    },
+    {
+     "source": "AAPL_10Q_202606.html",
+     "chunk_index": "9"
+    }
+   ]
+  },
+  {
+   "id": "mh-01",
+   "category": "multi_hop",
+   "query": "在 Amazon、Microsoft、Alphabet、Meta 這四家公司中，最近十二個月（TTM）總營收規模最大的是哪一家？該公司同期的毛利率又是多少？",
+   "relevant": [
+    "AMZN_Fundamentals_20260612.txt",
+    "MSFT_Fundamentals_20260612.txt",
+    "GOOGL_Fundamentals_20260612.txt",
+    "META_Fundamentals_20260612.txt"
+   ],
+   "ticker_scope": [
+    "AMZN",
+    "GOOGL",
+    "META",
+    "MSFT"
+   ],
+   "literals": [
+    {
+     "literal": "742.78",
+     "verified": "2026-09-04 讀四家 Fundamentals#0：AMZN Revenue(TTM) 742.78 為最大＝hop-1 答案，AMZN Gross Margin 50.60 ＝hop-2 答案，其餘三家 TTM 營收是比較所需。⚠ 這五顆是 check_comparison_claims 真值的同一批來源"
+    },
+    {
+     "literal": "50.60",
+     "verified": "2026-09-04 讀四家 Fundamentals#0：AMZN Revenue(TTM) 742.78 為最大＝hop-1 答案，AMZN Gross Margin 50.60 ＝hop-2 答案，其餘三家 TTM 營收是比較所需。⚠ 這五顆是 check_comparison_claims 真值的同一批來源"
+    },
+    {
+     "literal": "318.27",
+     "verified": "2026-09-04 讀四家 Fundamentals#0：AMZN Revenue(TTM) 742.78 為最大＝hop-1 答案，AMZN Gross Margin 50.60 ＝hop-2 答案，其餘三家 TTM 營收是比較所需。⚠ 這五顆是 check_comparison_claims 真值的同一批來源"
+    },
+    {
+     "literal": "422.50",
+     "verified": "2026-09-04 讀四家 Fundamentals#0：AMZN Revenue(TTM) 742.78 為最大＝hop-1 答案，AMZN Gross Margin 50.60 ＝hop-2 答案，其餘三家 TTM 營收是比較所需。⚠ 這五顆是 check_comparison_claims 真值的同一批來源"
+    },
+    {
+     "literal": "214.96",
+     "verified": "2026-09-04 讀四家 Fundamentals#0：AMZN Revenue(TTM) 742.78 為最大＝hop-1 答案，AMZN Gross Margin 50.60 ＝hop-2 答案，其餘三家 TTM 營收是比較所需。⚠ 這五顆是 check_comparison_claims 真值的同一批來源"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AMZN_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "GOOGL_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "META_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "MSFT_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "mh-02",
+   "category": "multi_hop",
+   "query": "在 Meta、NVIDIA、Microsoft 這三家公司中，最近十二個月（TTM）毛利率最高的是哪一家公司？該公司同期的總營收是多少？",
+   "relevant": [
+    "META_Fundamentals_20260612.txt",
+    "NVDA_Fundamentals_20260612.txt",
+    "MSFT_Fundamentals_20260612.txt"
+   ],
+   "ticker_scope": [
+    "META",
+    "MSFT",
+    "NVDA"
+   ],
+   "literals": [
+    {
+     "literal": "81.94",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：META Gross Margin 81.94 最高＝hop-1，META Revenue(TTM) 214.96＝hop-2；NVDA 74.14／MSFT 68.31 為比較值"
+    },
+    {
+     "literal": "214.96",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：META Gross Margin 81.94 最高＝hop-1，META Revenue(TTM) 214.96＝hop-2；NVDA 74.14／MSFT 68.31 為比較值"
+    },
+    {
+     "literal": "74.14",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：META Gross Margin 81.94 最高＝hop-1，META Revenue(TTM) 214.96＝hop-2；NVDA 74.14／MSFT 68.31 為比較值"
+    },
+    {
+     "literal": "253.49",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：META Gross Margin 81.94 最高＝hop-1，META Revenue(TTM) 214.96＝hop-2；NVDA 74.14／MSFT 68.31 為比較值"
+    },
+    {
+     "literal": "68.31",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：META Gross Margin 81.94 最高＝hop-1，META Revenue(TTM) 214.96＝hop-2；NVDA 74.14／MSFT 68.31 為比較值"
+    },
+    {
+     "literal": "318.27",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：META Gross Margin 81.94 最高＝hop-1，META Revenue(TTM) 214.96＝hop-2；NVDA 74.14／MSFT 68.31 為比較值"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "META_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "MSFT_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "NVDA_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "mh-03",
+   "category": "multi_hop",
+   "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+   "relevant": [
+    "NVDA_Fundamentals_20260612.txt",
+    "META_Fundamentals_20260612.txt",
+    "GOOGL_Fundamentals_20260612.txt"
+   ],
+   "ticker_scope": [
+    "GOOGL",
+    "META",
+    "NVDA"
+   ],
+   "literals": [
+    {
+     "literal": "85.20",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：NVDA Revenue Growth(YoY) 85.20 最高＝hop-1；META 33.10／GOOGL 21.80 為比較值"
+    },
+    {
+     "literal": "33.10",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：NVDA Revenue Growth(YoY) 85.20 最高＝hop-1；META 33.10／GOOGL 21.80 為比較值"
+    },
+    {
+     "literal": "21.80",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：NVDA Revenue Growth(YoY) 85.20 最高＝hop-1；META 33.10／GOOGL 21.80 為比較值"
+    },
+    {
+     "literal": "253.49",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：NVDA Revenue Growth(YoY) 85.20 最高＝hop-1；META 33.10／GOOGL 21.80 為比較值"
+    },
+    {
+     "literal": "159.61",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：NVDA Revenue Growth(YoY) 85.20 最高＝hop-1；META 33.10／GOOGL 21.80 為比較值"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "GOOGL_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "META_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "NVDA_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "mh-04",
+   "category": "multi_hop",
+   "query": "在 Microsoft、Alphabet、Apple 這三家公司中，最近十二個月（TTM）營業利益率（operating margin）最高的是哪一家？該公司同期的總營收是多少？",
+   "relevant": [
+    "MSFT_Fundamentals_20260612.txt",
+    "GOOGL_Fundamentals_20260612.txt",
+    "AAPL_Fundamentals_20260612.txt"
+   ],
+   "ticker_scope": [
+    "AAPL",
+    "GOOGL",
+    "MSFT"
+   ],
+   "literals": [
+    {
+     "literal": "46.33",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：MSFT Operating Margin 46.33 最高＝hop-1；GOOGL 36.12／AAPL 32.27 為比較值"
+    },
+    {
+     "literal": "36.12",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：MSFT Operating Margin 46.33 最高＝hop-1；GOOGL 36.12／AAPL 32.27 為比較值"
+    },
+    {
+     "literal": "32.27",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：MSFT Operating Margin 46.33 最高＝hop-1；GOOGL 36.12／AAPL 32.27 為比較值"
+    },
+    {
+     "literal": "318.27",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：MSFT Operating Margin 46.33 最高＝hop-1；GOOGL 36.12／AAPL 32.27 為比較值"
+    },
+    {
+     "literal": "422.50",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：MSFT Operating Margin 46.33 最高＝hop-1；GOOGL 36.12／AAPL 32.27 為比較值"
+    },
+    {
+     "literal": "451.44",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：MSFT Operating Margin 46.33 最高＝hop-1；GOOGL 36.12／AAPL 32.27 為比較值"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AAPL_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "GOOGL_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "MSFT_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  },
+  {
+   "id": "mh-05",
+   "category": "multi_hop",
+   "query": "在 Alphabet、Microsoft、Amazon 這三家公司中，最近十二個月（TTM）淨利（net income）最高的是哪一家？該公司最近一年的營收年增率是多少？",
+   "relevant": [
+    "GOOGL_Fundamentals_20260612.txt",
+    "MSFT_Fundamentals_20260612.txt",
+    "AMZN_Fundamentals_20260612.txt"
+   ],
+   "ticker_scope": [
+    "AMZN",
+    "GOOGL",
+    "MSFT"
+   ],
+   "literals": [
+    {
+     "literal": "160.21",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：GOOGL Net Income 160.21 最高＝hop-1；MSFT 125.22／AMZN 90.80 為比較值"
+    },
+    {
+     "literal": "125.22",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：GOOGL Net Income 160.21 最高＝hop-1；MSFT 125.22／AMZN 90.80 為比較值"
+    },
+    {
+     "literal": "90.80",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：GOOGL Net Income 160.21 最高＝hop-1；MSFT 125.22／AMZN 90.80 為比較值"
+    },
+    {
+     "literal": "422.50",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：GOOGL Net Income 160.21 最高＝hop-1；MSFT 125.22／AMZN 90.80 為比較值"
+    },
+    {
+     "literal": "21.80",
+     "verified": "2026-09-04 讀三家 Fundamentals#0：GOOGL Net Income 160.21 最高＝hop-1；MSFT 125.22／AMZN 90.80 為比較值"
+    }
+   ],
+   "resolved_snapshot": [
+    {
+     "source": "AMZN_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "GOOGL_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    },
+    {
+     "source": "MSFT_Fundamentals_20260612.txt",
+     "chunk_index": "0"
+    }
+   ]
+  }
+ ]
+}

@@ -119,14 +119,18 @@
 
 上限常數＝**把 `reference_answers.json` 原文當成系統答案餵進去評的分數**。它回答「這個指標還有沒有可追空間」：
 
-| metric | gold 上限（n=65） | 系統實測 | 判讀 |
-|---|---|---|---|
-| `context_recall` | .788 | .774 | 差 .014，噪音內 |
-| `context_precision` | .843 | .804 | 噪音內 |
-| `nv_context_relevance` | .969 | .969 | **到頂** |
-| `faithfulness` | .659 | **.816** | **已超過（負空間）** |
-| `answer_relevancy` | .871 | .855 | 幾乎無空間 |
-| `answer_correctness` | **.972** | **.642** | **唯一有空間的（+0.330）** |
+**2026-09-06 在新 judge（`google/gemma-4-31b-it`）＋ 65 題上整組重量**（`gpt-oss-120b` 被 NVIDIA 退役／410）。系統臂＝`experiments/ragas_65q_gemma_sysA2/sysB` 兩輪均值，上限＝`ragas_65q_gemma_goldceiling`（只換 answer，contexts 沿用同一份 agentic 結果）：
+
+| metric | gold 上限（gemma, n=65） | 系統實測 | 噪音門檻 | 判讀 |
+|---|---|---|---|---|
+| `context_recall` | .826 | .822 | .017 | 差 .005，噪音內 |
+| `context_precision` | .780 | .769 | .046 | 噪音內 |
+| `nv_context_relevance` | .923 | .918 | .012 | **到頂** |
+| `faithfulness` | .726 | **.876** | .021 | **已超過（負空間）** |
+| `answer_relevancy` | .888 | .859 | .004 | +.029，唯一的第二條細縫（很窄） |
+| `answer_correctness` | **.987** | **.654** | .012 | **唯一有空間的（+0.333）** |
+
+⚠ **換 judge 沒有動搖這張表的任何一格判讀。** 舊 judge（`gpt-oss-120b`，同樣 65 題）的數字留在這裡供對照，**不要拿去跟上表混算**：recall .788/.774、precision .843/.804、nv .969/.969、faith .659/**.816**、relevancy .871/.855、correctness **.972**/**.642**（落差 .330）。兩把尺各自量出來的落差是 .330 與 .333。
 
 切塊／ingest 改動只能影響前三個檢索指標，而它們全部飽和。**再改也量不到，不是「改動沒效果」而是「尺沒有刻度了」。**
 

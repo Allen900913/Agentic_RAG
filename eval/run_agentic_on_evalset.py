@@ -65,7 +65,8 @@ DEFAULT_OUTPUT = Path("experiments/agentic/generation_judge.json")
 
 
 def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
-                         sub_queries: list, period_notes: list | None = None) -> dict:
+                         sub_queries: list, period_notes: list | None = None,
+                         unit_stats: dict | None = None) -> dict:
     """把 agentic 輸出攤平成 generation_judge.json 的 record schema。
     RAGAS 只讀 id/category/query/answer/contexts；其餘欄位補上以對齊 schema、方便複查。"""
     # ⚠ 2026-08-11 修：`contexts` 與 `sources` 必須**同一次過濾**、逐位對齊。原本 contexts 濾掉
@@ -94,6 +95,11 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
         # （「沒有任何文件提及」「我沒有足夠的資訊來回答」）卻都記成 False。
         # 改為複用單管線那邊已經寫好的 `looks_like_refusal`（含中文標記、全文比對），
         # 不再維護第二套判定——兩套必然漂移，這次就是漂移的結果。
+        # 金額單位後處理的計數與明細（`rq.finalize_answer_units` 的 stats）。這是
+        # BACKLOG〈「億」發生頻率〉缺的分母：每一筆都代表 LLM 違反 Rule 11 自己寫了億。
+        # ⚠ **`None` 與 `{}` 不同**：`None` ＝ 這一題沒經過後處理（graph 崩潰降級，或舊結果檔），
+        #   `{}`／全 0 ＝ 經過了但沒觸發。合併兩者會把降級題算進分母，讓頻率被系統性低估。
+        "unit_stats": unit_stats if unit_stats is not None else None,
         "is_refusal": looks_like_refusal(answer),
         "wrongful_refusal": None,
         "context_recall_llm": None,
@@ -229,7 +235,8 @@ def main() -> None:
             out = ar.run_agentic(q["query"], **run_kwargs)
             rec = _record_from_agentic(q, out["answer"], out.get("chunks", []),
                                        out.get("sub_queries", []),
-                                       out.get("period_notes", []))
+                                       out.get("period_notes", []),
+                                       out.get("unit_stats"))
             records_by_id[q["id"]] = rec
             print(f"    ✓ {time.time()-t0:.0f}s | sub_queries={len(out.get('sub_queries', []))} "
                   f"| chunks={rec['agentic_n_chunks']} | answer_len={len(out['answer'])} "

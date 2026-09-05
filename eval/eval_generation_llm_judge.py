@@ -56,7 +56,14 @@ DEFAULT_GEN_MODEL = rq.DEFAULT_MODEL   # 與生產 rag_query.py 一致（刻意�
 #   openai/gpt-oss-20b   10/11  ← 與被下架的 qwen3-32b 同分
 #   openai/gpt-oss-120b   9/11  ← 大模型反而更差，且與 gen_model 同一支（自評偏誤）
 # 兩者都栽在 lex12_fiscal_calendar（財年措辭誤判，已知系統性 bug 家族，換模型救不了）。
-DEFAULT_JUDGE_MODEL = "openai/gpt-oss-20b"
+#
+# 2026-09-04：換成 `google/gemma-4-31b-it`。理由是延遲——選型證據見
+# `eval_ragas_vs_rubric.py` 的 `DEFAULT_RAGAS_MODEL` 上方那張表（同一場 bake-off，
+# 三個角色其中一個就是這支 judge 的 rubric 評分形狀），gemma 中位 3.0s vs 20b 的 8.8s。
+# ⚠ **上面那份 10/11 vs 9/11 是綁在 `gpt-oss-20b` 上的，對 gemma 不成立**。要拿新的
+#   就跑 `eval/judge_regression.py`（11 個凍結案例），而且**那支不是零噪音**：同一份碼、
+#   同一個模型連跑三個單輪拿到 10/11、9/11、11/11 → 一律看逐題 k/n，不要拿單輪比大小。
+DEFAULT_JUDGE_MODEL = "google/gemma-4-31b-it"
 
 # ⚠ 拒答判準（`REFUSAL_MARKERS`／`REFUSAL_MAX_CHARS`／`looks_like_refusal`）2026-08-27
 # 搬進 `rag_query.py`——生產端也要用它（拒答不該附引用清單），而生產不可以 import eval/。

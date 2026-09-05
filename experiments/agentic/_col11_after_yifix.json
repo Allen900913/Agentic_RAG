@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "producer": "run_agentic_on_evalset.py",
+    "module": "agentic_rag_version",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "retrieval_model": "nvidia/nemotron-3-super-120b-a12b",
+    "checker_model": "nvidia/nemotron-3-super-120b-a12b",
+    "gen_model": "nvidia/nemotron-3-super-120b-a12b",
+    "validator": true,
+    "web_search": false,
+    "freshness_mode": "snapshot",
+    "eval_set": "eval\\eval_set.json"
+  },
+  "records": [
+    {
+      "id": "col-11",
+      "category": "colloquial",
+      "query": "微軟的雲端服務最近成長得快不快？",
+      "answerable": true,
+      "answer": "微軟的雲端服務近期增長非常快速，以Azure和其他雲服務為例，年增達40%。[MSFT_10Q_202603.html, chunk #75]\n\n- 在截至2026年3月31日的九個月內，Intelligent Cloud營收增加221億美元或29%[MSFT_10Q_202603.html, chunk #75]，其中伺服器產品與雲服務營收增加218億美元或31%[MSFT_10Q_202603.html, chunk #75]，且Azure和其他雲服務收入成長40%[MSFT_10Q_202603.html, chunk #75]。  \n- 在截至2026年3月31日的三個月內，Intelligent Cloud營收增加79億美元或30%[MSFT_10Q_202603.html, chunk #69]，伺服器產品與雲服務營收增加78億美元或32%[MSFT_10Q_202603.html, chunk #69]，Azure和其他雲服務收入同樣成長40%[MSFT_10Q_202603.html, chunk #69]。  \n- 在2026財年第三季度，Microsoft Cloud總收入達545億美元，年增29%[MSFT_10Q_202603.html, chunk #49]，同時Azure和其他雲服務收入亦成長40%[MSFT_10Q_202603.html, chunk #49]。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202603.html #75 (rerank=0.730)\n  - MSFT_10Q_202603.html #49 (rerank=0.729)\n  - MSFT_10Q_202603.html #69 (rerank=0.726)\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.508)",
+      "raw_answer_with_evidence": null,
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 75
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 49
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 69
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ],
+      "contexts": [
+        "[MSFT 10-Q period 202603] [Nine Months Ended March 31, 2026 vs March 31, 2025] [section: Intelligent Cloud] Intelligent Cloud\n\nRevenue increased $22.1 billion or 29%. •Server products and cloud services revenue increased $21.8 billion or 31% driven by Azure and other cloud services. Azure and other cloud services revenue grew 40% driven by demand for services across the platform with continued growth across all workloads. Server products revenue increased 1% primarily driven by higher purchases of licenses running in multi-cloud environments. •Enterprise and partner services revenue increased $381 million or 7% driven by growth in Enterprise Support Services. Operating income increased $8.6 billion or 26%. •Cost of revenue increased $12.7 billion or 45% driven by investments in AI infrastructure to support growing customer demand. •Gross margin increased $9.4 billion or 20% driven by growth in Azure. Gross margin percentage decreased driven by the continued investments in AI infrastructure, offset in part by efficiency gains in Azure. •Operating expenses increased $856 million or 5% driven by continued investments in research and development compute capacity, AI talent, and data to support product development that benefits the entire portfolio. Cost of revenue included an unfavorable foreign currency impact of 2%.",
+        "[MSFT 10-Q period 202603] [section: OVERVIEW] We generate revenue by offering a wide range of cloud-based solutions, content, and other services to people and businesses; licensing and supporting an array of software products; delivering relevant online advertising to a global audience; and designing and selling devices. Our most significant expenses are related to compensating employees; supporting and investing in our cloud-based services, including datacenter operations; designing, manufacturing, marketing, and selling our other products and services; and income taxes. Highlights from the third quarter of fiscal year 2026 compared with the third quarter of fiscal year 2025 included:\n\n•Microsoft Cloud revenue increased 29% to $54.5 billion. •Commercial remaining performance obligation increased 99% to $627 billion. •Microsoft 365 Commercial cloud revenue increased 19%. •Microsoft 365 Consumer cloud revenue increased 33%. •LinkedIn revenue increased 12%. •Dynamics 365 revenue increased 22%. •Azure and other cloud services revenue increased 40%. •Windows OEM and Devices revenue decreased 2%. •Xbox content and services revenue decreased 5%. •Search advertising (formerly Search and news advertising) revenue excluding traffic acquisition costs increased 12%.",
+        "[MSFT 10-Q period 202603] [Three Months Ended March 31, 2026 vs March 31, 2025] [section: Intelligent Cloud] Intelligent Cloud\n\nRevenue increased $7.9 billion or 30%. •Server products and cloud services revenue increased $7.8 billion or 32% driven by Azure and other cloud services. Azure and other cloud services revenue grew 40% driven by demand for services across the platform with continued growth across all workloads. Server products revenue increased slightly, primarily driven by higher purchases of licenses running in multi-cloud environments, offset in part by renewals with lower in-period revenue recognition from the mix of contracts and continued customer shift to cloud. •Enterprise and partner services revenue increased $141 million or 7% driven by growth in Enterprise Support Services.",
+        "[MSFT] === MSFT Company Fundamentals === Generated: 2026-06-12\n\n--- Company Overview --- Name : Microsoft Corporation Sector : Technology Industry : Software - Infrastructure Employees: 228,000\n\n--- Valuation Metrics --- Market Cap : $2899.62B Enterprise Value : $2946.82B P/E Ratio Trailing: 23.262217 P/E Ratio Forward : 20.176886 Price/Sales (TTM) : 9.110466 Price/Book : 6.9982247 EV/EBITDA : 15.976\n\n--- Profitability --- Revenue (TTM) : $318.27B Gross Profit : $217.41B EBITDA : $184.46B Net Income : $125.22B Profit Margin : 39.34% Operating Margin: 46.33% Gross Margin : 68.31%\n\n--- Growth --- Revenue Growth (YoY): 18.30% Earnings Growth : 23.40% EPS Trailing : 16.78 EPS Forward : 19.3459"
+      ],
+      "correctness": null,
+      "correctness_verdict": null,
+      "unit_stats": {
+        "yi_stripped": 0,
+        "yi_repaired": 0,
+        "yi_stripped_detail": [],
+        "yi_repaired_detail": []
+      },
+      "is_refusal": false,
+      "wrongful_refusal": null,
+      "context_recall_llm": null,
+      "context_recall_overlap": null,
+      "actionable_feedback": "",
+      "agentic_sub_queries": [
+        "微軟的雲端服務（Azure）最近的成長率是多少？"
+      ],
+      "agentic_n_chunks": 4,
+      "agentic_period_notes": []
+    }
+  ]
+}

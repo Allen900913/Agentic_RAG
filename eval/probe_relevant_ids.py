@@ -17,19 +17,33 @@ filter 在上游就濾掉了。
 
 **② 「gold 檔的某些 chunk 沒被圈選」不是缺陷。** `eval_set.json` 的 gold 只到**檔名**，一個檔
 有幾十個 chunk，排除同檔裡離題的那些**正是這個欄位該做的事**。第一版把它當危險指標，量出
-「4 題危險」——那是量尺的錯不是系統的錯。現在只留 `all_gold_dropped`（gold 檔進了候選卻**整個**
-被排除）這個不含糊的形狀。
+「4 題危險」——那是量尺的錯不是系統的錯。所以 `all_gold_dropped` 收窄成「gold 檔進了候選卻
+**整個**被排除」這個不含糊的形狀。
+
+⚠ **但收窄的代價是這支從此量不到真正該量的東西**：它分不出「濾掉離題 chunk（正確）」與
+「濾掉答案所在的 chunk（危險）」——兩者住在同一個檔裡。2026-08-28 那次量到「gold 全滅 0 題、
+誤選他家 0 題、圈選率 1.00 的題 0/8」，看起來全綠，而 `BACKLOG.md` 老實記著「**那有沒有害
+正好被這條缺口本身擋住**」。**2026-09-04 補上 chunk 層 gold（`eval/chunk_gold.py`）之後這一格
+才有量尺**，就是下表的 `cgold_dropped`。
 
 ---
 
-## 四個指標，不可合併（同 `probe_temporal_interference.py` 的教訓）
+## 五個指標，不可合併（同 `probe_temporal_interference.py` 的教訓）
 
 | 指標 | 意思 | 代價 |
 |---|---|---|
-| `all_gold_dropped` | gold 檔的 chunk 進了候選，卻**一個都沒被圈選** | **危險**：答案失去唯一依據，且是靜默的 |
+| `all_gold_dropped` | gold **檔**的 chunk 進了候選，卻**一個都沒被圈選** | **危險**：答案失去唯一依據，且是靜默的 |
+| **`cgold_dropped`（答案全滅）** | **答案所在的那幾顆** chunk 進了候選卻整個被排除 | **這一格才是那條缺口的量尺**——它與上一格的差就是「濾掉離題 vs 濾掉答案」 |
 | `kept_offtopic` | 合成混池裡，**別家公司**的 chunk 被圈選 | **陰性對照**：少了它，「一律全選」也會零缺陷 |
 | `select_rate` | 圈選數／候選數 | **1.00 ＝ 這一題等於沒過濾**（守門員在場但沒上工） |
 | `empty_rate` | 一次都沒圈選 → 退回 top-k 全收 | 外觀與「全部都相關」**完全相同** |
+
+⚠ **`cgold_dropped` 的語意是 union ＋ all-dropped**：一題的 gold 是所有 literal 命中 chunk 的
+**聯集**，留住任何一顆就不算全滅。聯集偏大時判定只會**更難**觸發＝ false-negative 方向。
+定義、逐題人工驗證、以及「為什麼不寫死 `chunk_index`」都在 `eval/chunk_gold.py` 檔頭。
+⚠ **三態不可合併**：`N/A`（gold chunk 沒進候選＝這一輪沒量到）／**`—`**（本題不在
+`chunk_gold.json` 的 41 題裡＝**根本沒有這把尺**，多為定性 semantic 題）／數值。
+把 `—` 讀成「沒問題」正是這支第一版犯過的那個錯的翻版。
 
 ⚠ **合成混池是刻意的，也是有代價的**：它犯了 CLAUDE.md〈量尺不可與被測物耦合〉形狀②的邊緣
 （量尺自備輸入）。緩解方式是**兩半都走生產路徑**——兩次真實 `rq.retrieve()` ＋ 生產的
@@ -49,6 +63,7 @@ filter 在上游就濾掉了。
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import json
 import sys
 from pathlib import Path
@@ -72,6 +87,18 @@ MIX = {
     "mix-01": ("Amazon AWS 最新一季的營收成長率是多少？", "AMZN"),
     "col-05": ("Tesla 的毛利率表現如何？", "TSLA"),
 }
+
+
+# chunk 層 gold：{題id: {(source, chunk_index), …}}，由 eval/chunk_gold.py 的凍結快照展開。
+# ⚠ 用凍結快照而不是當下重新定位，理由同 probe_temporal_interference 的 gold 展開：
+#   當下展開會讓「語料換版」與「圈選變差」兩件事混在同一格裡。快照與現行 collection
+#   對不對得上，由 `chunk_gold.py --check` 單獨負責。
+def _load_chunk_gold() -> dict:
+    import chunk_gold as _cg
+    return {q["id"]: _cg.frozen_chunks(q) for q in _cg.load()["queries"]}
+
+
+_CHUNK_GOLD = _load_chunk_gold()
 
 
 def _load_cases(ids: list[str]) -> list[dict]:
@@ -126,12 +153,24 @@ def main() -> int:
 
         shown = pool[:ar.POOL_RETURN_K]
         shown_ids = {ar._chunk_id(c) for c in shown}
-        gold_ids = {ar._chunk_id(c) for c in shown if c.get("source") in gold_files}
+        # ⚠ **必須用 fnmatch 不是 `in`**（2026-09-04 修）：`eval_set.json` 有 **14 題**的
+        #   `relevant` 是萬用字元（`AAPL_Fundamentals_*.txt`），而它們**全部是 lexical／
+        #   colloquial**——正好是這支最該量的那一類。舊版精確比對讓那 14 題的 `gold全滅`
+        #   永遠是 N/A，而 **N/A 的外觀與「這一題沒問題」在摘要裡很容易被讀成同一件事**。
+        #   是加了 chunk 層 gold（那支用 fnmatch）之後，兩欄對不上才被逼出來的。
+        gold_ids = {ar._chunk_id(c) for c in shown
+                    if any(fnmatch.fnmatch(c.get("source") or "", p) for p in gold_files)}
+        # chunk 層 gold（2026-09-04 加）：`gold_ids` 是**整個 gold 檔**的 chunk，而檔裡本來就
+        # 有離題的那些——排除它們正是 `relevant_ids` 該做的事。真正危險的是把**答案所在的
+        # 那幾顆**丟掉，而那要 chunk 粒度才分得出來。gold 定義與 union 語意見 eval/chunk_gold.py。
+        cg = _CHUNK_GOLD.get(qid)
+        cgold_ids = ({ar._chunk_id(c) for c in shown
+                      if (c.get("source"), str(c.get("chunk_index"))) in cg} if cg else set())
         off_ids = ({ar._chunk_id(c) for c in shown
                     if (c.get("source") or "").upper().startswith(off_ticker + "_")}
                    if off_ticker else set())
 
-        all_dropped, kept_off, rates, empties = [], [], [], 0
+        all_dropped, cgold_dropped, kept_off, rates, empties = [], [], [], [], 0
         for _ in range(args.repeat):
             scope = ar._build_todo_temporal_scope(query, ar.FRESHNESS_SNAPSHOT)
             v = ar._check_sufficiency(query, shown, scope, ar.FRESHNESS_SNAPSHOT)
@@ -139,16 +178,19 @@ def main() -> int:
             empties += (not sel)
             rates.append(len(sel) / len(shown_ids) if shown_ids else 0.0)
             all_dropped.append(bool(gold_ids) and not (gold_ids & sel) if gold_ids else None)
+            cgold_dropped.append(not (cgold_ids & sel) if cgold_ids else None)
             kept_off.append(len(sel & off_ids) > 0 if off_ids else None)
 
         rows.append({"id": qid, "n": len(shown_ids), "gold": len(gold_ids), "off": len(off_ids),
-                     "all_dropped": all_dropped, "kept_off": kept_off,
+                     "cgold": len(cgold_ids), "cgold_in_set": cg is not None,
+                     "all_dropped": all_dropped, "cgold_dropped": cgold_dropped, "kept_off": kept_off,
                      "empty": empties, "rate": sum(rates) / len(rates) if rates else 0.0})
 
-    print(f"{'題':<8}{'候選':>5}{'gold':>6}{'混入他家':>9}"
-          f"{'gold全滅':>10}{'誤選他家':>10}{'空圈選':>8}{'圈選率':>8}")
-    print("-" * 66)
+    print(f"{'題':<8}{'候選':>5}{'gold':>6}{'答案顆':>7}{'混入他家':>9}"
+          f"{'gold全滅':>10}{'答案全滅':>10}{'誤選他家':>10}{'空圈選':>8}{'圈選率':>8}")
+    print("-" * 84)
     danger = neg_fail = n_na = no_filter = 0
+    c_danger = c_na = c_unset = 0
     for r in rows:
         d = _kn(r["all_dropped"], bool)
         o = _kn(r["kept_off"], bool)
@@ -156,12 +198,23 @@ def main() -> int:
         danger += (d != "N/A" and not d.startswith("0/"))
         neg_fail += (o != "N/A" and not o.startswith("0/"))
         no_filter += (r["rate"] >= 0.999)
+        cd = _kn(r["cgold_dropped"], bool) if r["cgold_in_set"] else "—"
+        if cd == "—":
+            c_unset += 1
+        elif cd == "N/A":
+            c_na += 1
+        elif not cd.startswith("0/"):
+            c_danger += 1
         empty_cell = "{}/{}".format(r["empty"], args.repeat)
-        print(f"{r['id']:<8}{r['n']:>5}{r['gold']:>6}{r['off']:>9}"
-              f"{d:>10}{o:>10}{empty_cell:>8}{r['rate']:>8.2f}")
+        print(f"{r['id']:<8}{r['n']:>5}{r['gold']:>6}{r['cgold']:>7}{r['off']:>9}"
+              f"{d:>10}{cd:>10}{o:>10}{empty_cell:>8}{r['rate']:>8.2f}")
 
     print()
     print(f"⚠ 危險（gold 檔進了候選卻整個被排除）：{danger} 題")
+    print(f"⚠ **危險（答案所在的 chunk 進了候選卻整個被排除）：{c_danger} 題**"
+          f"   ← 這一格才分得出「濾掉離題（正確）」與「濾掉答案（危險）」")
+    print(f"  答案全滅的 N/A：{c_na} 題（gold chunk 沒進候選）／"
+          f"「—」：{c_unset} 題（本題不在 chunk_gold.json 的 41 題裡）")
     print(f"⚠ 陰性對照（合成混池裡誤選他家）    ：{neg_fail} 題"
           f"{'' if any(r['off'] for r in rows) else '   ⚠ 沒有任何他家 chunk 進池＝這一格沒判別力'}")
     print(f"  N/A（gold 沒進候選＝這一題沒量到東西，不是通過）：{n_na} 題")
@@ -170,8 +223,10 @@ def main() -> int:
     print(f"  空圈選：{sum(r['empty'] for r in rows)}/{len(rows) * args.repeat}"
           f"（空＝退回 rerank top-k 全收，外觀與『全部都相關』相同）")
     print("\n⚠ 這支是 probe 不是閘門：看逐題 k/n，不要看總分；下結論前 --repeat ≥3。")
-    print("⚠ 「gold 檔的**部分** chunk 沒被圈選」刻意不算缺陷——gold 只到檔名，"
+    print("⚠ 「gold 檔的**部分** chunk 沒被圈選」刻意不算缺陷——`gold全滅` 那一欄只到檔名，"
           "排除同檔裡離題的 chunk 正是這個欄位該做的事。")
+    print("⚠ `答案全滅` 是 union ＋ all-dropped：一題的 gold 是所有 literal 命中 chunk 的聯集，"
+          "留住任何一顆就不算全滅。**聯集偏大時判定只會更難觸發**＝ false-negative 方向。")
     return 0
 
 

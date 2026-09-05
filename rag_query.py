@@ -418,8 +418,11 @@ _PAIRED_YI_AFTER_RE = re.compile(
     r"[0-9][0-9,]*(?:\.[0-9]+)?\s*億(?:美元|美金)?\s*[)）]",
     re.IGNORECASE)
 # 形狀 B：LLM 自己寫的億 → 緊跟一個來源單位數字的括號。動作＝刪掉前面那個億，留來源數字。
+# ⚠ **前綴的 `$` 必須一起吃掉**（2026-09-05）：LLM 會寫 `$54.5 億（$54.5 billion）`，
+#   而舊版從 `[0-9]` 起頭 → 剝掉億之後原本那個 `$` 變成孤兒，吐出 `$$54.5 billion`，
+#   再經 ② 就成了 `$545 億美元（$54.5 billion）`。值是對的，但多一個 `$`。閘門⑲m11 守它。
 _PAIRED_YI_BEFORE_RE = re.compile(
-    r"[0-9][0-9,]*(?:\.[0-9]+)?\s*億(?:美元|美金)?\s*"
+    r"(?:(?:US)?\$\s?)?[0-9][0-9,]*(?:\.[0-9]+)?\s*億(?:美元|美金)?\s*"
     r"[（(]\s*((?:US)?\$?\s?[0-9][0-9,]*(?:\.[0-9]+)?\s*" + _SRC_UNIT_ALT + r"(?![A-Za-z]))"
     r"\s*[)）]",
     re.IGNORECASE)
@@ -454,22 +457,50 @@ def repair_paired_yi(text: str) -> tuple:
 #   ① 來源有 "$N billion"  ② 來源沒有 "$N/10 billion"  ③ 來源沒有 "$N*100 million"
 # ②③ 排掉「答案其實是對的、只是來源另有一個數字長得像」的情況。
 # 實測：對本 eval 的 29 處雙寫 + 15 處 millions 表格推導，零誤報。
-# 幣別標記【必填】：不可寫成可選。「10 億使用者」「25 億部裝置」「2.57 億股」都是
+# 幣別標記【必填】：不可寫成無條件可選。「10 億使用者」「25 億部裝置」「2.57 億股」都是
 # 非金額計數，若允許無幣別匹配，來源剛好有 "$10 billion" 就會把「10 億使用者」改成
 # 「100 億美元（$10 billion）使用者」——回測實際踩到（news-10 / mi-11）。
 # 漏修無害（人工稽核還在），改壞有害，故一律從嚴。
-_YI_SOLO_RE = re.compile(r"(?:(?:US)?\$\s?)?([0-9][0-9,]*(?:\.[0-9]+)?)[\s  ]*億[\s  ]*(美元|歐元)")
+#
+# ⚠ **2026-09-05 收窄了「必填」的範圍：幣別詞可省，但只在有 `$`／`US$` 前綴時。**
+#   65 題端到端跑出來的（`gj_multiyear_r2_unitstats.json`，col-11）：LLM 寫
+#   「Microsoft Cloud 收入…增加 29% 至 **$54.5 億**」，來源逐字寫著
+#   `Microsoft Cloud revenue increased 29% to $54.5 billion` ＝ 差 10 倍，而舊的正則
+#   對這份答案匹配到 **0 個**（同一題還有 `$22.1/$21.8/$7.9/$7.8 億` 共 5 處，
+#   `_src_has(..., billion)` 對 5 處**全部**是 True ← ③ 手上證據齊全，只是從來沒看到它們）。
+#   上面那個回歸的危險前提是「**沒有**幣別標記」，而 `$` 本身就是幣別標記——
+#   「10 億使用者」不會寫成「$10 億使用者」。所以放行 `$` 前綴不會把它放回來。
+#   誤報對照凍結在 `verify_answer_validators.py` 閘門⑲m。
+# **幣別詞與 `$` 前綴兩者皆無 → 不是金額**，由 `_is_monetary_yi()` 單一判準裁決，
+# 而 `_yi_values()` 與 `repair_yi_against_source()` **共用它**（見 `_yi_values` docstring）。
+_YI_SOLO_RE = re.compile(
+    r"((?:US)?\$[\s  ]?)?([0-9][0-9,]*(?:\.[0-9]+)?)[\s  ]*億[\s  ]*(美元|歐元)?(?![元圓])")
+
+
+def _is_monetary_yi(m: "re.Match") -> bool:
+    """`_YI_SOLO_RE` 的一次匹配算不算**金額**：有幣別詞（group 3）或有 `$`/`US$` 前綴（group 1）。
+    兩者皆無就是「10 億使用者」那種非金額計數，一律不算。
+
+    ⚠ **這是單一判準**：`_yi_values`（產生證據）與 `repair_yi_against_source`（執行修改）
+      都必須經過它。兩邊若各判各的，就會出現「被當成證據、卻不會被修」或反過來的形狀，
+      而那正是 `_yi_values` docstring 說的不變量。閘門⑲m8 驗這件事。"""
+    return bool(m.group(1) or m.group(3))
+
+
 # 後接括號是否為「單位雙寫」（$X billion / 12,345 百萬），而非敘述性括號（如「（其中…」）。
 _DUAL_PAREN_RE = re.compile(r"^[\s  ]*[（(][\s  ]*(?:US)?\$?[\s  ]*[0-9]")
 
 
 def _yi_values(text: str) -> set:
-    """文本裡所有「N 億(美元)」的數值（round 到 6 位供集合比對，避開浮點尾差）。
-    刻意與 `_YI_SOLO_RE` 共用同一支正則：能被拿來當證據的形狀，與會被修的形狀必須一致。"""
+    """文本裡所有**金額**「N 億(美元)」的數值（round 到 6 位供集合比對，避開浮點尾差）。
+    刻意與 `_YI_SOLO_RE` ＋ `_is_monetary_yi` 共用同一支正則與同一個資格判準：
+    能被拿來當證據的形狀，與會被修的形狀必須一致。"""
     out = set()
     for m in _YI_SOLO_RE.finditer(text or ""):
+        if not _is_monetary_yi(m):
+            continue
         try:
-            out.add(round(float(m.group(1).replace(",", "")), 6))
+            out.add(round(float(m.group(2).replace(",", "")), 6))
         except ValueError:
             pass
     return out
@@ -513,19 +544,21 @@ def repair_yi_against_source(text: str, context: str, known_yi=frozenset()) -> t
         # 已經是雙寫「N 億美元（$X billion）」的不碰：那是 post-processor 算好的。
         # 但只認「括號內以數字/$ 開頭」的單位雙寫——敘述性括號（「（其中 34.75…」）不算，
         # 否則會漏修（回測：mi-09 的 84.75 就是這樣被跳過的）。
+        if not _is_monetary_yi(m):
+            return m.group(0)          # 「10 億使用者」這種非金額計數，一律不碰
         if _DUAL_PAREN_RE.match(text[m.end():m.end() + 8]):
             return m.group(0)
-        n = float(m.group(1).replace(",", ""))
+        n = float(m.group(2).replace(",", ""))
         # 排除條款（對 A/B 兩種證據都先跑）：來源另有對應值 → 答案可能本來就對。
         if _src_has(context, n / 10, r"billion|B\b") or _src_has(context, n * 100, r"million|M\b"):
             return m.group(0)
         if _src_has(context, n, r"billion|B\b"):
-            new = f"{_fmt_yi(n * 10)} 億{m.group(2) or '美元'}（${m.group(1)} billion）"
+            new = f"{_fmt_yi(n * 10)} 億{m.group(3) or '美元'}（${m.group(2)} billion）"
         elif round(n * 10, 6) in known_yi:
             # 證據 B **不補 `（$N billion）`**：那個字串不在來源裡（來源寫的是 millions
             # 表格），補了會被 agentic 的 `find_untraceable_numbers` 判成無法溯源。
             # 正確的雙寫已經由 ② 寫在同一份答案的別處了，這裡只要把值修對。
-            new = f"{_fmt_yi(n * 10)} 億{m.group(2) or '美元'}"
+            new = f"{_fmt_yi(n * 10)} 億{m.group(3) or '美元'}"
         else:
             return m.group(0)                      # 兩種證據都沒有 → 無從定罪
         repairs.append((m.group(0), new))
@@ -535,7 +568,8 @@ def repair_yi_against_source(text: str, context: str, known_yi=frozenset()) -> t
 
 
 
-def finalize_answer_units(answer: str, chunks=None, *, web_extra: str = "", verbose: bool = False) -> str:
+def finalize_answer_units(answer: str, chunks=None, *, web_extra: str = "",
+                          verbose: bool = False, stats: dict | None = None) -> str:
     """金額單位的**唯一後處理入口**（agentic 與單發管線共用）。三層，順序不可調換：
 
       ① `repair_paired_yi`         — 剝掉 LLM 緊貼配對的億（順帶解掉巢狀）
@@ -546,6 +580,18 @@ def finalize_answer_units(answer: str, chunks=None, *, web_extra: str = "", verb
       ③ 靠 `_DUAL_PAREN_RE` 認出「已經是雙寫的不要碰」，那個形態要 ② 跑完才定型。
     ⚠ **只能呼叫一次**（② 重入會巢狀）。新的消費端一律呼叫這支，不要自己組三層。
     ⚠ `chunks`／`web_extra` 都給不出來時 ③ 自動跳過（判準需要來源，沒有來源就無從定罪）。
+
+    **`stats`（2026-09-04 加）**：傳一個 dict 進來，會被填上這一次的計數與逐筆明細。
+    這是 `BACKLOG.md`〈量不到：先斬後奏的「億」發生**頻率**〉缺的那個分母——① 與 ③ 觸發
+    的每一筆，都代表 **LLM 違反了 Rule 11 自己寫了億**（Rule 11 要求 Writer 原樣保留
+    `$X billion` 且不寫億），所以 `yi_stripped + yi_repaired` 就是分子。
+    ⚠ **刻意用 out-param 而不是模組層全域**：agentic 的 `_node_execute` 用 ThreadPoolExecutor
+      平行跑子問題，全域會被別的執行緒蓋掉——而蓋掉之後外觀與「這一題沒觸發」完全相同。
+    ⚠ **刻意不改回傳型別**：`finalize_answer_units` 有三個呼叫端（`graph`／`api_server`／
+      `rag_query` 自己），改成回 tuple 會讓漏改的那個安靜地把 tuple 當字串接下去。
+    ⚠ **明細記的是被改前後的字串，不是「LLM 錯了幾次」**——③ 的證據 B 有已知的殘餘誤報
+      方向（見 BACKLOG〈已接受的極限〉），要下「新模型比舊模型糟」這種結論之前，明細必須
+      人工讀過。這一格提供的是分母與可稽核的清單，不是判定。
     """
     text, stripped = repair_paired_yi(answer or "")
     # ② 的產出即證據 B（見 `repair_yi_against_source`）：跑前跑後的億值差集＝**程式算的**那些。
@@ -562,6 +608,13 @@ def finalize_answer_units(answer: str, chunks=None, *, web_extra: str = "", verb
         text, fixes = repair_yi_against_source(text, context, produced_yi)
     if verbose and (stripped or fixes):
         print(f"[units] 剝掉 LLM 自算的億 {len(stripped)} 處、依來源修正 {len(fixes)} 處")
+    if stats is not None:
+        stats.update({
+            "yi_stripped": len(stripped),          # ① 緊貼配對的億（LLM 先斬後奏）
+            "yi_repaired": len(fixes),             # ③ 孤立的億被判定為 10x 音譯而修掉
+            "yi_stripped_detail": list(stripped),
+            "yi_repaired_detail": [{"before": a, "after": b} for a, b in fixes],
+        })
     return text
 
 

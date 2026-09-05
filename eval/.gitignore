@@ -105,3 +105,12 @@ __pycache__/
 # probe_web_query_form 的 2x2 query 形式探針 fixture（r2 是第二輪，刻意另一份才比得出差異）。
 !web_fixture_query_form.json
 !web_fixture_query_form_r2.json
+
+# ── 2026-09-04 補：**第七次**。上一段才把通則改寫成「錄完就跑 git check-ignore」──────
+#   · chunk_gold.json  **chunk 層 gold**（41 題／83 顆）。判準與 reference_answers.json
+#     一字不差：**腳本重現不了**。候選雖然是程式抽的，但「哪些 literal 算數」是逐題人工
+#     驗證的（`verified` 欄位記著怎麼驗的），而剔掉的三種形狀——脈絡值、同表鄰居、純巧合
+#     ——沒有任何規則分得出來（那是感知）。掉了就要重做一次 41 題的人工審核。
+#   ⚠ 這次是靠 `git status` 沒看到檔案才發現的，**不是**靠上一段規定的 check-ignore
+#     ——那條規則寫了但沒人執行得到。真正擋住它的仍然是「commit 前看一眼 status」。
+!chunk_gold.json
