@@ -49,6 +49,17 @@ relevancy .002／correctness .008。照既有規則取新舊較大值 → **`nv`
 算出來的，**不可當基準**。改用 `--timeout 900 --nvidia-passes 2` 之後：A2 剩 1 筆（`mix-13`
 的 correctness）、B 與 C 都是 0 筆。⚠ 這兩個值目前**只在 CLI 傳，預設仍是 420／1**。
 
+**⑦ 順帶驗了 correctness judge（另一支、另一個 prompt）：也維持 gemma，但理由是反直覺的。**
+`judge_regression.py` 11 個凍結案例，gemma 與 `gpt-oss-20b` 各跑 9 輪。聚合幾乎一樣
+（80/90 vs 82/90），**失敗方向相反**：gemma 五個陰性對照 **全部 9/9**（種進去的缺陷一個
+沒漏），唯一硬傷是 `sem03_grounded_specific_number` **0/9** ＝ 把有根據的具體數字判成捏造
+（**誤報**，安全方向）；20b 沒有全掛的題，但**三個陰性對照會漏**（8／6／2）＝ 認不出植入的
+假數字（**漏報**，危險方向）。照本 repo 一貫判準 → 維持 gemma。
+⚠ **只看 `sem03` 那一題會選 20b**（9/9 vs 0/9），結論與逐題 k/n 攤開後**相反**——
+這就是那支腳本自己寫的「比逐題 k/n，不要比單輪總分」的用處。
+⚠ `sem03_grounded_specific_number` 記為 gemma 的**已知行為差異不是回歸**：65 題 **0 題帶
+rubric**，其餘引用 `DEFAULT_JUDGE_MODEL` 的五支全已退役 ＝ **目前沒有活的消費端**。
+
 **⑥ 併發不是槓桿（一條 null result）。** `--max-workers 6` 探針：沒有加速，且出現 3 次
 500/503（`--max-workers 2` 是 0 次）。`--max-workers 2` 本來就是預設，help 字串早就寫著
 「NVIDIA 限速，別開太高」——這 40 分鐘重新推導了 repo 已經知道的事。

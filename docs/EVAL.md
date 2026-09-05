@@ -68,6 +68,8 @@
 | `collapse` 的 `prefer="rank"` | **cross-encoder 對年份無感**：gold@5 0.837 → **0.653**，錯期率 ×3.5 | 無 | 08-19 |
 | `collapse` 的 `prefer="hybrid"` | 等於不修（gold@5 0.837＝不修），還多刪一個 gold。已刪碼 | 無 | 08-19 |
 | **SYSTEM_PROMPT 加「不得四捨五入」** | 規則被明文違反，發生率 1/2 輪 vs 改動前 1/3 個封存檔——**在噪音內，量不出效果**。⚠ 規則本身沒有害處（同批 faithfulness +.067），死的是「能證明它有效」 | 造一批必然觸發的題（見 BACKLOG） | 08-25 |
+| **RAGAS `--max-workers` 開到 6** | **沒有加速**，且出現 3 次 500/503（workers=2 是 0 次）。牆鐘時間是算術：390 個 metric-row × 88s ÷ workers。`--max-workers 2` 本來就是預設，help 字串早就寫著「NVIDIA 限速，別開太高」——這 40 分鐘重新推導了 repo 已經知道的事 | NVIDIA 端放寬限速 | 09-06 |
+| **拿 TTFT 榜選 judge** | **與真實 judge 負載是反的**：TTFT 榜首 `minimax-m3` 第 8 次呼叫就 429；TTFT 第 5 的 `nemotron-3.5-lightning` 把思考過程寫進 content → 中位 33s。**單 token 延遲量不到 judge 會失敗的方式**（真實 judge 的 contexts 是 64,610 字元，bake-off 的 1KB prompt 沒有預測力） | 無（機制型） | 09-04 |
 
 **復活成功案例**：`rerank_multi_query`（07-07 判死，理由是變體仍中文）在「英文變體＋glossary」的新前提下（07-08）復活，現已併入生產的雙 query 精排機制。
 

@@ -49,6 +49,35 @@
   ⚠ **correctness judge（`eval_generation_llm_judge.DEFAULT_JUDGE_MODEL`）同日一起換成 gemma**，
     那一支的驗收才是 `judge_regression.py`（11 凍結案例），且它**不是零噪音**：同碼同模型
     三個單輪 10/11、9/11、11/11 → 看逐題 k/n，不要拿單輪比大小。
+  → **2026-09-06 兩個模型各跑 11 案例 × 9 輪，逐題 k/n 攤開比**（`--repeat 9`，
+    scratchpad `jr_gemma9b.log`；20b 那輪見 task b17nljsyt）。**聚合值幾乎一樣**
+    （gemma 80/90 vs 20b 82/90），**但失敗的方向相反，而這才是判準**：
+
+    | 案例 | gemma k/9 | 20b k/9 |
+    |---|---|---|
+    | `sem03_grounded_specific_number`（陽性） | **0** | 9 |
+    | `col07_rubric_reweight`（陽性） | 8 | 7 |
+    | `lex12_fiscal_calendar`（陽性） | 9 | 7 |
+    | `col01_true_fabrication_negative`（**陰性對照**） | 9 | 8 |
+    | `col03_true_wrong_number_negative`（**陰性對照**） | 9 | **6** |
+    | `sem03_true_fabrication_negative`（**陰性對照**） | 9 | **2**（記 N/A） |
+    | 其餘 5 題 | 9 | 9 |
+
+    · **gemma 五個陰性對照全部 9/9**——種進去的缺陷一個都沒放過。
+      它唯一的硬傷是 `sem03_grounded_specific_number` **0/9**：把「服務營收 310 億、
+      成長 16%」這種**有根據的具體數字**判成捏造（該案例凍結的正是 07-08 這個形狀）。
+      那是**誤報方向**，安全的那一邊。
+    · **20b 反過來**：沒有任何一題全掛，但**三個陰性對照會漏**（8／6／2）
+      ＝ 種進去的假數字、錯數字它認不出來。**漏報方向，危險的那一邊。**
+    → **結論：維持 gemma。** 照本 repo 一貫的判準（看不對稱的錯誤、陰性對照不可省），
+      「偶爾多疑」遠優於「認不出植入的缺陷」。⚠ 這個結論與只看 `sem03` 那一題得到的
+      印象**相反**——單題比較會選 20b（9/9 vs 0/9）。**這就是「逐題 k/n」那條規則的用處。**
+    ⚠ `sem03_grounded_specific_number` 記為 **gemma 的已知行為差異**，不是回歸：
+      `eval_set.json` 65 題 **0 題帶 rubric**，`evaluate_correctness_with_feedback` 沒有 rubric
+      跑不起來，而其餘引用 `DEFAULT_JUDGE_MODEL` 的五支全部已退役 → **目前沒有活的消費端**。
+      **復活條件**：rubric 這條線哪天有了活的消費端，這一題要重新看（並重跑這個對照）。
+    ⚠ **不能歸因給「換模型」本身**：`gpt-oss-120b` 已 410，A/B 做不成；repo 記著的
+      `120b 9/11` 沒留逐題表，不知道掛的兩題是哪兩題。
 - `eval/gen_reference_answers.py:38` `GEN_MODEL` — 參考答案的生成模型。**這支該換**
   （不換的話第一次跑就 410），換本身安全：現有 `reference_answers.json` 已納版控，
   不重生成就不會被動到。
