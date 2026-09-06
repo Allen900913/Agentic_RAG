@@ -1367,6 +1367,31 @@ def _fill_dependent_hop(task: str, entity: str) -> str:
     return task
 
 
+def _deterministic_defects(answer: str, chunks: list[dict], web_extra: str = "") -> dict[str, int]:
+    """答案的**零 LLM 缺陷指紋**：四個確定性偵測器各自的命中數。用來比較「重生成前 vs 之後」。
+
+    **為什麼需要它**（2026-09-06）：Synthesize 是一條六道的修補鏈，每一道抓到就**整篇重生成**，
+    而後面那道的重生成可以破壞前面那道已經修好的東西——前面那幾道**已經跑完了，沒有人再看**。
+    碼上的排序是兩兩推理出來的（「number 放 reflect 之後」「dual_source 放最末」），
+    但那個論證只在「後面不會破壞前面」時成立，六道兩兩之間並不都成立。
+    業界對這件事的結論一致：整篇重生成會讓先前已滿足的約束被破壞（見 docs/AGENTIC.md A13）。
+
+    ⚠ **刻意只收零 LLM 的四項**：`find_claim_conflicts` 要先跑 `_extract_claims`（一次 LLM 呼叫），
+      放進來會讓每一次重生成都多燒一次錢——而「critique 側免費」正是這個設計成立的前提。
+    ⚠ **四個 key 一律在場**（值是 0 而不是缺席）：消費端要能分辨「這一格沒問題」與「沒量這一格」。
+    ⚠ `citations` 數的是**指向不存在來源**的引用，不是引用總數——後者會讓「答案寫長一點」
+      看起來像退步。"""
+    text = answer or ""
+    allowed = {(c.get("source"), c.get("chunk_index")) for c in (chunks or [])}
+    bad_cites = sum(1 for c in _extract_citations(text) if c not in allowed)
+    return {
+        "citations":    bad_cites,
+        "untraceable":  len(find_untraceable_numbers(text, chunks or [], web_extra)),
+        "stale_period": len(find_stale_period_claims(text, chunks or [])),
+        "undated_dual": len(find_undated_dual_sourcing(text)),
+    }
+
+
 def _build_temporal_contract(freshness_mode: str) -> str:
     coverage_text = _format_kb_coverage(_pkg._get_kb_coverage())
     if freshness_mode == FRESHNESS_SNAPSHOT:

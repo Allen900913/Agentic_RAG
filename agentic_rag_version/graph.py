@@ -840,6 +840,9 @@ class SupervisorState(TypedDict, total=False):
     # 以及「Planner 說沒依賴但句子沒有主詞」的分歧數。同 `unit_stats`／`replan_stats`
     # 的角色——是**分母**不是判定。
     plan_stats: dict
+    # 重生成回歸守衛的計數（見 `_accept_revision`）：accepted／rejected／empty ＋ 逐筆明細。
+    # 是**分母**不是判定——「六道修補鏈的重生成到底破壞了什麼」在此之前完全沒有量尺。
+    revision_stats: dict
 
 
 _REPLANNER_PROMPT = f"""你是美股情報 RAG 的動態重規劃器。給你「原始問題」與「目前待辦清單（含各自狀態與
@@ -1299,6 +1302,8 @@ def _node_synthesize(state: SupervisorState) -> dict:
     # 最終生成整段包 try/except（graph 崩潰降級保證）：這是全 run 最後一步,若 LLM API 此時不穩
     # （見實測 NVIDIA 端連續 504）,不能讓整個 graph.invoke 炸穿、零產出——退回零 LLM 的機械式摘要,
     # 至少保留真實 chunk 內容 + citation。
+    # 回歸守衛的計數：五道會重生成的 validator 共用同一份（見 `_accept_revision`）。
+    _rev_stats: dict = {}
     try:
         answer = _pkg._write_final_answer(state["query"], chunks, GEN_MODEL, extra_user=extra,
                                      web_extra=web_extra, period_note=period_note)
@@ -1316,27 +1321,27 @@ def _node_synthesize(state: SupervisorState) -> dict:
         # 確定性一致性稽核（零 LLM 成本的偵測,只有真的抓到才花一次重生成）。放在 reflect 之前,
         # 讓 reflect 稽核的是已調和過的版本。
         if not rq.looks_like_refusal(answer):
-            answer = _pkg._consistency_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
+            answer = _pkg._consistency_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose, rev_stats=_rev_stats,
                                                 web_extra=web_extra, period_note=period_note)
         # 確定性期別稽核（零 LLM 偵測）：答案自稱「最新一季」卻引用了較舊的期別 → 重生成一次。
         # 放在一致性之後、reflect 之前：期別改對可能連帶換掉數字，要讓 reflect 稽核最終版本。
         if not rq.looks_like_refusal(answer):
-            answer = _pkg._period_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
+            answer = _pkg._period_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose, rev_stats=_rev_stats,
                                            web_extra=web_extra, period_note=period_note)
         if state.get("enable_reflection", True) and not rq.looks_like_refusal(answer):
-            answer = _pkg._reflect_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
+            answer = _pkg._reflect_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose, rev_stats=_rev_stats,
                                       web_extra=web_extra, period_note=period_note)
         # 數字溯源（零 LLM 偵測）**放最後**：這是唯一會看 reflect 重生成結果的檢查。
         # 100 題乾跑誤報 0 題（見 find_untraceable_numbers 的兩條排除規則），所以放進主線不會
         # 擾動既有基準；真的觸發才花一次重生成。
         if not rq.looks_like_refusal(answer):
-            answer = _pkg._number_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose,
+            answer = _pkg._number_check_and_fix(state["query"], answer, chunks, GEN_MODEL, verbose=verbose, rev_stats=_rev_stats,
                                            web_extra=web_extra, period_note=period_note)
         # R5 並陳時點（零 LLM 偵測）**放最末**：時點是措辭問題，而上面每一道的重生成都可能
         # 把時點改掉；放中間等於只驗了一個會被後面推翻的版本。281 份既有答案乾跑觸發 1 次
         # 且是真陽性（見 find_undated_dual_sourcing），所以不會擾動既有基準。
         if not rq.looks_like_refusal(answer):
-            answer = _pkg._dual_source_check_and_fix(state["query"], answer, chunks, GEN_MODEL,
+            answer = _pkg._dual_source_check_and_fix(state["query"], answer, chunks, GEN_MODEL, rev_stats=_rev_stats,
                                                 verbose=verbose, web_extra=web_extra,
                                                 period_note=period_note)
     except Exception as e:
@@ -1373,7 +1378,8 @@ def _node_synthesize(state: SupervisorState) -> dict:
              if (c.get("source"), c.get("chunk_index")) in _cited]
     answer = answer.rstrip() + _basis_disclosure_notice(
         state.get("query", ""), _used, answer, _todos_ratio_fields(state.get("todos")))
-    return {"answer": answer, "unit_stats": _unit_stats}
+    return {"answer": answer, "unit_stats": _unit_stats,
+            "revision_stats": _rev_stats}
 
 
 def build_graph():

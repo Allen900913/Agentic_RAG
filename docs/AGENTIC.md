@@ -18,6 +18,7 @@
 - [A10 Synthesize 的 validator 疊法與共用守門](#a10-synthesize-的-validator-疊法與共用守門)
 - [A11 期間降級揭露：兩個獨立通道，不是一個](#a11-期間降級揭露兩個獨立通道不是一個)
 - [A12 multi_hop 依賴：業界怎麼做，以及本 repo 為什麼那樣接](#a12-multi_hop-依賴業界怎麼做以及本-repo-為什麼那樣接)
+- [A13 重生成鏈的回歸：業界怎麼做，以及為什麼這裡不做迴圈](#a13-重生成鏈的回歸業界怎麼做以及為什麼這裡不做迴圈)
 
 ---
 
@@ -526,3 +527,47 @@ state 流到 Generator）叫得出來。
 「weakest link effect」——第二跳做得再對，第一跳錯了整題就錯。實跑當場看到一次：
 「七家裡淨利最高的是哪一家」第一跳連跑三輪都 `sufficient=False`（top-k 裝不下七家的 Fundamentals），
 解出的實體是 `Apple`。**那是檢索問題不是依賴問題**，不要用依賴機制去補它。
+
+---
+
+## A13 重生成鏈的回歸：業界怎麼做，以及為什麼這裡不做迴圈
+
+**問題**：`_node_synthesize` 是六道的修補鏈（citation → consistency → period → reflect → number →
+dual_source），每一道抓到就**整篇重生成**。引用有守（每道內部都補跑 `_validate_and_fix_citations`），
+其他不變量沒有——後面那道的重生成可以破壞前面那道修好的東西，而**前面那幾道已經跑完、沒有人再看**。
+碼上的排序是**兩兩推理**出來的（「number 放 reflect 之後」「dual_source 放最末」），
+那個論證只在「後面不會破壞前面」時成立，六道兩兩之間並不都成立。
+
+**2026-09-06 查的（四篇）：**
+
+| 結論 | 出處 |
+|---|---|
+| **整篇重生成會讓先前已滿足的約束被破壞**；解法是 targeted correction——只改該改的部分，保住已經對的內容 | [Self-Review Framework](https://arxiv.org/html/2507.05598v1) |
+| critique↔refine **迴圈**：每次 refine 之後**重跑全部約束**，直到全過或撞 max iterations | [DeCRIM（Amazon）](https://arxiv.org/pdf/2410.06458) |
+| 競爭型軟約束會讓管線陷入**震盪**（滿足一個就違反另一個），需要偵測 oscillatory failure | [Meta Self-Refining](https://arxiv.org/pdf/2507.10590) |
+| **沒有外部回饋的自我修正常常反而變差** | [Limits of Self-Correction](https://www.preprints.org/frontend/manuscript/b753c9b8a11bbed2b3db90713e4cc83d/download_pub) |
+
+**本 repo 做的是單向守衛，不是迴圈。三個理由：**
+
+1. **成本結構不同。** DeCRIM 的每一輪 refine 都要一次 LLM 呼叫，而這裡一題已經燒 50~60 次
+   （見 CLAUDE.md）。相對的，本 repo 的 critique 側**本來就是零 LLM 的偵測器**——
+   所以「重生成之後重算一次全部指紋」幾乎不要錢。**免費的那一半先做，要錢的那一半先量。**
+
+2. **「不會更糟」與「會更好」是兩件事，前者才是這裡的病。** 守衛保證前者：任何一格變差就退回。
+   後者要靠迴圈，而要不要做迴圈的判準是 `revision_stats.rejected` 的實際發生率
+   ——那個分母 2026-09-06 才做出來（見 BACKLOG）。
+
+3. **第四篇那條結論站在我們這邊**：本 repo 的回饋是零 LLM 的確定性偵測器，不是模型自我評分。
+   所以「自我修正會變差」那個風險在這裡已經被結構性避開，剩下的只是「重生成的副作用」。
+
+**⚠ 守衛的判準有三個容易寫錯的地方，每個都有誤報對照（閘門㉑）：**
+
+- **逐格比較不是加總**（㉑h）：四格是四種不同的病，加總會讓「修好一個期別錯、引入一個捏造
+  數字」看起來持平，而那兩者嚴重度不對稱。這條是變異測試 P3 逼出來的。
+- **相等就接受**（㉑d）：重生成常常只改措辭。以「沒變好就退回」當判準會把整條修補鏈關掉。
+- **空的重生成不是退回**（㉑l）：那是 LLM 呼叫失敗，與「改壞了」是兩種病，
+  合併成一個數字就再也分不出來。
+
+**⚠ 指紋刻意不含 `find_claim_conflicts`**：它要先跑 `_extract_claims`（一次 LLM 抽取），
+收進來就毀掉「critique 免費」這個前提。代價是**「一致性被重生成破壞」這一型目前量不到也守不到**，
+記在 BACKLOG。

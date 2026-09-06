@@ -2194,6 +2194,164 @@ def gate20_fair_select_order() -> None:
         _assert("⑳h 活體對照可執行（掃不到就等於這道閘門只測了合成資料）", False, repr(e))
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+def gate21_revision_regression_guard() -> None:
+    """㉑ 重生成不得讓**已經通過的**確定性檢查倒退（2026-09-06）。
+
+    **病灶**：Synthesize 是一條六道的修補鏈（citation → consistency → period → reflect →
+    number → dual_source），每一道抓到就**整篇重生成**。碼上的註解顯示排序是**兩兩推理**出來的
+    （「number 放 reflect 之後」「dual_source 放最末」），但那個論證只在「後面那道不會破壞前面
+    那道」時成立，六道兩兩之間並不都成立——`_dual_source_check_and_fix` 的重生成可以引入新的
+    不可溯源數字或新的期別錯誤，而那兩道**已經跑完了，沒有人再看**。
+
+    **業界的說法一致**（2026-09-06 查的，見 docs/AGENTIC.md A13）：整篇重生成會讓先前已滿足的
+    約束被破壞，解法是 targeted correction ＋ **每次 refine 之後重跑全部約束**（DeCRIM 的
+    critique↔refine 迴圈）；沒有外部回饋的自我修正常常反而變差。
+
+    **本 repo 的成本結構讓這件事很便宜**：critique 側本來就是**零 LLM** 的偵測器，
+    所以「重生成之後把全部偵測器重跑一次」幾乎不要錢——**只有 refine 要錢**。
+    因此這裡做的不是 DeCRIM 那種迴圈（會多燒 LLM），而是**單向的接受守衛**：
+    重生成之後重算一次零 LLM 的缺陷指紋，**任何一格變差就退回原答案**。
+
+    ⚠ **判別力幾乎全在誤報對照**：陽性那兩條，一個「一律退回原答案」的實作也會過——而那等於
+      把整條修補鏈關掉。會出事的是它擋掉不該擋的：**㉑c**（修好自己那道、其餘不變 → 必須接受）、
+      **㉑d**（逐字相同 → 接受，不可以因為「沒變好」就退）、**㉑e**（同時修好兩道 → 接受）。
+    ⚠ **指紋刻意只收零 LLM 的四項**：`find_claim_conflicts` 要先跑 `_extract_claims`（一次 LLM
+      呼叫），放進守衛會讓每次重生成多燒一次錢，那正是這個設計要避免的。
+    ⚠ **計數要在場**（同 ⑲l4／⑭d）：沒退回就是 0 而不是缺席，否則消費端分不出
+      「這一題沒有重生成」與「重生成了而且沒退步」。
+    """
+    print("\n㉑ 重生成的回歸守衛：任何零 LLM 檢查變差就退回原答案")
+    FP = ar._deterministic_defects
+    ACC = ar._accept_revision
+
+    KB = [{"source": "MSFT_10K_2026.html", "chunk_index": 3, "ticker": "MSFT",
+           "raw_rerank_score": 0.9,
+           "content": "Revenue increased 18% to $84.75 billion in fiscal year 2026."}]
+    CITE = "【MSFT_10K_2026.html, chunk #3】"
+    GOOD = f"營收成長 18% 至 $84.75 billion{CITE}。"
+
+    # ── ㉑a 指紋本身：乾淨答案四項全 0；四個 key 都要在場 ──────────────────────
+    fp = FP(GOOD, KB, "")
+    _assert("㉑a 乾淨答案的缺陷指紋四項全 0，且四個 key 都在場（不是缺席）",
+            set(fp) == {"citations", "untraceable", "stale_period", "undated_dual"}
+            and all(v == 0 for v in fp.values()), fp)
+
+    # ── ㉑b 陽性：重生成引入了不可溯源的數字 → 退回 ─────────────────────────────
+    # ⚠ 測資的形狀要**真的**觸發 `find_untraceable_numbers`：它的正則要求「恰好兩位小數、
+    #   後面不接 % 或億兆萬」。第一版寫 `71.3%`，一個都匹配不到 → ㉑b 當場 FAIL。
+    #   同一天第四次踩到「測資的形狀與被測物不同」（⑳e／⑭j／⑮q 是前三次）。
+    BAD_NUM = f"營收成長 18% 至 $84.75 billion{CITE}，另計 12345.67 的調整項{CITE}。"
+    st: dict = {}
+    got = ACC(GOOD, BAD_NUM, KB, "", tag="number", stats=st)
+    _assert("㉑b 重生成引入不可溯源的數字 → 退回原答案 ＋ 計數",
+            got == GOOD and st.get("rejected") == 1, f"stats={st}")
+    _assert("㉑b2 退回要有逐筆明細（哪一道 validator 的重生成、退步在哪一格）",
+            len(st.get("rejected_detail") or []) == 1
+            and "number" in (st["rejected_detail"][0] or ""),
+            f"實得 {st.get('rejected_detail')}")
+
+    # ── ㉑f 陽性：重生成引入不存在的引用 → 退回 ────────────────────────────────
+    BAD_CITE = f"營收成長 18% 至 $84.75 billion{CITE}，另見【AAPL_10K_2025.html, chunk #9】。"
+    st2: dict = {}
+    _assert("㉑f 重生成引入指向不存在來源的引用 → 退回",
+            ACC(GOOD, BAD_CITE, KB, "", tag="reflect", stats=st2) == GOOD
+            and st2.get("rejected") == 1, f"stats={st2}")
+
+    # ── ㉑c 誤報對照：修好了自己那道、其餘不變 → **必須接受** ──────────────────
+    #    少了這條，一個「一律退回」的實作也會滿分——而那等於把整條修補鏈整個關掉。
+    st3: dict = {}
+    FIXED = ACC(BAD_NUM, GOOD, KB, "", tag="number", stats=st3)
+    _assert("㉑c **誤報對照**：重生成把缺陷修好了 → 必須接受（一律退回的實作在這裡會掛）",
+            FIXED == GOOD and st3.get("rejected") == 0 and st3.get("accepted") == 1,
+            f"stats={st3}")
+
+    # ── ㉑d 誤報對照：逐字相同 → 接受（不可以因為「沒變好」就退） ────────────────
+    st4: dict = {}
+    _assert("㉑d **誤報對照**：重生成與原答案逐字相同 → 接受，退回數必須是 0",
+            ACC(GOOD, GOOD, KB, "", tag="period", stats=st4) == GOOD
+            and st4.get("rejected") == 0, f"stats={st4}")
+
+    # ── ㉑e 誤報對照：兩道一起修好 → 接受 ─────────────────────────────────────
+    st5: dict = {}
+    _assert("㉑e **誤報對照**：同時修好兩格 → 接受",
+            ACC(BAD_CITE + BAD_NUM, GOOD, KB, "", tag="dual_source", stats=st5) == GOOD
+            and st5.get("rejected") == 0, f"stats={st5}")
+
+    # ── ㉑h **逐格比較 vs 總和**：一格變好、另一格變壞、總和持平 → 必須退回 ─────
+    #    ⚠ 這條是變異測試 P3 逼出來的：少了它，一個「比四格**加總**」的實作全綠，
+    #    而那會讓「修好一個期別錯、引入一個捏造數字」看起來持平——那兩者的嚴重度不對稱。
+    st_mix: dict = {}
+    _assert("㉑h **誤報對照**：一格變好、一格變壞、總和持平 → 仍須退回（逐格比較，不是加總）",
+            ACC(BAD_CITE, BAD_NUM, KB, "", tag="period", stats=st_mix) == BAD_CITE
+            and st_mix.get("rejected") == 1,
+            f"before={FP(BAD_CITE, KB, '')} after={FP(BAD_NUM, KB, '')} stats={st_mix}")
+
+    # ── ㉑g 計數在場（同 ⑲l4／⑭d 的形狀）────────────────────────────────────
+    st6: dict = {}
+    ACC(GOOD, GOOD, KB, "", tag="consistency", stats=st6)
+    _assert("㉑g 沒退回時 `rejected` 是 0 而**不是缺席**（否則分不出「沒重生成」與「沒退步」）",
+            st6.get("rejected") == 0 and st6.get("accepted") == 1, f"實得 {st6}")
+
+    # ── ㉑l 誤報對照：空的重生成不是「退步」，是別的病 ─────────────────────────
+    st7: dict = {}
+    _assert("㉑l **誤報對照**：重生成回空字串 → 保留原答案，但**不計入退回**（那是別的病）",
+            ACC(GOOD, "", KB, "", tag="reflect", stats=st7) == GOOD
+            and st7.get("rejected") == 0 and st7.get("empty") == 1, f"實得 {st7}")
+
+    # ── ㉑i 接線：五道 `*_check_and_fix` **全部**都要掛守衛（同 ⑭a：改三道漏一道要叫）
+    import ast
+    _funcs = _pkg_funcdefs()
+    _GUARDED = ("_consistency_check_and_fix", "_period_check_and_fix", "_reflect_and_fix",
+                "_number_check_and_fix", "_dual_source_check_and_fix")
+    _missing = []
+    for _n in _GUARDED:
+        _fn = _funcs.get(_n)
+        if _fn is None or "_accept_revision" not in ast.unparse(_fn):
+            _missing.append(_n)
+    _assert("㉑i 五道會重生成的 validator **全部**掛上守衛（漏一道要叫得出來）",
+            not _missing, f"缺 {_missing}")
+
+    # ── ㉑j 接線：state → run_agentic → record，且 None ≠ {}（同 ⑲l10）─────────
+    _ann = getattr(ar.SupervisorState, "__annotations__", {})
+    _assert("㉑j SupervisorState 宣告了 `revision_stats`（沒宣告 → LangGraph 丟掉它）",
+            "revision_stats" in _ann, f"實得 {sorted(_ann)}")
+    _assert("㉑j2 `run_agentic` 真的回傳 `revision_stats`",
+            "revision_stats" in inspect.getsource(ar.run_agentic))
+    try:
+        import importlib.util as _iu
+        _spec = _iu.spec_from_file_location(
+            "_rgoe_rev", str(Path(__file__).resolve().parent / "run_agentic_on_evalset.py"))
+        _m = _iu.module_from_spec(_spec)
+        _spec.loader.exec_module(_m)
+        _q = {"id": "x-1", "category": "mixed", "query": "Q"}
+        _r1 = _m._record_from_agentic(_q, "A", [], [], [], {}, {}, {}, st)
+        _r2 = _m._record_from_agentic(_q, "A", [], [], [], {}, {}, {}, None)
+        _assert("㉑j3 record 建構子寫進 `revision_stats` 的**值**", _r1.get("revision_stats") == st,
+                f"實得 {_r1.get('revision_stats')}")
+        _assert("㉑j4 `None`（崩潰降級／舊結果檔）不得被寫成 `{}`",
+                _r2.get("revision_stats") is None, f"實得 {_r2.get('revision_stats')!r}")
+    except Exception as e:      # noqa: BLE001
+        _assert("㉑j3 record 建構子接得上（接不上＝只測了記憶體裡的 dict）", False, repr(e))
+
+    # ── ㉑k 回歸護欄：指紋函式本身零 LLM（呼叫 call_llm 就當場失敗）────────────
+    _called = {"n": 0}
+    _saved = ar.rq.call_llm
+
+    def _boom(*a, **k):
+        _called["n"] += 1
+        raise AssertionError("指紋函式不得呼叫 LLM")
+
+    ar.rq.call_llm = _boom
+    try:
+        FP(BAD_NUM, KB, "")
+        ACC(GOOD, BAD_NUM, KB, "", tag="t", stats={})
+    finally:
+        ar.rq.call_llm = _saved
+    _assert("㉑k 指紋與守衛全程零 LLM（否則每次重生成都多燒一次錢，那正是這個設計要避開的）",
+            _called["n"] == 0, f"實得 {_called['n']} 次 LLM 呼叫")
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -2224,6 +2382,7 @@ def main() -> int:
     gate18_web_fetched_but_uncited()
     gate19_unit_finalization()
     gate20_fair_select_order()
+    gate21_revision_regression_guard()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")

@@ -68,7 +68,8 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
                          sub_queries: list, period_notes: list | None = None,
                          unit_stats: dict | None = None,
                          replan_stats: dict | None = None,
-                         plan_stats: dict | None = None) -> dict:
+                         plan_stats: dict | None = None,
+                         revision_stats: dict | None = None) -> dict:
     """把 agentic 輸出攤平成 generation_judge.json 的 record schema。
     RAGAS 只讀 id/category/query/answer/contexts；其餘欄位補上以對齊 schema、方便複查。"""
     # ⚠ 2026-08-11 修：`contexts` 與 `sources` 必須**同一次過濾**、逐位對齊。原本 contexts 濾掉
@@ -110,6 +111,9 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
         # 舊 fixture），那時依賴仍由詞表判 → 彙總 `deps_pruned`／`deps_disagreed`
         # 之前要先按這一格分群，否則會把「沒走新路」算成「新路沒問題」。
         "plan_stats": plan_stats if plan_stats is not None else None,
+        # 重生成回歸守衛的計數。`rejected` 每一筆＝某一道 validator 的重生成讓另一道
+        # 已經通過的確定性檢查倒退了（見 `_accept_revision`）。⚠ `None` ≠ `{}` 同上。
+        "revision_stats": revision_stats if revision_stats is not None else None,
         "is_refusal": looks_like_refusal(answer),
         "wrongful_refusal": None,
         "context_recall_llm": None,
@@ -248,7 +252,8 @@ def main() -> None:
                                        out.get("period_notes", []),
                                        out.get("unit_stats"),
                                        out.get("replan_stats"),
-                                       out.get("plan_stats"))
+                                       out.get("plan_stats"),
+                                       out.get("revision_stats"))
             records_by_id[q["id"]] = rec
             print(f"    ✓ {time.time()-t0:.0f}s | sub_queries={len(out.get('sub_queries', []))} "
                   f"| chunks={rec['agentic_n_chunks']} | answer_len={len(out['answer'])} "

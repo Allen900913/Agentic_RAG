@@ -5,6 +5,48 @@
 
 ## 2026-09-06
 
+### agentic D：Synthesize 的六道修補鏈沒有不動點，加上零成本的回歸守衛
+
+**病灶**：`_node_synthesize` 是一條六道的鏈（citation → consistency → period → reflect → number →
+dual_source），每一道抓到就**整篇重生成**。引用是守住的（每道 `*_check_and_fix` 內部都補跑一次
+`_validate_and_fix_citations`），**但其他不變量沒有**：`_dual_source_check_and_fix` 的重生成可以
+引入新的不可溯源數字或新的期別錯誤，而那兩道**已經跑完了，沒有人再看**。碼上的註解顯示排序是
+**兩兩推理**出來的（「number 放 reflect 之後」「dual_source 放最末」），那個論證只在
+「後面那道不會破壞前面那道」時成立，六道兩兩之間並不都成立。
+
+**先查了業界**（四篇，記進 `docs/AGENTIC.md` A13）：整篇重生成會讓先前已滿足的約束被破壞，
+解法是 targeted correction ＋ **每次 refine 之後重跑全部約束**（DeCRIM 的 critique↔refine 迴圈）；
+競爭型約束會造成震盪；**沒有外部回饋的自我修正常常反而變差**（本 repo 的偵測器是零 LLM 的外部
+回饋，站在對的那一邊）。
+
+**本 repo 的成本結構讓修法很便宜，所以刻意不做 DeCRIM 那種迴圈**：那種迴圈每一輪 refine 都要
+一次 LLM 呼叫，而這裡一題已經燒 50~60 次。改做**單向的接受守衛**——critique 側本來就是零 LLM，
+重生成之後重算一次四項缺陷指紋（不合法引用／不可溯源數字／期別倒退／並陳缺時點），
+**任何一格變差就退回重生成前的答案**。零額外 LLM 呼叫。
+
+· `validators._deterministic_defects(answer, chunks, web_extra) -> dict[str,int]`：四項指紋，
+  四個 key 一律在場。**刻意不收 `find_claim_conflicts`**——它要先跑 `_extract_claims`（一次 LLM），
+  收進來就毀掉「critique 免費」這個前提。
+· `_accept_revision(...)`：判準是**逐格**不是加總（四格是四種病，加總會讓「修好一個期別錯、
+  引入一個捏造數字」看起來持平）；**相等就接受**（以「沒變好就退回」當判準會把整條鏈關掉）；
+  **空的重生成不算退回**（那是 LLM 失敗，另一種病）。
+· 五道會重生成的 validator 全部掛上，`rev_stats` 走 out-param（不改回傳型別——五個呼叫端，
+  改成 tuple 會讓漏改的那個安靜地把 tuple 當字串接）。計數經 graph state → `run_agentic` →
+  結果檔的 `revision_stats`，與 `unit_stats`／`replan_stats`／`plan_stats` 同一條路、同一套
+  `None` ≠ `{}` 語意。
+
+**驗收：閘門㉑ 16 項（300 → 316 全 PASS）。7/7 變異全抓到。** 另跑一次真實端到端：
+reflect 抓到「54.5 億美元 ← 來源實際為 $54.5 billion」→ 重生成 → 守衛判定沒有退步 → 接受，
+最終答案是 `545 億美元（$54.5 billion）`（⑲m 的修法同時在線）。
+
+⚠ **這次拿到的是「重生成破壞了什麼」的分母，那在此之前完全不存在**。要不要進一步做成
+critique↔refine 迴圈，判準就是 `revision_stats.rejected` 的實際發生率——見 BACKLOG。
+⚠ **㉑b 的測資第一版寫錯**：`find_untraceable_numbers` 的正則要求「恰好兩位小數且後面不接 %」，
+而我寫了 `71.3%` → 一個都匹配不到、㉑b 當場 FAIL。**同一天第四次踩到「測資的形狀與被測物不同」**
+（⑳e／⑭j／⑮q 是前三次）。
+⚠ **㉑h 是變異測試 P3 逼出來的**：少了「一格變好一格變壞、總和持平」那條測資，
+一個「比四格加總」的實作全綠。
+
 ### agentic C：multi_hop 的依賴改由 Planner 宣告，`_BACKREF_RE` 詞表退位
 
 **病灶**：`depends_on` 這個欄位兩個 todo 建構點都有，值**恆為 `None`**；實際決定「這一跳要不要等

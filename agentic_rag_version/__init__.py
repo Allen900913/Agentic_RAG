@@ -164,6 +164,7 @@ from .validators import (   # noqa: E402
     _CITE_RE,
     _REF_PREFIX_RE,
     _BARE_REF_CITE_RE,
+    _deterministic_defects,
     _extract_citations,
     _repair_reference_citations,
     _parse_period_months,
@@ -817,8 +818,49 @@ def _extract_claims(answer: str, model_name: str,
 _WS_RE = re.compile(r"\s+")
 
 
+def _accept_revision(original: str, revised: str, chunks: list[dict], web_extra: str,
+                     *, tag: str, stats: dict | None = None) -> str:
+    """重生成的**回歸守衛**：零 LLM 重算缺陷指紋，**任何一格變差就退回原答案**。
+
+    **為什麼是單向守衛而不是 DeCRIM 那種 critique↔refine 迴圈**：迴圈的每一輪 refine 都要一次
+    LLM 呼叫，而本管線一題已經燒 50~60 次；守衛則是**零成本**（critique 側本來就是零 LLM 的
+    偵測器）。取捨是：守衛保證「不會更糟」，但不會把剩下的缺陷修掉——那本來就是下一道
+    validator 的工作，而它們在同一條鏈上排在後面。
+
+    ⚠ **判準是「任何一格變差」不是「總數變多」**：四格是四種不同的病，加總會讓
+      「修好一個期別錯、引入一個捏造數字」看起來持平——而那兩者的嚴重度不對稱。
+    ⚠ **相等就接受**：重生成常常只改措辭。以「沒變好就退回」當判準會把整條修補鏈關掉
+      （閘門㉑c/㉑d 是那兩條誤報對照）。
+    ⚠ **空的重生成不算退回**（`empty`）：那是 LLM 呼叫失敗，與「改壞了」是兩種病，
+      合併成一個數字就再也分不出來（同 ⑲l4／⑭d 的形狀）。
+    ⚠ `stats` 走 out-param 不改回傳型別：五個呼叫端，改成 tuple 會讓漏改的那個安靜地
+      把 tuple 當字串接（`rq.finalize_answer_units` 的 `stats` 就是這個理由）。
+    """
+    if stats is not None:
+        for k, v in (("accepted", 0), ("rejected", 0), ("empty", 0), ("rejected_detail", [])):
+            stats.setdefault(k, v)
+    if not (revised or "").strip():
+        if stats is not None:
+            stats["empty"] += 1
+        return original
+    before = _deterministic_defects(original, chunks, web_extra)
+    after = _deterministic_defects(revised, chunks, web_extra)
+    worse = [k for k in after if after[k] > before[k]]
+    if worse:
+        detail = f"{tag}: " + "、".join(f"{k} {before[k]}→{after[k]}" for k in worse)
+        _trace(f"revision-guard: {detail} → 退回重生成前的答案")
+        if stats is not None:
+            stats["rejected"] += 1
+            stats["rejected_detail"].append(detail)
+        return original
+    if stats is not None:
+        stats["accepted"] += 1
+    return revised
+
+
 def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                               verbose: bool = False, web_extra: str = "", period_note: str = "") -> str:
+                               verbose: bool = False, web_extra: str = "", period_note: str = "",
+                     rev_stats: dict | None = None) -> str:
     """一致性稽核 → 有衝突則帶問題重生成一次 → 再過 citation 稽核。無衝突原樣回傳。
 
     `web_extra` 只在**重生成**時帶回（見 `_validate_and_fix_citations` 的說明）。
@@ -854,15 +896,17 @@ def _consistency_check_and_fix(query: str, answer: str, chunks: list[dict], mode
                                   extra_user=_CONSIST_REVISE_SUFFIX.format(issues=issues),
                                   web_extra=web_extra, period_note=period_note)
     if revised and revised.strip():
-        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
-                                           web_extra=web_extra, period_note=period_note)
-    return answer
+        revised = _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
+                                              web_extra=web_extra, period_note=period_note)
+    # 回歸守衛（零 LLM）：重生成把別的確定性檢查弄差了就退回原答案。見 `_accept_revision`。
+    return _accept_revision(answer, revised, chunks, web_extra, tag="consistency", stats=rev_stats)
 
 
 
 
 def _dual_source_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                               verbose: bool = False, web_extra: str = "", period_note: str = "") -> str:
+                               verbose: bool = False, web_extra: str = "", period_note: str = "",
+                     rev_stats: dict | None = None) -> str:
     """R5 並陳時點稽核 → 有缺時點則帶問題重生成一次 → 再過 citation 稽核。
 
     **放在數字溯源之後**（管線最末）：時點是**措辭**問題，而前面每一道 validator 的重生成都
@@ -885,13 +929,15 @@ def _dual_source_check_and_fix(query: str, answer: str, chunks: list[dict], mode
                                   extra_user=_DUAL_SOURCE_REVISE_SUFFIX.format(issues=issues),
                                   web_extra=web_extra, period_note=period_note)
     if revised and revised.strip():
-        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
-                                           web_extra=web_extra, period_note=period_note)
-    return answer
+        revised = _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
+                                              web_extra=web_extra, period_note=period_note)
+    # 回歸守衛（零 LLM）：重生成把別的確定性檢查弄差了就退回原答案。見 `_accept_revision`。
+    return _accept_revision(answer, revised, chunks, web_extra, tag="dual_source", stats=rev_stats)
 
 
 def _number_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                          verbose: bool = False, web_extra: str = "", period_note: str = "") -> str:
+                          verbose: bool = False, web_extra: str = "", period_note: str = "",
+                     rev_stats: dict | None = None) -> str:
     """數字溯源稽核 → 有找不到出處的數字則帶問題重生成一次 → 再過 citation 稽核。
 
     **放在 reflect 之後**：那正是缺口所在（reflect 的重生成引入的幻覺沒有任何人再看）。
@@ -909,13 +955,15 @@ def _number_check_and_fix(query: str, answer: str, chunks: list[dict], model_nam
                                   extra_user=_NUMBER_REVISE_SUFFIX.format(issues=issues),
                                   web_extra=web_extra, period_note=period_note)
     if revised and revised.strip():
-        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
-                                           web_extra=web_extra, period_note=period_note)
-    return answer
+        revised = _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
+                                              web_extra=web_extra, period_note=period_note)
+    # 回歸守衛（零 LLM）：重生成把別的確定性檢查弄差了就退回原答案。見 `_accept_revision`。
+    return _accept_revision(answer, revised, chunks, web_extra, tag="number", stats=rev_stats)
 
 
 def _period_check_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                          verbose: bool = False, web_extra: str = "", period_note: str = "") -> str:
+                          verbose: bool = False, web_extra: str = "", period_note: str = "",
+                     rev_stats: dict | None = None) -> str:
     """期別稽核 → 有落差則帶問題重生成一次 → 再過 citation 稽核。無落差原樣回傳。
 
     與 `_consistency_check_and_fix` 分開而不合併成一次重生成：兩者的修訂指示語意完全不同
@@ -935,9 +983,10 @@ def _period_check_and_fix(query: str, answer: str, chunks: list[dict], model_nam
                                   extra_user=_PERIOD_REVISE_SUFFIX.format(issues=issues),
                                   web_extra=web_extra, period_note=period_note)
     if revised and revised.strip():
-        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
-                                           web_extra=web_extra, period_note=period_note)
-    return answer
+        revised = _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
+                                              web_extra=web_extra, period_note=period_note)
+    # 回歸守衛（零 LLM）：重生成把別的確定性檢查弄差了就退回原答案。見 `_accept_revision`。
+    return _accept_revision(answer, revised, chunks, web_extra, tag="period", stats=rev_stats)
 
 
 def _format_citations(chunks: list[dict]) -> str:
@@ -1002,7 +1051,8 @@ _REFLECT_REVISE_SUFFIX = """
 
 
 def _reflect_and_fix(query: str, answer: str, chunks: list[dict], model_name: str,
-                     verbose: bool = False, web_extra: str = "", period_note: str = "") -> str:
+                     verbose: bool = False, web_extra: str = "", period_note: str = "",
+                     rev_stats: dict | None = None) -> str:
     """Reflection 節點的核心:稽核幻覺→有則帶問題重生成一次→再過 citation 稽核。無幻覺原樣回傳。
 
     ⚠ 2026-08-13：`web_extra` 要進 **`sources_text`**，不只進重生成。這一層是拿「答案」對
@@ -1031,9 +1081,10 @@ def _reflect_and_fix(query: str, answer: str, chunks: list[dict], model_name: st
                                   web_extra=web_extra, period_note=period_note)
     if revised and revised.strip():
         # 重生成後再過 citation 稽核,確保修正時沒引入捏造引用
-        return _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
-                                           web_extra=web_extra, period_note=period_note)
-    return answer
+        revised = _validate_and_fix_citations(query, revised, chunks, model_name, verbose=verbose,
+                                              web_extra=web_extra, period_note=period_note)
+    # 回歸守衛（零 LLM）：重生成把別的確定性檢查弄差了就退回原答案。見 `_accept_revision`。
+    return _accept_revision(answer, revised, chunks, web_extra, tag="reflect", stats=rev_stats)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -1151,6 +1202,9 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
         # 為 False ＝ 這一題走的是舊格式 plan（重放快取命中舊 fixture），
         # 那時依賴仍由 `_BACKREF_RE` 詞表判——彙總時要把這兩群分開。
         "plan_stats": final.get("plan_stats") or {},
+        # 重生成回歸守衛（見 `_accept_revision`）。`rejected` 每一筆都代表
+        # **某一道 validator 的重生成讓另一道已經通過的檢查倒退了**。
+        "revision_stats": final.get("revision_stats") or {},
     }
 
 
