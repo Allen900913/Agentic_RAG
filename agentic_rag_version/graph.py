@@ -729,9 +729,21 @@ def _run_executor(task: str, temporal_scope: str, freshness_mode: str,
 COMMIT_TOP_K      = int(os.getenv("AGENTIC_COMMIT_TOP_K", str(rq.DEFAULT_TOP_K)))   # 每個子問題 advance 時收進 collected 的 top-k。env 可覆蓋供 ablation。
 
 # ── Supervisor / Subagent 架構專屬常數 ────────────────────────────────────────
-MAX_ITERS      = int(os.getenv("AGENTIC_MAX_ITERS", "8"))   # 總「子問題執行次數」上限（防 replanner 無限加待辦）。
+# 總「子問題執行次數」上限。⚠ **在現行常數下這條咬不到，別以為它是那道保險**（2026-09-06 量的）：
+# todo 的狀態是單向的（pending → in_progress → done，不會回頭），所以總執行次數**恆等於**曾經
+# 建立過的 todo 數 ≤ `MAX_TODOS`；`MAX_TODOS(7) < MAX_ITERS(8)` ⇒ 永遠先撞到前者。
+# 它也不是死碼——**把 `MAX_TODOS` 調到 ≥ 這個值的那一刻它就活過來**，而那時會有 todo 被建立卻
+# 永遠不執行，且完全靜默（`_route_after_replan` 直接跳 synthesize，不留任何痕跡）。
+# 兩個常數要一起調，`verify_web_gate_isolation` 閘門⑭a 守這個不變量。
+MAX_ITERS      = int(os.getenv("AGENTIC_MAX_ITERS", "8"))
 
-MAX_TODOS      = MAX_SUBQUERIES   # 待辦清單總數上限（沿用 7：Magnificent Seven 逐一列滿 + replan 新增後仍守此上限）。
+# 待辦清單總數上限（沿用 7：Magnificent Seven 逐一列滿 + replan 新增後仍守此上限）。
+# ⚠ **Planner 與 Replanner 共用這一個額度、先到先得**，而 Planner 一定先跑：實測 planner 拆 7 個
+#   時 Replanner 的預算是 **0**（拆 5 個 → 2、拆 1 個 → 6）。也就是說「拆得最細的題」＝
+#   「Replanner 完全沒有預算的題」，恰好是 multi_hop 那一類。
+#   額度要不要拆開是**待決的**，判準是 `replan_stats.refused_budget` 的實際發生率——
+#   在量到之前不要調高（子問題爆炸級聯有前科，見 `QUERY_WEB_BUDGET` 上方）。見 BACKLOG。
+MAX_TODOS      = MAX_SUBQUERIES
 
 # 2026-07-31：execute 節點改成一次處理「一整波」pending 待辦（見 _node_execute），同一波內彼此獨立
 # 的子問題用 thread pool 重疊執行——retrieve 仍靠 _RETRIEVE_LOCK 天然序列化，grade/生成這類 LLM API
@@ -756,6 +768,10 @@ class SupervisorState(TypedDict, total=False):
     sufficient: bool           # Replanner 判定證據已足、可提前收斂
     answer: str                # 最終答案（未附引用清單；附錄在 run_agentic 收尾加）
     unit_stats: dict           # `rq.finalize_answer_units` 這一次剝掉／修掉了幾處億（見那支的 stats 說明）
+    # Replanner 的待辦額度統計（見 `_node_replan`）。⚠ **沒有宣告在這裡的 key，LangGraph 會直接
+    # 丟掉**——閘門⑭g 守這條。⚠ 這一格是**累加**的：LangGraph 對沒有 reducer 的 key 是取代語意，
+    # 所以 `_node_replan` 自己讀舊值再合併（⑭i 守這條），否則只會剩下最後一輪。
+    replan_stats: dict
 
 
 _REPLANNER_PROMPT = f"""你是美股情報 RAG 的動態重規劃器。給你「原始問題」與「目前待辦清單（含各自狀態與
@@ -1067,6 +1083,18 @@ def _node_replan(state: SupervisorState) -> dict:
     has_pending_dependent = any(
         t["status"] == "pending" and _is_dependent_hop(t["task"]) for t in todos)
 
+    # 待辦額度統計。⚠ **自己讀舊值再合併**：LangGraph 對沒有 reducer 的 key 是**取代**語意，
+    #   直接回一份新的會讓前面幾輪 replan 的計數整個消失（⑭i 守這條）。
+    # ⚠ 三個計數一律**在場**，沒發生就是 0 而不是缺席——消費端要分得出「replanner 不想加」
+    #   與「想加但額度滿了」，缺席讓兩者外觀相同（同閘門⑲l4 的教訓）。
+    _prev = state.get("replan_stats") or {}
+    _rstats = {
+        "rounds": int(_prev.get("rounds", 0)) + 1,
+        "added": int(_prev.get("added", 0)),
+        "refused_budget": int(_prev.get("refused_budget", 0)),
+        "refused_tasks": list(_prev.get("refused_tasks", [])),
+    }
+
     sufficient = False
     if isinstance(data, dict):
         sufficient = _coerce_bool(data.get("sufficient", False))
@@ -1079,41 +1107,54 @@ def _node_replan(state: SupervisorState) -> dict:
         #   `["字串"]`（既有 replay 快取錄的全是這種 → 落到 kb）與新格式的
         #   `[{"task":…, "route":…}]`。理由與 Planner 那邊逐字相同，見該函式 docstring。
         for a in _parse_plan_output(data.get("add", []) or []):
-            if len(todos) < MAX_TODOS:
-                task, a_route = a["task"], a["route"]
-                # Prompt 是機率性約束；snapshot / --no-web 再用 Python 硬擋 web todo。
-                # ⚠ **判準從 `_is_web_todo(task)` 換成 route 欄位**（2026-09-02）：那個詞表
-                #   （`網路|上網|web search|internet`）匹配不到「在 Yahoo Finance 上查詢」
-                #   「使用NASDAQ官方網站」——六個真實措辭逐字凍結在閘門⑧p。現在路由是欄位，
-                #   不需要再從中文句子反推。
-                if a_route in ("web", "both") and (freshness_mode == FRESHNESS_SNAPSHOT
-                                                   or not _pkg.ENABLE_WEB_SEARCH):
-                    _trace(f"replan: 拒絕不符合時間模式的 web todo → {task!r}")
-                    continue
-                # intraday 且已打過 web → 追加任何待辦都必然徒勞（實測 18/18 零貢獻）。
-                # ⚠ **刻意不加「這是不是 web 待辦」的前置條件**：intraday 且已搜過 web 之後，
-                #   追加**任何**待辦都徒勞，不只 web 的。第二版曾用 `_is_web_todo(task)` 當前置
-                #   條件而被詞表漏掉（六個措辭凍結在閘門⑧p）；那個函式已於 2026-09-02 刪除，
-                #   但這裡的判準不變——**不要**改成 `a_route in ("web","both")`，那會讓
-                #   「查一下 10-Q 有沒有提到」這種徒勞的 kb 待辦重新溜進來。
-                if _web_retry_is_pointless(todos):
-                    _trace(f"replan: 拒絕徒勞的追加待辦（intraday 且已搜過 web）→ {task!r}")
-                    continue
-                scope = _build_todo_temporal_scope(task, freshness_mode)
-                todos.append({
-                    "id": next_id,
-                    "task": task,
-                    "temporal_scope": scope,
-                    "attributable": False,
-                    "route": a_route,
-                    "depends_on": None,
-                    "freshness_gaps": [],   # 同上：執行完由 _node_execute 回填
-                    "period_notes": [],
-                    "web_used": False,
-                    "status": "pending",
-                    "result": "",
-                })
-                next_id += 1
+            # ⚠ **額度用完的拒絕原本是這個 `if` 的隱含 else：沒有 trace、沒有計數**
+            #   （2026-09-06 改）。另外兩個拒絕分支都有 trace，只有最常發生的這個沒有，於是
+            #   「replanner 想加 3 個但額度滿了」與「replanner 什麼都不想加」在結果檔裡**外觀
+            #   完全相同** → `probe_replan_contribution` 量到的「Replanner 貢獻 0」在拆得細的
+            #   題上讀不出來。改成早退 ＋ 計數（行為與舊版逐字相同，閘門⑭f 是那條回歸護欄）。
+            #   ⚠ 計數**刻意與另外兩個拒絕分支分開**：三種原因是三種不同的病，合併成一個
+            #   數字就再也分不出來（⑭e 守這條）。
+            if len(todos) >= MAX_TODOS:
+                _rstats["refused_budget"] += 1
+                _rstats["refused_tasks"].append(a["task"])
+                _trace(f"replan: 待辦額度已滿（MAX_TODOS={MAX_TODOS}，Planner 先用掉大部分）"
+                       f"→ 拒絕 {a['task']!r}")
+                continue
+            task, a_route = a["task"], a["route"]
+            # Prompt 是機率性約束；snapshot / --no-web 再用 Python 硬擋 web todo。
+            # ⚠ **判準從 `_is_web_todo(task)` 換成 route 欄位**（2026-09-02）：那個詞表
+            #   （`網路|上網|web search|internet`）匹配不到「在 Yahoo Finance 上查詢」
+            #   「使用NASDAQ官方網站」——六個真實措辭逐字凍結在閘門⑧p。現在路由是欄位，
+            #   不需要再從中文句子反推。
+            if a_route in ("web", "both") and (freshness_mode == FRESHNESS_SNAPSHOT
+                                               or not _pkg.ENABLE_WEB_SEARCH):
+                _trace(f"replan: 拒絕不符合時間模式的 web todo → {task!r}")
+                continue
+            # intraday 且已打過 web → 追加任何待辦都必然徒勞（實測 18/18 零貢獻）。
+            # ⚠ **刻意不加「這是不是 web 待辦」的前置條件**：intraday 且已搜過 web 之後，
+            #   追加**任何**待辦都徒勞，不只 web 的。第二版曾用 `_is_web_todo(task)` 當前置
+            #   條件而被詞表漏掉（六個措辭凍結在閘門⑧p）；那個函式已於 2026-09-02 刪除，
+            #   但這裡的判準不變——**不要**改成 `a_route in ("web","both")`，那會讓
+            #   「查一下 10-Q 有沒有提到」這種徒勞的 kb 待辦重新溜進來。
+            if _web_retry_is_pointless(todos):
+                _trace(f"replan: 拒絕徒勞的追加待辦（intraday 且已搜過 web）→ {task!r}")
+                continue
+            scope = _build_todo_temporal_scope(task, freshness_mode)
+            todos.append({
+                "id": next_id,
+                "task": task,
+                "temporal_scope": scope,
+                "attributable": False,
+                "route": a_route,
+                "depends_on": None,
+                "freshness_gaps": [],   # 同上：執行完由 _node_execute 回填
+                "period_notes": [],
+                "web_used": False,
+                "status": "pending",
+                "result": "",
+            })
+            next_id += 1
+            _rstats["added"] += 1
     if has_pending_dependent:   # 第二跳未跑 → 一律不收斂,強制回 execute 把它做完
         sufficient = False
     if sufficient:
@@ -1121,8 +1162,8 @@ def _node_replan(state: SupervisorState) -> dict:
             if t["status"] == "pending":
                 t["status"] = "dropped"
     _trace(f"replan: sufficient={sufficient} "
-           f"todos={[(t['id'], t['status']) for t in todos]}")
-    return {"todos": todos, "sufficient": sufficient}
+           f"todos={[(t['id'], t['status']) for t in todos]} stats={_rstats}")
+    return {"todos": todos, "sufficient": sufficient, "replan_stats": _rstats}
 
 
 def _route_after_replan(state: SupervisorState) -> str:

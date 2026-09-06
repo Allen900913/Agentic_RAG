@@ -5,6 +5,44 @@
 
 ## 2026-09-06
 
+### agentic B：Replanner 的待辦額度用完時，拒絕原本一個字都不印
+
+**先量再改。** 零 LLM 驅動 graph 控制流（`_node_execute` / `_node_replan` / `_route_after_replan`），
+replan 的 LLM 換成「每輪都想加 3 個」的樁：
+
+| planner 拆幾個 | replan 真的加得進去 | 總執行次數 | 停在哪個上限 |
+|---|---|---|---|
+| 1 | 6 | 7 | `MAX_TODOS` |
+| 5 | 2 | 7 | `MAX_TODOS` |
+| **7** | **0** | 7 | `MAX_TODOS` |
+
+**① `MAX_ITERS=8` 在現行常數下咬不到。** todo 的狀態是單向的（pending → in_progress → done，
+不會回頭），所以總執行次數**恆等於**曾經建立過的 todo 數 ≤ `MAX_TODOS=7`。它的註解寫著
+「防 replanner 無限加待辦」，但做那件事的是 `MAX_TODOS`。**它不是死碼**——把 `MAX_TODOS` 調到
+≥ 8 的那一刻它就活過來，而那時會有 todo 被建立卻永遠不執行、且完全靜默。註解改成實話，
+不變量交給閘門⑭a。
+
+**② `MAX_TODOS` 是 Planner 與 Replanner 共用的一個額度、先到先得，而 Planner 一定先跑。**
+所以「拆得最細的題」＝「Replanner 完全沒有預算的題」，恰好是 multi_hop 那一類。
+
+**③ 改的是可觀測性，不是額度。** 額度用完的拒絕原本是 `if len(todos) < MAX_TODOS:` 的**隱含
+else**：沒有 trace、沒有計數——而另外兩個拒絕分支（時間模式不符、intraday 徒勞）都有 trace，
+只有最常發生的這個沒有。於是「replanner 想加 3 個但額度滿了」與「replanner 什麼都不想加」
+在結果檔裡**外觀完全相同**，`probe_replan_contribution.py` 量到的「Replanner 貢獻 0」在拆得細
+的題上**讀不出來**。現在落地成 `replan_stats`（`rounds`／`added`／`refused_budget`／
+`refused_tasks`），走 graph state → `run_agentic` → `run_agentic_on_evalset` 的 record，
+與 `unit_stats` **同一條路、同一套 `None` ≠ `{}` 語意**。
+
+⚠ **刻意不動任何常數。** 「該不該給 Replanner 獨立額度」需要證據，而證據就是這次落地的計數。
+沒量到之前調高上限＝又一個「聽起來合理」的機制假設（子問題爆炸級聯有前科）。見 BACKLOG。
+⚠ **行為逐字不變**（⑭f 是那條回歸護欄）：早退取代隱含 else，todos 的產出完全相同。
+
+**驗收：閘門⑭ 15 項（`verify_web_gate_isolation.py`，181 → 196 全 PASS）。7/7 變異全抓到。**
+
+⚠ **⑭j 第一版是恆真的**：它原本只數 `_node_replan` 裡 `_trace` 呼叫的**總數**（≥ 4），而改動前
+就已經有四個以上 → 自測當場全綠。改成問「那個 trace 的引數裡有沒有 `MAX_TODOS`」才有判別力。
+**這是同一天第二次踩到同一個形狀**（⑳e 是第一次），兩次都是變異測試抓出來的。
+
 ### agentic A：`_fair_select` 修掉一個自我矛盾——順序不再由跨子問題不可比的分數決定
 
 **病灶是同一個函式的兩句話互相矛盾。** [`agentic_rag_version/retrieval.py`](agentic_rag_version/retrieval.py)

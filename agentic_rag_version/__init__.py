@@ -1138,6 +1138,12 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
         #   根本沒經過 `finalize_answer_units`。消費端要把「缺這格」與「這格是 0」分開讀，
         #   否則崩潰降級的題會被算進「LLM 這次沒寫億」的分母裡。
         "unit_stats": final.get("unit_stats") or {},
+        # Replanner 的待辦額度統計（見 `_node_replan`）。`refused_budget` 每一筆都代表
+        # **Replanner 想加一個待辦、但額度被 Planner 用光了**——那是 `MAX_TODOS` 該不該
+        # 拆成兩份額度的分母（見該常數上方與 BACKLOG）。
+        # ⚠ 與 `unit_stats` 同樣的 `None` ≠ `{}` 語意：崩潰降級那條路不經過 graph，
+        #   **整個 key 不會出現**（不是 0），消費端要把兩者分開讀。
+        "replan_stats": final.get("replan_stats") or {},
     }
 
 

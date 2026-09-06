@@ -1724,6 +1724,180 @@ def _check_monkeypatch_reaches_callers() -> int:
     return fail
 
 
+def _check_replan_todo_budget() -> int:
+    """閘門⑭：Replanner 的待辦額度用完時，拒絕必須**看得見**（2026-09-06）。
+
+    **量到的事實**（零 LLM 驅動 graph 控制流，純確定性）：
+
+    | planner 拆幾個 | replan 真的加得進去 | 總執行次數 | 停在哪個上限 |
+    |---|---|---|---|
+    | 1 | 6 | 7 | `MAX_TODOS` |
+    | 5 | 2 | 7 | `MAX_TODOS` |
+    | **7** | **0** | 7 | `MAX_TODOS` |
+
+    兩件事：
+    ① **`MAX_ITERS` 咬不到**。它的註解寫著「總子問題執行次數上限（防 replanner 無限加待辦）」，
+       但 todo 的狀態是單向的（pending → in_progress → done，不會回頭），所以總執行次數
+       **恆等於**曾經建立過的 todo 數 ≤ `MAX_TODOS`。`MAX_TODOS(7) < MAX_ITERS(8)` ⇒ 不可達。
+       它不是死碼——**把 `MAX_TODOS` 調到 ≥ `MAX_ITERS` 的那一刻它就會活過來**，而那時會有
+       todo 被建立卻永遠不執行，且**完全靜默**。⑭a 就是守這個未來。
+    ② **Planner 與 Replanner 共用同一個額度、先到先得**，而 Planner 一定先跑。所以
+       「拆得最細的題」＝「Replanner 完全沒有預算的題」，恰好是 multi_hop 那一類。
+
+    **這道閘門修的不是額度，是可觀測性。** 拒絕原本是 `if len(todos) < MAX_TODOS:` 的**隱含
+    else**——沒有 trace、沒有計數，而另外兩個拒絕分支（時間模式不符、intraday 徒勞）都有 trace。
+    於是「replanner 想加 3 個但額度滿了」與「replanner 什麼都不想加」在結果檔裡**外觀完全相同**，
+    `probe_replan_contribution.py` 量到的「Replanner 貢獻 0」因此在大題上**讀不出來**。
+    這與 `unit_stats` 是同一個形狀（見閘門⑲l）：先把分母做出來，再談要不要改額度。
+
+    ⚠ **刻意不動任何常數**：「該不該給 Replanner 獨立額度」需要證據，而證據就是這次落地的
+      計數。沒有量到之前調高上限＝又一個「聽起來合理」的機制假設（子問題爆炸級聯有前科）。
+    ⚠ **判別力集中在四條誤報對照**：⑭d（不想加時計數必須是 **0 而不是缺席**——同 ⑲l4，
+      否則消費端分不出兩種情況）、⑭e（另外兩個拒絕分支**不得**被算進來，三種病不可合併）、
+      ⑭f（只加觀測、todos 產出逐字不變）、⑭i（多輪必須**累加**——LangGraph 對沒有 reducer
+      的 key 是取代語意，寫錯就只剩最後一輪）。
+    """
+    import ast
+    import inspect
+    import json as _json
+    import llm_replay as _lr
+
+    results: list[tuple[str, bool, str]] = []
+    MT, MI, MS = ar.MAX_TODOS, ar.MAX_ITERS, ar.MAX_SUBQUERIES
+
+    # ── ⑭a 常數前提：MAX_TODOS 必須嚴格小於 MAX_ITERS ────────────────────────────
+    results.append((f"⑭a MAX_TODOS({MT}) < MAX_ITERS({MI})：否則 todo 會建了卻永不執行",
+                    MT < MI,
+                    "調高 MAX_TODOS 時 MAX_ITERS 要一起調，否則多出來的 todo 靜默消失"))
+    results.append((f"⑭a2 MAX_SUBQUERIES({MS}) <= MAX_TODOS({MT})：Planner 不得一次就超編",
+                    MS <= MT, "Planner 拆出來的 todo 會直接被 replan 的上限判定為超編"))
+
+    # ── 共用：零 LLM 驅動 _node_replan ──────────────────────────────────────────
+    def _todo(tid, task="T"):
+        return {"id": tid, "task": task, "status": "done", "result": "r", "route": "kb",
+                "depends_on": None, "temporal_scope": "", "attributable": True,
+                "ratio_fields": None, "freshness_gaps": [], "period_notes": [], "web_used": False}
+
+    def _replan(n_existing, add, *, mode=None, prev_stats=None, add_route="kb"):
+        mode = mode or ar.FRESHNESS_SNAPSHOT
+        payload = {"sufficient": False, "drop": [],
+                   "add": [{"task": t, "route": add_route} for t in add]}
+
+        def _fake_llm(messages, model_name, temperature=0.0):
+            return _json.dumps(payload, ensure_ascii=False)
+
+        saved = (_lr._CACHE, _lr.enabled, ar.rq.call_llm, ar._build_temporal_contract)
+        _lr._CACHE, _lr.enabled = {}, (lambda: False)
+        ar.rq.call_llm = _fake_llm
+        ar._build_temporal_contract = lambda m: "(contract stub)"
+        try:
+            st = {"query": "Q", "freshness_mode": mode, "collected": [],
+                  "todos": [_todo(i, f"T{i}") for i in range(n_existing)]}
+            if prev_stats is not None:
+                st["replan_stats"] = prev_stats
+            return ar._node_replan(st)
+        finally:
+            (_lr._CACHE, _lr.enabled, ar.rq.call_llm, ar._build_temporal_contract) = saved
+
+    # ── ⑭b 陽性：額度滿 → 一個都加不進去，而且**數得出來** ────────────────────────
+    out_full = _replan(MT, ["新A", "新B", "新C"])
+    s_full = out_full.get("replan_stats") or {}
+    results.append((f"⑭b 額度已滿（todos={MT}）→ 3 個 add 全被拒，且 refused_budget == 3",
+                    len(out_full["todos"]) == MT and s_full.get("refused_budget") == 3,
+                    f"實得 todos={len(out_full['todos'])} stats={s_full}"))
+    results.append(("⑭b2 拒絕要有逐筆明細（只有計數的話查不出被丟掉的是什麼）",
+                    list(s_full.get("refused_tasks") or []) == ["新A", "新B", "新C"],
+                    f"實得 {s_full.get('refused_tasks')}"))
+
+    # ── ⑭c 誤報對照：額度沒滿 → 同一批 add 全進得去，且 refused_budget 是 0 ────────
+    out_room = _replan(1, ["新A", "新B", "新C"])
+    s_room = out_room.get("replan_stats") or {}
+    results.append(("⑭c **誤報對照**：額度沒滿 → 3 個全進得去、refused_budget == 0",
+                    len(out_room["todos"]) == 4 and s_room.get("refused_budget") == 0,
+                    f"實得 todos={len(out_room['todos'])} stats={s_room}"))
+
+    # ── ⑭d 誤報對照（⑲l4 的形狀）：什麼都不想加 → 兩個計數都要**在場**且為 0 ────────
+    s_none = _replan(1, []).get("replan_stats") or {}
+    results.append(("⑭d **誤報對照**：不想加東西 → added/refused 都是 0 而**不是缺席**",
+                    s_none.get("added") == 0 and s_none.get("refused_budget") == 0,
+                    f"實得 {s_none}（缺席的話分不出「不想加」與「加不進去」）"))
+    results.append(("⑭d2 `added` 要真的反映加進去幾個（不是恆 0）",
+                    s_room.get("added") == 3, f"實得 {s_room.get('added')}"))
+
+    # ── ⑭e 誤報對照：另外兩個拒絕分支不得混進 refused_budget（三種不同的病）─────────
+    s_mode = _replan(1, ["上網查X"], add_route="web").get("replan_stats") or {}
+    results.append(("⑭e **誤報對照**：snapshot 拒絕 web todo 時 refused_budget 必須是 0",
+                    s_mode.get("refused_budget") == 0,
+                    f"實得 {s_mode}；混在一起就分不出「額度滿」與「時間模式不符」"))
+
+    # ── ⑭f 回歸護欄：只加觀測，todos 的產出逐字不變 ────────────────────────────
+    _got = [(t["id"], t["task"], t["route"], t["attributable"], t["status"])
+            for t in out_room["todos"]]
+    _want = [(0, "T0", "kb", True, "done"),
+             (1, "新A", "kb", False, "pending"),
+             (2, "新B", "kb", False, "pending"),
+             (3, "新C", "kb", False, "pending")]
+    results.append(("⑭f **誤報對照**：加了計數之後 todos 的產出逐字不變（只加觀測）",
+                    _got == _want, f"實得 {_got}"))
+
+    # ── ⑭i 多輪必須累加（LangGraph 對沒有 reducer 的 key 是**取代**語意）───────────
+    s1 = _replan(MT, ["甲"]).get("replan_stats") or {}
+    s2 = _replan(MT, ["乙", "丙"], prev_stats=s1).get("replan_stats") or {}
+    results.append(("⑭i 多輪 replan 的計數必須**累加**（取代語意會讓前面幾輪消失）",
+                    s2.get("refused_budget") == 3 and s2.get("rounds") == 2,
+                    f"第一輪 {s1} → 第二輪 {s2}"))
+
+    # ── ⑭g 接線：欄位有宣告在 SupervisorState + run_agentic 真的讀它 ──────────────
+    _ann = getattr(ar.SupervisorState, "__annotations__", {})
+    results.append(("⑭g SupervisorState 宣告了 `replan_stats`（沒宣告 → LangGraph 丟掉它）",
+                    "replan_stats" in _ann, f"實得欄位 {sorted(_ann)}"))
+    _ra_src = inspect.getsource(ar.run_agentic)
+    results.append(("⑭g2 `run_agentic` 真的從最終 state 讀 `replan_stats` 並回傳",
+                    "replan_stats" in _ra_src,
+                    "只寫在 state 裡而沒有回傳＝跑 65 題也彙總不到，同 ⑲l 的教訓"))
+
+    # ── ⑭h 接線：拿真實 stats 餵**生產的 record 建構子**驗值，且 None ≠ {}（⑲l10）──
+    try:
+        import importlib.util as _iu
+        from pathlib import Path as _Pa
+        _spec = _iu.spec_from_file_location(
+            "_rgoe_probe", str(_Pa(__file__).resolve().parent / "run_agentic_on_evalset.py"))
+        _m = _iu.module_from_spec(_spec)
+        _spec.loader.exec_module(_m)
+        _q = {"id": "x-1", "category": "mixed", "query": "Q"}
+        _rec = _m._record_from_agentic(_q, "A", [], [], [], {}, s_full)
+        _rec_none = _m._record_from_agentic(_q, "A", [], [], [], {}, None)
+        results.append(("⑭h record 建構子把 `replan_stats` 的**值**寫進結果檔",
+                        _rec.get("replan_stats") == s_full, f"實得 {_rec.get('replan_stats')}"))
+        results.append(("⑭h2 `None`（崩潰降級／舊結果檔）不得被寫成 `{}`",
+                        _rec_none.get("replan_stats") is None,
+                        f"實得 {_rec_none.get('replan_stats')!r}"))
+    except Exception as e:      # noqa: BLE001
+        results.append(("⑭h record 建構子接得上（接不上＝只測了記憶體裡的 dict）",
+                        False, repr(e)))
+
+    # ── ⑭j AST：額度那個拒絕分支真的有自己的 `_trace`（原本是隱含 else，一個字都沒印）
+    #    ⚠ **第一版只數 `_trace` 的總數（>= 4），而那是恆真的**——改動前就已經有四個以上，
+    #    自測當場全綠。要有判別力就得問「那個 trace 是不是在講額度」。同 ⑳e／⑰i 的形狀。
+    _tree = ast.parse(inspect.getsource(ar._node_replan))
+    _trace_args = [ast.unparse(_a) for _n in ast.walk(_tree)
+                   if isinstance(_n, ast.Call) and isinstance(_n.func, ast.Name)
+                   and _n.func.id == "_trace"
+                   for _a in _n.args]
+    results.append(("⑭j 額度拒絕有**自己的** `_trace`（另外兩個分支都有，只有它原本沒有）",
+                    any("MAX_TODOS" in _s for _s in _trace_args),
+                    f"{len(_trace_args)} 個 _trace 引數，沒有一個提到 MAX_TODOS"))
+
+    print()
+    print(f"  {'Replanner 待辦額度：拒絕必須看得見':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
 def main() -> int:
     print(f"  {'情境':<24}{'Q1':>6}{'Q2':>6}{'Q3':>6}{'Q4':>6}{'呼叫':>6}   判定")
     print("  " + "-" * 68)
@@ -1758,6 +1932,7 @@ def main() -> int:
     fail += _check_route_dispatch()
     fail += _check_replay_readonly()
     fail += _check_monkeypatch_reaches_callers()
+    fail += _check_replan_todo_budget()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0

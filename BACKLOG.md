@@ -244,6 +244,23 @@ live 的就是上面三支。另有 `eval/diagnose_crit_miss.py:32` 與 `eval/re
   ⚠ **在有尺之前，不要因為「感覺變好了」就往這個方向再改一次**——那正是本 repo 記過六次的
   「機制假設聽起來合理」。
 
+- **`MAX_TODOS` 該不該拆成「Planner 額度」＋「Replanner 額度」——分母 2026-09-06 做好了，還沒跑。**
+  現況：兩者**共用**一個 7、先到先得，Planner 一定先跑 → **planner 拆 7 個時 Replanner 的預算是 0**
+  （拆 5 → 2、拆 1 → 6，零 LLM 量的，見 [`CHANGELOG.md`](CHANGELOG.md)）。也就是說「拆得最細的題」
+  ＝「Replanner 完全沒有預算的題」，恰好是 multi_hop 那一類。
+  **卡點原本是量尺**：拒絕是隱含 else，沒有 trace 沒有計數 → 「想加但額度滿了」與「什麼都不想加」
+  外觀完全相同。**現在有 `replan_stats.refused_budget` 了**（graph state → `run_agentic` → 結果檔），
+  閘門⑭ 15 項守它。
+  **要決定之前先跑的**：① 全量 65 題，看 `refused_budget > 0` 的題佔幾成、集中在哪一類；
+  ② 那些題的 `refused_tasks` **人工讀過**——被擋掉的是有價值的待辦，還是又一批同義的
+  「改用網路搜尋查…」（後者已有前科，見 `QUERY_WEB_BUDGET` 上方註解）。
+  ⚠ **在讀過明細之前不要調高上限**：子問題爆炸級聯實測過一題 7 次 web／近一小時。
+  ⚠ **這個分母也讓 `probe_replan_contribution` 的舊結論限縮**：那支量到的「Replanner 貢獻 0」
+  在 planner 拆滿的題上**不是量測結果而是定義**（預算是 0，當然貢獻 0）。要重新解讀它，
+  得先按 `refused_budget` 分層。
+  ⚠ `MAX_ITERS` 與 `MAX_TODOS` **要一起調**：前者在現行常數下咬不到，但 `MAX_TODOS ≥ MAX_ITERS`
+  的那一刻會有 todo 建了卻永不執行、且完全靜默。閘門⑭a 守這條。
+
 ---
 
 ## 觀察：multi_hop 的「比大小」目前沒有 Python 在做（量過了，沒有損害）
