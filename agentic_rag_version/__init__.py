@@ -122,6 +122,7 @@ from .retrieval import (   # noqa: E402
     _fetch_fundamentals_with_field,
     _ensure_ratio_source_coverage,
     _BACKREF_RE,
+    _DEP_PLACEHOLDER_RE,
     _TICKER_CANON,
 )
 from .validators import (   # noqa: E402
@@ -204,6 +205,7 @@ from .validators import (   # noqa: E402
     _NUMBER_REVISE_SUFFIX,
     _DUAL_SOURCE_REVISE_SUFFIX,
     FRESHNESS_SNAPSHOT,
+    _has_unresolved_anchor,
     _is_dependent_hop,
     _resolve_hop_entity,
     _fill_dependent_hop,
@@ -251,6 +253,7 @@ from .graph import (   # noqa: E402
     _coerce_bool,
     _PLANNER_PROMPT,
     _parse_plan_output,
+    validate_plan_dependencies,
     _plan_subqueries,
     _CHECKER_PROMPT,
     _CHECKER_LIVE_RECENCY_BLOCK,
@@ -1144,6 +1147,10 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
         # ⚠ 與 `unit_stats` 同樣的 `None` ≠ `{}` 語意：崩潰降級那條路不經過 graph，
         #   **整個 key 不會出現**（不是 0），消費端要把兩者分開讀。
         "replan_stats": final.get("replan_stats") or {},
+        # Plan 的依賴宣告品質（見 `validate_plan_dependencies`）。`deps_declared`
+        # 為 False ＝ 這一題走的是舊格式 plan（重放快取命中舊 fixture），
+        # 那時依賴仍由 `_BACKREF_RE` 詞表判——彙總時要把這兩群分開。
+        "plan_stats": final.get("plan_stats") or {},
     }
 
 

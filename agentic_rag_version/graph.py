@@ -43,7 +43,7 @@ from .tools import _current_run_state
 from .tools import _current_run_state, _reset_run_pool, _subagent_apps, _take_query_web_budget, rag_search, web_search
 from .tracing import _trace
 from .validators import FRESHNESS_SNAPSHOT
-from .validators import FRESHNESS_SNAPSHOT, _basis_disclosure_notice, _build_todo_temporal_scope, _fill_dependent_hop, _format_unresolved_freshness_notice, _is_dependent_hop, _news_freshness_gaps, _resolve_hop_entity, _unfulfilled_web_route_gaps, _unmet_realtime_gaps
+from .validators import FRESHNESS_SNAPSHOT, _basis_disclosure_notice, _build_todo_temporal_scope, _fill_dependent_hop, _format_unresolved_freshness_notice, _has_unresolved_anchor, _is_dependent_hop, _news_freshness_gaps, _resolve_hop_entity, _unfulfilled_web_route_gaps, _unmet_realtime_gaps
 from .validators import NO_REALTIME_SOURCE, REALTIME_STALE_DAYS, _classify_staleness, _get_as_of_date
 from .validators import _extract_citations, web_fetched_but_uncited_notice
 from .validators import _get_as_of_date
@@ -169,13 +169,23 @@ _PLANNER_PROMPT = f"""你是美股情報 RAG 的規劃器。把使用者問題�
   · **同一公司同一面向不要拆成多個近義子問題**——例如同一則新聞事件拆成兩問、或把同一個指標換句話問兩次
     (「毛利率是多少」vs「毛利率水準如何」)都算重複,合成一個即可。不同指標(毛利率 vs 淨利率)才算不同意圖。
   · 只有「集合詞需逐一列舉成員」或「多實體/多年度比較」時,才可以超過 3 個(此時以意圖保全為準,不受精簡限制)。
+- 【依賴 depends_on】絕大多數子問題**彼此獨立,填 null**。只有「必須先知道前一個子問題的答案
+  才寫得出來」的那種第二跳才填——典型是「市值最高的是哪一家」→「**那一家**的毛利率是多少」。
+  · 填的是**排在前面**的那個子問題的索引(0 起算);只能往前指,不能指自己、也不能指後面的。
+  · 這種子問題的文字裡,把待解的公司寫成 **#索引** 佔位符,不要寫「該公司」這類代名詞:
+    寫「#0 的毛利率是多少」,不要寫「該公司的毛利率是多少」。執行時 #0 會被換成第 0 個
+    子問題解出的公司名。
+  · ⚠ **能自己寫清楚就不要建依賴**:原問題已經點名公司時直接寫公司名,填 null。
+    多建一個依賴會讓那個子問題晚一輪才檢索。
 - 不要杜撰原問題沒有的意圖;不要拆過細。最多 {MAX_SUBQUERIES} 個。
 
-只輸出一個 JSON 陣列,元素是物件 {{"task": 繁體中文子問題, "route": "kb"|"web"|"both"}},
+只輸出一個 JSON 陣列,元素是物件
+{{"task": 繁體中文子問題, "route": "kb"|"web"|"both", "depends_on": 索引或 null}},
 不要任何其他文字。
-例:[{{"task":"Apple 的 FY2025 EPS 是多少","route":"kb"}},
-    {{"task":"Apple 最近有什麼跟 Siri 有關的消息","route":"web"}},
-    {{"task":"Apple 目前的市值是多少","route":"both"}}]"""
+例:[{{"task":"Apple 的 FY2025 EPS 是多少","route":"kb","depends_on":null}},
+    {{"task":"Apple 最近有什麼跟 Siri 有關的消息","route":"web","depends_on":null}},
+    {{"task":"Magnificent Seven 裡市值最高的是哪一家","route":"both","depends_on":null}},
+    {{"task":"#2 的毛利率是多少","route":"kb","depends_on":2}}]"""
 
 
 def _parse_plan_output(data) -> list[dict]:
@@ -198,17 +208,71 @@ def _parse_plan_output(data) -> list[dict]:
         return []
     out: list[dict] = []
     for item in data:
+        dep, declared = None, False
         if isinstance(item, str):
             task, route = item.strip(), _ROUTE_LEGACY_DEFAULT
         elif isinstance(item, dict):
             task = str(item.get("task") or "").strip()
             raw = str(item.get("route") or "").strip().lower()
             route = raw if raw in VALID_ROUTES else _ROUTE_UNCERTAIN_DEFAULT
+            # ⚠ **「說沒有」與「沒說」必須分得開**（2026-09-06）：`depends_on: null` 是
+            #   Planner **宣告**這一跳不依賴任何人，而整個 key 不存在（舊格式、既有 fixture、
+            #   replan 建的 todo）是**沒有資訊**。分不開的話，`_BACKREF_RE` 那張詞表仍然是
+            #   實際做決定的人，而端到端跑分看不出任何差別——`_RATIO_INTENT_RE` 就是這個形狀
+            #   （見 CLAUDE.md〈LLM 與 Python 的分工〉）。閘門⑮a/⑮c 是這條的兩個方向。
+            if "depends_on" in item:
+                declared = True
+                _d = item.get("depends_on")
+                # 值壞掉（字串、bool、浮點）→ 正規化成 None，但 `declared` 仍是 True：
+                # 「宣告了但寫壞了」由驗證層修剪並計數，不在解析層靜默吃掉（同 route 的
+                # 「解析寬鬆、分派嚴格」）。⚠ `bool` 要先擋：Python 的 True 是 int 的子類。
+                if isinstance(_d, int) and not isinstance(_d, bool):
+                    dep = _d
         else:
             continue                      # 數字/None/巢狀陣列 → 丟掉,不要 str() 成垃圾子問題
         if task:
-            out.append({"task": task, "route": route})
+            out.append({"task": task, "route": route,
+                        "depends_on": dep, "deps_declared": declared})
     return out
+
+
+def validate_plan_dependencies(todos: list[dict]) -> tuple[list[dict], dict]:
+    """Plan 的 DAG 結構檢驗 ＋ 修剪。**純函式、零 LLM、零網路。** 回傳 `(todos, stats)`。
+
+    業界（A.DOT／Maestro／structured-planning 三篇一致）的第二段：執行前做 variable hygiene
+    （無懸空引用）與無環檢查，**懸空引用是 prune ＋ warning 不是靜默**。
+
+    ⚠ **不需要 Kahn／DFS**：todo 的 `id` 是依清單位置指派的，所以「只能依賴排在自己前面的」
+      （`0 <= depends_on < id`）**同時**保證無懸空、無自環、無環，是 O(n) 的全序檢查。
+      副產品：`id 0` 的 `depends_on` 恆被修剪成 `None` ⇒ **永遠至少有一個非依賴型 todo，
+      `_node_execute` 不會 deadlock**（閘門⑮i）。
+
+    ⚠ **`deps_disagreed` 不是缺陷計數，是分母**：Planner 宣告「沒有依賴」、而子問題字面上
+      帶著未解錨點（`#N` 或回指代名詞且句中沒點名任何公司）時記一筆。那種情況 `_is_dependent_hop`
+      **仍然會延後**（見該函式），這裡只負責把分歧數出來——日後要不要拿掉那個例外，靠這個數字。
+    """
+    stats = {"n_todos": len(todos), "deps_declared": False, "deps_count": 0,
+             "deps_pruned": 0, "deps_pruned_detail": [], "deps_disagreed": 0}
+    for i, t in enumerate(todos):
+        if t.get("deps_declared"):
+            stats["deps_declared"] = True
+        dep = t.get("depends_on")
+        tid = t.get("id", i)
+        if dep is not None:
+            if not (isinstance(dep, int) and 0 <= dep < tid):
+                stats["deps_pruned"] += 1
+                stats["deps_pruned_detail"].append(
+                    f"id={tid} depends_on={dep!r}（只能依賴排在自己前面的 todo）")
+                _trace(f"plan: 依賴引用非法 → 修剪 id={tid} depends_on={dep!r}")
+                t["depends_on"] = None
+            else:
+                stats["deps_count"] += 1
+        # 分歧：宣告了「沒有依賴」，但這句話單獨檢索時沒有主詞。
+        if t.get("deps_declared") and t.get("depends_on") is None and _has_unresolved_anchor(
+                t.get("task", "")):
+            stats["deps_disagreed"] += 1
+            _trace(f"plan: Planner 說無依賴、但子問題沒有主詞 → 仍延後 id={tid} {t.get('task')!r}")
+    return todos, stats
 
 
 def _plan_subqueries(query: str, freshness_mode: str) -> list[dict]:
@@ -772,6 +836,10 @@ class SupervisorState(TypedDict, total=False):
     # 丟掉**——閘門⑭g 守這條。⚠ 這一格是**累加**的：LangGraph 對沒有 reducer 的 key 是取代語意，
     # 所以 `_node_replan` 自己讀舊值再合併（⑭i 守這條），否則只會剩下最後一輪。
     replan_stats: dict
+    # Plan 的依賴宣告品質（見 `validate_plan_dependencies`）：宣告了幾個、修剪了幾個、
+    # 以及「Planner 說沒依賴但句子沒有主詞」的分歧數。同 `unit_stats`／`replan_stats`
+    # 的角色——是**分母**不是判定。
+    plan_stats: dict
 
 
 _REPLANNER_PROMPT = f"""你是美股情報 RAG 的動態重規劃器。給你「原始問題」與「目前待辦清單（含各自狀態與
@@ -862,8 +930,11 @@ def _node_plan(state: SupervisorState) -> dict:
             # 「在 Yahoo Finance 上查詢」，見閘門⑧p）。
             "route": sub["route"],
             # 依賴：這個子問題要等哪個 todo 的結果才寫得出來（mh-07 的「該公司」）。
-            # **這一版只留欄位不解析**——先讓 route 站穩，見 BACKLOG 的〈明確不做的〉。
-            "depends_on": None,
+            # **2026-09-06 起由 Planner 宣告**（見 `_PLANNER_PROMPT` 的【依賴 depends_on】），
+            # 取代原本用 `_BACKREF_RE` 回指詞表反推的作法。`deps_declared` 分辨「Planner 說
+            # 沒有」與「Planner 沒說」——少了它詞表仍然是實際做決定的人（見 `_parse_plan_output`）。
+            "depends_on": sub.get("depends_on"),
+            "deps_declared": bool(sub.get("deps_declared")),
             "temporal_scope": scope,
             # Planner 的分解是**使用者意圖的重述** → 由它產生的期間降級揭露可以說「所詢問財年」。
             # 對照 `_node_replan` 那一個（見該處註解）。判準與 `_pkg._retrieve_chunks` 的 docstring 同一條。
@@ -875,10 +946,12 @@ def _node_plan(state: SupervisorState) -> dict:
             "status": "pending",
             "result": "",
         })
+    # 業界那三段的第二段：執行前跑確定性結構檢驗（無懸空引用／無環），非法的 prune ＋ trace。
+    todos, plan_stats = validate_plan_dependencies(todos)
     _trace(f"plan: {len(todos)} todos → "
-           f"{[(t['task'], t['route']) for t in todos]}")
+           f"{[(t['task'], t['route'], t['depends_on']) for t in todos]} stats={plan_stats}")
     return {"todos": todos, "collected": [], "web_notes": [], "period_notes": [],
-            "iterations": 0, "sufficient": False}
+            "iterations": 0, "sufficient": False, "plan_stats": plan_stats}
 
 
 def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
@@ -958,14 +1031,19 @@ def _node_execute(state: SupervisorState) -> dict:
     # 出來才能檢索。這一波若還有無依賴的 pending(含第一跳),就先只跑它們、把依賴型 hop 留到下一波
     # ——等 hop-1 結果進 collected 後,下一波(此時 ready 為空)才回填實體並檢索。Type A/單跳無「該公司」
     # 代名詞,ready 涵蓋全部 pending,行為與舊版完全一致。
-    ready = [i for i in all_pending if not _is_dependent_hop(todos[i]["task"])]
-    deferred = [i for i in all_pending if _is_dependent_hop(todos[i]["task"])]
+    # ⚠ 傳整個 todo 而不是 `todos[i]["task"]`：判定要讀 `depends_on`／`deps_declared`
+    #   兩個欄位（見 `_is_dependent_hop`）。只傳 task 的話，Planner 的宣告等於沒接上。
+    ready = [i for i in all_pending if not _is_dependent_hop(todos[i])]
+    deferred = [i for i in all_pending if _is_dependent_hop(todos[i])]
     if ready:
         pending_idxs = ready
     else:
         # 只剩依賴型 → 第一跳已完成:把「該公司」回填成解出的具體公司,再檢索(否則無 ticker → 撈回隨機 chunk)。
-        entity = _resolve_hop_entity(todos, state.get("collected", []))
         for i in deferred:
+            # 實體逐 todo 解析：Planner 宣告了 `depends_on` 就只看那一個父 todo，
+            # 沒宣告才退回「所有 done todo 的 ticker 眾數」（舊行為）。見 `_resolve_hop_entity`。
+            entity = _resolve_hop_entity(todos, state.get("collected", []),
+                                         parent_id=todos[i].get("depends_on"))
             if entity:
                 filled = _fill_dependent_hop(todos[i]["task"], entity)
                 if filled != todos[i]["task"]:
@@ -1081,7 +1159,7 @@ def _node_replan(state: SupervisorState) -> dict:
     # multi_hop 保護：還沒跑的依賴型第二跳(帶未解「該公司」代名詞)是回答原始問題的必要一跳,
     # 不能被機率性 replanner 誤 drop、也不能因 hop-1 一做完就被判 sufficient 跳過。此時強制續跑。
     has_pending_dependent = any(
-        t["status"] == "pending" and _is_dependent_hop(t["task"]) for t in todos)
+        t["status"] == "pending" and _is_dependent_hop(t) for t in todos)
 
     # 待辦額度統計。⚠ **自己讀舊值再合併**：LangGraph 對沒有 reducer 的 key 是**取代**語意，
     #   直接回一份新的會讓前面幾輪 replan 的計數整個消失（⑭i 守這條）。
@@ -1100,7 +1178,7 @@ def _node_replan(state: SupervisorState) -> dict:
         sufficient = _coerce_bool(data.get("sufficient", False))
         drop_ids = {int(x) for x in (data.get("drop", []) or []) if str(x).lstrip("-").isdigit()}
         for t in todos:
-            if t["id"] in drop_ids and t["status"] == "pending" and not _is_dependent_hop(t["task"]):
+            if t["id"] in drop_ids and t["status"] == "pending" and not _is_dependent_hop(t):
                 t["status"] = "dropped"
         next_id = max((t["id"] for t in todos), default=-1) + 1
         # ⚠ 用**同一個** `_parse_plan_output` 正規化（唯一定義點）：它同時吃舊格式的
@@ -1146,7 +1224,11 @@ def _node_replan(state: SupervisorState) -> dict:
                 "temporal_scope": scope,
                 "attributable": False,
                 "route": a_route,
+                # replan 建的 todo **刻意標成「沒宣告」**：Replanner 的 prompt 沒有教它填這個
+                # 欄位，標 True 會把「說沒有」這個語意套到根本沒被問過的東西上。沒宣告 →
+                # `_is_dependent_hop` 退回詞表 ＝ 與 2026-09-06 之前逐字相同。
                 "depends_on": None,
+                "deps_declared": False,
                 "freshness_gaps": [],   # 同上：執行完由 _node_execute 回填
                 "period_notes": [],
                 "web_used": False,

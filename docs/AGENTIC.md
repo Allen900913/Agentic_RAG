@@ -17,6 +17,7 @@
 - [A9 R4：web ↔ 財報衝突要求「並陳」而不是「裁決」](#a9-r4web--財報衝突要求並陳而不是裁決)
 - [A10 Synthesize 的 validator 疊法與共用守門](#a10-synthesize-的-validator-疊法與共用守門)
 - [A11 期間降級揭露：兩個獨立通道，不是一個](#a11-期間降級揭露兩個獨立通道不是一個)
+- [A12 multi_hop 依賴：業界怎麼做，以及本 repo 為什麼那樣接](#a12-multi_hop-依賴業界怎麼做以及本-repo-為什麼那樣接)
 
 ---
 
@@ -484,3 +485,44 @@ MSFT 最新一季是 Q4 FY2026，它**沒有獨立的 10-Q**（被包進 10-K）
 state 流到 Generator）叫得出來。
 > **接線鎖要驗的是值不是關鍵字**——這是 ⑧g（呼叫端引數被重構掉）、⑭a（改三道漏一道）之後同一個
 > 教訓的第三次。三次都是「量尺自備輸入 → 從來沒驗過生產供不供得出那個輸入」的變形。
+
+---
+
+## A12 multi_hop 依賴：業界怎麼做，以及本 repo 為什麼那樣接
+
+**2026-09-06 動手之前查的**（三篇獨立來源結論一致）：
+
+| 做法 | 出處 |
+|---|---|
+| 依賴由規劃器**當結構吐出來**，子問題用佔位符指涉前一跳（MuSiQue 的 `#1`、A.DOT 的 `$var_d[.c]`、`#TaskN`） | [Agentic DAG-Orchestrated Planner](https://arxiv.org/html/2603.14229v1)、[RAG for Multi-Hop QA Based on Structured Planning](https://dl.acm.org/doi/10.1145/3789506)、[When RAG Meets Query Planning](https://arxiv.org/html/2607.00508) |
+| 執行前跑**確定性結構檢驗**：必填欄位 → variable hygiene（無懸空引用）→ 無環（DFS／Kahn） | [A.DOT 附錄 C](https://arxiv.org/html/2603.14229v1)、[Maestro Order](https://arxiv.org/pdf/2606.23983) |
+| 懸空引用是 **prune ＋ warning**，不是靜默丟掉、也不是整個計畫作廢 | [Maestro Order](https://arxiv.org/pdf/2606.23983)、[From Agent Loops to Structured Graphs](https://arxiv.org/pdf/2604.11378) |
+| 依賴順序執行；第二跳把佔位符換成第一跳解出的實體 | 同上三篇 |
+
+**本 repo 接法與業界的三個差異，每個都有理由：**
+
+1. **無環檢查不用 Kahn／DFS，用 `0 <= depends_on < id`。** 本 repo 的 todo `id` 是**依清單位置**
+   指派的，所以「只能依賴排在自己前面的」同時保證無懸空、無自環、無環，是 O(n) 的全序檢查。
+   副產品比 Kahn 更有用：**id 0 的 `depends_on` 恆被剪成 `None` ⇒ 永遠至少有一個 ready todo，
+   `_node_execute` 結構上不會 deadlock**。
+
+2. **「Planner 說沒有」與「Planner 沒說」分成兩個欄位**（`depends_on` ＋ `deps_declared`）。
+   業界的論文假設規劃器一律輸出完整計畫，本 repo 不能——`llm_replay` 裡錄的既有 fixture 全是
+   加欄位之前的格式，而**沒有這個區分就會退化成「詞表仍然是實際做決定的人」**，那是 repo 自己
+   記過的 `_RATIO_INTENT_RE` 形狀（CLAUDE.md〈LLM 與 Python 的分工〉最後一條）。
+
+3. **多留了一個有意識的例外**：Planner 宣告 `null` 但子問題字面上沒有主詞時仍然延後。
+   理由不是「詞表比較準」，是那句話**單獨拿去檢索時沒有主詞**——那是字面事實不是感知；
+   而代價不對稱（多等一個 wave ↔ 無 ticker 的破檢索）。
+   ⚠ 這個例外**必須帶分母**，否則它會變成「詞表從後門回來」：分歧記進
+   `plan_stats.deps_disagreed`，日後拿不拿掉它靠那個數字。
+
+**⚠ 這條路目前在題庫上是量不到的**：`eval_set.json` 的 5 題 multi_hop **候選集合全部寫在題面上**
+（「在 A、B、C 三家中」），Planner 正確地選擇扇出、`deps_count` 為 0。實際踩到依賴的是
+「Magnificent Seven 裡淨利最高的那一家的毛利率」這種**候選集合不在題面上**的形狀，而題庫裡沒有。
+造那種題**不可以併進 `eval_set.json`**（分母不可變），要走獨立斷言集。
+
+**⚠ 文獻自己指出的天花板**：[Failure Modes in Multi-Hop QA](https://arxiv.org/pdf/2601.12499) 的
+「weakest link effect」——第二跳做得再對，第一跳錯了整題就錯。實跑當場看到一次：
+「七家裡淨利最高的是哪一家」第一跳連跑三輪都 `sufficient=False`（top-k 裝不下七家的 Fundamentals），
+解出的實體是 `Apple`。**那是檢索問題不是依賴問題**，不要用依賴機制去補它。

@@ -5,6 +5,51 @@
 
 ## 2026-09-06
 
+### agentic C：multi_hop 的依賴改由 Planner 宣告，`_BACKREF_RE` 詞表退位
+
+**病灶**：`depends_on` 這個欄位兩個 todo 建構點都有，值**恆為 `None`**；實際決定「這一跳要不要等
+前一跳」的是 `_BACKREF_RE`（`該公司|該企業|該家公司|這家公司|此公司|上述公司|前述公司|上述那家公司`）。
+那張詞表匹配不到「**那家公司**」「它」「該廠商」「這間公司」與任何英文措辭——而寫那句話的是
+Planner LLM，措辭每輪都在變。同 `rq.looks_like_news_query`／`_RELATIVE_TIME_RE`／`_WEB_TODO_RE`。
+
+**先查了業界怎麼做**（三篇一致，見 `docs/AGENTIC.md`）：依賴由規劃器**當結構吐出來**，子問題用
+MuSiQue 的 `#1` 或 A.DOT 的 `$var_d` 指涉前一跳；執行前跑確定性結構檢驗（variable hygiene／無環）；
+**懸空引用是 prune ＋ warning 不是靜默**。佔位符是**格式定義的封閉集合**，正好落在
+CLAUDE.md 允許詞表的那個例外裡。照這三段做：
+
+1. **宣告**：`_PLANNER_PROMPT` 輸出 `depends_on`，子問題把待解公司寫成 `#索引`。
+2. **驗證**：新增 `validate_plan_dependencies`（純函式）。`0 <= depends_on < id` **同時**保證無懸空、
+   無自環、無環（id 依清單位置指派）——不需要 Kahn，O(n)。非法值 prune ＋ trace ＋ 計數。
+   副產品：id 0 恆為 `None` ⇒ **永遠有 ready todo，不會 deadlock**。
+3. **判定與替換**：`_is_dependent_hop` 改讀欄位；`_fill_dependent_hop` 三層退路
+   （`#N` → 回指代名詞 → 兩者皆無且句中沒點名公司時**前綴實體**）；`_resolve_hop_entity` 多一個
+   `parent_id`，有宣告就**只看那一個父 todo**（舊行為是所有 done todo 的 ticker 眾數，會被別的
+   子問題裡出現更多次的公司蓋掉）。
+
+**關鍵取捨：「說沒有」與「沒說」必須分得開。** `depends_on: null` ＝ Planner 宣告不依賴，**它說了算**；
+整個 key 不存在（舊格式 `list[str]`、既有 replay fixture、`_node_replan` 建的 todo）＝ 沒有資訊，
+**才**退回詞表。分不開的話詞表仍然是實際做決定的人，而端到端跑分看不出任何差別
+——`_RATIO_INTENT_RE` 就是那個形狀。**一個有意識的例外**：說 `null` 但句子字面沒有主詞時仍然延後
+（那是**字面事實**不是感知，代價不對稱），分歧記進 `plan_stats.deps_disagreed` ＝ 日後拿不拿掉它的分母。
+
+**驗收：閘門⑮ 28 項（`verify_web_gate_isolation.py`，196 → 224 全 PASS）。10/10 變異全抓到。**
+**加上兩次真實端到端**（snapshot、無 web）：
+· 「三家中營收年增率最高 → 該公司 TTM 淨利」→ Planner 自己列滿 6 個子問題、`deps_count=0`（正確：
+  候選集合寫在題面上，扇出比建依賴好）。
+· 「Magnificent Seven 裡淨利最高的那一家的毛利率、營業利益率」→ Planner 吐 `#0` ＋ `depends_on:0`，
+  驗證 `deps_count=2 / pruned=0`，執行時從**宣告的父 todo** 解出實體、`#0` → `Apple`，兩個第二跳
+  各一輪就 sufficient。**業界那三段完整跑通。**
+
+⚠ **在 `eval_set.json` 上量到的差異是 0，而那是預期**：5 題 multi_hop 的候選集合全部寫在題面上。
+  這次改的是「候選集合不在題面上」那一類，而題庫裡沒有。見 [`BACKLOG.md`](BACKLOG.md)。
+⚠ **既有 replay fixture 逐字相容**：`plan` 的 replay key 不含 system prompt，改 prompt 不會 miss；
+  舊 fixture 錄的 plan 沒有 `depends_on` key → `deps_declared=False` → 走詞表 ＝ 行為完全不變（⑮d/⑮l）。
+⚠ **BACKLOG 那條「已接受的極限」當初的成本理由是錯的**：它寫著「要把單波 ThreadPoolExecutor 拆成多波」，
+  但 `ready`／`deferred` 兩波機制**當時就已經存在**（由詞表驅動）。這次一個 wave 都沒有多。
+⚠ **⑮q 第一版是恆真的**：`_find_all_ticker_aliases` 回傳集合、同一個 todo 每家只算一票，兩個 todo
+  時「眾數」剛好也回對的答案（變異 N8 沒抓到）→ 改成三個 done todo。
+  **同一天第三次踩到「測資讓那條路從來沒被走到」**（⑳e、⑭j 是前兩次）。
+
 ### agentic B：Replanner 的待辦額度用完時，拒絕原本一個字都不印
 
 **先量再改。** 零 LLM 驅動 graph 控制流（`_node_execute` / `_node_replan` / `_route_after_replan`），

@@ -38,7 +38,7 @@ import agentic_rag_version as _pkg
 #   套件物件上的 monkeypatch 蓋得到。子模組**不得裸用**被 patch 的名字，也不得
 #   `from .x import` 它們（那會壓一份當時的物件）——守門是閘門⑬。
 
-from .retrieval import _BACKREF_RE, _TICKER_CANON, _has_ratio_intent, _resolve_ratio_fields
+from .retrieval import _BACKREF_RE, _DEP_PLACEHOLDER_RE, _TICKER_CANON, _has_ratio_intent, _resolve_ratio_fields
 from .retrieval import _COVERAGE_SOURCE_RE, _format_kb_coverage, _mentioned_tickers, _source_coverage_parts
 from .tracing import _trace
 
@@ -1281,21 +1281,59 @@ _DUAL_SOURCE_REVISE_SUFFIX = """
 FRESHNESS_SNAPSHOT = "snapshot"
 
 
-def _is_dependent_hop(task: str) -> bool:
-    """依賴型第二跳：帶未解回指代名詞(該公司…)且句中沒點名任何具體公司。這種子問題要等
-    第一跳辨識出公司、回填實體後才能正確檢索。已含具體公司名 → 不算未解(planner 已自行填好)。"""
-    if not _BACKREF_RE.search(task or ""):
+def _has_unresolved_anchor(task: str) -> bool:
+    """這句話**單獨拿去檢索時有沒有主詞**：帶 `#N` 佔位符，或帶回指代名詞且句中沒點名任何公司。
+
+    ⚠ 這是一條**字面事實**，不是「這題是不是 multi_hop」那種感知——後者已經交給 Planner 的
+      `depends_on` 欄位（見 `_is_dependent_hop`）。分清這兩件事很重要：詞表拿來判「這個字串
+      有沒有主詞」是正當的，拿來判「使用者的意圖是什麼」不是。"""
+    t = task or ""
+    if _DEP_PLACEHOLDER_RE.search(t):
+        return True
+    if not _BACKREF_RE.search(t):
         return False
-    return not _mentioned_tickers(task)
+    return not _mentioned_tickers(t)
 
 
-def _resolve_hop_entity(todos: list[dict], collected: list[dict]) -> str | None:
-    """從已完成待辦推出「第一跳辨識出的公司」正規名,供第二跳回填『該公司』。純確定性:
-    先看非依賴型 done 待辦的局部結果文字命中的 ticker(眾數),再退回已 commit chunk 的 owner ticker。"""
+def _is_dependent_hop(todo) -> bool:
+    """這一跳要不要等前一跳？**Planner 宣告的 `depends_on` 說了算，詞表退位。**
+
+    判定順序（⚠ 順序就是這次改動的全部內容，見閘門⑮）：
+      ① Planner **宣告過** `depends_on`（key 存在，含 `null`）→ 宣告值決定。
+         · 有值 → 依賴型。**即使詞表匹配不到那個措辭**（「那家公司」「它」「該廠商」、英文…），
+           這是原本那個缺陷的正解。
+         · `null` → 不依賴。**但有一個有意識的例外**：句子字面上沒有主詞時仍然延後
+           （`_has_unresolved_anchor`）。理由不是「詞表比較準」，是那句話單獨檢索時
+           **沒有主詞**＝字面事實，而代價不對稱（多等一個 wave ↔ 無 ticker 的破檢索）。
+           這種分歧由 `validate_plan_dependencies` 記進 `plan_stats.deps_disagreed`
+           ＝ 日後要不要拿掉這個例外的分母。
+      ② **沒宣告**（舊格式 `list[str]`、既有 replay fixture、`_node_replan` 建的 todo）
+         → 才退回詞表，行為與 2026-09-06 之前**逐字相同**（閘門⑮l 是那條回歸護欄）。
+
+    ⚠ 參數同時吃 todo dict 與純字串：`_node_replan` 與舊呼叫點傳的是 `task` 字串，
+      那等價於「沒宣告」＝ ②。"""
+    t = {"task": todo} if isinstance(todo, str) else (todo or {})
+    if t.get("deps_declared"):
+        if t.get("depends_on") is not None:
+            return True
+        return _has_unresolved_anchor(t.get("task", ""))
+    return _has_unresolved_anchor(t.get("task", ""))
+
+
+def _resolve_hop_entity(todos: list[dict], collected: list[dict],
+                        parent_id: int | None = None) -> str | None:
+    """從已完成待辦推出「第一跳辨識出的公司」正規名,供第二跳回填。純確定性。
+
+    `parent_id` 是 Planner 宣告的 `depends_on`（2026-09-06 加）：**有宣告就只看那一個 todo**。
+    ⚠ 為什麼重要：舊行為是取所有 done 待辦的 ticker **眾數**，而另一個子問題的局部結果裡
+      公司名可能刷屏（「Apple 的營收…Apple…Apple」）→ 把真正該解的那一家蓋掉。閘門⑮q 守這條。
+    沒有宣告（舊 fixture／replan 建的 todo）→ 退回眾數，行為逐字不變。"""
     from collections import Counter
     cnt: Counter = Counter()
     for t in todos:
-        if t.get("status") == "done" and not _is_dependent_hop(t.get("task", "")):
+        if parent_id is not None and t.get("id") != parent_id:
+            continue
+        if t.get("status") == "done" and (parent_id is not None or not _is_dependent_hop(t)):
             res = t.get("result", "") or ""
             for tk in rq._find_all_ticker_aliases(res.lower(), res):
                 cnt[tk] += 1
@@ -1311,8 +1349,22 @@ def _resolve_hop_entity(todos: list[dict], collected: list[dict]) -> str | None:
 
 
 def _fill_dependent_hop(task: str, entity: str) -> str:
-    """把第二跳子問題裡的『該公司…』回指代名詞換成解出的具體公司名。"""
-    return _BACKREF_RE.sub(entity, task)
+    """把第二跳子問題裡的未解主詞換成解出的具體公司名。**三層退路，每層都是確定性的。**
+
+    ① `#N` 佔位符（MuSiQue／A.DOT 的通用格式，`_DEP_PLACEHOLDER_RE`）→ 直接替換。
+    ② 回指代名詞（`_BACKREF_RE`）→ 既有行為，逐字不變。
+    ③ 兩種錨點都沒有**且句中沒點名任何公司** → **前綴實體**。
+       ⚠ 這一層是必要的：Planner 宣告了 `depends_on` 卻寫成「那家公司的毛利率」時，
+         ①② 都對不上；原樣送出去就是無 ticker 的破檢索——那正是這次要修的病。
+    ⚠ **句中已經點名公司時一個字都不改**（閘門⑮p）：那代表沒有東西要解，前綴上去等於
+      把**別家公司**掛到問題前面，比不改糟得多。"""
+    if _DEP_PLACEHOLDER_RE.search(task):
+        return _DEP_PLACEHOLDER_RE.sub(entity, task)
+    if _BACKREF_RE.search(task):
+        return _BACKREF_RE.sub(entity, task)
+    if not _mentioned_tickers(task):
+        return f"{entity} {task}"
+    return task
 
 
 def _build_temporal_contract(freshness_mode: str) -> str:

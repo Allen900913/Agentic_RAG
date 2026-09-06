@@ -1898,6 +1898,201 @@ def _check_replan_todo_budget() -> int:
     return fail
 
 
+def _check_plan_dependencies() -> int:
+    """閘門⑮：multi_hop 的依賴由 **Planner 宣告的欄位**決定，不再由回指代名詞詞表推斷（2026-09-06）。
+
+    **病灶**：`depends_on` 這個欄位兩個 todo 建構點都有，值**恆為 `None`**；實際決定「這一跳要不要
+    等前一跳」的是 `_BACKREF_RE`（`該公司|該企業|該家公司|這家公司|此公司|上述公司|前述公司|上述那家公司`）。
+    那張詞表匹配不到「**那家公司**」「它」「該廠商」「這間公司」以及任何英文措辭——而寫出那句話的
+    是 Planner LLM，措辭每輪都在變。這是 `rq.looks_like_news_query`／`_RELATIVE_TIME_RE`／
+    `_WEB_TODO_RE` 三個死者的同一個形狀（見 CLAUDE.md〈LLM 與 Python 的分工〉）。
+
+    **業界做法**（2026-09-06 查的，三篇一致）：依賴由規劃器**當結構吐出來**，子問題用
+    MuSiQue 式的 `#1` 佔位符或 A.DOT 的 `$var_d` 指涉前一跳；執行前跑**確定性結構檢驗**
+    （欄位齊全 → variable hygiene／無懸空引用 → 無環）；**懸空引用是 prune ＋ warning，不是靜默**。
+    佔位符是**格式定義的封閉集合**，正好落在 CLAUDE.md 允許詞表的那個例外裡。
+
+    **本 repo 的關鍵取捨——「說沒有」與「沒說」必須分得開。** CLAUDE.md 記著 `_RATIO_INTENT_RE`
+    的教訓：「改成 LLM 之後，判別力來自『LLM 說不是就必須不是』——若空答案會掉回詞表，
+    詞表仍然是實際做決定的人，而端到端跑分看不出任何差別」。所以：
+      · `depends_on` **有出現在 plan 輸出裡**（含 `null`）→ `deps_declared=True`，**它說了算**。
+      · 整個 key **沒出現**（舊格式字串陣列、既有 fixture、replan 建的 todo）→ 才退回詞表。
+    ⑮c／⑮l 是這條的兩個方向，⑮k 是「詞表漏掉但欄位抓得到」的陽性。
+
+    ⚠ **一個有意識的例外，所以它必須有斷言**（⑮m）：Planner 宣告「沒有依賴」、但子問題**字面上
+      帶著未解錨點且句中沒點名任何公司**時，仍然延後。理由不是「詞表比較準」——是那句話
+      **單獨拿去檢索時沒有主詞**，那是字面事實不是感知；而代價不對稱（多等一個 wave ↔ 無 ticker
+      的破檢索）。這種分歧會記進 `plan_stats.deps_disagreed` ＝ 日後要不要拿掉這個例外的分母。
+
+    ⚠ **無環不需要 Kahn**：todo 的 id 依清單位置指派，所以「只能依賴排在自己前面的」
+      （`0 <= depends_on < id`）**同時**保證無懸空、無自環、無環，而且是全序檢查、O(n)。
+      副產品是 `id 0` 的 `depends_on` 恆為 `None` → **永遠至少有一個 ready todo，不會 deadlock**（⑮i）。
+
+    ⚠ **判別力集中在五條誤報對照**：⑮j（合法依賴不得被修剪，且 `deps_pruned` 是 0 **不是缺席**）、
+      ⑮l（沒宣告的 todo 行為逐字不變＝既有 fixture 的回歸護欄）、⑮p（句中已點名公司時
+      一個字都不能改——否則會把別家公司前綴上去）、⑮d（舊格式 `list[str]` 相容）、
+      ⑮q（實體解析要用**宣告的那個父 todo**，不是所有 done todo 的眾數）。
+    """
+    import inspect
+
+    results: list[tuple[str, bool, str]] = []
+    P = ar._parse_plan_output
+    V = ar.validate_plan_dependencies
+    D = ar._is_dependent_hop
+    F = ar._fill_dependent_hop
+
+    # ── 解析層：「說沒有」與「沒說」必須分得開 ────────────────────────────────────
+    _no_key = P([{"task": "A", "route": "kb"}])[0]
+    results.append(("⑮a 新格式但沒有 depends_on key → deps_declared=False（＝沒說）",
+                    _no_key.get("deps_declared") is False and _no_key.get("depends_on") is None,
+                    f"實得 {_no_key}"))
+
+    _dep0 = P([{"task": "A", "route": "kb"}, {"task": "B", "route": "kb", "depends_on": 0}])[1]
+    results.append(("⑮b `depends_on: 0` → declared=True、值是 0",
+                    _dep0.get("deps_declared") is True and _dep0.get("depends_on") == 0,
+                    f"實得 {_dep0}"))
+
+    _null = P([{"task": "A", "route": "kb", "depends_on": None}])[0]
+    results.append(("⑮c **這條是整個修法的關鍵**：`depends_on: null` → declared=True（Planner 說沒有）",
+                    _null.get("deps_declared") is True and _null.get("depends_on") is None,
+                    f"實得 {_null}；與 ⑮a 分不開的話，詞表仍然是實際做決定的人"))
+
+    _legacy = P(["舊格式子問題"])[0]
+    results.append(("⑮d **誤報對照**：舊格式 `list[str]` → declared=False（既有 fixture 逐字相容）",
+                    _legacy.get("deps_declared") is False and _legacy.get("route") == "kb",
+                    f"實得 {_legacy}"))
+
+    _bad = P([{"task": "A", "route": "kb", "depends_on": "abc"},
+              {"task": "B", "route": "kb", "depends_on": True}])
+    results.append(("⑮e 非法值（字串／bool）→ 值正規化成 None 但 declared 仍是 True（交給驗證層）",
+                    all(x.get("depends_on") is None and x.get("deps_declared") is True for x in _bad),
+                    f"實得 {_bad}"))
+
+    # ── 驗證層：variable hygiene ＋ 無環（業界的第二段）───────────────────────────
+    def _todos(*deps):
+        return [{"id": i, "task": f"T{i}", "route": "kb", "depends_on": d,
+                 "deps_declared": True, "status": "pending"} for i, d in enumerate(deps)]
+
+    tv, sv = V(_todos(None, 9, 0))
+    results.append(("⑮f 懸空引用（depends_on=9 而只有 3 個 todo）→ prune 成 None ＋ 計數",
+                    tv[1]["depends_on"] is None and sv.get("deps_pruned") == 1,
+                    f"實得 todos={[t['depends_on'] for t in tv]} stats={sv}"))
+    results.append(("⑮f2 修剪要有逐筆明細（只有計數的話查不出被剪掉的是什麼）",
+                    len(sv.get("deps_pruned_detail") or []) == 1,
+                    f"實得 {sv.get('deps_pruned_detail')}"))
+
+    tv, sv = V(_todos(None, 1, 0))
+    results.append(("⑮g 自我引用（id==depends_on）→ prune",
+                    tv[1]["depends_on"] is None and sv.get("deps_pruned") == 1,
+                    f"實得 {[t['depends_on'] for t in tv]}"))
+
+    tv, sv = V(_todos(None, 2, None))
+    results.append(("⑮h 前向引用（depends_on > id）→ prune（`dep < id` 同時保證無懸空／無環）",
+                    tv[1]["depends_on"] is None and sv.get("deps_pruned") == 1,
+                    f"實得 {[t['depends_on'] for t in tv]}"))
+
+    tv, sv = V(_todos(0, 0, 1))
+    results.append(("⑮i 驗證後 id 0 的 depends_on 恆為 None ⇒ 永遠有 ready todo，不會 deadlock",
+                    tv[0]["depends_on"] is None and any(t["depends_on"] is None for t in tv),
+                    f"實得 {[t['depends_on'] for t in tv]}"))
+
+    tv, sv = V(_todos(None, 0, 1))
+    results.append(("⑮j **誤報對照**：合法的依賴鏈不得被修剪，且 deps_pruned 是 0 而**不是缺席**",
+                    [t["depends_on"] for t in tv] == [None, 0, 1] and sv.get("deps_pruned") == 0,
+                    f"實得 todos={[t['depends_on'] for t in tv]} stats={sv}"))
+    results.append(("⑮j2 `deps_count` 要反映真的宣告了幾個（不是恆 0）",
+                    sv.get("deps_count") == 2, f"實得 {sv.get('deps_count')}"))
+
+    # ── 判定層：詞表退位 ────────────────────────────────────────────────────────
+    _MISSED = "那家公司的毛利率是多少"       # ⚠ 逐字凍結：`_BACKREF_RE` 匹配**不到**這一句
+    results.append(("⑮k 前提：`那家公司…` 確實是現行詞表漏掉的措辭（否則下一條測到的是別條路）",
+                    ar._BACKREF_RE.search(_MISSED) is None,
+                    "詞表如果補了這個詞，這條前提就要改——但補詞不是這次的修法"))
+    results.append(("⑮k2 **陽性**：Planner 宣告 depends_on=0 → 判定為依賴型（詞表漏掉也沒關係）",
+                    D({"task": _MISSED, "depends_on": 0, "deps_declared": True}),
+                    "欄位沒被讀到＝這次改動等於沒做"))
+
+    results.append(("⑮l **誤報對照**：沒宣告（replan 建的／舊 fixture）→ 仍走詞表，行為逐字不變",
+                    D({"task": "該公司的毛利率是多少", "depends_on": None, "deps_declared": False})
+                    and not D({"task": _MISSED, "depends_on": None, "deps_declared": False})
+                    and not D({"task": "Apple 該公司的毛利率", "depends_on": None,
+                               "deps_declared": False}),
+                    "沒宣告時的三種既有行為（命中／漏掉／已點名公司）必須完全不變"))
+
+    results.append(("⑮l2 **誤報對照**：Planner 說 `null` 且字面沒有未解錨點 → 不延後（宣告說了算）",
+                    not D({"task": "Apple 的毛利率是多少", "depends_on": None, "deps_declared": True}),
+                    "這裡若還去問詞表，就是詞表沒有真的退位"))
+
+    results.append(("⑮m **有意識的例外**：說 null 但字面帶未解錨點（無主詞）→ 仍延後",
+                    D({"task": "該公司的毛利率是多少", "depends_on": None, "deps_declared": True}),
+                    "那句話單獨檢索時沒有主詞＝字面事實；代價不對稱（多一個 wave vs 破檢索）"))
+
+    _tv, _sv = V([{"id": 0, "task": "Apple 的營收", "route": "kb", "depends_on": None,
+                   "deps_declared": True, "status": "pending"},
+                  {"id": 1, "task": "該公司的毛利率是多少", "route": "kb", "depends_on": None,
+                   "deps_declared": True, "status": "pending"}])
+    results.append(("⑮m2 這種分歧要記進 `deps_disagreed` ＝ 日後拿不拿掉這個例外的分母",
+                    _sv.get("deps_disagreed") == 1, f"實得 {_sv}"))
+
+    # ── 替換層：MuSiQue 式佔位符 ＋ 兩層退路 ─────────────────────────────────────
+    results.append(("⑮n `#0` 佔位符 → 換成解出的實體（業界通用格式）",
+                    F("#0 的毛利率是多少", "NVIDIA") == "NVIDIA 的毛利率是多少",
+                    f"實得 {F('#0 的毛利率是多少', 'NVIDIA')!r}"))
+    results.append(("⑮n2 回指代名詞的既有替換行為不變",
+                    F("該公司的毛利率是多少", "NVIDIA") == "NVIDIA的毛利率是多少",
+                    f"實得 {F('該公司的毛利率是多少', 'NVIDIA')!r}"))
+    results.append(("⑮o 兩種錨點都沒有、句中也沒點名公司 → 前綴實體（不要原樣送去做破檢索）",
+                    F(_MISSED, "NVIDIA") == f"NVIDIA {_MISSED}",
+                    f"實得 {F(_MISSED, 'NVIDIA')!r}"))
+    results.append(("⑮p **誤報對照**：句中已點名公司 → 一個字都不准改",
+                    F("Apple 的毛利率是多少", "NVIDIA") == "Apple 的毛利率是多少",
+                    f"實得 {F('Apple 的毛利率是多少', 'NVIDIA')!r}；前綴上去就是換成別家公司"))
+    results.append(("⑮p2 **誤報對照**：`#` 後面不是數字 → 不是佔位符，不得替換",
+                    F("Item #A 的毛利率", "NVIDIA") == "NVIDIA Item #A 的毛利率"
+                    or "#A" in F("Item #A 的毛利率", "NVIDIA"),
+                    f"實得 {F('Item #A 的毛利率', 'NVIDIA')!r}"))
+
+    # ── 實體解析：用宣告的那個父 todo，不是所有 done todo 的眾數 ────────────────
+    # ⚠ **三個 done todo 是必要的**：`_find_all_ticker_aliases` 回傳的是**集合**，同一個 todo
+    #   裡公司名出現幾次都只算一票 → 兩個 todo 時 NVDA:1 / AAPL:1 平手，眾數剛好也回 NVIDIA
+    #   ＝ 這條斷言**恆真**（變異 N8 實測沒抓到）。要讓「眾數」與「宣告的父 todo」真的分岔，
+    #   別家必須多於一票。同 ⑳e／⑭j 的形狀：測資讓那條路從來沒被走到。
+    _done = [{"id": 0, "task": "誰是市值最高的", "status": "done", "deps_declared": True,
+              "depends_on": None, "result": "NVIDIA 是市值最高的"},
+             {"id": 1, "task": "Apple 的營收", "status": "done", "deps_declared": True,
+              "depends_on": None, "result": "Apple 的營收是 3910 億美元"},
+             {"id": 2, "task": "Apple 的毛利率", "status": "done", "deps_declared": True,
+              "depends_on": None, "result": "Apple 的毛利率是 46%"}]
+    _ent = ar._resolve_hop_entity(_done, [], parent_id=0)
+    results.append(("⑮q **誤報對照**：有宣告父 todo 時只看那一個（不是所有 done todo 的眾數）",
+                    _ent == "NVIDIA",
+                    f"實得 {_ent!r}；取眾數會被別的子問題裡出現更多次的公司蓋掉"))
+    results.append(("⑮q2 沒有宣告父 todo 時退回既有的眾數行為（這裡眾數是 Apple）",
+                    ar._resolve_hop_entity(_done, [], parent_id=None) == "Apple",
+                    "舊行為不得因為加了參數而壞掉"))
+
+    # ── 接線（同 ⑭g／⑭h 的教訓：驗值不驗名字）──────────────────────────────────
+    _ann = getattr(ar.SupervisorState, "__annotations__", {})
+    results.append(("⑮r SupervisorState 宣告了 `plan_stats`（沒宣告 → LangGraph 丟掉它）",
+                    "plan_stats" in _ann, f"實得 {sorted(_ann)}"))
+    results.append(("⑮r2 `run_agentic` 真的回傳 `plan_stats`",
+                    "plan_stats" in inspect.getsource(ar.run_agentic),
+                    "只寫在 state 裡＝跑 65 題也彙總不到，同 ⑲l／⑭g2 的教訓"))
+    _pn_src = inspect.getsource(ar._node_plan)
+    results.append(("⑮r3 `_node_plan` 真的呼叫了驗證（不呼叫＝懸空引用會原樣流到 executor）",
+                    "validate_plan_dependencies" in _pn_src,
+                    "業界那三段的第二段沒接上"))
+
+    print()
+    print(f"  {'multi_hop 依賴：欄位說了算，詞表退位':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
 def main() -> int:
     print(f"  {'情境':<24}{'Q1':>6}{'Q2':>6}{'Q3':>6}{'Q4':>6}{'呼叫':>6}   判定")
     print("  " + "-" * 68)
@@ -1933,6 +2128,7 @@ def main() -> int:
     fail += _check_replay_readonly()
     fail += _check_monkeypatch_reaches_callers()
     fail += _check_replan_todo_budget()
+    fail += _check_plan_dependencies()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0

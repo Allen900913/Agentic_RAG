@@ -678,6 +678,11 @@ def _ensure_ratio_source_coverage(ranked: list[dict], selected: list[dict], want
 # 解法(全確定性,不動 replanner LLM)：execute 分波時延後這種依賴型 hop,等 hop-1 辨識出公司、
 # 把代名詞回填成具體公司名後,下一波才檢索。
 _BACKREF_RE = re.compile(r"該公司|該企業|該家公司|這家公司|此公司|上述公司|前述公司|上述那家公司")
+# MuSiQue／A.DOT 式的依賴佔位符：子問題直接寫「#0 的毛利率是多少」，執行時換成第 0 跳解出的實體。
+# ⚠ 這是**格式定義的封閉集合**（CLAUDE.md〈LLM 與 Python 的分工〉允許詞表的那個例外），
+#   與上面那張「猜使用者怎麼措辭」的回指詞表**不是同一種東西**。
+# ⚠ `(?<![0-9A-Za-z])` 是要擋掉 `chunk#3` 這種黏在字尾的形狀；`#A` 不是佔位符（閘門⑮p2）。
+_DEP_PLACEHOLDER_RE = re.compile(r"(?<![0-9A-Za-z])#(\d+)")
 # ticker → 可被 _mentioned_tickers / retrieve 重新偵測的正規公司名（回填第二跳用）
 _TICKER_CANON = {"AAPL": "Apple", "MSFT": "Microsoft", "NVDA": "NVIDIA",
                  "AMZN": "Amazon", "GOOGL": "Alphabet", "META": "Meta", "TSLA": "Tesla"}
