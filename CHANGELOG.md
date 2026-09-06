@@ -5,6 +5,40 @@
 
 ## 2026-09-06
 
+### agentic A：`_fair_select` 修掉一個自我矛盾——順序不再由跨子問題不可比的分數決定
+
+**病灶是同一個函式的兩句話互相矛盾。** [`agentic_rag_version/retrieval.py`](agentic_rag_version/retrieval.py)
+的 `_fair_select` docstring 寫著「cross-encoder 原始分數是**相對當次 query** 的，跨子問題不可
+直接比（B 的 0.72 可能已是 B 的最佳答案，卻輸給 A 的第七名）」——那正是**選擇**改成 round-robin
+的全部理由——然後最後一行仍然 `sorted(picked, key=raw_rerank_score)`，**把同一個剛被宣告不可比
+的分數拿回來決定順序**。分數不可比就是不可比，不會因為換成排序就變可比。
+
+**實際後果**：某個 facet **唯一**的證據（在自己的子問題裡是第 1 名、絕對分數低）會被壓到名單
+最後，而 writer budget 上限 `WRITER_BUDGET_CAP=16`、`rq.SYSTEM_PROMPT` Rule 4 要第一句給結論、
+Rule 9 要多公司題逐一具名歸屬。
+
+**改了兩件事**：① 拿掉最後那道 `sorted`，輪詢序就是回傳序；② 一併拿掉 `len(collected) <= k`
+的 early-return——那條捷徑原樣回傳輸入（＝全域分數降序），於是同一個函式對「剛好裝得下」與
+「裝不下」給**兩種不同的順序規則**。迴圈本身在 `len <= k` 時就會把全部撿完。
+**桶內仍然照分數降序**（同一個 query 評出來的分數是可比的）。
+
+**驗收：閘門⑳ 9 項（`verify_answer_validators.py`，291 → 300 項全 PASS）。4/4 變異全抓到。**
+
+⚠ **收益沒有量，也不宣稱**。RAGAS 分不出這個量級（見 [`docs/EVAL.md`](docs/EVAL.md)〈量尺飽和〉），
+所以 9 條斷言全是**結構性質**，沒有一條說「答案會更好」。這是「修掉一個自我矛盾」不是「量到改善」。
+⚠ **會擾動既有基準**：送給 Generator 的 chunk 順序變了 → 之後跑出來的答案與 09-06 之前的
+不可逐字比。replay fixture **不受影響**（七個 kind 都在 `_fair_select` 之前，生成本來就沒有快取）。
+
+**兩個被踩出來的東西**（都是「測資的形狀與生產不同」，同族第四、第五次）：
+
+1. **⑳e 第一版是恆真的。** 它要驗「桶內仍照分數降序」，測資卻是本來就已經分數降序的 pool
+   → 「有排序」與「沒排序」輸出逐字相同，**變異 M3 當場沒抓到**。改成刻意打亂輸入序才有判別力。
+   同 ⑰i／⑱f 的形狀。
+2. **拿掉 early-return 當場炸出閘門⑮ 的測資缺陷。** ⑮ 餵給 `_node_synthesize` 的單顆合成 chunk
+   **沒有 `raw_rerank_score`**，而生產的 chunk 一律由 `rq._payload_to_chunk` 建、必定有這個欄位
+   （⑳h 拿真實 payload 餵生產建構子守這條）。舊的 early-return 讓那顆測資永遠走捷徑 → 缺陷
+   **從來沒現形**。修法是**改測資不是改生產函式**——後者就是「讓量尺反過來拉著被測物走」。
+
 ### RAGAS 量尺在新 judge 上重量完畢：gold 上限整組換新，噪音兩格被推高
 
 換 judge（`gpt-oss-120b` 退役 → `google/gemma-4-31b-it`）之後，`GOLD_BASELINE` 與 `NOISE`

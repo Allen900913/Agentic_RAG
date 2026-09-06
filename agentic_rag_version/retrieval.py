@@ -129,14 +129,30 @@ def _merge_chunks(pool: list[dict], new: list[dict]) -> list[dict]:
 
 
 def _fair_select(collected: list[dict], k: int) -> list[dict]:
-    """跨子問題公平取 top-k 餵 Generator（P0-1）。
+    """跨子問題公平取 top-k 餵 Generator（P0-1）,**輪詢的順序就是回傳的順序**。
+
     collected 全域依 raw_rerank_score 排序後直接截斷有兩個病灶:① 高分子問題把其他子問題整段擠出
     WRITER_MAX_CHUNKS;② cross-encoder 原始分數是「相對當次 query」的,跨子問題不可直接比（B 的
     0.72 可能已是 B 的最佳答案,卻輸給 A 的第七名）。改成 round-robin:各子問題依自身 rerank 排序輪流
-    各取一個（保底代表性）,名額用不完再由高分遞補;最終仍依 rerank 排序,給 Generator 由強到弱的穩定
-    順序。單一子問題時退化成單純 top-k（collected 通常 ≤ k,直接原樣回傳）。"""
-    if len(collected) <= k:
-        return collected
+    各取一個（保底代表性）,名額用不完再由高分遞補。
+
+    ⚠ **2026-09-06 拿掉最後那道 `sorted(picked, key=raw_rerank_score)`**：舊版選完之後又把
+      **同一個上面才宣告「跨子問題不可比」的分數**拿回來決定順序,兩句話互相矛盾。②
+      這個理由對排序與對選擇是**同一個理由**——分數不可比就不可比,不會因為換成排序就變可比。
+      實際後果:某個 facet **唯一**的證據（它在自己的子問題裡是第 1 名,但絕對分數低）會被壓到
+      名單最後,而 writer budget 上限是 `WRITER_BUDGET_CAP=16`、`rq.SYSTEM_PROMPT` Rule 4 要
+      第一句給結論、Rule 9 要多公司題逐一具名歸屬。輪詢序天然把「每個 facet 的最佳證據」排在前面。
+      ⚠ **桶內仍然照分數降序**（同一個 query 評出來的分數是可比的）——閘門⑳e 守這條,
+        別為了「不用分數」連桶內也一起丟掉。
+      ⚠ **只動順序、不動選擇**:選出來的集合逐字不變,閘門⑳c 是那條護欄。
+      ⚠ **收益沒有量,也不宣稱**:本 repo 的 RAGAS 量尺分不出這個量級（見 docs/EVAL.md
+        〈量尺飽和〉）。這是「修掉一個自我矛盾」,不是「量到有效的改善」。
+
+    ⚠ **`len(collected) <= k` 的 early-return 一併拿掉**:那條捷徑原樣回傳輸入（＝全域分數降序）,
+      於是同一個函式對「剛好裝得下」與「裝不下」兩種情形給**兩種不同的順序規則**。迴圈本身在
+      `len <= k` 時就會把全部撿完,結果集合相同、順序才一致。閘門⑳d 守這條。
+
+    單一子問題時退化成單純 top-k（只有一個桶,輪詢序 ≡ 分數降序,行為逐字不變——閘門⑳b）。"""
     buckets: dict[int, list[dict]] = {}
     for c in sorted(collected, key=lambda x: x["raw_rerank_score"], reverse=True):
         buckets.setdefault(c.get("_subq", 0), []).append(c)
@@ -154,7 +170,7 @@ def _fair_select(collected: list[dict], k: int) -> list[dict]:
                     break
         if not progressed:
             break
-    return sorted(picked, key=lambda x: x["raw_rerank_score"], reverse=True)
+    return picked
 
 
 def _writer_budget(n_facets: int) -> int:

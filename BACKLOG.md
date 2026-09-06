@@ -231,6 +231,19 @@ live 的就是上面三支。另有 `eval/diagnose_crit_miss.py:32` 與 `eval/re
   卡點「有沒有既有流程依賴回寫」也查清楚了：有三個（`record_web_fixture --mode record`＋兩支 period probe 會自動把快取指到 `eval/replay_cache.json`），所以**唯讀必須是 opt-in**。
   ⚠ 這一條原本還寫著「`record_web_fixture.py --mode replay` 沒設 strict」——**那句已過期**，2026-08-29 就設了 `strict:plan,replan,translate_en,check`。剩下的漏洞是**非 strict 的三個 kind 仍會回寫**，那才是唯讀真正堵住的東西。
 
+- **`_fair_select` 的順序改動（2026-09-06，閘門⑳）收益量不到，而且短期內不會有尺。**
+  改的是「送給 Generator 的 chunk 順序」——輪詢序取代全域分數降序（見 [`CHANGELOG.md`](CHANGELOG.md)）。
+  9 條斷言全是**結構性質**，**沒有一條宣稱答案會變好**，這是刻意的。
+  **為什麼量不到**：唯一可能反映它的指標是 `answer_correctness`，而那格的噪音是 .012、
+  MDE 換算成「要幾題從 0 修到 0.5」是 4~7 題；「把某個 facet 的證據從第 12 位挪到第 2 位」
+  這種改動的效果量遠在解析度之下（同 §量尺飽和 的論證）。零噪音的 `check_number_defects`
+  也量不到——它判的是數字對不對，不是「有沒有提到那個 facet」。
+  **可能量得到的形狀（都還沒做）**：① 造一批「多 facet 且每個 facet 只有一顆低分證據」的題，
+  用逐條斷言驗「每個 facet 都被答到」——⚠ 那批題**不可併進 `eval_set.json`**（分母不可變）；
+  ② 拿 `chunk_gold.json` 量「答案實際引用的 chunk」對 gold 的涵蓋，而不是候選池對 gold 的涵蓋。
+  ⚠ **在有尺之前，不要因為「感覺變好了」就往這個方向再改一次**——那正是本 repo 記過六次的
+  「機制假設聽起來合理」。
+
 ---
 
 ## 觀察：multi_hop 的「比大小」目前沒有 Python 在做（量過了，沒有損害）

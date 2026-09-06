@@ -30,6 +30,11 @@ import subprocess
 import sys
 from pathlib import Path
 
+# 本檔輸出含 ✔／⚠／全形，Windows 主控台預設 cp950 會在**成功**那一行當場炸
+# （2026-09-06 踩到：失敗路徑全是 ASCII 標籤，所以「跑得過」看起來像正常）。
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 ROOT = Path(__file__).resolve().parent.parent
 
 # 只認 experiments/ 底下的證據檔。`eval/` 的 fixture 由各自的 selftest 守，

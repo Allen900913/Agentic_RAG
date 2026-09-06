@@ -1219,7 +1219,14 @@ def gate15_period_fallback_disclosure() -> None:
             not revalidate_missing, f"沒帶的：{revalidate_missing}")
 
     # ── ⑮c 誤報對照：沒有揭露時，prompt 必須逐字不變（否則 65 題基準會無聲漂移）
-    _c = [{"source": "MSFT_10K_2026.html", "chunk_index": 3, "content": "Revenue increased 18%."}]
+    # ⚠ `raw_rerank_score` 不可省（同 ⑯ 那邊的註解）：`_fair_select` 拿它分桶排序。
+    #   ⚙ 2026-09-06 被抳出來的：舊版 `_fair_select` 有一道 `len(collected) <= k` 的 early-return，
+    #   這筆單顆測資永遠走那條捷徑 → 它的形狀與生產不同（生產的 chunk 一律由
+    #   `rq._payload_to_chunk` 建，一定有這個欄位，見 ⑯h）**卻從來沒有現形**。
+    #   拿掉 early-return 當場 KeyError。修法是改測資不是改生產函式（後者就是
+    #   「讓量尺反過來拉著被測物走」）。同族第四次，見 CLAUDE.md ⑯k／⑯m。
+    _c = [{"source": "MSFT_10K_2026.html", "chunk_index": 3, "content": "Revenue increased 18%.",
+           "ticker": "MSFT", "raw_rerank_score": 0.9}]
     _assert("⑮c 空揭露 → user prompt 與「完全不傳這個參數」逐字相同",
             ar.rq.build_user_prompt("Q", _c, "") == ar.rq.build_user_prompt("Q", _c))
 
@@ -2078,6 +2085,115 @@ def gate19_unit_finalization():
     _assert("⑲j 拒答文字逐字不變", F(REF, KB) == REF)
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+def gate20_fair_select_order() -> None:
+    """⑳ `_fair_select` 決定「餵給 Generator 的順序」時，不得用跨子問題不可比的分數。
+
+    **病灶是這個函式自己的兩句話互相矛盾**：它的 docstring 寫著「cross-encoder 原始分數是
+    **相對當次 query** 的，跨子問題不可直接比（B 的 0.72 可能已是 B 的最佳答案，卻輸給 A 的
+    第七名）」——那正是**選擇**改成 round-robin 的全部理由；然後最後一行仍然
+    `sorted(picked, key=raw_rerank_score)`，**把同一個剛被宣告不可比的分數拿回來決定順序**。
+
+    **順序為什麼有影響**：`rq.SYSTEM_PROMPT` Rule 4 要模型第一句就給結論、Rule 9 要求多公司題
+    在句子裡逐一具名歸屬，而 writer budget 上限是 `WRITER_BUDGET_CAP=16` 顆。分數降序會把
+    「某個 facet **唯一**的證據」（它在自己的子問題裡是第 1 名，但絕對分數低）壓到最後幾位。
+
+    ⚠ **這次動的只有順序，不是選擇**：⑳c 是那條護欄——選出來的**集合必須完全相同**。
+    ⚠ **收益未量**：這裡沒有任何一條宣稱答案會變好，全部是結構性質。這是刻意的——
+      「換個順序答案會更好」是機制宣稱，而本 repo 的量尺（RAGAS）分不出這個量級。
+      不量就不宣稱，見 [`BACKLOG.md`](BACKLOG.md)。
+    ⚠ **判別力集中在三條誤報對照**：**⑳b**（單桶時必須與分數降序逐字相同＝既有單意圖題
+      的回歸護欄）、**⑳e**（桶**內**分數仍然可比，不可以為了「不用分數」連桶內也打亂）、
+      **⑳i**（`_subq` 缺席的降級路徑 chunk 不得炸，且行為要退化成單桶）。
+      陽性的 ⑳a 少了 ⑳f 也可能碰巧通過，所以 ⑳f 另外斷言「輸出不是全域分數降序」。
+    """
+    print("\n⑳ _fair_select：順序不得由跨子問題不可比的分數決定")
+    F = ar._fair_select
+
+    def _c(subq: int, idx: int, score: float) -> dict:
+        return {"source": f"S{subq}.txt", "chunk_index": idx, "ticker": "X",
+                "raw_rerank_score": score, "_subq": subq}
+
+    def _ids(rows) -> list:
+        return [(c["_subq"], c["chunk_index"]) for c in rows]
+
+    # A 桶三顆分數全面壓過 B/C ——這正是 `_fair_select` docstring 描述的那個形狀：
+    # B 的 0.40 已經是 B 自己的最佳答案，卻輸給 A 的第三名 0.85。
+    A1, A2, A3 = _c(0, 1, 0.95), _c(0, 2, 0.90), _c(0, 3, 0.85)
+    B1, C1 = _c(1, 1, 0.40), _c(2, 1, 0.35)
+    # ⚠ 進來時本來就是分數降序（`_merge_chunks` 的輸出形狀）。這一點很重要：
+    #   一個「原樣回傳輸入順序」的實作會與舊行為**逐字相同**，所以陽性斷言必須看位置。
+    POOL = [A1, A2, A3, B1, C1]
+
+    got4 = F(list(POOL), 4)
+    head = {c["_subq"] for c in got4[:3]}
+    _assert("⑳a 三個子問題各自的第 1 名都落在前 3 個位置（每個 facet 的最佳證據不被壓到後面）",
+            head == {0, 1, 2}, f"前 3 位的 _subq={[c['_subq'] for c in got4[:3]]} 全序={_ids(got4)}")
+
+    _assert("⑳c 護欄：這次只動順序——選出來的**集合**與 round-robin 選擇邏輯完全相同",
+            sorted(_ids(got4)) == sorted([(0, 1), (0, 2), (1, 1), (2, 1)]), _ids(got4))
+
+    _assert("⑳f 判別力：輸出**不是**全域分數降序（少了這條，一個沒真的改的實作也會過 ⑳a）",
+            _ids(got4) != _ids(sorted(got4, key=lambda x: x["raw_rerank_score"], reverse=True)),
+            _ids(got4))
+
+    got5 = F(list(POOL), 5)
+    _assert("⑳d len(collected) <= k 也要走同一條路（不再有 early-return 的順序分岔），且一顆都不掉",
+            sorted(_ids(got5)) == sorted(_ids(POOL)) and _ids(got5) != _ids(POOL),
+            f"got={_ids(got5)} pool={_ids(POOL)}")
+
+    # ⑳e 誤報對照：桶**內**的分數是同一個 query 評出來的＝可比，不可以一併丟掉。
+    # ⚠ **輸入必須刻意打亂**：第一版拿上面那個 `POOL`（本來就是分數降序）來測，於是
+    #   「桶內有排序」與「桶內不排序」的輸出逐字相同 → 這條斷言**恆真**（變異測試 M3
+    #   當場沒抓到）。同 ⑰i／⑱f 那兩次的形狀：**測資讓那條路從來沒被走到**。
+    #   生產上 `collected` 確實一直是降序的（`_merge_chunks` 的輸出），但這條要守的
+    #   正是「不要依賴那個巧合」。
+    SHUFFLED = [A3, B1, A1, C1, A2]      # 桶 0 的輸入序是 .85 / .95 / .90：刻意不是降序
+    _a_seq = [c["raw_rerank_score"] for c in F(list(SHUFFLED), 5) if c["_subq"] == 0]
+    _assert("⑳e 誤報對照：同一個子問題內部仍然是分數降序（桶內分數可比，別連它也不用）",
+            _a_seq == [0.95, 0.90, 0.85], _a_seq)
+
+    # ⑳b 回歸護欄：單一子問題（eval_set 裡大多數題就是這個形狀）行為必須逐字不變。
+    SINGLE = [A1, A2, A3]
+    _assert("⑳b 誤報對照：單一子問題 → 與分數降序逐字相同（單意圖題的回歸護欄）",
+            _ids(F(list(SINGLE), 2)) == [(0, 1), (0, 2)]
+            and _ids(F(list(SINGLE), 9)) == [(0, 1), (0, 2), (0, 3)],
+            f"k=2 → {_ids(F(list(SINGLE), 2))}；k=9 → {_ids(F(list(SINGLE), 9))}")
+
+    # ⑳i 誤報對照：降級路徑（`_fallback_local_summary`）與舊結果檔的 chunk 沒有 `_subq`。
+    #   `.get('_subq', 0)` 讓它們全歸桶 0 ＝ 退化成單桶，不得炸、也不得改變相對順序。
+    NOSUB = [{"source": "Z.txt", "chunk_index": i, "ticker": "X", "raw_rerank_score": s}
+             for i, s in ((1, 0.9), (2, 0.8), (3, 0.7))]
+    try:
+        _got_ns = F(list(NOSUB), 2)
+        _ok_ns = [c["chunk_index"] for c in _got_ns] == [1, 2]
+        _detail = [c["chunk_index"] for c in _got_ns]
+    except Exception as e:      # noqa: BLE001 — 這條就是要抓「沒有 _subq 會不會炸」
+        _ok_ns, _detail = False, repr(e)
+    _assert("⑳i 誤報對照：chunk 沒有 `_subq`（降級路徑／舊結果檔）不得炸，退化成單桶分數降序",
+            _ok_ns, _detail)
+
+    # ── ⑳g 生產接線：`_subq` 真的是生產打上去的，不是只有測試自己寫（同 ⑮e／⑲l9 的教訓）
+    import ast as _ast
+    _fd = _pkg_funcdefs()
+    _rot = _fd.get("_run_one_todo")
+    _src = _ast.unparse(_rot) if _rot else ""
+    _assert("⑳g 生產接線：`_run_one_todo` 真的把 `_subq` 打在 commit 進 collected 的 chunk 上",
+            _rot is not None and "'_subq'" in _src and "todo['id']" in _src,
+            f"找到 _run_one_todo={_rot is not None}")
+
+    # ── ⑳h 活體：排序讀的 `raw_rerank_score` 真的由生產建構子產出（不是測試自造的 dict）
+    try:
+        _cl = ar.rq.make_qdrant_client()
+        _pts, _ = _cl.scroll(ar.rq.COLLECTION_NAME, limit=1, with_payload=True, with_vectors=False)
+        _built = ar.rq._payload_to_chunk(_pts[0].payload, 0.5, 0.75)
+        _assert("⑳h 活體：真實 payload 餵生產建構子 `rq._payload_to_chunk` 後確實有 `raw_rerank_score`",
+                _built.get("raw_rerank_score") == 0.75,
+                f"keys={sorted(_built)[:12]}")
+    except Exception as e:      # noqa: BLE001
+        _assert("⑳h 活體對照可執行（掃不到就等於這道閘門只測了合成資料）", False, repr(e))
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -2107,6 +2223,7 @@ def main() -> int:
     gate17_dual_source_timepoints()
     gate18_web_fetched_but_uncited()
     gate19_unit_finalization()
+    gate20_fair_select_order()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")
