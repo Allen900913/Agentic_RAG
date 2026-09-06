@@ -8,8 +8,8 @@ ground_truth，導致答案裡每個「清單沒明講的正確細節」都被�
 
 作法：對每個有 rubric 的 query，從**黃金來源檔**（eval_set 的 relevant globs）撈
 chunk、用 BGE-M3 dense 相似度快速選 top-K（避開 CPU cross-encoder 的 46s 瓶頸），
-用 gemini-2.5-flash 生成一份 grounded、完整的英文參考答案。參考答案獨立於系統
-輸出（grounded 在黃金來源，而非系統檢索結果），避免循環。
+用 `--gen-model` 指定的模型生成一份 grounded、完整的英文參考答案。參考答案獨立於
+系統輸出（grounded 在黃金來源，而非系統檢索結果），避免循環。
 
 ⚠️ 生成走 rq.call_llm（'gemini-' 開頭走 Google GenAI，其餘走 NVIDIA NIM）。
 ⚠️ 本腳本跑在專案 .venv（需要 rag_query / qdrant / FlagEmbedding）。
@@ -35,7 +35,23 @@ import rag_query as rq
 EVAL_SET_PATH = Path("eval/eval_set.json")
 GOLD_TOP_K = 8           # 生成參考答案時餵幾個黃金 chunk（收斂以控 token）
 CHUNK_CHAR_CAP = 1500    # 每個 chunk 餵進 context 的字元上限（控 token）
-GEN_MODEL = "openai/gpt-oss-120b"   # NVIDIA NIM（見 rag_query.call_llm 的 provider 路由）
+# 參考答案的生成模型（NVIDIA NIM；見 rag_query.call_llm 的 provider 路由）。
+# 2026-09-06 從 `openai/gpt-oss-120b` 換掉——它於 2026-09-03T08:00Z 被 NVIDIA 退役（410 Gone），
+# 留著等於第一次呼叫就炸。
+# ⚠ **這個角色的選型判準與別處不同：不能與 judge 或系統 generator 同源。**
+#   參考答案是 `answer_correctness` 的 ground truth，系統答案要跟它比對——
+#   · 不用 `google/gemma-4-31b-it`：那是現在的 **RAGAS judge**（judge 評自己家族寫的文字）。
+#   · 不用 `nvidia/nemotron-3-super-120b-a12b`：那是現在的**生產 GEN_MODEL**，
+#     參考答案會長得像系統輸出 → correctness 被系統性灌高。
+#   本 repo 已經量過並否決「judge 與 generator 同源」這個形狀，這裡是同一個道理。
+# ⚠ 為什麼 20b 在**這個角色**可以，而在 RAGAS judge 不行：那邊一輪 390 個 metric-row，
+#   8.8s 中位延遲會變成幾小時；這裡是 65 題跑一次、輸出直接進版控，延遲無關緊要。
+#   穩定性有當日實測：2026-09-06 `judge_regression --repeat 9` 連續 ~100 次呼叫零失敗。
+#   `call_llm` 不傳 `max_tokens`（吃 server 預設），所以「reasoning token 吃光正文」
+#   那個坑（TABLE_SUMMARY_MODEL @200 實測 10/10 全空）在這裡不成立。
+# ⚠ **這個角色沒有 bake-off**。上面是排除法＋可用性，不是量出來的品質排名。
+#   真要換，先想清楚它會不會與 judge／generator 同源，再用 `--gen-model` 覆蓋。
+GEN_MODEL = "openai/gpt-oss-20b"
 
 REFERENCE_SYSTEM = """You are writing a GOLD REFERENCE ANSWER for evaluating a RAG system.
 
@@ -207,10 +223,24 @@ def main():
                     help="無視快取強制重生成（配 --ids 用）。用途：切塊方式變了但 query 與 "
                          "gold_files 都沒變時，快取條件 ①②③ 都攔不到（③ 只在舊檔已有 "
                          "collection 欄位時才判得出來）。⚠ 不帶 --ids 就是全量重生成，"
-                         "會覆蓋掉 reference_answers.json 裡的人工校正。")
+                         "會覆蓋掉 reference_answers.json 裡的人工校正——那需要 --force-all。")
+    ap.add_argument("--force-all", action="store_true",
+                    help="確認要全量重生成（--force 不帶 --ids 時必須加）。"
+                         "⚠ 這會覆蓋掉 reference_answers.json 裡 24 處人工校正，**腳本重現不了**。")
     ap.add_argument("--match-lang-from", nargs="*", default=None,
                     help="結果檔清單：逐題把參考答案語言對齊該題系統答案語言（消跨語言失真）")
     args = ap.parse_args()
+
+    # ⚠ `--force` 不帶 `--ids` ＝ 全量重生成 ＝ 洗掉 reference_answers.json 的 24 處人工校正
+    #   （非腳本可重現，見 CLAUDE.md）。原本只有 help 字串在擋，而在 2026-09-06 之前
+    #   還有一道**意外的**保險：預設模型是已退役的 `gpt-oss-120b`，跑下去第一個呼叫就 410，
+    #   人工校正毫髮無傷。把預設換成活的模型等於拆掉那道保險 → 這裡補一道真的。
+    if args.force and not args.ids and not args.force_all:
+        print(f"[refuse] --force 不帶 --ids ＝ 全量重生成，會覆蓋 {args.output} 裡的人工校正。",
+              file=sys.stderr)
+        print("         只想重生成幾題：加 --ids <id> ...", file=sys.stderr)
+        print("         真的要全量重生成：加 --force-all（先確認該檔已 commit）。", file=sys.stderr)
+        sys.exit(2)
 
     lang_map = build_answer_lang_map(args.match_lang_from) if args.match_lang_from else {}
 
