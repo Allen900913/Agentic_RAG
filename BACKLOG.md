@@ -183,6 +183,21 @@ live 的就是上面三支。另有 `eval/diagnose_crit_miss.py:32` 與 `eval/re
   `context_precision` 那格最不可信：三對量到 .046 / .005 / .006，而 .046 的成因（最高排名那筆判定翻面 → 整題 1.0→0.0）隨時會再發生，現在取的仍是最大的 .046。
   **卡點是成本**：一輪全量在 `.venv-ragas` 要 ~2 小時（`--max-workers 2`，NVIDIA 限速不能再高），要收斂門檻得多跑幾對同輸入重評。**引用任何 `NOISE` 常數之前，先看它是幾對量出來的。**
 
+- **「檢索已經到頂」這個結論靠的是一把已經作廢的尺；量它的工具 2026-09-08 補上了，數字還沒跑。**
+  那個結論來自 **100 題 × 舊 judge（`gpt-oss-120b`，已 410）× 舊 collection** 的 RAGAS 檢索三指標，
+  而本 repo 自己的規則寫著「跨 2026-09-04 的分數一律不可比」「跨輪比 RAGAS 聚合值 ＝ 把 judge 噪音
+  算進系統差異」。`chunk_gold.json`（41/65 題、83 顆）2026-09-04 就建好了，但**只被
+  `probe_relevant_ids` 拿去量 Grader 的圈選，從來沒量過 `rq.retrieve()` 本身**。
+  → [`eval/probe_chunk_gold_recall.py`](eval/probe_chunk_gold_recall.py) 補上這一格。
+  ⚠ **判讀先看 @5 與 @20 的差**：排序問題（rerank／`_fair_select`）與召回問題（HyDE 這類機制
+  才有意義的那一格）是**兩種病、兩種修法**，合併成一個 recall 數字就分不出來。
+  ⚠ **`@20` 其實就是整個候選池**（`RRF_TOP_N_PRIMARY = 20`，實測中位池 14）→「召回問題」同時
+  指向那個常數本身，而它上一次 sweep 是在舊 collection 上做的。
+  ⚠ **偏誤方向只會高估**（gold 是聯集）→ **低分是硬證據，高分不是健康證明**。
+  ⚠ 三題 smoke 已跑過（`lex-03` 召回問題、`col-08`／`mh-01` @5 就在），**n=1 輪不可下結論**；
+  下結論要 `--repeat 3` 以上。⚠ `col-08` 這一格與 BACKLOG 舊註記（「dense rank 25/106」）**對不上**，
+  要嘛那筆註記已過期（寫於單年 collection 時代），要嘛 chunk gold 指到的是另一顆——**先查是不是尺錯**。
+
 - **`exec_stats.forced_pass` 的分母已落地（2026-09-08），發生率還沒量。**
   `forced_pass` 每一筆＝**Grader 連 `MAX_REWRITES+1` 輪都判證據不足，而系統照樣拿它作答且零保留**。
   在此之前這件事完全不可觀測（executor 的 4-tuple 沒有這一格），發現它是因為端到端撞到一題答錯的。
