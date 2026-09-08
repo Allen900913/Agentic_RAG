@@ -40,6 +40,35 @@
 
 ## 2026-09-08
 
+### 崩潰降級的題會被 resume 永遠跳過（`repair_degraded_records.py`）
+
+**跑 65 題分母那一輪當場撞到的。** `run_agentic_on_evalset.py` 的 resume 判準是
+「**有 answer 且無 error** → 跳過」，而 `run_agentic` 的 graph 崩潰降級路徑**照樣產出 answer、
+也不寫 error**（它走一次乾淨的單發檢索+生成兜底）。兩件事湊起來：**降級題會被 resume 永遠跳過**，
+於是一份「跑完 65 題」的結果檔裡可能混著 N 題根本沒經過 agentic 管線的記錄，而且外觀完全正常。
+
+**觸發它的是 NVIDIA NIM 的間歇性 404**（證據 `experiments/_nim404_probe.txt`）：
+同一個 model、同一段 prompt、同一支 `rq.call_llm`，同一分鐘內 **10/20 失敗**，幾分鐘後 **0/6**。
+model 是 `nvidia/nemotron-3-super-120b-a12b` ＝ `rq.DEFAULT_MODEL` 與 agentic 三個常數**同一個 id**。
+plan／replan 的 `rq.call_llm` **沒有包 try/except** → 一次 404 就炸掉整個 `graph.invoke`。
+⚠ **判定是暫時性事件不是下架，所以刻意不換模型**：下架的表徵是 410 且**持續**
+（`gpt-oss-120b` 2026-09-03 就是那樣）；這次是 404 且**幾分鐘內從 50% 掉到 0%**。
+換模型的代價是所有基準與 replay fixture 全部失效、且沒得 A/B——不為一場會過去的外部故障付。
+
+· `eval/repair_degraded_records.py`：判準是**五個 stats 鍵全部都是 `None`**。
+  ⚠ 這正是那五個通道當初保留 `None` ≠ `{}` 的用途（`{}` ＝ 跑完了只是沒觸發）——
+  **這個區分上線第一天就派上用場了**：對照 2026-09-05 的基準 `unit_stats=None` 是 **0/65**，
+  而事件當天前 3 題就有 2 題全 `None`。沒有它，我會拿一份混著崩潰題的資料去算 `forced_pass` 發生率。
+  ⚠ 刻意用「全部皆 None」不是「任一個 None」：任一個會把舊格式結果檔整份誤判成降級。
+  ⚠ 刻意**不自動重跑**（補跑仍走 `run_agentic_on_evalset.py` 同一個入口，免得變成第二個跑分入口）；
+  ⚠ 刻意 `--dry-run` 為預設（結果檔是跑了好幾小時的東西）。
+  selftest 5 項，判別力全在②③④三條誤報對照。
+
+⚠ **一個我自己寫錯又當場被資料推翻的判讀**：第一版警語寫「降級會系統性偏向 multi_hop／mixed
+（LLM 呼叫次數多）」，而實測 3 筆降級**全是 semantic**。真相是 `eval_set.json` **按類別排序**
+（前 15 題全是 semantic），而崩潰依**時間**叢集 → **類別與跑的先後在這份題庫裡是共線的**，
+那一欄根本分不出兩者。警語已改成講這件事。
+
 ### executor 的「重試用完強制放行」在此之前完全不可觀測
 
 **病灶**（2026-09-07 端到端實跑撞到的，不是想出來的）：`_run_executor_*` 的迴圈出口是

@@ -1,0 +1,23 @@
+NVIDIA NIM 間歇性 404 事件（2026-09-08，跑 65 題分母那一輪時撞到）
+
+model = nvidia/nemotron-3-super-120b-a12b（= rq.DEFAULT_MODEL
+        = agentic 的 CHECKER_MODEL / GEN_MODEL / RETRIEVAL_MODEL，四個常數同一個 id）
+
+直接打同一個 model、同一段 prompt、同一支 rq.call_llm：
+
+  11:2x  20 次 → 10 ok / 10 NotFoundError('Error code: 404')     ＝ 50% 失敗
+  11:3x   6 次 →  6 ok /  0 失敗                                  ＝  0% 失敗
+
+判讀：**這是暫時性的基礎設施事件，不是模型下架。**
+  · 下架的表徵是 410 Gone 且**持續**（gpt-oss-120b 2026-09-03 就是那樣，當天整條管線全死）。
+  · 這次是 404 且**幾分鐘內從 50% 掉到 0%** → 比較像 NIM 後端輪替／部分 replica 不健康。
+
+為什麼它會炸掉整個 graph：
+  plan/replan 呼叫 rq.call_llm **沒有包 try/except**（`run_agentic` 那段降級註解自己寫著
+  「實測撞過 NVIDIA 端連續 504 把整個 invoke 炸穿」）→ 一次 404 就讓 graph.invoke 整個掛掉，
+  落到降級單發路徑，結果檔裡五個 stats 全部是 None。
+
+⚠ 對量測的意義：**跑分當天 API 半死，事後很容易被誤讀成系統回歸。**
+  這次是靠 2026-09-08 新加的 `exec_stats`（None ≠ {}）當場看出來的——
+  對照 2026-09-05 那份基準（experiments/agentic/gj_multiyear_r2_unitstats.json）
+  unit_stats=None 的題數是 **0/65**，而這一輪前 3 題就有 2 題全 None。
