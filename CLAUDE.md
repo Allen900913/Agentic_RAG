@@ -66,7 +66,7 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 - **⚠ 但「量尺飽和」是關於量尺，不是關於系統——這兩句被混為一談過。** 2026-09-08 用 chunk 層 gold（[`eval/probe_chunk_gold_recall.py`](eval/probe_chunk_gold_recall.py)，41 題 × 3 輪、跨輪翻面 0）量到：`gold@5 = 0.683`／`gold@20 = 0.780`，**13/41 題（32%）有檢索層缺陷**——9 題召回（gold 從沒進過 20 名候選池）＋ 4 題排序。
   · **lexical 的 `@5` 與 `@20` 完全相同（30/30）⇒ 那一類的病 100% 在召回、與排序無關**，而 9 題召回失敗有 5 題是 lexical。
   · ⚠ **這不表示修了檢索答案就會變好**：`forced_pass` 的交叉分析（見下）顯示 10 題裡只有 1 題（`lex-04`）是檢索問題，5 題是「撈到了 Grader 仍判不足」。**「有缺陷」與「修了有用」是兩個問題，第二個仍然沒有量尺。**
-  · ⚠ `@20` 就是**整個候選池**（`RRF_TOP_N_PRIMARY = 20`，實測中位池正好 20）⇒「召回問題」同時指向那個常數，而它上一次 sweep 在舊 collection 上。
+  · ⚠ **`@20` 不等於「整個候選池」，這一格被讀錯過兩次**：RRF 回 `RRF_TOP_N_PRIMARY = 20` 個候選，而 `rq.retrieve()` 回的是那 20 個**經過 hard filter／跨期 collapse／去重刪剩下的**（實測 7~19）。`probe_chunk_gold_recall` 印的 `pool` 是**後者**。⚠ 2026-09-09 的層級歸因（[`eval/probe_recall_layer_attribution.py`](eval/probe_recall_layer_attribution.py)，41 題 × 2 輪）量到：9 題召回失敗的 **`pre20` 全都是 20**（名額用滿、gold 不在裡面），且「被 collapse／filter 刪掉 gold」**0 題** ⇒ 那條懷疑排除。分層是 **② RRF 名額 2 題／③ `FETCH_N` 名額 3 題／④ 真的撈不到 3 題／跨輪翻面 1 題**——**五題是名額問題，`RRF_TOP_N_PRIMARY` 與 `FETCH_N` 的 sweep 因此有據可循**（而它上一次 sweep 在舊 collection 上）。見 [`BACKLOG.md`](BACKLOG.md)。
 - **⚠ 表格摘要模型換過兩次，兩次都是被迫的**（gemini-2.5-flash → llama-3.3-70b → 2026-08-16 後者被 Groq 退役）。**換這個模型必須先跑 bake-off**：它是推理模型，`TABLE_SUMMARY_MAX_TOKENS` 太小會讓 reasoning token 吃光正文額度、**靜默吐空字串**（實測 gpt-oss-120b @200 是 10/10 全空）。判準見 [`unstructured_components.py`](unstructured_components.py) `TABLE_SUMMARY_MODEL` 上方的證據表——選型看**輸出穩定性**不是模型大小。失敗的唯一出口是 [`eval/verify_table_captions.py`](eval/verify_table_captions.py) 的 `missing_on_big`。
 
 ### Collection 一覽

@@ -3,6 +3,63 @@
 紀錄本專案每次有意義的程式修改（架構調整、參數變更、新增功能、放棄的實驗）。新條目加在最上面。
 **每筆條目只留「改了什麼、關鍵數字、結論」**，診斷過程與推導細節見 `docs/` 與 git log，不重述。
 
+## 2026-09-09
+
+### 召回失敗的層級歸因：`RRF-20` 名額用滿、collapse 一筆 gold 都沒吃掉
+
+新增 [`eval/probe_recall_layer_attribution.py`](eval/probe_recall_layer_attribution.py)（selftest 8/8，5 條誤報對照）。
+41 題 × 2 輪，`experiments/rla_20260909.json`。把 09-08 量到的 9 題召回失敗拆成四格：
+
+| 格 | 題數 | 題 |
+|---|---|---|
+| ① collapse／filter 刪掉 gold | **0** | —— |
+| ② RRF 名額不夠（`RRF_TOP_N_PRIMARY=100` 才進得來） | 2 | `lex-17` `sem-03` |
+| ③ prefetch 名額不夠（`FETCH_N=300` 才進得來） | 3 | `col-01` `lex-04` `sem-01` |
+| ④ 真的撈不到 | 3 | `lex-03` `lex-14` `sem-05` |
+| 跨輪翻面 | 1 | `lex-07` |
+
+- **① ＝ 0 是乾淨的 null result**：跨期 collapse／三層 filter／去重沒有吃掉任何 gold。
+- **5/9 是名額問題**，且 `FETCH_N`（3 題）比 `RRF_TOP_N_PRIMARY`（2 題）更值得動。**兩個常數要分開 sweep。**
+- ④ 的三題有兩題同形狀（`lex-03`／`lex-14` 都是「某公司某財年的 Diluted EPS」）→ 結構性成因，不是查詢向量問題。
+- ⚠ **一路上讀錯過兩次同一個數字**：`probe_chunk_gold_recall` 印的 `pool` 是 `retrieve()` 的**回傳長度**
+  （RRF-20 被 filter／collapse／去重刪剩下的），**不是候選池**。09-08 據此推出「池是滿的」、
+  09-09 上午又據此推翻成「名額沒用完」——**實測 `pre20` 全部都是 20**，原判讀方向才是對的。
+  `@20` ≠「整個候選池」這件事已寫進 CLAUDE.md 與 BACKLOG。
+
+### `gold@cited` 漏斗：量出來的比預期窄，而那本身是結論
+
+新增 [`eval/probe_gold_funnel.py`](eval/probe_gold_funnel.py)（selftest 9/9）。
+41 題可量：撈到且引用 31（76%）／**撈到卻沒引用 0**／沒撈到 10。`experiments/gold_funnel_20260908.json`。
+
+- ⚠ **那個 0 照規則當壞消息查，確實是量尺的問題**：`sources` 是 `_fair_select` **之後**
+  交給 Generator 的 5 顆，不是撈到過的聯集 → **5 顆裡的 gold 幾乎必然被引用**＝第二段結構性接近恆真。
+- ⇒ **「撈到了但被丟掉」目前量不到，缺的是資料不是方法**：結果檔沒有子問題檢索的聯集。
+  下一步是在 `run_agentic` 加 `retrieved_union` 觀測通道（同 `unit_stats`／`exec_stats` 的作法）。
+- **仍有用的一半**：與單管線臂逐題比對只有三題分歧，其中 `lex-17`（單管線 gold 不在候選池、
+  agentic 撈到且引用）是**「子問題拆解改善召回」目前唯一的直接證據**；`mix-08`／`sem-04`
+  的分歧被兩支的 **k 不同**解釋掉（top-50 vs 最終 5 顆），不是 agentic 的缺陷。
+
+### 讀完 09-08 那一輪的三批明細（零成本，讀既有結果檔）
+
+- **確診缺陷（未修）**：`_fill_dependent_hop` 用 `_DEP_PLACEHOLDER_RE.sub(entity, task)`
+  把**每一個** `#N` 都換成同一個實體 → `mh-03` 實際送出的子問題是
+  「在 **NVIDIA、NVIDIA、NVIDIA** 中，哪一家的最近一年營收年增率最高？」。零 LLM 可重現。
+  底層成因是 `depends_on` **單一 int 表達不了多父依賴**，而比較型的 hop 天生多父。
+  ⚠ 該題**最後答對了**（三家 Fundamentals chunk 都在池子裡，Generator 自己比的）→ 端到端跑分看不到。
+- **`MAX_TODOS` 維持 7**：被額度擋掉的 2 個待辦（META／GOOGL 的 TTM 淨利）雖然有意義，
+  但那三顆 chunk **本來就已經在 collected 裡**＝重複撈。復活條件：出現一筆被擋掉、
+  而該資訊確實不在 collected 裡的待辦。
+- **`kb_unfixable_exit` 整輪 0，而 18 筆 `forced_pass` 有 ~14 筆正是 KB 天花板**
+  （「神經網路訓練細節」「Android 開發者人數」「與其他車廠的比較」…）。
+  ⇒ **第一順位不是加揭露句，是讓 `kb_unfixable` 真的會觸發**——那條路早就接好了。
+  這是 `_check_sufficiency` 的判定品質問題，要先有 probe（陰性對照不可省）。
+
+### 順帶：`_extract_citations` 對 `;` 串接的引用整段抓不到（生產缺陷，未修）
+
+`_CITE_RE` 要求 chunk 編號後緊接右括號 → `[A, chunk #20; B, chunk #19]` 抓到 **0 筆**（不是部分）。
+65 題結果檔 363 個引用區段裡 **5 個（1.4%）**，分屬 `sem-01`／`mix-10`／`mh-01`／`sem-13`。
+⚠ 影響閘門㉑ 接受守衛的 `citations` 指紋（漏報方向）。未修：改它會動到既有判定，要配斷言＋跑全閘門。
+
 ## 2026-09-08
 
 ### 補上「生產檢索到底撈不撈得到」這把尺（`probe_chunk_gold_recall.py`）
