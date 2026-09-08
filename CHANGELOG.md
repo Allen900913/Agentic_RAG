@@ -3,6 +3,57 @@
 紀錄本專案每次有意義的程式修改（架構調整、參數變更、新增功能、放棄的實驗）。新條目加在最上面。
 **每筆條目只留「改了什麼、關鍵數字、結論」**，診斷過程與推導細節見 `docs/` 與 git log，不重述。
 
+## 2026-09-08
+
+### executor 的「重試用完強制放行」在此之前完全不可觀測
+
+**病灶**（2026-09-07 端到端實跑撞到的，不是想出來的）：`_run_executor_*` 的迴圈出口是
+
+```python
+if verdict["sufficient"] or rnd >= MAX_REWRITES:   # 註解自己寫著「或次數用盡強制放行」
+```
+
+而回傳的 4-tuple `(summary, web_notes, realtime_need, period_notes)` **沒有任何一格**說明它是
+哪一種。Synthesize 因此分不出「Grader 判過」與「重試三輪都不夠、硬放」，兩者在結果檔裡外觀完全相同。
+
+**實測那一題**：「Magnificent Seven 裡最近十二個月淨利最高的是哪一家？」hop-1 連跑三輪
+`sufficient=False`（Grader 每輪都在列缺哪幾家），答案照樣產出、**零保留**，而且答錯——
+答 Apple $122.58B，KB 裡實際最高是 GOOGL $160.21B（AAPL 排第 4）。
+**系統早就知道自己資料不夠，那個訊號被丟掉了。**
+
+（那一題答錯的**成因**是另一件事，已登錄成已接受的極限：「Magnificent Seven」是集合詞 →
+`_mentioned_tickers` 回 `[]` → `_ensure_ticker_coverage` 的每家保底整個不觸發 → top-5 裝不下 7 家。
+這次**沒有**修那個，見 `BACKLOG.md`。）
+
+**這次做的是分母不是行為**（同 `unit_stats`／`replan_stats`／`plan_stats`／`revision_stats` 的順序，
+第五個）：`exec_stats` 逐子問題記下**唯一**的出場方式，經 graph state → `run_agentic` → record
+寫進結果檔。行為逐字沒變，兩條護欄守著（⑯g 帶不帶參數輸出逐字相同、⑯m 強制放行仍照常產出摘要）。
+
+· `graph._EXEC_OUTCOMES`：五種出場的封閉集合。**四種病不可合併**——只有 `forced_pass` 是缺陷，
+  `kb_unfixable_exit`（KB 結構上補不了，提早跳出是**正確行為**且另有時效揭露）、
+  `web_budget_exit`（route=web 且 query 級預算用完）、`crashed` 各是別的病。一個
+  「出場時 sufficient 為 False 就算 forced_pass」的實作會把四種混成一種＝分母灌水到沒有意義。
+· `_note_exec_outcome(stats, outcome, **detail)`：out-param、**set-once**。out-param 是因為
+  `_node_execute` 是 ThreadPoolExecutor（模組層全域會被別的執行緒蓋掉，而蓋掉後的外觀與
+  「這一題沒觸發」相同）；set-once 是因為 react 在 break 之前還會生成摘要，那一段拋例外會落到
+  `except` → 沒有 set-once 就一次執行被算成兩種病。**刻意不改回傳型別**：4-tuple 有三個呼叫端。
+· `_merge_exec_stats(prev, per_todo)`：**必須讀 `prev`**——LangGraph 對沒有 reducer 的 key 是
+  取代語意，只回傳這一波會讓最終只剩最後一波，而 multi_hop 的第二跳正好都在最後一波。
+  沒寫 outcome 的（wave worker 在 executor 之外炸了）一律算 `crashed` 並計入 `todos`。
+
+**閘門⑯（22 項）**加在 `eval/verify_web_gate_isolation.py`：224 → **246 項**，四道閘門
+85／316／17／246 全 PASS。判別力集中在四條誤報對照（⑯b 第一輪就夠、⑯d `kb_unfixable`、
+⑯e web 預算、⑯l 崩潰），**變異 Q1／Q2 只有它們抓得到**。
+
+⚠ **變異測試第一輪的 Q1／Q2 是假性「沒抓到」**：executor 是**裸名**呼叫 `_note_exec_outcome`，
+只改 `ar.<name>` 的 patch 根本到不了呼叫端。改注 `agentic_rag_version.graph` 之後 8/8 全抓到。
+**變異的注入點要在定義處，不是門面。**
+⚠ 兩處測試樁跟著改：`verify_answer_validators` ⑮ 的 `_run_executor` lambda 要收 `exec_stats=None`；
+本檔 `_drive` 的 `_tavily_search` 樁要收 `need=`（模組級樁是 `lambda q:`，升級到 web 那一路會炸成
+`crashed`，害 ⑯d 測到別的東西）。
+
+**還沒做的**：`forced_pass` 的**發生率**。全量 65 題跑一輪才有分母——在那之前不要動揭露或拒答。
+
 ## 2026-09-06
 
 ### agentic D：Synthesize 的六道修補鏈沒有不動點，加上零成本的回歸守衛

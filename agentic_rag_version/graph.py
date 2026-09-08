@@ -550,9 +550,61 @@ def _fallback_local_summary(task: str, chunks: list[dict], period_note: str = ""
         return _mechanical_summary(task, chunks)
 
 
+# ── executor 的「出場方式」：四種病不可合併 ────────────────────────────────────
+# 迴圈有三個 break ＋ 一個 except，而它們**只有一種**是缺陷：
+#   · `sufficient`        Grader 真的判過
+#   · `forced_pass`       重試用完仍不足就放行 ← **這一格是分母要量的東西**
+#   · `kb_unfixable_exit` KB 結構上補不了（時效）→ 提早跳出。這是**正確行為**，另有時效揭露
+#   · `web_budget_exit`   route=web 且 query 級預算用完 → 本子問題留空並記缺口
+#   · `crashed`           executor 例外降級
+# ⚠ 一個「出場時 sufficient 為 False 就算 forced_pass」的實作會把前四種混成一種，
+#   分母灌水到沒有意義。閘門⑯d／⑯e／⑯l 是那三條誤報對照。
+_EXEC_OUTCOMES = ("sufficient", "forced_pass", "kb_unfixable_exit", "web_budget_exit", "crashed")
+
+
+def _note_exec_outcome(stats: dict | None, outcome: str, **detail) -> None:
+    """記下這個子問題**唯一**的出場方式。out-param，`None` ＝ 呼叫端不想量。
+
+    ⚠ **刻意 set-once**：react executor 在 break 之前還會生成摘要，那一段拋例外會落到
+      `except` → 沒有 set-once 就會同時記成兩種病，而 `_merge_exec_stats` 的加總會多算一筆。
+    ⚠ **刻意用 out-param 不用模組層全域**（同 `rq.finalize_answer_units` 的 `stats`）：
+      `_node_execute` 是 ThreadPoolExecutor，全域會被別的執行緒蓋掉，而蓋掉後的外觀
+      與「這一題沒觸發」完全相同。
+    ⚠ **刻意不改回傳型別**：executor 的 4-tuple 有三個呼叫端，加第五格會讓漏改的那個
+      在 unpack 時才炸，而 react 那條路平常不跑＝拖很久才現形。
+    """
+    if stats is None or stats.get("outcome"):
+        return
+    assert outcome in _EXEC_OUTCOMES, f"未知的 outcome {outcome!r}"
+    stats["outcome"] = outcome
+    stats.update(detail)
+
+
+def _merge_exec_stats(prev: dict, per_todo: list[dict]) -> dict:
+    """把一整波的 per-todo 出場方式併進**前幾波**的累計值。
+
+    ⚠ **必須讀 `prev`**（同閘門⑭i）：LangGraph 對沒有 reducer 的 key 是**取代**語意，
+      直接回傳這一波的計數會讓最終結果只剩最後一波——而 multi_hop 的第二跳正好都在最後一波。
+    ⚠ **沒寫 outcome 一律算 `crashed`**：那代表 wave worker 在 executor 之外炸了
+      （`_node_execute` 的防禦性 except）。算進分母而不是靜默漏掉，否則 `todos` 會少計。
+    """
+    out = {k: int(prev.get(k, 0)) for k in _EXEC_OUTCOMES}
+    out["todos"] = int(prev.get("todos", 0))
+    out["forced_pass_detail"] = list(prev.get("forced_pass_detail", []))
+    for st in per_todo:
+        st = st or {}
+        out["todos"] += 1
+        out[st.get("outcome") if st.get("outcome") in _EXEC_OUTCOMES else "crashed"] += 1
+        if st.get("outcome") == "forced_pass":
+            out["forced_pass_detail"].append(
+                {k: st.get(k) for k in ("id", "task", "missing", "rounds")})
+    return out
+
+
 def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
                         subq_index: int, verbose: bool, *,
-                        attributable: bool) -> tuple[str, list[str], str, list[str]]:
+                        attributable: bool,
+                        exec_stats: dict | None = None) -> tuple[str, list[str], str, list[str]]:
     """[舊行為，AGENTIC_REACT_EXECUTOR=true 才用] Executor 核心：Agent A（ReAct 檢索員）⇄ Grader 的訊息
     傳遞迴圈。先純檢索（system prompt 鎖生成）→ Grader 評分 → 不夠餵糾正訊息續搜（有界 MAX_REWRITES）→
     夠了發「解除限制、生成摘要」觸發訊息 → A 產出局部摘要 → 跳出。回傳 (summary, web_notes)。
@@ -590,6 +642,10 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
                     fin = app.invoke({"messages": messages},
                                      config={"recursion_limit": SUBAGENT_RECURSION_LIMIT})
                 summary = _last_ai_text(fin["messages"])
+                _note_exec_outcome(
+                    exec_stats,
+                    "sufficient" if verdict["sufficient"] else "forced_pass",
+                    rounds=rnd + 1, missing=verdict.get("missing", ""))
                 break
             # 不夠：餵糾正訊息，明令繼續搜尋、不要生成摘要（沿用 Grader 的 missing/new_query）
             missing = verdict["missing"] or "關鍵事實不足"
@@ -599,6 +655,7 @@ def _run_executor_react(task: str, temporal_scope: str, freshness_mode: str,
                 f"記得：繼續用工具搜尋、**不要生成摘要**。")))
     except Exception as e:
         _trace(f"execute[{subq_index}] subagent 崩潰 → 降級單次檢索+生成：{e!r}")
+        _note_exec_outcome(exec_stats, "crashed", error=repr(e))
         if not state.pool:
             with _pkg._quiet():
                 state.pool.extend(_merge_chunks([], _pkg._retrieve_chunks(task, attributable=attributable)))
@@ -678,7 +735,8 @@ def _dispatch_todo(route: str, query: str, *, need: str = "none",
 def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: str,
                                 subq_index: int, verbose: bool, *,
                                 attributable: bool,
-                                route: str = "kb") -> tuple[str, list[str], str, list[str]]:
+                                route: str = "kb",
+                                exec_stats: dict | None = None) -> tuple[str, list[str], str, list[str]]:
     """[預設] Executor 核心（deterministic，2026-07-29 修）：**planner 子問題原封不動直接檢索**，不讓
     Agent A(ReAct) 自行改寫 query。流程：直接 retrieve → Grader 評分 → 不夠則用 Grader 的 targeted
     new_query 再 retrieve（併池、只加不減）→ 有界 MAX_REWRITES → 走生產契約產局部摘要。
@@ -705,6 +763,7 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
                 else:
                     _trace(f"execute[{subq_index}] web 預算已用完（{_pkg.QUERY_WEB_BUDGET} 次）"
                            f"且 route=web → 不退回 KB，本子問題留空並記缺口")
+                    _note_exec_outcome(exec_stats, "web_budget_exit", rounds=rnd + 1)
                     break
             # 兩個條件都要成立：① 這個 todo 本身出自 Planner（不是 replan 加的）
             # ② 還沒被 Grader 改寫過（rnd 0）。任何一個不成立，這一輪產生的揭露句都不該
@@ -724,6 +783,13 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
                    f"q={active_query[:32]!r} pool={len(state.pool)} "
                    f"sufficient={verdict['sufficient']} missing={verdict['missing'][:40]!r}")
             if verdict["sufficient"] or rnd >= MAX_REWRITES:
+                # ⚠ 這裡是**兩種**出場擠在同一個條件裡：Grader 判過、以及「重試用完硬放」。
+                #   在此之前兩者對下游完全不可分（回傳的 4-tuple 沒有這一格），
+                #   於是「三輪都不夠仍照樣作答」在結果檔裡與正常答案外觀相同。閘門⑯。
+                _note_exec_outcome(
+                    exec_stats,
+                    "sufficient" if verdict["sufficient"] else "forced_pass",
+                    rounds=rnd + 1, missing=verdict.get("missing", ""))
                 break
             # 升級：只有「KB 結構上補不了」才從 kb 升成 both（見 `_escalate_route`）。
             _next_route = _escalate_route(eff_route, verdict)
@@ -734,6 +800,8 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
             if verdict.get("kb_unfixable") and _next_route == eff_route:
                 _trace(f"execute[{subq_index}] 不足原因 KB 補不了（時效）且路由已無可升級 → "
                        f"跳過剩餘 {MAX_REWRITES - rnd} 次改寫")
+                _note_exec_outcome(exec_stats, "kb_unfixable_exit", rounds=rnd + 1,
+                                   missing=verdict.get("missing", ""))
                 break
             # ⚠ **已知成本**：升級成 web 之後還會再 grade 一次，而那一次的池子與這一次相同
             #   （web_notes 不是 chunk），所以判定必然一樣 → **多燒一次 Grader 呼叫**。
@@ -753,6 +821,7 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
         #   [`eval/verify_web_gate_isolation.py`](eval/verify_web_gate_isolation.py)。
     except Exception as e:
         _trace(f"execute[{subq_index}] deterministic executor 例外 → 降級：{e!r}")
+        _note_exec_outcome(exec_stats, "crashed", error=repr(e))
         if not state.pool:
             with _pkg._quiet():
                 state.pool.extend(_merge_chunks([], _pkg._retrieve_chunks(task, attributable=attributable)))
@@ -764,7 +833,8 @@ def _run_executor_deterministic(task: str, temporal_scope: str, freshness_mode: 
 def _run_executor(task: str, temporal_scope: str, freshness_mode: str,
                   subq_index: int, verbose: bool, *,
                   attributable: bool,
-                  route: str = "kb") -> tuple[str, list[str], str, list[str]]:
+                  route: str = "kb",
+                  exec_stats: dict | None = None) -> tuple[str, list[str], str, list[str]]:
     """Dispatcher：預設 deterministic（planner 子問題直接檢索）；AGENTIC_REACT_EXECUTOR=true 回舊 ReAct。
 
     第三個回傳值是 Grader 最後一次的 `realtime_need`——`_pkg._run_one_todo` 要靠它判「這個子問題
@@ -776,9 +846,10 @@ def _run_executor(task: str, temporal_scope: str, freshness_mode: str,
         #   自己決定何時停、自己選 tool。要讓它支援 route 得先把那些 agency 收回來，
         #   不在這次範圍內。用它跑 ＝ 回到加 route 之前的行為。
         return _run_executor_react(task, temporal_scope, freshness_mode, subq_index, verbose,
-                                   attributable=attributable)
+                                   attributable=attributable, exec_stats=exec_stats)
     return _run_executor_deterministic(task, temporal_scope, freshness_mode, subq_index, verbose,
-                                      attributable=attributable, route=route)
+                                      attributable=attributable, route=route,
+                                      exec_stats=exec_stats)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -843,6 +914,11 @@ class SupervisorState(TypedDict, total=False):
     # 重生成回歸守衛的計數（見 `_accept_revision`）：accepted／rejected／empty ＋ 逐筆明細。
     # 是**分母**不是判定——「六道修補鏈的重生成到底破壞了什麼」在此之前完全沒有量尺。
     revision_stats: dict
+    # executor 每個子問題的**出場方式**（見 `_merge_exec_stats`）：sufficient／forced_pass／
+    # kb_unfixable_exit／web_budget_exit／crashed ＋ forced_pass 的逐筆明細。
+    # ⚠ 這一格是**累加**的（同 `replan_stats`）：`_node_execute` 每一波跑一次，
+    #   而 LangGraph 對沒有 reducer 的 key 是取代語意 → 必須自己讀舊值再合併（⑯i 守）。
+    exec_stats: dict
 
 
 _REPLANNER_PROMPT = f"""你是美股情報 RAG 的動態重規劃器。給你「原始問題」與「目前待辦清單（含各自狀態與
@@ -962,6 +1038,8 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
     迴圈 + commit 篩選，回傳這個子問題的完整結果。不觸碰任何跨子問題共用的可變狀態，讓 wave 執行
     可以安全平行呼叫（已用 ThreadPoolExecutor 實測驗證 contextvars 在 submit() 下天生隔離）。"""
     task = todo["task"]
+    # 這個子問題的「出場方式」（閘門⑯）。每個 todo 一份 ＝ ThreadPoolExecutor 天然隔離。
+    _es: dict = {}
     summary, web_notes, realtime_need, period_notes = _pkg._run_executor(
         task, todo.get("temporal_scope", ""), freshness_mode, todo["id"], verbose,
         # ⚠ `.get(..., "kb")` 而不是下標：`_node_replan` 建的 todo 這一版還沒有 route
@@ -971,7 +1049,9 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
         #   給預設值＝新的 todo 建立點會靜默沿用「可歸因」，那正是這次要防的東西。
         #   兩個建立點都設了這個欄位，由 `verify_answer_validators.py` 閘門 ⑮g 把關。
         attributable=todo["attributable"],
+        exec_stats=_es,
     )
+    _es["id"], _es["task"] = todo["id"], task
     # executor 剛跑完、還在同一個 thread/context 內，_current_run_state() 拿到的就是這個子問題
     # 剛剛用的那份 run state。優先用 Grader 圈選的 relevant_ids 過濾（見 _pkg._check_sufficiency）：
     # 不再是「rerank 前 k 名就全收」，濾掉高分但離題的 chunk。Grader 沒給圈選訊號 → 退回舊行為。
@@ -1013,7 +1093,10 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
             # ⚠ 2026-08-29 帶出來：`_node_replan` 要靠它擋掉「intraday 且已打過 web」之後的
             #   同義 web 重試（見那裡的 `_web_retry_is_pointless`）。在此之前它算完就被丟掉。
             "realtime_need": realtime_need,
-            "period_notes": period_notes}
+            "period_notes": period_notes,
+            # ⚠ 這一格**只是觀測**：Synthesize 目前不讀它，行為與加它之前逐字相同（閘門⑯g／⑯m）。
+            #   先把分母做出來，再談要不要揭露／拒答（同 `unit_stats`／`replan_stats` 的順序）。
+            "exec_stats": _es}
 
 
 def _node_execute(state: SupervisorState) -> dict:
@@ -1075,7 +1158,11 @@ def _node_execute(state: SupervisorState) -> dict:
                 results[i] = {"id": todos[i]["id"],
                               "summary": f"（子問題「{todos[i]['task']}」執行時發生未預期錯誤）",
                               "web_used": False, "web_notes": [], "picked": [],
-                              "freshness_gaps": [], "period_notes": []}
+                              "freshness_gaps": [], "period_notes": [],
+                              # 這一格不能省：漏了它 `todos` 分母會少計，而「少計」與
+                              # 「這一波沒跑」外觀相同（閘門⑯i3）。
+                              "exec_stats": {"outcome": "crashed", "id": todos[i]["id"],
+                                             "task": todos[i]["task"], "error": repr(e)}}
 
     collected = state.get("collected", [])
     web = list(state.get("web_notes", []))
@@ -1096,12 +1183,16 @@ def _node_execute(state: SupervisorState) -> dict:
         for n in r.get("period_notes", []):
             if n not in periods:
                 periods.append(n)
+    # executor 出場方式的累計（閘門⑯）。⚠ 一定要讀 `state`：LangGraph 對沒有 reducer 的 key
+    # 是**取代**語意，只回傳這一波會讓最終只剩最後一波，而 multi_hop 第二跳正好在最後一波。
+    exec_stats = _merge_exec_stats(state.get("exec_stats") or {},
+                                   [results[i].get("exec_stats") or {} for i in pending_idxs])
     # 保留舊語意：MAX_ITERS 是「總子問題執行次數」上限，不是「總波次」上限，避免分波後這個防線變寬鬆。
     iters = state.get("iterations", 0) + len(pending_idxs)
     _trace(f"execute wave: {len(pending_idxs)} todos ({[todos[i]['id'] for i in pending_idxs]}) done → "
            f"collected={len(collected)} period_notes={len(periods)}")
     return {"todos": todos, "collected": collected, "web_notes": web,
-            "period_notes": periods, "iterations": iters}
+            "period_notes": periods, "iterations": iters, "exec_stats": exec_stats}
 
 
 def _node_replan(state: SupervisorState) -> dict:

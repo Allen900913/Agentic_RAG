@@ -274,6 +274,9 @@ from .graph import (   # noqa: E402
     _effective_route,
     _escalate_route,
     _dispatch_todo,
+    _EXEC_OUTCOMES,
+    _note_exec_outcome,
+    _merge_exec_stats,
     _run_executor_deterministic,
     _run_executor,
     COMMIT_TOP_K,
@@ -1205,6 +1208,11 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
         # 重生成回歸守衛（見 `_accept_revision`）。`rejected` 每一筆都代表
         # **某一道 validator 的重生成讓另一道已經通過的檢查倒退了**。
         "revision_stats": final.get("revision_stats") or {},
+        # executor 的出場方式（見 `_merge_exec_stats`）。`forced_pass` 每一筆都代表
+        # **Grader 連 MAX_REWRITES+1 輪都判證據不足，而系統照樣拿它作答且零保留**——
+        # 「要不要揭露／拒答」的分母就是這一格。⚠ 另外三種出場（`kb_unfixable_exit`／
+        # `web_budget_exit`／`crashed`）**不是同一種病**，彙總時不可合併（閘門⑯d/e/l）。
+        "exec_stats": final.get("exec_stats") or {},
     }
 
 

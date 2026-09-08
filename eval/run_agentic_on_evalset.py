@@ -69,7 +69,8 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
                          unit_stats: dict | None = None,
                          replan_stats: dict | None = None,
                          plan_stats: dict | None = None,
-                         revision_stats: dict | None = None) -> dict:
+                         revision_stats: dict | None = None,
+                         exec_stats: dict | None = None) -> dict:
     """把 agentic 輸出攤平成 generation_judge.json 的 record schema。
     RAGAS 只讀 id/category/query/answer/contexts；其餘欄位補上以對齊 schema、方便複查。"""
     # ⚠ 2026-08-11 修：`contexts` 與 `sources` 必須**同一次過濾**、逐位對齊。原本 contexts 濾掉
@@ -114,6 +115,10 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
         # 重生成回歸守衛的計數。`rejected` 每一筆＝某一道 validator 的重生成讓另一道
         # 已經通過的確定性檢查倒退了（見 `_accept_revision`）。⚠ `None` ≠ `{}` 同上。
         "revision_stats": revision_stats if revision_stats is not None else None,
+        # executor 的出場方式。`forced_pass` 每一筆＝Grader 連 MAX_REWRITES+1 輪都判不足、
+        # 系統仍拿它作答且零保留（見 `_merge_exec_stats`）。⚠ 另外三種出場不是同一種病，
+        # 彙總時不可合併；⚠ `None` ≠ `{}` 同上——崩潰降級題不經過 graph，整格缺席。
+        "exec_stats": exec_stats if exec_stats is not None else None,
         "is_refusal": looks_like_refusal(answer),
         "wrongful_refusal": None,
         "context_recall_llm": None,
@@ -253,7 +258,8 @@ def main() -> None:
                                        out.get("unit_stats"),
                                        out.get("replan_stats"),
                                        out.get("plan_stats"),
-                                       out.get("revision_stats"))
+                                       out.get("revision_stats"),
+                                       out.get("exec_stats"))
             records_by_id[q["id"]] = rec
             print(f"    ✓ {time.time()-t0:.0f}s | sub_queries={len(out.get('sub_queries', []))} "
                   f"| chunks={rec['agentic_n_chunks']} | answer_len={len(out['answer'])} "

@@ -2093,6 +2093,224 @@ def _check_plan_dependencies() -> int:
     return fail
 
 
+def _check_forced_pass_visibility() -> int:
+    """閘門⑯：「重試用完強制放行」必須留下痕跡（`exec_stats`，2026-09-08）。
+
+    **病灶**（2026-09-07 端到端實跑撞到的）：`_run_executor_*` 的迴圈出口是
+
+        if verdict["sufficient"] or rnd >= MAX_REWRITES:   # 註解自己寫著「或次數用盡強制放行」
+
+    而回傳的 4-tuple `(summary, web_notes, realtime_need, period_notes)` **沒有任何一格**說明
+    它是哪一種。Synthesize 因此分不出「Grader 判過」與「重試三輪都不夠、硬放」。
+    實測：「Magnificent Seven 裡最近十二個月淨利最高的是哪一家？」hop-1 連跑三輪
+    `sufficient=False`（Grader 每輪都在列缺哪幾家），答案照樣產出、**零保留**，而且答錯
+    （答 Apple $122.58B，實際最高是 GOOGL $160.21B）。
+
+    **這道閘門修的是可觀測性，不是行為**（同閘門⑭ 與 `unit_stats` 的形狀）：先把分母做出來，
+    再談要不要揭露／拒答。⑯g／⑯m 就是「行為逐字沒變」的那兩條護欄。
+
+    ⚠ **四種出場不可合併**（同 ⑭e）：迴圈有三個 break ＋ 一個 except，四種病完全不同——
+      · `forced_pass`：重試用完仍不足 ← **這次要量的**
+      · `kb_unfixable_exit`：KB 結構上補不了（時效），提早跳出是**正確行為**，已有時效揭露
+      · `web_budget_exit`：route=web 且 query 級預算用完，本子問題留空並記缺口
+      · `crashed`：executor 例外降級
+      一個「出場時 sufficient 為 False 就算 forced_pass」的實作會把前三種混成一種，
+      而那會讓分母灌水到沒有意義。⑯d／⑯e／⑯l 是那三條誤報對照。
+    ⚠ **計數要在場**（同 ⑭d／⑲l4）：沒觸發是 0 而不是缺席，否則消費端分不出
+      「這一題沒有強制放行」與「這一題根本沒經過 executor」（崩潰降級題）。
+    ⚠ **兩個 executor 都要掛**（同 ⑭a／㉑i）：`AGENTIC_REACT_EXECUTOR=true` 走的是另一支，
+      改一支漏一支的失敗方式是「那個組態下分母恆為 0」＝與「從來沒發生」外觀相同。⑯h 用 AST 守。
+    ⚠ **多波必須累加**（同 ⑭i）：`_node_execute` 每一波跑一次，而 LangGraph 對沒有 reducer
+      的 key 是**取代**語意——寫錯就只剩最後一波，而 multi_hop 的第二跳正好都在最後一波。
+    """
+    import inspect
+
+    results: list[tuple[str, bool, str]] = []
+    SAVED = (ar._check_sufficiency, ar._retrieve_chunks, ar._fallback_local_summary,
+             ar._web_query_en, ar.ENABLE_WEB_SEARCH, ar.QUERY_WEB_BUDGET,
+             # ⚠ 檔首那支模組級 stub 是 `lambda q:`，而生產呼叫的是 `_tavily_search(q, need=...)`
+             #   ——不換一支收得下 `need` 的，升級到 web 那一路會炸在 TypeError
+             #   並被 `except` 收成 `crashed`，於是 ⑯d 測到的是別的東西（實際踩過）。
+             ar._tavily_search)
+
+    def _chunk(i=0):
+        return {"source": "MSFT_10K_2026.html", "chunk_index": i, "ticker": "MSFT",
+                "content": "Revenue increased 18%.", "raw_rerank_score": 0.9,
+                "rerank_score": 0.9, "score": 0.9}
+
+    def _drive(verdicts, *, route="kb", freshness=None, web=False, budget=3,
+               with_stats=True, crash=False):
+        """零 LLM 驅動 `_run_executor_deterministic`；回傳 (輸出 4-tuple, exec_stats)。
+
+        `verdicts` 是 Grader 每一輪的裁決（用完就重複最後一個）。
+        """
+        seq = list(verdicts)
+        calls = {"n": 0}
+
+        def _fake_check(subquery, pool, temporal_scope, freshness_mode):
+            v = dict(seq[min(calls["n"], len(seq) - 1)])
+            calls["n"] += 1
+            v.setdefault("missing", "缺 AAPL/GOOGL/META/TSLA 的 TTM 淨利")
+            v.setdefault("new_query", "")
+            v.setdefault("relevant_ids", [])
+            v.setdefault("realtime_need", "none")
+            v.setdefault("kb_unfixable", False)
+            return v
+
+        def _fake_retrieve(q, *, attributable=True):
+            # ⚠ 只炸第一次：`except` 區塊自己還會再呼叫一次 `_retrieve_chunks` 做降級補救，
+            #   無條件拋會讓例外直接穿出 executor（測到的是別的東西）。
+            if crash and not calls.get("crashed"):
+                calls["crashed"] = True
+                raise RuntimeError("模擬 executor 內部崩潰")
+            return [_chunk(calls["n"])]
+
+        ar._check_sufficiency = _fake_check
+        ar._retrieve_chunks = _fake_retrieve
+        ar._fallback_local_summary = lambda task, chunks: "SUMMARY"
+        ar._web_query_en = lambda q: q
+        ar._tavily_search = lambda q, need="none": "（stub，絕不連網）"
+        ar.ENABLE_WEB_SEARCH = web
+        ar.QUERY_WEB_BUDGET = budget
+        ar._reset_query_web_budget()
+        st: dict = {}
+        kw = {"exec_stats": st} if with_stats else {}
+        try:
+            out = ar._run_executor_deterministic(
+                "誰的淨利最高", "", freshness or ar.FRESHNESS_SNAPSHOT, 0, False,
+                attributable=True, route=route, **kw)
+        finally:
+            (ar._check_sufficiency, ar._retrieve_chunks, ar._fallback_local_summary,
+             ar._web_query_en, ar.ENABLE_WEB_SEARCH, ar.QUERY_WEB_BUDGET,
+             ar._tavily_search) = SAVED
+        return out, st
+
+    NO = {"sufficient": False}
+    YES = {"sufficient": True}
+
+    # ── ⑯a 陽性：三輪都不夠 → forced_pass，且帶得出「缺什麼」──────────────────────
+    _out, st = _drive([NO])
+    results.append(("⑯a 三輪 sufficient=False 仍產出答案 → outcome 記成 `forced_pass`",
+                    st.get("outcome") == "forced_pass", f"實得 {st!r}"))
+    results.append(("⑯a2 帶得出輪數與 Grader 說的「缺什麼」（無明細＝有分母卻查不出是哪一題）",
+                    st.get("rounds") == ar.MAX_REWRITES + 1 and "TTM" in (st.get("missing") or ""),
+                    f"實得 rounds={st.get('rounds')!r} missing={st.get('missing')!r}"))
+
+    # ── ⑯b 誤報對照：第一輪就夠 → 不得記成 forced_pass ────────────────────────────
+    _out, st = _drive([YES])
+    results.append(("⑯b **誤報對照**：第一輪 Grader 就判夠 → `sufficient`，不是 forced_pass",
+                    st.get("outcome") == "sufficient", f"實得 {st!r}"))
+    _out2, st2 = _drive([NO, YES])
+    results.append(("⑯b2 最後一輪才夠（用掉改寫但沒用完）→ 仍是 `sufficient`",
+                    st2.get("outcome") == "sufficient", f"實得 {st2!r}"))
+
+    # ── ⑯c set-once：一次執行只能有一種出場 ────────────────────────
+    #    react executor 在 break 之前還會生成摘要，那一段拋例外會落到 `except`。
+    #    沒有 set-once 就會同時記成兩種病，而 `_merge_exec_stats` 的加總會多算一筆。
+    _once: dict = {}
+    ar._note_exec_outcome(_once, "forced_pass", rounds=3, missing="m")
+    ar._note_exec_outcome(_once, "crashed", error="x")
+    results.append(("⑯c set-once：第二次記錄不得覆蓋（否則一次執行被算成兩種病）",
+                    _once.get("outcome") == "forced_pass" and _once.get("rounds") == 3,
+                    f"實得 {_once!r}"))
+    results.append(("⑯c2 `stats=None`（呼叫端不想量）不得炸",
+                    ar._note_exec_outcome(None, "crashed") is None, ""))
+
+    # ── ⑯d 誤報對照：KB 補不了（時效）提早跳出 ≠ 強制放行 ─────────────────────────
+    #    這是**正確行為**且已有時效揭露路徑。「出場時不足就算 forced_pass」的實作會混進來。
+    _out, st = _drive([{"sufficient": False, "kb_unfixable": True}],
+                      freshness=ar.FRESHNESS_LIVE, web=True)
+    results.append(("⑯d **誤報對照**：`kb_unfixable` 提早跳出 → 自己的一格，不得算 forced_pass",
+                    st.get("outcome") == "kb_unfixable_exit", f"實得 {st!r}"))
+
+    # ── ⑯e 誤報對照：route=web 且預算用完 ≠ 強制放行 ─────────────────────────────
+    _out, st = _drive([NO], route="web", freshness=ar.FRESHNESS_LIVE, web=True, budget=0)
+    results.append(("⑯e **誤報對照**：web 預算用完留空 → 自己的一格，不得算 forced_pass",
+                    st.get("outcome") == "web_budget_exit", f"實得 {st!r}"))
+
+    # ── ⑯l 誤報對照：崩潰降級是別的病（同 ㉑l）──────────────────────────────────
+    _out, st = _drive([NO], crash=True)
+    results.append(("⑯l **誤報對照**：executor 例外降級 → `crashed`，不得算 forced_pass",
+                    st.get("outcome") == "crashed", f"實得 {st!r}"))
+
+    # ── ⑯f 四種出場**恰好一個**，且都在封閉集合裡 ────────────────────────────────
+    _seen = {_drive([NO])[1].get("outcome"), _drive([YES])[1].get("outcome"),
+             _drive([NO], crash=True)[1].get("outcome")}
+    results.append(("⑯f 每次執行**恰好**寫一個 outcome，且值落在封閉集合裡",
+                    _seen <= set(ar._EXEC_OUTCOMES) and None not in _seen,
+                    f"實得 {_seen!r}，合法 {ar._EXEC_OUTCOMES!r}"))
+
+    # ── ⑯g 回歸護欄：帶不帶 exec_stats，輸出**逐字相同**（同 ⑲l5／⑭f）────────────
+    _with, _ = _drive([NO])
+    _without, _ = _drive([NO], with_stats=False)
+    results.append(("⑯g **回歸護欄**：加了 `exec_stats` 參數後輸出逐字不變（只加觀測、不改行為）",
+                    _with == _without, f"{_with!r} vs {_without!r}"))
+
+    # ── ⑯h AST：兩個 executor ＋ dispatcher 都掛上（同 ⑭a／㉑i）───────────────────
+    _missing = [n for n in ("_run_executor_react", "_run_executor_deterministic", "_run_executor")
+                if "exec_stats" not in inspect.getsource(getattr(ar, n))]
+    results.append(("⑯h 兩個 executor ＋ dispatcher **全部**掛上（漏一支＝該組態下分母恆 0）",
+                    not _missing, f"缺 {_missing}"))
+
+    # ── ⑯i 多波累加：LangGraph 沒有 reducer 的 key 是取代語意（同 ⑭i）─────────────
+    _merged = ar._merge_exec_stats(
+        {"todos": 2, "forced_pass": 1, "sufficient": 1, "forced_pass_detail": [{"id": 0}]},
+        [{"outcome": "forced_pass", "id": 3, "task": "T", "missing": "m", "rounds": 3}])
+    results.append(("⑯i 第二波必須**累加**到第一波上（取代語意會只剩最後一波）",
+                    _merged["todos"] == 3 and _merged["forced_pass"] == 2
+                    and _merged["sufficient"] == 1 and len(_merged["forced_pass_detail"]) == 2,
+                    f"實得 {_merged!r}"))
+    results.append(("⑯i2 沒觸發的那幾格是 **0 而不是缺席**（同 ⑭d／⑲l4）",
+                    all(k in _merged for k in ar._EXEC_OUTCOMES) and _merged["crashed"] == 0,
+                    f"實得 {sorted(_merged)}"))
+    _m0 = ar._merge_exec_stats({}, [{}])
+    results.append(("⑯i3 沒寫 outcome 的結果（wave worker 崩潰）算 `crashed`，不得靜默漏掉分母",
+                    _m0.get("todos") == 1 and _m0.get("crashed") == 1, f"實得 {_m0!r}"))
+
+    # ── ⑯j 接線：state → run_agentic → record，且 `None` ≠ `{}`（同 ⑲l10／㉑j）──────
+    _ann = getattr(ar.SupervisorState, "__annotations__", {})
+    results.append(("⑯j SupervisorState 宣告了 `exec_stats`（沒宣告 → LangGraph 整個丟掉）",
+                    "exec_stats" in _ann, f"實得 {sorted(_ann)}"))
+    results.append(("⑯j2 `_node_execute` 真的回傳 `exec_stats`",
+                    "exec_stats" in inspect.getsource(ar._node_execute), ""))
+    results.append(("⑯j3 `run_agentic` 真的回傳 `exec_stats`",
+                    "exec_stats" in inspect.getsource(ar.run_agentic), ""))
+    try:
+        import importlib.util as _iu
+        _spec = _iu.spec_from_file_location(
+            "_rgoe_exec", str(Path(__file__).resolve().parent / "run_agentic_on_evalset.py"))
+        _m = _iu.module_from_spec(_spec)
+        _spec.loader.exec_module(_m)
+        _q = {"id": "x-1", "category": "multi_hop", "query": "Q"}
+        _val = {"todos": 1, "forced_pass": 1}
+        _r1 = _m._record_from_agentic(_q, "A", [], [], [], {}, {}, {}, {}, _val)
+        _r2 = _m._record_from_agentic(_q, "A", [], [], [], {}, {}, {}, {}, None)
+        results.append(("⑯j4 record 建構子寫進 `exec_stats` 的**值**（同 ⑮e：寫了名字不等於流得到）",
+                        _r1.get("exec_stats") == _val, f"實得 {_r1.get('exec_stats')!r}"))
+        results.append(("⑯j5 `None`（崩潰降級／舊結果檔）不得被寫成 `{}`——會把它算進分母",
+                        _r2.get("exec_stats") is None, f"實得 {_r2.get('exec_stats')!r}"))
+    except Exception as e:      # noqa: BLE001
+        results.append(("⑯j4 record 建構子接得上（接不上＝只測了記憶體裡的 dict）", False, repr(e)))
+
+    # ── ⑯k 前提斷言：這道量的是「不足卻放行」，所以 MAX_REWRITES 必須真的有上限 ──────
+    results.append((f"⑯k 前提：MAX_REWRITES({ar.MAX_REWRITES}) 有限 ⇒ 強制放行這條路真的走得到",
+                    isinstance(ar.MAX_REWRITES, int) and ar.MAX_REWRITES >= 0,
+                    "無上限的話 forced_pass 恆為 0，這道閘門會變成恆真"))
+
+    # ── ⑯m 不改行為的第二條證明：強制放行仍照常產出摘要 ───────────────────────────
+    results.append(("⑯m 強制放行仍照常產出摘要（這次**刻意不改行為**，只加分母）",
+                    _with[0] == "SUMMARY", f"實得 {_with[0]!r}"))
+
+    print()
+    print(f"  {'強制放行必須留下痕跡（exec_stats）':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
 def main() -> int:
     print(f"  {'情境':<24}{'Q1':>6}{'Q2':>6}{'Q3':>6}{'Q4':>6}{'呼叫':>6}   判定")
     print("  " + "-" * 68)
@@ -2129,6 +2347,7 @@ def main() -> int:
     fail += _check_monkeypatch_reaches_callers()
     fail += _check_replan_todo_budget()
     fail += _check_plan_dependencies()
+    fail += _check_forced_pass_visibility()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0

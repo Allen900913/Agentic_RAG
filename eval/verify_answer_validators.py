@@ -1473,7 +1473,10 @@ def gate15_period_fallback_disclosure() -> None:
         return d
 
     try:
-        ar._run_executor = (lambda task, scope, fm, idx, verbose, *, attributable, route="kb":
+        # ⚠ `exec_stats=None` 不可省：`_run_one_todo` 2026-09-08 起會傳這個 out-param
+        #   （閘門⑯）。漏了它這支 stub 會 TypeError，而那不是被測物的問題。
+        ar._run_executor = (lambda task, scope, fm, idx, verbose, *, attributable, route="kb",
+                            exec_stats=None:
                             (_seen_attr.append(attributable), _seen_route.append(route),
                              ("摘要", [], "none", []))[2])
         for _flag in (True, False):
