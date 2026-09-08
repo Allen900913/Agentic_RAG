@@ -40,6 +40,56 @@
 
 ## 2026-09-08
 
+### 四個分母第一次量到，其中兩個推翻了原本的假設
+
+**一輪全量 65 題（`experiments/agentic/gj_65q_denominators_20260908.json`，0 降級——
+中間補跑兩次，見上一則）＋ chunk 層召回探針 3 輪。**
+
+**① `exec_stats.forced_pass` = 15.5%**（18/116 子問題、**10/65 題**）。
+逐類別：semantic 37.5%／colloquial 23.5%／mixed 12.0%／lexical 11.1%／multi_hop 0%。
+`kb_unfixable_exit` 與 `web_budget_exit` 都是 0（`--no-web`，預期）。
+
+**交叉分析推翻了我自己的假設**：把那 10 題對上 `chunk_gold` →
+**5 題是「撈到了、Grader 仍判不足」**、只有 **1 題（`lex-04`）是真的沒撈到**、4 題無 gold
+（而那 4 題 Grader 要的是「神經網路訓練細節」「Android 開發者人數」「與其他車廠比較」
+——10-K／10-Q 本來就沒有）。
+⇒ **`forced_pass` 不是檢索問題，修法方向是揭露不是撈更多。**
+⚠ 推論限制：`sources` 是跨子問題的**聯集**，多 todo 的題較弱；紮實的只有
+`lex-04`（1/1 todo，gold 不在聯集）、`lex-10`（1/1 todo，gold 在）、`mix-12`（2/2 todo 全 fp）。
+
+**附帶撈到的**：`crashed` 4 筆**全在 multi_hop**（`mh-01` 1/7、`mh-05` 2/6、`mh-02` 1/6）
+⇒ **5 題 multi_hop 有 3 題是帶著崩掉的子問題產出答案的**，而在今天之前結果檔對此完全沉默；
+`check_comparison_claims` 40/40 PASS 也照不出來（它只驗贏家對不對）。
+
+**② `replan_stats.refused_budget` = 2（1/65 題）→ 不拆 `MAX_TODOS`。**
+09-06 那個「Planner 拆 7 個時 Replanner 預算是 0」的推理是對的，但**實際咬到只有 `mh-03` 一題**。
+⇒ 證據不足以動額度（子問題爆炸級聯有前科）。BACKLOG 那一格改成「已量、不動」。
+
+**③ `plan_stats`：65/65 都宣告了 `depends_on`，`deps_pruned` = 0、`deps_disagreed` = 2**（全在 `mh-03`）。
+只有 4 題宣告依賴、全是 multi_hop。⇒「說 null 但句子沒主詞仍延後」那個例外**只動了 2 次**，
+拿不拿掉影響都極小 → **維持現狀**。
+
+**④ `revision_stats`：接受 7、退回 0、空 0**（7/65 題觸發重生成）。
+⇒ **不把 Synthesize 改成 critique↔refine 迴圈**（那會每題多燒 LLM，而目前量到的破壞是 0）。
+⚠ 這不代表閘門㉑ 的守衛沒用——它代表這一輪沒觸發，7 次是小樣本。
+
+**⑤ chunk 層召回（41 題 × 3 輪，跨輪翻面 0）：`gold@5 = 0.683`／`gold@20 = 0.780`。**
+
+| 診斷 | 題數 | 哪幾題 |
+|---|---|---|
+| 召回問題（gold 從沒進過候選池） | **9** | `col-01` `lex-03` `lex-04` `lex-07` `lex-14` `lex-17` `sem-01` `sem-03` `sem-05` |
+| 排序問題（@20 進得來、@5 進不來） | 4 | `col-03` `mix-08` `mix-14` `sem-04` |
+| 沒問題 | 28 | |
+
+**lexical 的 `@5` 與 `@20` 完全相同（30/30）⇒ 那一類的病 100% 在召回、與排序無關**，
+而 9 題召回失敗有 5 題是 lexical（`lex-03`／`lex-07`／`lex-14` 與 BACKLOG 既有記錄一致）。
+候選池中位數**正好是 20**（`RRF_TOP_N_PRIMARY` 上限）⇒ 池是滿的、gold 仍不在裡面。
+
+⚠ **這修正了一句被讀錯的話**：「切塊／檢索已經到頂」原本是**關於 RAGAS 這把尺**的結論
+（檢索三指標飽和），卻被讀成關於系統。chunk 層 gold 顯示 **32% 的可量題有檢索層缺陷**。
+⚠ **但「有缺陷」不等於「修了有用」**：① 的交叉分析顯示 10 題 forced_pass 只有 1 題是檢索問題。
+**第二個問題目前仍然沒有量尺**，別把 32% 當成可回收的收益。
+
 ### 崩潰降級的題會被 resume 永遠跳過（`repair_degraded_records.py`）
 
 **跑 65 題分母那一輪當場撞到的。** `run_agentic_on_evalset.py` 的 resume 判準是

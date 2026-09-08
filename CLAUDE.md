@@ -17,7 +17,8 @@
 | **冷凍題庫** | [`eval/eval_set_news.json`](eval/eval_set_news.json) 37 題（2026-08-19 拔除新聞時移出）。**現在不要拿它跑分** |
 | **預設 LLM** | `nvidia/nemotron-3-super-120b-a12b`（2026-09-03 換）。前一代 `openai/gpt-oss-120b` 於 2026-09-03T08:00Z 被 NVIDIA 退役（HTTP 410 Gone），而它是**檢索／判定／生成三側共用**的預設 → 當天整條管線的 LLM 全死。**五個定義點**：[`rag_query.py`](rag_query.py) `DEFAULT_MODEL`／`DEFAULT_GEN_MODEL`、`agentic_rag_version/` 的 `CHECKER_MODEL`／`GEN_MODEL`／`RETRIEVAL_MODEL`（後三者可用 env 覆蓋）。選型證據 `experiments/_model_bakeoff_20260903.log`：**判準是輸出穩定性與延遲，不是模型大小**——nemotron-3-super 三個結構化角色 3/3 且最快（plan 10.4s／check 6.5s／filter 2.8s），`deepseek-v4-pro` plan 一次 **604 秒**（一題 50~60 次呼叫 → 不可用）、`llama-3.1-nemotron-ultra-253b` 在 NIM 上 **404**。⚠ **換模型讓所有既有基準與 replay fixture 失效**（中間產物全變），且**沒有辦法與舊模型 A/B**（舊的已下架）。⚠ 「LLM 自己把 `$X million` 換算成億且算錯位數」**舊模型同病**（2026-08-07 稽核 13 題 23 處），2026-09-03 已由 `rq.finalize_answer_units` 接線修掉，見 [`CHANGELOG.md`](CHANGELOG.md)；仍未量的是**頻率**，見 [`BACKLOG.md`](BACKLOG.md)。ingest 表格摘要走 Groq `openai/gpt-oss-20b`，不受影響 |
 | **確定性閘門** | `verify_period_intent_routing` 85／`verify_answer_validators` **316**／`verify_cross_period_collapse` 17／`verify_web_gate_isolation` **246** — **全 PASS** |
-| **量尺狀態** | RAGAS 六指標**五個已達或超過 gold 上限**；唯一有空間的是 `answer_correctness`（**0.654 vs 0.987**，2026-09-06 在新 judge 上重量），而那 0.33 落差對 retrieval 免疫 |
+| **四個分母（2026-09-08 首次量到）** | `experiments/agentic/gj_65q_denominators_20260908.json`（65 題、0 降級）。**`forced_pass` 15.5%**（18/116 子問題、10/65 題）＝ Grader 判不足仍作答且零揭露／`refused_budget` **2**（1 題）→ 不拆 `MAX_TODOS`／`deps_disagreed` **2**、`deps_pruned` 0 → 例外維持／`revision_stats` 接受 7、**退回 0** → 不做 critique↔refine 迴圈 |
+| **量尺狀態** | RAGAS 六指標**五個已達或超過 gold 上限**；唯一有空間的是 `answer_correctness`（**0.654 vs 0.987**，2026-09-06 在新 judge 上重量）。⚠ **飽和是量尺的性質不是系統的**：chunk 層 gold（2026-09-08）量到 `gold@5 0.683`／`gold@20 0.780`、**32% 的可量題有檢索層缺陷**——RAGAS 看不到，不等於不存在 |
 | **已知帶著上線的缺陷** | `MSFT_10K_2024.html#158` 幅度接地漏一筆（1/1009＝0.1%），見 [`BACKLOG.md`](BACKLOG.md) |
 
 **一句話交接**：切塊／檢索這條路已經到頂，量尺飽和；現在能動的只有生成層與確定性 validator，而驗收一律用零噪音的逐條斷言（`check_number_defects` ＋ `verify_*` 閘門），不是 RAGAS。
@@ -61,7 +62,11 @@ data_update_edgar.py ─────┘  切塊六層 → BGE-M3 dense+sparse �
 
 - **檢索**：BGE-M3 dense+sparse hybrid → server-side RRF → cross-encoder rerank → top-5。
 - **切塊六層**：Item → 期間章節 → 通用小標 → 幅度接地 → SemanticChunker → RCTS 上界 → min-size 下界。前四層是**規則**（決定「哪裡不准切」），SemanticChunker 決定「裡面哪裡切」——**前者取代不了後者**。
-- **⚠ 切塊／ingest 這條路已經到頂，不要再改**：六個 RAGAS 指標五個已達或超過 gold 上限。檢索完美與檢索全失敗的題只差 0.141 correctness → 全修好也只有 +0.024，低於噪音底線。詳見 [`docs/EVAL.md`](docs/EVAL.md)〈量尺飽和〉。
+- **⚠ RAGAS 的檢索三指標已飽和，不要再用它量切塊／檢索**：六個指標五個已達或超過 gold 上限。詳見 [`docs/EVAL.md`](docs/EVAL.md)〈量尺飽和〉。
+- **⚠ 但「量尺飽和」是關於量尺，不是關於系統——這兩句被混為一談過。** 2026-09-08 用 chunk 層 gold（[`eval/probe_chunk_gold_recall.py`](eval/probe_chunk_gold_recall.py)，41 題 × 3 輪、跨輪翻面 0）量到：`gold@5 = 0.683`／`gold@20 = 0.780`，**13/41 題（32%）有檢索層缺陷**——9 題召回（gold 從沒進過 20 名候選池）＋ 4 題排序。
+  · **lexical 的 `@5` 與 `@20` 完全相同（30/30）⇒ 那一類的病 100% 在召回、與排序無關**，而 9 題召回失敗有 5 題是 lexical。
+  · ⚠ **這不表示修了檢索答案就會變好**：`forced_pass` 的交叉分析（見下）顯示 10 題裡只有 1 題（`lex-04`）是檢索問題，5 題是「撈到了 Grader 仍判不足」。**「有缺陷」與「修了有用」是兩個問題，第二個仍然沒有量尺。**
+  · ⚠ `@20` 就是**整個候選池**（`RRF_TOP_N_PRIMARY = 20`，實測中位池正好 20）⇒「召回問題」同時指向那個常數，而它上一次 sweep 在舊 collection 上。
 - **⚠ 表格摘要模型換過兩次，兩次都是被迫的**（gemini-2.5-flash → llama-3.3-70b → 2026-08-16 後者被 Groq 退役）。**換這個模型必須先跑 bake-off**：它是推理模型，`TABLE_SUMMARY_MAX_TOKENS` 太小會讓 reasoning token 吃光正文額度、**靜默吐空字串**（實測 gpt-oss-120b @200 是 10/10 全空）。判準見 [`unstructured_components.py`](unstructured_components.py) `TABLE_SUMMARY_MODEL` 上方的證據表——選型看**輸出穩定性**不是模型大小。失敗的唯一出口是 [`eval/verify_table_captions.py`](eval/verify_table_captions.py) 的 `missing_on_big`。
 
 ### Collection 一覽
