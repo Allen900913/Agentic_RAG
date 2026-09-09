@@ -1522,6 +1522,10 @@ def _check_monkeypatch_reaches_callers() -> int:
     FROZEN = {
         "ENABLE_WEB_SEARCH", "QUERY_WEB_BUDGET", "_build_temporal_contract",
         "_check_sufficiency", "_fallback_local_summary", "_get_kb_coverage",
+        # `_get_graph`：閘門㉒ 拿一個 invoke 就炸的假 graph 換掉它，用來驗降級路徑寫不寫
+        # `degraded_reason`。⚠ 這一筆是 ⑬a **自己反推出來的**（加了㉒ 當天當場 FAIL）——
+        # 那正是「從 eval 腳本反推而不是只讀凍結清單」的用途。
+        "_get_graph",
         "_get_models", "_retrieve_chunks", "_run_executor", "_run_one_todo",
         "_tavily_raw", "_tavily_search", "_web_query_en", "_write_final_answer",
     }

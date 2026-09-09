@@ -11,7 +11,13 @@
 plan／replan 的 `rq.call_llm` **沒有包 try/except** → 一次 404 就炸掉整個 `graph.invoke`。
 證據見 `experiments/_nim404_probe.txt`。
 
-## 怎麼認出降級題：`None` ≠ `{}`
+## 怎麼認出降級題：`degraded_reason`，退回 `None` ≠ `{}`
+
+2026-09-09 起降級路徑自己會寫 `degraded_reason`（例外型別＋訊息＋最深一層的檔:行），
+那是直接證據。**舊指紋不可拿掉**：既有結果檔沒有這個欄位，只認新指紋會讓它們
+整份變成「沒有降級題」——而那正好是這支要防的失敗方式。
+
+## 舊指紋（結果檔早於 2026-09-09 時唯一的判準）：`None` ≠ `{}`
 
 `run_agentic` 的降級 return **整個不帶** stats 鍵 → record 建構子寫成 `None`；
 正常跑完但沒觸發則是 `{}` 或帶 0 的 dict。**這個區分就是本檔唯一的判準**，
@@ -62,6 +68,11 @@ def is_degraded(rec: dict) -> bool:
       · 全部 → 只有「降級 return 不帶任何 stats 鍵」才成立。
     ⚠ `{}` **不算降級**：那是「跑完了、只是沒觸發」。這正是 `None` ≠ `{}` 的用途。
     """
+    # 2026-09-09 起降級路徑自己會寫 `degraded_reason`（型別＋訊息＋檔:行）——那是**直接**
+    # 證據，比「五個 stats 鍵全 None」這個間接指紋強。⚠ 舊指紋不能拿掉：既有的結果檔
+    # （含兩輪五個分母那兩份）沒有這個欄位，只認新指紋會讓它們全部變成「沒有降級題」。
+    if rec.get("degraded_reason"):
+        return True
     present = [k for k in _STATS_KEYS if k in rec]
     if not present:
         return False          # 整份檔都沒有這些欄位 ＝ 舊格式，不是降級
@@ -94,6 +105,15 @@ def main() -> int:
     print(f"  總計 {len(recs)} 題｜降級 {len(bad)} 題 ({len(bad) / max(len(recs), 1):.0%})")
     if bad:
         print(f"  降級 id：{[r.get('id') for r in bad]}")
+        # 成因（2026-09-09 起才有）。舊結果檔這一格全是 None——那不是「查不出成因」，
+        # 是「那時候還沒有這個欄位」，兩者不可混為一談。
+        _reasons = [(r.get("id"), r.get("degraded_reason")) for r in bad]
+        if any(x[1] for x in _reasons):
+            print("  成因：")
+            for rid, why in _reasons:
+                print(f"    {rid}: {why or '（這份結果檔早於 degraded_reason，成因不可考）'}")
+        else:
+            print("  ⚠ 這份結果檔沒有 `degraded_reason` 欄位（早於 2026-09-09）→ 成因不可考。")
         # ⚠ **這個分布不可以直接讀成「哪一類比較容易崩」**：`eval_set.json` 是**按類別排序**的
         #   （semantic 在最前面），而崩潰來自 API 事件、會**依時間叢集**——所以「類別」與
         #   「跑的先後」在這份題庫裡是**共線的**，這一欄分不出兩者。
@@ -145,6 +165,11 @@ def _selftest() -> int:
        not is_degraded({"id": "x", "answer": "a"}))
     _a("⑤ 部分欄位存在時只看存在的那些（欄位是逐步加上去的）",
        is_degraded({"id": "x", "unit_stats": None}))
+    _a("⑥ 新指紋：有 `degraded_reason` 就是降級（直接證據，不必靠五鍵推論）",
+       is_degraded({"id": "x", "degraded_reason": "RuntimeError: boom @ graph.py:12 in _node_plan",
+                    "exec_stats": {"todos": 1}}))
+    _a("⑦ **誤報對照**：`degraded_reason` 是 None／缺席不算降級（缺席＝沒降級）",
+       not is_degraded({"id": "x", "degraded_reason": None, "exec_stats": {"todos": 1}}))
 
     print(f"\n  PASS {ok}  FAIL {fail}")
     return 1 if fail else 0

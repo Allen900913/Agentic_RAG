@@ -5,6 +5,49 @@
 
 ## 2026-09-09
 
+### 兩個觀測通道：降級成因、檢索候選池聯集（只加觀測，行為逐字不變）
+
+**病灶一：降級的成因無處可查。** `run_agentic` 的 `graph.invoke` 崩潰降級只用 `_trace` 印
+（非 verbose 完全不輸出），而降級記錄**外觀完全正常**（有 answer、無 error、resume 還跳過它）
+→ 2026-09-08 三題、09-09 九題降級，成因全是猜的。
+
+**病灶二：「撈到了卻沒被用」結構性量不到。** 結果檔的 `sources` 是
+`rq.retrieve()` → `run_state.pool` → **Grader `relevant_ids` 圈選** → `[:COMMIT_TOP_K]` →
+`picked` → `collected` 這條鏈的**最末端**（65 題中位數 3 顆），於是 `probe_gold_funnel`
+那一格兩輪都是 0——**那是量尺的性質不是系統健康**。⚠ 這條鏈歸因錯過兩次（先說「跨子問題的
+聯集」、再說「`_fair_select` 的產出」，而後者根本不被 `run_agentic` 回傳）。
+
+**做了什麼**（`agentic_rag_version/{__init__,graph}.py`、`eval/{run_agentic_on_evalset,
+repair_degraded_records,probe_gold_funnel}.py`）：
+
+- `degraded_reason`：例外型別＋訊息＋**最深一層的檔:行**，寫進 record。⚠ 只帶 `repr(e)` 的
+  資訊量與現行 `_trace` 相同 ＝ 沒解決任何事（閘門㉒d）。
+- `retrieved_union`：各子問題 `run_state.pool` 的 key（**Grader 圈選之前**），逐子問題標記，
+  跨波累加。去重鍵是 `(subq, source, chunk_index)` **三元組**——同一顆被兩個子問題撈到要留
+  兩筆，那正是這個通道要回答的問題。
+- 兩者都遵守**缺席 ≠ 空值**：`degraded_reason` 缺席＝沒降級、`retrieved_union` 缺席＝沒經過
+  graph（同 `unit_stats` 的 `None` ≠ `{}`）。
+- `repair_degraded_records` 改用新指紋並印出成因，**舊指紋保留**（既有結果檔沒有新欄位，
+  只認新的會讓它們整份變成「沒有降級題」）。
+- `probe_gold_funnel` 升成三段漏斗，舊結果檔自動退回兩段版並**分群印**（兩群的 ③ 不是同一
+  個東西，不可合併）。
+
+**第一個數字**：mh-03 單題 6 個子問題、候選池聯集 **78 顆去重 chunk，只有 6 顆進 `collected`
+——92% 被 Grader 圈選＋`COMMIT_TOP_K` 丟掉**。⇒ **修檢索對那 72 顆完全無效**，
+「32% 的可量題有檢索層缺陷」這句話下面藏著一個更大的漏斗。
+
+**驗收**：閘門㉒（23 項，`verify_answer_validators` 316 → **339**，全 PASS），
+9/9 變異全抓到；`probe_gold_funnel --selftest` 16/16；`repair_degraded_records --selftest` 7/7；
+四道確定性閘門全 PASS（85／339／17／246）。
+
+⚠ **兩個量尺自己的錯，都留在紀錄裡**：① ㉒n3 第一版走 `ast.Return`，而 crash 兜底那個 dict
+是**指派**不是 return → 當場 FAIL 而系統是對的。② 變異「去重鍵漏掉 subq」第一版只改迴圈裡的
+`k` 沒改 `seen`，實際變成「去重從此不觸發」→ 被 ㉒l 抓到而 **㉒k 那條路一次都沒被走到**。
+**變異本身也要自洽**，否則「抓到了」是抓到別的東西。
+
+⚠ **既有結果檔沒有這兩格**，要重跑一輪才量得到三段漏斗。
+
+
 ### 五個分母的第二輪：兩個 R1 的結論被推翻，四個決定可以定案
 
 `experiments/agentic/gj_65q_denominators_r2_20260909.json`（65 題、0 降級，repair 三輪：9→4→0）。

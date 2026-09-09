@@ -897,6 +897,7 @@ class SupervisorState(TypedDict, total=False):
     verbose: bool
     todos: list[dict]          # 待辦清單（另含 temporal_scope/freshness_gaps/web_used）
     collected: list[dict]      # 跨待辦收集的 KB chunk 聯集（Synthesize 的 citation allowlist 來源）
+    retrieved_union: list[dict]  # 純觀測：各子問題檢索候選池的 key 聯集（Grader 圈選**之前**）
     web_notes: list[str]       # web_search 的網路結果（另標，不進 chunk allowlist）
     period_notes: list[str]    # 期間降級揭露（Tier 2 fallback；注入 Generator prompt，見 _pkg._retrieve_chunks）
     iterations: int            # execute↔replan 已迭代幾次（防無限迴圈）
@@ -1033,6 +1034,27 @@ def _node_plan(state: SupervisorState) -> dict:
             "iterations": 0, "sufficient": False, "plan_stats": plan_stats}
 
 
+def _merge_pool_keys(prev: list[dict], new: list[dict]) -> list[dict]:
+    """檢索候選池 key 的跨波累加＝`retrieved_union` 的**唯一合併點**（2026-09-09）。
+
+    去重鍵是 **(subq, source, chunk_index)** 三元組，不是 (source, chunk_index)：
+    同一顆 chunk 被**兩個**子問題各自撈到時兩筆都要留——「哪一個子問題撈到它」正是這個
+    通道要回答的問題（閘門㉒k）。同一個子問題重複出現才併掉（閘門㉒l）。
+
+    ⚠ **累加不是取代**（同 `_merge_exec_stats`／⑭i／⑯i）：LangGraph 對沒有 reducer 的
+      key 是取代語意，只回傳這一波會讓最終只剩最後一波，而 multi_hop 的第二跳正好都在
+      最後一波。呼叫端必須讀 `state.get("retrieved_union")`（閘門㉒o）。
+    """
+    seen = {(d.get("subq"), d.get("source"), d.get("chunk_index")) for d in prev}
+    out = list(prev)
+    for d in new:
+        k = (d.get("subq"), d.get("source"), d.get("chunk_index"))
+        if k not in seen:
+            seen.add(k)
+            out.append(d)
+    return out
+
+
 def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
     """在自己的 thread（因此也是自己獨立的 contextvars context）內跑完一個子問題：retrieve↔grade
     迴圈 + commit 篩選，回傳這個子問題的完整結果。不觸碰任何跨子問題共用的可變狀態，讓 wave 執行
@@ -1071,6 +1093,13 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
     _rf = todo.get("ratio_fields")
     if mentioned and _has_ratio_intent(_rf, task):
         picked = _ensure_ratio_source_coverage(run_state.pool, picked, mentioned, task, _rf)
+    # 檢索候選池的 key（**純觀測**，閘門㉒p 守它不得參與 `picked` 的建構）。
+    # 為什麼要這一格：結果檔的 `sources` 是 pool → Grader 圈選 → COMMIT_TOP_K 截斷
+    # 之後的**末端**（實測 65 題中位數 3 顆），於是「撈到了卻沒被用」在結果檔裡
+    # **結構性地量不到**——`probe_gold_funnel` 兩輪都是 0，而那是量尺的性質不是系統健康。
+    # ⚠ 只存 key 不存 content：一題最多 ~7 子問題 × ~20 顆，存全文會把結果檔灌大一個數量級。
+    pool_keys = [{"source": c.get("source"), "chunk_index": c.get("chunk_index"),
+                  "subq": todo["id"]} for c in run_state.pool]
     for c in picked:
         c["_subq"] = todo["id"]
     # 時效缺口在這裡算,不在 plan 時算：判準是「這個子問題**實際用到了**誰的新聞」,
@@ -1096,7 +1125,9 @@ def _run_one_todo(todo: dict, freshness_mode: str, verbose: bool) -> dict:
             "period_notes": period_notes,
             # ⚠ 這一格**只是觀測**：Synthesize 目前不讀它，行為與加它之前逐字相同（閘門⑯g／⑯m）。
             #   先把分母做出來，再談要不要揭露／拒答（同 `unit_stats`／`replan_stats` 的順序）。
-            "exec_stats": _es}
+            "exec_stats": _es,
+            # 同上，純觀測：這個子問題的檢索候選池（`rq.retrieve` 的產出，Grader 圈選**之前**）。
+            "pool_keys": pool_keys}
 
 
 def _node_execute(state: SupervisorState) -> dict:
@@ -1159,12 +1190,18 @@ def _node_execute(state: SupervisorState) -> dict:
                               "summary": f"（子問題「{todos[i]['task']}」執行時發生未預期錯誤）",
                               "web_used": False, "web_notes": [], "picked": [],
                               "freshness_gaps": [], "period_notes": [],
+                              # 這一格同樣不能省（同 ⑯i3）：漏了 `_node_execute` 的合併
+                              # 會 KeyError，或退化成靜默跳過這一波＝分母少計。
+                              "pool_keys": [],
                               # 這一格不能省：漏了它 `todos` 分母會少計，而「少計」與
                               # 「這一波沒跑」外觀相同（閘門⑯i3）。
                               "exec_stats": {"outcome": "crashed", "id": todos[i]["id"],
                                              "task": todos[i]["task"], "error": repr(e)}}
 
     collected = state.get("collected", [])
+    # ⚠ 一定要讀 `state`（同 `exec_stats`／⑭i／⑯i）：LangGraph 對沒有 reducer 的 key 是
+    #   **取代**語意，只回傳這一波會讓最終只剩最後一波（閘門㉒o）。
+    retrieved = _merge_pool_keys(state.get("retrieved_union") or [], [])
     web = list(state.get("web_notes", []))
     periods = list(state.get("period_notes", []))
     for i in pending_idxs:   # 依原始順序合併（thread 完成順序不影響結果，只影響合併時機）
@@ -1176,6 +1213,7 @@ def _node_execute(state: SupervisorState) -> dict:
         todos[i]["period_notes"] = r.get("period_notes", [])
         todos[i]["status"] = "done"
         collected = _merge_chunks(collected, r["picked"])
+        retrieved = _merge_pool_keys(retrieved, r.get("pool_keys") or [])
         web += r["web_notes"]
         # 去重跨子問題：多個子問題問同一家同一年，`rq._build_fallback_note` 會產生逐字相同的句子，
         # 而這句話最終要整篇只講一次（同 `_format_unresolved_freshness_notice` 的教訓：
@@ -1192,7 +1230,8 @@ def _node_execute(state: SupervisorState) -> dict:
     _trace(f"execute wave: {len(pending_idxs)} todos ({[todos[i]['id'] for i in pending_idxs]}) done → "
            f"collected={len(collected)} period_notes={len(periods)}")
     return {"todos": todos, "collected": collected, "web_notes": web,
-            "period_notes": periods, "iterations": iters, "exec_stats": exec_stats}
+            "period_notes": periods, "iterations": iters, "exec_stats": exec_stats,
+            "retrieved_union": retrieved}
 
 
 def _node_replan(state: SupervisorState) -> dict:

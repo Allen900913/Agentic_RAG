@@ -2355,6 +2355,191 @@ def gate21_revision_regression_guard() -> None:
             _called["n"] == 0, f"實得 {_called['n']} 次 LLM 呼叫")
 
 
+
+def gate22_observability_channels() -> None:
+    """㉒ 兩個**觀測**通道：降級成因（`degraded_reason`）與檢索候選池聯集（`retrieved_union`）。
+
+    **病灶一：降級的成因無處可查。** `run_agentic` 的 `graph.invoke` 崩潰降級路徑只用
+    `_trace` 印例外（非 verbose 完全不輸出），而降級記錄**外觀完全正常**（有 answer、
+    無 error、resume 還會跳過它，見 `repair_degraded_records.py`）。實測 2026-09-08 三題、
+    09-09 九題降級，**成因到現在全是猜的**。
+
+    **病灶二：「撈到了但被丟掉」量不到。** 結果檔的 `sources` 是
+    `rq.retrieve` → `run_state.pool` → **Grader `relevant_ids` 圈選** → `[:COMMIT_TOP_K]`
+    → `picked` → `collected` 這條鏈的**最末端**（實測 65 題中位數只有 3 顆），
+    於是 `probe_gold_funnel` 的「撈到卻沒引用」這一格**結構性接近恆為 0**——
+    那個 0 是量尺的性質，不是系統健康。⚠ 這一格歸因錯過兩次（先說是 `_fair_select`
+    的輸出、再說是檢索聯集），現在這條鏈是逐行讀出來的。
+
+    ⚠ **兩者都只加觀測、不改行為**（同 `unit_stats`／`replan_stats`／`exec_stats` 的順序：
+      先做出分母，再談要不要改行為）。㉒e／㉒p 是「行為逐字沒變」的那兩條護欄。
+    ⚠ **缺席 ≠ 空值**（同 ⑲l10／⑯j5）：`degraded_reason` 缺席 ＝ 沒降級；
+      `retrieved_union` 缺席 ＝ 沒經過 graph。填 `""`／`[]` 會讓兩種情況外觀相同。
+    ⚠ **判別力集中在誤報對照**：陽性那幾條，一個「一律填一個字串／一律回空 list」的實作
+      也會過。會出事的是 ㉒b（正常路徑不得帶成因）、㉒d（成因不帶位置 ＝ 與 `_trace`
+      等價、還是查不出哪個節點炸的）、㉒j（跨波必須**累加**，同 ⑭i／⑯i）、
+      ㉒k（同一顆 chunk 被兩個子問題撈到要留兩筆——那正是「哪一個子問題撈到它」的資訊）。
+    ⚠ **變異測試本身踩了本 repo 一再出現的那個坑**（⑳e／⑰i／⑭j／⑮q 之後第五次）：
+      第一版的「去重鍵漏掉 subq」只改了迴圈裡的 `k`、沒改 `seen` 的推導式，於是實際變成
+      「去重從此不觸發」——被 ㉒l 抓到，而 **㉒k 那條路一次都沒被走到**。改成 `seen` 與 `k`
+      一致地漏掉 subq（M4b）之後，㉒k 才真的失敗。**變異本身也要自洽**，否則「抓到了」
+      是抓到別的東西。9/9 變異全抓到。
+    """
+    print("\n[㉒] 觀測通道：降級成因 ＋ 檢索候選池聯集")
+    import ast
+    fds = _pkg_funcdefs()
+
+    def _return_dict_keys(node) -> list[set]:
+        """node 底下每一個 `return {...}` 的字面 key 集合。"""
+        out = []
+        for n in ast.walk(node):
+            if isinstance(n, ast.Return) and isinstance(n.value, ast.Dict):
+                out.append({k.value for k in n.value.keys
+                            if isinstance(k, ast.Constant) and isinstance(k.value, str)})
+        return out
+
+    # ── A 部分：degraded_reason ────────────────────────────────────────────────
+    ra = fds.get("run_agentic")
+    _assert("㉒a0 前提：AST 找得到 `run_agentic`（找不到的話下面全部是假性通過）",
+            ra is not None)
+    if ra is None:
+        return
+
+    handlers = [h for n in ast.walk(ra) if isinstance(n, ast.Try) for h in n.handlers]
+    deg_keys = [ks for h in handlers for ks in _return_dict_keys(h)]
+    _assert("㉒a 降級（except）路徑的 return dict 帶 `degraded_reason`",
+            bool(deg_keys) and any("degraded_reason" in ks for ks in deg_keys),
+            f"實得 {deg_keys}")
+
+    # ⚠ **誤報對照**：正常路徑**不得**帶這個鍵。缺席才是「沒降級」的表示法；
+    #   正常路徑填 None／"" 會讓消費端要多維護一套「什麼算空」的判準。
+    all_keys = _return_dict_keys(ra)
+    normal_keys = [ks for ks in all_keys if ks not in deg_keys and "answer" in ks]
+    _assert("㉒b **誤報對照**：正常路徑的 return 不得帶 `degraded_reason`（缺席＝沒降級）",
+            bool(normal_keys) and all("degraded_reason" not in ks for ks in normal_keys),
+            f"實得 {normal_keys}")
+
+    # ── ㉒c/d/e/f 行為：真的把 graph 弄炸，驗降級回傳 ───────────────────────────
+    class _BoomGraph:
+        def invoke(self, *a, **kw):
+            raise RuntimeError("nim-404-boom")
+
+    _saved = {k: getattr(ar, k) for k in
+              ("_get_graph", "_get_models", "_fallback_local_summary")}
+    _saved_retrieve = ar.rq.retrieve
+    try:
+        ar._get_graph = lambda: _BoomGraph()
+        ar._get_models = lambda: (None, None, None)
+        ar.rq.retrieve = lambda *a, **kw: ([], None)
+        ar._fallback_local_summary = lambda *a, **kw: "FALLBACK-ANSWER"
+        out = ar.run_agentic("測試查詢", freshness_mode="snapshot")
+    finally:
+        for k, v in _saved.items():
+            setattr(ar, k, v)
+        ar.rq.retrieve = _saved_retrieve
+
+    reason = out.get("degraded_reason")
+    _assert("㉒c 降級時 `degraded_reason` 有值，且帶得出例外型別與訊息",
+            isinstance(reason, str) and "RuntimeError" in reason and "nim-404-boom" in reason,
+            f"實得 {reason!r}")
+    # ⚠ **這條是 A 部分最重要的一條**：只帶 `repr(e)` 的話，資訊量與現行 `_trace` 印的
+    #   **完全相同**，而現行的問題正是「印了也查不出是哪個節點炸的」。要能定位到**檔:行**。
+    _tail = (reason or "").split(".py:")[-1][:6]
+    _assert("㉒d **誤報對照**：成因要帶最深一層的位置（檔名:行號），不只是 repr(e)",
+            isinstance(reason, str) and ".py:" in reason and any(c.isdigit() for c in _tail),
+            f"實得 {reason!r}")
+    _assert("㉒e **回歸護欄**：只加觀測，降級路徑既有的三個鍵逐字不變",
+            (out.get("answer") or "").startswith("FALLBACK-ANSWER")
+            and out.get("chunks") == [] and out.get("sub_queries") == ["測試查詢"],
+            f"實得 answer={out.get('answer')!r} chunks={out.get('chunks')} "
+            f"sub_queries={out.get('sub_queries')}")
+    # ⚠ 降級沒經過 graph → 檢索聯集這一格必須**缺席**（不是空 list）。
+    _assert("㉒f 降級路徑不得憑空產生 `retrieved_union`（缺席≠空 list，同 ⑲l10）",
+            "retrieved_union" not in out, f"實得 {out.get('retrieved_union')!r}")
+
+    # ── ㉒g/h 消費端接線：拿真實值餵**生產的** record 建構子（同 ⑮e／⑲l9 的教訓）──
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import run_agentic_on_evalset as rae   # noqa: E402
+    Q = {"id": "t-1", "category": "semantic", "query": "q"}
+    UNION = [{"source": "S", "chunk_index": 1, "subq": 0}]
+    rec = rae._record_from_agentic(Q, "a", [], [], [], None, None, None, None, None,
+                                   retrieved_union=UNION, degraded_reason=reason)
+    _assert("㉒g 兩個值都真的流進 record（不是呼叫點寫了參數名而已）",
+            rec.get("degraded_reason") == reason and rec.get("retrieved_union") == UNION,
+            f"實得 {rec.get('degraded_reason')!r} / {rec.get('retrieved_union')!r}")
+    rec2 = rae._record_from_agentic(Q, "a", [], [], [])
+    _assert("㉒h **誤報對照**：沒降級時兩格都是 None（不是空字串也不是空 list）",
+            rec2.get("degraded_reason") is None and rec2.get("retrieved_union") is None,
+            f"實得 {rec2.get('degraded_reason')!r} / {rec2.get('retrieved_union')!r}")
+
+    # ── ㉒i 舊格式回歸：`repair_degraded_records` 不得因為新欄位而誤判 ──────────
+    import repair_degraded_records as rdr   # noqa: E402
+    _assert("㉒i **誤報對照**：舊格式結果檔（無新欄位）仍不得被判成降級",
+            not rdr.is_degraded({"id": "x", "answer": "a"})
+            and not rdr.is_degraded({"id": "x", "exec_stats": {}, "unit_stats": {}}))
+    _assert("㉒i2 有 `degraded_reason` 就是降級（新指紋，比五鍵全 None 更直接）",
+            rdr.is_degraded({"id": "x", "degraded_reason": "RuntimeError: boom @ g.py:1"}))
+    _assert("㉒i3 **誤報對照**：`degraded_reason` 為 None 不算降級",
+            not rdr.is_degraded({"id": "x", "degraded_reason": None, "exec_stats": {}}))
+
+    # ── B 部分：retrieved_union 的合併語意（純函式，零 I/O）────────────────────
+    MP = getattr(ar, "_merge_pool_keys", None)
+    _assert("㉒j0 前提：`_merge_pool_keys` 存在（合併語意要有單一定義點）", MP is not None)
+    if MP is None:
+        return
+    A = [{"source": "S1", "chunk_index": 1, "subq": 0}]
+    B = [{"source": "S2", "chunk_index": 2, "subq": 1}]
+    # ⚠ **同 ⑭i／⑯i**：LangGraph 對沒有 reducer 的 key 是**取代**語意。只回傳這一波
+    #   會讓最終只剩最後一波，而 multi_hop 的第二跳正好都在最後一波。
+    _assert("㉒j 跨波必須**累加**（不是取代）", MP(A, B) == A + B, f"實得 {MP(A, B)}")
+    # ⚠ **誤報對照**：同一顆 chunk 被**兩個**子問題撈到 → 兩筆都要留。
+    #   併掉就丟掉了「哪一個子問題撈到它」，而那正是這個通道要回答的問題。
+    C = [{"source": "S1", "chunk_index": 1, "subq": 1}]
+    _assert("㉒k **誤報對照**：同一顆 chunk 不同子問題 → 兩筆都留（subq 是資訊不是雜訊）",
+            len(MP(A, C)) == 2, f"實得 {MP(A, C)}")
+    _assert("㉒l **誤報對照**：同一子問題同一顆只留一筆（重跑同一波不得灌水分母）",
+            MP(A, list(A)) == A, f"實得 {MP(A, list(A))}")
+    _assert("㉒m **誤報對照**：空的新一波不得清掉既有累計",
+            MP(A + B, []) == A + B, f"實得 {MP(A + B, [])}")
+
+    # ── ㉒n/o/p 接線：executor 回傳帶 pool_keys、_node_execute 累加進 state ─────
+    rot = fds.get("_run_one_todo")
+    nex = fds.get("_node_execute")
+    _assert("㉒n0 前提：AST 找得到 `_run_one_todo` 與 `_node_execute`",
+            rot is not None and nex is not None)
+    if rot is None or nex is None:
+        return
+    _assert("㉒n executor 的每一個 return dict 都帶 `pool_keys`",
+            bool(_return_dict_keys(rot))
+            and all("pool_keys" in ks for ks in _return_dict_keys(rot)),
+            f"實得 {_return_dict_keys(rot)}")
+    nex_dicts = _return_dict_keys(nex)
+    _assert("㉒n2 `_node_execute` 的 return 帶 `retrieved_union`",
+            any("retrieved_union" in ks for ks in nex_dicts), f"實得 {nex_dicts}")
+    # crash 兜底那個 result dict（wave worker 未預期例外）漏了 pool_keys 的話，
+    # 那一波會靜默地不計入分母——與「這一波沒跑」外觀相同（同 ⑯i3 的教訓）。
+    # ⚠ **量尺自己踩的坑**：crash 兜底那個 dict 是 `results[i] = {...}` 的**指派**不是
+    #   `return`，只走 `ast.Return` 的話它整個看不到 → 第一版當場 FAIL，而系統是對的
+    #   （「稽核回報 FAIL，先問是不是量尺錯」，這次就是量尺錯）。改成掃所有 Dict 字面。
+    _all_dicts = [{k.value for k in n.keys
+                   if isinstance(k, ast.Constant) and isinstance(k.value, str)}
+                  for n in ast.walk(nex) if isinstance(n, ast.Dict)]
+    _crash = [ks for ks in _all_dicts if "picked" in ks]
+    _assert("㉒n3 crash 兜底的 result dict 也要帶 `pool_keys`（同 ⑯i3：漏了會靜默消失）",
+            bool(_crash) and all("pool_keys" in ks for ks in _crash), f"實得 {_crash}")
+    # ⚠ **同 ⑭i／⑯i 的那條**：累加必須讀 `state`，只回傳這一波是錯的。
+    _src = ast.unparse(nex)
+    _assert("㉒o `retrieved_union` 的累加要讀 `state`（不讀就只剩最後一波）",
+            "state.get('retrieved_union'" in _src or 'state.get("retrieved_union"' in _src,
+            "沒看到從 state 讀既有累計")
+    # ⚠ **回歸護欄**：這個通道只是觀測，`picked` 的建構不得被動到。
+    _rot_src = ast.unparse(rot)
+    _assert("㉒p **回歸護欄**：`pool_keys` 只讀 pool，不得參與 `picked` 的建構",
+            "pool_keys" in _rot_src
+            and "picked = " not in _rot_src.split("pool_keys")[-1].split("return")[0],
+            "pool_keys 之後又動了 picked")
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -2386,6 +2571,7 @@ def main() -> int:
     gate19_unit_finalization()
     gate20_fair_select_order()
     gate21_revision_regression_guard()
+    gate22_observability_channels()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")

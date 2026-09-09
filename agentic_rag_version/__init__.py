@@ -277,6 +277,7 @@ from .graph import (   # noqa: E402
     _EXEC_OUTCOMES,
     _note_exec_outcome,
     _merge_exec_stats,
+    _merge_pool_keys,
     _run_executor_deterministic,
     _run_executor,
     COMMIT_TOP_K,
@@ -1145,6 +1146,16 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
         # （沿用 nv 版既有行為),實測撞過 NVIDIA 端連續 504 把整個 invoke 炸穿——這裡是最後一道保底,
         # 確保「LLM API 暫時不穩」不會讓整支 CLI/eval 崩潰,至少走一次乾淨的生產單發查詢兜底。
         _trace(f"run_agentic: graph.invoke 崩潰（{e!r}）→ 降級走一次生產單發檢索+生成")
+        # 降級的成因要**進結果檔**，不能只有 `_trace`（非 verbose 完全不輸出，而降級記錄
+        # 外觀完全正常——有 answer、無 error、resume 還會跳過它）。2026-09-08 三題、
+        # 09-09 九題降級，成因在加這一格之前全是猜的。
+        # ⚠ 要帶**最深一層的檔:行**，不能只有 `repr(e)`：後者的資訊量與上面那行 `_trace`
+        #   完全相同，而現行的病正是「印了也查不出是哪個節點炸的」（閘門㉒d）。
+        import traceback as _tb_mod
+        _frames = _tb_mod.extract_tb(e.__traceback__)
+        _loc = (f"{os.path.basename(_frames[-1].filename)}:{_frames[-1].lineno}"
+                f" in {_frames[-1].name}") if _frames else "?"
+        _degraded_reason = f"{type(e).__name__}: {e} @ {_loc}"[:400]
         bge_m3, rerank_model, client = _get_models()
         with _quiet():
             chunks_fb, note_fb = rq.retrieve(query, bge_m3, rerank_model, client,
@@ -1160,7 +1171,11 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
                 "freshness_gaps": _news_freshness_gaps(chunks_fb, _get_as_of_date()),
             }])
         return {"answer": answer_fb, "chunks": chunks_fb, "sub_queries": [query], "messages": [],
-                "period_notes": [note_fb] if note_fb else []}
+                "period_notes": [note_fb] if note_fb else [],
+                # ⚠ 這個鍵**只在降級時出現**：缺席＝沒降級（閘門㉒b）。填 None／"" 會讓
+                #   消費端要多維護一套「什麼算空」的判準，而那正是 `None` ≠ `{}` 的教訓。
+                #   ⚠ 同理這條路**不帶** `retrieved_union`（沒經過 graph，閘門㉒f）。
+                "degraded_reason": _degraded_reason}
 
     answer = (final.get("answer") or
               "I don't have enough information in my knowledge base to answer this.")
@@ -1213,6 +1228,14 @@ def run_agentic(query: str, recursion_limit: int = 100, verbose: bool = False,
         # 「要不要揭露／拒答」的分母就是這一格。⚠ 另外三種出場（`kb_unfixable_exit`／
         # `web_budget_exit`／`crashed`）**不是同一種病**，彙總時不可合併（閘門⑯d/e/l）。
         "exec_stats": final.get("exec_stats") or {},
+        # 各子問題檢索候選池（`rq.retrieve` 產出、Grader 圈選**之前**）的 key 聯集。
+        # ⚠ **純觀測**：沒有任何節點讀它，行為與加它之前逐字相同。
+        # 為什麼需要：`chunks`／`sources` 是 pool → Grader 圈選 → `COMMIT_TOP_K` 截斷
+        # 之後的**末端**（實測 65 題中位數 3 顆），於是「撈到了卻沒被用」在結果檔裡
+        # **結構性地量不到**——`probe_gold_funnel` 兩輪都是 0，那是量尺的性質不是系統健康。
+        # ⚠ 崩潰降級那條路**整個 key 不會出現**（沒經過 graph），同 `unit_stats` 的
+        #   `None` ≠ `{}`：消費端要把「缺席」與「空」分開讀，否則降級題會被算進分母。
+        "retrieved_union": final.get("retrieved_union") or [],
     }
 
 
