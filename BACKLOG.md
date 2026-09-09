@@ -917,9 +917,60 @@ hard filter／跨期 collapse／去重刪掉的。要分的三格：
 
 ⚠ **不可掛 `RAG_REPLAY_CACHE`**：釘死 plan 會產生**假的穩定**，正好毀掉第二輪唯一的用途。
 ⚠ 跑完先跑 `repair_degraded_records.py` 確認 **0 降級**再讀任何比率——遺失的不是隨機樣本。
+⚠ **降級的「成因」目前無處可查**（2026-09-09 實測）：`run_agentic` 的 graph 崩潰降級
+  只用 `_trace` 印例外，而 `_trace` 非 verbose 時不輸出 → 結果檔沒有、log 也沒有。
+  於是「這一輪為什麼 9 題降級」只能靠**當下另外去打 API** 猜（09-08 那次就是這樣查的）。
+  **修法很便宜且與行為無關**：把 `repr(e)` 寫進 record 的一個 `degraded_reason` 欄位
+  （同 `unit_stats`／`exec_stats` 的觀測性作法）。**還沒做。**
 ⚠ 兩輪之間只看**逐題翻面**，不要比聚合值大小（同 `check_number_defects` 的 ≥2 輪規則）。
 
 **決定什麼**：`forced_pass` 揭露要不要做、門檻放哪；`MAX_TODOS` 拆不拆；critique↔refine 要不要做。
+
+#### ✅ T0 跑完了（2026-09-09，`experiments/agentic/gj_65q_denominators_r2_20260909.json`）
+
+⚠ **三輪 repair 才到 0 降級**（9 → 4 → 0）。R1 是 3 題降級，這輪是 9 題——**成因不明**，
+  因為降級的例外只用 `_trace` 印、非 verbose 不輸出（見上方那條）。
+
+| 分母 | R1（09-08） | R2（09-09） | 讀法 |
+|---|---|---|---|
+| `forced_pass`（子問題） | 18/116 ＝ **15.5%** | 10/109 ＝ **9.2%** | **一輪的點估計不可靠** |
+| `forced_pass`（題） | 10 | 7 | **穩定核心 5 題**：`lex-04` `lex-10` `mix-12` `sem-14` `sem-15` |
+| `kb_unfixable_exit` | 0 | **0** | 225 個子問題**一次都沒觸發** |
+| `web_budget_exit` | 0 | 0 | `--no-web`，預期 |
+| `crashed` | 4 | 3 | 見下方 ⚠ |
+| `refused_budget` | 2（`mh-03`） | **0** | 155 個 replan round 共 2 次 |
+| `deps_disagreed` | 2（`mh-03`） | 1（`mh-04`） | 兩輪都非 0，不同題 |
+| `deps_pruned` | 0 | 0 | 兩輪 0 |
+| `revision` 接受／退回 | 7／**0** | 7／**0** | **逐字相同** |
+| `unit_stats` ①／③ | 0／10（7 題） | 0／**23**（8 題） | ③ 翻倍以上 |
+
+**四個可以據此定案的決定**：
+
+1. **不拆 `MAX_TODOS`。** 兩輪 155 個 replan round 一共只擋掉 2 個待辦，而那 2 個
+   （T3 讀過）撈的是**已經在 collected 裡**的 chunk。**證據不支持動這個常數。**
+2. **不做 critique↔refine 迴圈。** 兩輪都是接受 7、退回 **0**——`_deterministic_defects`
+   的四項指紋**一次都沒有變差**。⚠ 這仍是小樣本（14 次重生成），但兩輪逐字相同
+   比單輪的 7 強得多。⚠ 指紋不含 `find_claim_conflicts`（要一次 LLM），
+   「一致性被重生成破壞」這一型**仍然量不到**。
+3. **`deps_disagreed` 的例外維持。** 兩輪都非 0（2 → 1）＝ Planner 說 `null` 但句子沒主詞
+   確實會發生；`deps_pruned` 兩輪 0 ＝ 沒有合法依賴被誤剪。
+4. **`forced_pass` 的第一順位不是揭露句，是 `kb_unfixable`。**
+   兩輪 **225 個子問題裡那個旗標一次都沒被設起來**，而 forced_pass 的 `missing` 有 ~14/18
+   正是「10-K 本來就不會寫這個」。那條路（`kb_unfixable_exit`）**早就接好而且是正確行為**。
+   ⇒ 要做的是量 `_check_sufficiency` 判 `kb_unfixable` 的準度（probe，陰性對照不可省：
+   把財報裡明明有的東西判成補不了 ＝ 白白拒答，比現況更糟），**不是先加警語**。
+
+**兩個被第二輪推翻的東西（都是我 R1 寫的）**：
+
+- ⚠ **「`crashed` 全在 multi_hop，5 題有 3 題帶著崩掉的子問題」不成立。**
+  R2 的 3 筆落在 `sem-05`（1/1）／`sem-10`（1/2）／`mh-01`（1/7）。**那是時間叢集不是類別**
+  ——與 `repair_degraded_records.py` 檔頭記的共線問題同一件事。
+- ⚠ **逐類 `forced_pass` 只有兩格是穩的**：`semantic` 兩輪最高（37.5% → 25.0%）、
+  `multi_hop` 兩輪都是 **0%**。`colloquial` 23.5% → **0%** ＝ 擺盪最大，**不可引用**。
+
+**T2 在 R2 上重跑**（`experiments/gold_funnel_r2_20260909.json`）：撈到且引用 **30/41（73%）**
+vs R1 的 31/41（76%），**41 題裡 40 題判定逐題相同**（只有 `mix-12` 翻面）＝ 第一段那個指標穩定。
+「撈到卻沒引用」**兩輪都是 0**，與「它結構性接近恆真」的判讀一致。
 
 ### T2（先寫尺，跑起來零 LLM）— `gold@cited`：把「檢索有缺陷」翻譯成「答案有沒有損失」
 

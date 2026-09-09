@@ -5,6 +5,38 @@
 
 ## 2026-09-09
 
+### 五個分母的第二輪：兩個 R1 的結論被推翻，四個決定可以定案
+
+`experiments/agentic/gj_65q_denominators_r2_20260909.json`（65 題、0 降級，repair 三輪：9→4→0）。
+
+| 分母 | R1 | R2 |
+|---|---|---|
+| `forced_pass`（子問題／題） | 18/116 ＝ 15.5%／10 題 | 10/109 ＝ **9.2%**／7 題 |
+| `kb_unfixable_exit` | 0 | **0** |
+| `crashed` | 4 | 3 |
+| `refused_budget` | 2 | **0** |
+| `deps_disagreed`／`deps_pruned` | 2／0 | 1／0 |
+| `revision` 接受／退回 | 7／0 | **7／0** |
+| `unit_stats` ①／③ | 0／10（7 題） | 0／**23**（8 題） |
+
+**定案四則**：① **不拆 `MAX_TODOS`**（兩輪 155 個 replan round 只擋掉 2 個待辦，且撈的是
+已在 collected 裡的 chunk）② **不做 critique↔refine 迴圈**（兩輪接受 7／退回 0，四項指紋一次都沒變差）
+③ `deps_disagreed` 的例外維持（兩輪非 0、`deps_pruned` 兩輪 0）
+④ **`forced_pass` 的第一順位是讓 `kb_unfixable` 真的觸發，不是加揭露句**——
+兩輪 225 個子問題那個旗標一次都沒設起來，而 `missing` 有 ~14/18 正是 KB 天花板。
+
+**被第二輪推翻的兩個 R1 結論（都是我寫的）**：
+- 「`crashed` 全在 multi_hop」**不成立**：R2 落在 `sem-05`／`sem-10`／`mh-01`。是**時間叢集**不是類別。
+- 逐類 `forced_pass` 只有兩格穩：`semantic` 兩輪最高、`multi_hop` 兩輪 0%；
+  `colloquial` 23.5% → **0%**，不可引用。
+
+**`probe_gold_funnel` 在 R2 重跑**：30/41（73%）vs R1 的 31/41，**41 題裡 40 題判定相同**
+（只有 `mix-12` 翻面）＝ 第一段指標穩定；「撈到卻沒引用」兩輪都是 0，與「結構性接近恆真」一致。
+
+⚠ **新的觀測性缺口（未修）**：graph 崩潰降級的例外只用 `_trace` 印、非 verbose 不輸出 →
+結果檔與 log 都查不到「為什麼降級」。R1 三題、R2 九題，成因至今是猜的。
+修法：把 `repr(e)` 寫進 record 的 `degraded_reason`（行為外的觀測性改動）。
+
 ### 召回失敗的層級歸因：`RRF-20` 名額用滿、collapse 一筆 gold 都沒吃掉
 
 新增 [`eval/probe_recall_layer_attribution.py`](eval/probe_recall_layer_attribution.py)（selftest 8/8，5 條誤報對照）。
