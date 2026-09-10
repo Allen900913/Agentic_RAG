@@ -79,6 +79,22 @@ def is_degraded(rec: dict) -> bool:
     return all(rec.get(k) is None for k in present)
 
 
+def subq_crashed(rec: dict) -> int:
+    """**子問題層**的崩潰筆數（`exec_stats.crashed`）。與 graph 崩潰降級是**兩種病**。
+
+    ⚠ **刻意只回報、不刪、不併進 `bad`**（2026-09-11 加）。理由三條：
+      · 閘門⑯ 明訂四種出場不可合併，`crashed` 有它自己的意義；
+      · 但 `is_degraded` 只看 graph 層 ⇒ **同一次 provider 事件的污染會有一半漏網**。
+        R4 實測：10 題 graph 降級被抓到並補跑，而 `mix-03` 兩個子問題**也**炸了
+        （答案逐字是「（子問題…的生成步驟發生錯誤，以下為檢索到的原始片段）」），
+        它 `degraded_reason` 缺席 ⇒ 補跑後這份檔回報「降級 0 題」，**而它並不乾淨**；
+        那一題接著就在 `check_number_defects` 裡 FAIL，成因是那次斷線不是系統。
+      · **不自動刪**是因為子問題崩潰也可能是系統性的，自動刪會讓它永遠看不見
+        （同「稽核回報 0 筆先當壞消息查」）。要刪由人看過再決定。
+    """
+    return int((rec.get("exec_stats") or {}).get("crashed") or 0)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -124,8 +140,18 @@ def main() -> int:
         print("  ⚠ 這個分布**不等於**「哪一類容易崩」：eval_set 按類別排序，而崩潰依時間叢集，"
               "\n    兩者共線、這一欄分不出來。")
         print("  ⚠ 補跑之前不要拿剩下的題算任何比率——遺失的不是隨機樣本。")
+    # ── 子問題層的崩潰：**另計、不刪**，但一定要說出來 ────────────────────────
+    _sub = [(r.get("id"), subq_crashed(r)) for r in recs if subq_crashed(r)]
+    if _sub:
+        print(f"\n  ⚠ 另有**子問題層**崩潰 {len(_sub)} 題（`exec_stats.crashed`）："
+              f"{[f'{i}×{n}' for i, n in _sub]}")
+        print("    這**不算 graph 降級**（兩種病，閘門⑯ 明訂不可合併），不會被刪、"
+              "\n    也不會被 resume 補跑——但它同樣可能是 provider 事件的殘留，"
+              "\n    而這份檔會回報「降級 0 題」＝**乾淨的外觀**。拿它跑驗收前先看一眼。")
+
     if not bad:
-        print("  ✔ 沒有降級題，不需要補救")
+        print("  ✔ 沒有 graph 降級題，不需要補救"
+              + ("（⚠ 但上面那幾題子問題崩過）" if _sub else ""))
         return 0
     if not args.apply:
         print("\n  （dry-run，沒有改檔。要真的刪請加 --apply）")
@@ -170,6 +196,19 @@ def _selftest() -> int:
                     "exec_stats": {"todos": 1}}))
     _a("⑦ **誤報對照**：`degraded_reason` 是 None／缺席不算降級（缺席＝沒降級）",
        not is_degraded({"id": "x", "degraded_reason": None, "exec_stats": {"todos": 1}}))
+
+    # ── 子問題層崩潰（2026-09-11 加）──────────────────────────────────────────
+    _crash = {"id": "x", "exec_stats": {"todos": 2, "crashed": 2}}
+    _a("⑧ 陽性：`exec_stats.crashed` 讀得出來", subq_crashed(_crash) == 2)
+    _a("⑨ **最重要的一條**：子問題崩潰**不得**被算成 graph 降級（兩種病不可合併）",
+       not is_degraded(_crash))
+    _a("⑩ **誤報對照**：`crashed=0` 要回 0，不可以被當成缺席或真值",
+       subq_crashed({"id": "x", "exec_stats": {"todos": 1, "crashed": 0}}) == 0)
+    _a("⑪ **誤報對照**：舊結果檔沒有 `exec_stats` 時回 0，不可以炸也不可以誤報",
+       subq_crashed({"id": "x"}) == 0)
+    _a("⑫ **誤報對照**：graph 降級題的 `exec_stats` 是 None ⇒ 這一格必須是 0，"
+       "否則同一次事件會被兩邊各記一次（分母灌水）",
+       subq_crashed({"id": "x", "exec_stats": None}) == 0)
 
     print(f"\n  PASS {ok}  FAIL {fail}")
     return 1 if fail else 0

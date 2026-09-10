@@ -67,6 +67,14 @@ import argparse
 import json
 import re
 import sys
+
+# ⚠ Windows 主控台預設 cp950，而報表帶著 ⚠／✔ 等字元 ⇒ **印到一半 crash**，
+#   後面的主張與摘要整段不見，而退出碼與「有 FAIL」外觀相同。2026-09-11 踩到。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))

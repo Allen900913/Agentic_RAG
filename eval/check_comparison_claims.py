@@ -53,6 +53,15 @@ import re
 import sys
 from pathlib import Path
 
+# ⚠ Windows 主控台預設 cp950，而本檔的報表帶著 ⚠／✔ 等字元 ⇒ **摘要那一行會 crash**，
+#   而 crash 的退出碼與「有 wrong_winner」外觀相同 ＝ 把一個編碼問題讀成一個系統缺陷。
+#   2026-09-11 實際踩到（5/5 全 PASS，卻是 UnicodeEncodeError 收場）。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import rag_query as rq          # noqa: E402  只為了共用 _COMPANY_TICKER（唯一定義點）
 
