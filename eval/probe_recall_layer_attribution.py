@@ -70,10 +70,32 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 BUCKETS = ("dropped", "rrf_seats", "fetch_seats", "unreachable", "fine")
+# 寬臂的探測上界。**刻意是絕對值**：它們回答「名額夠不夠」，不是生產組態的倍數。
+# ⚠ 但凡是要印出來或拿來判斷的地方，一律引用這些名字，不要再寫一次數字。
+_WIDE_RRF, _WIDER_RRF, _WIDE_FETCH = 100, 200, 300
+
+def _labels() -> dict:
+    """分格標籤。**數字一律從常數算出來，不寫死在字面裡**（2026-09-11）。
+
+    ⚠ 生產的 `RRF_TOP_N_PRIMARY` 09-10 由 20 改成 30，而這裡原本寫著「進過 RRF-20」
+      ⇒ 報表會印一個**與實際跑的組態不符**的標籤，而讀報表的人無從察覺。
+      這與生產臂寫死常數是同一個病的兩半：**一個量錯、一個講錯**。
+    """
+    import rag_query as _rq
+    return {
+        "dropped":     f"① 刪錯了（進過 RRF-{_rq.RRF_TOP_N_PRIMARY}，回傳裡沒有）",
+        "rrf_seats":   f"② RRF 名額不夠（RRF={_WIDE_RRF} 才進得來）",
+        "fetch_seats": f"③ prefetch 名額不夠（FETCH_N={_WIDE_FETCH} 才進得來）",
+        "unreachable": "④ 真的撈不到（三個候選集都沒有）",
+        "fine":        "　 沒問題（gold 在 retrieve() 的回傳裡）",
+    }
+
+
+# ⚠ 保留 `_LABEL` 這個名字給零 Qdrant 的 selftest 用（它不該 import rq 的執行期狀態）。
 _LABEL = {
-    "dropped":     "① 刪錯了（進過 RRF-20，回傳裡沒有）",
-    "rrf_seats":   "② RRF 名額不夠（RRF=100 才進得來）",
-    "fetch_seats": "③ prefetch 名額不夠（FETCH_N=300 才進得來）",
+    "dropped":     "① 刪錯了（進過生產 RRF 名額，回傳裡沒有）",
+    "rrf_seats":   "② RRF 名額不夠",
+    "fetch_seats": "③ prefetch 名額不夠",
     "unreachable": "④ 真的撈不到（三個候選集都沒有）",
     "fine":        "　 沒問題（gold 在 retrieve() 的回傳裡）",
 }
@@ -184,17 +206,27 @@ def run(args) -> int:
         print(f"\n── 第 {rnd + 1}/{args.repeat} 輪 " + "─" * 52)
         for qid, r in rows.items():
             golds = {_key(s, ci) for s, ci in cg.gold_chunks(docs, gold_by_id[qid])}
-            pre20, post = _one_arm(r["query"], reranker, 20, 60)
+            # ⚠ **生產臂的常數一定要從 `rq` 讀，不可以寫死**（2026-09-11 踩到）：
+            #   這裡原本是 `_one_arm(..., 20, 60)`，而 `RRF_TOP_N_PRIMARY` 於 2026-09-10
+            #   改成 30 ⇒ 這支從那一刻起量的是**沒有人在用的組態**，而外觀完全正常。
+            #   同一個形狀本 repo 已踩三次（閘門① 的 `_gate()` 是抄寫、
+            #   `probe_chunk_gold_recall` 把「上限 20」寫死在輸出字串）。
+            #   通則：**量尺凡是要重現生產行為的地方，一律 import 不抄寫。**
+            pre20, post = _one_arm(r["query"], reranker,
+                                   rq.RRF_TOP_N_PRIMARY, rq.FETCH_N)
             hit_post = any(k in golds for k in post)
             hit_pre20 = bool(golds & pre20)
             # 兩條 wide 臂只在需要時才跑（省時間；不跑等於不可能翻成 ②③，
             # 而那只會讓判定更往 ④ 靠 ＝ 誤報方向偏保守）。
             hit100 = hitw = False
             if not hit_post and not hit_pre20:
-                pre100, _ = _one_arm(r["query"], stub, 100, 60)
+                # ⚠ 寬臂**刻意保持絕對值**（100／200＋300）：它們是「名額夠不夠」的
+                #   上界探測，不是生產組態的倍數。但下面印出來的標籤要用真實數字，
+                #   不可以寫死在文字裡（同上）。
+                pre100, _ = _one_arm(r["query"], stub, _WIDE_RRF, rq.FETCH_N)
                 hit100 = bool(golds & pre100)
                 if not hit100:
-                    prew, _ = _one_arm(r["query"], stub, 200, 300)
+                    prew, _ = _one_arm(r["query"], stub, _WIDER_RRF, _WIDE_FETCH)
                     hitw = bool(golds & prew)
             v = classify(hit_post, hit_pre20, hit100, hitw)
             r["verdicts"].append(v)
@@ -202,7 +234,7 @@ def run(args) -> int:
                                 "hit_post": hit_post, "hit_pre20": hit_pre20,
                                 "hit_rrf100": hit100, "hit_wide": hitw})
             if v != "fine":
-                print(f"  [{qid:<7}/{r['category']:<10}] {_LABEL[v]}  "
+                print(f"  [{qid:<7}/{r['category']:<10}] {_labels()[v]}  "
                       f"pool={len(post)} pre20={len(pre20)}")
 
     _report(rows, na, args.repeat)
@@ -230,7 +262,7 @@ def _report(rows: dict, na: dict, repeat: int) -> None:
         tally[r["verdicts"][0] if qid not in flip else "unstable"].append(qid)
     for b in BUCKETS:
         ids = sorted(tally.get(b, []))
-        print(f"\n{_LABEL[b]}：{len(ids)} 題")
+        print(f"\n{_labels()[b]}：{len(ids)} 題")
         if ids and b != "fine":
             for qid in ids:
                 print(f"    {qid:<8} {rows[qid]['category']:<10} {rows[qid]['query'][:46]}")
@@ -246,6 +278,21 @@ def _report(rows: dict, na: dict, repeat: int) -> None:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+def prod_arm_is_not_hardcoded(src: str) -> bool:
+    """生產臂有沒有把常數寫死。純函式，供 `--selftest` 餵誤報對照。
+
+    ⚠ **這條守的是一個會靜默失效的形狀**：量尺把被測物的組態抄成字面常數之後，
+      改生產的那一刻兩者就脫鉤，而**量尺照樣跑、照樣印數字、外觀完全正常**。
+      2026-09-11 實際發生過：生產 20 → 30，這支還在量 20。
+    """
+    import re as _re
+    m = _re.search(r"pre20,\s*post\s*=\s*_one_arm\((.*?)\)", src, _re.S)
+    if not m:
+        return False
+    args = m.group(1)
+    return "rq.RRF_TOP_N_PRIMARY" in args and "rq.FETCH_N" in args
+
+
 def _selftest() -> int:
     """⚠ 判別力全在誤報對照④⑤⑥：陽性那三條，一個「一律回 dropped」的實作也會過。"""
     ok = fail = 0
@@ -275,6 +322,21 @@ def _selftest() -> int:
        len({classify(*[bool(i >> b & 1) for b in range(4)]) for i in range(16)} - set(BUCKETS)) == 0)
     _a("⑧ **誤報對照**：wide 為 True 不會蓋掉更下游的 dropped 判定",
        classify(False, True, True, True) == "dropped")
+
+    # ── 生產臂不可寫死常數（2026-09-11 加，判別力全在誤報對照）──────────────
+    _src = Path(__file__).read_text(encoding="utf-8")
+    _a("⑨ 生產臂從 `rq` 讀常數，沒有寫死（09-11 踩到：生產改 30 而這支還在量 20）",
+       prod_arm_is_not_hardcoded(_src))
+    _a("⑨b **誤報對照**：寫死數字的版本必須被抓到（否則這條是恆真的）",
+       not prod_arm_is_not_hardcoded(
+           'pre20, post = _one_arm(r["query"], reranker, 20, 60)'))
+    _a("⑨c **誤報對照**：只讀對一半也算違規（抄一個、import 一個）",
+       not prod_arm_is_not_hardcoded(
+           'pre20, post = _one_arm(r["query"], reranker, rq.RRF_TOP_N_PRIMARY, 60)'))
+    _a("⑨d **誤報對照**：整段不存在時必須回 False，不可以真空成立",
+       not prod_arm_is_not_hardcoded("def unrelated(): pass"))
+    _a("⑩ 標籤裡不得寫死生產的名額數字（報表會講一個與實跑不符的組態）",
+       all("RRF-20" not in v and "RRF-30" not in v for v in _LABEL.values()))
 
     print(f"\n  PASS {ok}  FAIL {fail}")
     return 1 if fail else 0
