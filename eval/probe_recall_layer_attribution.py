@@ -69,7 +69,8 @@ for _s in (sys.stdout, sys.stderr):
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-BUCKETS = ("dropped", "rrf_seats", "fetch_seats", "unreachable", "fine")
+BUCKETS = ("dropped", "rrf_seats", "rrf_seats_deep", "fetch_seats",
+           "unreachable", "fine")
 # 寬臂的探測上界。**刻意是絕對值**：它們回答「名額夠不夠」，不是生產組態的倍數。
 # ⚠ 但凡是要印出來或拿來判斷的地方，一律引用這些名字，不要再寫一次數字。
 _WIDE_RRF, _WIDER_RRF, _WIDE_FETCH = 100, 200, 300
@@ -84,9 +85,12 @@ def _labels() -> dict:
     import rag_query as _rq
     return {
         "dropped":     f"① 刪錯了（進過 RRF-{_rq.RRF_TOP_N_PRIMARY}，回傳裡沒有）",
-        "rrf_seats":   f"② RRF 名額不夠（RRF={_WIDE_RRF} 才進得來）",
-        "fetch_seats": f"③ prefetch 名額不夠（FETCH_N={_WIDE_FETCH} 才進得來）",
-        "unreachable": "④ 真的撈不到（三個候選集都沒有）",
+        "rrf_seats":   f"② RRF 名額不夠（RRF={_WIDE_RRF}、FETCH_N 不動就進得來）",
+        "rrf_seats_deep": (f"②深 RRF 名額不夠且要很深"
+                           f"（RRF={_WIDER_RRF}、FETCH_N 不動）"),
+        "fetch_seats": (f"③ prefetch 名額不夠（RRF 已放到 {_WIDER_RRF} "
+                        f"仍要 FETCH_N={_WIDE_FETCH}）"),
+        "unreachable": "④ 真的撈不到（四個候選集都沒有）",
         "fine":        "　 沒問題（gold 在 retrieve() 的回傳裡）",
     }
 
@@ -95,19 +99,30 @@ def _labels() -> dict:
 _LABEL = {
     "dropped":     "① 刪錯了（進過生產 RRF 名額，回傳裡沒有）",
     "rrf_seats":   "② RRF 名額不夠",
+    "rrf_seats_deep": "②深 RRF 名額不夠且要很深",
     "fetch_seats": "③ prefetch 名額不夠",
-    "unreachable": "④ 真的撈不到（三個候選集都沒有）",
+    "unreachable": "④ 真的撈不到（四個候選集都沒有）",
     "fine":        "　 沒問題（gold 在 retrieve() 的回傳裡）",
 }
 
 
-def classify(in_post: bool, in_pre20: bool, in_pre100: bool, in_prewide: bool) -> str:
-    """四格分類。**純函式、零 I/O**，好讓 `--selftest` 拿誤報對照餵它。
+def classify(in_post: bool, in_pre20: bool, in_pre100: bool,
+             in_pre200: bool, in_prewide: bool) -> str:
+    """五格分類。**純函式、零 I/O**，好讓 `--selftest` 拿誤報對照餵它。
 
     ⚠ 順序即語意：先排除「回傳裡就有」（那不是召回失敗），再由下游往上游問。
-    ⚠ 三個 `pre` 是**遞增包含**的關係（wide ⊇ 100 ⊇ 20）——但**不強制**：
+    ⚠ 四個 `pre` 是**遞增包含**的關係（wide ⊇ 200 ⊇ 100 ⊇ 生產）——但**不強制**：
       RRF 是排名融合，加大名額理論上不改變前段，實務上仍可能因 tie 而抖動。
       所以判斷一律用 `or`，不用「只在後者」。
+
+    ⚠ **`in_pre200` 是 2026-09-11 補的，補的是一個會誤導人的歸因**：在那之前
+      只有兩條寬臂（RRF=100／RRF=200＋FETCH_N=300），於是 ③ 格的意思其實是
+      「**兩個名額一起放寬**才進得來」，而標籤卻寫著「prefetch 名額不夠」
+      ⇒ 把一個**分不出來**的結果講成一個可以單獨調的旋鈕。
+      而 `docs/EVAL.md` 已經記著「`FETCH_N` 單獨調對 `retrieve()` 的回傳零效果」
+      ——照舊標籤讀，會第二次得到同一個已經被否決的行動建議。
+      現在多跑一條「RRF 放到 200、FETCH_N 不動」的臂把兩者切開：進得來 ＝ ②深
+      （仍是 RRF 名額），仍進不來才是 ③（真的要更深的 prefetch）。
     """
     if in_post:
         return "fine"
@@ -115,6 +130,8 @@ def classify(in_post: bool, in_pre20: bool, in_pre100: bool, in_prewide: bool) -
         return "dropped"
     if in_pre100:
         return "rrf_seats"
+    if in_pre200:
+        return "rrf_seats_deep"
     if in_prewide:
         return "fetch_seats"
     return "unreachable"
@@ -218,7 +235,7 @@ def run(args) -> int:
             hit_pre20 = bool(golds & pre20)
             # 兩條 wide 臂只在需要時才跑（省時間；不跑等於不可能翻成 ②③，
             # 而那只會讓判定更往 ④ 靠 ＝ 誤報方向偏保守）。
-            hit100 = hitw = False
+            hit100 = hit200 = hitw = False
             if not hit_post and not hit_pre20:
                 # ⚠ 寬臂**刻意保持絕對值**（100／200＋300）：它們是「名額夠不夠」的
                 #   上界探測，不是生產組態的倍數。但下面印出來的標籤要用真實數字，
@@ -226,13 +243,20 @@ def run(args) -> int:
                 pre100, _ = _one_arm(r["query"], stub, _WIDE_RRF, rq.FETCH_N)
                 hit100 = bool(golds & pre100)
                 if not hit100:
-                    prew, _ = _one_arm(r["query"], stub, _WIDER_RRF, _WIDE_FETCH)
-                    hitw = bool(golds & prew)
-            v = classify(hit_post, hit_pre20, hit100, hitw)
+                    # ⚠ 這一條（RRF 放到 200、**FETCH_N 維持生產值**）是把
+                    #   「RRF 名額」與「prefetch 名額」切開的唯一一刀，見 `classify`。
+                    pre200, _ = _one_arm(r["query"], stub, _WIDER_RRF, rq.FETCH_N)
+                    hit200 = bool(golds & pre200)
+                    if not hit200:
+                        prew, _ = _one_arm(r["query"], stub,
+                                           _WIDER_RRF, _WIDE_FETCH)
+                        hitw = bool(golds & prew)
+            v = classify(hit_post, hit_pre20, hit100, hit200, hitw)
             r["verdicts"].append(v)
             r["detail"].append({"post": len(post), "pre20": len(pre20),
                                 "hit_post": hit_post, "hit_pre20": hit_pre20,
-                                "hit_rrf100": hit100, "hit_wide": hitw})
+                                "hit_rrf100": hit100, "hit_rrf200": hit200,
+                               "hit_wide": hitw})
             if v != "fine":
                 print(f"  [{qid:<7}/{r['category']:<10}] {_labels()[v]}  "
                       f"pool={len(post)} pre20={len(pre20)}")
@@ -243,7 +267,12 @@ def run(args) -> int:
         Path(args.output).write_text(json.dumps(
             {"_meta": {"collection": rq.COLLECTION_NAME, "repeat": args.repeat,
                        "translate": not args.no_translate,
-                       "arms": {"prod": [20, 60], "rrf100": [100, 60], "wide": [200, 300]},
+                       # ⚠ 這裡原本寫死 `"prod": [20, 60]` ⇒ **證據檔會宣稱一個
+                       #   與實跑不符的組態**，而且是永久寫進檔案裡的假話。
+                       "arms": {"prod": [rq.RRF_TOP_N_PRIMARY, rq.FETCH_N],
+                                "rrf100": [_WIDE_RRF, rq.FETCH_N],
+                                "rrf200": [_WIDER_RRF, rq.FETCH_N],
+                                "wide": [_WIDER_RRF, _WIDE_FETCH]},
                        "na": dict(na)},
              "rows": rows}, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"\n[OK] 寫出 {args.output}")
@@ -306,22 +335,32 @@ def _selftest() -> int:
             fail += 1
             print(f"  FAIL  {name}  {note}")
 
-    _a("① 進過 RRF-20 但回傳沒有 → dropped",
-       classify(False, True, False, False) == "dropped")
-    _a("② 不在 RRF-20、RRF=100 進得來 → rrf_seats",
-       classify(False, False, True, False) == "rrf_seats")
-    _a("③ 只有 wide 進得來 → fetch_seats",
-       classify(False, False, False, True) == "fetch_seats")
+    _a("① 進過生產 RRF 名額但回傳沒有 → dropped",
+       classify(False, True, False, False, False) == "dropped")
+    _a("② 不在生產名額、RRF=100 進得來 → rrf_seats",
+       classify(False, False, True, False, False) == "rrf_seats")
+    _a("②深 RRF=200 才進得來、FETCH_N 沒動 → rrf_seats_deep（仍是 RRF 名額）",
+       classify(False, False, False, True, False) == "rrf_seats_deep")
+    _a("③ RRF 放到 200 仍不夠、要 FETCH_N=300 → fetch_seats",
+       classify(False, False, False, False, True) == "fetch_seats")
     _a("④ **誤報對照**：回傳裡有 gold → fine，即使 pre 全 True（那不是召回失敗）",
-       classify(True, True, True, True) == "fine")
-    _a("⑤ **誤報對照**：三個候選集都沒有 → unreachable，不可以塞給 dropped",
-       classify(False, False, False, False) == "unreachable")
+       classify(True, True, True, True, True) == "fine")
+    _a("⑤ **誤報對照**：四個候選集都沒有 → unreachable，不可以塞給 dropped",
+       classify(False, False, False, False, False) == "unreachable")
     _a("⑥ **誤報對照**：`in_post` 優先於一切——池沒滿／pre 沒命中都不影響",
-       classify(True, False, False, False) == "fine")
-    _a("⑦ 四格互斥且窮盡（16 種輸入組合各自落在恰好一格）",
-       len({classify(*[bool(i >> b & 1) for b in range(4)]) for i in range(16)} - set(BUCKETS)) == 0)
+       classify(True, False, False, False, False) == "fine")
+    _a("⑦ 五格互斥且窮盡（32 種輸入組合各自落在恰好一格）",
+       len({classify(*[bool(i >> b & 1) for b in range(5)])
+            for i in range(32)} - set(BUCKETS)) == 0)
     _a("⑧ **誤報對照**：wide 為 True 不會蓋掉更下游的 dropped 判定",
-       classify(False, True, True, True) == "dropped")
+       classify(False, True, True, True, True) == "dropped")
+    # ⚠ **這兩條是 2026-09-11 補的，補的是一個「分不出來卻講得很篤定」的歸因**：
+    #   舊版只有兩條寬臂，於是「RRF 要放到 200」與「prefetch 要更深」一起落進 ③，
+    #   而標籤寫著「prefetch 名額不夠」＝ 指向一個 `docs/EVAL.md` 已否決的旋鈕。
+    _a("⑧b **誤報對照**：RRF=200 進得來時**不可以**算成 ③，那不是 prefetch 的問題",
+       classify(False, False, False, True, True) == "rrf_seats_deep")
+    _a("⑧c **誤報對照**：③ 的成立要件是「RRF 放到 200 仍不夠」，缺這個前提就不是 ③",
+       classify(False, False, True, False, True) == "rrf_seats")
 
     # ── 生產臂不可寫死常數（2026-09-11 加，判別力全在誤報對照）──────────────
     _src = Path(__file__).read_text(encoding="utf-8")
@@ -337,6 +376,10 @@ def _selftest() -> int:
        not prod_arm_is_not_hardcoded("def unrelated(): pass"))
     _a("⑩ 標籤裡不得寫死生產的名額數字（報表會講一個與實跑不符的組態）",
        all("RRF-20" not in v and "RRF-30" not in v for v in _LABEL.values()))
+    _a("⑪ ③ 的標籤必須說出它的前提（RRF 已放到上界），否則會被讀成可單獨調 FETCH_N",
+       str(_WIDER_RRF) in _labels()["fetch_seats"])
+    _a("⑪b **誤報對照**：② 與 ②深 的標籤要分得出來（合併回一格就白補了）",
+       _labels()["rrf_seats"] != _labels()["rrf_seats_deep"])
 
     print(f"\n  PASS {ok}  FAIL {fail}")
     return 1 if fail else 0
