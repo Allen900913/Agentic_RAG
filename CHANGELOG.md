@@ -5,6 +5,48 @@
 
 ## 2026-09-09
 
+### `kb_unfixable` 這條線：我推導錯兩次，現在有量尺了
+
+**背景**：09-08 的判讀是「`kb_unfixable_exit` 兩輪 225 個子問題一次都沒觸發 ⇒ 讓它觸發是
+`forced_pass` 的第一順位」。
+
+**錯誤 ①**：`kb_unfixable` 只在 `_check_sufficiency` 的 `if _live:` ＋ `_classify_staleness`
+改判時設 ＝ **時效**天花板的旗標；而 28 筆 `forced_pass` 的 `missing` **沒有一筆在講時效**，
+全是**內容**（「10-K 沒寫 CUDA 推出年份」「沒有中國市場出貨量」）。**兩件事從頭就不是同一件。**
+⚠ `BACKLOG.md` 第 682 行早就寫著這句話，我仍然重新推導出相反的結論 →
+**下結論前先 grep 自己的 BACKLOG**（同「提實驗前先 `ls experiments/`」）。
+
+**錯誤 ②**：改成「財報題庫上 `realtime_need` 依設計是 `none` ⇒ 結構上不可能觸發」，
+證據是煙霧測試 10/10——**樣本太小**。完整一輪（25 子問題 × 3 輪 × 2 臂 ＝ 150 次判定）：
+`realtime_need` **none 124／days 14／intraday 12**，`kb_unfixable` **True 17 次**，
+全在真正的即時題（`col-09`「蘋果現在市值」、`col-03`「亞馬遜最近跟哪家 AI 公司搭上線」）。
+
+**新增量尺** `eval/probe_kb_content_ceiling.py`（`experiments/kb_ceiling_20260909.json`）：
+兩臂 `prod` vs `wide`（`FETCH_N` 60→180、`RRF_TOP_N_PRIMARY` 20→50、`POOL_RETURN_K` 5→15），
+四格 `prod_sufficient`／`rescued_by_width`／`ceiling_recency`／`ceiling_content`。
+
+| | 結果 |
+|---|---|
+| `forced_pass` 子問題 10 筆 | **`ceiling_content` 8**／`rescued_by_width` 1（`mix-04`）／`prod_sufficient` 1 |
+| 陰性對照 15 筆 | `prod_sufficient` 11／`rescued_by_width` 1／`ceiling_recency` 2／`ceiling_content` 1 |
+| **內容誤殺率** | **0/15**（唯一那筆 `lex-06` 是市值題，只因旗標閃爍才落到內容格） |
+| 旗標穩定性 | 在**凍結的**候選池上，5 個即時子問題有 **4 個**跨輪翻面 |
+
+⇒ **`ceiling_content` 是真正的缺口**（8/10 在 3 倍寬的檢索下仍不足，而系統對它沒有任何旗標），
+且陰性對照顯示做一個內容旗標的**誤殺風險是 0/15**。
+
+⚠ **`kb_unfixable_exit` 在生產是 0，仍未解釋。** 旗標閃爍是最可能的線索但沒有證實——
+今天已在這題上編錯兩次機制，不編第三次。**下一步是觀測不是修法**：把 `realtime_need`／
+`kb_unfixable` 逐輪記進 `exec_stats`。
+
+⚠ **量尺自己也錯一次**：第一版把兩種 ceiling 混成一格，三筆即時題被算成「誤殺 3/15」。
+拆開後是 0/15。`--rescore`（零 LLM 從輸出 JSON 重算判定）就是為此加的——判定規則改了
+不該重燒 45 分鐘的 LLM＋檢索。
+
+⚠ **順帶確認 eval 隔離沒破**：迴圈裡 `eff_route = _next_route` **不會**重新套
+`_effective_route`，所以升級後 `eff_route` 可能是 `"web"`；但 `web_search` 工具第一行就檢查
+`_pkg.ENABLE_WEB_SEARCH` → 回「已停用」。兩個獨立條件各自足夠這件事仍然成立。
+
 ### 兩個觀測通道：降級成因、檢索候選池聯集（只加觀測，行為逐字不變）
 
 **病灶一：降級的成因無處可查。** `run_agentic` 的 `graph.invoke` 崩潰降級只用 `_trace` 印

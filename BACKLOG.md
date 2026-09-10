@@ -845,14 +845,48 @@ refused_tasks = ["從 META 基本面報告中擷取最近十二個月（TTM）�
 | **要算，而系統不算** | ~3 | 「微軟 FY2025 自由現金流」`col-10`（不是報表科目＝OCF−capex）／「Amazon 2025 全年 capex」`lex-10`（只有 Q2/Q3/前九個月） |
 | 其他 | ~1 | `mix-03` 部門別營業利益成長 |
 
-⚠ **這才是這一批最重要的發現**：`kb_unfixable` 這個旗標**整輪 65 題一次都沒有被設起來**，
-  而它存在的理由正是這 14 筆。Grader 明明在 `missing` 裡把「缺什麼」寫得很清楚，
-  卻沒有把它判成「KB 補不了」→ 於是走了三輪改寫、然後 `forced_pass` 硬答。
-  ⇒ **修法的第一順位不是「加揭露句」，是讓 `kb_unfixable` 真的會觸發**——
-  那條路早就接好了（`kb_unfixable_exit` 是**正確行為**，而且另有時效揭露）。
-  ⚠ 這是 `_check_sufficiency` 的**判定品質**問題（LLM 側），要先有 probe 才能量，
-  形狀照 `probe_realtime_need`／`probe_route_classification`（陰性對照不可省：
-  把財報裡明明有的東西判成 `kb_unfixable` ＝ 白白拒答，比現況更糟）。
+~~⚠ **這才是這一批最重要的發現**：`kb_unfixable` 旗標整輪一次都沒被設起來，而它存在的
+理由正是這 14 筆 ⇒ 修法的第一順位是讓它真的會觸發。~~
+
+⚠ **2026-09-09：上面那段撤回，而我在同一天又錯了第二次。兩個錯的版本都留在這裡。**
+
+**錯誤版本 ①（09-08 寫的，上面刪除線那段）**：「旗標從來不觸發 ⇒ 讓它觸發是第一順位」。
+錯在把兩件事當成一件：`kb_unfixable` **只在 `if _live:` ＋ `_classify_staleness` 改判時設**，
+它是**時效**天花板的旗標；而上表 28 筆 `missing` **沒有一筆在講時效**，全在講**內容**
+（「10-K 沒寫 CUDA 推出年份」）。⇒ **讓 `kb_unfixable` 觸發修不到 `forced_pass`。**
+⚠ 這件事本檔第 682 行早就寫著（「`kb_unfixable` 只涵蓋**時效**這一種」）——
+**下結論之前先 grep 自己的 BACKLOG**，與「提實驗前先 `ls experiments/`」是同一條紀律。
+
+**錯誤版本 ②（09-09 稍後寫的）**：「財報題庫上 `realtime_need` 依設計就是 `none`
+⇒ 那個旗標結構性不可能觸發，0 是正確行為」。證據是煙霧測試的 10/10 `none`——
+**樣本太小**。跑完整輪（25 子問題 × 3 輪 × 2 臂 ＝ 150 次 Grader 判定）之後：
+`realtime_need` 是 **none 124／days 14／intraday 12**，`kb_unfixable` **為 True 17 次**。
+⇒ **它確實會觸發**，全在真正的即時／新聞子問題上（`col-09`「蘋果現在市值」、
+`lex-06`「Apple 目前 Market Cap」、`col-03`「亞馬遜最近跟哪家 AI 公司搭上線」、
+`mh-04`、`mix-10`）。
+
+**目前站得住的四件事**（`experiments/kb_ceiling_20260909.json`，25 × 3 輪）：
+
+| | |
+|---|---|
+| `forced_pass` 子問題 10 筆 | `ceiling_content` **8**／`rescued_by_width` 1（`mix-04`）／`prod_sufficient` 1（`sem-04`，Grader 翻面） |
+| **陰性對照 15 筆** | `prod_sufficient` 11／`rescued_by_width` 1／`ceiling_recency` 2／`ceiling_content` **1** |
+| **內容誤殺率** | **0/15**——唯一那筆 `lex-06` 是市值題（時效），只因旗標跨輪閃爍才落到內容格 |
+| **旗標跨輪不穩** | 在**凍結的**候選池上，5 個即時子問題有 **4 個**（`col-09` `lex-06` `mh-04` `mix-10`）的 `kb_unfixable` 跨輪翻面 |
+
+⇒ **`ceiling_content` 是真正的缺口**（8/10 的 forced_pass 子問題在 3 倍寬的檢索下仍不足，
+而系統對這種情況沒有任何旗標），且**陰性對照顯示做一個內容旗標的誤殺風險是 0/15**。
+
+⚠ **`kb_unfixable_exit` 在生產 225 個子問題裡是 0，這件事到現在仍未解釋。**
+  旗標閃爍是最可能的線索（它要在**對的那一輪**亮才會早退），但**沒有證實**——
+  我今天已經在這題上編錯兩次機制，不編第三次。
+  **下一步是觀測不是修法**：把 `realtime_need`／`kb_unfixable` 逐輪記進 `exec_stats`
+  （同 `unit_stats`／`degraded_reason` 的順序：先做出分母）。
+
+⚠ **量尺自己也錯過一次**：第一版把兩種 ceiling 混成一格 `ceiling_candidate`，
+  於是三筆真正的即時題被算進「誤殺率 3/15」——**那是時效旗標正確觸發，不是誤殺**。
+  拆成 `ceiling_recency`／`ceiling_content` 之後真實誤殺是 0/15。
+  ⚠ 這也是為什麼 `--rescore` 存在：判定規則改了不該重燒 45 分鐘的 LLM＋檢索。
 
 **(d) `crashed = 4` 全在 multi_hop——但那一欄分不出成因**
 
@@ -935,7 +969,7 @@ hard filter／跨期 collapse／去重刪掉的。要分的三格：
 |---|---|---|---|
 | `forced_pass`（子問題） | 18/116 ＝ **15.5%** | 10/109 ＝ **9.2%** | **一輪的點估計不可靠** |
 | `forced_pass`（題） | 10 | 7 | **穩定核心 5 題**：`lex-04` `lex-10` `mix-12` `sem-14` `sem-15` |
-| `kb_unfixable_exit` | 0 | **0** | 225 個子問題**一次都沒觸發** |
+| `kb_unfixable_exit` | 0 | **0** | 225 個子問題一次都沒觸發——⚠ **正確行為**，它是**時效**旗標而題庫全是財報題（見上方 (c) 的更正） |
 | `web_budget_exit` | 0 | 0 | `--no-web`，預期 |
 | `crashed` | 4 | 3 | 見下方 ⚠ |
 | `refused_budget` | 2（`mh-03`） | **0** | 155 個 replan round 共 2 次 |
@@ -954,11 +988,10 @@ hard filter／跨期 collapse／去重刪掉的。要分的三格：
    「一致性被重生成破壞」這一型**仍然量不到**。
 3. **`deps_disagreed` 的例外維持。** 兩輪都非 0（2 → 1）＝ Planner 說 `null` 但句子沒主詞
    確實會發生；`deps_pruned` 兩輪 0 ＝ 沒有合法依賴被誤剪。
-4. **`forced_pass` 的第一順位不是揭露句，是 `kb_unfixable`。**
-   兩輪 **225 個子問題裡那個旗標一次都沒被設起來**，而 forced_pass 的 `missing` 有 ~14/18
-   正是「10-K 本來就不會寫這個」。那條路（`kb_unfixable_exit`）**早就接好而且是正確行為**。
-   ⇒ 要做的是量 `_check_sufficiency` 判 `kb_unfixable` 的準度（probe，陰性對照不可省：
-   把財報裡明明有的東西判成補不了 ＝ 白白拒答，比現況更糟），**不是先加警語**。
+4. ~~**`forced_pass` 的第一順位是 `kb_unfixable`。**~~ **2026-09-09 撤回，見上方 (c)。**
+   `kb_unfixable` 是**時效**旗標，在財報題庫上結構性不可能觸發 ⇒ 那個 0 是正確行為。
+   ⇒ 真正的缺口是**內容天花板沒有任何旗標**，而先要量的是「forced_pass 的子問題到底是
+   內容天花板還是沒撈到」＝ `eval/probe_kb_content_ceiling.py`。**仍然不是先加警語。**
 
 **兩個被第二輪推翻的東西（都是我 R1 寫的）**：
 
