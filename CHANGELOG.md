@@ -46,6 +46,75 @@
 而 `#4` 的財年標頭出現在塊**中間** ⇒ 單一 chunk 橫跨兩個財年。修法要重跑 ingest，
 **等下次有正當理由重建時一起做**，別為它寫檢索層特例。
 
+### R4：第四輪分母 ＋ 三個量尺缺陷（兩個是我自己的尺，一個在生產）
+
+`experiments/agentic/gj_65q_r4_20260911.json`（65 題、0 降級、0 子問題崩）。
+
+| 分母 | R1 | R2 | R3 | **R4** |
+|---|---|---|---|---|
+| `forced_pass`（子問題） | 15.5% | 9.2% | 7.5% | **7.4%**（8/108） |
+| `forced_pass`（題） | 10 | 7 | 6 | 7 |
+| `refused_budget` | 2 | 0 | 0 | **0** |
+| `revision` 接受／退回 | 7／0 | 7／0 | 9／1 | **13／0** |
+| `unit` ①／③ | 0／10 | 0／23 | 4／23 | **2／28** |
+| `deps_pruned` | 0 | 0 | 0 | **1** |
+
+**① 「穩定核心」第三次縮水，這個概念不成立。** 四輪都在的只剩 `lex-04`／`mix-12`
+（5 → 3 → **2**）。逐類也再翻一次：R4 的 semantic 是 **0**（R1/R2 各 3、R3 是 1）。
+
+**② `crashed` 的成因第一次查得出來**，而那正是 `degraded_reason` 加進來要做的事：
+10 題 graph 降級 ＋ `mix-03` 兩個子問題崩，全是 `NotFoundError: 404`，連續落在
+`sem-09`~`mix-04` ⇒ **provider 端一段暫時性視窗**（當場另打 `DEFAULT_MODEL` 證實模型仍活，
+3.7s 回 `OK`）。⇒「崩潰依時間叢集不是類別」從共線性推論變成**直接證據**。
+⚠ **但這一格只答對一半**：`_loc` 取 `extract_tb(...)[-1]` ＝ 無條件最深一幀，
+SDK 例外的最深一幀住在 `openai/_base_client.py` ⇒ **仍然沒說是哪個節點炸的**，
+而那正是閘門㉒d 宣稱要解決的事。這次帶資訊的是**例外型別**。修法見 `BACKLOG.md`。
+
+**③ `forced_pass` 的分母被 Grader 誤判污染，R4 獨立複現 R3 的 2/8。**
+最硬的一筆是 `mh-04`：Grader 說「缺少 Alphabet 的 TTM 營業利益率」，而
+`GOOGL_Fundamentals#0` 寫著 `Operating Margin: 36.12%`，那顆 chunk **就在該子問題
+自己的候選池裡**（`retrieved_union` 標 `subq: 3` ＝ forced_pass 的 todo id），
+最終答案引用它、寫出 36.12%、贏家也挑對。⇒ **不是檢索、不是 KB 覆蓋。**
+⚠ 不是全部都是 Grader 的錯：`col-03` subq=1 的池子全是舊年份 10-K，那題是真的池子有問題。
+⇒ 這同時是待決的「`forced_pass` 接成拒答」的**反向證據**。
+
+**④ `deps_pruned` 首次非 0，而且是自我依賴。** `mh-04` 的 Planner 吐了 `id=4 depends_on=4`，
+閘門⑮ 的位置規則 `0 <= depends_on < id` 當場剪掉並留 trace
+⇒ **「無環不需要 Kahn」第一次拿到實地驗證**——Planner 真的會吐自環。
+
+**⑤ 三個量尺缺陷（全部在同一輪的驗收裡冒出來）**
+
+· `repair_degraded_records` **只抓 graph 層** ⇒ 同一次 provider 事件的污染**一半漏網**：
+  `mix-03` 的 `degraded_reason` 缺席，補跑後回報「降級 0 題」而它並不乾淨，
+  接著就在 `check_number_defects` 裡 FAIL。改成**另計、不刪、不併**（閘門⑯ 四種出場不可合併；
+  自動刪會讓系統性的子問題崩潰永遠看不見）。selftest 7 → 12。
+· `check_comparison_claims` 與 `check_number_defects` 的報表帶 `⚠`，
+  Windows 主控台 cp950 ⇒ **印到一半 crash**，而退出碼與「有 FAIL」外觀相同。
+  前者 5/5 全 PASS 卻 crash 收場，後者摘要整段不見。兩支補上 `reconfigure`。
+· `number_claims` 的 `mix-03` **判了一個對的答案 FAIL**：答案寫精確值
+  「63.98 億美元（$6,398 百萬）」，而 `expect_text` 只認四捨五入的 `6.4 billion|64 億`
+  ——而 `check_rounding_fidelity` 正把「捨成約值」當缺陷在量 ⇒ **兩把尺方向相反**。放寬。
+
+修完之後四輪逐條斷言是 **8/8、6/1/1(N/A)、8/8、7/1**，剩下兩個 FAIL 都是 `col-11`
+（答案講 Azure 40%／Intelligent Cloud 29%／Server 31%，**一次都沒提 Microsoft Cloud**；
+`anchored_pct` 單獨會放行，是金額判準 `$54.5 billion` 攔下來的）＝ 4 輪 2 次觸發。
+
+### `lex-04` 的 gold 指向兩顆附件索引——三支尺一起把答對的題目報成檢索缺陷
+
+`NVDA_10K_2026.html` 有 5 顆 chunk 含「2006」，而 literal 是**裸年份 `2006`**
+⇒ `resolved_snapshot` 收到 **#16／#206**，那兩顆是**附件索引**
+（`Form of Indemnity Agreement … 8-K 10.1 3/7/2006`），#41 是 CFO 的經歷；
+真正答這題的 **#20**（`With our introduction of CUDA in 2006, we opened …`）
+與接續塊 **#21** 一顆都沒收。⇒ `probe_chunk_gold_recall` 的召回失敗、
+`probe_recall_layer_attribution` 的 ③、`probe_gold_funnel` 的 ③ **三支尺一起誤報**。
+
+改用 `"2006, we opened"`（#20/#21 都含，附件索引與 CFO 經歷都不含），
+`--check` 從 1 題漂移回 0、gold 維持 95 顆，漏斗的 ③ 5 題 → **4 題**。
+掃過所有 literal 找同形狀的：**沒有第二個裸年份**。
+⚠ 舊的 `verified` 註記**自己就點名它是「唯一存活的年份型 literal」然後論證它安全**
+（「兩個數值門檻自己濾掉了日曆年份」）——那句話對這個 literal 本身不成立，它就是一個日曆年份。
+**風險被正確識別，然後被放行了。**
+
 ### E3a：改完 gold 重量檢索——32% → 19.5%，但只有 2 題是真的修好了
 
 `experiments/cgr_rrf30_goldfix_20260911.json`（41 題 × 3 輪，RRF=30 ＋ 修過的 gold）：

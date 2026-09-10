@@ -1126,7 +1126,7 @@ hard filter／跨期 collapse／去重刪掉的。要分的三格：
 | `forced_pass`（題） | 10 | 7 | 6 | ⚠ ~~穩定核心 5 題~~ → **三輪都在的只有 3 題**：`lex-04` `mix-12` `sem-14`（`lex-10`／`sem-15` R3 不觸發），且 R3 新冒出 `mh-01`／`mh-05` |
 | `kb_unfixable_exit` | 0 | 0 | **0** | 332 個子問題一次都沒觸發——⚠ **2026-09-10 解釋清楚：三輪都跑在 `snapshot`，而那兩個欄位算在 `if _live:` 裡面 ⇒ 恆為 0 是定義不是觀察**（閘門⑰）。見上方 (c) 的錯誤版本 ③ |
 | `web_budget_exit` | 0 | 0 | 0 | `--no-web`，預期 |
-| `crashed` | 4 | 3 | **1**（`mh-02`） | 見下方 ⚠。R3 **一次 repair 就 0 降級**（R2 要三輪） |
+| `crashed` | 4 | 3 | **1**（`mh-02`） | 見下方 ⚠。R3 **一次 repair 就 0 降級**（R2 要三輪）。**R4（09-11）：10 題 graph 降級 ＋ `mix-03` 兩個子問題崩，成因逐筆是 `NotFoundError: 404`、連續落在 `sem-09`~`mix-04` ＝ provider 端暫時性視窗**（另打 `DEFAULT_MODEL` 證實模型仍活）⇒「時間叢集」從推論變直接證據。⚠ `repair_degraded_records` 原本只抓 graph 層，`mix-03` 漏網並污染了 `check_number_defects` ⇒ 09-11 加了子問題層另計 |
 | `refused_budget` | 2（`mh-03`） | 0 | **0** | 230 個 replan round 共 2 次 |
 | `deps_disagreed` | 2（`mh-03`） | 1（`mh-04`） | 2（`mh-03` `mh-05`） | 三輪都非 0 |
 | `deps_pruned` | 0 | 0 | 0 | 三輪 0 |
