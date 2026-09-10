@@ -18,12 +18,14 @@ repo 自己的規則（**跨 2026-09-04 的分數一律不可比**、**跨輪比
 | 高 | 低 | **排序**問題 | rerank／`RRF_TOP_N_PRIMARY`／`_fair_select` |
 | 低 | 低 | **召回**問題 | 召回層（HyDE 這類「換一個查詢向量」的機制才在這一格有意義） |
 
-⚠ **`@20` 實際上就是「整個候選池」，不是「一個大排序的前 20 名」**：`RRF_TOP_N_PRIMARY = 20`
-——server-side RRF 只回 20 個候選，rerank 只是把這 20 個重排（實測去重與 hard filter 之後更小，
-`mh-01` 只有 12）。所以本檔印出 `pool` 的中位數，**判讀時先看它**：pool 若已 < 20，
-「@20 進不來」就等於「**RRF 那 20 個名額裡根本沒有它**」＝ 召回層的問題，而那同時指向
-`RRF_TOP_N_PRIMARY` 這個常數本身（它上一次 sweep 是在舊 collection 上做的）。
-**不要把「@20 進不來」直接讀成「embedding 不行」——先問名額夠不夠。**
+⚠ **`@k` 在 k 接近候選池上限時就是「整個候選池」，不是「一個大排序的前 k 名」**：
+server-side RRF 只回 `RRF_TOP_N_PRIMARY` 個候選，rerank 只是把它們重排（實測去重與
+hard filter 之後更小）。所以本檔印出 `pool` 的中位數，**判讀時先看它**：pool 若已 < k，
+「@k 進不來」就等於「**RRF 的名額裡根本沒有它**」＝ 召回層的問題。
+**不要把「@k 進不來」直接讀成「embedding 不行」——先問名額夠不夠。**
+⚠ **這條懷疑 2026-09-10 已經被 sweep 證實並修掉**：`RRF_TOP_N_PRIMARY` 20 → 30
+救回 3 題、退步 0 題（見 `rag_query.py` 該常數上方的證據表）。所以**現在的 baseline
+是 30**，本檔預設的 `--k 5 20` 之下 `@20` 不再等於整個候選池——判讀時更要看 `pool`。
 
 ⚠ **這兩格對應完全不同的修法，合併成一個 recall 數字就分不出來了。** `BACKLOG.md` 記著
 `col-05`／`col-08` 的 dense rank 是 **25／106**（＝下面那一列），而 `col-04` 的關鍵內容
@@ -143,14 +145,17 @@ def _report(rows: dict, ks: tuple[int, ...], n_rounds: int, label: str,
     print(f"\n  ⚠ N/A {n_na} 題**不是 PASS 也不是 FAIL**：`chunk_gold` 只涵蓋 41/65，"
           f"那是上限不是缺陷（定性題沒有可定位的數值答案）。")
 
-    # ⚠ 這一段是**量尺自己的效度檢查**，不是裝飾：`RRF_TOP_N_PRIMARY = 20` 表示候選池上限
-    #   就是 20，所以 `@20` 量到的其實是「有沒有進候選池」。池若比 @k 還小，那一欄的
+    # ⚠ 這一段是**量尺自己的效度檢查**，不是裝飾：候選池的上限就是 `RRF_TOP_N_PRIMARY`，
+    #   所以 `@k` 在 k >= 該上限時量到的其實是「有沒有進候選池」。池若比 @k 還小，那一欄的
     #   語意就從「排名」變成「進不進得來」——不講清楚會把「名額不夠」誤讀成「embedding 不行」。
+    # ⚠ **上限一定要從 `rq` 讀，不可以寫死**：2026-09-10 把常數從 20 調到 30 時，
+    #   這一行原本印的是寫死的「上限 20」——量尺會開始說謊，而那種謊看起來完全正常。
     pools = sorted(n for r in rows.values() for n in (r.get("pool") or []))
     if pools:
         med = pools[len(pools) // 2]
+        import rag_query as _rq
         print(f"\n  候選池大小：中位 {med}、最小 {pools[0]}、最大 {pools[-1]}"
-              f"（RRF_TOP_N_PRIMARY 上限 20）")
+              f"（RRF_TOP_N_PRIMARY 上限 {_rq.RRF_TOP_N_PRIMARY}）")
         if med < max(ks):
             print(f"  ⚠ **中位池 {med} < @{max(ks)}**：那一欄實際量的是「有沒有進候選池」，"
                   f"不是「排在前 {max(ks)} 名」。\n"

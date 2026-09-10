@@ -5,6 +5,37 @@
 
 ## 2026-09-10
 
+### `RRF_TOP_N_PRIMARY` 20 → 30（生產組態變更）
+
+依上一條的 sweep 證據改的。**同一次把三處會因此說謊的敘述一起改**：
+
+1. `rag_query.py` 該常數上方換成完整證據表（三臂的秒數／`gold@5`／`gold@20`），
+   並明寫「**不要再往上調到 50**」與舊註解「sweep 顯示 20 > 40」作廢的理由
+   （舊 collection，跨 collection 不可比）。**舊句子沒有被靜默刪掉**——
+   留著是為了讓讀過舊結論的人知道它去哪了。
+2. `agentic_rag_version/retrieval.py` 的 `_fetch_fundamentals_with_field` docstring：
+   那段推論裡「`RRF_TOP_N_PRIMARY` 碼上註明 sweep 過 20 > 40，不該為一題去動它」
+   的前提沒了。⚠ **但那條保底仍然要留**：它修的是「該公司有沒有含被問欄位的
+   Fundamentals」這個**確定性**問題，而調名額只是讓 `lex-17` **這次剛好**進得來；
+   且它的觸發條件是「selected 裡沒有」⇒ 池裡有了就不觸發，留著的成本是 0。
+3. `eval/probe_chunk_gold_recall.py` 原本把「（RRF_TOP_N_PRIMARY 上限 20）」
+   **寫死在輸出字串裡** ⇒ 改常數的那一刻量尺就會開始說謊，而**那種謊看起來完全正常**。
+   改成從 `rq` 讀。⚠ 這是「量尺與被測物耦合」的另一種形狀：不是讀錯欄位，
+   是把被測物的組態抄成了字面常數。
+
+⚠ **`eval/probe_kb_content_ceiling.py` 的 `_WIDE` 是絕對值**（`RRF_TOP_N_PRIMARY: 50`）
+⇒ 寬臂相對生產的倍率從 2.5× 變成 1.67×，而 `experiments/kb_ceiling_20260909.json`
+是在生產＝20 時量的。**舊結果的「3 倍寬的檢索仍不足」對新基準不再逐字成立**，
+要重新宣稱得重跑。已在該檔標註。
+
+驗收：四道閘門 339／256／85／17 全 PASS；`probe_chunk_gold_recall --selftest` 12 項、
+`probe_kb_content_ceiling --selftest` 14 項全過；生產預設下實跑 `lex-17` rank 1、
+`mix-14` rank 4、池中位 30。
+
+⚠ **既有 replay fixture 會出現合法 miss**：`check` 的快取 key 含「這次實際看到的候選 id」，
+候選集變了就是合法 miss——那正是被測改動造成的差異，不該用舊決策蓋掉。
+⚠ **既有的 RAGAS 聚合值與 chunk 層基準都是 20 時代量的**，跨這次變更不可直接比。
+
 ### `RRF_TOP_N_PRIMARY` 全量 sweep：30 買得到全部收益，50 是純浪費
 
 `experiments/cgr_rrf_baseline20_20260910.json`／`cgr_rrf30_20260910.json`／

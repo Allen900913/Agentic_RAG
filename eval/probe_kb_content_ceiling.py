@@ -117,6 +117,12 @@ def classify(prod_ok: bool, wide_ok: bool, recency_flag: bool = False) -> str:
 # ⚠ **刻意不動 `RERANK_INPUT_N`**：它管的是「重排幾顆」不是「召回幾顆」，而 cross-encoder
 #   在這台機器上是 CPU 的成本主宰——實測 `RERANK_INPUT_N=150` 讓單次檢索從 33s 變 46s，
 #   而它對「KB 裡到底有沒有」這個問題**不增加任何新資訊**（那 100 顆本來就在池子裡）。
+# ⚠ **這是絕對值，不是「生產的 N 倍」**：2026-09-10 生產的 `RRF_TOP_N_PRIMARY`
+#   由 20 改成 30 ⇒ 寬臂相對生產的倍率從 2.5× 變成 1.67×，而
+#   `experiments/kb_ceiling_20260909.json` 是在生產＝20 時量的。
+#   ⇒ **舊結果的「3 倍寬的檢索仍不足」對新的生產基準不再逐字成立**；
+#     要重新宣稱那件事得重跑。（`FETCH_N` 那一格 2026-09-10 已證實對
+#     `rq.retrieve()` 的回傳零效果，見 `docs/EVAL.md` 已試無效總表。）
 _WIDE = {"FETCH_N": 180, "RRF_TOP_N_PRIMARY": 50}
 _WIDE_POOL_RETURN_K = 15
 

@@ -565,13 +565,22 @@ def _fetch_fundamentals_with_field(ticker: str, fields: list[str], task: str) ->
 
     ⚠ **為什麼保底不能只掃池**（2026-08-21 實測，這是 lex-17 的第二層真因）：
       `_ensure_ratio_source_coverage` 原本只在 `run_state.pool` 裡找，而 pool ＝ Qdrant
-      server-side RRF 回傳的 `RRF_TOP_N_PRIMARY`(=20) 個候選。實測「Microsoft 的營收成長率
+      server-side RRF 回傳的 `RRF_TOP_N_PRIMARY` 個候選（當時 20，2026-09-10 起 30）。
+      實測「Microsoft 的營收成長率
       表現如何」在生產組態（`full_translate_en=True`，英譯句
       "How is Microsoft's revenue growth rate performing?"）下，**`MSFT_Fundamentals #0`
       連候選名單都沒進**（進來的是零比率的 #1，rank 5）。也就是說：名字叫「保底」，
       實作卻是「希望它剛好在池裡」——池裡沒有的時候，它什麼也做不到。
-      （中文原句反而撈得到 #0，rank 7。這不是 recall 調參能一勞永逸的方向，
-       且 `RRF_TOP_N_PRIMARY` 碼上註明 sweep 過 20 > 40，不該為一題去動它。）
+      （中文原句反而撈得到 #0，rank 7。這不是 recall 調參能一勞永逸的方向。）
+    ⚠ **2026-09-10 更新，但這條保底仍然要留**：`RRF_TOP_N_PRIMARY` 20 → 30 之後
+      `lex-17` 的 gold **確實進得了候選池**（@5 0/3 → 3/3），所以「池裡沒有」這個
+      前提對這一題已經不成立。**不要因此把保底拿掉**——理由有兩個：
+      ① 保底修的是「該公司有沒有含被問欄位的 Fundamentals」這個**確定性**問題，
+         而調名額只是讓它**這次剛好**進得來，換個措辭或換個 collection 就未必；
+      ② 它的觸發條件是「selected 裡沒有含該欄位的 Fundamentals」，池裡有了就不會觸發
+         ⇒ 留著的成本是 0，拿掉的代價是回到「希望它剛好在池裡」。
+      （舊註解說「碼上註明 sweep 過 20 > 40，不該為一題去動它」——那個 sweep 是舊
+       collection 上做的，已於 2026-09-10 在 multiyear 上重量並作廢。）
 
     所以補撈走**確定性查詢**而不是相似度：「這家公司的哪個 Fundamentals chunk 含
     Revenue Growth 欄位」有唯一正確答案 → 照 CLAUDE.md〈LLM 與 Python 的分工〉交給 Python。

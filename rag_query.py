@@ -52,7 +52,24 @@ SPARSE_VECTOR_NAME = "sparse"
 
 DEFAULT_TOP_K      = 5
 FETCH_N            = 60   # 每路 prefetch 取多少候選送進 server-side RRF（寬召回，Qdrant 取 60/30 幾乎同速）
-RRF_TOP_N_PRIMARY  = 20   # server-side RRF 回傳候選數；sweep 顯示 20 > 40（reranker 信噪比最佳）
+RRF_TOP_N_PRIMARY  = 30   # server-side RRF 回傳候選數。
+# ⚠ 2026-09-10 由 20 改成 30。證據：`experiments/cgr_rrf_baseline20_20260910.json`／
+#   `cgr_rrf30_20260910.json`／`cgr_rrf50_20260910.json`（41 題 × 3 輪 × 三臂，
+#   chunk 層 gold，掛 replay cache 釘死英譯）：
+#       RRF=20  28.8s/次   gold@5 0.683  gold@20 0.780
+#       RRF=30  41.9s(+46%) gold@5 0.732  gold@20 0.829   ← 現行
+#       RRF=50  67.8s(+135%) gold@5 0.732  gold@20 0.829
+#   改善 3 題（`lex-17`／`mix-14` 進 @5，`sem-03` 進 @20）、**退步 0 題**、跨輪不穩定 0 題。
+# ⚠ **不要再往上調到 50**：逐題 k/n 與 30 逐字相同（第 31~50 名沒有一個含 gold），
+#   而 `RERANK_INPUT_N = 50` 是 cross-encoder 的輸入上限 ⇒ 多出來的候選全部要重排，
+#   時間翻到 +135% 卻一題都沒多買。已進 `docs/EVAL.md` 的〈已試無效總表〉。
+# ⚠ **舊註解「sweep 顯示 20 > 40（reranker 信噪比最佳）」已作廢**：那是在**舊 collection**
+#   上量的，照 CLAUDE.md「跨 collection 的分數不可比」的規則不能拿來擋這次的量測。
+#   留這句在這裡是為了讓讀到舊結論的人知道它去哪了，不是要兩句並存。
+# ⚠ **代價落在使用者的等待時間上**：單管線每次查詢 28.8s → 41.9s，而 agentic
+#   **每個子問題各跑一次完整 `retrieve()`** ⇒ 會被子問題數乘上去。要再調之前先量那一邊。
+# ⚠ **收益量的是檢索不是答案**：`chunk_gold` 是聯集、偏大 ⇒ 這是上界；
+#   「修了答案會不會變好」目前仍然沒有量尺（見 `BACKLOG.md`）。
 VARIANT_CAP        = 8    # 每個變體只注入 top-N（sweep 顯示 8 > 5 > 3/15）
 RERANK_INPUT_N     = 50   # cross-encoder reranker 輸入上限（成本天花板）
 RERANK_MAX_LENGTH  = 2048 # cross-encoder 每筆輸入截斷 token 數；預設(未設定時)是 8192 等於不截斷。
