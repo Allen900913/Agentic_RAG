@@ -1,0 +1,549 @@
+{
+  "_meta": {
+    "results": "experiments/agentic/gj_65q_r4_20260911.json",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "na": {
+      "semantic": [
+        "sem-02",
+        "sem-06",
+        "sem-07",
+        "sem-08",
+        "sem-10",
+        "sem-11",
+        "sem-12",
+        "sem-13",
+        "sem-14",
+        "sem-15"
+      ],
+      "mixed": [
+        "mix-06",
+        "mix-10",
+        "mix-11",
+        "mix-13",
+        "mix-01"
+      ],
+      "lexical": [
+        "lex-05",
+        "lex-15"
+      ],
+      "colloquial": [
+        "col-02",
+        "col-04",
+        "col-05",
+        "col-06",
+        "col-07",
+        "col-11",
+        "col-12"
+      ]
+    }
+  },
+  "rows": {
+    "sem-01": {
+      "category": "semantic",
+      "verdict": "not_retrieved",
+      "n_gold": 2,
+      "n_sources": 5,
+      "n_cited": 1,
+      "n_union": 16,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "sem-03": {
+      "category": "semantic",
+      "verdict": "dropped_by_grader",
+      "n_gold": 2,
+      "n_sources": 3,
+      "n_cited": 2,
+      "n_union": 16,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "sem-04": {
+      "category": "semantic",
+      "verdict": "not_retrieved",
+      "n_gold": 2,
+      "n_sources": 2,
+      "n_cited": 2,
+      "n_union": 14,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "sem-05": {
+      "category": "semantic",
+      "verdict": "not_retrieved",
+      "n_gold": 2,
+      "n_sources": 5,
+      "n_cited": 5,
+      "n_union": 13,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mix-05": {
+      "category": "mixed",
+      "verdict": "used",
+      "n_gold": 3,
+      "n_sources": 2,
+      "n_cited": 1,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mix-07": {
+      "category": "mixed",
+      "verdict": "used",
+      "n_gold": 4,
+      "n_sources": 10,
+      "n_cited": 2,
+      "n_union": 60,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mix-08": {
+      "category": "mixed",
+      "verdict": "dropped_by_grader",
+      "n_gold": 3,
+      "n_sources": 6,
+      "n_cited": 2,
+      "n_union": 32,
+      "stages": 3,
+      "union_superset_ok": false,
+      "out_of_union": [
+        [
+          "META_Fundamentals_20260612.txt",
+          "0"
+        ]
+      ],
+      "semicolon_recovered": 0
+    },
+    "mix-09": {
+      "category": "mixed",
+      "verdict": "used",
+      "n_gold": 3,
+      "n_sources": 3,
+      "n_cited": 1,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": false,
+      "out_of_union": [
+        [
+          "AAPL_Fundamentals_20260612.txt",
+          "0"
+        ]
+      ],
+      "semicolon_recovered": 0
+    },
+    "mix-12": {
+      "category": "mixed",
+      "verdict": "dropped_by_grader",
+      "n_gold": 3,
+      "n_sources": 6,
+      "n_cited": 2,
+      "n_union": 63,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mix-14": {
+      "category": "mixed",
+      "verdict": "used",
+      "n_gold": 2,
+      "n_sources": 5,
+      "n_cited": 2,
+      "n_union": 45,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mix-15": {
+      "category": "mixed",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 1,
+      "n_cited": 1,
+      "n_union": 33,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-01": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 1,
+      "n_cited": 1,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-02": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 1,
+      "n_cited": 1,
+      "n_union": 22,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-03": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 5,
+      "n_sources": 3,
+      "n_cited": 2,
+      "n_union": 22,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-04": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 2,
+      "n_sources": 3,
+      "n_cited": 2,
+      "n_union": 26,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-06": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 1,
+      "n_cited": 1,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-07": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 4,
+      "n_sources": 2,
+      "n_cited": 2,
+      "n_union": 22,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-08": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 1,
+      "n_cited": 1,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-09": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 3,
+      "n_cited": 2,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-10": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 2,
+      "n_sources": 4,
+      "n_cited": 3,
+      "n_union": 47,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-11": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 1,
+      "n_cited": 1,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-12": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 4,
+      "n_sources": 5,
+      "n_cited": 5,
+      "n_union": 22,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-13": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 1,
+      "n_cited": 1,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-14": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 6,
+      "n_sources": 5,
+      "n_cited": 2,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-16": {
+      "category": "lexical",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 3,
+      "n_cited": 3,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "lex-17": {
+      "category": "lexical",
+      "verdict": "used_via_backstop",
+      "n_gold": 1,
+      "n_sources": 4,
+      "n_cited": 4,
+      "n_union": 15,
+      "stages": 3,
+      "union_superset_ok": false,
+      "out_of_union": [
+        [
+          "MSFT_Fundamentals_20260612.txt",
+          "0"
+        ]
+      ],
+      "semicolon_recovered": 0
+    },
+    "col-01": {
+      "category": "colloquial",
+      "verdict": "not_retrieved",
+      "n_gold": 2,
+      "n_sources": 5,
+      "n_cited": 4,
+      "n_union": 14,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "col-03": {
+      "category": "colloquial",
+      "verdict": "used",
+      "n_gold": 4,
+      "n_sources": 7,
+      "n_cited": 2,
+      "n_union": 74,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "col-08": {
+      "category": "colloquial",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 1,
+      "n_cited": 1,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "col-09": {
+      "category": "colloquial",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 1,
+      "n_cited": 1,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "col-10": {
+      "category": "colloquial",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 1,
+      "n_cited": 1,
+      "n_union": 15,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "col-13": {
+      "category": "colloquial",
+      "verdict": "used",
+      "n_gold": 3,
+      "n_sources": 2,
+      "n_cited": 1,
+      "n_union": 30,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mh-01": {
+      "category": "multi_hop",
+      "verdict": "used",
+      "n_gold": 4,
+      "n_sources": 5,
+      "n_cited": 4,
+      "n_union": 33,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 3
+    },
+    "mh-02": {
+      "category": "multi_hop",
+      "verdict": "used",
+      "n_gold": 3,
+      "n_sources": 3,
+      "n_cited": 3,
+      "n_union": 37,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mh-03": {
+      "category": "multi_hop",
+      "verdict": "used",
+      "n_gold": 3,
+      "n_sources": 6,
+      "n_cited": 3,
+      "n_union": 57,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mh-04": {
+      "category": "multi_hop",
+      "verdict": "used",
+      "n_gold": 3,
+      "n_sources": 4,
+      "n_cited": 3,
+      "n_union": 130,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mh-05": {
+      "category": "multi_hop",
+      "verdict": "used",
+      "n_gold": 3,
+      "n_sources": 5,
+      "n_cited": 3,
+      "n_union": 147,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "sem-09": {
+      "category": "semantic",
+      "verdict": "dropped_by_grader",
+      "n_gold": 3,
+      "n_sources": 5,
+      "n_cited": 3,
+      "n_union": 16,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mix-02": {
+      "category": "mixed",
+      "verdict": "used",
+      "n_gold": 1,
+      "n_sources": 4,
+      "n_cited": 3,
+      "n_union": 32,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mix-04": {
+      "category": "mixed",
+      "verdict": "used",
+      "n_gold": 3,
+      "n_sources": 3,
+      "n_cited": 1,
+      "n_union": 35,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    },
+    "mix-03": {
+      "category": "mixed",
+      "verdict": "dropped_by_grader",
+      "n_gold": 1,
+      "n_sources": 4,
+      "n_cited": 4,
+      "n_union": 43,
+      "stages": 3,
+      "union_superset_ok": true,
+      "out_of_union": [],
+      "semicolon_recovered": 0
+    }
+  }
+}
