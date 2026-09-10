@@ -49,6 +49,12 @@ rq.retrieve() → run_state.pool → Grader 的 relevant_ids 圈選 → [:COMMIT
 ⚠ **`retrieved_union` 也不等於 `probe_chunk_gold_recall` 的 `@20`**：前者是**跨子問題的
   聯集**（實測單題可達 78 顆），後者是**單一 query 的候選池**。並排比較會把
   「拆解出更多 query」誤讀成「檢索變好了」。
+⚠ **進入答案有兩條入口，`retrieved_union` 只涵蓋第一條**（2026-09-10 實跑抓到）：
+  `_ensure_ratio_source_coverage` 的 `_fetch_fundamentals_with_field` 直接打 Qdrant，
+  繞過 `run_state.pool` ⇒ **`sources ⊆ retrieved_union` 不是不變量**（本檔第一版把它
+  寫成不變量，於是 `lex-17`「保底救回了檢索漏掉的 gold」這個**成功**被報成資料錯）。
+  第二條入口進來的 gold 記在 `used_via_backstop`，**不可**併進 `used`（那會讓
+  「檢索漏了」看不見）也**不可**併進 `cited_not_retrieved`（那會稀釋真正的資料錯）。
 ⚠ **gold 是聯集、偏大**（`chunk_gold.json` 的消費語意）→ 兩段都只會**高估**。
 ⚠ **引用解析一律用生產的 `_extract_citations`**，不自己寫一份 regex：
   自己寫一份 ＝ 量尺量的是我寫的那個解析器，不是系統實際認得的引用格式
@@ -126,11 +132,21 @@ def classify3(in_union: bool, in_sources: bool, in_cited: bool) -> str:
       在 `retrieved_union` 之前這一格結構性量不到（見檔頭）。
     ⚠ **不可以把 `dropped_by_grader` 併進 `not_retrieved`**：兩者的修法在不同層，
       合併就等於把「圈選太兇」誤診成「檢索撈不到」——正是本 repo 一再犯的那種歸因錯。
-    ⚠ 順序刻意先問 `in_cited`：引用了卻不在候選池是**資料不一致**（另一種病），
-      要單獨標出來，不可以因為它同時也「不在 sources」就落進別格。
+    ⚠ 順序刻意先問 `in_cited`：引用了卻不在候選池是另一種東西，要單獨標出來，
+      不可以因為它同時也「不在 sources」就落進別格。
+    ⚠ **`retrieved_union` 不是「進入答案」的唯一入口，這一格 2026-09-10 才被實跑抓到。**
+      `_ensure_ratio_source_coverage` 最後一段是**確定性補撈**
+      （`_fetch_fundamentals_with_field` 直接打 Qdrant），完全繞過 `run_state.pool`
+      ⇒ **`sources ⊆ retrieved_union` 不是不變量**。實測 `lex-17` 的 gold
+      （`MSFT_Fundamentals_20260612.txt#0`）**從來沒進過候選池**，是保底撈回來的。
+      · `in_sources` 為真 ⇒ `used_via_backstop` ＝ **保底正確地救回了檢索漏掉的 gold**。
+        少了這一格，一次成功會被報成「資料不一致」，而且那題本來會落進 `not_retrieved`
+        ＝ 把「檢索沒撈到但系統救回來了」誤讀成「檢索沒撈到」。
+      · `in_sources` 為假 ⇒ `cited_not_retrieved` ＝ 引用了一顆兩條入口都沒有的 chunk，
+        **那才是真的資料不一致**。兩者不可合併。
     """
     if in_cited and not in_union:
-        return "cited_not_retrieved"
+        return "used_via_backstop" if in_sources else "cited_not_retrieved"
     if in_cited:
         return "used"
     if in_sources:
@@ -184,9 +200,12 @@ def run(args) -> int:
                      "n_sources": len(srcs), "n_cited": len(cited),
                      "n_union": None if uni is None else len(uni),
                      "stages": 2 if uni is None else 3,
-                     # 結構不變量：`sources` 是 `retrieved_union` 的下游 ⇒ 必為子集。
-                     # 破了就是資料錯（或這兩格來自不同次跑），要當場看得見。
+                     # ⚠ **這裡原本寫著「結構不變量：sources ⊆ retrieved_union」，那是錯的**
+                     #   （2026-09-10 實跑抓到）。`_ensure_ratio_source_coverage` 的確定性
+                     #   補撈是**第二條入口**，繞過 `run_state.pool` ⇒ 差集是預期會有的。
+                     #   欄位保留（它是事實），但判讀改成「差集能不能由已知入口解釋」。
                      "union_superset_ok": None if uni is None else srcs <= uni,
+                     "out_of_union": None if uni is None else sorted(srcs - uni),
                      "semicolon_recovered": recovered}
 
     _report(rows, na)
@@ -206,10 +225,25 @@ _LABEL = {
     "dropped_by_grader":   "② **撈到了但被 Grader 圈選／COMMIT_TOP_K 丟掉** ← 修檢索也無效，"
                            "該修的是圈選或名額",
     "not_retrieved":       "③ 檢索根本沒撈到 ← 只有這一格修檢索才有用",
-    "cited_not_retrieved": "⚠ 引用了沒撈過的 chunk（資料不一致，另一種病）",
+    "used_via_backstop":   "④ **gold 沒進候選池，但被 ratio 保底補撈回來且引用了** ← "
+                           "檢索漏了、系統救回來（不是缺陷，也**不可**併進①）",
+    "cited_not_retrieved": "⚠ 引用了兩條入口都沒有的 chunk（**真的**資料不一致）",
 }
 _ORDER = ("used", "retrieved_unused", "dropped_by_grader", "not_retrieved",
-          "cited_not_retrieved")
+          "used_via_backstop", "cited_not_retrieved")
+
+
+def _looks_like_ratio_backstop(key) -> bool:
+    """這顆 chunk 像不像 `_ensure_ratio_source_coverage` 補撈進來的。
+
+    ⚠ **判準是抄寫生產的**（`retrieval.py` 的 `is_fund` ＝ source 檔名含 `Fundamentals`）
+      ——改那一行務必同步改這裡，同閘門① `_gate()` 的約定。
+    ⚠ 這**不是**在判斷「這顆對不對」，只是在分辨「它從哪條入口進來」。
+      判錯的方向不對稱：把未知來源誤判成已知入口 ＝ **把真的資料錯藏起來**，
+      所以判準刻意收窄成大小寫敏感的檔名比對，不做任何模糊匹配。
+    """
+    src = key[0] if isinstance(key, (tuple, list)) else key
+    return "Fundamentals" in str(src)
 
 
 def _report(rows: dict, na: dict) -> None:
@@ -240,8 +274,13 @@ def _report(rows: dict, na: dict) -> None:
                        ("used", "retrieved_unused", "dropped_by_grader"))
             gen3 = sum(1 for r in g3.values() if r["verdict"] in ("used", "retrieved_unused"))
             u3 = sum(1 for r in g3.values() if r["verdict"] == "used")
+            # ⚠ `used_via_backstop` **不屬於這三段的任何一段**（檢索沒撈到，卻被引用）
+            #   → 三欄會加不起來。靜靜地把它漏掉會讓人讀成「那題的 gold 沒被用」，
+            #   所以在同一行標出來，不併進任何一欄。
+            bk3 = sum(1 for r in g3.values() if r["verdict"] == "used_via_backstop")
             parts.append(f"[三段] 撈到 {got3}/{len(g3)} → 進 Generator {gen3}/{len(g3)}"
-                         f" → 引用 {u3}/{len(g3)}")
+                         f" → 引用 {u3}/{len(g3)}"
+                         + (f"（另 +{bk3} 題靠 ratio 保底補撈，不計入這三欄）" if bk3 else ""))
         if g2:
             got2 = sum(1 for r in g2.values() if r["verdict"] in ("used", "retrieved_unused"))
             u2 = sum(1 for r in g2.values() if r["verdict"] == "used")
@@ -262,10 +301,24 @@ def _report(rows: dict, na: dict) -> None:
               "\n    手上卻沒引用」＝ 結構性接近恆為 0，**不是健康證明**。見檔頭。")
     if n2 and n3:
         print("  ⚠ **這兩群不可合併**：③ 在兩群裡是兩個不同的東西。")
+    # ⚠ **這一段原本斷言 `sources ⊆ retrieved_union` 是不變量，而那個前提是錯的**
+    #   （2026-09-10 實跑當場報 FAIL，照「稽核回報 FAIL 先問是不是量尺錯」查出來的）。
+    #   `_ensure_ratio_source_coverage` 的確定性補撈是**第二條入口**。
+    #   所以現在問的不是「有沒有差集」，而是「差集能不能由那條已知入口解釋」。
     bad = [q for q, r in rows.items() if r.get("union_superset_ok") is False]
     if bad:
-        print(f"  ✗ **結構不變量破了**：{len(bad)} 題的 `sources` 不是 `retrieved_union` 的子集"
-              f"\n    （{' '.join(sorted(bad))}）——兩格來自不同次跑，或資料錯。先查這個。")
+        unexplained = {q: [k for k in (rows[q].get("out_of_union") or [])
+                           if not _looks_like_ratio_backstop(k)] for q in bad}
+        n_ex = sum(len(rows[q].get("out_of_union") or []) for q in bad)
+        n_un = sum(len(v) for v in unexplained.values())
+        print("  \u26a0 %d 題的 `sources` 帶著 `retrieved_union` 以外的 chunk（共 %d 顆）"
+              % (len(bad), n_ex))
+        print("    ——**這是預期的，不是資料錯**：`_ensure_ratio_source_coverage` 的確定性"
+              "補撈繞過候選池，是第二條入口（%s）。" % " ".join(sorted(bad)))
+        if n_un:
+            ids = sorted(q for q, v in unexplained.items() if v)
+            print("  \u2717 **其中 %d 顆無法由那條入口解釋**（%s）" % (n_un, " ".join(ids)))
+            print("    ——那才是要查的：兩格來自不同次跑，或資料錯。")
     rec_n = sum(r.get("semicolon_recovered", 0) for r in rows.values())
     if rec_n:
         ids = sorted(q for q, r in rows.items() if r.get("semicolon_recovered"))
@@ -304,14 +357,30 @@ def _selftest() -> int:
        classify3(True, True, False) == "retrieved_unused")
     _a("⑪ **誤報對照**：整條都沒撈到才是 `not_retrieved`",
        classify3(False, False, False) == "not_retrieved")
-    _a("⑫ **誤報對照**：引用了沒撈過的 chunk 一律是資料不一致，不因 sources 而改判",
-       classify3(False, False, True) == "cited_not_retrieved"
-       and classify3(False, True, True) == "cited_not_retrieved")
-    _a("⑬ **誤報對照**：三段版在「有 sources 就有 union」的合法輸入上，"
-       "五個格子都取得到（沒有恆不觸發的死格）",
+    # ⚠ **⑫ 的第一版斷言「不因 sources 而改判」，而那正是錯的那個前提**
+    #   （2026-09-10 實跑抓到 `lex-17`／`mix-08`）。留在這裡當紀錄：量尺寫死了一個
+    #   從來沒驗證過的不變量，於是把「保底救回 gold」這個**成功**報成了一種病。
+    _a("⑫ **誤報對照**：兩條入口都沒有卻被引用 → `cited_not_retrieved`（真的資料不一致）",
+       classify3(False, False, True) == "cited_not_retrieved")
+    _a("⑫b 不在候選池、但在 `sources` 裡且被引用 → `used_via_backstop`"
+       "（ratio 保底的確定性補撈，繞過 `run_state.pool`）",
+       classify3(False, True, True) == "used_via_backstop")
+    _a("⑫c **誤報對照**：`used_via_backstop` 不可併進 `used`——後者代表檢索撈到了，"
+       "前者代表**檢索漏了而保底救回來**，兩者對「要不要修檢索」的意義相反",
+       classify3(False, True, True) != classify3(True, True, True))
+    _a("⑫d **誤報對照**：也不可併進 `cited_not_retrieved`——那一格是真的資料錯，"
+       "混進來會讓真正的資料錯被稀釋到看不見",
+       classify3(False, True, True) != classify3(False, False, True))
+    _a("⑬ **誤報對照**：三段版六個格子都取得到（沒有恆不觸發的死格）",
        {classify3(u, s, c) for u in (True, False) for s in (True, False)
         for c in (True, False)} == {"used", "retrieved_unused", "dropped_by_grader",
-                                    "not_retrieved", "cited_not_retrieved"})
+                                    "not_retrieved", "used_via_backstop",
+                                    "cited_not_retrieved"})
+    _a("⑬b **誤報對照**：已知第二入口的判準只認檔名且大小寫敏感"
+       "（誤判成「已知」＝ 把真的資料錯藏起來）",
+       _looks_like_ratio_backstop(("MSFT_Fundamentals_20260612.txt", "0"))
+       and not _looks_like_ratio_backstop(("MSFT_10K_2026.html", "124"))
+       and not _looks_like_ratio_backstop(("msft_fundamentals_lower.txt", "0")))
     _a("⑭ **回歸護欄**：兩段版 `classify` 逐字不動（舊結果檔的判定不得因為加了第三段而變）",
        classify(True, True) == "used" and classify(True, False) == "retrieved_unused"
        and classify(False, False) == "not_retrieved"
