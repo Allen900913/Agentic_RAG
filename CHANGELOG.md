@@ -5,6 +5,41 @@
 
 ## 2026-09-10
 
+### `kb_unfixable_exit = 0` 不是謎，是 snapshot 的定義——我在同一個旗標上讀錯的第三次
+
+**結論**：`_check_sufficiency` 的 `need, kb_unfixable = "none", False` 寫在 `if _live:`
+**之前**，真值只在 `_live`（`freshness_mode == FRESHNESS_LIVE`）時才算。而
+`run_agentic_on_evalset.py` 的 `--freshness-mode` 預設是 **snapshot**，三份全量結果檔的
+`meta` 逐一確認過都是 `"freshness_mode": "snapshot"` ⇒ **`realtime_need` 恆為 `"none"`、
+`kb_unfixable` 恆為 `False`、`exec_stats.kb_unfixable_exit` 恆為 0。那是定義不是觀察。**
+
+⚠ **而 09-09 那 17 次觸發是探針用 `--freshness-mode live` 跑出來的**（它自己的預設）
+⇒ **兩個數字從來不是同一個組態**。我拿其中一個去解釋另一個，那是類別錯誤。
+
+**三次錯誤，三個不同的錯法**（都留在 [`BACKLOG.md`](BACKLOG.md)）：
+
+| | 我寫的 | 錯在哪 |
+|---|---|---|
+| ① 09-08 | 「旗標從不觸發 ⇒ 讓它觸發是 `forced_pass` 的第一順位」 | 它是**時效**旗標，而 `forced_pass` 的 `missing` 全在講**內容** |
+| ② 09-09 | 「財報題庫上 `realtime_need` 依設計是 none ⇒ 結構上不可能觸發」 | **方向對、理由錯**（歸因給題庫性質，實際是 `freshness_mode` 參數），且證據是 10/10 煙霧測試＝樣本太小 |
+| ③ 09-09 | 「探針實測 17/150 會觸發 ⇒ 生產的 0 仍未解釋，可能是旗標跨輪閃爍」 | 那 17 次是 **live**，生產是 **snapshot**。閃爍與這件事無關 |
+
+**做了什麼**：閘門⑰ `_check_snapshot_recency_is_inert`（10 項，`verify_web_gate_isolation`
+246 → **256**）。**刻意不加逐輪觀測**——snapshot 下那條通道只會錄下三個常數，
+而那正是我原本打算做的「下一步」。**這次不是量得更多，是讀對了一行程式。**
+
+⚠ **判別力**：陽性三條（⑰a~⑰c）一個「把時效整段刪掉」的實作也會通過 ⇒ 判別力在 live
+那三條鏡像（⑰d~⑰f）。真正防止再犯的是 **⑰h／⑰i／⑰j**：把「跑分預設 snapshot、
+探針預設 live、**兩者不得相同**」寫成斷言——少了它們，下一個人照樣會拿 17 解釋 0。
+
+⚠ **⑰f 第一版當場 FAIL，而系統是對的**（「稽核回報 FAIL 先問是不是量尺錯」再次生效）：
+`_check_sufficiency` 用**裸名**呼叫 `_classify_staleness`，patch `ar.<name>` 到不了呼叫端
+（同閘門⑬「用 import 複製綁定」與 ⑯ 變異測試的教訓）。**更危險的是同一版的 ⑰c 真空成立**
+——計數器永遠是空的，snapshot 就算真的呼叫了也看不出來。注入點改到
+`agentic_rag_version.graph` 之後，**5/5 變異全抓到**（含「把改判搬出 `if _live:`」）。
+
+⇒ **`BACKLOG.md` 那條「未解釋」關閉。真正的缺口仍然是內容天花板沒有旗標（誤殺 0/15）。**
+
 ### 65 題第三輪：三個我自己前兩輪寫下的結論被推翻，一個量尺的錯前提被實跑抓到
 
 `experiments/agentic/gj_65q_r3_20260910.json`（65 題、`--no-web`、snapshot、

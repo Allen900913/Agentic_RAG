@@ -2319,6 +2319,122 @@ def _check_forced_pass_visibility() -> int:
     return fail
 
 
+def _check_snapshot_recency_is_inert() -> int:
+    """閘門⑰：**snapshot 模式下時效那一整條是惰性的**（2026-09-10 加）。
+
+    ## 這道閘門修的是一個判讀錯誤，不是一個系統缺陷
+
+    `_check_sufficiency` 的 `need, kb_unfixable = "none", False` 寫在前面，而算出真值的
+    那幾行**全部住在 `if _live:` 裡**（`_live = freshness_mode == FRESHNESS_LIVE`）。
+    `run_agentic_on_evalset.py` 的 `--freshness-mode` 預設是 **snapshot**
+    ⇒ **每一份全量結果檔的 `realtime_need` 恆為 `"none"`、`kb_unfixable` 恆為 `False`
+    ⇒ `exec_stats.kb_unfixable_exit` 恆為 0。那是定義，不是待解釋的觀察。**
+
+    ⚠ **我在這個旗標上連續讀錯三次**，三次都寫進了文件（見 `BACKLOG.md` 的 (c)）：
+      ① 「旗標從來不觸發 ⇒ 讓它觸發是 `forced_pass` 的第一順位」——錯在它是**時效**旗標，
+         而 `forced_pass` 的 `missing` 全在講**內容**。
+      ② 「財報題庫上 `realtime_need` 依設計是 none ⇒ 結構上不可能觸發」——**方向對了、
+         理由錯了**（我歸因給題庫的性質，實際是 `freshness_mode` 這個參數），
+         而且證據是 10/10 的煙霧測試 ＝ 樣本太小。
+      ③ 「探針實測 17/150 會觸發 ⇒ 生產的 0 仍未解釋，可能是旗標跨輪閃爍」——
+         **那 17 次是探針用 `--freshness-mode live` 跑出來的**（它的預設），
+         與生產的 snapshot **從來不是同一個組態**。閃爍與這件事無關。
+      ⇒ 這道閘門把 ①②③ 都證偽掉的那個結構事實**凍結成可重跑的斷言**。
+
+    ## 判別力
+
+    ⚠ **陽性那幾條（⑰a~⑰c）一個「把時效整段刪掉」的實作也會通過**，所以判別力全在
+      live 那三條誤報對照（⑰d~⑰f）：它們證明這條路**在該生效的時候真的會生效**，
+      「snapshot 下恆為 none/False」才是隔離，而不是功能壞掉。
+    ⚠ **⑰h／⑰i／⑰j 才是真正防止再犯的**：它們把「生產跑 snapshot、探針跑 live」
+      寫成斷言。少了它們，下一個人照樣會拿探針的 17 去解釋生產的 0。
+    """
+    import ast as _ast
+    import json as _json
+
+    import rag_query as rq
+    print()
+    print("  閘門⑰ snapshot 下時效整條惰性（＝生產 kb_unfixable_exit=0 是定義）")
+    print("  " + "-" * 68)
+    fail = 0
+
+    def _a(name, cond, note=""):
+        nonlocal fail
+        if not cond:
+            fail += 1
+        print(f"  {name:<64}{'OK  ' if cond else 'FAIL'} {note}")
+
+    # Grader 的 LLM 輸出**刻意寫成最極端的那一種**：說夠、且說需要 intraday。
+    # snapshot 下這兩個欄位都必須被無視。
+    LOUD = _json.dumps({"sufficient": True, "missing": "", "new_query": "",
+                        "relevant_ids": [], "realtime_need": "intraday"})
+    pool = [{"source": "NVDA_10K_2026.html", "chunk_index": 3, "content": "營收成長。",
+             "rerank_score": 0.9}]
+    calls = []
+
+    def _fake_stale(need, top, as_of):
+        calls.append(need)
+        return (99, True)          # 「過期 99 天、而且 KB 補不了」
+
+    # ⚠ **注入點必須在**定義處**（`agentic_rag_version.graph`）不是 `ar.`：
+    #   `_check_sufficiency` 是用**裸名**呼叫 `_classify_staleness` 的，改 `ar.<name>` 的
+    #   綁定到不了呼叫端。⇒ 第一版的 ⑷f 當場 FAIL（而系統是對的），
+    #   而更危險的是 ⑷c **真空成立**：計數器永遠是空的，snapshot 就算真的呼叫了
+    #   它也看不出來。同闘門⑩ 與 ⑲ 的變異測試教訓（注入點要在定義處）。
+    from agentic_rag_version import graph as _g
+    real_llm, real_stale, real_get = rq.call_llm, _g._classify_staleness, ar._replay.get
+    try:
+        rq.call_llm = lambda *a, **k: LOUD
+        _g._classify_staleness = _fake_stale
+        # 重放快取若命中就量不到被測物 → 強迫 MISS
+        ar._replay.get = lambda *a, **k: ar._replay.MISS
+
+        calls.clear()
+        snap = ar._check_sufficiency("NVIDIA 現在股價多少？", pool, "", ar.FRESHNESS_SNAPSHOT)
+        _a("⑰a snapshot：`realtime_need` 恆為 none（Grader 說 intraday 也一樣）",
+           snap["realtime_need"] == "none", f'got={snap["realtime_need"]!r}')
+        _a("⑰b snapshot：`kb_unfixable` 恆為 False（＝`kb_unfixable_exit` 不可能非 0）",
+           snap["kb_unfixable"] is False, f'got={snap["kb_unfixable"]!r}')
+        _a("⑰c snapshot：`_classify_staleness` **一次都不被呼叫** ← 結構上的理由",
+           calls == [], f"calls={calls}")
+        _a("⑰g snapshot：時效改判不得動 `sufficient`（Grader 說夠就是夠）",
+           snap["sufficient"] is True)
+
+        calls.clear()
+        live = ar._check_sufficiency("NVIDIA 現在股價多少？", pool, "", ar.FRESHNESS_LIVE)
+        _a("⑰d **誤報對照** live：`realtime_need` 照 Grader 走（否則寫死 none 也過 ⑰a）",
+           live["realtime_need"] == "intraday", f'got={live["realtime_need"]!r}')
+        _a("⑰e **誤報對照** live：`kb_unfixable` **可以**是 True（否則一律 False 也過 ⑰b）",
+           live["kb_unfixable"] is True, f'got={live["kb_unfixable"]!r}')
+        _a("⑰f **誤報對照** live：`_classify_staleness` 真的被呼叫（⑰c 的鏡像）",
+           calls == ["intraday"], f"calls={calls}")
+    finally:
+        rq.call_llm, _g._classify_staleness, ar._replay.get = real_llm, real_stale, real_get
+
+    def _default_of(path: str, flag: str):
+        """從腳本的 argparse 讀出某旗標的預設值（純 AST，不執行那支腳本）。"""
+        tree = _ast.parse(Path(path).read_text(encoding="utf-8"))
+        for node in _ast.walk(tree):
+            if (isinstance(node, _ast.Call)
+                    and getattr(node.func, "attr", "") == "add_argument"
+                    and node.args
+                    and getattr(node.args[0], "value", None) == flag):
+                for kw in node.keywords:
+                    if kw.arg == "default":
+                        return getattr(kw.value, "value", None)
+        return None
+
+    run_default = _default_of("eval/run_agentic_on_evalset.py", "--freshness-mode")
+    probe_default = _default_of("eval/probe_kb_content_ceiling.py", "--freshness-mode")
+    _a("⑰h 全量跑分的 `--freshness-mode` 預設是 snapshot（改了它，每一份舊結果檔的讀法都要改）",
+       run_default == "snapshot", f"got={run_default!r}")
+    _a("⑰i `probe_kb_content_ceiling` 預設是 **live** ＝ 與生產**不同組態**",
+       probe_default == "live", f"got={probe_default!r}")
+    _a("⑰j **誤報對照**：兩者若哪天變成同一個值要當場叫（否則 17 vs 0 的解釋靜默失效）",
+       run_default != probe_default)
+    return fail
+
+
 def main() -> int:
     print(f"  {'情境':<24}{'Q1':>6}{'Q2':>6}{'Q3':>6}{'Q4':>6}{'呼叫':>6}   判定")
     print("  " + "-" * 68)
@@ -2356,6 +2472,7 @@ def main() -> int:
     fail += _check_replan_todo_budget()
     fail += _check_plan_dependencies()
     fail += _check_forced_pass_visibility()
+    fail += _check_snapshot_recency_is_inert()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0
