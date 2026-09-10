@@ -69,6 +69,7 @@
 | `collapse` 的 `prefer="hybrid"` | 等於不修（gold@5 0.837＝不修），還多刪一個 gold。已刪碼 | 無 | 08-19 |
 | **SYSTEM_PROMPT 加「不得四捨五入」** | 規則被明文違反，發生率 1/2 輪 vs 改動前 1/3 個封存檔——**在噪音內，量不出效果**。⚠ 規則本身沒有害處（同批 faithfulness +.067），死的是「能證明它有效」 | 造一批必然觸發的題（見 BACKLOG） | 08-25 |
 | **RAGAS `--max-workers` 開到 6** | **沒有加速**，且出現 3 次 500/503（workers=2 是 0 次）。牆鐘時間是算術：390 個 metric-row × 88s ÷ workers。`--max-workers 2` 本來就是預設，help 字串早就寫著「NVIDIA 限速，別開太高」——這 40 分鐘重新推導了 repo 已經知道的事 | NVIDIA 端放寬限速 | 09-06 |
+| **`FETCH_N` sweep（60 → 180 / 300）** | **對 `rq.retrieve()` 的回傳零效果**：五題 quota-limited 的候選池大小與 baseline **逐字相同**（12/14/15/7/10）。成因是**串聯**：prefetch 撈得再深，中間仍卡著 `RRF_TOP_N_PRIMARY=20` 這道融合後的名額。⚠ 這推翻了 `BACKLOG.md` T1「③ 格＝`FETCH_N` 名額不夠，3 題比 2 題更值得動」的**可操作性**——T1 量的是 **prefetch 候選集**，而「進得了 prefetch」不等於「擠得進 RRF 前 20」。T1 的歸因沒錯，錯的是我把它讀成一個可以單獨調的旋鈕。⚠ 疊在 `RRF=50` 之上還**略微變差**（sem-03 rank 9→10，池 30→28／24→23／21→20）＝ 更深的 prefetch 改變 RRF 前 50 名的組成，被 hard filter 刪掉的反而更多。 | 先有證據顯示 `RRF_TOP_N_PRIMARY` 已經放寬、而召回仍卡在 prefetch 深度 | 09-10 |
 | **拿 TTFT 榜選 judge** | **與真實 judge 負載是反的**：TTFT 榜首 `minimax-m3` 第 8 次呼叫就 429；TTFT 第 5 的 `nemotron-3.5-lightning` 把思考過程寫進 content → 中位 33s。**單 token 延遲量不到 judge 會失敗的方式**（真實 judge 的 contexts 是 64,610 字元，bake-off 的 1KB prompt 沒有預測力） | 無（機制型） | 09-04 |
 
 **復活成功案例**：`rerank_multi_query`（07-07 判死，理由是變體仍中文）在「英文變體＋glossary」的新前提下（07-08）復活，現已併入生產的雙 query 精排機制。

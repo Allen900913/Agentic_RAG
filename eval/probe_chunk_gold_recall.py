@@ -184,12 +184,49 @@ def _report(rows: dict, ks: tuple[int, ...], n_rounds: int, label: str,
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+_SWEEPABLE = ("FETCH_N", "RRF_TOP_N_PRIMARY", "RERANK_INPUT_N")
+
+
+def parse_overrides(items) -> dict:
+    """`["FETCH_N=180"]` → `{"FETCH_N": 180}`。純函式，供 `--selftest` 餵誤報對照。
+
+    ⚠ **名字不在白名單就當場炸**，不靜默忽略：打錯字的失敗外觀與「這個常數沒有效果」
+      完全相同——那正是 sweep 最容易得出的假 null result。
+    ⚠ 白名單刻意只有三個**檢索名額**常數。它是**格式定義的封閉集合**（CLAUDE.md 允許
+      詞表的那個例外），不是在猜使用者想調什麼。
+    ⚠ `RERANK_INPUT_N` 列在這裡但**不建議動**：它管重排不管召回，而它是這台機器的成本
+      主宰（150 讓單次檢索 33s→46s，見 `probe_kb_content_ceiling`）。
+    """
+    out = {}
+    for it in items or []:
+        if "=" not in it:
+            raise SystemExit(f"[FATAL] --override 要寫成 NAME=VALUE，收到 {it!r}")
+        k, v = it.split("=", 1)
+        k = k.strip()
+        if k not in _SWEEPABLE:
+            raise SystemExit(f"[FATAL] 不可 sweep 的常數 {k!r}；可用：{', '.join(_SWEEPABLE)}")
+        out[k] = int(v)
+    return out
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # 臂一：單管線（跑真實 rq.retrieve）
 # ──────────────────────────────────────────────────────────────────────────────
 def run_single(args) -> int:
     import rag_query as rq
     from FlagEmbedding import BGEM3FlagModel
     from sentence_transformers import CrossEncoder
+
+    ov = parse_overrides(getattr(args, "override", None))
+    # ⚠ **就地改模組屬性**：`rq.retrieve` 在函式體內讀這些常數，改 `rq.<NAME>` 就會生效。
+    #   不用 env 是因為 `rag_query` 沒有為它們留 env 入口，而**為了 sweep 去給生產加 env
+    #   入口＝為了量尺去改被測物**。改屬性只活在這個 process 裡。
+    _saved = {k: getattr(rq, k) for k in ov}
+    for k, v in ov.items():
+        setattr(rq, k, v)
+    if ov:
+        print("[INFO] override " + "  ".join(
+            f"{k}: {_saved[k]} → {getattr(rq, k)}" for k in ov))
 
     gold_by_id = cg.by_id()
     eset = _eval_set(Path(args.eval_set))
@@ -253,9 +290,14 @@ def run_single(args) -> int:
         Path(args.output).write_text(json.dumps(
             {"_meta": {"arm": "single", "collection": rq.COLLECTION_NAME,
                        "translate": not args.no_translate, "repeat": args.repeat,
-                       "k": list(ks), "na": dict(na_ids)},
+                       "k": list(ks), "na": dict(na_ids),
+                       # ⚠ 覆蓋值一定要進 `_meta`：兩份輸出檔的差別**只有**這一格，
+                       #   沒記下來的話兩個臂在檔案層完全分不出來。
+                       "overrides": ov, "baseline": _saved},
              "rows": rows}, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"\n[OK] 寫出 {args.output}")
+    for k, v in _saved.items():        # 同一個 process 若再跑別的臂，不可留下污染
+        setattr(rq, k, v)
     return 0
 
 
@@ -362,6 +404,30 @@ def cmd_selftest() -> int:
     _a("⑤ @20 也全滅 → 歸「召回問題」（那才是 HyDE 這類機制有意義的一格）",
        any("召回問題" in ln and "q1" in ln for ln in out5.splitlines()), out5)
 
+    # ── `--override` 的解析（判別力全在「打錯字要炸」那兩條）────────────────
+    _a("⑥ `NAME=VALUE` 解析成 int", parse_overrides(["FETCH_N=180"]) == {"FETCH_N": 180})
+    _a("⑥b 可以一次給多個", parse_overrides(["FETCH_N=180", "RRF_TOP_N_PRIMARY=50"])
+       == {"FETCH_N": 180, "RRF_TOP_N_PRIMARY": 50})
+    _a("⑥c 沒給就是空 dict（＝生產組態，不是「有覆蓋但值為 0」）",
+       parse_overrides(None) == {} and parse_overrides([]) == {})
+    try:
+        parse_overrides(["FETCH_NN=180"])
+        _a("⑦ **誤報對照**：名字打錯必須當場炸（靜默忽略＝假的 null result）", False)
+    except SystemExit:
+        _a("⑦ **誤報對照**：名字打錯必須當場炸（靜默忽略＝假的 null result）", True)
+    try:
+        parse_overrides(["COLLECTION_NAME=x"])
+        _a("⑦b **誤報對照**：白名單以外的 `rq` 屬性也要炸（別讓 sweep 變成任意改生產）",
+           False)
+    except SystemExit:
+        _a("⑦b **誤報對照**：白名單以外的 `rq` 屬性也要炸（別讓 sweep 變成任意改生產）",
+           True)
+    try:
+        parse_overrides(["FETCH_N"])
+        _a("⑦c **誤報對照**：少了 `=` 也要炸", False)
+    except SystemExit:
+        _a("⑦c **誤報對照**：少了 `=` 也要炸", True)
+
     print(f"\n  PASS {ok}  FAIL {fail}")
     return 1 if fail else 0
 
@@ -383,6 +449,9 @@ def main() -> int:
     ap.add_argument("--from-results", default=None,
                     help="agentic 臂：讀結果檔的 sources（零檢索零 LLM）")
     ap.add_argument("--output", default=None, help="⚠ 一律寫到 experiments/")
+    ap.add_argument("--override", nargs="+", metavar="NAME=VALUE",
+                    help="sweep 檢索名額常數（%s）。⚠ 只影響本 process"
+                         % ", ".join(_SWEEPABLE))
     ap.add_argument("--selftest", action="store_true")
     args = ap.parse_args()
 
