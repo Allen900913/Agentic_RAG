@@ -69,6 +69,7 @@
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import re
 import sys
@@ -271,7 +272,11 @@ def _rebuild(collection: str | None) -> int:
         q["resolved_snapshot"] = [{"source": s, "chunk_index": i}
                                   for s, i in sorted(gold_chunks(docs, q))]
     g["_meta"]["resolved_against"] = {"collection": col, "n_chunks": len(docs)}
-    GOLD_PATH.write_text(json.dumps(g, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    # ⚠ **不可用 `write_text`**：Windows 上它會把 `\n` 轉成 `\r\n`，而本檔在版控裡是 LF
+    #   ⇒ 每次重建都製造一份全檔的**假 diff**，把真正的 gold 變動埋進噪音裡。
+    #   （2026-09-11 踩到：只改了 3 題，diff 卻是 1385/1334 行。）
+    with io.open(GOLD_PATH, "w", encoding="utf-8", newline="") as fh:
+        fh.write(json.dumps(g, ensure_ascii=False, indent=1) + "\n")
     tot = sum(len(q["resolved_snapshot"]) for q in g["queries"])
     print(f"[OK] 重建快照：{len(g['queries'])} 題／{tot} 顆 gold chunk（collection={col}）")
     return 0

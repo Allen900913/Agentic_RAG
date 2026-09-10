@@ -558,7 +558,8 @@
    "category": "lexical",
    "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
    "relevant": [
-    "NVDA_IncomeStatement_*.txt"
+    "NVDA_IncomeStatement_*.txt",
+    "NVDA_10K_2026.html"
    ],
    "ticker_scope": [
     "NVDA"
@@ -566,10 +567,26 @@
    "literals": [
     {
      "literal": "4.90",
-     "verified": "2026-09-04 讀 NVDA_IncomeStatement_20260612#1：`Diluted EPS: $4.90`。剔除 24.51/120.07/215.94/130.39（同表其他列，非題目問的量）"
+     "verified": "2026-09-04 讀 NVDA_IncomeStatement_20260612#1：`Diluted EPS: $4.90`。剔除 24.51/120.07/215.94/130.39（同表其他列，非題目問的量） ｜ 2026-09-11 加入 10-K：gold 原本只釘 NVDA_IncomeStatement#1，但同一個事實在 NVDA_10K_2026.html 的損益表也有，且 R3 實際答對就是引用那裡（#164/#181）。逐顆讀過解析結果，4 顆全是稀釋 EPS 所在行（#164/#126/#181/#0），無巧合命中。"
     }
    ],
    "resolved_snapshot": [
+    {
+     "source": "NVDA_10K_2026.html",
+     "chunk_index": "0"
+    },
+    {
+     "source": "NVDA_10K_2026.html",
+     "chunk_index": "126"
+    },
+    {
+     "source": "NVDA_10K_2026.html",
+     "chunk_index": "164"
+    },
+    {
+     "source": "NVDA_10K_2026.html",
+     "chunk_index": "181"
+    },
     {
      "source": "NVDA_IncomeStatement_20260612.txt",
      "chunk_index": "1"
@@ -631,7 +648,8 @@
    "category": "lexical",
    "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
    "relevant": [
-    "AAPL_IncomeStatement_*.txt"
+    "AAPL_IncomeStatement_*.txt",
+    "AAPL_10K_2025.html"
    ],
    "ticker_scope": [
     "AAPL"
@@ -639,10 +657,22 @@
    "literals": [
     {
      "literal": "7.46",
-     "verified": "2026-09-04 讀 AAPL_IncomeStatement_20260612#1：`Diluted EPS: $7.46`。剔除 15.00（股數）、112.01（淨利）"
+     "verified": "2026-09-04 讀 AAPL_IncomeStatement_20260612#1：`Diluted EPS: $7.46`。剔除 15.00（股數）、112.01（淨利） ｜ 2026-09-11 加入 10-K：同 lex-03。R3 答對引用 AAPL_10K_2025#0/#115。解析到 3 顆（#108/#115/#0），逐顆讀過都是 Diluted EPS 行。"
     }
    ],
    "resolved_snapshot": [
+    {
+     "source": "AAPL_10K_2025.html",
+     "chunk_index": "0"
+    },
+    {
+     "source": "AAPL_10K_2025.html",
+     "chunk_index": "108"
+    },
+    {
+     "source": "AAPL_10K_2025.html",
+     "chunk_index": "115"
+    },
     {
      "source": "AAPL_IncomeStatement_20260612.txt",
      "chunk_index": "1"
@@ -820,7 +850,8 @@
    "category": "lexical",
    "query": "Meta fiscal year 2025 的 Diluted EPS 是多少？",
    "relevant": [
-    "META_IncomeStatement_*.txt"
+    "META_IncomeStatement_*.txt",
+    "META_10K_2025.html"
    ],
    "ticker_scope": [
     "META"
@@ -828,10 +859,30 @@
    "literals": [
     {
      "literal": "23.49",
-     "verified": "2026-09-04 讀 META_IncomeStatement_20260612#1：`Diluted EPS: $23.49`。剔除 60.46（淨利）、2.57（股數）"
+     "verified": "2026-09-04 讀 META_IncomeStatement_20260612#1：`Diluted EPS: $23.49`。剔除 60.46（淨利）、2.57（股數） ｜ 2026-09-11 加入 10-K：同 lex-03。R3 答對引用 META_10K_2025#0。解析到 5 顆（#264/#242/#164/#0/#241），逐顆讀過都是 Diluted EPS 行。"
     }
    ],
    "resolved_snapshot": [
+    {
+     "source": "META_10K_2025.html",
+     "chunk_index": "0"
+    },
+    {
+     "source": "META_10K_2025.html",
+     "chunk_index": "164"
+    },
+    {
+     "source": "META_10K_2025.html",
+     "chunk_index": "241"
+    },
+    {
+     "source": "META_10K_2025.html",
+     "chunk_index": "242"
+    },
+    {
+     "source": "META_10K_2025.html",
+     "chunk_index": "264"
+    },
     {
      "source": "META_IncomeStatement_20260612.txt",
      "chunk_index": "1"
