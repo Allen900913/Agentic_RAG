@@ -73,6 +73,15 @@ import io
 import json
 import re
 import sys
+# ⚠ Windows 主控台預設 cp950，而本檔的報表帶著 ⚠／✔／① 等字元 ⇒ **印到一半就 crash**，
+#   而 crash 的退出碼與「有 FAIL」外觀相同 ＝ 把量尺自己的失敗讀成系統的失敗。
+#   2026-09-11 普查：eval/ 的 51 支裡有 27 支帶著這個地雷，其中兩支當天真的踩了。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
+
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent
@@ -94,7 +103,16 @@ def literal_matcher(lit: str):
     實作，2026-09-04 改成 import 這裡（它的雙向自測因此變成測共用實作＝嚴格更好）。
     """
     if _NUMERIC_LITERAL_RE.match(lit):
-        rx = re.compile(r"(?<![0-9,.])" + re.escape(lit) + r"(?![0-9,.])")
+        # ⚠ **邊界要排除的是「數字的延續」，不是「標點」**（2026-09-11 修）。
+        #   舊版是 `(?<![0-9,.])…(?![0-9,.])`，於是 `2006,` `4.90.` 這種
+        #   **後面緊跟逗號或句點**的寫法一律匹配不到——而英文散文裡數字後面
+        #   最常見的正是逗號與句點。實測 `lex-04` 的 gold 因此指到兩顆**附件索引**
+        #   （`3/7/2006`，後面接空白所以匹配得到），而真正的答案
+        #   `With our introduction of CUDA in 2006, we opened …` 匹配不到。
+        #   ⇒ 三支尺（召回、層級歸因、漏斗）一起把一個答對的題目報成檢索缺陷。
+        #   現在的判準：只有「前後真的接著數字」才算延續——
+        #   `.`／`,` 只有在**它自己後面（或前面）也是數字**時才算數字的一部分。
+        rx = re.compile(r"(?<!\d)(?<!\d[.,])" + re.escape(lit) + r"(?!\d)(?![.,]\d)")
         return lambda t: bool(rx.search(t or ""))
     low = lit.lower()
     return lambda t: low in (t or "").lower()
@@ -176,6 +194,29 @@ _SELFTEST = [
     #    的原版）沒錯，是斷言寫錯了。收窄邊界會誤傷 `ratio was 3.19%` 那種正當命中，
     #    而 union 語意下多命中一顆只會讓判定更保守 → 維持現狀並在這裡記下來。
     ("2006", "on 12/2006/01", True, "斜線分隔的日期仍命中（已知範圍，見上方註解）"),
+    # ── 2026-09-11：邊界改成「只擋數字延續」之後補的八條 ─────────────────────
+    # ⚠ **上面那條 `("2006", "CUDA in 2006", True)` 是恆真的**：它把生產文字裡的
+    #   **逗號拿掉了**，而壞掉的正是逗號那條路 ⇒ 那一格從來沒被測到。
+    #   （本 repo 同一個形狀已經踩過五次：⑰i、⑱f、⑳e、⑭j、⑮q。）
+    ("2006", "With our introduction of CUDA in 2006, we opened the parallel",
+     True, "**生產的逐字形狀**：數字後面緊跟逗號——舊邊界在這裡回 False"),
+    ("4.90", "Diluted EPS was 4.90.", True, "句末句點：舊邊界同樣回 False"),
+    ("23.49", "diluted earnings per share of 23.49, up from", True, "逗號＋空白"),
+    ("128.3", "capex of 128.3, and", True, "逗號（lex-10 的另一種寫法）"),
+    # ⚠ **前方邊界那條路一開始也沒被測到**（變異 M3「只修後方」全綠）——上面四條
+    #   的前綴全是空白／`$`，兩版邊界都放行 ⇒ 補這兩條真實形狀（SEC 的 HTML 轉純文字
+    #   很常出現點引線，逗號緊貼也是表格轉出來的常態）：
+    ("1,353", "Total revenue......1,353", True,
+     "點引線：前一個字元是 `.` 但它前面不是數字 ⇒ 不是小數點"),
+    ("4.90", "Diluted EPS,4.90", True,
+     "逗號緊貼：前一個字元是 `,` 但它前面不是數字 ⇒ 不是千分位"),
+    # 以下四條是**誤報對照**：放寬之後仍然必須擋住真正的「數字延續」
+    ("353", "revenue of 1,353 million", False,
+     "**誤報對照**：前面是 `,` 而 `,` 前面是數字 ⇒ 那是千分位，不是獨立的數"),
+    ("1,353", "revenue of 1,353.27 million", False,
+     "**誤報對照**：後面是 `.` 而 `.` 後面是數字 ⇒ 小數點，不是句點"),
+    ("3.19", "ratio 3.19.5 weird", False, "**誤報對照**：`.` 後接數字仍算延續"),
+    ("2006", "code 2006.4 revision", False, "**誤報對照**：同上，年份也不例外"),
     ("CUDA", "our cuda platform", True, "片語型大小寫無關"),
     ("CUDA", "our OpenCL platform", False, "片語型陰性"),
 ]

@@ -42,7 +42,9 @@ import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
-sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+for _s in (sys.stdout, sys.stderr):  # ⚠ stderr 也要轉：traceback 走 stderr，只轉 stdout 的話「印到一半 crash」照樣發生（2026-09-11 閘門 H1）
+
+    _s.reconfigure(encoding="utf-8", errors="replace")
 _ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_ROOT))
 

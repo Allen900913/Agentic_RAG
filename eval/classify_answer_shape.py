@@ -82,7 +82,7 @@ def classify(query: str) -> tuple[str, dict]:
 
 
 def main() -> None:
-    for stream in (sys.stdout,):
+    for stream in (sys.stdout, sys.stderr):  # ⚠ stderr 也要轉：traceback 走 stderr，只轉 stdout 的話「印到一半 crash」照樣發生（2026-09-11 閘門 H1）
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8", errors="replace")
 

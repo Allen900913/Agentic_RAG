@@ -35,7 +35,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-sys.stdout.reconfigure(encoding="utf-8", errors="replace")   # 本檔輸出含 ↔／⚠／全形，Windows 預設 cp950 會在 gate8 當場炸
+for _s in (sys.stdout, sys.stderr):  # ⚠ stderr 也要轉：traceback 走 stderr，只轉 stdout 的話「印到一半 crash」照樣發生（2026-09-11 閘門 H1）
+
+    _s.reconfigure(encoding="utf-8", errors="replace")   # 本檔輸出含 ↔／⚠／全形，Windows 預設 cp950 會在 gate8 當場炸
 
 import agentic_rag_version as ar   # noqa: E402
 

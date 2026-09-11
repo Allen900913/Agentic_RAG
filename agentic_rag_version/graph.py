@@ -44,7 +44,10 @@ from .tools import _current_run_state, _reset_run_pool, _subagent_apps, _take_qu
 from .tracing import _trace
 from .validators import FRESHNESS_SNAPSHOT
 from .validators import FRESHNESS_SNAPSHOT, _basis_disclosure_notice, _build_todo_temporal_scope, _fill_dependent_hop, _format_unresolved_freshness_notice, _has_unresolved_anchor, _is_dependent_hop, _news_freshness_gaps, _resolve_hop_entity, _unfulfilled_web_route_gaps, _unmet_realtime_gaps
-from .validators import NO_REALTIME_SOURCE, REALTIME_STALE_DAYS, _classify_staleness, _get_as_of_date
+# ⚠ `_classify_staleness` **刻意不 import**（2026-09-11）：它是 eval 的 patch 目標，
+#   `from .validators import` 會在本模組 globals 壓一份當時的物件 ⇒ stub 蓋不到
+#   （閘門⑬b）。呼叫處走 `_pkg._classify_staleness`。
+from .validators import NO_REALTIME_SOURCE, REALTIME_STALE_DAYS, _get_as_of_date
 from .validators import _extract_citations, web_fetched_but_uncited_notice
 from .validators import _get_as_of_date
 
@@ -414,7 +417,11 @@ def _check_sufficiency(subquery: str, pool: list[dict], temporal_scope: str = ""
         need = str(data.get("realtime_need", "none") or "none").strip().lower()
         if need not in REALTIME_STALE_DAYS:
             need = "none"
-        stale_days, kb_unfixable = _classify_staleness(need, top, _get_as_of_date())
+        # ⚠ **一定要走 `_pkg.`**：eval 用 `ar._classify_staleness = stub` 攔截，
+        #   裸名呼叫的話 stub 蓋不到 → 閘門⑰f 當場 FAIL 而系統是對的（2026-09-10 踩過），
+        #   更危險的是同一版的 ⑰c **真空成立**。閘門 H2 現在守這件事。
+        stale_days, kb_unfixable = _pkg._classify_staleness(
+            need, top, _get_as_of_date())
         if stale_days is not None and sufficient:
             sufficient = False
             # ⚠ `kb_unfixable` 只在**整個 collection 的天花板**也過期時才成立（見 _classify_staleness）。

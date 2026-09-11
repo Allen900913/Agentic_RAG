@@ -22,7 +22,13 @@
 | 臂 | 組態 |
 |---|---|
 | `prod` | 生產的 `_retrieve_chunks` ＋ 生產的 `_check_sufficiency` |
-| `wide` | `FETCH_N` 60→180、`RRF_TOP_N_PRIMARY` 20→50、`POOL_RETURN_K` 5→15 |
+| `wide` | `FETCH_N` →180、`RRF_TOP_N_PRIMARY` →50、`POOL_RETURN_K` →15（`_WIDE` 是**絕對值**） |
+
+⚠ **這一行原本寫著「60→180、20→50」，而 `RRF_TOP_N_PRIMARY` 2026-09-10 已改成 30**
+  ⇒ 那個「20」是**抄來的、而且已經過期**，連帶讓 `experiments/kb_ceiling_20260909.json`
+  的「3 倍寬」說法逐字不成立（實際只有 1.67 倍）。**寬臂的倍率不是固定的**，
+  要知道當次跑的是幾倍請看輸出檔的 `_meta`，不要讀這段散文。
+  （這是 2026-09-11 由閘門 `verify_eval_harness.py` H3 的候選清單指出來的。）
 
 ⚠ **`RERANK_INPUT_N` 刻意不動**：它管「重排幾顆」不是「召回幾顆」，對「KB 裡到底有沒有」
   不增加新資訊，而它是這台機器上 CPU 的成本主宰（實測 150 讓單次檢索 33s → 46s）。

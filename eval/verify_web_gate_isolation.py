@@ -35,6 +35,15 @@ import io
 import json
 import os
 import sys
+# ⚠ Windows 主控台預設 cp950，而本檔的報表帶著 ⚠／✔／① 等字元 ⇒ **印到一半就 crash**，
+#   而 crash 的退出碼與「有 FAIL」外觀相同 ＝ 把量尺自己的失敗讀成系統的失敗。
+#   2026-09-11 普查：eval/ 的 51 支裡有 27 支帶著這個地雷，其中兩支當天真的踩了。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
+
 from datetime import date
 from pathlib import Path
 
@@ -1530,6 +1539,12 @@ def _check_monkeypatch_reaches_callers() -> int:
         # `POOL_RETURN_K`：`probe_kb_content_ceiling` 的寬臂放大它（Grader 看幾顆候選）。
         # 同 `_get_graph`，這一筆也是 ⑬a 自己反推出來、當天當場 FAIL 才補上的。
         "POOL_RETURN_K",
+        # ⚠ `_classify_staleness` 2026-09-11 才進這張清單，而**它一直都被 patch**——
+        #   只是先前攔在 `agentic_rag_version.graph` 上（為了遷就一個裸名呼叫），
+        #   於是 ⑬a 的 AST 反推（只看 `ar.` / `_pkg.`）看不到它。呼叫端改成 `_pkg.`、
+        #   注入點回到 `ar.` 之後它立刻現形 ＝ **⑬a 的反推範圍本身也有盲區**，
+        #   而那個盲區正好被「搬注入點」這個遷就動作製造出來。
+        "_classify_staleness",
         "_retrieve_chunks", "_run_executor", "_run_one_todo",
         "_tavily_raw", "_tavily_search", "_web_query_en", "_write_final_answer",
     }
@@ -2381,11 +2396,17 @@ def _check_snapshot_recency_is_inert() -> int:
     #   綁定到不了呼叫端。⇒ 第一版的 ⑷f 當場 FAIL（而系統是對的），
     #   而更危險的是 ⑷c **真空成立**：計數器永遠是空的，snapshot 就算真的呼叫了
     #   它也看不出來。同闘門⑩ 與 ⑲ 的變異測試教訓（注入點要在定義處）。
-    from agentic_rag_version import graph as _g
-    real_llm, real_stale, real_get = rq.call_llm, _g._classify_staleness, ar._replay.get
+    # ⚠ **2026-09-11 注入點搬回 `ar.`**，而且是因為**呼叫端被修好了**，不是因為判斷改了：
+    #   上面那段講的「搬到定義處」其實是**遷就缺陷**——真正的病是 `_check_sufficiency`
+    #   用裸名呼叫 `_classify_staleness`（`graph.py:417`），違反閘門⑬「子模組一律走 `_pkg.`」。
+    #   新的閘門 `verify_eval_harness.py` H2 獨立抓到它 → 呼叫端改成 `_pkg.`，
+    #   注入點因此回到 `ar.`＝ 與 ⑬ 的規則一致。
+    #   ⇒ **教訓**：量尺為了「能攔到」而搬注入點之前，先問「是不是呼叫端該改」。
+    #     搬注入點會讓那個缺陷永久隱形，只有 ⑬／H2 這種結構閘門抓得到。
+    real_llm, real_stale, real_get = rq.call_llm, ar._classify_staleness, ar._replay.get
     try:
         rq.call_llm = lambda *a, **k: LOUD
-        _g._classify_staleness = _fake_stale
+        ar._classify_staleness = _fake_stale
         # 重放快取若命中就量不到被測物 → 強迫 MISS
         ar._replay.get = lambda *a, **k: ar._replay.MISS
 
@@ -2409,7 +2430,7 @@ def _check_snapshot_recency_is_inert() -> int:
         _a("⑰f **誤報對照** live：`_classify_staleness` 真的被呼叫（⑰c 的鏡像）",
            calls == ["intraday"], f"calls={calls}")
     finally:
-        rq.call_llm, _g._classify_staleness, ar._replay.get = real_llm, real_stale, real_get
+        rq.call_llm, ar._classify_staleness, ar._replay.get = real_llm, real_stale, real_get
 
     def _default_of(path: str, flag: str):
         """從腳本的 argparse 讀出某旗標的預設值（純 AST，不執行那支腳本）。"""

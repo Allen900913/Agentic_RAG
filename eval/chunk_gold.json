@@ -38,18 +38,18 @@
    ],
    "literals": [
     {
-     "literal": "2006",
-     "verified": "2026-09-04 讀 NVDA_10K_2026#16 原文：CUDA 於 2006 年推出，是護城河敘述的錨點。⚠ 同一個 literal 另中 #206（股權激勵計畫表格）＝巧合，union 語意下只會讓判定更保守"
+     "literal": "2006, we opened",
+     "verified": "2026-09-11 與 lex-04 同因：裸年份 `2006` 在 `NVDA_10K_2026.html` 命中 5 顆，其中 #16／#206 是**附件索引**（`3/7/2006`）、#41 是 CFO 的經歷（`beginning in 2006`），都不是答案。邊界修好之後真正的 #20／#21 會進來，但那三顆雜訊也會一起進來——**gold 有雜訊會讓召回率虛高**（撈到一顆附件索引就算命中 gold），所以改用片語 `2006, we opened` 精確指到 #20／#21。"
     }
    ],
    "resolved_snapshot": [
     {
      "source": "NVDA_10K_2026.html",
-     "chunk_index": "16"
+     "chunk_index": "20"
     },
     {
      "source": "NVDA_10K_2026.html",
-     "chunk_index": "206"
+     "chunk_index": "21"
     }
    ]
   },
@@ -151,6 +151,10 @@
     {
      "source": "AMZN_10K_2025.html",
      "chunk_index": "162"
+    },
+    {
+     "source": "AMZN_10K_2025.html",
+     "chunk_index": "171"
     }
    ]
   },
@@ -948,18 +952,18 @@
    ],
    "literals": [
     {
-     "literal": "2006",
-     "verified": "同 sem-01（col-01 maps_to sem-01）"
+     "literal": "2006, we opened",
+     "verified": "2026-09-11 與 lex-04 同因：裸年份 `2006` 在 `NVDA_10K_2026.html` 命中 5 顆，其中 #16／#206 是**附件索引**（`3/7/2006`）、#41 是 CFO 的經歷（`beginning in 2006`），都不是答案。邊界修好之後真正的 #20／#21 會進來，但那三顆雜訊也會一起進來——**gold 有雜訊會讓召回率虛高**（撈到一顆附件索引就算命中 gold），所以改用片語 `2006, we opened` 精確指到 #20／#21。"
     }
    ],
    "resolved_snapshot": [
     {
      "source": "NVDA_10K_2026.html",
-     "chunk_index": "16"
+     "chunk_index": "20"
     },
     {
      "source": "NVDA_10K_2026.html",
-     "chunk_index": "206"
+     "chunk_index": "21"
     }
    ]
   },
