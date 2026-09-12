@@ -1,0 +1,870 @@
+{
+  "_meta": {
+    "arm": "single",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "translate": true,
+    "repeat": 3,
+    "k": [
+      5,
+      20
+    ],
+    "na": {
+      "semantic": [
+        "sem-02",
+        "sem-06",
+        "sem-07",
+        "sem-08",
+        "sem-10",
+        "sem-11",
+        "sem-12",
+        "sem-13",
+        "sem-14",
+        "sem-15"
+      ],
+      "mixed": [
+        "mix-01",
+        "mix-06",
+        "mix-10",
+        "mix-11",
+        "mix-13"
+      ],
+      "lexical": [
+        "lex-05",
+        "lex-15"
+      ],
+      "colloquial": [
+        "col-02",
+        "col-04",
+        "col-05",
+        "col-06",
+        "col-07",
+        "col-11",
+        "col-12"
+      ]
+    },
+    "overrides": {},
+    "baseline": {}
+  },
+  "rows": {
+    "sem-01": {
+      "category": "semantic",
+      "query": "NVIDIA 的核心技術護城河是什麼？",
+      "n_gold": 2,
+      "rounds": 3,
+      "hits": {
+        "5": 0,
+        "20": 0
+      },
+      "best_rank": [
+        null,
+        null,
+        null
+      ],
+      "pool": [
+        18,
+        18,
+        18
+      ]
+    },
+    "sem-03": {
+      "category": "semantic",
+      "query": "Microsoft 如何把 Copilot 整合進 Microsoft 365 的產品策略？",
+      "n_gold": 2,
+      "rounds": 3,
+      "hits": {
+        "5": 0,
+        "20": 3
+      },
+      "best_rank": [
+        7,
+        7,
+        7
+      ],
+      "pool": [
+        15,
+        15,
+        15
+      ]
+    },
+    "sem-04": {
+      "category": "semantic",
+      "query": "Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？",
+      "n_gold": 2,
+      "rounds": 3,
+      "hits": {
+        "5": 0,
+        "20": 3
+      },
+      "best_rank": [
+        9,
+        9,
+        9
+      ],
+      "pool": [
+        13,
+        13,
+        13
+      ]
+    },
+    "sem-05": {
+      "category": "semantic",
+      "query": "Amazon 在 AWS 基礎設施與 AI 領域（含與 Anthropic 的合作）的投資策略是什麼？",
+      "n_gold": 2,
+      "rounds": 3,
+      "hits": {
+        "5": 0,
+        "20": 0
+      },
+      "best_rank": [
+        null,
+        null,
+        null
+      ],
+      "pool": [
+        14,
+        14,
+        14
+      ]
+    },
+    "sem-09": {
+      "category": "semantic",
+      "query": "Meta 在 AI 與 Reality Labs 上的長期願景與投資方向是什麼？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        4,
+        4,
+        4
+      ],
+      "pool": [
+        17,
+        17,
+        17
+      ]
+    },
+    "mix-02": {
+      "category": "mixed",
+      "query": "Microsoft More Personal Computing 部門最新一季營收表現如何？哪些因素互相抵銷？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "mix-03": {
+      "category": "mixed",
+      "query": "Microsoft 最新一季整體營業利益成長多少？主要由哪些部門帶動？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "mix-04": {
+      "category": "mixed",
+      "query": "Amazon 國際業務（International segment）在最新一季佔整體營收多少比例？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "mix-05": {
+      "category": "mixed",
+      "query": "Amazon AWS 部門最新一季營業利益成長的主要驅動因素是什麼？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "mix-07": {
+      "category": "mixed",
+      "query": "Google 收購 Wiz 花了多少錢？這如何影響 Google Cloud 部門？",
+      "n_gold": 4,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        2,
+        2,
+        2
+      ],
+      "pool": [
+        12,
+        12,
+        12
+      ]
+    },
+    "mix-08": {
+      "category": "mixed",
+      "query": "Meta 最新一季總營收成長多少？主要驅動因素是什麼？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 0,
+        "20": 3
+      },
+      "best_rank": [
+        9,
+        9,
+        9
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "mix-09": {
+      "category": "mixed",
+      "query": "Apple 大中華區（Greater China）最新一季營收成長多少？主要驅動因素是什麼？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "mix-12": {
+      "category": "mixed",
+      "query": "NVIDIA 這一季在中國市場的資料中心晶片出貨狀況如何？跟去年同期相比有何變化？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        2,
+        2,
+        2
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "mix-14": {
+      "category": "mixed",
+      "query": "Tesla 汽車銷售營收最新一季成長多少？主要驅動因素是什麼？",
+      "n_gold": 2,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        4,
+        4,
+        4
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "mix-15": {
+      "category": "mixed",
+      "query": "Tesla 2026 年至今生產與交付了多少輛消費性車輛？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "lex-01": {
+      "category": "lexical",
+      "query": "NVIDIA 目前的 Market Cap（市值）是多少？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "lex-02": {
+      "category": "lexical",
+      "query": "NVIDIA 的 trailing P/E Ratio 是多少？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "lex-03": {
+      "category": "lexical",
+      "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
+      "n_gold": 5,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        23,
+        23,
+        22
+      ]
+    },
+    "lex-04": {
+      "category": "lexical",
+      "query": "NVIDIA 是哪一年推出 CUDA 開發平台的？",
+      "n_gold": 2,
+      "rounds": 3,
+      "hits": {
+        "5": 0,
+        "20": 0
+      },
+      "best_rank": [
+        null,
+        null,
+        null
+      ],
+      "pool": [
+        20,
+        20,
+        20
+      ]
+    },
+    "lex-06": {
+      "category": "lexical",
+      "query": "Apple 目前的 Market Cap（市值）是多少？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "lex-07": {
+      "category": "lexical",
+      "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
+      "n_gold": 4,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        22,
+        17,
+        22
+      ]
+    },
+    "lex-08": {
+      "category": "lexical",
+      "query": "Microsoft 目前的 Free Cash Flow 是多少？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "lex-09": {
+      "category": "lexical",
+      "query": "Amazon 目前的 Total Debt 是多少？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "lex-10": {
+      "category": "lexical",
+      "query": "Amazon 在 2025 年的現金資本支出（cash capital expenditures）是多少？",
+      "n_gold": 2,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        2,
+        2,
+        2
+      ],
+      "pool": [
+        27,
+        27,
+        27
+      ]
+    },
+    "lex-11": {
+      "category": "lexical",
+      "query": "Alphabet（Google）目前的員工人數是多少？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "lex-12": {
+      "category": "lexical",
+      "query": "Google 完成收購 Wiz 的確切日期是哪一天？金額是多少？",
+      "n_gold": 4,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        19,
+        19,
+        19
+      ]
+    },
+    "lex-13": {
+      "category": "lexical",
+      "query": "Meta 目前的 Return on Equity（股東權益報酬率）是多少？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "lex-14": {
+      "category": "lexical",
+      "query": "Meta fiscal year 2025 的 Diluted EPS 是多少？",
+      "n_gold": 6,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        3,
+        3,
+        3
+      ],
+      "pool": [
+        25,
+        25,
+        25
+      ]
+    },
+    "lex-16": {
+      "category": "lexical",
+      "query": "Apple 近一年的整體營收成長率是多少？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "lex-17": {
+      "category": "lexical",
+      "query": "Microsoft 的營收成長率表現如何？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        11,
+        11,
+        11
+      ]
+    },
+    "col-01": {
+      "category": "colloquial",
+      "query": "為什麼大家做 AI 都要靠 NVIDIA 的技術，別家學不來？",
+      "n_gold": 2,
+      "rounds": 3,
+      "hits": {
+        "5": 0,
+        "20": 0
+      },
+      "best_rank": [
+        null,
+        null,
+        null
+      ],
+      "pool": [
+        15,
+        15,
+        15
+      ]
+    },
+    "col-03": {
+      "category": "colloquial",
+      "query": "亞馬遜最近在 AI 這塊砸錢做了什麼？跟哪家 AI 公司搭上線？",
+      "n_gold": 4,
+      "rounds": 3,
+      "hits": {
+        "5": 0,
+        "20": 3
+      },
+      "best_rank": [
+        12,
+        12,
+        12
+      ],
+      "pool": [
+        24,
+        24,
+        24
+      ]
+    },
+    "col-08": {
+      "category": "colloquial",
+      "query": "NVIDIA 現在值多少錢（市值）？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "col-09": {
+      "category": "colloquial",
+      "query": "蘋果公司現在市值多少？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "col-10": {
+      "category": "colloquial",
+      "query": "微軟每年能自由運用的現金大概有多少？",
+      "n_gold": 1,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "col-13": {
+      "category": "colloquial",
+      "query": "蘋果在大中華區最近賣得好不好？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        30,
+        30,
+        30
+      ]
+    },
+    "mh-01": {
+      "category": "multi_hop",
+      "query": "在 Amazon、Microsoft、Alphabet、Meta 這四家公司中，最近十二個月（TTM）總營收規模最大的是哪一家？該公司同期的毛利率又是多少？",
+      "n_gold": 4,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        12,
+        12,
+        12
+      ]
+    },
+    "mh-02": {
+      "category": "multi_hop",
+      "query": "在 Meta、NVIDIA、Microsoft 這三家公司中，最近十二個月（TTM）毛利率最高的是哪一家公司？該公司同期的總營收是多少？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        2,
+        2,
+        2
+      ],
+      "pool": [
+        9,
+        9,
+        9
+      ]
+    },
+    "mh-03": {
+      "category": "multi_hop",
+      "query": "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        9,
+        9,
+        9
+      ]
+    },
+    "mh-04": {
+      "category": "multi_hop",
+      "query": "在 Microsoft、Alphabet、Apple 這三家公司中，最近十二個月（TTM）營業利益率（operating margin）最高的是哪一家？該公司同期的總營收是多少？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        10,
+        10,
+        10
+      ]
+    },
+    "mh-05": {
+      "category": "multi_hop",
+      "query": "在 Alphabet、Microsoft、Amazon 這三家公司中，最近十二個月（TTM）淨利（net income）最高的是哪一家？該公司最近一年的營收年增率是多少？",
+      "n_gold": 3,
+      "rounds": 3,
+      "hits": {
+        "5": 3,
+        "20": 3
+      },
+      "best_rank": [
+        1,
+        1,
+        1
+      ],
+      "pool": [
+        9,
+        9,
+        9
+      ]
+    }
+  }
+}

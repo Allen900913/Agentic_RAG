@@ -1,0 +1,153 @@
+{
+  "meta": {
+    "as_of": "2026-09-02",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_mixed_prod.json",
+    "replay_cache": "eval/web_replay_llm_mixed_prod.json"
+  },
+  "records": [
+    {
+      "id": "mi-01",
+      "query": "NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？",
+      "why": "multi_intent",
+      "answer": "NVIDIA 2026 年最新財報顯示營收同比成長約 **85.20%**，這代表營收在一年內提升了超過八成 [NVDA_Fundamentals_20260612.txt, chunk #0]，而第一季（2027 財年）營收從前一年同季的 **440.62 億美元（$44,062 百萬）** 增至 **816.15 億美元（$81,615 百萬）**，增幅同樣約 **85.2%**（81,615‑44,062 = 375.53 億美元（$37,553 百萬））[NVDA_10Q_202604.html, chunk #14]。  \n\n此高速成長與近期與 IREN 的 AI 雲端合作相呼應，具體體現在以下幾個資料中心布局的進展：\n\n1. **投資與基礎建設規模**：NVIDIA 獲得在 IREN 投資最高 **2.1 億美元** 的權利，並共同部署最高 **5 GW** 的 AI 基礎設施 [web: https://finance.yahoo.com/sectors/technology/articles/nvidia-invests-2-1-billion-111838996.html]。  \n2. **技術與設計**：根據 CNBC 報導，雙方將使用 NVIDIA 的 **DSX‑branded** 基礎設計，在 IREN 全球資料中心（包括澳洲）內提供 AI 工作負載的算力 [web: https://www.cnbc.com/2026/05/07/iren-stock-ai-infrastructure-nvidia.html]。  \n3. **美國本土部署**：另一則 Yahoo 新聞指出，雙方簽署了約 **34 億美元** 的五年 AI 雲端服務合約，將在 IREN 位於德州 Childress 的資料中心部署 **約 60 MW** 的空冷 **Blackwell** 平台系統，支援 NVIDIA 內部 AI 與研究工作負載 [web: https://finance.yahoo.com/sectors/technology/articles/iren-partnership-nvidia-expands-3-143642848.html]。  \n4. **能源與地域布局**：IREN 的資料中心遍布北美、歐洲與亞太的再生能源豐富區域，說明 NVIDIA 正透過此合作擴大在多區域、可再生能源驅動的資料中心佈局，以支撐日益增長的 AI 計算需求 [web: https://finance.yahoo.com/sectors/technology/articles/nvidia-invests-2-1-billion-111838996.html]。\n\n綜合來看，NVIDIA 的營收高速成長與與 IREN 的多層面合作（大規模電力供應、巨額投資權、DSX‑branded 設計與 Blackwell GPU 平台）共同顯示公司正加速在全球資料中心網路中擴張算力基礎設施，並透過可再生能源與先進硬體佈局鞏固其 AI 雲端服務的競爭優勢。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10Q_202504.html #27 (rerank=0.721)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.720)\n  - NVDA_10Q_202604.html #26 (rerank=0.718)\n  - NVDA_10Q_202604.html #14 (rerank=0.715)\n  - NVDA_10Q_202604.html #36 (rerank=0.713)\n  - NVDA_10Q_202604.html #0 (rerank=0.712)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - NVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展\n  - 查找 2026 年 6 月 12 日之後的新聞報導，特別是 2026 年 8 月以後，說明 NVIDIA 與 IREN 的最新 AI 雲端合作案及其在資料中心布局上的具體進展\n  - 查找 2026 年 6 月至 2026 年 9 月間 NVIDIA 與 IREN AI 雲端合作的新聞報導與官方公告，說明合作內容與資料中心布局的具體進展\n  - 查找 NVIDIA 官方發布的與 IREN AI 雲端合作的新聞稿或公告，說明合作內容與資料中心布局的具體進展\n  - 查找分析師或業界評論（如 Bloomberg、Reuters）對 NVIDIA 與 IREN 合作在資料中心布局上的影響與具體進展",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 目前的營收成長率是多少",
+        "NVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展",
+        "在 NVIDIA 2026 FY Q1 10‑Q 中查找與 IREN AI 雲端合作的相關資訊",
+        "查找 2026 年 6 月 12 日之後的新聞報導，特別是 2026 年 8 月以後，說明 NVIDIA 與 IREN 的最新 AI 雲端合作案及其在資料中心布局上的具體進展",
+        "查找 2026 年 6 月至 2026 年 9 月間 NVIDIA 與 IREN AI 雲端合作的新聞報導與官方公告，說明合作內容與資料中心布局的具體進展",
+        "查找 NVIDIA 官方發布的與 IREN AI 雲端合作的新聞稿或公告，說明合作內容與資料中心布局的具體進展",
+        "查找分析師或業界評論（如 Bloomberg、Reuters）對 NVIDIA 與 IREN 合作在資料中心布局上的影響與具體進展"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10Q_202504.html",
+          "chunk_index": 27
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-02",
+      "query": "NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？",
+      "why": "multi_intent",
+      "answer": "NVIDIA 目前的毛利率為 **74.14%（TTM）**【NVDA_Fundamentals_20260612.txt, chunk #0】。  \n\n根據 2026‑01‑23 的 CNBC 報導，中國市場過去曾貢獻 NVIDIA 資料中心業務至少 **五分之一的營收**，若黃仁勳的最新表態成功讓 AI 晶片重新進入中國，這部分營收有望被重新捕捉，對未來整體營收形成正向推力【web: https://www.cnbc.com/amp/2026/01/23/nvidia-ceo-jensen-huang-china-visit-chip-sales-restrictions.html】。  \n\n此外，2025‑08‑27 的 CNBC 報導指出，儘管當季未向中國銷售任何 H20 晶片，NVIDIA 仍實現 **56% 的年比年營收成長，營收達到 540 億美元（$54 billion）**，顯示在中國市場受限的情況下公司仍能保持高速增長；若銷售限制解除，預計同樣的增長動能將進一步放大【web: https://www.cnbc.com/amp/2025/08/27/nvidia-jensen-huang-real-possibility-blackwell-ai-chip-to-china.html】。  \n\n綜合以上，黃仁勳談及「將 Blackwell AI 晶片帶到中國」的可能性，若美國政府批准相關出口許可，將可能恢復或擴大中國在資料中心營收中的 **至少 20% 份額**，在已顯示出強勁成長的基礎上，為 NVIDIA 未來營收提供顯著的上行空間。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n⚠ 口徑說明：上文引用的 TTM（最近十二個月）口徑數值為 **Revenue Growth 85.20%**，與文中的財報期間（財年／單季）數字不是同一個口徑——兩者數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.722)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響\n  - 查找黃仁勳最近關於在中國市場開放 AI 晶片銷售的新聞及其對 NVIDIA 未來營收的潛在影響\n  - 搜尋截至2026-09-02的最近新聞，黃仁勳談及在中國市場開放 AI 晶片銷售的具體內容\n  - 查找 Bloomberg 或 Reuters 等主要金融媒體於 2026-08 至 2026-09 報導黃仁勳宣布在中國開放 AI 晶片銷售的具體內容與市場影響分析\n  - 取得 NVIDIA 官方於 2026-08 至 2026-09 的新聞稿，說明在中國市場開放 AI 晶片銷售的具體內容\n  - 收集分析師或市場研究機構對 NVIDIA 在中國開放 AI 晶片銷售的營收影響評估",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 目前的毛利率是多少",
+        "黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響",
+        "查找黃仁勳最近關於在中國市場開放 AI 晶片銷售的新聞及其對 NVIDIA 未來營收的潛在影響",
+        "搜尋截至2026-09-02的最近新聞，黃仁勳談及在中國市場開放 AI 晶片銷售的具體內容",
+        "查找 Bloomberg 或 Reuters 等主要金融媒體於 2026-08 至 2026-09 報導黃仁勳宣布在中國開放 AI 晶片銷售的具體內容與市場影響分析",
+        "取得 NVIDIA 官方於 2026-08 至 2026-09 的新聞稿，說明在中國市場開放 AI 晶片銷售的具體內容",
+        "收集分析師或市場研究機構對 NVIDIA 在中國開放 AI 晶片銷售的營收影響評估"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-03",
+      "query": "Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？",
+      "why": "multi_intent",
+      "answer": "Apple 的毛利率為 **47.86%（TTM）**，而 Evercore ISI 最近將目標價提升至 **$365**（由 $330 上調），同時維持 **Outperform** 評等，市場因此將 Apple 視為高毛利、服務收入持續成長的正面投資標的【AAPL_Fundamentals_20260612.txt, chunk #0】、【web: https://finance.yahoo.com/markets/stocks/articles/evercore-isi-raises-price-target-082006105.html】。\n\n- **毛利率表現**：根據最新的 TTM 數據，Apple 的 Gross Margin 為 47.86%，顯示公司在產品與服務的成本控制上仍保持相當高的盈利能力【AAPL_Fundamentals_20260612.txt, chunk #0】。  \n- **Evercore ISI 目標價與評等**：Evercore ISI 在 5 月 14 日將 Apple 的目標價從 $330 提升至 $365，並繼續給予 Outperform 評等【web: https://finance.yahoo.com/markets/stocks/articles/evercore-isi-raises-price-target-082006105.html】。  \n- **市場綜合看法**：分析師指出，儘管 iPhone 出貨量增長疲弱，服務部門的高毛利成長與 AI 相關的 Apple Intelligence 推出，仍能在低至中雙位數的速度推動每股盈餘與自由現金流提升，這提升了市場對 Apple 未來營收與獲利的信心【web: https://finance.yahoo.com/markets/stocks/articles/evercore-isi-raises-price-target-082006105.html】。因此，投資者普遍將 Apple 視為具備持續高毛利與可預測現金流的「複合型」成長股。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; AAPL 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.715)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？\n  - 查找 Evercore ISI 最近對 Apple 的目標價調升及評等變化，以及市場對此的綜合看法\n  - Evercore ISI 最新對 Apple 的目標價與評等數值\n  - 查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）\n  - 查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）\n  - 查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此調升的綜合看法（截至2026-09-02）",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 目前的毛利率是多少",
+        "Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？",
+        "查找 Evercore ISI 最近對 Apple 的目標價調升及評等變化，以及市場對此的綜合看法",
+        "Evercore ISI 最新對 Apple 的目標價與評等數值",
+        "查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）",
+        "查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）",
+        "查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此調升的綜合看法（截至2026-09-02）"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-04",
+      "query": "Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？",
+      "why": "multi_intent",
+      "answer": "Apple 近一年的營收成長率為 **16.60%（YoY）**【AAPL_Fundamentals_20260612.txt, chunk #0】。  \n\n關於 WWDC 2026 發表的 Siri AI 新功能，新聞確實報導 Apple 在本次開發者大會上推出了「Siri AI」並強調其隱私與日常使用的提升【web: https://apnews.com/article/apple-siri-wwdc-iphone-aa25d07c06d366ec5b62643a1f5b0db9】、【web: https://www.cnbc.com/2026/06/08/apple-wwdc-2026-live-updates.html】；然而，提供的資料中並未包含分析師對此功能如何影響 Apple 未來成長動能的具體評估或預測，亦無相關的財務或戰略說明。因此，**知識庫中查無足夠資料** 來判斷 Siri AI 對公司未來成長動能的意義。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.704)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？\n  - 查找2024年 WWDC Apple 發表的 Siri AI 新功能的新聞報導，並分析其對公司未來成長動能的影響\n  - 查找分析師對 WWDC 2024 Siri AI 功能的成長動能評估\n  - 查找 Apple 官方在 2024 年 WWDC 發表的 Siri AI 新功能的具體描述與主要媒體報導\n  - 查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的最新新聞報導，並彙整分析師對其未來成長動能的評估\n  - 查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的新聞報導，並彙整分析師對其未來成長動能的評估",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 近一年營收成長率是多少",
+        "Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？",
+        "查找2024年 WWDC Apple 發表的 Siri AI 新功能的新聞報導，並分析其對公司未來成長動能的影響",
+        "查找分析師對 WWDC 2024 Siri AI 功能的成長動能評估",
+        "查找 Apple 官方在 2024 年 WWDC 發表的 Siri AI 新功能的具體描述與主要媒體報導",
+        "查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的最新新聞報導，並彙整分析師對其未來成長動能的評估",
+        "查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的新聞報導，並彙整分析師對其未來成長動能的評估"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-05",
+      "query": "Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？",
+      "why": "multi_intent",
+      "answer": "（子問題「Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？」的生成步驟發生錯誤，以下為檢索到的原始片段）\n[MSFT_Fundamentals_20260612.txt, chunk #0] [MSFT] === MSFT Company Fundamentals === Generated: 2026-06-12 --- Company Overview --- Name : Microsoft Corporation Sector : Technology Industry : Software - Infrastructure Employees: 228,000 --- Val…\n[MSFT_10Q_202603.html, chunk #73] …sed 106 億美元（$10.6 billion） or 17%. Microsoft 365 Commercial cloud revenue grew 18% with growth in revenue per user driven by Microsoft 365 E5 and Microsoft 365 Copilot, and continued Microsoft 365 Commercial s…\n[MSFT_10Q_202603.html, chunk #65] … 31, 2026 vs March 31, 2025] Nine Months Ended March 31, 2026 Compared with Nine Months Ended March 31, 2025 Revenue increased 365 億美元（$36.5 billion） or 18% driven by growth in Microsoft Cloud. Intelligent Clo…\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; MSFT 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n⚠ 網路結果未採用：本次已取得網路搜尋結果，但最終答案未引用其中任何來源；以上內容僅根據知識庫的 SEC 財報與基本面資料，**不代表涵蓋至查詢日**。\n\n---\n⚠ 口徑說明：上文引用的 TTM（最近十二個月）口徑數值為 **Revenue Growth 18.30%**，與文中的財報期間（財年／單季）數字不是同一個口徑——兩者數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.715)\n  - MSFT_10Q_202603.html #73 (rerank=0.692)\n  - MSFT_10Q_202603.html #65 (rerank=0.663)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息\n  - 查詢 Microsoft 最近自研七個 AI 模型的策略進展的最新新聞與分析，並說明對公司 AI 布局的意涵\n  - 查詢 Microsoft 最近在新聞中宣布自研七個 AI 模型的具體內容與分析，並說明對公司 AI 布局的意涵\n  - 取得截至 2026-09-02 的最新新聞與分析，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵\n  - 查詢 2026 年 9 月前 Microsoft 宣布自研七個 AI 模型的最新新聞與分析，說明對公司 AI 布局的意涵\n  - 取得截至 2026-09-02 的最新新聞，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Microsoft 目前的營收成長率是多少",
+        "Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息",
+        "查詢 Microsoft 最近自研七個 AI 模型的策略進展的最新新聞與分析，並說明對公司 AI 布局的意涵",
+        "查詢 Microsoft 最近在新聞中宣布自研七個 AI 模型的具體內容與分析，並說明對公司 AI 布局的意涵",
+        "取得截至 2026-09-02 的最新新聞與分析，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵",
+        "查詢 2026 年 9 月前 Microsoft 宣布自研七個 AI 模型的最新新聞與分析，說明對公司 AI 布局的意涵",
+        "取得截至 2026-09-02 的最新新聞，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 73
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 65
+        }
+      ]
+    }
+  ]
+}

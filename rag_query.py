@@ -52,7 +52,24 @@ SPARSE_VECTOR_NAME = "sparse"
 
 DEFAULT_TOP_K      = 5
 FETCH_N            = 60   # 每路 prefetch 取多少候選送進 server-side RRF（寬召回，Qdrant 取 60/30 幾乎同速）
-RRF_TOP_N_PRIMARY  = 20   # server-side RRF 回傳候選數；sweep 顯示 20 > 40（reranker 信噪比最佳）
+RRF_TOP_N_PRIMARY  = 30   # server-side RRF 回傳候選數。
+# ⚠ 2026-09-10 由 20 改成 30。證據：`experiments/cgr_rrf_baseline20_20260910.json`／
+#   `cgr_rrf30_20260910.json`／`cgr_rrf50_20260910.json`（41 題 × 3 輪 × 三臂，
+#   chunk 層 gold，掛 replay cache 釘死英譯）：
+#       RRF=20  28.8s/次   gold@5 0.683  gold@20 0.780
+#       RRF=30  41.9s(+46%) gold@5 0.732  gold@20 0.829   ← 現行
+#       RRF=50  67.8s(+135%) gold@5 0.732  gold@20 0.829
+#   改善 3 題（`lex-17`／`mix-14` 進 @5，`sem-03` 進 @20）、**退步 0 題**、跨輪不穩定 0 題。
+# ⚠ **不要再往上調到 50**：逐題 k/n 與 30 逐字相同（第 31~50 名沒有一個含 gold），
+#   而 `RERANK_INPUT_N = 50` 是 cross-encoder 的輸入上限 ⇒ 多出來的候選全部要重排，
+#   時間翻到 +135% 卻一題都沒多買。已進 `docs/EVAL.md` 的〈已試無效總表〉。
+# ⚠ **舊註解「sweep 顯示 20 > 40（reranker 信噪比最佳）」已作廢**：那是在**舊 collection**
+#   上量的，照 CLAUDE.md「跨 collection 的分數不可比」的規則不能拿來擋這次的量測。
+#   留這句在這裡是為了讓讀到舊結論的人知道它去哪了，不是要兩句並存。
+# ⚠ **代價落在使用者的等待時間上**：單管線每次查詢 28.8s → 41.9s，而 agentic
+#   **每個子問題各跑一次完整 `retrieve()`** ⇒ 會被子問題數乘上去。要再調之前先量那一邊。
+# ⚠ **收益量的是檢索不是答案**：`chunk_gold` 是聯集、偏大 ⇒ 這是上界；
+#   「修了答案會不會變好」目前仍然沒有量尺（見 `BACKLOG.md`）。
 VARIANT_CAP        = 8    # 每個變體只注入 top-N（sweep 顯示 8 > 5 > 3/15）
 RERANK_INPUT_N     = 50   # cross-encoder reranker 輸入上限（成本天花板）
 RERANK_MAX_LENGTH  = 2048 # cross-encoder 每筆輸入截斷 token 數；預設(未設定時)是 8192 等於不截斷。
@@ -61,11 +78,11 @@ RERANK_MAX_LENGTH  = 2048 # cross-encoder 每筆輸入截斷 token 數；預設(
                            # 因為該候選相關內容不在前 512 token 內。全庫 2367 chunk 的 token 分布
                            # p99=2278、僅 1.6% 超過 2048 token；2048 在 sem-11 測試中與未截斷（8192）
                            # top-5 逐位分數完全一致，仍有 ~1.8 倍加速（見 CHANGELOG 2026-07-13）。
-DEFAULT_MODEL   = "openai/gpt-oss-120b"       # retrieval 側預設（filter/rewrite/translate）；2026-07-21 統一改走 NVIDIA NIM
+DEFAULT_MODEL   = "nvidia/nemotron-3-super-120b-a12b"       # retrieval 側預設（filter/rewrite/translate）；2026-07-21 統一改走 NVIDIA NIM  # ⚠ 2026-09-03 換：gpt-oss-120b 被 NVIDIA 退役（410 Gone）。選型見 experiments/_model_bakeoff_20260903.log
                                                # （單一 OpenAI-compatible endpoint、單把 NVIDIA_API_KEY，取代 Groq 4-key TPD
                                                # 輪換）。見 agentic_rag_nv.py 已驗證的模型選型：gpt-oss-120b 在 NVIDIA 上快
                                                # 且合法；meta/llama-3.3-70b-instruct 反而會 timeout，不可用。
-DEFAULT_GEN_MODEL = "openai/gpt-oss-120b"     # 生成答案側預設（見 CHANGELOG 2026-07-09 乾淨隔離 A/B：
+DEFAULT_GEN_MODEL = "nvidia/nemotron-3-super-120b-a12b"     # 生成答案側預設（見 CHANGELOG 2026-07-09 乾淨隔離 A/B：  # ⚠ 2026-09-03 換：gpt-oss-120b 被 NVIDIA 退役（410 Gone）。選型見 experiments/_model_bakeoff_20260903.log
                                                # retrieval 固定 70b、只換 gen model，120b 對 k=3 全量 11 題 semantic
                                                # 零回歸、mean 0.627→0.870 且更穩定，故轉正式預設）。此 model id 在 NVIDIA NIM
                                                # 目錄下同名，換 backend 不必換 id。
@@ -113,7 +130,7 @@ def make_qdrant_client():
 # ── 答案尾端的「證據尾巴」──────────────────────────────────────────────────────
 # 生成器會在答案後面接一段 metadata（`---\n📚 引用來源…` 或 `---\n⚠ 口徑說明…`）。那是**呈現層**
 # 不是答案內容，任何「對答案本身做判斷」的地方都該先把它切掉。
-# ⚠ 這個概念在 repo 裡**已經各自長出四份定義**（`agentic_rag_v2` 的 producer、
+# ⚠ 這個概念在 repo 裡**已經各自長出四份定義**（`agentic_rag_version` 的 producer、
 # `eval/check_number_defects.FOOTER`、`eval/check_rounding_fidelity._TAIL_RE`、
 # `eval/eval_ragas_vs_rubric` 的 footer strip）。這裡是**唯一的正式定義**，新的消費端一律用它；
 # 既有那幾份的收攏見 BACKLOG（動 RAGAS 那份會移動分數，不可順手改）。
@@ -286,6 +303,18 @@ dropping the other with a false "no info".
 # 呼叫 extract_final_answer() 剝除 Evidence Log、只把 Answer 區塊留給使用者/judge。
 # ══════════════════════════════════════════════════════════════════════════════
 
+
+
+ZH_ANSWER_DIRECTIVE = (
+    "\n\nLANGUAGE — 你的整段回答必須用【繁體中文】書寫,不得用英文段落、不得用簡體字。"
+    "保留英文金融術語、股票代號(NVDA/MSFT/…)、以及來源的 \"$X billion / $Y million\" 單位詞【照原文】"
+    "(依 Rule 11,不要自己換算成億);只有敘述文字要繁體中文,數字與其單位詞不改。"
+)
+# ⚠ **唯一定義點**（2026-09-03 從 agentic 提上來）。原本只有 agentic 附這段，單發管線用裸
+#   SYSTEM_PROMPT —— 而 SYSTEM_PROMPT **從來沒有規定過輸出語言**，舊模型回繁中純屬它自己的傾向。
+#   換成 nemotron-3-super 之後當場現形：單發路徑 12 題有 8 題整篇英文，而那正是
+#   api_server / app 產品線走的那條路。新的消費端一律用這個常數，不要再抄一份。
+
 SYSTEM_PROMPT_EVIDENCE_FIRST = SYSTEM_PROMPT + """
 14. Before writing your answer, you MUST first produce an Evidence Log: go through
 EVERY numbered reference in order and write ONE line per reference stating whether it
@@ -331,7 +360,10 @@ def extract_final_answer(raw: str) -> str:
 _USD_UNIT_RE = re.compile(
     r'(?:((?:US)?\$)\s?)?([0-9][0-9,]*(?:\.[0-9]+)?)\s*'
     r'(billion|trillion|million|bn|mn|十億|百萬|兆)(?![A-Za-z])'
-    r'(?:\s*(?:美元|美金|dollars?|USD))?',
+    # 尾綴含裸「元」：LLM 常寫「$119,796 百萬元」，只吃到「百萬」會把「元」留成孤兒
+    # （實測輸出 `1,197.96 億美元（$119,796 百萬）元`）。「元」放最後，`美元` 仍優先匹配。
+    # 幣別語意不受影響：has_ccy 只認 $／美元／美金／dollar／USD，裸「元」不足以判定為美元。
+    r'(?:\s*(?:美元|美金|dollars?|USD|元))?',
     re.IGNORECASE)
 # 含中文單位詞安全網：LLM 若沒照 Rule 11、寫成「$13.63 十億 / 890 百萬」也一律歸成億。
 _UNIT_TO_YI = {"billion": 10.0, "bn": 10.0, "trillion": 10000.0, "million": 0.01, "mn": 0.01,
@@ -373,6 +405,235 @@ def convert_usd_units_to_yi(text: str) -> str:
         return f"{_fmt_yi(yi)} 億{'美元' if has_ccy else ''}（{src}）"
     text = _DOLLAR_ABBR_RE.sub(lambda m: m.group(1) + _ABBR_WORD[m.group(2)], text or "")
     return _USD_UNIT_RE.sub(_repl, text)
+
+
+# ── LLM 先斬後奏的「億」：剝掉，讓上面那支獨佔換算 ───────────────────────────────
+# **為什麼是「剝掉」而不是「改對」**：Rule 11 的契約是 *Writer 完全不要寫億*，換算由
+# `convert_usd_units_to_yi` 獨佔。LLM 一旦自己寫了，正解是把它的算術拿掉、讓程式重算——
+# 「改對它」等於承認兩個權威，而其中一個會算錯。
+#
+# 三個實測形狀（2026-09-03 逐字驗證；**舊模型同病**，見 `eval/gen_reference_answers.py`
+# 註解記載的 2026-08-07 稽核 13 題 23 處 → 這不是換模型造成的回歸）：
+#   ① `$82,886 百萬美元（約 $82.9 億美元）`   → 換算差 10 倍（該是 828.86 億）
+#   ② `716,924 百萬美元（即 716.924 億美元）`  → 同上
+#   ③ `84.75 億美元（$84.75 billion）`         → **值對不對另說，它會讓轉換器吐巢狀**：
+#      實測輸出 `84.75 億美元（847.5 億美元（$84.75 billion））`
+# ③ 證明這一層不只修錯值，**它同時是巢狀的解**。所以判準刻意不看值對不對、一律剝掉：
+# 「這個億緊貼著一個來源單位數字」＝它必然是 LLM 自己算的，而程式待會就會重算一次。
+#
+# ⚠ **只處理「緊貼配對」的億，孤立的億不碰**（那是 `repair_yi_against_source` 的活，
+#   要有來源才判得動）。配對寫在同一個括號結構裡 → 零歧義。這正是「取同句最近的數字」
+#   當配對法會死的地方：實測它把期別碼 `202512`、年份 `2026` 當成配對值，128 筆全誤報。
+# ⚠ **必須跑在 `convert_usd_units_to_yi` 之前**：那支不冪等（見它自己的 docstring），
+#   跑在後面會匹配到它自己的產出而巢狀。順序由 `finalize_answer_units` 保證，不要各自組。
+_SRC_UNIT_ALT = r"(?:billion|trillion|million|bn|mn|十億|百萬|兆)"
+# 形狀 A：來源單位數字 → 緊跟一個「換算成億」的括號。動作＝刪掉那個括號，留來源數字。
+_PAIRED_YI_AFTER_RE = re.compile(
+    r"([0-9][0-9,]*(?:\.[0-9]+)?\s*" + _SRC_UNIT_ALT + r"(?![A-Za-z])"
+    r"(?:\s*(?:美元|美金|dollars?|USD|元))?)"  # 裸「元」同 `_USD_UNIT_RE`，否則括號隔著它匹配不到
+    r"\s*[（(]\s*(?:約|約為|即|亦即|等於|≈|=|~)?\s*(?:US)?\$?\s*"
+    r"[0-9][0-9,]*(?:\.[0-9]+)?\s*億(?:美元|美金)?\s*[)）]",
+    re.IGNORECASE)
+# 形狀 B：LLM 自己寫的億 → 緊跟一個來源單位數字的括號。動作＝刪掉前面那個億，留來源數字。
+# ⚠ **前綴的 `$` 必須一起吃掉**（2026-09-05）：LLM 會寫 `$54.5 億（$54.5 billion）`，
+#   而舊版從 `[0-9]` 起頭 → 剝掉億之後原本那個 `$` 變成孤兒，吐出 `$$54.5 billion`，
+#   再經 ② 就成了 `$545 億美元（$54.5 billion）`。值是對的，但多一個 `$`。閘門⑲m11 守它。
+_PAIRED_YI_BEFORE_RE = re.compile(
+    r"(?:(?:US)?\$\s?)?[0-9][0-9,]*(?:\.[0-9]+)?\s*億(?:美元|美金)?\s*"
+    r"[（(]\s*((?:US)?\$?\s?[0-9][0-9,]*(?:\.[0-9]+)?\s*" + _SRC_UNIT_ALT + r"(?![A-Za-z]))"
+    r"\s*[)）]",
+    re.IGNORECASE)
+
+
+def repair_paired_yi(text: str) -> tuple:
+    """剝掉 LLM 自己算的「億」——**只剝與來源單位數字緊貼配對的那些**。零 LLM、零來源查詢。
+
+    回傳 `(處理後文字, [被剝掉的原字串, ...])`。孤立的億一律不動（漏修無害，改壞有害）。
+    ⚠ 必須跑在 `convert_usd_units_to_yi` 之前，見上方註解。
+    """
+    stripped: list = []
+
+    def _strip_paren(m):
+        stripped.append(m.group(0))
+        return m.group(1)
+
+    out = _PAIRED_YI_AFTER_RE.sub(_strip_paren, text or "")
+    out = _PAIRED_YI_BEFORE_RE.sub(_strip_paren, out)
+    return out, stripped
+
+
+# ── 確定性 backstop：LLM 勸不動時，直接拿來源把「億」算對 ────────────────────────
+# 為什麼需要這層：上面的 prompt(CRITICAL 規則) + gen_reference_clean(重試) 都只是「勸」，
+# 勸不動時舊碼只 print 一行「需人工檢查」就放行——2026-08-07 稽核抓到 13 題 23 處錯，
+# 全部是這樣漏出去的（警告在 100 題輸出裡捲過去，沒人回頭看）。
+# rq.convert_usd_units_to_yi 也救不了：它只認「數字+英文單位詞」，LLM 一旦先斬後奏寫成
+# 「253.49 億美元」，那支轉換器明文「不碰已經是億的值」→ 結構性失明。
+#
+# 判準必須自足，不能拿答案的 N 億去撞來源的 $N billion 就定罪（來源同時有 $2.5B 與
+# $250 million 時會誤判）。因此三個條件同時成立才動手：
+#   ① 來源有 "$N billion"  ② 來源沒有 "$N/10 billion"  ③ 來源沒有 "$N*100 million"
+# ②③ 排掉「答案其實是對的、只是來源另有一個數字長得像」的情況。
+# 實測：對本 eval 的 29 處雙寫 + 15 處 millions 表格推導，零誤報。
+# 幣別標記【必填】：不可寫成無條件可選。「10 億使用者」「25 億部裝置」「2.57 億股」都是
+# 非金額計數，若允許無幣別匹配，來源剛好有 "$10 billion" 就會把「10 億使用者」改成
+# 「100 億美元（$10 billion）使用者」——回測實際踩到（news-10 / mi-11）。
+# 漏修無害（人工稽核還在），改壞有害，故一律從嚴。
+#
+# ⚠ **2026-09-05 收窄了「必填」的範圍：幣別詞可省，但只在有 `$`／`US$` 前綴時。**
+#   65 題端到端跑出來的（`gj_multiyear_r2_unitstats.json`，col-11）：LLM 寫
+#   「Microsoft Cloud 收入…增加 29% 至 **$54.5 億**」，來源逐字寫著
+#   `Microsoft Cloud revenue increased 29% to $54.5 billion` ＝ 差 10 倍，而舊的正則
+#   對這份答案匹配到 **0 個**（同一題還有 `$22.1/$21.8/$7.9/$7.8 億` 共 5 處，
+#   `_src_has(..., billion)` 對 5 處**全部**是 True ← ③ 手上證據齊全，只是從來沒看到它們）。
+#   上面那個回歸的危險前提是「**沒有**幣別標記」，而 `$` 本身就是幣別標記——
+#   「10 億使用者」不會寫成「$10 億使用者」。所以放行 `$` 前綴不會把它放回來。
+#   誤報對照凍結在 `verify_answer_validators.py` 閘門⑲m。
+# **幣別詞與 `$` 前綴兩者皆無 → 不是金額**，由 `_is_monetary_yi()` 單一判準裁決，
+# 而 `_yi_values()` 與 `repair_yi_against_source()` **共用它**（見 `_yi_values` docstring）。
+_YI_SOLO_RE = re.compile(
+    r"((?:US)?\$[\s  ]?)?([0-9][0-9,]*(?:\.[0-9]+)?)[\s  ]*億[\s  ]*(美元|歐元)?(?![元圓])")
+
+
+def _is_monetary_yi(m: "re.Match") -> bool:
+    """`_YI_SOLO_RE` 的一次匹配算不算**金額**：有幣別詞（group 3）或有 `$`/`US$` 前綴（group 1）。
+    兩者皆無就是「10 億使用者」那種非金額計數，一律不算。
+
+    ⚠ **這是單一判準**：`_yi_values`（產生證據）與 `repair_yi_against_source`（執行修改）
+      都必須經過它。兩邊若各判各的，就會出現「被當成證據、卻不會被修」或反過來的形狀，
+      而那正是 `_yi_values` docstring 說的不變量。閘門⑲m8 驗這件事。"""
+    return bool(m.group(1) or m.group(3))
+
+
+# 後接括號是否為「單位雙寫」（$X billion / 12,345 百萬），而非敘述性括號（如「（其中…」）。
+_DUAL_PAREN_RE = re.compile(r"^[\s  ]*[（(][\s  ]*(?:US)?\$?[\s  ]*[0-9]")
+
+
+def _yi_values(text: str) -> set:
+    """文本裡所有**金額**「N 億(美元)」的數值（round 到 6 位供集合比對，避開浮點尾差）。
+    刻意與 `_YI_SOLO_RE` ＋ `_is_monetary_yi` 共用同一支正則與同一個資格判準：
+    能被拿來當證據的形狀，與會被修的形狀必須一致。"""
+    out = set()
+    for m in _YI_SOLO_RE.finditer(text or ""):
+        if not _is_monetary_yi(m):
+            continue
+        try:
+            out.add(round(float(m.group(2).replace(",", "")), 6))
+        except ValueError:
+            pass
+    return out
+
+
+def _num_variants(v: float) -> set:
+    """一個數值在文本中可能的字面寫法（含千分位）。"""
+    s = f"{v:.10f}".rstrip("0").rstrip(".")
+    out = {s}
+    if abs(v - round(v)) < 1e-9:
+        out |= {f"{int(round(v)):,}", str(int(round(v)))}
+    if "." in s:
+        ip, dp = s.split(".")
+        out.add(f"{int(ip):,}.{dp}")
+    return out
+
+
+def _src_has(context: str, v: float, unit: str) -> bool:
+    return any(re.search(rf"\$\s?{re.escape(x)}\s*(?:{unit})", context)
+               for x in _num_variants(v))
+
+
+def repair_yi_against_source(text: str, context: str, known_yi=frozenset()) -> tuple:
+    """把答案裡「LLM 手轉且確定錯」的 N 億，修成 (N*10) 億美元。
+    回傳 (修好的文字, [(原字串, 新字串), ...])。無法判定的一律不動（寧可漏修不可錯改）。
+
+    **兩種互相獨立的證據**，任一成立即可定罪（排除條款對兩者一律先跑）：
+      A. 來源有 "$N billion" —— 原始判準，需要來源是**文字**形態。
+      B. `known_yi` 含 N*10 —— `convert_usd_units_to_yi` 已從來源形態的數字算出 N*10 億
+         並寫進同一份答案，所以那個值是程式算的、是權威的；LLM 另外寫的 N 億就是對
+         **同一個量**做的音譯錯誤（把「billion」直譯成「億」）。
+    ⚠ B 是 2026-09-04 端到端跑出來才補的：A 要求單位詞**緊貼**數字，而 SEC 的數字幾乎
+      都住在 markdown 表格裡（`| Revenue | $82,886 |`，"In millions" 只寫在表頭）→
+      `_src_has` 對表格來源**結構性失明**，實測 billion 與 million 兩個方向都是 False。
+      修法不是去教 `_src_has` 讀表頭（哪個表頭管哪個儲存格是感知不是規則，判錯會把對的
+      數字改壞），而是換一個自足的證據源：② 自己的產出。
+    """
+    repairs = []
+
+    def _repl(m):
+        # 已經是雙寫「N 億美元（$X billion）」的不碰：那是 post-processor 算好的。
+        # 但只認「括號內以數字/$ 開頭」的單位雙寫——敘述性括號（「（其中 34.75…」）不算，
+        # 否則會漏修（回測：mi-09 的 84.75 就是這樣被跳過的）。
+        if not _is_monetary_yi(m):
+            return m.group(0)          # 「10 億使用者」這種非金額計數，一律不碰
+        if _DUAL_PAREN_RE.match(text[m.end():m.end() + 8]):
+            return m.group(0)
+        n = float(m.group(2).replace(",", ""))
+        # 排除條款（對 A/B 兩種證據都先跑）：來源另有對應值 → 答案可能本來就對。
+        if _src_has(context, n / 10, r"billion|B\b") or _src_has(context, n * 100, r"million|M\b"):
+            return m.group(0)
+        if _src_has(context, n, r"billion|B\b"):
+            new = f"{_fmt_yi(n * 10)} 億{m.group(3) or '美元'}（${m.group(2)} billion）"
+        elif round(n * 10, 6) in known_yi:
+            # 證據 B **不補 `（$N billion）`**：那個字串不在來源裡（來源寫的是 millions
+            # 表格），補了會被 agentic 的 `find_untraceable_numbers` 判成無法溯源。
+            # 正確的雙寫已經由 ② 寫在同一份答案的別處了，這裡只要把值修對。
+            new = f"{_fmt_yi(n * 10)} 億{m.group(3) or '美元'}"
+        else:
+            return m.group(0)                      # 兩種證據都沒有 → 無從定罪
+        repairs.append((m.group(0), new))
+        return new
+
+    return _YI_SOLO_RE.sub(_repl, text or ""), repairs
+
+
+
+def finalize_answer_units(answer: str, chunks=None, *, web_extra: str = "",
+                          verbose: bool = False, stats: dict | None = None) -> str:
+    """金額單位的**唯一後處理入口**（agentic 與單發管線共用）。三層，順序不可調換：
+
+      ① `repair_paired_yi`         — 剝掉 LLM 緊貼配對的億（順帶解掉巢狀）
+      ② `convert_usd_units_to_yi`  — 程式獨佔換算，產出「X 億美元（$Y unit）」雙寫
+      ③ `repair_yi_against_source` — 剩下的**孤立**億，拿來源**或 ② 自己的產出**判定並修 10x 音譯
+
+    ⚠ **順序是這支存在的理由**：② 不冪等且會匹配自己的產出 → ① 必須在前；
+      ③ 靠 `_DUAL_PAREN_RE` 認出「已經是雙寫的不要碰」，那個形態要 ② 跑完才定型。
+    ⚠ **只能呼叫一次**（② 重入會巢狀）。新的消費端一律呼叫這支，不要自己組三層。
+    ⚠ `chunks`／`web_extra` 都給不出來時 ③ 自動跳過（判準需要來源，沒有來源就無從定罪）。
+
+    **`stats`（2026-09-04 加）**：傳一個 dict 進來，會被填上這一次的計數與逐筆明細。
+    這是 `BACKLOG.md`〈量不到：先斬後奏的「億」發生**頻率**〉缺的那個分母——① 與 ③ 觸發
+    的每一筆，都代表 **LLM 違反了 Rule 11 自己寫了億**（Rule 11 要求 Writer 原樣保留
+    `$X billion` 且不寫億），所以 `yi_stripped + yi_repaired` 就是分子。
+    ⚠ **刻意用 out-param 而不是模組層全域**：agentic 的 `_node_execute` 用 ThreadPoolExecutor
+      平行跑子問題，全域會被別的執行緒蓋掉——而蓋掉之後外觀與「這一題沒觸發」完全相同。
+    ⚠ **刻意不改回傳型別**：`finalize_answer_units` 有三個呼叫端（`graph`／`api_server`／
+      `rag_query` 自己），改成回 tuple 會讓漏改的那個安靜地把 tuple 當字串接下去。
+    ⚠ **明細記的是被改前後的字串，不是「LLM 錯了幾次」**——③ 的證據 B 有已知的殘餘誤報
+      方向（見 BACKLOG〈已接受的極限〉），要下「新模型比舊模型糟」這種結論之前，明細必須
+      人工讀過。這一格提供的是分母與可稽核的清單，不是判定。
+    """
+    text, stripped = repair_paired_yi(answer or "")
+    # ② 的產出即證據 B（見 `repair_yi_against_source`）：跑前跑後的億值差集＝**程式算的**那些。
+    # 用差集而不是改 ② 的簽章，是為了不動那支的既有契約（⑲d 凍結了它的正常路徑逐字輸出）。
+    _yi_before = _yi_values(text)
+    text = convert_usd_units_to_yi(text)
+    produced_yi = _yi_values(text) - _yi_before
+    fixes = []
+    # 乾草堆同時含 KB chunk 與 web 結果——與 `find_untraceable_numbers` 同一個定義：
+    # 要問「來源到底有沒有這個數」，不需要先解出它掛在誰名下。
+    context = "\n".join([(c.get("content") or "") for c in (chunks or [])] + [web_extra or ""])
+    # 證據 B 不需要來源，所以 chunks 全空時 ③ 仍要跑（只是那時排除條款一律真空成立）。
+    if context.strip() or produced_yi:
+        text, fixes = repair_yi_against_source(text, context, produced_yi)
+    if verbose and (stripped or fixes):
+        print(f"[units] 剝掉 LLM 自算的億 {len(stripped)} 處、依來源修正 {len(fixes)} 處")
+    if stats is not None:
+        stats.update({
+            "yi_stripped": len(stripped),          # ① 緊貼配對的億（LLM 先斬後奏）
+            "yi_repaired": len(fixes),             # ③ 孤立的億被判定為 10x 音譯而修掉
+            "yi_stripped_detail": list(stripped),
+            "yi_repaired_detail": [{"before": a, "after": b} for a, b in fixes],
+        })
+    return text
+
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -620,7 +881,7 @@ def _get_latest_10q_periods(client) -> dict:
 #
 # ⚠ **財年不等於曆年**：`NVDA_10K_2026` 是 FY2026 FY，而 `NVDA_10Q_202604` 是 **FY2027 Q1**
 # ——後者才新。同一個坑 agentic 端已經踩過並用 `_fiscal_rank` 修好（見
-# `agentic_rag_v2._fiscal_rank` 的 NVDA 反轉註解）；這裡是**同一套序**放在共用層，
+# `agentic_rag_version._fiscal_rank` 的 NVDA 反轉註解）；這裡是**同一套序**放在共用層，
 # 讓兩條管線不要各寫一份。
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -1692,7 +1953,7 @@ def _payload_to_chunk(payload: dict, rrf_score: float, raw_rerank: float) -> dic
     """Qdrant payload → 下游共用的 chunk dict。**這是唯一的建構點**（retrieve 與任何補撈路徑都走它）。
 
     ⚠ 為什麼抽成具名函式：2026-08-21 實測，`period_basis` 在 payload 裡、也建了索引，
-      但**沒有被帶進 chunk dict**，於是 `agentic_rag_v2._basis_disclosure_notice`
+      但**沒有被帶進 chunk dict**，於是 `agentic_rag_version._basis_disclosure_notice`
       在生產上結構性永遠不觸發。而它的閘門之所以全綠，是因為測試自己造 dict、
       親手寫上了 `period_basis`——量尺與被測物耦合，這是同類第五次。
       抽成函式之後，閘門可以拿**真實 payload 餵這個生產建構子**，
@@ -1707,7 +1968,7 @@ def _payload_to_chunk(payload: dict, rrf_score: float, raw_rerank: float) -> dic
         "chunk_type":       payload.get("chunk_type", "n/a"),
         # ↓ 期別三欄（2026-08-19 補）。加進來之前，任何需要「這個 chunk 是哪一節、哪一期」
         #   的下游都得自己再掃一次 Qdrant——實測被迫這麼做的有三處：
-        #   agentic_rag_v2 的期別 validator、`_scan_kb_coverage`、
+        #   agentic_rag_version 的期別 validator、`_scan_kb_coverage`、
         #   eval/probe_temporal_interference。payload 本來就有，只是沒帶出來。
         "item_id":          payload.get("item_id", ""),
         "filing_type":      payload.get("filing_type", ""),
@@ -2358,12 +2619,15 @@ def run_single_query(query, retrieval_model, gen_model, top_k, bge_m3, rerank_mo
 
     user_prompt = build_user_prompt(query, chunks, fallback_note)
     messages    = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": SYSTEM_PROMPT + ZH_ANSWER_DIRECTIVE},
         {"role": "user",   "content": user_prompt},
     ]
 
     print(f"🤖 Calling {gen_model}...")
     answer = call_llm(messages, gen_model, temperature=GEN_TEMPERATURE)
+    # 金額單位後處理（三層，見 `finalize_answer_units`）。⚠ 2026-09-03 之前**單發管線完全沒有
+    # 這一層**——它只裝在 agentic synthesize 與 gen_reference_answers，而單發才是產品線走的路。
+    answer = finalize_answer_units(answer, chunks)
 
     print(f"\n{'═'*60}")
     print("💡 Answer:")
@@ -2418,6 +2682,7 @@ def run_interactive(retrieval_model, gen_model, top_k, bge_m3, rerank_model, cli
 
         print(f"🤖 Generating answer ({gen_model})...")
         answer = call_llm(messages, gen_model, temperature=GEN_TEMPERATURE)
+        answer = finalize_answer_units(answer, chunks)   # 同 run_single_query
 
         print(f"\n{'─'*60}")
         print("💡 Answer:")
@@ -2455,7 +2720,8 @@ Examples:
     parser.add_argument("--model", "-m", type=str, default=DEFAULT_MODEL,
                         help="Retrieval 模型（filter/rewrite/translate 用）。生成模型獨立由 --gen-model 控制。")
     parser.add_argument("--gen-model", type=str, default=DEFAULT_GEN_MODEL,
-                        help="生成答案用的模型；預設 openai/gpt-oss-120b（見 CHANGELOG 2026-07-09 "
+                        help="生成答案用的模型；預設 DEFAULT_GEN_MODEL（不在這裡寫死模型名——"
+                             "2026-09-03 換過一次，寫死的那份當場就過時了）（見 CHANGELOG 2026-07-09 "
                              "乾淨隔離 A/B：retrieval 固定 70b、k=3 全量 11 題 semantic 零回歸、"
                              "mean 0.627→0.870）。retrieval 側維持 --model 不變——兩者是獨立維度。")
     parser.add_argument("--rewrite", action=argparse.BooleanOptionalAction,

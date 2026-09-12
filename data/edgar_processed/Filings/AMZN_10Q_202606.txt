@@ -79,37 +79,37 @@
 
 **Three and Six Months Ended** *(In millions, except shares and per share data)*
 
-|  | Jun 30, 2026 (Q2) | Jun 30, 2025 (Q2) | Jun 30, 2026 (YTD) | Jun 30, 2025 (YTD) |
-| --- | ---: | ---: | ---: | ---: |
-|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, END OF PERIOD |  |  |  |  |
-|       Net income | $62,647 | $18,164 | $92,902 | $35,291 |
-|       Depreciation and amortization of property and equipment and capitalized content costs, operating lease assets, and other | $19,988 | $15,227 | $38,933 | $29,489 |
-|       Stock-based compensation | $6,038 | $6,534 | $10,070 | $10,223 |
-|       Non-operating expense (income), net | $(53,381) | $(1,258) | $(69,013) | $(4,075) |
-|       Deferred income taxes | $17,691 | $11 | $30,489 | $518 |
-|         Inventories | $(1,818) | $(4,054) | $(196) | $(5,276) |
-|         Accounts receivable, net and other | $(8,204) | $(1,125) | $(13,954) | $122 |
-|         Other assets | $(4,717) | $(2,971) | $(8,528) | $(6,373) |
-|         Accounts payable | $9,442 | $7,058 | $705 | $(1,985) |
-|         Accrued expenses and other | $(2,018) | $(4,952) | $(10,063) | $(9,013) |
-|         Unearned revenue | $(281) | $(119) | $74 | $609 |
-|     Net cash provided by (used in) operating activities | $45,387 | $32,515 | $71,419 | $49,530 |
-|       Purchases of property and equipment | $(54,208) | $(32,183) | $(98,411) | $(57,202) |
-|       Proceeds from property and equipment sales and incentives | $1,132 | $815 | $2,101 | $1,579 |
-|       Acquisitions, net of cash acquired, non-marketable investments, and other, net | $(24,359) | $(1,700) | $(39,767) | $(1,652) |
-|       Sales and maturities of marketable securities | $24,196 | $11,441 | $41,882 | $19,178 |
-|       Purchases of marketable securities | $(26,006) | $(17,797) | $(49,262) | $(31,130) |
-|     Net cash provided by (used in) investing activities | $(79,245) | $(39,424) | $(143,457) | $(69,227) |
-|       Proceeds from short-term debt, and other | $9,368 | $2,093 | $15,386 | $3,908 |
-|       Repayments of short-term debt, and other | $(9,573) | $(1,392) | $(15,682) | $(3,474) |
-|       Proceeds from long-term debt | $13,557 |  | $66,998 | $746 |
-|       Repayments of long-term debt | $(2,752) | $(2,751) | $(2,752) | $(2,751) |
-|       Principal repayments of finance leases | $(395) | $(411) | $(863) | $(821) |
-|       Principal repayments of financing obligations | $(59) | $(78) | $(174) | $(194) |
-|     Net cash provided by (used in) financing activities | $10,146 | $(2,539) | $62,913 | $(2,586) |
-|     Foreign currency effect on cash, cash equivalents, and restricted cash | $(53) | $1,008 | $(54) | $1,424 |
-|   Net increase (decrease) in cash, cash equivalents, and restricted cash | $(23,765) | $(8,440) | $(9,179) | $(20,859) |
-|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, END OF PERIOD |  |  |  |  |
+|  | Jun 30, 2026 (Q2) | Jun 30, 2025 (Q2) | Jun 30, 2026 | Jun 30, 2026 (YTD) | Jun 30, 2025 (YTD) | Jun 30, 2025 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, BEGINNING OF PERIOD | $104,692 | $69,893 | $61,453 | $90,106 | $82,312 | $71,673 |
+|       Net income | $62,647 | $18,164 | $135,281 | $92,902 | $35,291 | $70,623 |
+|       Depreciation and amortization of property and equipment and capitalized content costs, operating lease assets, and other | $19,988 | $15,227 | $75,200 | $38,933 | $29,489 | $58,562 |
+|       Stock-based compensation | $6,038 | $6,534 | $19,314 | $10,070 | $10,223 | $20,551 |
+|       Non-operating expense (income), net | $(53,381) | $(1,258) | $(79,818) | $(69,013) | $(4,075) | $(4,702) |
+|       Deferred income taxes | $17,691 | $11 | $41,441 | $30,489 | $518 | $(2,407) |
+|         Inventories | $(1,818) | $(4,054) | $2,078 | $(196) | $(5,276) | $(5,851) |
+|         Accounts receivable, net and other | $(8,204) | $(1,125) | $(21,409) | $(13,954) | $122 | $(4,602) |
+|         Other assets | $(4,717) | $(2,971) | $(17,787) | $(8,528) | $(6,373) | $(15,100) |
+|         Accounts payable | $9,442 | $7,058 | $13,921 | $705 | $(1,985) | $6,264 |
+|         Accrued expenses and other | $(2,018) | $(4,952) | $(6,069) | $(10,063) | $(9,013) | $(4,842) |
+|         Unearned revenue | $(281) | $(119) | $(749) | $74 | $609 | $2,641 |
+|     Net cash provided by (used in) operating activities | $45,387 | $32,515 | $161,403 | $71,419 | $49,530 | $121,137 |
+|       Purchases of property and equipment | $(54,208) | $(32,183) | $(173,028) | $(98,411) | $(57,202) | $(107,656) |
+|       Proceeds from property and equipment sales and incentives | $1,132 | $815 | $4,021 | $2,101 | $1,579 | $4,703 |
+|       Acquisitions, net of cash acquired, non-marketable investments, and other, net | $(24,359) | $(1,700) | $(41,956) | $(39,767) | $(1,652) | $(4,809) |
+|       Sales and maturities of marketable securities | $24,196 | $11,441 | $67,090 | $41,882 | $19,178 | $30,924 |
+|       Purchases of marketable securities | $(26,006) | $(17,797) | $(72,902) | $(49,262) | $(31,130) | $(46,731) |
+|     Net cash provided by (used in) investing activities | $(79,245) | $(39,424) | $(216,775) | $(143,457) | $(69,227) | $(123,569) |
+|       Proceeds from short-term debt, and other | $9,368 | $2,093 | $20,798 | $15,386 | $3,908 | $8,187 |
+|       Repayments of short-term debt, and other | $(9,573) | $(1,392) | $(20,634) | $(15,682) | $(3,474) | $(7,901) |
+|       Proceeds from long-term debt | $13,557 |  | $81,925 | $66,998 | $746 | $746 |
+|       Repayments of long-term debt | $(2,752) | $(2,751) | $(5,022) | $(2,752) | $(2,751) | $(7,434) |
+|       Principal repayments of finance leases | $(395) | $(411) | $(1,599) | $(863) | $(821) | $(1,556) |
+|       Principal repayments of financing obligations | $(59) | $(78) | $(308) | $(174) | $(194) | $(694) |
+|     Net cash provided by (used in) financing activities | $10,146 | $(2,539) | $75,160 | $62,913 | $(2,586) | $(8,652) |
+|     Foreign currency effect on cash, cash equivalents, and restricted cash | $(53) | $1,008 | $(314) | $(54) | $1,424 | $864 |
+|   Net increase (decrease) in cash, cash equivalents, and restricted cash | $(23,765) | $(8,440) | $19,474 | $(9,179) | $(20,859) | $(10,220) |
+|   CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, END OF PERIOD | $80,927 | $61,453 | $80,927 | $80,927 | $61,453 | $61,453 |
 
 --- [TABLE extra #0] ---
 (Mark One)
@@ -198,81 +198,72 @@ Operating income by segment is as follows (in millions):
 | North Am...
 
 --- [TABLE extra #11] ---
-Our financial focus is on long-term, sustainable growth in free cash flow. We provide a free cash flow measure because we believe it provides additional perspective on the impact of acquiring property and equipment with cash. Free cash flow
-
-|  | Twelve Months Ended June 30, |  |  |  |  |  |  |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-|  | 2025 |  | 2026 |  |  |  |  |
-| Net cash provided ...
-
---- [TABLE extra #12] ---
 Information regarding the effect of foreign exchange rates, versus the U.S. Dollar, on our net sales, operating expenses, and operating income is provided to show reported period operating results had the foreign exchange rates remained the
 
 |  | Three Months Ended June 30, |  | Six Months Ended June 30, |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |...
 
---- [TABLE extra #13] ---
+--- [TABLE extra #12] ---
 Table of Contents
 
 | Item 3. | Quantitative and Qualitative Disclosures About Market Risk |
 | --- | --- |...
 
---- [TABLE extra #14] ---
+--- [TABLE extra #13] ---
 Table of Contents
 
 | Item 4. | Controls and Procedures |
 | --- | --- |...
 
---- [TABLE extra #15] ---
+--- [TABLE extra #14] ---
 PART II. OTHER INFORMATION
 
 | Item 1. | Legal Proceedings |
 | --- | --- |...
 
---- [TABLE extra #16] ---
+--- [TABLE extra #15] ---
 See Item 1 of Part I, “Financial Statements — Note 4 — Commitments and Contingencies — Legal Proceedings.”
 
 | Item 1A. | Risk Factors |
 | --- | --- |...
 
---- [TABLE extra #17] ---
+--- [TABLE extra #16] ---
 Table of Contents
 
 | Item 2. | Unregistered Sales of Equity Securities and Use of Proceeds |
 | --- | --- |...
 
---- [TABLE extra #18] ---
+--- [TABLE extra #17] ---
 None.
 
 | Item 3. | Defaults Upon Senior Securities |
 | --- | --- |...
 
---- [TABLE extra #19] ---
+--- [TABLE extra #18] ---
 None.
 
 | Item 4. | Mine Safety Disclosures |
 | --- | --- |...
 
---- [TABLE extra #20] ---
+--- [TABLE extra #19] ---
 Not applicable.
 
 | Item 5. | Other Information |
 | --- | --- |...
 
---- [TABLE extra #21] ---
+--- [TABLE extra #20] ---
 Table of Contents
 
 | Item 6. | Exhibits |
 | --- | --- |...
 
---- [TABLE extra #22] ---
-Exhibit index for notes section, listing various company documents.
+--- [TABLE extra #21] ---
+The table lists exhibits referenced in Amazon’s 8‑K filing, including corporate documents, loan agreements, officer certifications, and the 10‑Q financial statements for the quarter ended June 30 2026.
 
 | Exhibit Number |  | Description |
 | --- | --- | --- |
-| 3.1 |  | Amended and Restated Certificate of Incorporation of Amazon.com, Inc. (incorporated by reference to the Company’s Current Report on Form 8-K, filed May 27, 2022). |
-| 3.2 |  | Amended and Restated Bylaws of Amazon.com, Inc. (incorporated by reference to the Compan...
+| 3.1 |  | Amended and Restated Certificate of Incorporation of Amazon.com, Inc. (incorporated by reference to the Company’s Current Report o...
 
---- [TABLE extra #23] ---
+--- [TABLE extra #22] ---
 Pursuant to the requirements of the Securities Exchange Act of 1934, the Registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized.
 
 |  | AMAZON.COM, INC. (REGISTRANT) |  |
@@ -282,9 +273,7 @@ Pursuant to the requirements of the Securities Exchange Act of 1934, the Registr
 |  |  | Vice President, Worldwide Controller |
 |  |  | (Principal Accounting Officer) ...
 
-[INFO] extra tables kept=24 (去重後，來自 unstructured)
-
-[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
+[INFO] extra tables kept=23 (去重後，來自 unstructured)
 
 --- [ITEM] Part I, Item 1 (len=75390 chars) ---
 Item 1.Financial Statements
@@ -349,9 +338,14 @@ Item 3.Quantitative and Qualitative Disclosures About Market Risk
 
 We are exposed to market risk for the effect of interest rate changes, foreign currency fluctuations, and changes in the market values of our investments. Information relating to quantitative and qualitative disclosures about market risk is set forth below and in Item 2 of Part I, “Management’s Discussion and Ana...
 
-[SECTION] item=Part_I_Item_3 period=None 依小標切成 4 段：(小標前=章節層) | Interest Rate Risk | Foreign Exchange Risk | Equity Investment Risk
+[MIN-MERGE] item=Part_I_Item_3 section=None 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_I_Item_3 section=Equity Investment Risk 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+--- [ITEM] Part I, Item 4 (len=2028 chars) ---
+Table of Contents
+
+Item 4.Controls and Procedures
+
+We carried out an evaluation required by the Securities Exchange Act of 1934 (the “1934 Act”), under the supervision and with the participation of our principal executive officer and principal financial officer, of the effectiveness of the design and operation of our disclosure controls and procedures, as defined in Rule 13a-15(e) of the 1934 Act,...
 
 --- [ITEM] Part II, Item 1 (len=132 chars) ---
 Item 1.Legal Proceedings
@@ -363,13 +357,17 @@ Item 1A.Risk Factors
 
 Please carefully consider the following discussion of significant factors, events, and uncertainties that make an investment in our securities risky. The events and consequences discussed in these risk factors could, in circumstances we may or may not be able to accurately predict, recognize, or control, have a material adverse effect on our business, growth, reputation, pros...
 
-[SECTION] item=Part_II_Item_1A period=None 依小標切成 7 段：(小標前=章節層) | We Face Intense Competition | We Have Foreign Exchange Risk | Operating Risks | We Face Significant Inventory Risk | We Are Subject to Payments-Related Risks | Legal and Regulatory Risks
+[MIN-MERGE] item=Part_II_Item_1A section=None 23 → 22 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
-[MIN-MERGE] item=Part_II_Item_1A section=Operating Risks 8 → 7 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+[RCTS] item=Part_II_Item_1A 原 chunk 1230 token > 1200 → 補切成 2 份
 
-[RCTS] item=Part_II_Item_1A 原 chunk 1243 token > 1200 → 補切成 2 份
+[RCTS] item=Part_II_Item_1A 原 chunk 1293 token > 1200 → 補切成 2 份
 
-[RCTS] item=Part_II_Item_1A 原 chunk 1539 token > 1200 → 補切成 3 份
+[RCTS] item=Part_II_Item_1A 原 chunk 1269 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1559 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1383 token > 1200 → 補切成 3 份
 
 --- [ITEM] Part II, Item 2 (len=92 chars) ---
 Table of Contents
@@ -408,4 +406,4 @@ ExhibitNumberDescription
 
 4.1Officers’ Certificate of...
 
-[MIN-MERGE] item=Part_II_Item_6 section=ExhibitNumberDescription 4 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+[MIN-MERGE] item=Part_II_Item_6 section=None 4 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

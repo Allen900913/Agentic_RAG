@@ -1,0 +1,435 @@
+=== GOOGL 10-Q | accession=0001652044-24-000053 | fiscal_year=2024 fiscal_period=Q1 period_code=202403 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**Alphabet Inc.** (GOOG)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2024 (Q1) | Mar 31, 2023 (Q1) |
+| --- | ---: | ---: |
+|   Revenues | $80,539 | $69,787 |
+|       Cost of revenues | $33,712 | $30,612 |
+|       Research and development | $11,903 | $11,468 |
+|       Sales and marketing | $6,426 | $6,533 |
+|       General and administrative | $3,026 | $3,759 |
+|       Total costs and expenses | $55,067 | $52,372 |
+|     Income from operations | 25,472 | 17,415 |
+|     Other income (expense), net | $2,843 | $790 |
+|   Income before income taxes | $28,315 | $18,205 |
+|   Provision for income taxes | $4,653 | $3,154 |
+|   Net income | $23,662 | $15,051 |
+|   Basic net income per share of Class A, Class B, and Class C stock (in dollars per share) | 1.91 | 1.18 |
+| *    Class A Common Stock* | 1.91 | 1.18 |
+| *    Class B Common Stock* | 1.91 | 1.18 |
+| *    Class C Capital Stock* | 1.91 | 1.18 |
+|   Diluted net income per share of Class A, Class B, and Class C stock (in dollars per share) | 1.89 | 1.17 |
+| *    Class A Common Stock* | 1.89 | 1.17 |
+| *    Class B Common Stock* | 1.89 | 1.17 |
+| *    Class C Capital Stock* | 1.89 | 1.17 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**Alphabet Inc.** (GOOG)
+
+**As of March 31, 2024 and December 31, 2023** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2024 | Dec 31, 2023 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $24,493 | $24,048 |
+|         Marketable securities | $83,597 | $86,868 |
+| *        Net Income* | $12,466 | $12,572 |
+|         Total cash, cash equivalents, and marketable securities | $108,090 | $110,916 |
+|         Accounts receivable, net | $44,552 | $47,964 |
+|         Other current assets | $12,829 | $12,650 |
+|         Total current assets | $165,471 | $171,530 |
+|     Non-marketable securities | $33,994 | $31,008 |
+|     Deferred income taxes | $11,687 | $12,169 |
+|     Property and equipment, net | $143,182 | $134,345 |
+|     Operating lease assets | $13,768 | $14,091 |
+|     Goodwill | $29,183 | $29,198 |
+|     Other non-current assets | $10,065 | $10,051 |
+|     Total assets | $407,350 | $402,392 |
+|         Accounts payable | $6,198 | $7,493 |
+|         Accrued compensation and benefits | $9,703 | $15,140 |
+|         Accrued expenses and other current liabilities | $48,603 | $46,168 |
+|         Accrued revenue share | $8,520 | $8,876 |
+|         Deferred revenue | $3,973 | $4,137 |
+|         Total current liabilities | $76,997 | $81,814 |
+|     Long-term debt | $13,228 | $13,253 |
+|     Deferred revenue, non-current | $921 | $911 |
+|     Income taxes payable, non-current | $9,234 | $8,474 |
+|     Deferred income taxes | $486 | $485 |
+|     Operating lease liabilities | $11,957 | $12,460 |
+|     Other long-term liabilities | $1,683 | $1,616 |
+|       Total liabilities | $114,506 | $119,013 |
+|       Commitments and Contingencies (Note 8) |  |  |
+|       Preferred stock, $0.001 par value per share, 100 shares authorized; no shares issued and outstanding |  |  |
+|       Class A, Class B, and Class C stock and additional paid-in capital, $0.001 par value per share: 300,000 shares authorized (Class A 180,000, Class B 60,000, Class C 60,000); 12,460 (Class A 5,899, Class B 870, Class C 5,691) and 12,381 (Class A 5,879, Class B 867, Class C 5,635) shares issued and outstanding | $77,913 | $76,534 |
+|       Accumulated other comprehensive income (loss) | $(4,839) | $(4,402) |
+|       Retained earnings | $219,770 | $211,247 |
+|       Total stockholders’ equity | $292,844 | $283,379 |
+|     Total liabilities and stockholders’ equity | $407,350 | $402,392 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**Alphabet Inc.** (GOOG)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Mar 31, 2024 (Q1) | Mar 31, 2023 (Q1) |
+| --- | ---: | ---: |
+|       Net income | $23,662 | $15,051 |
+|       Depreciation of property and equipment | $3,413 | $2,635 |
+|       Stock-based compensation expense | $5,264 | $5,284 |
+|       Deferred income taxes | $419 | $(1,854) |
+|       Loss (gain) on debt and equity securities, net | $(1,781) | $(84) |
+|       Other | $334 | $1,104 |
+|         Accounts receivable, net | $3,167 | $4,454 |
+|         Income taxes, net | $3,011 | $4,069 |
+|         Other assets | $(1,000) | $(746) |
+|         Accounts payable | $(2,124) | $(1,105) |
+|         Accrued expenses and other liabilities | $(5,054) | $(4,496) |
+|         Accrued revenue share | $(322) | $(602) |
+|         Deferred revenue | $(141) | $(201) |
+|     Net cash provided by operating activities | $28,848 | $23,509 |
+|       Purchases of property and equipment | $(12,012) | $(6,289) |
+|       Purchases of marketable securities | $(20,684) | $(14,227) |
+|       Maturities and sales of marketable securities | $24,985 | $18,327 |
+|       Purchases of non-marketable securities | $(1,206) | $(626) |
+|       Maturities and sales of non-marketable securities | $313 | $36 |
+|       Acquisitions, net of cash acquired, and purchases of intangible assets | $(61) | $(42) |
+|       Other investing activities | $101 | $(125) |
+|     Net cash used in investing activities | $(8,564) | $(2,946) |
+|       Net payments related to stock-based award activities | $(2,929) | $(1,989) |
+|       Repurchases of stock | $(15,696) | $(14,557) |
+|       Proceeds from issuance of debt, net of costs | $1,982 | $6,927 |
+|       Repayments of debt | $(3,079) | $(6,952) |
+|       Proceeds from sale of interest in consolidated entities, net | $8 | $3 |
+|     Net cash used in financing activities | $(19,714) | $(16,568) |
+|     Effect of exchange rate changes on cash and cash equivalents | $(125) | $50 |
+|   Net increase (decrease) in cash and cash equivalents | $445 | $4,045 |
+|   Cash and cash equivalents at beginning of period | $24,048 | $21,879 |
+|   Cash and cash equivalents at end of period | $24,493 | $25,924 |
+
+--- [TABLE extra #0] ---
+(Mark One)
+
+| ☒ | QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #1] ---
+For the quarterly period ended
+
+| ☐ | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #2] ---
+(Exact name of registrant as specified in its charter)
+
+| Delaware | 61-1767919 |
+| --- | --- |
+| (State or other jurisdiction of incorporation or organization) | (I.R.S. Employer Identification Number) |...
+
+--- [TABLE extra #3] ---
+(Registrant's telephone number, including area code)
+
+| Securities registered pursuant to Section 12(b) of the Act: |  |  |
+| --- | --- | --- |
+| Title of each class | Trading Symbol(s) | Name of each exchange on which registered |
+| Class A Common Stock, $0.001 par value | GOOGL | Nasdaq Stock Market LLC |
+|  |  | (Nasdaq Global Select Market) |
+| Class C Capital Stock, $0.001 par value | GOOG | ...
+
+--- [TABLE extra #4] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large accelerated filer | ☒ |  | Accelerated filer | ☐ |
+| --- | --- | --- | --- | --- |
+| Non-accelerated filer | ☐ |  | Smaller reporting company | ☐ |
+| ...
+
+--- [TABLE extra #5] ---
+As of April 18, 2024, there were million shares of Alphabet’s Class A stock outstanding, million shares of Alphabet's Class B stock outstanding, and million shares of Alphabet's Class C stock outstanding.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #6] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #7] ---
+our expectation that we will continue to face heightened regulatory scrutiny, and changes in regulatory conditions, laws, and public policies, which could affect our business practices and financial results;
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #8] ---
+"Alphabet," "Google," and other trademarks of ours appearing in this report are our property. We do not intend our use or display of other companies' trade names or trademarks to imply an endorsement or sponsorship of us by such companies, 
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #9] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #10] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #11] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #12] ---
+(in millions; unaudited)
+
+|  | Three Months Ended March 31, 2023 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Class A, Class B, Class C Stock and Additional Paid-In Capital |  | Accumulated Other Comprehensive Income (Loss) |  | Retained Earnings |  | Total Stockholders’...
+
+--- [TABLE extra #13] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #14] ---
+See accompanying notes.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #15] ---
+Note 1.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #16] ---
+Note 3.
+
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #17] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #18] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #19] ---
+| Table of Contents | Alphabet Inc. |
+| --- | --- |...
+
+--- [TABLE extra #20] ---
+The following table presents revenues by type (in millions):
+
+|  | Three Months Ended |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  | March 31, |  |  |  |  |  |  |
+|  | 2023 |  | 2024 |  |  |  |  |
+| Google Search & other | $ | 40,359 |  |  | $ | 46,156 |  |
+| YouTube ads | 6,693 |  |  | 8,090 |  |  |  |
+| Google Network | 7,496 |  |  | 7,413 |  |  |  |
+| Google advertis...
+
+--- [TABLE extra #21] ---
+The following table presents changes in monetization metrics for Google Search & other revenues (paid clicks and cost-per-click) and Google Network revenues (impressions and cost-per-impression), expressed as a percentage, from three months
+
+| Google Search & other |  |  |
+| --- | --- | --- |
+| Paid clicks change | 5 | % |
+| Cost-per-click change | 8 | % |
+| Google Network |  |  |
+| Impressions ch...
+
+--- [TABLE extra #22] ---
+The following table presents the foreign currency exchange effect on international revenues and total revenues (in millions, except percentages):
+
+|  |  |  |  |  | Three Months Ended March 31, 2024 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---...
+
+--- [TABLE extra #23] ---
+The following table presents segment operating income (loss) (in millions):
+
+|  | Three Months Ended |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | March 31, |  |  |  |  |  |  |  |  |  |  |
+|  | 2023 |  | 2024 |  |  |  |  |  |  |  |  |
+| Operating income (loss): |  |  |  |  |  |  |  |  |  |  |  |
+| Google Services | $ | 21,737 |  |  |...
+
+--- [TABLE extra #24] ---
+The following table presents Class A and Class C shares repurchased and subsequently retired (in millions):
+
+|  | Three Months Ended March 31, 2024 |  |  |  |  |
+| --- | --- | --- | --- | --- | --- |
+|  | Shares |  | Amount |  |  |
+| Class A share repurchases | 23 |  | $ | 3,350 |  |
+| Class C share repurchases | 88 |  | 12,707 |  |  |
+| Total share repurchases (1) | 111 |  | $ | 16,057 |  |...
+
+--- [TABLE extra #25] ---
+The following table presents information with respect to Alphabet's repurchases of Class A and Class C stock during the quarter ended March 31, 2024.
+
+| Period |  | Total Number of Class A Shares Purchased (in thousands) (1) |  | Total Number of Class C Shares Purchased (in thousands) (1) |  | Average Price Paid per Class A Share (2) |  | Average Price Paid per Class C Share (2) |  | Total Number ...
+
+--- [TABLE extra #26] ---
+ITEM 6.EXHIBITS
+
+| Exhibit Number |  |  | Description |  | Incorporated by reference herein |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  | Form |  | Date |  |  |  |
+| 10.01 | * | ♦ | Alphabet Inc. Amended and Restated 2021 Stock Plan – Form of Alphabet Restricted Stock Unit Agreement |  |  |  |  |
+| 10.02 | * | ♦ | Alphabet Inc. Amended and Restated 2021 Stock Plan – Form of Alp...
+
+--- [TABLE extra #27] ---
+| ♦ | Indicates management compensatory plan, contract, or arrangement. |
+| --- | --- |
+| * | Filed herewith. |
+| ‡ | Furnished herewith. |...
+
+[INFO] extra tables kept=28 (去重後，來自 unstructured)
+
+--- [ITEM] Part I, Item 1 (len=63500 chars) ---
+ITEM 1.FINANCIAL STATEMENTS
+
+Alphabet Inc.
+
+CONSOLIDATED BALANCE SHEETS
+
+(in millions, except par value per share amounts)
+
+As of December 31, 2023As ofMarch 31, 2024
+
+(unaudited)
+
+Assets
+
+Current assets:
+
+Cash and cash equivalents$24,048 $24,493 
+
+Marketable securities86,868 83,597 
+
+Total cash, cash equivalents, and marketable securities110,916 108,090 
+
+Accounts receivable, net47,964 44,552 
+
+O...
+
+[MIN-MERGE] item=Part_I_Item_1 section=None 29 → 28 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_I_Item_1 原 chunk 1454 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 2802 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1274 token > 1200 → 補切成 2 份
+
+--- [ITEM] Part I, Item 2 (len=45859 chars) ---
+ITEM 2.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+Please read the following discussion and analysis of our financial condition and results of operations together with "Note About Forward-Looking Statements" and our consolidated financial statements and related notes included under Item 1 of this Quarterly Report on Form 10-Q as well as our Annual Report ...
+
+[GROUND] item=Part_I_Item_2 period=None 48 → 45 段（無幅度數字的段併回帶表格的前一段）
+
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 45 段：(小標前=章節層) | Understanding Alphabet’s Financial Results | Revenues and Monetization Metrics | Google Services | Google Advertising | Google Cloud | Other Bets | Costs and Expenses | Cost of Revenues | Operating Expenses | Other Income (Expense), Net | Provision for Income Taxes | Executive Overview | Other Information | Revenues | Google Search & other | YouTube ads | Google Network | Monetization Metrics | Google Cloud | Revenues by Geography | Use of Non-GAAP Constant Currency Information | % Change from Prior Period | Cost of Revenues | Research and Development | Sales and Marketing | General and Administrative | Segment Profitability | Google Services | Google Cloud | Other Bets | Provision for Income Taxes | Cash, Cash Equivalents, and Marketable Securities | Liquidity and Material Cash Requirements | Capital Expenditures and Leases | Capital Expenditures | Leases | Financing | Share Repurchase Program | Dividend Program | European Commission Fines | Taxes | Purchase Commitments and Other Contractual Obligations | Critical Accounting Estimates | Available Information
+
+[MIN-MERGE] item=Part_I_Item_2 section=Google Cloud 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Research and Development 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Google Services 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Purchase Commitments and Other Contractual Obligations 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Part I, Item 3 (len=289 chars) ---
+ITEM 3.QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+For quantitative and qualitative disclosures about market risk, refer to Part II, Item 7A, Quantitative and Qualitative Disclosures About Market Risk, in our Annual Report on Form 10-K for the year ended December 31, 2023....
+
+--- [ITEM] Part I, Item 4 (len=1940 chars) ---
+ITEM 4.CONTROLS AND PROCEDURES
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our chief executive officer and chief financial officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Exchange Act, as of the end of the period covered by this Quarterly Report on Form 10-Q.
+
+Based on this evaluation,...
+
+--- [ITEM] Part II, Item 1 (len=304 chars) ---
+ITEM 1.LEGAL PROCEEDINGS
+
+For a description of our material pending legal proceedings, see Note 8 “Commitments and Contingencies - Legal Matters” of the Notes to Consolidated Financial Statements included in Part I, Item 1 of this Quarterly Report on Form 10-Q, which is incorporated herein by reference....
+
+--- [ITEM] Part II, Item 1A (len=4739 chars) ---
+ITEM 1A.RISK FACTORS                
+
+Our operations and financial results are subject to various risks and uncertainties, including those described in Part I, Item 1A, "Risk Factors" in our Annual Report on Form 10-K for the year ended December 31, 2023, which could adversely affect our business, financial condition, results of operations, cash flows, and the trading price of our stock. Below are...
+
+[MIN-MERGE] item=Part_II_Item_1A section=None 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Part II, Item 2 (len=1443 chars) ---
+ITEM 2.UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
+
+Issuer Purchases of Equity Securities
+
+The following table presents information with respect to Alphabet's repurchases of Class A and Class C stock during the quarter ended March 31, 2024.
+
+PeriodTotal Number of Class A Shares Purchased 
+
+(in thousands) (1)
+
+Total Number of Class C Shares Purchased 
+
+(in thousands) (1)
+
+Average Pr...
+
+--- [ITEM] Part II, Item 5 (len=1646 chars) ---
+ITEM 5.OTHER INFORMATION 
+
+10b5-1 Trading Plans
+
+During the fiscal quarter ended March 31, 2024, no Section 16 director or officer adopted, modified, or terminated a “Rule 10b5-1 trading arrangement” (as defined in Item 408 of Regulation S-K of the Exchange Act).
+
+There were no “non-Rule 10b5-1 trading arrangements” (as defined in Item 408 of Regulation S-K of the Exchange Act) adopted, modified o...
+
+--- [ITEM] Part II, Item 6 (len=2213 chars) ---
+ITEM 6.EXHIBITS
+
+ExhibitNumber  DescriptionIncorporated by reference herein
+
+FormDate
+
+10.01
+
+*
+
+♦Alphabet Inc. Amended and Restated 2021 Stock Plan – Form of Alphabet Restricted Stock Unit Agreement
+
+10.02
+
+*
+
+♦Alphabet Inc. Amended and Restated 2021 Stock Plan – Form of Alphabet CEO Performance Stock Unit Agreement
+
+10.03
+
+*
+
+♦Alphabet Inc. Amended and Restated 2021 Stock Plan – Form of Alphabet...

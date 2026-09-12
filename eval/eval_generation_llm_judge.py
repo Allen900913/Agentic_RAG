@@ -48,7 +48,7 @@ load_dotenv(override=True)
 import rag_query as rq
 
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
-DEFAULT_GEN_MODEL = rq.DEFAULT_MODEL   # "openai/gpt-oss-120b"，與生產 rag_query.py 一致
+DEFAULT_GEN_MODEL = rq.DEFAULT_MODEL   # 與生產 rag_query.py 一致（刻意不複述模型名，會漂）
 # 2026-07-19：judge 預設從 qwen3-32b 換成 gpt-oss-20b。qwen/qwen3-32b 已下架
 # （404 model_not_found），NVIDIA 目錄亦無任何可用的 Qwen 替身：qwen3-next-80b /
 # seed-oss-36b 都帶 Deprecation:2026-07-27、nemotron-nano-3-30b 直接 404。
@@ -56,7 +56,14 @@ DEFAULT_GEN_MODEL = rq.DEFAULT_MODEL   # "openai/gpt-oss-120b"，與生產 rag_q
 #   openai/gpt-oss-20b   10/11  ← 與被下架的 qwen3-32b 同分
 #   openai/gpt-oss-120b   9/11  ← 大模型反而更差，且與 gen_model 同一支（自評偏誤）
 # 兩者都栽在 lex12_fiscal_calendar（財年措辭誤判，已知系統性 bug 家族，換模型救不了）。
-DEFAULT_JUDGE_MODEL = "openai/gpt-oss-20b"
+#
+# 2026-09-04：換成 `google/gemma-4-31b-it`。理由是延遲——選型證據見
+# `eval_ragas_vs_rubric.py` 的 `DEFAULT_RAGAS_MODEL` 上方那張表（同一場 bake-off，
+# 三個角色其中一個就是這支 judge 的 rubric 評分形狀），gemma 中位 3.0s vs 20b 的 8.8s。
+# ⚠ **上面那份 10/11 vs 9/11 是綁在 `gpt-oss-20b` 上的，對 gemma 不成立**。要拿新的
+#   就跑 `eval/judge_regression.py`（11 個凍結案例），而且**那支不是零噪音**：同一份碼、
+#   同一個模型連跑三個單輪拿到 10/11、9/11、11/11 → 一律看逐題 k/n，不要拿單輪比大小。
+DEFAULT_JUDGE_MODEL = "google/gemma-4-31b-it"
 
 # ⚠ 拒答判準（`REFUSAL_MARKERS`／`REFUSAL_MAX_CHARS`／`looks_like_refusal`）2026-08-27
 # 搬進 `rag_query.py`——生產端也要用它（拒答不該附引用清單），而生產不可以 import eval/。
@@ -971,7 +978,7 @@ def main() -> None:
     parser.add_argument("--translate-query-en", action="store_true",
                         help="入口把 query 翻成英文一次，dense/sparse/rewrite/rerank 全部改用（解 cross-lingual 失真，見 CHANGELOG 2026-07-08）")
     parser.add_argument("--full-translate-en", action="store_true",
-                        help="檢索中間層一律用英文（dense+sparse recall + rerank 全英文），對齊 agentic_rag_v2 的 full_translate_en=True，做「單次檢索 vs agentic」公平對照用")
+                        help="檢索中間層一律用英文（dense+sparse recall + rerank 全英文），對齊 agentic_rag_version 的 full_translate_en=True，做「單次檢索 vs agentic」公平對照用")
     parser.add_argument("--compress", action="store_true",
                         help="檢索後句級抽取：生成前把每個 chunk 的相關句逐字抽出擺前面（見 CHANGELOG "
                              "2026-07-14）。預設關，維持既有 baseline 向後相容。")

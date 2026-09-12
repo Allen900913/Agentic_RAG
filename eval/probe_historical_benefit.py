@@ -51,6 +51,15 @@ import os
 import re
 import statistics
 import sys
+# ⚠ Windows 主控台預設 cp950，而本檔的報表帶著 ⚠／✔／① 等字元 ⇒ **印到一半就 crash**，
+#   而 crash 的退出碼與「有 FAIL」外觀相同 ＝ 把量尺自己的失敗讀成系統的失敗。
+#   2026-09-11 普查：eval/ 的 51 支裡有 27 支帶著這個地雷，其中兩支當天真的踩了。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
+
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent
@@ -61,19 +70,11 @@ sys.path.insert(0, str(_ROOT))
 if "--no-replay-cache" not in sys.argv and not os.getenv("RAG_REPLAY_CACHE"):
     os.environ["RAG_REPLAY_CACHE"] = str(_ROOT / "eval" / "replay_cache.json")
 
-_NUMERIC_LITERAL_RE = re.compile(r"^[0-9][0-9,.]*$")
-
-
-def literal_matcher(lit: str):
-    """把題庫的 `literal` 編成一個 `(text) -> bool`。
-
-    數字型要用邊界比對，否則 `1,353` 會吃到 `21,353`、`3.19` 會吃到 `13.19` 與 `3.190`
-    ——那會讓 gold 檔多出幾份、前提檢查跟著失真。片語型則是大小寫無關的子字串。"""
-    if _NUMERIC_LITERAL_RE.match(lit):
-        rx = re.compile(r"(?<![0-9,.])" + re.escape(lit) + r"(?![0-9,.])")
-        return lambda t: bool(rx.search(t or ""))
-    low = lit.lower()
-    return lambda t: low in (t or "").lower()
+# `literal_matcher` 2026-09-04 搬到 `eval/chunk_gold.py` 當唯一定義點——本檔與那支用的是
+# 同一個判準（「literal 在 collection 裡落在哪」），維護兩份逐字相同的正則遲早會漂移。
+# ⚠ 下面 `cmd_selftest` 的 10 條案例**刻意留在這裡**：它們現在測的是共用實作，
+#   等於多一個獨立的呼叫端在守同一個零件（chunk_gold.py 自己也有一組，形狀不同）。
+from chunk_gold import literal_matcher  # noqa: E402
 
 
 def scan_docs(client, collection: str) -> list[dict]:

@@ -112,8 +112,8 @@
 |       Other | $(81) |  |
 |     Net cash used in financing activities | $(21,283) | $(15,553) |
 |   Change in cash and cash equivalents | $2,632 | $6,645 |
-|   Cash and cash equivalents at end of period |  |  |
-|   Cash and cash equivalents at end of period |  |  |
+|   Cash and cash equivalents at beginning of period | $10,605 | $8,589 |
+|   Cash and cash equivalents at end of period | $13,237 | $15,234 |
 
 --- [TABLE extra #0] ---
 FORM
@@ -260,9 +260,7 @@ Investment and Interest Rate Risk
 
 Financial market risks related to investment and interest rate risk are described in Part II, Item 7A, “Quantitative and Qualitative Disclosures About Market Risk” in our Annual Report on Form 10-K for the fiscal year ended January 25, 2026. Our marketable equity securities consist of publicly-he...
 
-[SECTION] item=Part_I_Item_3 period=None 依小標切成 2 段：Investment and Interest Rate Risk | Foreign Exchange Rate Risk
-
---- [ITEM] Part I, Item 4 (len=2332 chars) ---
+--- [ITEM] Part I, Item 4 (len=2304 chars) ---
 Item 4. Controls and Procedures
 
 Controls and Procedures
@@ -270,8 +268,6 @@ Controls and Procedures
 Disclosure Controls and Procedures
 
 Based on their evaluation as of April 26, 2026, our management, including our Chief Executive Officer and Chief Financial Officer, has concluded that our disclosure controls and procedures (as defined in Rule 13a-15(e) under the Exchange Act) were effective to provide reasonable assurance that the informa...
-
-[SECTION] item=Part_I_Item_4 period=None 依小標切成 2 段：Disclosure Controls and Procedures | Inherent Limitations on Effectiveness of Controls
 
 --- [ITEM] Part II, Item 1 (len=217 chars) ---
 Item 1. Legal Proceedings
@@ -295,10 +291,6 @@ Issuer Purchases of Equity Securities
 We repurchased 108 million shares of our common stock for $20.2 billion during the first quarter of fiscal year 2027. As of April 26, 2026, we were authorized, subject to certain specifications, to repurchase up to $38.5 billion of our common stock.
 
 On May 18, 2026, our Board of Directors a...
-
-[SECTION] item=Part_II_Item_2 period=None 依小標切成 2 段：Issuer Purchases of Equity Securities | Employee Equity Incentive Program Share Withholding
-
-[MIN-MERGE] item=Part_II_Item_2 section=Issuer Purchases of Equity Securities 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 5 (len=825 chars) ---
 Item 5. Other Information
@@ -337,5 +329,3 @@ Schedule/FormExhibitFiling Date
 31.1*Certification of Chief Executive Officer as required by Rule 13a-14(a) of the Securities Exchange Act of 1934
 
 31.2*Certification of Chief Financial Officer as required by Rule 13a-14(a) of the Securities Exchan...
-
-[SECTION] item=Part_II_Item_6 period=None 依小標切成 2 段：(小標前=章節層) | Colette M. Kress

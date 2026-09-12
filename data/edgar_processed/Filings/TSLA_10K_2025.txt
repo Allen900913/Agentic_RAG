@@ -126,8 +126,8 @@
 |     Net cash provided by financing activities | $1,139 | $3,853 | $2,589 |
 |     Effect of exchange rate changes on cash and cash equivalents and restricted cash | $171 | $(141) | $4 |
 |   Net increase (decrease) in cash and cash equivalents and restricted cash | $579 | $(152) | $265 |
-|   Cash and cash equivalents and restricted cash, end of period |  |  |  |
-|   Cash and cash equivalents and restricted cash, end of period |  |  |  |
+|   Cash and cash equivalents and restricted cash, beginning of period | $17,037 | $17,189 | $16,924 |
+|   Cash and cash equivalents and restricted cash, end of period | $17,616 | $17,037 | $17,189 |
 |     Acquisitions of property and equipment included in liabilities | $1,913 | $1,410 | $2,272 |
 |     Cash paid during the period for interest | $292 | $277 | $126 |
 
@@ -250,36 +250,32 @@ INDEX TO EXHIBITS(1)
 | 3.1 |  | Certificate of Formation of the Registrant |  | 10-Q |  | 001-34756 |  | 3.1 |  | July 24, 2024 |  |  |...
 
 --- [TABLE extra #15] ---
-Exhibit data for investor's rights agreements and securities.
+The table lists exhibit numbers, descriptions, filing forms, file numbers, exhibit codes, and filing dates for documents referenced in the SEC filing, covering events from 2011 to 2025.
 
 | Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
-| 4.7 |  | Waiver to Fifth Amended and Restated Investor’s Rights Agreeme...
+|  | Exhibit Description |  | Form |  |...
 
 --- [TABLE extra #16] ---
-Exhibit data for various filings and agreements.
+The table lists exhibit numbers, descriptions, filing forms, file numbers, and filing dates for documents referenced in the SEC filing’s notes section, covering events from 2008 to 2025.
 
 | Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
-| 10.1** |  | Form of Indemnification Agreement between the Registrant and its directo...
+|  | Exhibit Description |  | Form |  ...
 
 --- [TABLE extra #17] ---
-Exhibit index for various SEC filings, covering multiple years.
+The table lists exhibits referenced in the filing, showing exhibit numbers, descriptions, filing forms, file numbers, and filing dates for documents dated 2015 through 2025.
 
 | Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
-| 10.16** |  | 2025 CEO Interim Restricted Stock Agreement, dated Augus...
+|  | Exhibit Description |  | Form |  | File No. | ...
 
 --- [TABLE extra #18] ---
-XBRL taxonomy extension documents for current filing.
+The table lists exhibits incorporated by reference in the filing’s notes section, detailing Inline XBRL taxonomy extension documents (Exhibits 101) and the Cover Page Interactive Data File (Exhibit 104).
 
 | Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
-| 101.SCH |  | Inline XBRL Taxonomy Extension Schema Document |  | — |  | — |  | ...
+|  | Exhibit Descript...
 
 --- [TABLE extra #19] ---
 Pursuant to the requirements of Section 13 or 15(d) the Securities Exchange Act of 1934, the registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized.
@@ -302,12 +298,52 @@ Pursuant to the requirements of the Securities Exchange Act of 1934, this report
 
 [INFO] extra tables kept=21 (去重後，來自 unstructured)
 
---- [ITEM] Item 7A (len=1626 chars) ---
-ITEM 7A. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+--- [ITEM] Item 1 (len=45463 chars) ---
+ITEM 1. BUSINESS
 
-Foreign Currency Risk
+Overview
 
-We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). In general, we are...
+We are focused on bringing artificial intelligence (“AI”) into the real world, through products and services like Full Self-Driving (“FSD”) (Supervised) and Robotaxi, as well as working to develop and commercialize AI robots (“Bots”) (including Optimus). We intend to leverage our current operations, in which we design, develop, manufacture, sell and lease high-performan...
+
+[MIN-MERGE] item=Item_1 section=None 26 → 25 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 1A (len=83678 chars) ---
+ITEM 1A. RISK FACTORS 
+
+You should carefully consider the risks described below together with the other information set forth in this report, which could materially affect our business, financial condition and future results. The risks described below are not the only risks facing our company. Risks and uncertainties not currently known to us or that we currently deem to be immaterial also may mat...
+
+[MIN-MERGE] item=Item_1A section=None 42 → 39 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1A 原 chunk 1211 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 1786 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1563 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 1B (len=5807 chars) ---
+Table of Contents
+
+ITEM 1B. UNRESOLVED STAFF COMMENTS
+
+None.
+
+ITEM 1C. CYBERSECURITY 
+
+Cybersecurity Risk Management and Strategy
+
+We recognize the importance of assessing, identifying, and managing material risks associated with cybersecurity threats, as such term is defined in Item 106(a) of Regulation S-K. These risks include, among other things: operational risks, intellectual property theft, ...
+
+[MIN-MERGE] item=Item_1B section=None 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 2 (len=1184 chars) ---
+ITEM 2. PROPERTIES
+
+We are headquartered in Austin, Texas. Our principal facilities include a large number of properties in North America, Europe and Asia utilized for manufacturing and assembly, warehousing, engineering, retail and service locations, Supercharger sites and administrative and sales offices. Our facilities are used to support both of our reporting segments, and are suitable and ade...
+
+--- [ITEM] Item 3 (len=227 chars) ---
+ITEM 3. LEGAL PROCEEDINGS
+
+For a description of our material pending legal proceedings, see Note 13, Commitments and Contingencies, to the consolidated financial statements included elsewhere in this Annual Report on Form 10-K....
 
 --- [ITEM] Item 4 (len=61 chars) ---
 ITEM 4. MINE SAFETY DISCLOSURES
@@ -318,83 +354,6 @@ Not applicable.
 
 PART II...
 
---- [ITEM] Item 9B (len=3416 chars) ---
-ITEM 9B. OTHER INFORMATION
-
-Rule 10b5-1 Trading Arrangements
-
-None of the Company’s directors or officers adopted, modified or terminated a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended December 31, 2025, as such terms are defined under Item 408(a) of Regulation S-K, except as follows: 
-
-On November 17, 2025, Vaibhav Taneja, Chie...
-
-[SECTION] item=Item_9B period=None 依小標切成 2 段：(小標前=章節層) | Investment in xAI
-
---- [ITEM] Item 1 (len=45463 chars) ---
-ITEM 1. BUSINESS
-
-Overview
-
-We are focused on bringing artificial intelligence (“AI”) into the real world, through products and services like Full Self-Driving (“FSD”) (Supervised) and Robotaxi, as well as working to develop and commercialize AI robots (“Bots”) (including Optimus). We intend to leverage our current operations, in which we design, develop, manufacture, sell and lease high-performan...
-
-[SECTION] item=Item_1 period=None 依小標切成 41 段：Overview | Segment Information | Automotive | Energy Storage Products | Energy Generation Offerings | Self-Driving Development and Artificial Intelligence | Vehicle Control and Infotainment Software | Battery and Powertrain | Energy Storage Products | Energy Generation Systems | Infrastructure | Automotive | Energy Generation and Storage | Sales and Marketing | Direct Sales | Used Vehicle Sales | Public Charging | In-App Upgrades | Energy Generation and Storage | Service | Energy Generation and Storage | Purchase Financing and Leases | Insurance | Energy Generation and Storage | Manufacturing | Supply Chain | Governmental Programs, Incentives and Regulations | Automotive Regulatory Credits | Energy Storage System Incentives and Policies | Energy Generation System Incentives and Policies | Vehicle Safety and Testing | Automobile Manufacturer and Dealer Regulation | Battery Safety and Testing | Solar Energy—General | Solar Energy—Net Metering | Automotive | Energy Storage Systems | Energy Generation Systems | Intellectual Property | Human Capital Resources | Available Information
-
-[MIN-MERGE] item=Item_1 section=Segment Information 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Energy Generation Offerings 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Infrastructure 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Direct Sales 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Energy Generation and Storage 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Solar Energy—General 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Energy Storage Systems 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Human Capital Resources 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 1A (len=83678 chars) ---
-ITEM 1A. RISK FACTORS 
-
-You should carefully consider the risks described below together with the other information set forth in this report, which could materially affect our business, financial condition and future results. The risks described below are not the only risks facing our company. Risks and uncertainties not currently known to us or that we currently deem to be immaterial also may mat...
-
-[SECTION] item=Item_1A period=None 依小標切成 2 段：(小標前=章節層) | Risks Related to Our Operations
-
-[MIN-MERGE] item=Item_1A section=Risks Related to Our Operations 32 → 29 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[RCTS] item=Item_1A 原 chunk 1786 token > 1200 → 補切成 3 份
-
-[RCTS] item=Item_1A 原 chunk 1563 token > 1200 → 補切成 3 份
-
---- [ITEM] Item 1B (len=60 chars) ---
-Table of Contents
-
-ITEM 1B. UNRESOLVED STAFF COMMENTS
-
-None....
-
---- [ITEM] Item 1C (len=5745 chars) ---
-ITEM 1C. CYBERSECURITY 
-
-Cybersecurity Risk Management and Strategy
-
-We recognize the importance of assessing, identifying, and managing material risks associated with cybersecurity threats, as such term is defined in Item 106(a) of Regulation S-K. These risks include, among other things: operational risks, intellectual property theft, fraud, extortion, harm to employees or customers and violation...
-
-[SECTION] item=Item_1C period=None 依小標切成 2 段：Cybersecurity Risk Management and Strategy | Cybersecurity Governance
-
---- [ITEM] Item 2 (len=1184 chars) ---
-ITEM 2. PROPERTIES
-
-We are headquartered in Austin, Texas. Our principal facilities include a large number of properties in North America, Europe and Asia utilized for manufacturing and assembly, warehousing, engineering, retail and service locations, Supercharger sites and administrative and sales offices. Our facilities are used to support both of our reporting segments, and are suitable and ade...
-
-[SECTION] item=Item_2 period=None 依小標切成 2 段：(小標前=章節層) | Megafactory LathropLathrop, CaliforniaLeased
-
---- [ITEM] Item 3 (len=227 chars) ---
-ITEM 3. LEGAL PROCEEDINGS
-
-For a description of our material pending legal proceedings, see Note 13, Commitments and Contingencies, to the consolidated financial statements included elsewhere in this Annual Report on Form 10-K....
-
 --- [ITEM] Item 5 (len=2664 chars) ---
 ITEM 5. MARKET FOR REGISTRANT’S COMMON EQUITY, RELATED STOCKHOLDER MATTERS AND ISSUER PURCHASES OF EQUITY SECURITIES
 
@@ -402,9 +361,7 @@ Market Information
 
 Our common stock has traded on The NASDAQ Global Select Market under the symbol “TSLA” since it began trading on June 29, 2010. Our initial public offering was priced at approximately $1.13 per share on June 28, 2010 as adjusted to give effect to the three-for-o...
 
-[SECTION] item=Item_5 period=None 依小標切成 4 段：Market Information | Holders | Dividend Policy | Stock Performance Graph
-
-[MIN-MERGE] item=Item_5 section=Stock Performance Graph 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+[MIN-MERGE] item=Item_5 section=None 3 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Item 7 (len=55405 chars) ---
 ITEM 7. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS 
@@ -420,6 +377,13 @@ The following discussion and analysis should be read in conjunction with the con
 [MIN-MERGE] item=Item_7 section=Critical Accounting Policies and Estimates 3 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [MIN-MERGE] item=Item_7 section=Inventory Valuation 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 7A (len=1626 chars) ---
+ITEM 7A. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+Foreign Currency Risk
+
+We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). In general, we are...
 
 --- [ITEM] Item 8 (len=171280 chars) ---
 ITEM 8. FINANCIAL STATEMENTS AND SUPPLEMENTARY DATA
@@ -482,6 +446,15 @@ Evaluation of Disclosure Controls and Procedures
 
 Our management, with the participation of our Chief Executive Officer and our Chief Financial Officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Exchange Act. In designing and evaluating the disclosure controls and procedures, our management recognizes t...
 
+--- [ITEM] Item 9B (len=3416 chars) ---
+ITEM 9B. OTHER INFORMATION
+
+Rule 10b5-1 Trading Arrangements
+
+None of the Company’s directors or officers adopted, modified or terminated a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended December 31, 2025, as such terms are defined under Item 408(a) of Regulation S-K, except as follows: 
+
+On November 17, 2025, Vaibhav Taneja, Chie...
+
 --- [ITEM] Item 9C (len=107 chars) ---
 ITEM 9C. DISCLOSURE REGARDING FOREIGN JURISDICTIONS THAT PREVENT INSPECTIONS
 
@@ -511,6 +484,15 @@ ITEM 13. CERTAIN RELATIONSHIPS AND RELATED TRANSACTIONS AND DIRECTOR INDEPENDENC
 
 The information required by this Item 13 of Form 10-K will be included in our 2026 Proxy Statement and is incorporated herein by reference....
 
+--- [ITEM] Item 14 (len=201 chars) ---
+ITEM 14. PRINCIPAL ACCOUNTANT FEES AND SERVICES
+
+The information required by this Item 14 of Form 10-K will be included in our 2026 Proxy Statement and is incorporated herein by reference.
+
+96
+
+PART IV...
+
 --- [ITEM] Item 15 (len=8818 chars) ---
 ITEM 15. EXHIBITS AND FINANCIAL STATEMENT SCHEDULES
 
@@ -518,29 +500,7 @@ ITEM 15. EXHIBITS AND FINANCIAL STATEMENT SCHEDULES
 
 2.All financial statement schedules have been omitted since the required information was not applicable or was not present in amounts sufficient to require submission of the schedules, or because the information required is included in the ...
 
---- [ITEM] Item 16 (len=1335 chars) ---
+--- [ITEM] Item 16 (len=33 chars) ---
 ITEM 16. FORM 10-K SUMMARY
 
-None.
-
-101
-
-SIGNATURES
-
-Pursuant to the requirements of Section 13 or 15(d) the Securities Exchange Act of 1934, the registrant has duly caused this report to be signed on its behalf by the undersigned, thereunto duly authorized.
-
-Tesla, Inc.
-
-Date: January 28, 2026
-
-/s/ Elon Musk 
-
-Elon Musk
-
-Chief Executive Officer
-
-(Principal Executive Officer)
-
-Pursuant to the requi...
-
-[SECTION] item=Item_16 period=None 依小標切成 4 段：(小標前=章節層) | (Principal Executive Officer) | SignatureTitleDate | Elon Musk
+None....

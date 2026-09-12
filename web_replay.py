@@ -148,7 +148,7 @@ def put(key: str, value: Any) -> None:
     """存一筆原始回應。
 
     ⚠ **必須深拷貝**：我們刻意錄在最外層，而下游 `_dedupe_web_results` 會**就地改寫**
-      同一批 dict（`r["_pub_date"] = d`，`agentic_rag_v2.py:584`）。存參照的話快取會被塞進
+      同一批 dict（`r["_pub_date"] = d`，`agentic_rag_version/__init__.py:584`）。存參照的話快取會被塞進
       `date` 物件 → 落盤時 `TypeError: Object of type date is not JSON serializable`。
       2026-08-15 首次真實錄製就這樣掉了第 8 筆。「錄在最外層」與「下游會改寫」是一組的，
       不能只做前者。

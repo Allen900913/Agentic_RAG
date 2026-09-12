@@ -1,0 +1,313 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_after.json"
+  },
+  "records": [
+    {
+      "id": "news-11",
+      "query": "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+      "why": "flow",
+      "answer": "亞馬遜最近在歐洲宣布了多項大型投資，總額以百億歐元計算，涵蓋供應鏈、雲端基礎建設與資料中心等領域【web: https://finance.yahoo.com/sectors/technology/articles/amazon-pumps-12-billion-european-110000057.html】。\n\n- **全歐洲投資規模**：2025 年，亞馬遜在歐洲的總投資超過 **60 億歐元**（約 69.7 億美元），創下公司在該區域史上最大年度投資【web: https://finance.yahoo.com/sectors/technology/articles/amazon-pumps-12-billion-european-110000057.html】。  \n- **供應鏈與自動化**：同時投入 **120 億美元**（約 10 億歐元）於歐洲供應鏈，新增 25,000 個工作機會並部署下一代機器人【web: https://finance.yahoo.com/sectors/technology/articles/amazon-pumps-12-billion-european-110000057.html】；其中一筆 10 億歐元（約 11.6 億美元）投資旨在加速運送速度【web: https://finance.yahoo.com/sectors/technology/articles/amazon-pumps-12-billion-european-110000057.html】。  \n- **荷蘭市場**：2025 年 10 月，亞馬遜計畫在荷蘭投資 **1.4 億歐元**（約 1.63 億美元），為其在該國的最大投資，預計在未來三年內完成【web: https://www.reuters.com/business/retail-consumer/amazon-invest-16-billion-dutch-operations-fd-reports-2025-10-27】。  \n- **AWS 主權雲**：2024 年，亞馬遜宣布在德國的 AWS 歐洲主權雲投入 **7.8 億歐元**（約 9.1 億美元），並於 2026 年 1 月擴展至比利時、荷蘭與葡萄牙【web: https://www.cnbc.com/2026/01/15/amazon-sovereign-cloud-europe-expansion.html】。  \n- **西班牙資料中心**：2024 年 5 月，AWS 再次投入 **170.2 億美元**（以歐元計算約 155 億歐元）於西班牙建設資料中心，計畫在 10 年內完成，將創造平均每年 17,500 個本地就業機會【web: https://www.reuters.com/technology/amazon-web-services-invest-1702-bln-data-centres-spain-2024-05-22】。  \n\n這些投資顯示亞馬遜正以數十億歐元規模加速在歐洲的物流、雲端服務與 AI 相關基礎設施建設，同時透過新工作機會與技術升級提升區域競爭力。\n\n---\n⚠ 資料時效：AMZN 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AMZN_10Q_202603.html #134 (rerank=0.725)\n  - AMZN_10K_2025.html #216 (rerank=0.725)\n  - AMZN_10K_2025.html #45 (rerank=0.723)\n  - AMZN_10K_2025.html #44 (rerank=0.719)\n  - AMZN_10K_2025.html #217 (rerank=0.714)\n  - AMZN_10Q_202606.html #94 (rerank=0.670)\n  - AMZN_10Q_202603.html #93 (rerank=0.665)\n  - AMZN_10K_2025.html #134 (rerank=0.661)\n  - AMZN_10Q_202603.html #43 (rerank=0.659)\n  - AMZN_10Q_202603.html #24 (rerank=0.653)\n  - AMZN_10Q_202606.html #2 (rerank=0.629)\n  - AMZN_10Q_202606.html #79 (rerank=0.622)\n  - AMZN_10K_2025.html #28 (rerank=0.610)\n  - AMZN_10K_2025.html #140 (rerank=0.588)\n  - AMZN_10K_2025.html #142 (rerank=0.567)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 亞馬遜最近在歐洲有什麼大型投資的新聞？",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "亞馬遜最近在歐洲有什麼大型投資的新聞？",
+        "查閱 Amazon 2025 年 10-K 中的歐洲投資計畫",
+        "查詢 Amazon 2026 年在歐洲的最新大型投資新聞（使用網路搜尋）",
+        "查閱 Amazon 2026 年 10-Q 中的歐洲投資資訊",
+        "查閱 Amazon 2026 年官方新聞稿中關於歐洲大型投資的資訊",
+        "查閱 Amazon 2026 年投資者簡報（Investor Presentation）中關於歐洲的大型投資資訊",
+        "查詢歐洲主要新聞媒體（如 Reuters、Financial Times、Bloomberg）報導的 Amazon 2026 年最新大型投資"
+      ],
+      "sources": [
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 134
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 216
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 217
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 205
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 94
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 93
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 134
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 43
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 135
+        },
+        {
+          "source": "AMZN_10Q_202603.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 79
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 24
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 140
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 142
+        }
+      ]
+    },
+    {
+      "id": "news-12",
+      "query": "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？",
+      "why": "flow",
+      "answer": "最近有幾則與 Tesla 或 Elon Musk 直接相關、顯著影響公司關注度的新聞，包括 Musk 宣布將把注意力重新放回 Tesla、股東投票高額薪酬方案、財報不佳導致股價大跌，以及市場對其品牌與未來合併構想的負面情緒。  \n\n- **2025‑04‑23 Reuters**：Musk 表示將把每週為美國總統特朗普的工作縮減至一天或兩天，並承諾重新聚焦 Tesla，結果 TSLA 股價當日上漲**近 8%**【web: https://www.reuters.com/business/autos-transportation/tesla-shares-rise-65-musk-says-cut-back-doge-work-2025-04-23】。同時報導指出 Tesla 前期**淨利下滑 71%**，汽車營收大幅下降，且公司警告平價車的產能提升可能較預期緩慢，並將在第二季財報更新時檢視全年交付預測，提升了市場對公司未來表現的關注。\n\n- **2025‑11‑06 CNBC**：股東將投票決定 Elon Musk **10,000 億美元（$1 兆）**的薪酬方案，該方案包含 12 個分期授予條件，若達成將提升 Musk 的投票權。報導指出，受此消息及 Musk 本人購買**10 億美元**股票助攻，Tesla 股價今年已**上漲 14%**【web: https://www.cnbc.com/2025/11/06/tesla-shareholders-vote-on-elon-musks-1-trillion-pay-package.html】。此外，國家經濟研究局的研究估計，若無 Musk 的「兩極化與黨派行為」，2022 年 10 月至 2025 年 4 月的美國銷售可能高出**67% 至 83%**【web: https://www.cnbc.com/2025/11/06/tesla-shareholders-vote-on-elon-musks-1-trillion-pay-package.html】，顯示其個人行為仍深刻影響市場情緒。\n\n- **未標示日期 WSJ**：Tesla 股價在一週內**下跌 15%**，市值蒸發約**215 億美元**，原因是公司未達到盈餘目標且首次出現兩年來的負現金流，且此跌勢與整體科技股因 AI 超支而拋售同步【web: https://www.wsj.com/finance/stocks/reality-bites-elon-musk-and-his-tesla-spacex-believers-1b639591】。此新聞突顯財務表現不佳對投資者關注度的衝擊。\n\n- **未標示日期 SEC Letter**：2024 年第一季 Tesla **總營收較去年同期下降 9%**，汽車營收**下降 13%**，淨利**下降 55%**，且持續的負面 Musk 相關報導被指削弱品牌形象，進一步影響消費者購買意願與公司底線【web: https://www.sec.gov/Archives/edgar/data/1318605/000121465924009597/o520243px14a6g.htm】。\n\n- **未標示日期 Yahoo Finance**：截至 2026 年，Tesla 股價**下跌 11%**，市盈率為**370x**（TTM），預期市盈率為**192x**，能源發電與儲能營收較去年同期**下降 12%**，全球車輛庫存上升至**27 天**，且社群媒體與預測市場對 Musk 想將 SpaceX 與 Tesla 合併成**34,000 億美元（$3.4 兆）**巨頭的懷疑情緒持續抑制關注度【web: https://finance.yahoo.com/markets/stocks/articles/elon-musk-may-trillionaire-tesla-191620897.html】。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "最近有什麼跟 Tesla 或 Elon Musk 相關、影響 Tesla 關注度的新聞？"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-13",
+      "query": "最近科技巨頭（Magnificent Seven）的股價有什麼值得注意的消息？",
+      "why": "flow",
+      "answer": "最近，Magnificent Seven 中的 **Apple** 與 **Microsoft** 股價出現顯著波動，Apple 股價在 8 月底持續在 $310‑$315 之間小幅上揚，而 Microsoft 股價則在 2026 年第一季大幅下跌後，於 7 月底的財報公布後在延伸交易中跳升逾 8%。  \n\n**Apple (AAPL)**  \n- 依 Yahoo Finance 的歷史行情，2026‑08‑27 收盤價為 **$314.58**，前幾日收盤價均介於 **$309.35‑$317.46** 之間【web: https://finance.yahoo.com/quote/AAPL/history】。  \n- CNBC 顯示最新報價為 **$319.70**，較前一交易日下跌 **$0.81**（‑0.25%）【web: https://www.cnbc.com/quotes/AAPL】。  \n- 公司的市值根據最新的基本面資料為 **43,420.2 億美元（$4,342.02 billion）**（約 43,400 億美元（$4.34 兆））【AAPL_Fundamentals_20260612.txt, chunk #0】。  \n\n**Microsoft (MSFT)**  \n- 2026‑03‑31 的 CNBC 報導指出，Microsoft 股價在第一季「**下跌 23%**」創下自 2008 年以來最慘跌幅【web: https://www.cnbc.com/2026/03/31/microsofts-stock-closes-worst-quarter-since-2008-financial-crisis.html】。  \n- 2026‑07‑29 的 Reuters 報導則說，財報公布後，Microsoft 股價在延伸交易中 **上漲超過 8%**【web: https://www.reuters.com/business/microsoft-tops-quarterly-cloud-growth-estimates-easing-spending-concerns-2026-07-29】。  \n- 同樣在 Reuters 文章中提到，Microsoft 在本年度迄今已下跌 **18%**，在雲端競爭中落後 Alphabet【web: https://www.reuters.com/business/microsoft-tops-quarterly-cloud-growth-estimates-easing-spending-concerns-2026-07-29】。  \n- Yahoo Finance 的分析文章指出，自上一次財報公布以來，Microsoft 股價 **上漲 12%**【web: https://finance.yahoo.com/markets/stocks/articles/why-microsoft-msft-12-since-153027787.html】。  \n\n**Meta Platforms (META)**  \n- 目前的基本面資料顯示其市值為 **14,429.2 億美元（$1,442.92 billion）**，但參考資料未提供即時股價資訊【META_Fundamentals_20260612.txt, chunk #0】。  \n\n**Amazon (AMZN)**、**Alphabet/Google (GOOGL)**、**Nvidia (NVDA)**、**Tesla (TSLA)**  \n- 這四家公司在提供的財務文件與即時搜尋結果中皆未出現最新股價或即時行情的具體數字，故無法報導近期股價變動【AMZN_10Q_202606.html, chunk #0】【GOOGL_10Q_202606.html, chunk #0】【NVDA_10Q_202510.html, chunk #101】【TSLA_Fundamentals_20260612.txt, chunk #0】。  \n\n總結來說，Apple 股價在近期保持在 $310‑$320 區間且略有上揚；Microsoft 則經歷了先跌後升的劇烈波動，從 23% 的季內跌幅回升至延伸交易中超過 8% 的漲幅。其餘四大科技巨頭的即時股價資訊在目前的參考資料中未被披露。\n\n---\n⚠ 資料時效：AMZN 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）; GOOGL 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）; META 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）; NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）; TSLA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_Fundamentals_20260612.txt #0 (rerank=0.728)\n  - META_10Q_202606.html #1 (rerank=0.727)\n  - AAPL_10Q_202606.html #1 (rerank=0.727)\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.725)\n  - GOOGL_10Q_202606.html #1 (rerank=0.724)\n  - META_Fundamentals_20260612.txt #1 (rerank=0.724)\n  - GOOGL_10Q_202606.html #2 (rerank=0.720)\n  - AAPL_10Q_202606.html #2 (rerank=0.719)\n  - GOOGL_10Q_202606.html #0 (rerank=0.719)\n  - AMZN_10Q_202606.html #0 (rerank=0.716)\n  - AMZN_10Q_202606.html #88 (rerank=0.715)\n  - TSLA_Fundamentals_20260612.txt #0 (rerank=0.712)\n  - AMZN_10Q_202606.html #2 (rerank=0.706)\n  - TSLA_10Q_202606.html #2 (rerank=0.703)\n  - NVDA_10Q_202510.html #101 (rerank=0.662)\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.507)",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 最近的股價有什麼值得注意的消息？",
+        "Microsoft 最近的股價有什麼值得注意的消息？",
+        "Amazon 最近的股價有什麼值得注意的消息？",
+        "Alphabet 最近的股價有什麼值得注意的消息？",
+        "Meta 最近的股價有什麼值得注意的消息？",
+        "Nvidia 最近的股價有什麼值得注意的消息？",
+        "Tesla 最近的股價有什麼值得注意的消息？"
+      ],
+      "sources": [
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 1
+        },
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 1
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "META_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_10Q_202606.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 88
+        },
+        {
+          "source": "AAPL_10K_2023.html",
+          "chunk_index": 73
+        },
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 17
+        },
+        {
+          "source": "NVDA_10Q_202510.html",
+          "chunk_index": 101
+        },
+        {
+          "source": "AMZN_10Q_202506.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "AMZN_10Q_202606.html",
+          "chunk_index": 74
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "news-14",
+      "query": "新聞如何評價 Apple 服務業務的成長與獲利能力？",
+      "why": "flow",
+      "answer": "Apple 服務業務被新聞普遍評價為「高速成長且獲利能力遠高於硬體」——服務收入在最新財季以兩位數的年增率上升，且服務毛利率超過七成，成為提升整體毛利的主要動力。  \n\n- 2026 年第三季（截至 2026‑06‑27）服務淨銷售為 **307.39 億美元（$30,739 million）**，較 2025 年同季 **274.23 億美元（$27,423 million）** 增長 **12%**；全年（九個月）服務收入 **917.28 億美元（$91,728 million）**，較前一年 **804.08 億美元（$80,408 million）** 增長 **14%**【AAPL_10Q_202606.html, chunk #38】。  \n- 同季服務毛利為 **232.45 億美元（$23,245 million）**，毛利率 **75.6%**，與前一年 **207.25 億美元（$20,725 million）**、毛利率 **75.6%** 基本持平，顯示服務的高利潤結構仍然穩定【AAPL_10Q_202606.html, chunk #39】。  \n- 整體毛利率從 2025 年的 **46.5%** 提升至 2026 年的 **50.1%**，其中服務的高毛利率是拉升公司總毛利的關鍵因素【AAPL_10Q_202606.html, chunk #39】。  \n\n新聞報導亦呼應這些財報數字：  \n\n- CNBC（2025‑01‑30）指出，服務業務的成長「提升了 Apple 的整體毛利」，該季公司總毛利率升至 **46.9%**，創下歷史新高，主要因服務貢獻【web: https://www.cnbc.com/2025/01/30/apples-gross-margin-hits-record-as-services-business-keeps-growing.html】。  \n- Yahoo Finance（未標示日期）報導稱，2025 財年第四季服務收入達 **288 億美元（$28.8 billion）**，較前一年增長 **15%**，全年服務收入 **1,092 億美元（$109.2 billion）**，較 2024 年增長 **14%**，且服務毛利率為 **75.3%**，遠高於硬體的 **36.2%**【web: https://finance.yahoo.com/news/apples-services-business-major-catalyst-182600661.html】。  \n- CNBC（2026‑04‑30）則指出，2026 年第二季服務收入較去年同期 **約 16%**（從 **266.5 億美元（$26.65 billion）** 增至 **307 億美元（$30.7 billion）**），隨著服務收入的提升，公司的整體毛利率升至 **49.3%**，顯示服務對提升整體獲利的貢獻持續擴大【web: https://www.cnbc.com/2026/04/30/apple-aapl-q2-2026-earnings-report.html】。  \n- 在 2026 Q3 財報電話會議（Yahoo Finance）中，CFO 表示服務業務在「大多數市場」均實現「雙位數增長」，創下廣告、App Store、AppleCare、Apple Music、Apple TV+ 等多項類別的紀錄，並預期未來季的服務毛利率將維持在 **47%‑48%**【web: https://finance.yahoo.com/quote/AAPL/earnings/AAPL-Q3-2026-earnings_call-658553.html】。  \n\n綜合以上，新聞一致認為 Apple 的服務部門正以兩位數的收入增長率擴張，且憑藉 **75% 以上的毛利率** 成為公司最具利潤貢獻的業務，對提升整體獲利能力與股東價值扮演關鍵角色。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #20 (rerank=0.729)\n  - AAPL_10Q_202606.html #37 (rerank=0.725)\n  - AAPL_10Q_202606.html #38 (rerank=0.725)\n  - AAPL_10Q_202606.html #16 (rerank=0.724)\n  - AAPL_10Q_202606.html #17 (rerank=0.722)\n  - AAPL_10Q_202606.html #15 (rerank=0.721)\n  - AAPL_10Q_202606.html #0 (rerank=0.709)\n  - AAPL_10Q_202603.html #19 (rerank=0.701)\n  - AAPL_10Q_202606.html #39 (rerank=0.692)\n  - AAPL_10Q_202512.html #18 (rerank=0.677)\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.511)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Apple 服務業務的成長與獲利能力在最近的新聞中如何被評價？",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 服務業務的成長與獲利能力在最近的新聞中如何被評價？",
+        "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的成長與獲利能力的新聞評價",
+        "改用網路搜尋查找Apple 2026 Q3 earnings call transcript 中對服務業務的成長與獲利能力的評論",
+        "改用網路搜尋查找2026-06-13至2026-09-01期間Apple 服務業務的分析師評論或新聞評論",
+        "在知識庫中查找截至2026-06-12的Apple 服務業務的新聞評價與分析"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 20
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 37
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 38
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 16
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 17
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10Q_202603.html",
+          "chunk_index": 19
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 39
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 18
+        },
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "news-15",
+      "query": "新聞報導 Apple 為什麼被視為值得長期持有的股票？",
+      "why": "flow",
+      "answer": "Apple 被視為值得長期持有的股票，主要因為其龐大的裝置基礎、持續成長的高毛利 Services 營收，以及正在布局的在裝置 AI 能力，為公司提供穩定的經常性收入與未來升級動能。[web: https://finance.yahoo.com/markets/stocks/articles/apple-rises-20-3-months-130800574.html]\n\n- **龐大且持續擴張的活躍裝置基數**：Apple 目前擁有超過 **25 億（2.5 billion）** 台活躍設備，這為其服務與應用提供了持久的使用者基礎。[web: https://finance.yahoo.com/markets/stocks/articles/apple-rises-20-3-months-130800574.html]  \n- **Services 佔比與高速成長**：在 **FY2026 Q2**（即第二季）中，Services 佔總淨銷售的 **27.9%**，營收達 **309.8 億美元（$30.98 billion）**，較去年同期 **成長 16.3%**，創下公司史上最高紀錄。[web: https://finance.yahoo.com/markets/stocks/articles/apple-rises-20-3-months-130800574.html]  \n- **高毛利、經常性收入模型**：Services 包含訂閱、支付、雲端、廣告與數位內容等，提供 **穩定且高毛利的經常性收入**，隨著使用者基數擴大，這類收入預期將持續提升。[web: https://finance.yahoo.com/markets/stocks/articles/buy-sell-hold-apple-stock-161500214.html]  \n- **企業客戶與 AI 工作負載的滲透**：Apple 正在爭取企業客戶在 Mac、iPad 與 iPhone 上部署 AI、提升生產力與安全性的需求，進一步擴大營收來源。[web: https://finance.yahoo.com/markets/stocks/articles/buy-sell-hold-apple-stock-161500214.html]  \n- **在裝置 AI 與 Apple Intelligence 的長期潛力**：Apple 透過自研 Apple Silicon、在裝置 AI 處理與隱私導向架構，持續投資基礎模型，預期能提升使用者黏著度、促進設備升級並開創新貨幣化機會。[web: https://finance.yahoo.com/markets/stocks/articles/buy-sell-hold-apple-stock-161500214.html]  \n- **新興市場佈局**：Apple 正在印度及其他新興市場擴大零售、製造與在地化產品，為長期營收增長提供額外動能。[web: https://finance.yahoo.com/markets/stocks/articles/buy-sell-hold-apple-stock-161500214.html]  \n- **生態系統的杠桿效應**：Apple 與 Alphabet 的合作（Alphabet 為 iPhone 預設搜尋引擎支付 **超過 200 億美元（$20 billion）**）顯示其平台可在不大量投資下創造可觀收益。[web: https://www.cnbc.com/2025/10/20/cramer-apple-rally-stock.html]  \n- **產品週期與創新**：分析師預期 iPhone 17 需求強勁、未來可能推出可折疊 iPhone，且手機週期為多年度，支撐未來營收的持續性與雙位數成長潛力。[web: https://www.cnbc.com/2025/10/20/cramer-apple-rally-stock.html]  \n\n綜合以上因素——龐大的裝置基礎、快速成長且高毛利的 Services、持續投入的 AI 與企業解決方案、以及在新興市場與生態系統的深度布局——使 Apple 被投資者視為具備長期防禦性與成長性的股票。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 為什麼被視為值得長期持有的股票？"
+      ],
+      "sources": []
+    }
+  ]
+}

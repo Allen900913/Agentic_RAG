@@ -67,6 +67,14 @@ import argparse
 import json
 import re
 import sys
+
+# ⚠ Windows 主控台預設 cp950，而報表帶著 ⚠／✔ 等字元 ⇒ **印到一半 crash**，
+#   後面的主張與摘要整段不見，而退出碼與「有 FAIL」外觀相同。2026-09-11 踩到。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -94,7 +102,7 @@ def source_types_of(value: float, contexts: list[str], sources: list[str]) -> li
 
     小數表示（0.166 = 16.6%）**只在 fundamentals 比對**：全庫實測只有它把比率寫成小數，
     10-K/10-Q 的 `0.xx` 是債券票面利率與每股金額、news 的是股價漲跌，在那些來源比對小數
-    會配到完全無關的東西。同 `agentic_rag_v2._ground_source_type` 的理由。
+    會配到完全無關的東西。同 `agentic_rag_version._ground_source_type` 的理由。
     """
     from rag_query import infer_source_type
     pats = [f"{value:g}%", f"{value:g} percent", f"{value:g} percentage points"]

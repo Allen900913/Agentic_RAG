@@ -1,0 +1,424 @@
+=== MSFT 10-Q | accession=0000950170-24-118967 | fiscal_year=2025 fiscal_period=Q1 period_code=202409 ===
+
+--- [TABLE] income_statement ---
+## Consolidated Statement of Income
+
+**MICROSOFT CORPORATION** (MSFT)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Sep 30, 2024 (Q1) | Sep 30, 2023 (Q1) |
+| --- | ---: | ---: |
+|         Revenue | $65,585 | $56,517 |
+| *        Product* | $15,272 | $15,535 |
+| *        Service and Other* | $50,313 | $40,982 |
+|         Cost of revenue | $20,099 | $16,302 |
+| *        Product* | $3,294 | $3,531 |
+| *        Service and Other* | $16,805 | $12,771 |
+|       Gross margin | $45,486 | $40,215 |
+|       Research and development | $7,544 | $6,659 |
+|       Sales and marketing | $5,717 | $5,187 |
+|       General and administrative | $1,673 | $1,474 |
+|         Operating income | $30,552 | $26,895 |
+|         Other income (expense), net | $(283) | $389 |
+|       Income before income taxes | $30,269 | $27,284 |
+|       Provision for income taxes | $5,602 | $4,993 |
+|       Net income | $24,667 | $22,291 |
+|         Basic | 3.32 | 3.00 |
+|         Diluted | 3.30 | 2.99 |
+|         Basic | 7,433 | 7,429 |
+|         Diluted | 7,470 | 7,462 |
+
+--- [TABLE] balance_sheet ---
+## Consolidated Balance Sheets
+
+**MICROSOFT CORPORATION** (MSFT)
+
+**As of September 30, 2024 and June 30, 2024** *(In millions, except shares and per share data)*
+
+|  | Sep 30, 2024 | Jun 30, 2024 |
+| --- | ---: | ---: |
+|         Cash and cash equivalents | $20,840 | $18,315 |
+|         Short-term investments | $57,588 | $57,228 |
+|         Total cash, cash equivalents, and short-term investments | $78,428 | $75,543 |
+|         Accounts receivable, net of allowance for doubtful accounts of $647 and $830 | $44,148 | $56,924 |
+|         Inventories | $1,626 | $1,246 |
+|         Other current assets | $25,724 | $26,021 |
+|       Total current assets | $149,926 | $159,734 |
+|       Property and equipment, net of accumulated depreciation of $80,517 and $76,421 | $152,863 | $135,591 |
+| *      Finance Lease* | $30,116 | $25,862 |
+|       Operating lease right-of-use assets | $20,528 | $18,961 |
+|       Equity and other investments | $15,778 | $14,600 |
+|       Goodwill | $119,374 | $119,220 |
+|       Intangible assets, net | $26,751 | $27,597 |
+|       Other long-term assets | $37,793 | $36,460 |
+|     Total assets | $523,013 | $512,163 |
+|         Accounts payable | $22,768 | $21,996 |
+|         Short-term debt |  | $6,693 |
+|         Current portion of long-term debt | $2,249 | $2,249 |
+|         Accrued compensation | $8,326 | $12,564 |
+|         Short-term income taxes | $9,717 | $5,017 |
+|         Short-term unearned revenue | $53,026 | $57,582 |
+|         Other current liabilities | $19,114 | $19,185 |
+|       Total current liabilities | $115,200 | $125,286 |
+|       Long-term debt | $42,868 | $42,688 |
+|       Long-term income taxes | $24,452 | $27,931 |
+|       Long-term unearned revenue | $2,663 | $2,602 |
+|       Deferred income taxes | $2,581 | $2,618 |
+|       Operating lease liabilities | $16,361 | $15,497 |
+|       Other long-term liabilities | $31,165 | $27,064 |
+|       Total liabilities | $235,290 | $243,686 |
+|       Commitments and contingencies |  |  |
+|       Common stock and paid-in capital - shares authorized 24,000; outstanding 7,436 and 7,434 | $102,976 | $100,923 |
+|       Retained earnings | $188,929 | $173,144 |
+|       Accumulated other comprehensive loss | $(4,182) | $(5,590) |
+|       Total stockholders’ equity | $287,723 | $268,477 |
+|     Total liabilities and stockholders’ equity | $523,013 | $512,163 |
+
+--- [TABLE] cash_flow_statement ---
+## Consolidated Statement of Cash Flows
+
+**MICROSOFT CORPORATION** (MSFT)
+
+**Three Months Ended** *(In millions, except shares and per share data)*
+
+|  | Sep 30, 2024 (Q1) | Sep 30, 2023 (Q1) |
+| --- | ---: | ---: |
+|       Net income | $24,667 | $22,291 |
+|       Depreciation, amortization, and other | $7,383 | $3,921 |
+|       Stock-based compensation expense | $2,832 | $2,507 |
+|       Net recognized losses (gains) on investments and derivatives | $(125) | $14 |
+|       Deferred income taxes | $(1,433) | $(568) |
+|       Accounts receivable | $14,037 | $11,034 |
+|       Inventories | $(373) | $(505) |
+|       Other current assets | $(82) | $(796) |
+|       Other long-term assets | $(1,761) | $(2,013) |
+|       Accounts payable | $(916) | $1,214 |
+|       Unearned revenue | $(5,553) | $(4,126) |
+|       Income taxes | $1,016 | $1,425 |
+|       Other current liabilities | $(5,479) | $(4,106) |
+|       Other long-term liabilities | $(33) | $291 |
+|     Net cash from operations | 34,180 | 30,583 |
+|       Proceeds from issuance (repayments) of debt, maturities of 90 days or less, net | $(5,746) | $18,692 |
+|       Proceeds from issuance of debt |  | $7,073 |
+|       Repayments of debt | $(966) | $(1,500) |
+|       Common stock issued | $706 | $685 |
+|       Common stock repurchased | $(4,107) | $(4,831) |
+|       Common stock cash dividends paid | $(5,574) | $(5,051) |
+|       Other, net | $(889) | $(307) |
+|     Net cash from (used in) financing | $(16,576) | $14,761 |
+|       Additions to property and equipment | $(14,923) | $(9,917) |
+|       Acquisition of companies, net of cash acquired, and purchases of intangible and other assets | $(1,849) | $(1,186) |
+|       Purchases of investments | $(1,620) | $(8,460) |
+|       Maturities of investments | $2,136 | $15,718 |
+|       Sales of investments | $1,968 | $5,330 |
+|       Other, net | $(913) | $(982) |
+|     Net cash from (used in) investing | $(15,201) | $503 |
+|     Effect of foreign exchange rates on cash and cash equivalents | $122 | $(99) |
+|   Net change in cash and cash equivalents | $2,525 | $45,748 |
+|   Cash and cash equivalents, beginning of period | $18,315 | $34,704 |
+|   Cash and cash equivalents, end of period | $20,840 | $80,452 |
+
+--- [TABLE extra #0] ---
+Commission File Number
+
+| Washington |  | 91-1144442 |
+| --- | --- | --- |
+| (STATE OF INCORPORATION) |  | (I.R.S. ID) |...
+
+--- [TABLE extra #1] ---
+www.microsoft.com/investor
+
+| Securities registered pursuant to Section 12(b) of the Act: |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| Title of each class |  | Trading Symbol |  | Name of exchange on which registered |
+| Common stock, $0.00000625 par value per share |  | MSFT |  | Nasdaq |
+| 3.125% Notes due 2028 |  | MSFT |  | Nasdaq |
+| 2.625% Notes due 2033 |  | MSFT |  | Nasdaq |...
+
+--- [TABLE extra #2] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large Accelerated Filer ☒ |  | Accelerated Filer ☐ |
+| --- | --- | --- |
+| Non-accelerated Filer ☐ |  | Smaller Reporting Company ☐ |
+|  |  | Emerging Growt...
+
+--- [TABLE extra #3] ---
+Indicate the number of shares outstanding of each of the issuer’s classes of common stock, as of the latest practicable date.
+
+| Class |  | Outstanding as of October 24, 2024 |  |  |
+| --- | --- | --- | --- | --- |
+| Common Stock, $ 0.00000625 par value per share |  | 7,434,880,776 shares |  |  |...
+
+--- [TABLE extra #4] ---
+STOCKHOLDERS’ EQUITY STATEMENTS
+
+| (In millions, except per share amounts) (Unaudited) |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Three Months Ended September 30, |  | 2024 |  |  | 2023 |  |  |  |
+| Common stock and paid-in capital |  |  |  |  |  |  |  |  |
+| Balance, beginning of period |  | $ | 100,923 |  |  | $ | 93,718 |  |
+| Common stock issued |  |  |...
+
+--- [TABLE extra #5] ---
+Our commercial business primarily consists of Server products and cloud services, Microsoft 365 Commercial products and cloud services, the commercial portion of LinkedIn, Enterprise and partner services, and Dynamics products and cloud ser
+
+| Commercial remaining performance obligation |  | Commercial portion of revenue allocated to remaining performance obligations, which includes unearned reven...
+
+--- [TABLE extra #6] ---
+Metrics related to our Productivity and Business Processes and Intelligent Cloud segments assess the health of our core businesses within these segments. The metrics primarily reflect growth across our cloud services.
+
+| Microsoft 365 Commercial cloud revenue growth |  | Revenue from Microsoft 365 Commercial subscriptions, comprising Microsoft 365 Commercial, Enterprise Mobility + Security, the cl...
+
+--- [TABLE extra #7] ---
+Metrics related to our More Personal Computing segment assess the performance of our key consumer businesses.
+
+| Windows OEM and Devices revenue growth |  | Revenue from sales of Windows Pro and non-Pro licenses sold through the OEM channel and sales of first-party Devices, including Surface, HoloLens, and PC accessories |
+| --- | --- | --- |
+| Xbox content and services revenue growth |  | Revenue...
+
+--- [TABLE extra #8] ---
+SEGMENT RESULTS OF OPERATIONS
+
+| (In millions, except percentages) |  | Three Months Ended September 30, |  |  | Percentage Change |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  |  | 2024 |  |  | 2023 |  |  |  |  |  |  |  |
+| Revenue |  |  |  |  |  |  |  |  |  |  |  |  |
+| Productivity and Business Processes |  | $ | 28,317 |  |  | $ | 25,...
+
+--- [TABLE extra #9] ---
+The following table outlines the expected future recognition of unearned revenue as of September 30, 2024:
+
+| (In millions) |  |  |  |  |
+| --- | --- | --- | --- | --- |
+| Three Months Ending |  |  |  |  |
+| December 31, 2024 |  | $ | 24,279 |  |
+| March 31, 2025 |  |  | 16,953 |  |
+| June 30, 2025 |  |  | 9,620 |  |
+| September 30, 2025 |  |  | 2,174 |  |
+| Thereafter |  |  | 2,663 |  |
+| Total |...
+
+--- [TABLE extra #10] ---
+The following table sets forth the potential loss in future earnings or fair values, including associated derivatives, resulting from hypothetical changes in relevant market rates or prices:
+
+| (In millions) |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Risk Categories |  |  | Hypothetical Change |  | September 30, 2024 |  |  | Impact |  |  |...
+
+--- [TABLE extra #11] ---
+Following are our monthly share repurchases for the first quarter of fiscal year 2025:
+
+| Period |  | Total Number of Shares Purchased |  |  | Average Price Paid Per Share |  |  | Total Number of Shares Purchased as Part of Publicly Announced Plans or Programs |  |  | Approximate Dollar Value of Shares That May Yet Be Purchased Under the Plans or Programs |  |  |  |  |  |
+| --- | --- | --- | --- |...
+
+--- [TABLE extra #12] ---
+ITEM 6. EXHIBITS
+
+|  |  |  |  |  |  | Incorporated by Reference |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Exhibit Number |  | Exhibit Description |  | Filed Herewith |  | Form |  | Period Ending |  | Exhibit |  | Filing Date |
+| 15.1 |  | Letter regarding unaudited interim financial information |  | X |  |  |  |  |  |  |  |  |
+| 31.1 |  |...
+
+[INFO] extra tables kept=13 (去重後，來自 unstructured)
+
+--- [ITEM] Part I, Item 1 (len=82749 chars) ---
+ITEM 1. FINANCIAL STATEMENTS
+
+  INCOME STATEMENTS 
+
+    (In millions, except per share amounts) (Unaudited)
+
+    Three Months Ended September 30,
+
+    2024
+
+    2023
+
+    Revenue:
+
+    Product
+
+    $
+
+    15,272
+
+    $
+
+    15,535
+
+    Service and other
+
+    50,313
+
+    40,982
+
+    Total revenue
+
+    65,585
+
+    56,517
+
+    Cost of revenue:
+
+    Product
+
+    3,294
+
+    3,531
+
+    Service and other...
+
+[MIN-MERGE] item=Part_I_Item_1 section=None 29 → 24 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_I_Item_1 原 chunk 1720 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 2259 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1440 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1318 token > 1200 → 補切成 2 份
+
+--- [ITEM] Part I, Item 2 (len=46720 chars) ---
+ITEM 2. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+  Note About Forward-Looking Statements
+
+  This report includes estimates, projections, statements relating to our business plans, objectives, and expected operating results that are “forward-looking statements” within the meaning of the Private Securities Litigation Reform Act of 1995, Section 27A of th...
+
+[PERIOD] item=Part_I_Item_2 依期間章節標題切成 7 段：(標題前) | Three Months Ended September 30, 2024 vs September 30, 2023 | Three Months Ended September 30, 2024 vs September 30, 2023 | Three Months Ended September 30, 2024 vs September 30, 2023 | Three Months Ended September 30, 2024 vs September 30, 2023 | Three Months Ended September 30, 2024 vs September 30, 2023 | Three Months Ended September 30, 2024 vs September 30, 2023
+
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 11 段：Note About Forward-Looking Statements | OVERVIEW | Industry Trends | Economic Conditions, Challenges, and Risks | Seasonality | Reportable Segments | Metrics | Commercial | LinkedIn revenue growth | More Personal Computing | SUMMARY RESULTS OF OPERATIONS
+
+[MIN-MERGE] item=Part_I_Item_2 section=Industry Trends 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[SECTION] item=Part_I_Item_2 period=Three Months Ended September 30, 2024 vs September 30, 2023 依小標切成 3 段：Productivity and Business Processes | Intelligent Cloud | More Personal Computing
+
+[SECTION] item=Part_I_Item_2 period=Three Months Ended September 30, 2024 vs September 30, 2023 依小標切成 2 段：(小標前=章節層) | OTHER INCOME (EXPENSE), NET
+
+[SECTION] item=Part_I_Item_2 period=Three Months Ended September 30, 2024 vs September 30, 2023 依小標切成 22 段：(小標前=章節層) | Effective Tax Rate | Uncertain Tax Positions | LIQUIDITY AND CAPITAL RESOURCES | Cash, Cash Equivalents, and Investments | Valuation | Cash Flows | Debt Proceeds | Unearned Revenue | Income Taxes | Share Repurchases | Dividends | Other Planned Uses of Capital | RECENT ACCOUNTING GUIDANCE | CRITICAL ACCOUNTING ESTIMATES | Revenue Recognition | Impairment of Investment Securities | Goodwill | Research and Development Costs | Legal and Other Contingencies | Income Taxes | Business Combinations – Valuation of Intangible Assets
+
+[MIN-MERGE] item=Part_I_Item_2 section=Unearned Revenue 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Research and Development Costs 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Business Combinations – Valuation of Intangible Assets 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Part I, Item 3 (len=2117 chars) ---
+ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+  RISKS
+
+  We are exposed to economic risk from foreign exchange rates, interest rates, credit risk, and equity prices. We use derivatives instruments to manage these risks, however, they may still impact our consolidated financial statements.
+
+  Foreign Currencies
+
+  Certain forecasted transactions, assets, and liabilities are ex...
+
+--- [ITEM] Part I, Item 4 (len=740 chars) ---
+ITEM 4. CONTROLS AND PROCEDURES
+
+  Under the supervision and with the participation of our management, including the Chief Executive Officer and Chief Financial Officer, we have evaluated the effectiveness of our disclosure controls and procedures as required by Exchange Act Rule 13a-15(b) as of the end of the period covered by this report. Based on that evaluation, the Chief Executive Officer and...
+
+--- [ITEM] Part II, Item 1 (len=203 chars) ---
+ITEM 1. LEGAL PROCEEDINGS
+
+  Refer to Note 14 – Contingencies of the Notes to Financial Statements (Part I, Item 1 of this Form 10-Q) for information regarding legal proceedings in which we are involved....
+
+--- [ITEM] Part II, Item 1A (len=73918 chars) ---
+ITEM 1A. RISK FACTORS
+
+  Our operations and financial results are subject to various risks and uncertainties, including those described below, that could adversely affect our business, operations, financial condition, results of operations, liquidity, and the trading price of our common stock.
+
+  STRATEGIC AND COMPETITIVE RISKS
+
+  We face intense competition across all markets for our products and...
+
+[MIN-MERGE] item=Part_II_Item_1A section=None 44 → 41 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1525 token > 1200 → 補切成 3 份
+
+--- [ITEM] Part II, Item 2 (len=1727 chars) ---
+ITEM 2. UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
+
+  SHARE REPURCHASES AND DIVIDENDS
+
+  Following are our monthly share repurchases for the first quarter of fiscal year 2025:
+
+    Period
+
+    Total Number
+
+of Shares
+
+Purchased
+
+    Average
+
+Price Paid
+
+Per Share
+
+    Total Number
+
+ of Shares
+
+ Purchased as
+
+Part of Publicly
+
+Announced Plans
+
+or Programs
+
+    Approximate
+
+Dollar V...
+
+--- [ITEM] Part II, Item 5 (len=368 chars) ---
+ITEM 5. OTHER INFORMATION
+
+  Insider Trading Arrangements
+
+  None of our officers or directors, as defined in Rule 16a-1(f) of the Securities Exchange Act of 1934, adopted, modified, or terminated a “Rule 10b5-1 trading arrangement” or a “non-Rule 10b5-1 trading arrangement,” as defined in Item 408 of Regulation S-K, during the three months ended September 30, 2024....
+
+--- [ITEM] Part II, Item 6 (len=1575 chars) ---
+ITEM 6. EXHIBITS
+
+    Incorporated by Reference
+
+    ExhibitNumber
+
+    Exhibit Description
+
+    Filed
+
+Herewith
+
+    Form
+
+    Period
+
+Ending
+
+    Exhibit
+
+    Filing Date
+
+    15.1
+
+    Letter regarding unaudited interim financial information
+
+    X
+
+    31.1
+
+    Certification of Chief Executive Officer Pursuant to Section 302 of the Sarbanes-Oxley Act of 2002
+
+    X
+
+    31.2
+
+    Certificatio...

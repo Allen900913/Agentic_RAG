@@ -125,8 +125,8 @@
 |     Net cash provided by (used in) financing activities | $1,209 | $(554) |
 |     Effect of exchange rate changes on cash and cash equivalents and restricted cash | $(83) | $151 |
 |   Net decrease in cash and cash equivalents and restricted cash | $(1,191) | $(302) |
-|   Cash and cash equivalents and restricted cash, end of period |  |  |
-|   Cash and cash equivalents and restricted cash, end of period |  |  |
+|   Cash and cash equivalents and restricted cash, beginning of period | $17,616 | $17,037 |
+|   Cash and cash equivalents and restricted cash, end of period | $16,425 | $16,735 |
 |     Acquisitions of property and equipment included in liabilities | $2,633 | $1,639 |
 |     Leased assets obtained in exchange for operating lease liabilities | $886 | $784 |
 |     Leased assets obtained in exchange for finance lease liabilities | $97 |  |
@@ -204,9 +204,9 @@ INDEX
 | --- | --- | --- | --- | --- | ---...
 
 --- [TABLE extra #10] ---
-Stockholders' equity changes for the six months ended June 30, 2025.
+The table presents the stockholders’ equity statement for the six months ended June 30, 2025, showing balances and changes in equity accounts and noncontrolling interests.
 
-| Six Months Ended June 30, 2025 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive (Loss) Income |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  ...
+| Six Months Ended June 30, 2025 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive (Loss) Income |  | Retained Earnings |  | Total Stockholders’ Equi...
 
 --- [TABLE extra #11] ---
 Revenues
@@ -231,74 +231,6 @@ INDEX TO EXHIBITS
 | 31.1 |  | Rule 13a-14(a) / 15(d)-14(a) Certification of Principal Executive Officer |  | — |  | — |  | — |  | — |  ...
 
 [INFO] extra tables kept=14 (去重後，來自 unstructured)
-
-[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
-
---- [ITEM] Part I, Item 3 (len=1640 chars) ---
-Table of Contents
-
-ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
-
-Foreign Currency Risk
-
-We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). ...
-
---- [ITEM] Part II, Item 1 (len=230 chars) ---
-ITEM 1. LEGAL PROCEEDINGS
-
-For a description of our material pending legal proceedings, see Note 11, Commitments and Contingencies, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q....
-
---- [ITEM] Part II, Item 1A (len=328 chars) ---
-ITEM 1A. RISK FACTORS
-
-Our operations and financial results are subject to various risks and uncertainties, including the factors discussed in Part I, Item 1A, Risk Factors in our Annual Report on Form 10-K for the year ended December 31, 2025, which could adversely affect our business, financial conditions and future results....
-
---- [ITEM] Part II, Item 2 (len=74 chars) ---
-ITEM 2. UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
-
-None....
-
---- [ITEM] Part II, Item 3 (len=46 chars) ---
-ITEM 3. DEFAULTS UPON SENIOR SECURITIES
-
-None....
-
---- [ITEM] Part II, Item 4 (len=48 chars) ---
-ITEM 4. MINE SAFETY DISCLOSURES
-
-Not applicable....
-
---- [ITEM] Part II, Item 5 (len=331 chars) ---
-ITEM 5. OTHER INFORMATION
-
-Rule 10b5-1 Trading Arrangements
-
-None of the Company’s directors or officers adopted, modified or terminated a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended June 30, 2026, as such terms are defined under Item 408(a) of Regulation S-K....
-
---- [ITEM] Part II, Item 6 (len=1420 chars) ---
-Table of Contents
-
-ITEM 6. EXHIBITS
-
-See Index to Exhibits at the end of this Quarterly Report on Form 10-Q for the information required by this Item.
-
-INDEX TO EXHIBITS
-
-ExhibitNumber Incorporated by ReferenceFiledHerewith
-
-Exhibit DescriptionFormFile No.ExhibitFiling Date
-
-31.1Rule 13a-14(a) / 15(d)-14(a) Certification of Principal Executive Officer
-
-————X
-
-31.2Rule 13a-14(a) / 15(d)-14(a) Certi...
-
-[SECTION] item=Part_II_Item_6 period=None 依小標切成 2 段：(小標前=章節層) | Exhibit DescriptionFormFile No.ExhibitFiling Date
-
-[MIN-MERGE] item=Part_II_Item_6 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Part_II_Item_6 section=Exhibit DescriptionFormFile No.ExhibitFiling Date 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part I, Item 1 (len=75030 chars) ---
 ITEM 1. FINANCIAL STATEMENTS
@@ -353,3 +285,72 @@ We are focused on bringing artificial intelligence into the real world, through 
 [SECTION] item=Part_I_Item_2 period=None 依小標切成 24 段：(小標前=章節層) | Overview | Automotive and AI Enabled Products—Production | Infrastructure | Cash Flow and Capital Expenditure Trends | Critical Accounting Policies and Estimates | Recent Accounting Pronouncements | Revenues | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Cost of Revenues and Gross Margin | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Research and Development Expense | Selling, General and Administrative Expense | Interest Income | Other Income, Net | Provision for Income Taxes | Liquidity and Capital Resources | Material Cash Requirements | Sources and Conditions of Liquidity | Cash Flows from Operating Activities | Cash Flows from Investing Activities | Cash Flows from Financing Activities
 
 [MIN-MERGE] item=Part_I_Item_2 section=Automotive and AI Enabled Products—Production 5 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Part I, Item 3 (len=1640 chars) ---
+Table of Contents
+
+ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+Foreign Currency Risk
+
+We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). ...
+
+--- [ITEM] Part I, Item 4 (len=1874 chars) ---
+ITEM 4. CONTROLS AND PROCEDURES
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our Chief Executive Officer and our Chief Financial Officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Securities Exchange Act of 1934, as amended (the “Exchange Act”). In designing and evaluating the disclosure c...
+
+--- [ITEM] Part II, Item 1 (len=230 chars) ---
+ITEM 1. LEGAL PROCEEDINGS
+
+For a description of our material pending legal proceedings, see Note 11, Commitments and Contingencies, to the consolidated financial statements included elsewhere in this Quarterly Report on Form 10-Q....
+
+--- [ITEM] Part II, Item 1A (len=328 chars) ---
+ITEM 1A. RISK FACTORS
+
+Our operations and financial results are subject to various risks and uncertainties, including the factors discussed in Part I, Item 1A, Risk Factors in our Annual Report on Form 10-K for the year ended December 31, 2025, which could adversely affect our business, financial conditions and future results....
+
+--- [ITEM] Part II, Item 2 (len=74 chars) ---
+ITEM 2. UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
+
+None....
+
+--- [ITEM] Part II, Item 3 (len=46 chars) ---
+ITEM 3. DEFAULTS UPON SENIOR SECURITIES
+
+None....
+
+--- [ITEM] Part II, Item 4 (len=48 chars) ---
+ITEM 4. MINE SAFETY DISCLOSURES
+
+Not applicable....
+
+--- [ITEM] Part II, Item 5 (len=331 chars) ---
+ITEM 5. OTHER INFORMATION
+
+Rule 10b5-1 Trading Arrangements
+
+None of the Company’s directors or officers adopted, modified or terminated a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended June 30, 2026, as such terms are defined under Item 408(a) of Regulation S-K....
+
+--- [ITEM] Part II, Item 6 (len=1048 chars) ---
+Table of Contents
+
+ITEM 6. EXHIBITS
+
+See Index to Exhibits at the end of this Quarterly Report on Form 10-Q for the information required by this Item.
+
+INDEX TO EXHIBITS
+
+ExhibitNumber Incorporated by ReferenceFiledHerewith
+
+Exhibit DescriptionFormFile No.ExhibitFiling Date
+
+31.1Rule 13a-14(a) / 15(d)-14(a) Certification of Principal Executive Officer
+
+————X
+
+31.2Rule 13a-14(a) / 15(d)-14(a) Certi...
+
+[MIN-MERGE] item=Part_II_Item_6 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

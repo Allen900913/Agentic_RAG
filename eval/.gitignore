@@ -105,3 +105,22 @@ __pycache__/
 # probe_web_query_form 的 2x2 query 形式探針 fixture（r2 是第二輪，刻意另一份才比得出差異）。
 !web_fixture_query_form.json
 !web_fixture_query_form_r2.json
+
+# ── 2026-09-04 補：**第七次**。上一段才把通則改寫成「錄完就跑 git check-ignore」──────
+#   · chunk_gold.json  **chunk 層 gold**（41 題／83 顆）。判準與 reference_answers.json
+#     一字不差：**腳本重現不了**。候選雖然是程式抽的，但「哪些 literal 算數」是逐題人工
+#     驗證的（`verified` 欄位記著怎麼驗的），而剔掉的三種形狀——脈絡值、同表鄰居、純巧合
+#     ——沒有任何規則分得出來（那是感知）。掉了就要重做一次 41 題的人工審核。
+#   ⚠ 這次是靠 `git status` 沒看到檔案才發現的，**不是**靠上一段規定的 check-ignore
+#     ——那條規則寫了但沒人執行得到。真正擋住它的仍然是「commit 前看一眼 status」。
+!chunk_gold.json
+
+# ── 2026-09-12 補：**第八次，而且這次的失敗方式最糟** ──────────────────────────────
+#   · eval_harness_baseline.json  閘門 H3 凍結的生產常數值 ＋ 17 個抄寫點的複核理由。
+#     判準同上：腳本重現不了（那 17 條 `reason` 是逐行看過才寫下的）。
+#   ⚠ **前七次掉檔是「東西不見」，這次是「量尺安靜地變成恆真」**：`main()` 寫著
+#     `... if BASELINE.exists() else {}`，所以在別人的 clone 上 H3 會**印綠的、零常數、零抄寫點**
+#     ——那正是這支閘門自己存在的理由（量尺壞掉不可以與系統正常外觀相同）。
+#     同一次改動已把 `main()` 改成缺檔就 FAIL（`--update-baseline` 除外）。
+#   ⚠ 這次是在盤點「搬到另一台機器要帶什麼」時撞到的，**七段警告一段都沒攔住它**。
+!eval_harness_baseline.json

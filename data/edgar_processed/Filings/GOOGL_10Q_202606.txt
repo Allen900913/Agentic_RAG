@@ -130,8 +130,8 @@
 |     Net cash provided by (used in) financing activities | $86,320 | $(26,033) |
 |     Effect of exchange rate changes on cash and cash equivalents | $(154) | $444 |
 |   Net increase (decrease) in cash and cash equivalents | $25,203 | $(2,430) |
-|   Cash and cash equivalents at end of period |  |  |
-|   Cash and cash equivalents at end of period |  |  |
+|   Cash and cash equivalents at beginning of period | $30,708 | $23,466 |
+|   Cash and cash equivalents at end of period | $55,911 | $21,036 |
 |     Property and equipment included in accrued liabilities and accounts payable | $29,113 | $10,635 |
 
 --- [TABLE extra #0] ---
@@ -222,22 +222,20 @@ See accompanying notes.
 |  | Series A and Series B Preferred Stock and Additional Paid-In Capital |  | Class A, Class B, Class C...
 
 --- [TABLE extra #13] ---
-Stockholders' equity changes for six months ended June 30, 2025.
+The table shows the balance sheet and equity changes for the six months ended June 30 2025, including preferred stock, common stock, additional paid‑in capital, OCI, retained earnings, and total stockholders’ equity.
 
 |  | Six Months Ended June 30, 2025 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  | Series A and Series B Preferred Stock and Additional Paid-In ...
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- ...
 
 --- [TABLE extra #14] ---
 | Table of Contents | Alphabet Inc. |
 | --- | --- |...
 
 --- [TABLE extra #15] ---
-Stockholders' equity changes for the three months ended June 30, 2026.
+The table shows the balance sheet and equity changes for the three months ended June 30 2026, including preferred and common stock, additional paid‑in capital, OCI, retained earnings, and total stockholders’ equity.
 
 |  | Three Months Ended June 30, 2026 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  | Series A and Series B Preferred Stock and Additional ...
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---...
 
 --- [TABLE extra #16] ---
 See accompanying notes.
@@ -333,10 +331,9 @@ ITEM 6.EXHIBITS
 | 3.1 |  |  |  | Certificate of Designations of the 6.25% Series A Mandatory Convertible Preferred Stock, filed with the Secretary of State of the State of Delaware and effective June 4, 2026 |  | Current...
 
 --- [TABLE extra #31] ---
-Exhibit index for Current Report on Form 8-K.
+The table lists exhibits and documents filed in Alphabet’s Form 8‑K on June 5 and 11, 2026, including deposit agreements, depositary receipt forms, capped call confirmations, stock plan amendments, registration rights letters, and officer certifications.
 
-| 4.21 |  |  |  | Deposit Agreement for the Series A Mandatory Convertible Preferred Stock, dated as of June 5, 2026, among Alphabet Inc., Computershare Inc. and Computershare Trust Company, N.A., acting jointly as depositary |  | Current Report on Form 8-K (File No. 001-37580) |  | June 5, 2026 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- ...
+| 4.21 |  |  |  | Deposit Agreement for the Series A Mandatory Convertible Preferred Stock, dated as of June 5, 2026, among Alphabet Inc., Compu...
 
 --- [TABLE extra #32] ---
 | 101.PRE | * |  |  | Inline XBRL Taxonomy Extension Presentation Linkbase Document |  |  |  |  |
@@ -350,21 +347,6 @@ Exhibit index for Current Report on Form 8-K.
 | ‡ | Furnished herewith. |...
 
 [INFO] extra tables kept=34 (去重後，來自 unstructured)
-
-[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
-
---- [ITEM] Part I, Item 2 (len=51405 chars) ---
-ITEM 2.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
-
-Please read the following discussion and analysis of our financial condition and results of operations together with "Note about Forward-Looking Statements" and our consolidated financial statements and related notes included under Item 1 of this Quarterly Report on Form 10-Q as well as our Annual Report ...
-
-[GROUND] item=Part_I_Item_2 period=None 52 → 50 段（無幅度數字的段併回帶表格的前一段）
-
-[SECTION] item=Part_I_Item_2 period=None 依小標切成 50 段：(小標前=章節層) | Understanding Alphabet’s Financial Results | Revenues and Monetization Metrics | Google Services | Google Advertising | Google Subscriptions, Platforms, and Devices | Google Cloud | Other Bets | Costs and Expenses | Cost of Revenues | Operating Expenses | Other Income (Expense), Net | Provision for Income Taxes | Executive Overview | Revenues | Google Search & other | YouTube ads | Google Network | Monetization Metrics | Google Subscriptions, Platforms, and Devices | Google Cloud | Revenues by Geography | Cost of Revenues | Research and Development | Sales and Marketing | General and Administrative | Segment Profitability | Google Services | Google Cloud | Other Bets | Provision for Income Taxes | Cash, Cash Equivalents, and Marketable Securities | Cash Provided by Financing Activities | Liquidity and Material Cash Requirements | Capital Expenditures and Leases | Capital Expenditures | Leases | Financing | Common Stock | Mandatory Convertible Preferred Stock | At-the-Market Program | Preferred and Common Dividends | Share Repurchase Program | Accrued Legal and Regulatory | Taxes | Purchase Commitments and Other Contractual Obligations | Acquisitions and Divestitures | Critical Accounting Estimates | Business Combinations | Available Information
-
-[MIN-MERGE] item=Part_I_Item_2 section=Google Subscriptions, Platforms, and Devices 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Part_I_Item_2 section=Cash, Cash Equivalents, and Marketable Securities 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part I, Item 1 (len=109483 chars) ---
 ITEM 1.FINANCIAL STATEMENTS
@@ -411,10 +393,32 @@ Inventory2,...
 
 [RCTS] item=Part_I_Item_1 原 chunk 1838 token > 1200 → 補切成 3 份
 
+--- [ITEM] Part I, Item 2 (len=51405 chars) ---
+ITEM 2.MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+Please read the following discussion and analysis of our financial condition and results of operations together with "Note about Forward-Looking Statements" and our consolidated financial statements and related notes included under Item 1 of this Quarterly Report on Form 10-Q as well as our Annual Report ...
+
+[GROUND] item=Part_I_Item_2 period=None 52 → 50 段（無幅度數字的段併回帶表格的前一段）
+
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 50 段：(小標前=章節層) | Understanding Alphabet’s Financial Results | Revenues and Monetization Metrics | Google Services | Google Advertising | Google Subscriptions, Platforms, and Devices | Google Cloud | Other Bets | Costs and Expenses | Cost of Revenues | Operating Expenses | Other Income (Expense), Net | Provision for Income Taxes | Executive Overview | Revenues | Google Search & other | YouTube ads | Google Network | Monetization Metrics | Google Subscriptions, Platforms, and Devices | Google Cloud | Revenues by Geography | Cost of Revenues | Research and Development | Sales and Marketing | General and Administrative | Segment Profitability | Google Services | Google Cloud | Other Bets | Provision for Income Taxes | Cash, Cash Equivalents, and Marketable Securities | Cash Provided by Financing Activities | Liquidity and Material Cash Requirements | Capital Expenditures and Leases | Capital Expenditures | Leases | Financing | Common Stock | Mandatory Convertible Preferred Stock | At-the-Market Program | Preferred and Common Dividends | Share Repurchase Program | Accrued Legal and Regulatory | Taxes | Purchase Commitments and Other Contractual Obligations | Acquisitions and Divestitures | Critical Accounting Estimates | Business Combinations | Available Information
+
+[MIN-MERGE] item=Part_I_Item_2 section=Google Subscriptions, Platforms, and Devices 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Part_I_Item_2 section=Cash, Cash Equivalents, and Marketable Securities 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 --- [ITEM] Part I, Item 3 (len=290 chars) ---
 ITEM 3.QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
 
 For quantitative and qualitative disclosures about market risk, refer to Part II, Item 7A, "Quantitative and Qualitative Disclosures About Market Risk" in our Annual Report on Form 10-K for the year ended December 31, 2025....
+
+--- [ITEM] Part I, Item 4 (len=1938 chars) ---
+ITEM 4.CONTROLS AND PROCEDURES
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our chief executive officer and chief financial officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Exchange Act, as of the end of the period covered by this Quarterly Report on Form 10-Q.
+
+Based on this evaluation,...
 
 --- [ITEM] Part II, Item 1 (len=305 chars) ---
 ITEM 1.LEGAL PROCEEDINGS
@@ -426,10 +430,6 @@ ITEM 1A.RISK FACTORS                
 
 Our operations and financial results are subject to various risks and uncertainties, including but not limited to those described in Part I, Item 1A, "Risk Factors" in our Annual Report on Form 10-K for the year ended December 31, 2025, which could harm our business, reputation, financial condition, and operating results, and may affect the trading price and p...
 
-[SECTION] item=Part_II_Item_1A period=None 依小標切成 2 段：(小標前=章節層) | Risks Specific to our Company
-
-[MIN-MERGE] item=Part_II_Item_1A section=Risks Specific to our Company 7 → 6 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
 --- [ITEM] Part II, Item 2 (len=430 chars) ---
 ITEM 2.UNREGISTERED SALES OF EQUITY SECURITIES AND USE OF PROCEEDS
 
@@ -439,7 +439,7 @@ On June 4, 2026, the company completed a $10.0 billion private placement of 14�
 
 Issuer Purchas...
 
-[SECTION] item=Part_II_Item_2 period=None 依小標切成 2 段：Unregistered Sales of Equity Securities | Issuer Purchases of Equity Securities
+[MIN-MERGE] item=Part_II_Item_2 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part II, Item 5 (len=1641 chars) ---
 ITEM 5.OTHER INFORMATION 
@@ -462,9 +462,5 @@ FormDate
 Current Report on Form 8-K (File No. 001-37580)June 5, 2026
 
 3.2Certificate of Designations of the 6.25% Series B Mandatory Convertibl...
-
-[SECTION] item=Part_II_Item_6 period=None 依小標切成 3 段：FormDate | Senior Vice President, Chief Financial Officer | Marsida Saraci
-
-[MIN-MERGE] item=Part_II_Item_6 section=FormDate 5 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [RCTS] item=Part_II_Item_6 原 chunk 1412 token > 1200 → 補切成 2 份

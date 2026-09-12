@@ -10,7 +10,7 @@
 閘門⑤ Grader 時效判準：snapshot 的 Checker prompt 逐字不變；日期算術真值表（零 LLM）。
 
 
-**這支在守什麼**：`agentic_rag_v2._run_executor_deterministic` 裡那個 web 補救判斷式，
+**這支在守什麼**：`agentic_rag_version._run_executor_deterministic` 裡那個 web 補救判斷式，
 必須滿足「生產打得到、eval 一次都不漏」。兩者是不同的護欄，很容易被誤當成同一個：
 
 | 條件 | 角色 |
@@ -35,13 +35,22 @@ import io
 import json
 import os
 import sys
+# ⚠ Windows 主控台預設 cp950，而本檔的報表帶著 ⚠／✔／① 等字元 ⇒ **印到一半就 crash**，
+#   而 crash 的退出碼與「有 FAIL」外觀相同 ＝ 把量尺自己的失敗讀成系統的失敗。
+#   2026-09-11 普查：eval/ 的 51 支裡有 27 支帶著這個地雷，其中兩支當天真的踩了。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
+
 from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
-import agentic_rag_v2 as ar  # noqa: E402
+import agentic_rag_version as ar  # noqa: E402
 
 LIVE = ar.FRESHNESS_LIVE
 SNAP = ar.FRESHNESS_SNAPSHOT
@@ -54,7 +63,7 @@ ar._tavily_search = lambda q: _calls.append(q) or "（stub，絕不連網）"
 
 
 def _gate(freshness: str, web_enabled: bool, sufficient: bool, task: str) -> bool:
-    """必須與 `agentic_rag_v2._run_executor_deterministic` 的 web 補救判斷式**逐字一致**。
+    """必須與 `agentic_rag_version._run_executor_deterministic` 的 web 補救判斷式**逐字一致**。
 
     ⚠ 這裡是抄寫、不是 import——判斷式寫在函式中段，無法單獨取用。
     兩份漂移的話這支會安靜地驗錯的東西，所以改動那一行時**務必同步改這裡**。
@@ -1487,6 +1496,966 @@ def _check_replay_readonly() -> int:
     return fail
 
 
+def _check_monkeypatch_reaches_callers() -> int:
+    """閘門⑬：套件化之後，打在套件上的 monkeypatch 仍然攔得住呼叫端（2026-09-03）。
+
+    **守的是什麼**：`agentic_rag_v2.py`（單一 4549 行檔）拆成 `agentic_rag_version/` 套件時，
+    最危險的失效**不會有任何外觀差異**。eval 全靠 `ar.<name> = stub` 攔截，而那是在**套件物件**
+    上改綁定；一旦呼叫端寫成 `from .webtools import _tavily_search`，那個名字就綁死在
+    呼叫端模組的 globals 裡，**stub 再也蓋不到它** → `verify_web_gate_isolation` 保證的
+    「eval 絕不連網」會**真的連網**，而閘門本身照樣全綠（它只數自己那個 stub 被叫幾次）。
+
+    同樣的病也吃常數：`ENABLE_WEB_SEARCH` / `QUERY_WEB_BUDGET` 被 eval 直接改寫，
+    子模組若各自 `from .config import ENABLE_WEB_SEARCH`，改的就是另一份。
+
+    ⚠ **判別力全在 ⑬e，其餘四條今天是空跑**：套件目前只有 `__init__`，沒有子模組，
+      所以 ⑬b~⑬d 是**真空成立**（vacuously true）——它們現在回報 OK **不代表有判別力**，
+      只代表還沒有東西可以違反。⑬e 拿一個**故意造出來的違規**餵同一套檢查，證明它抓得到；
+      沒有 ⑬e，這道閘門就是這個專案犯過六次的「量尺與被測物耦合」的第七次。
+
+    ⚠ **⑬a 刻意從 eval 腳本反推而不是只讀凍結清單**：漏掉一個 patch 站點的失敗方式，
+      與「那個站點本來就不存在」外觀相同。所以凍結清單少於實際 patch 的名字時要當場炸。
+    """
+    import ast as _ast
+    import pkgutil as _pkgutil
+    import re as _re
+    import sys as _sys
+    from pathlib import Path as _P
+
+    results: list[tuple[str, bool, str]] = []
+
+    def _ck(name: str, ok: bool, note: str = "") -> None:
+        results.append((name, bool(ok), note))
+
+    # ── ⑬a 凍結清單 vs eval 實際 patch 的名字 ──────────────────────────────────
+    FROZEN = {
+        "ENABLE_WEB_SEARCH", "QUERY_WEB_BUDGET", "_build_temporal_contract",
+        "_check_sufficiency", "_fallback_local_summary", "_get_kb_coverage",
+        # `_get_graph`：閘門㉒ 拿一個 invoke 就炸的假 graph 換掉它，用來驗降級路徑寫不寫
+        # `degraded_reason`。⚠ 這一筆是 ⑬a **自己反推出來的**（加了㉒ 當天當場 FAIL）——
+        # 那正是「從 eval 腳本反推而不是只讀凍結清單」的用途。
+        "_get_graph",
+        "_get_models",
+        # `POOL_RETURN_K`：`probe_kb_content_ceiling` 的寬臂放大它（Grader 看幾顆候選）。
+        # 同 `_get_graph`，這一筆也是 ⑬a 自己反推出來、當天當場 FAIL 才補上的。
+        "POOL_RETURN_K",
+        # ⚠ `_classify_staleness` 2026-09-11 才進這張清單，而**它一直都被 patch**——
+        #   只是先前攔在 `agentic_rag_version.graph` 上（為了遷就一個裸名呼叫），
+        #   於是 ⑬a 的 AST 反推（只看 `ar.` / `_pkg.`）看不到它。呼叫端改成 `_pkg.`、
+        #   注入點回到 `ar.` 之後它立刻現形 ＝ **⑬a 的反推範圍本身也有盲區**，
+        #   而那個盲區正好被「搬注入點」這個遷就動作製造出來。
+        "_classify_staleness",
+        "_retrieve_chunks", "_run_executor", "_run_one_todo",
+        "_tavily_raw", "_tavily_search", "_web_query_en", "_write_final_answer",
+    }
+    # ⚠ **用 AST 不用 regex**（2026-09-03 被踩出來）：第一版是
+    #   `re.compile(r"\b_?ar\.(\w+)\s*=(?!=)")`，而 ⑦e 那行是**元組賦值**
+    #   `ar._tavily_raw, ar.ENABLE_WEB_SEARCH = _boom, True` —— regex 匹配不到，
+    #   於是 `_tavily_raw` 從來沒進過凍結清單；拆 webtools 時它被留成裸用，⑦e 當場 FAIL。
+    #   **「從腳本反推」的價值全繫於反推得完整**，而這正是它會漏的方式。
+    found: set[str] = set()
+    for p in sorted(_P(__file__).parent.glob("*.py")):
+        try:
+            t = _ast.parse(p.read_text(encoding="utf-8"))
+        except (OSError, SyntaxError):
+            continue
+        for node in _ast.walk(t):
+            tgts = []
+            if isinstance(node, _ast.Assign):
+                tgts = list(node.targets)
+            elif isinstance(node, (_ast.AugAssign, _ast.AnnAssign)):
+                tgts = [node.target]
+            flat = []
+            while tgts:
+                x = tgts.pop()
+                if isinstance(x, (_ast.Tuple, _ast.List)):
+                    tgts += list(x.elts)
+                else:
+                    flat.append(x)
+            for x in flat:
+                if (isinstance(x, _ast.Attribute) and isinstance(x.value, _ast.Name)
+                        and x.value.id in ("ar", "_ar")):
+                    found.add(x.attr)
+    missing = found - FROZEN
+    _ck("⑬a 凍結清單涵蓋 eval 實際 patch 的每一個名字", not missing,
+        f"清單漏了 {sorted(missing)}——拆分時不會被保護")
+
+    pkg = _sys.modules[ar.__name__]
+    submods = []
+    if hasattr(pkg, "__path__"):
+        for mi in _pkgutil.iter_modules(list(pkg.__path__)):
+            m = _sys.modules.get(f"{ar.__name__}.{mi.name}")
+            if m is not None and getattr(m, "__file__", None):
+                submods.append(m)
+
+    # ── ⑬b 沒有任何子模組把被 patch 的名字綁成自己的 module-level global ──────────
+    def _shadowers(names: set[str], mods) -> list[str]:
+        """子模組**用 import 複製**了一份被 patch 的綁定。
+
+        ⚠ 危險的是「複製」不是「定義」（2026-09-03 收窄）：`def _tavily_search` 住在哪個模組
+          都無所謂——eval 改的是 `ar._tavily_search`，只要沒人裸用（⑬c）、大家都走 `_pkg.`，
+          patch 就蓋得到。真正讓 stub 失效的是 `from .webtools import _tavily_search`：
+          那在呼叫端 globals 壓了一份**當時的**物件，之後 patch 再也動不到。
+          舊版連「定義」都算違規，代價是那 13 個名字全被釘在 `__init__`，檔案瘦不下去。
+
+        ⚠ 讀 AST 不讀 `vars(m)`：`vars` 分不出「這裡定義的」與「從別處 import 的」。
+        """
+        bad = []
+        for m in mods:
+            try:
+                tree = _ast.parse(_P(m.__file__).read_text(encoding="utf-8"))
+            except (OSError, SyntaxError):
+                continue
+            for node in _ast.walk(tree):
+                if isinstance(node, (_ast.Import, _ast.ImportFrom)):
+                    for a in node.names:
+                        nm = a.asname or a.name.split(".")[0]
+                        if nm in names:
+                            bad.append(f"{m.__name__}:{node.lineno} import {nm}")
+        return bad
+
+    def _importers_of(name: str, mods) -> set[str]:
+        return {b.split(":")[0] for b in _shadowers({name}, mods)}
+
+    shadow = _shadowers(FROZEN, submods)
+    _ck(f"⑬b 子模組（{len(submods)} 個）沒有 import 複製被 patch 的綁定", not shadow,
+        f"遮蔽：{shadow[:4]}")
+
+    # ── ⑬c 子模組裡沒有「直接呼叫全域名字」的呼叫點（必須走套件物件）───────────────
+    def _direct_calls(names: set[str], mods) -> list[str]:
+        """子模組裡**任何**裸引用被 patch 的名字。
+
+        ⚠ 2026-09-03 從「只看 `Call`」擴成「看所有 `Name` load」：**常數是 load 不是 call**，
+          `if ENABLE_WEB_SEARCH:` 舊版完全看不到。而常數的失效方式與函式一模一樣——
+          子模組 `from .config import ENABLE_WEB_SEARCH` 之後，eval 改的是另一份。
+          擴大之後，被 patch 的名字就**可以住進子模組**（只要沒人裸用），
+          `__init__` 才瘦得下去。
+        """
+        bad = []
+        for m in mods:
+            try:
+                tree = _ast.parse(_P(m.__file__).read_text(encoding="utf-8"))
+            except (OSError, SyntaxError):
+                continue
+            # 定義處本身（def/assign 的 Store）不算引用；只抓 Load。
+            for node in _ast.walk(tree):
+                if (isinstance(node, _ast.Name) and isinstance(node.ctx, _ast.Load)
+                        and node.id in names):
+                    bad.append(f"{m.__name__}:{node.lineno} {node.id}")
+        return bad
+
+    direct = _direct_calls(FROZEN, submods)
+    _ck("⑬c 子模組沒有裸引用被 patch 的名字（要走套件物件；含常數讀取）", not direct,
+        f"直呼：{direct[:4]}")
+
+    # ── ⑬d 動態版：真的 patch 下去，沒有任何子模組還握著舊物件 ───────────────────
+    sentinel = object()
+    victim = "_tavily_search"
+    saved = getattr(ar, victim)
+    try:
+        setattr(ar, victim, sentinel)
+        # ⚠ 只看「用 import 複製了綁定」的模組——定義處自己那份不算，見 `_shadowers`。
+        _copiers = _importers_of(victim, submods)
+        stale = [f"{m.__name__}.{victim}" for m in submods
+                 if m.__name__ in _copiers and vars(m).get(victim, sentinel) is not sentinel]
+    finally:
+        setattr(ar, victim, saved)
+    _ck(f"⑬d patch `ar.{victim}` 之後沒有子模組握著舊物件", not stale, f"舊物件：{stale}")
+
+    # ── ⑬e 誤報對照：故意造一個違規的假子模組，上面三條必須抓到 ────────────────────
+    #   ⚠ 這是本道**唯一**有判別力的斷言（⑬b~⑬d 在還沒有子模組時是真空成立）。
+    import types as _types
+    fake = _types.ModuleType(f"{ar.__name__}._fake_violation")
+    fake.__file__ = str(_P(__file__).parent / "_fake_violation_probe.py")
+    fake._tavily_search = saved     # ← import 複製的那份：patch 之後它還握著舊物件
+    fake.ENABLE_WEB_SEARCH = True
+    probe = _P(fake.__file__)
+    src = ("from .webtools import _tavily_search\n"
+           "from .config import ENABLE_WEB_SEARCH\n"
+           "\n"
+           "def go(q):\n"
+           "    _tavily_search(q)\n"
+           "    return ENABLE_WEB_SEARCH\n")
+    try:
+        probe.write_text(src, encoding="utf-8")
+        caught_b = _shadowers(FROZEN, [fake])
+        _ck("⑬e1 誤報對照：import 複製綁定必須被 ⑬b 抓到", len(caught_b) == 2,
+            f"抓到 {caught_b}")
+        caught_c = _direct_calls(FROZEN, [fake])
+        _ck("⑬e2 誤報對照：裸引用（函式呼叫＋常數讀取）必須被 ⑬c 抓到", len(caught_c) == 2,
+            f"抓到 {caught_c}")
+        setattr(ar, victim, sentinel)
+        try:
+            caught_d = [f"{fake.__name__}.{victim}"
+                        if fake.__name__ in _importers_of(victim, [fake])
+                        and vars(fake).get(victim, sentinel) is not sentinel else None]
+            caught_d = [x for x in caught_d if x]
+        finally:
+            setattr(ar, victim, saved)
+        _ck("⑬e3 誤報對照：複製者握著舊物件必須被 ⑬d 抓到", len(caught_d) == 1,
+            f"抓到 {caught_d}")
+
+        # ⑬e4 **反向**誤報對照：定義處不得被誤報成違規，否則那 13 個名字會被永久釘在 __init__
+        defn = _types.ModuleType(f"{ar.__name__}._fake_definition")
+        defn.__file__ = str(_P(__file__).parent / "_fake_definition_probe.py")
+        dprobe = _P(defn.__file__)
+        dprobe.write_text('def _tavily_search(q, need="none"):\n    return ""\n',
+                          encoding="utf-8")
+        try:
+            _ck("⑬e4 反向誤報對照：**定義**被 patch 的名字不算違規",
+                not _shadowers(FROZEN, [defn]) and not _direct_calls(FROZEN, [defn]),
+                "定義處被誤報 → 那 13 個名字會被永久釘在 __init__")
+        finally:
+            dprobe.unlink(missing_ok=True)
+    finally:
+        probe.unlink(missing_ok=True)
+
+    # ── ⑬f 子模組定義的每個 top-level 名字都要能從套件上拿到 ────────────────────
+    #   ⚠ **這條是被踩出來的**（2026-09-03 拆 validators 時）：`__init__` 的 re-export 清單
+    #     是手列的，漏了 `_WEB_UNCITED_MARK` → 閘門⑱ 當場 AttributeError。回頭用同樣方式
+    #     重算 `freshness`，發現**手列的 27 個裡漏了 9 個**——它們只是還沒被任何斷言碰到。
+    #     手列必漏，而漏掉的失敗方式是「有人用到才爆」，可能拖很久才現形。
+    unreachable = []
+    for m in submods:
+        try:
+            tree = _ast.parse(_P(m.__file__).read_text(encoding="utf-8"))
+        except (OSError, SyntaxError):
+            continue
+        imported = {a.asname or a.name for n in _ast.walk(tree)
+                    if isinstance(n, (_ast.Import, _ast.ImportFrom)) for a in n.names}
+        for n in tree.body:
+            names = []
+            if isinstance(n, _ast.FunctionDef):
+                names = [n.name]
+            elif isinstance(n, _ast.Assign):
+                names = [t.id for t in n.targets if isinstance(t, _ast.Name)]
+            for nm in names:
+                if nm in imported or nm.startswith("__"):
+                    continue
+                if not hasattr(ar, nm):
+                    unreachable.append(f"{m.__name__}.{nm}")
+    _ck("⑬f 子模組的 top-level 名字全部 re-export 得到（手列清單必漏）",
+        not unreachable, f"拿不到：{unreachable[:6]}")
+
+    print()
+    print(f"  {'套件化之後 monkeypatch 仍攔得住':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
+def _check_replan_todo_budget() -> int:
+    """閘門⑭：Replanner 的待辦額度用完時，拒絕必須**看得見**（2026-09-06）。
+
+    **量到的事實**（零 LLM 驅動 graph 控制流，純確定性）：
+
+    | planner 拆幾個 | replan 真的加得進去 | 總執行次數 | 停在哪個上限 |
+    |---|---|---|---|
+    | 1 | 6 | 7 | `MAX_TODOS` |
+    | 5 | 2 | 7 | `MAX_TODOS` |
+    | **7** | **0** | 7 | `MAX_TODOS` |
+
+    兩件事：
+    ① **`MAX_ITERS` 咬不到**。它的註解寫著「總子問題執行次數上限（防 replanner 無限加待辦）」，
+       但 todo 的狀態是單向的（pending → in_progress → done，不會回頭），所以總執行次數
+       **恆等於**曾經建立過的 todo 數 ≤ `MAX_TODOS`。`MAX_TODOS(7) < MAX_ITERS(8)` ⇒ 不可達。
+       它不是死碼——**把 `MAX_TODOS` 調到 ≥ `MAX_ITERS` 的那一刻它就會活過來**，而那時會有
+       todo 被建立卻永遠不執行，且**完全靜默**。⑭a 就是守這個未來。
+    ② **Planner 與 Replanner 共用同一個額度、先到先得**，而 Planner 一定先跑。所以
+       「拆得最細的題」＝「Replanner 完全沒有預算的題」，恰好是 multi_hop 那一類。
+
+    **這道閘門修的不是額度，是可觀測性。** 拒絕原本是 `if len(todos) < MAX_TODOS:` 的**隱含
+    else**——沒有 trace、沒有計數，而另外兩個拒絕分支（時間模式不符、intraday 徒勞）都有 trace。
+    於是「replanner 想加 3 個但額度滿了」與「replanner 什麼都不想加」在結果檔裡**外觀完全相同**，
+    `probe_replan_contribution.py` 量到的「Replanner 貢獻 0」因此在大題上**讀不出來**。
+    這與 `unit_stats` 是同一個形狀（見閘門⑲l）：先把分母做出來，再談要不要改額度。
+
+    ⚠ **刻意不動任何常數**：「該不該給 Replanner 獨立額度」需要證據，而證據就是這次落地的
+      計數。沒有量到之前調高上限＝又一個「聽起來合理」的機制假設（子問題爆炸級聯有前科）。
+    ⚠ **判別力集中在四條誤報對照**：⑭d（不想加時計數必須是 **0 而不是缺席**——同 ⑲l4，
+      否則消費端分不出兩種情況）、⑭e（另外兩個拒絕分支**不得**被算進來，三種病不可合併）、
+      ⑭f（只加觀測、todos 產出逐字不變）、⑭i（多輪必須**累加**——LangGraph 對沒有 reducer
+      的 key 是取代語意，寫錯就只剩最後一輪）。
+    """
+    import ast
+    import inspect
+    import json as _json
+    import llm_replay as _lr
+
+    results: list[tuple[str, bool, str]] = []
+    MT, MI, MS = ar.MAX_TODOS, ar.MAX_ITERS, ar.MAX_SUBQUERIES
+
+    # ── ⑭a 常數前提：MAX_TODOS 必須嚴格小於 MAX_ITERS ────────────────────────────
+    results.append((f"⑭a MAX_TODOS({MT}) < MAX_ITERS({MI})：否則 todo 會建了卻永不執行",
+                    MT < MI,
+                    "調高 MAX_TODOS 時 MAX_ITERS 要一起調，否則多出來的 todo 靜默消失"))
+    results.append((f"⑭a2 MAX_SUBQUERIES({MS}) <= MAX_TODOS({MT})：Planner 不得一次就超編",
+                    MS <= MT, "Planner 拆出來的 todo 會直接被 replan 的上限判定為超編"))
+
+    # ── 共用：零 LLM 驅動 _node_replan ──────────────────────────────────────────
+    def _todo(tid, task="T"):
+        return {"id": tid, "task": task, "status": "done", "result": "r", "route": "kb",
+                "depends_on": None, "temporal_scope": "", "attributable": True,
+                "ratio_fields": None, "freshness_gaps": [], "period_notes": [], "web_used": False}
+
+    def _replan(n_existing, add, *, mode=None, prev_stats=None, add_route="kb"):
+        mode = mode or ar.FRESHNESS_SNAPSHOT
+        payload = {"sufficient": False, "drop": [],
+                   "add": [{"task": t, "route": add_route} for t in add]}
+
+        def _fake_llm(messages, model_name, temperature=0.0):
+            return _json.dumps(payload, ensure_ascii=False)
+
+        saved = (_lr._CACHE, _lr.enabled, ar.rq.call_llm, ar._build_temporal_contract)
+        _lr._CACHE, _lr.enabled = {}, (lambda: False)
+        ar.rq.call_llm = _fake_llm
+        ar._build_temporal_contract = lambda m: "(contract stub)"
+        try:
+            st = {"query": "Q", "freshness_mode": mode, "collected": [],
+                  "todos": [_todo(i, f"T{i}") for i in range(n_existing)]}
+            if prev_stats is not None:
+                st["replan_stats"] = prev_stats
+            return ar._node_replan(st)
+        finally:
+            (_lr._CACHE, _lr.enabled, ar.rq.call_llm, ar._build_temporal_contract) = saved
+
+    # ── ⑭b 陽性：額度滿 → 一個都加不進去，而且**數得出來** ────────────────────────
+    out_full = _replan(MT, ["新A", "新B", "新C"])
+    s_full = out_full.get("replan_stats") or {}
+    results.append((f"⑭b 額度已滿（todos={MT}）→ 3 個 add 全被拒，且 refused_budget == 3",
+                    len(out_full["todos"]) == MT and s_full.get("refused_budget") == 3,
+                    f"實得 todos={len(out_full['todos'])} stats={s_full}"))
+    results.append(("⑭b2 拒絕要有逐筆明細（只有計數的話查不出被丟掉的是什麼）",
+                    list(s_full.get("refused_tasks") or []) == ["新A", "新B", "新C"],
+                    f"實得 {s_full.get('refused_tasks')}"))
+
+    # ── ⑭c 誤報對照：額度沒滿 → 同一批 add 全進得去，且 refused_budget 是 0 ────────
+    out_room = _replan(1, ["新A", "新B", "新C"])
+    s_room = out_room.get("replan_stats") or {}
+    results.append(("⑭c **誤報對照**：額度沒滿 → 3 個全進得去、refused_budget == 0",
+                    len(out_room["todos"]) == 4 and s_room.get("refused_budget") == 0,
+                    f"實得 todos={len(out_room['todos'])} stats={s_room}"))
+
+    # ── ⑭d 誤報對照（⑲l4 的形狀）：什麼都不想加 → 兩個計數都要**在場**且為 0 ────────
+    s_none = _replan(1, []).get("replan_stats") or {}
+    results.append(("⑭d **誤報對照**：不想加東西 → added/refused 都是 0 而**不是缺席**",
+                    s_none.get("added") == 0 and s_none.get("refused_budget") == 0,
+                    f"實得 {s_none}（缺席的話分不出「不想加」與「加不進去」）"))
+    results.append(("⑭d2 `added` 要真的反映加進去幾個（不是恆 0）",
+                    s_room.get("added") == 3, f"實得 {s_room.get('added')}"))
+
+    # ── ⑭e 誤報對照：另外兩個拒絕分支不得混進 refused_budget（三種不同的病）─────────
+    s_mode = _replan(1, ["上網查X"], add_route="web").get("replan_stats") or {}
+    results.append(("⑭e **誤報對照**：snapshot 拒絕 web todo 時 refused_budget 必須是 0",
+                    s_mode.get("refused_budget") == 0,
+                    f"實得 {s_mode}；混在一起就分不出「額度滿」與「時間模式不符」"))
+
+    # ── ⑭f 回歸護欄：只加觀測，todos 的產出逐字不變 ────────────────────────────
+    _got = [(t["id"], t["task"], t["route"], t["attributable"], t["status"])
+            for t in out_room["todos"]]
+    _want = [(0, "T0", "kb", True, "done"),
+             (1, "新A", "kb", False, "pending"),
+             (2, "新B", "kb", False, "pending"),
+             (3, "新C", "kb", False, "pending")]
+    results.append(("⑭f **誤報對照**：加了計數之後 todos 的產出逐字不變（只加觀測）",
+                    _got == _want, f"實得 {_got}"))
+
+    # ── ⑭i 多輪必須累加（LangGraph 對沒有 reducer 的 key 是**取代**語意）───────────
+    s1 = _replan(MT, ["甲"]).get("replan_stats") or {}
+    s2 = _replan(MT, ["乙", "丙"], prev_stats=s1).get("replan_stats") or {}
+    results.append(("⑭i 多輪 replan 的計數必須**累加**（取代語意會讓前面幾輪消失）",
+                    s2.get("refused_budget") == 3 and s2.get("rounds") == 2,
+                    f"第一輪 {s1} → 第二輪 {s2}"))
+
+    # ── ⑭g 接線：欄位有宣告在 SupervisorState + run_agentic 真的讀它 ──────────────
+    _ann = getattr(ar.SupervisorState, "__annotations__", {})
+    results.append(("⑭g SupervisorState 宣告了 `replan_stats`（沒宣告 → LangGraph 丟掉它）",
+                    "replan_stats" in _ann, f"實得欄位 {sorted(_ann)}"))
+    _ra_src = inspect.getsource(ar.run_agentic)
+    results.append(("⑭g2 `run_agentic` 真的從最終 state 讀 `replan_stats` 並回傳",
+                    "replan_stats" in _ra_src,
+                    "只寫在 state 裡而沒有回傳＝跑 65 題也彙總不到，同 ⑲l 的教訓"))
+
+    # ── ⑭h 接線：拿真實 stats 餵**生產的 record 建構子**驗值，且 None ≠ {}（⑲l10）──
+    try:
+        import importlib.util as _iu
+        from pathlib import Path as _Pa
+        _spec = _iu.spec_from_file_location(
+            "_rgoe_probe", str(_Pa(__file__).resolve().parent / "run_agentic_on_evalset.py"))
+        _m = _iu.module_from_spec(_spec)
+        _spec.loader.exec_module(_m)
+        _q = {"id": "x-1", "category": "mixed", "query": "Q"}
+        _rec = _m._record_from_agentic(_q, "A", [], [], [], {}, s_full)
+        _rec_none = _m._record_from_agentic(_q, "A", [], [], [], {}, None)
+        results.append(("⑭h record 建構子把 `replan_stats` 的**值**寫進結果檔",
+                        _rec.get("replan_stats") == s_full, f"實得 {_rec.get('replan_stats')}"))
+        results.append(("⑭h2 `None`（崩潰降級／舊結果檔）不得被寫成 `{}`",
+                        _rec_none.get("replan_stats") is None,
+                        f"實得 {_rec_none.get('replan_stats')!r}"))
+    except Exception as e:      # noqa: BLE001
+        results.append(("⑭h record 建構子接得上（接不上＝只測了記憶體裡的 dict）",
+                        False, repr(e)))
+
+    # ── ⑭j AST：額度那個拒絕分支真的有自己的 `_trace`（原本是隱含 else，一個字都沒印）
+    #    ⚠ **第一版只數 `_trace` 的總數（>= 4），而那是恆真的**——改動前就已經有四個以上，
+    #    自測當場全綠。要有判別力就得問「那個 trace 是不是在講額度」。同 ⑳e／⑰i 的形狀。
+    _tree = ast.parse(inspect.getsource(ar._node_replan))
+    _trace_args = [ast.unparse(_a) for _n in ast.walk(_tree)
+                   if isinstance(_n, ast.Call) and isinstance(_n.func, ast.Name)
+                   and _n.func.id == "_trace"
+                   for _a in _n.args]
+    results.append(("⑭j 額度拒絕有**自己的** `_trace`（另外兩個分支都有，只有它原本沒有）",
+                    any("MAX_TODOS" in _s for _s in _trace_args),
+                    f"{len(_trace_args)} 個 _trace 引數，沒有一個提到 MAX_TODOS"))
+
+    print()
+    print(f"  {'Replanner 待辦額度：拒絕必須看得見':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
+def _check_plan_dependencies() -> int:
+    """閘門⑮：multi_hop 的依賴由 **Planner 宣告的欄位**決定，不再由回指代名詞詞表推斷（2026-09-06）。
+
+    **病灶**：`depends_on` 這個欄位兩個 todo 建構點都有，值**恆為 `None`**；實際決定「這一跳要不要
+    等前一跳」的是 `_BACKREF_RE`（`該公司|該企業|該家公司|這家公司|此公司|上述公司|前述公司|上述那家公司`）。
+    那張詞表匹配不到「**那家公司**」「它」「該廠商」「這間公司」以及任何英文措辭——而寫出那句話的
+    是 Planner LLM，措辭每輪都在變。這是 `rq.looks_like_news_query`／`_RELATIVE_TIME_RE`／
+    `_WEB_TODO_RE` 三個死者的同一個形狀（見 CLAUDE.md〈LLM 與 Python 的分工〉）。
+
+    **業界做法**（2026-09-06 查的，三篇一致）：依賴由規劃器**當結構吐出來**，子問題用
+    MuSiQue 式的 `#1` 佔位符或 A.DOT 的 `$var_d` 指涉前一跳；執行前跑**確定性結構檢驗**
+    （欄位齊全 → variable hygiene／無懸空引用 → 無環）；**懸空引用是 prune ＋ warning，不是靜默**。
+    佔位符是**格式定義的封閉集合**，正好落在 CLAUDE.md 允許詞表的那個例外裡。
+
+    **本 repo 的關鍵取捨——「說沒有」與「沒說」必須分得開。** CLAUDE.md 記著 `_RATIO_INTENT_RE`
+    的教訓：「改成 LLM 之後，判別力來自『LLM 說不是就必須不是』——若空答案會掉回詞表，
+    詞表仍然是實際做決定的人，而端到端跑分看不出任何差別」。所以：
+      · `depends_on` **有出現在 plan 輸出裡**（含 `null`）→ `deps_declared=True`，**它說了算**。
+      · 整個 key **沒出現**（舊格式字串陣列、既有 fixture、replan 建的 todo）→ 才退回詞表。
+    ⑮c／⑮l 是這條的兩個方向，⑮k 是「詞表漏掉但欄位抓得到」的陽性。
+
+    ⚠ **一個有意識的例外，所以它必須有斷言**（⑮m）：Planner 宣告「沒有依賴」、但子問題**字面上
+      帶著未解錨點且句中沒點名任何公司**時，仍然延後。理由不是「詞表比較準」——是那句話
+      **單獨拿去檢索時沒有主詞**，那是字面事實不是感知；而代價不對稱（多等一個 wave ↔ 無 ticker
+      的破檢索）。這種分歧會記進 `plan_stats.deps_disagreed` ＝ 日後要不要拿掉這個例外的分母。
+
+    ⚠ **無環不需要 Kahn**：todo 的 id 依清單位置指派，所以「只能依賴排在自己前面的」
+      （`0 <= depends_on < id`）**同時**保證無懸空、無自環、無環，而且是全序檢查、O(n)。
+      副產品是 `id 0` 的 `depends_on` 恆為 `None` → **永遠至少有一個 ready todo，不會 deadlock**（⑮i）。
+
+    ⚠ **判別力集中在五條誤報對照**：⑮j（合法依賴不得被修剪，且 `deps_pruned` 是 0 **不是缺席**）、
+      ⑮l（沒宣告的 todo 行為逐字不變＝既有 fixture 的回歸護欄）、⑮p（句中已點名公司時
+      一個字都不能改——否則會把別家公司前綴上去）、⑮d（舊格式 `list[str]` 相容）、
+      ⑮q（實體解析要用**宣告的那個父 todo**，不是所有 done todo 的眾數）。
+    """
+    import inspect
+
+    results: list[tuple[str, bool, str]] = []
+    P = ar._parse_plan_output
+    V = ar.validate_plan_dependencies
+    D = ar._is_dependent_hop
+    F = ar._fill_dependent_hop
+
+    # ── 解析層：「說沒有」與「沒說」必須分得開 ────────────────────────────────────
+    _no_key = P([{"task": "A", "route": "kb"}])[0]
+    results.append(("⑮a 新格式但沒有 depends_on key → deps_declared=False（＝沒說）",
+                    _no_key.get("deps_declared") is False and _no_key.get("depends_on") is None,
+                    f"實得 {_no_key}"))
+
+    _dep0 = P([{"task": "A", "route": "kb"}, {"task": "B", "route": "kb", "depends_on": 0}])[1]
+    results.append(("⑮b `depends_on: 0` → declared=True、值是 0",
+                    _dep0.get("deps_declared") is True and _dep0.get("depends_on") == 0,
+                    f"實得 {_dep0}"))
+
+    _null = P([{"task": "A", "route": "kb", "depends_on": None}])[0]
+    results.append(("⑮c **這條是整個修法的關鍵**：`depends_on: null` → declared=True（Planner 說沒有）",
+                    _null.get("deps_declared") is True and _null.get("depends_on") is None,
+                    f"實得 {_null}；與 ⑮a 分不開的話，詞表仍然是實際做決定的人"))
+
+    _legacy = P(["舊格式子問題"])[0]
+    results.append(("⑮d **誤報對照**：舊格式 `list[str]` → declared=False（既有 fixture 逐字相容）",
+                    _legacy.get("deps_declared") is False and _legacy.get("route") == "kb",
+                    f"實得 {_legacy}"))
+
+    _bad = P([{"task": "A", "route": "kb", "depends_on": "abc"},
+              {"task": "B", "route": "kb", "depends_on": True}])
+    results.append(("⑮e 非法值（字串／bool）→ 值正規化成 None 但 declared 仍是 True（交給驗證層）",
+                    all(x.get("depends_on") is None and x.get("deps_declared") is True for x in _bad),
+                    f"實得 {_bad}"))
+
+    # ── 驗證層：variable hygiene ＋ 無環（業界的第二段）───────────────────────────
+    def _todos(*deps):
+        return [{"id": i, "task": f"T{i}", "route": "kb", "depends_on": d,
+                 "deps_declared": True, "status": "pending"} for i, d in enumerate(deps)]
+
+    tv, sv = V(_todos(None, 9, 0))
+    results.append(("⑮f 懸空引用（depends_on=9 而只有 3 個 todo）→ prune 成 None ＋ 計數",
+                    tv[1]["depends_on"] is None and sv.get("deps_pruned") == 1,
+                    f"實得 todos={[t['depends_on'] for t in tv]} stats={sv}"))
+    results.append(("⑮f2 修剪要有逐筆明細（只有計數的話查不出被剪掉的是什麼）",
+                    len(sv.get("deps_pruned_detail") or []) == 1,
+                    f"實得 {sv.get('deps_pruned_detail')}"))
+
+    tv, sv = V(_todos(None, 1, 0))
+    results.append(("⑮g 自我引用（id==depends_on）→ prune",
+                    tv[1]["depends_on"] is None and sv.get("deps_pruned") == 1,
+                    f"實得 {[t['depends_on'] for t in tv]}"))
+
+    tv, sv = V(_todos(None, 2, None))
+    results.append(("⑮h 前向引用（depends_on > id）→ prune（`dep < id` 同時保證無懸空／無環）",
+                    tv[1]["depends_on"] is None and sv.get("deps_pruned") == 1,
+                    f"實得 {[t['depends_on'] for t in tv]}"))
+
+    tv, sv = V(_todos(0, 0, 1))
+    results.append(("⑮i 驗證後 id 0 的 depends_on 恆為 None ⇒ 永遠有 ready todo，不會 deadlock",
+                    tv[0]["depends_on"] is None and any(t["depends_on"] is None for t in tv),
+                    f"實得 {[t['depends_on'] for t in tv]}"))
+
+    tv, sv = V(_todos(None, 0, 1))
+    results.append(("⑮j **誤報對照**：合法的依賴鏈不得被修剪，且 deps_pruned 是 0 而**不是缺席**",
+                    [t["depends_on"] for t in tv] == [None, 0, 1] and sv.get("deps_pruned") == 0,
+                    f"實得 todos={[t['depends_on'] for t in tv]} stats={sv}"))
+    results.append(("⑮j2 `deps_count` 要反映真的宣告了幾個（不是恆 0）",
+                    sv.get("deps_count") == 2, f"實得 {sv.get('deps_count')}"))
+
+    # ── 判定層：詞表退位 ────────────────────────────────────────────────────────
+    _MISSED = "那家公司的毛利率是多少"       # ⚠ 逐字凍結：`_BACKREF_RE` 匹配**不到**這一句
+    results.append(("⑮k 前提：`那家公司…` 確實是現行詞表漏掉的措辭（否則下一條測到的是別條路）",
+                    ar._BACKREF_RE.search(_MISSED) is None,
+                    "詞表如果補了這個詞，這條前提就要改——但補詞不是這次的修法"))
+    results.append(("⑮k2 **陽性**：Planner 宣告 depends_on=0 → 判定為依賴型（詞表漏掉也沒關係）",
+                    D({"task": _MISSED, "depends_on": 0, "deps_declared": True}),
+                    "欄位沒被讀到＝這次改動等於沒做"))
+
+    results.append(("⑮l **誤報對照**：沒宣告（replan 建的／舊 fixture）→ 仍走詞表，行為逐字不變",
+                    D({"task": "該公司的毛利率是多少", "depends_on": None, "deps_declared": False})
+                    and not D({"task": _MISSED, "depends_on": None, "deps_declared": False})
+                    and not D({"task": "Apple 該公司的毛利率", "depends_on": None,
+                               "deps_declared": False}),
+                    "沒宣告時的三種既有行為（命中／漏掉／已點名公司）必須完全不變"))
+
+    results.append(("⑮l2 **誤報對照**：Planner 說 `null` 且字面沒有未解錨點 → 不延後（宣告說了算）",
+                    not D({"task": "Apple 的毛利率是多少", "depends_on": None, "deps_declared": True}),
+                    "這裡若還去問詞表，就是詞表沒有真的退位"))
+
+    results.append(("⑮m **有意識的例外**：說 null 但字面帶未解錨點（無主詞）→ 仍延後",
+                    D({"task": "該公司的毛利率是多少", "depends_on": None, "deps_declared": True}),
+                    "那句話單獨檢索時沒有主詞＝字面事實；代價不對稱（多一個 wave vs 破檢索）"))
+
+    _tv, _sv = V([{"id": 0, "task": "Apple 的營收", "route": "kb", "depends_on": None,
+                   "deps_declared": True, "status": "pending"},
+                  {"id": 1, "task": "該公司的毛利率是多少", "route": "kb", "depends_on": None,
+                   "deps_declared": True, "status": "pending"}])
+    results.append(("⑮m2 這種分歧要記進 `deps_disagreed` ＝ 日後拿不拿掉這個例外的分母",
+                    _sv.get("deps_disagreed") == 1, f"實得 {_sv}"))
+
+    # ── 替換層：MuSiQue 式佔位符 ＋ 兩層退路 ─────────────────────────────────────
+    results.append(("⑮n `#0` 佔位符 → 換成解出的實體（業界通用格式）",
+                    F("#0 的毛利率是多少", "NVIDIA") == "NVIDIA 的毛利率是多少",
+                    f"實得 {F('#0 的毛利率是多少', 'NVIDIA')!r}"))
+    results.append(("⑮n2 回指代名詞的既有替換行為不變",
+                    F("該公司的毛利率是多少", "NVIDIA") == "NVIDIA的毛利率是多少",
+                    f"實得 {F('該公司的毛利率是多少', 'NVIDIA')!r}"))
+    results.append(("⑮o 兩種錨點都沒有、句中也沒點名公司 → 前綴實體（不要原樣送去做破檢索）",
+                    F(_MISSED, "NVIDIA") == f"NVIDIA {_MISSED}",
+                    f"實得 {F(_MISSED, 'NVIDIA')!r}"))
+    results.append(("⑮p **誤報對照**：句中已點名公司 → 一個字都不准改",
+                    F("Apple 的毛利率是多少", "NVIDIA") == "Apple 的毛利率是多少",
+                    f"實得 {F('Apple 的毛利率是多少', 'NVIDIA')!r}；前綴上去就是換成別家公司"))
+    results.append(("⑮p2 **誤報對照**：`#` 後面不是數字 → 不是佔位符，不得替換",
+                    F("Item #A 的毛利率", "NVIDIA") == "NVIDIA Item #A 的毛利率"
+                    or "#A" in F("Item #A 的毛利率", "NVIDIA"),
+                    f"實得 {F('Item #A 的毛利率', 'NVIDIA')!r}"))
+
+    # ── 實體解析：用宣告的那個父 todo，不是所有 done todo 的眾數 ────────────────
+    # ⚠ **三個 done todo 是必要的**：`_find_all_ticker_aliases` 回傳的是**集合**，同一個 todo
+    #   裡公司名出現幾次都只算一票 → 兩個 todo 時 NVDA:1 / AAPL:1 平手，眾數剛好也回 NVIDIA
+    #   ＝ 這條斷言**恆真**（變異 N8 實測沒抓到）。要讓「眾數」與「宣告的父 todo」真的分岔，
+    #   別家必須多於一票。同 ⑳e／⑭j 的形狀：測資讓那條路從來沒被走到。
+    _done = [{"id": 0, "task": "誰是市值最高的", "status": "done", "deps_declared": True,
+              "depends_on": None, "result": "NVIDIA 是市值最高的"},
+             {"id": 1, "task": "Apple 的營收", "status": "done", "deps_declared": True,
+              "depends_on": None, "result": "Apple 的營收是 3910 億美元"},
+             {"id": 2, "task": "Apple 的毛利率", "status": "done", "deps_declared": True,
+              "depends_on": None, "result": "Apple 的毛利率是 46%"}]
+    _ent = ar._resolve_hop_entity(_done, [], parent_id=0)
+    results.append(("⑮q **誤報對照**：有宣告父 todo 時只看那一個（不是所有 done todo 的眾數）",
+                    _ent == "NVIDIA",
+                    f"實得 {_ent!r}；取眾數會被別的子問題裡出現更多次的公司蓋掉"))
+    results.append(("⑮q2 沒有宣告父 todo 時退回既有的眾數行為（這裡眾數是 Apple）",
+                    ar._resolve_hop_entity(_done, [], parent_id=None) == "Apple",
+                    "舊行為不得因為加了參數而壞掉"))
+
+    # ── 接線（同 ⑭g／⑭h 的教訓：驗值不驗名字）──────────────────────────────────
+    _ann = getattr(ar.SupervisorState, "__annotations__", {})
+    results.append(("⑮r SupervisorState 宣告了 `plan_stats`（沒宣告 → LangGraph 丟掉它）",
+                    "plan_stats" in _ann, f"實得 {sorted(_ann)}"))
+    results.append(("⑮r2 `run_agentic` 真的回傳 `plan_stats`",
+                    "plan_stats" in inspect.getsource(ar.run_agentic),
+                    "只寫在 state 裡＝跑 65 題也彙總不到，同 ⑲l／⑭g2 的教訓"))
+    _pn_src = inspect.getsource(ar._node_plan)
+    results.append(("⑮r3 `_node_plan` 真的呼叫了驗證（不呼叫＝懸空引用會原樣流到 executor）",
+                    "validate_plan_dependencies" in _pn_src,
+                    "業界那三段的第二段沒接上"))
+
+    print()
+    print(f"  {'multi_hop 依賴：欄位說了算，詞表退位':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
+def _check_forced_pass_visibility() -> int:
+    """閘門⑯：「重試用完強制放行」必須留下痕跡（`exec_stats`，2026-09-08）。
+
+    **病灶**（2026-09-07 端到端實跑撞到的）：`_run_executor_*` 的迴圈出口是
+
+        if verdict["sufficient"] or rnd >= MAX_REWRITES:   # 註解自己寫著「或次數用盡強制放行」
+
+    而回傳的 4-tuple `(summary, web_notes, realtime_need, period_notes)` **沒有任何一格**說明
+    它是哪一種。Synthesize 因此分不出「Grader 判過」與「重試三輪都不夠、硬放」。
+    實測：「Magnificent Seven 裡最近十二個月淨利最高的是哪一家？」hop-1 連跑三輪
+    `sufficient=False`（Grader 每輪都在列缺哪幾家），答案照樣產出、**零保留**，而且答錯
+    （答 Apple $122.58B，實際最高是 GOOGL $160.21B）。
+
+    **這道閘門修的是可觀測性，不是行為**（同閘門⑭ 與 `unit_stats` 的形狀）：先把分母做出來，
+    再談要不要揭露／拒答。⑯g／⑯m 就是「行為逐字沒變」的那兩條護欄。
+
+    ⚠ **四種出場不可合併**（同 ⑭e）：迴圈有三個 break ＋ 一個 except，四種病完全不同——
+      · `forced_pass`：重試用完仍不足 ← **這次要量的**
+      · `kb_unfixable_exit`：KB 結構上補不了（時效），提早跳出是**正確行為**，已有時效揭露
+      · `web_budget_exit`：route=web 且 query 級預算用完，本子問題留空並記缺口
+      · `crashed`：executor 例外降級
+      一個「出場時 sufficient 為 False 就算 forced_pass」的實作會把前三種混成一種，
+      而那會讓分母灌水到沒有意義。⑯d／⑯e／⑯l 是那三條誤報對照。
+    ⚠ **計數要在場**（同 ⑭d／⑲l4）：沒觸發是 0 而不是缺席，否則消費端分不出
+      「這一題沒有強制放行」與「這一題根本沒經過 executor」（崩潰降級題）。
+    ⚠ **兩個 executor 都要掛**（同 ⑭a／㉑i）：`AGENTIC_REACT_EXECUTOR=true` 走的是另一支，
+      改一支漏一支的失敗方式是「那個組態下分母恆為 0」＝與「從來沒發生」外觀相同。⑯h 用 AST 守。
+    ⚠ **多波必須累加**（同 ⑭i）：`_node_execute` 每一波跑一次，而 LangGraph 對沒有 reducer
+      的 key 是**取代**語意——寫錯就只剩最後一波，而 multi_hop 的第二跳正好都在最後一波。
+    """
+    import inspect
+
+    results: list[tuple[str, bool, str]] = []
+    SAVED = (ar._check_sufficiency, ar._retrieve_chunks, ar._fallback_local_summary,
+             ar._web_query_en, ar.ENABLE_WEB_SEARCH, ar.QUERY_WEB_BUDGET,
+             # ⚠ 檔首那支模組級 stub 是 `lambda q:`，而生產呼叫的是 `_tavily_search(q, need=...)`
+             #   ——不換一支收得下 `need` 的，升級到 web 那一路會炸在 TypeError
+             #   並被 `except` 收成 `crashed`，於是 ⑯d 測到的是別的東西（實際踩過）。
+             ar._tavily_search)
+
+    def _chunk(i=0):
+        return {"source": "MSFT_10K_2026.html", "chunk_index": i, "ticker": "MSFT",
+                "content": "Revenue increased 18%.", "raw_rerank_score": 0.9,
+                "rerank_score": 0.9, "score": 0.9}
+
+    def _drive(verdicts, *, route="kb", freshness=None, web=False, budget=3,
+               with_stats=True, crash=False):
+        """零 LLM 驅動 `_run_executor_deterministic`；回傳 (輸出 4-tuple, exec_stats)。
+
+        `verdicts` 是 Grader 每一輪的裁決（用完就重複最後一個）。
+        """
+        seq = list(verdicts)
+        calls = {"n": 0}
+
+        def _fake_check(subquery, pool, temporal_scope, freshness_mode):
+            v = dict(seq[min(calls["n"], len(seq) - 1)])
+            calls["n"] += 1
+            v.setdefault("missing", "缺 AAPL/GOOGL/META/TSLA 的 TTM 淨利")
+            v.setdefault("new_query", "")
+            v.setdefault("relevant_ids", [])
+            v.setdefault("realtime_need", "none")
+            v.setdefault("kb_unfixable", False)
+            return v
+
+        def _fake_retrieve(q, *, attributable=True):
+            # ⚠ 只炸第一次：`except` 區塊自己還會再呼叫一次 `_retrieve_chunks` 做降級補救，
+            #   無條件拋會讓例外直接穿出 executor（測到的是別的東西）。
+            if crash and not calls.get("crashed"):
+                calls["crashed"] = True
+                raise RuntimeError("模擬 executor 內部崩潰")
+            return [_chunk(calls["n"])]
+
+        ar._check_sufficiency = _fake_check
+        ar._retrieve_chunks = _fake_retrieve
+        ar._fallback_local_summary = lambda task, chunks: "SUMMARY"
+        ar._web_query_en = lambda q: q
+        ar._tavily_search = lambda q, need="none": "（stub，絕不連網）"
+        ar.ENABLE_WEB_SEARCH = web
+        ar.QUERY_WEB_BUDGET = budget
+        ar._reset_query_web_budget()
+        st: dict = {}
+        kw = {"exec_stats": st} if with_stats else {}
+        try:
+            out = ar._run_executor_deterministic(
+                "誰的淨利最高", "", freshness or ar.FRESHNESS_SNAPSHOT, 0, False,
+                attributable=True, route=route, **kw)
+        finally:
+            (ar._check_sufficiency, ar._retrieve_chunks, ar._fallback_local_summary,
+             ar._web_query_en, ar.ENABLE_WEB_SEARCH, ar.QUERY_WEB_BUDGET,
+             ar._tavily_search) = SAVED
+        return out, st
+
+    NO = {"sufficient": False}
+    YES = {"sufficient": True}
+
+    # ── ⑯a 陽性：三輪都不夠 → forced_pass，且帶得出「缺什麼」──────────────────────
+    _out, st = _drive([NO])
+    results.append(("⑯a 三輪 sufficient=False 仍產出答案 → outcome 記成 `forced_pass`",
+                    st.get("outcome") == "forced_pass", f"實得 {st!r}"))
+    results.append(("⑯a2 帶得出輪數與 Grader 說的「缺什麼」（無明細＝有分母卻查不出是哪一題）",
+                    st.get("rounds") == ar.MAX_REWRITES + 1 and "TTM" in (st.get("missing") or ""),
+                    f"實得 rounds={st.get('rounds')!r} missing={st.get('missing')!r}"))
+
+    # ── ⑯b 誤報對照：第一輪就夠 → 不得記成 forced_pass ────────────────────────────
+    _out, st = _drive([YES])
+    results.append(("⑯b **誤報對照**：第一輪 Grader 就判夠 → `sufficient`，不是 forced_pass",
+                    st.get("outcome") == "sufficient", f"實得 {st!r}"))
+    _out2, st2 = _drive([NO, YES])
+    results.append(("⑯b2 最後一輪才夠（用掉改寫但沒用完）→ 仍是 `sufficient`",
+                    st2.get("outcome") == "sufficient", f"實得 {st2!r}"))
+
+    # ── ⑯c set-once：一次執行只能有一種出場 ────────────────────────
+    #    react executor 在 break 之前還會生成摘要，那一段拋例外會落到 `except`。
+    #    沒有 set-once 就會同時記成兩種病，而 `_merge_exec_stats` 的加總會多算一筆。
+    _once: dict = {}
+    ar._note_exec_outcome(_once, "forced_pass", rounds=3, missing="m")
+    ar._note_exec_outcome(_once, "crashed", error="x")
+    results.append(("⑯c set-once：第二次記錄不得覆蓋（否則一次執行被算成兩種病）",
+                    _once.get("outcome") == "forced_pass" and _once.get("rounds") == 3,
+                    f"實得 {_once!r}"))
+    results.append(("⑯c2 `stats=None`（呼叫端不想量）不得炸",
+                    ar._note_exec_outcome(None, "crashed") is None, ""))
+
+    # ── ⑯d 誤報對照：KB 補不了（時效）提早跳出 ≠ 強制放行 ─────────────────────────
+    #    這是**正確行為**且已有時效揭露路徑。「出場時不足就算 forced_pass」的實作會混進來。
+    _out, st = _drive([{"sufficient": False, "kb_unfixable": True}],
+                      freshness=ar.FRESHNESS_LIVE, web=True)
+    results.append(("⑯d **誤報對照**：`kb_unfixable` 提早跳出 → 自己的一格，不得算 forced_pass",
+                    st.get("outcome") == "kb_unfixable_exit", f"實得 {st!r}"))
+
+    # ── ⑯e 誤報對照：route=web 且預算用完 ≠ 強制放行 ─────────────────────────────
+    _out, st = _drive([NO], route="web", freshness=ar.FRESHNESS_LIVE, web=True, budget=0)
+    results.append(("⑯e **誤報對照**：web 預算用完留空 → 自己的一格，不得算 forced_pass",
+                    st.get("outcome") == "web_budget_exit", f"實得 {st!r}"))
+
+    # ── ⑯l 誤報對照：崩潰降級是別的病（同 ㉑l）──────────────────────────────────
+    _out, st = _drive([NO], crash=True)
+    results.append(("⑯l **誤報對照**：executor 例外降級 → `crashed`，不得算 forced_pass",
+                    st.get("outcome") == "crashed", f"實得 {st!r}"))
+
+    # ── ⑯f 四種出場**恰好一個**，且都在封閉集合裡 ────────────────────────────────
+    _seen = {_drive([NO])[1].get("outcome"), _drive([YES])[1].get("outcome"),
+             _drive([NO], crash=True)[1].get("outcome")}
+    results.append(("⑯f 每次執行**恰好**寫一個 outcome，且值落在封閉集合裡",
+                    _seen <= set(ar._EXEC_OUTCOMES) and None not in _seen,
+                    f"實得 {_seen!r}，合法 {ar._EXEC_OUTCOMES!r}"))
+
+    # ── ⑯g 回歸護欄：帶不帶 exec_stats，輸出**逐字相同**（同 ⑲l5／⑭f）────────────
+    _with, _ = _drive([NO])
+    _without, _ = _drive([NO], with_stats=False)
+    results.append(("⑯g **回歸護欄**：加了 `exec_stats` 參數後輸出逐字不變（只加觀測、不改行為）",
+                    _with == _without, f"{_with!r} vs {_without!r}"))
+
+    # ── ⑯h AST：兩個 executor ＋ dispatcher 都掛上（同 ⑭a／㉑i）───────────────────
+    _missing = [n for n in ("_run_executor_react", "_run_executor_deterministic", "_run_executor")
+                if "exec_stats" not in inspect.getsource(getattr(ar, n))]
+    results.append(("⑯h 兩個 executor ＋ dispatcher **全部**掛上（漏一支＝該組態下分母恆 0）",
+                    not _missing, f"缺 {_missing}"))
+
+    # ── ⑯i 多波累加：LangGraph 沒有 reducer 的 key 是取代語意（同 ⑭i）─────────────
+    _merged = ar._merge_exec_stats(
+        {"todos": 2, "forced_pass": 1, "sufficient": 1, "forced_pass_detail": [{"id": 0}]},
+        [{"outcome": "forced_pass", "id": 3, "task": "T", "missing": "m", "rounds": 3}])
+    results.append(("⑯i 第二波必須**累加**到第一波上（取代語意會只剩最後一波）",
+                    _merged["todos"] == 3 and _merged["forced_pass"] == 2
+                    and _merged["sufficient"] == 1 and len(_merged["forced_pass_detail"]) == 2,
+                    f"實得 {_merged!r}"))
+    results.append(("⑯i2 沒觸發的那幾格是 **0 而不是缺席**（同 ⑭d／⑲l4）",
+                    all(k in _merged for k in ar._EXEC_OUTCOMES) and _merged["crashed"] == 0,
+                    f"實得 {sorted(_merged)}"))
+    _m0 = ar._merge_exec_stats({}, [{}])
+    results.append(("⑯i3 沒寫 outcome 的結果（wave worker 崩潰）算 `crashed`，不得靜默漏掉分母",
+                    _m0.get("todos") == 1 and _m0.get("crashed") == 1, f"實得 {_m0!r}"))
+
+    # ── ⑯j 接線：state → run_agentic → record，且 `None` ≠ `{}`（同 ⑲l10／㉑j）──────
+    _ann = getattr(ar.SupervisorState, "__annotations__", {})
+    results.append(("⑯j SupervisorState 宣告了 `exec_stats`（沒宣告 → LangGraph 整個丟掉）",
+                    "exec_stats" in _ann, f"實得 {sorted(_ann)}"))
+    results.append(("⑯j2 `_node_execute` 真的回傳 `exec_stats`",
+                    "exec_stats" in inspect.getsource(ar._node_execute), ""))
+    results.append(("⑯j3 `run_agentic` 真的回傳 `exec_stats`",
+                    "exec_stats" in inspect.getsource(ar.run_agentic), ""))
+    try:
+        import importlib.util as _iu
+        _spec = _iu.spec_from_file_location(
+            "_rgoe_exec", str(Path(__file__).resolve().parent / "run_agentic_on_evalset.py"))
+        _m = _iu.module_from_spec(_spec)
+        _spec.loader.exec_module(_m)
+        _q = {"id": "x-1", "category": "multi_hop", "query": "Q"}
+        _val = {"todos": 1, "forced_pass": 1}
+        _r1 = _m._record_from_agentic(_q, "A", [], [], [], {}, {}, {}, {}, _val)
+        _r2 = _m._record_from_agentic(_q, "A", [], [], [], {}, {}, {}, {}, None)
+        results.append(("⑯j4 record 建構子寫進 `exec_stats` 的**值**（同 ⑮e：寫了名字不等於流得到）",
+                        _r1.get("exec_stats") == _val, f"實得 {_r1.get('exec_stats')!r}"))
+        results.append(("⑯j5 `None`（崩潰降級／舊結果檔）不得被寫成 `{}`——會把它算進分母",
+                        _r2.get("exec_stats") is None, f"實得 {_r2.get('exec_stats')!r}"))
+    except Exception as e:      # noqa: BLE001
+        results.append(("⑯j4 record 建構子接得上（接不上＝只測了記憶體裡的 dict）", False, repr(e)))
+
+    # ── ⑯k 前提斷言：這道量的是「不足卻放行」，所以 MAX_REWRITES 必須真的有上限 ──────
+    results.append((f"⑯k 前提：MAX_REWRITES({ar.MAX_REWRITES}) 有限 ⇒ 強制放行這條路真的走得到",
+                    isinstance(ar.MAX_REWRITES, int) and ar.MAX_REWRITES >= 0,
+                    "無上限的話 forced_pass 恆為 0，這道閘門會變成恆真"))
+
+    # ── ⑯m 不改行為的第二條證明：強制放行仍照常產出摘要 ───────────────────────────
+    results.append(("⑯m 強制放行仍照常產出摘要（這次**刻意不改行為**，只加分母）",
+                    _with[0] == "SUMMARY", f"實得 {_with[0]!r}"))
+
+    print()
+    print(f"  {'強制放行必須留下痕跡（exec_stats）':<52}{'判定':>8}")
+    print("  " + "-" * 68)
+    fail = 0
+    for name, ok, note in results:
+        fail += 0 if ok else 1
+        print(f"  {name:<52}{('OK' if ok else 'FAIL'):>8}  {'' if ok else note}")
+    return fail
+
+
+def _check_snapshot_recency_is_inert() -> int:
+    """閘門⑰：**snapshot 模式下時效那一整條是惰性的**（2026-09-10 加）。
+
+    ## 這道閘門修的是一個判讀錯誤，不是一個系統缺陷
+
+    `_check_sufficiency` 的 `need, kb_unfixable = "none", False` 寫在前面，而算出真值的
+    那幾行**全部住在 `if _live:` 裡**（`_live = freshness_mode == FRESHNESS_LIVE`）。
+    `run_agentic_on_evalset.py` 的 `--freshness-mode` 預設是 **snapshot**
+    ⇒ **每一份全量結果檔的 `realtime_need` 恆為 `"none"`、`kb_unfixable` 恆為 `False`
+    ⇒ `exec_stats.kb_unfixable_exit` 恆為 0。那是定義，不是待解釋的觀察。**
+
+    ⚠ **我在這個旗標上連續讀錯三次**，三次都寫進了文件（見 `BACKLOG.md` 的 (c)）：
+      ① 「旗標從來不觸發 ⇒ 讓它觸發是 `forced_pass` 的第一順位」——錯在它是**時效**旗標，
+         而 `forced_pass` 的 `missing` 全在講**內容**。
+      ② 「財報題庫上 `realtime_need` 依設計是 none ⇒ 結構上不可能觸發」——**方向對了、
+         理由錯了**（我歸因給題庫的性質，實際是 `freshness_mode` 這個參數），
+         而且證據是 10/10 的煙霧測試 ＝ 樣本太小。
+      ③ 「探針實測 17/150 會觸發 ⇒ 生產的 0 仍未解釋，可能是旗標跨輪閃爍」——
+         **那 17 次是探針用 `--freshness-mode live` 跑出來的**（它的預設），
+         與生產的 snapshot **從來不是同一個組態**。閃爍與這件事無關。
+      ⇒ 這道閘門把 ①②③ 都證偽掉的那個結構事實**凍結成可重跑的斷言**。
+
+    ## 判別力
+
+    ⚠ **陽性那幾條（⑰a~⑰c）一個「把時效整段刪掉」的實作也會通過**，所以判別力全在
+      live 那三條誤報對照（⑰d~⑰f）：它們證明這條路**在該生效的時候真的會生效**，
+      「snapshot 下恆為 none/False」才是隔離，而不是功能壞掉。
+    ⚠ **⑰h／⑰i／⑰j 才是真正防止再犯的**：它們把「生產跑 snapshot、探針跑 live」
+      寫成斷言。少了它們，下一個人照樣會拿探針的 17 去解釋生產的 0。
+    """
+    import ast as _ast
+    import json as _json
+
+    import rag_query as rq
+    print()
+    print("  閘門⑰ snapshot 下時效整條惰性（＝生產 kb_unfixable_exit=0 是定義）")
+    print("  " + "-" * 68)
+    fail = 0
+
+    def _a(name, cond, note=""):
+        nonlocal fail
+        if not cond:
+            fail += 1
+        print(f"  {name:<64}{'OK  ' if cond else 'FAIL'} {note}")
+
+    # Grader 的 LLM 輸出**刻意寫成最極端的那一種**：說夠、且說需要 intraday。
+    # snapshot 下這兩個欄位都必須被無視。
+    LOUD = _json.dumps({"sufficient": True, "missing": "", "new_query": "",
+                        "relevant_ids": [], "realtime_need": "intraday"})
+    pool = [{"source": "NVDA_10K_2026.html", "chunk_index": 3, "content": "營收成長。",
+             "rerank_score": 0.9}]
+    calls = []
+
+    def _fake_stale(need, top, as_of):
+        calls.append(need)
+        return (99, True)          # 「過期 99 天、而且 KB 補不了」
+
+    # ⚠ **注入點必須在**定義處**（`agentic_rag_version.graph`）不是 `ar.`：
+    #   `_check_sufficiency` 是用**裸名**呼叫 `_classify_staleness` 的，改 `ar.<name>` 的
+    #   綁定到不了呼叫端。⇒ 第一版的 ⑷f 當場 FAIL（而系統是對的），
+    #   而更危險的是 ⑷c **真空成立**：計數器永遠是空的，snapshot 就算真的呼叫了
+    #   它也看不出來。同闘門⑩ 與 ⑲ 的變異測試教訓（注入點要在定義處）。
+    # ⚠ **2026-09-11 注入點搬回 `ar.`**，而且是因為**呼叫端被修好了**，不是因為判斷改了：
+    #   上面那段講的「搬到定義處」其實是**遷就缺陷**——真正的病是 `_check_sufficiency`
+    #   用裸名呼叫 `_classify_staleness`（`graph.py:417`），違反閘門⑬「子模組一律走 `_pkg.`」。
+    #   新的閘門 `verify_eval_harness.py` H2 獨立抓到它 → 呼叫端改成 `_pkg.`，
+    #   注入點因此回到 `ar.`＝ 與 ⑬ 的規則一致。
+    #   ⇒ **教訓**：量尺為了「能攔到」而搬注入點之前，先問「是不是呼叫端該改」。
+    #     搬注入點會讓那個缺陷永久隱形，只有 ⑬／H2 這種結構閘門抓得到。
+    real_llm, real_stale, real_get = rq.call_llm, ar._classify_staleness, ar._replay.get
+    try:
+        rq.call_llm = lambda *a, **k: LOUD
+        ar._classify_staleness = _fake_stale
+        # 重放快取若命中就量不到被測物 → 強迫 MISS
+        ar._replay.get = lambda *a, **k: ar._replay.MISS
+
+        calls.clear()
+        snap = ar._check_sufficiency("NVIDIA 現在股價多少？", pool, "", ar.FRESHNESS_SNAPSHOT)
+        _a("⑰a snapshot：`realtime_need` 恆為 none（Grader 說 intraday 也一樣）",
+           snap["realtime_need"] == "none", f'got={snap["realtime_need"]!r}')
+        _a("⑰b snapshot：`kb_unfixable` 恆為 False（＝`kb_unfixable_exit` 不可能非 0）",
+           snap["kb_unfixable"] is False, f'got={snap["kb_unfixable"]!r}')
+        _a("⑰c snapshot：`_classify_staleness` **一次都不被呼叫** ← 結構上的理由",
+           calls == [], f"calls={calls}")
+        _a("⑰g snapshot：時效改判不得動 `sufficient`（Grader 說夠就是夠）",
+           snap["sufficient"] is True)
+
+        calls.clear()
+        live = ar._check_sufficiency("NVIDIA 現在股價多少？", pool, "", ar.FRESHNESS_LIVE)
+        _a("⑰d **誤報對照** live：`realtime_need` 照 Grader 走（否則寫死 none 也過 ⑰a）",
+           live["realtime_need"] == "intraday", f'got={live["realtime_need"]!r}')
+        _a("⑰e **誤報對照** live：`kb_unfixable` **可以**是 True（否則一律 False 也過 ⑰b）",
+           live["kb_unfixable"] is True, f'got={live["kb_unfixable"]!r}')
+        _a("⑰f **誤報對照** live：`_classify_staleness` 真的被呼叫（⑰c 的鏡像）",
+           calls == ["intraday"], f"calls={calls}")
+    finally:
+        rq.call_llm, ar._classify_staleness, ar._replay.get = real_llm, real_stale, real_get
+
+    def _default_of(path: str, flag: str):
+        """從腳本的 argparse 讀出某旗標的預設值（純 AST，不執行那支腳本）。"""
+        tree = _ast.parse(Path(path).read_text(encoding="utf-8"))
+        for node in _ast.walk(tree):
+            if (isinstance(node, _ast.Call)
+                    and getattr(node.func, "attr", "") == "add_argument"
+                    and node.args
+                    and getattr(node.args[0], "value", None) == flag):
+                for kw in node.keywords:
+                    if kw.arg == "default":
+                        return getattr(kw.value, "value", None)
+        return None
+
+    run_default = _default_of("eval/run_agentic_on_evalset.py", "--freshness-mode")
+    probe_default = _default_of("eval/probe_kb_content_ceiling.py", "--freshness-mode")
+    _a("⑰h 全量跑分的 `--freshness-mode` 預設是 snapshot（改了它，每一份舊結果檔的讀法都要改）",
+       run_default == "snapshot", f"got={run_default!r}")
+    _a("⑰i `probe_kb_content_ceiling` 預設是 **live** ＝ 與生產**不同組態**",
+       probe_default == "live", f"got={probe_default!r}")
+    _a("⑰j **誤報對照**：兩者若哪天變成同一個值要當場叫（否則 17 vs 0 的解釋靜默失效）",
+       run_default != probe_default)
+    return fail
+
+
 def main() -> int:
     print(f"  {'情境':<24}{'Q1':>6}{'Q2':>6}{'Q3':>6}{'Q4':>6}{'呼叫':>6}   判定")
     print("  " + "-" * 68)
@@ -1520,6 +2489,11 @@ def main() -> int:
     fail += _check_content_date_extraction()
     fail += _check_route_dispatch()
     fail += _check_replay_readonly()
+    fail += _check_monkeypatch_reaches_callers()
+    fail += _check_replan_todo_budget()
+    fail += _check_plan_dependencies()
+    fail += _check_forced_pass_visibility()
+    fail += _check_snapshot_recency_is_inert()
     print()
     print("GATE:", "PASS" if fail == 0 else f"FAIL（{fail} 項不符）")
     return 1 if fail else 0

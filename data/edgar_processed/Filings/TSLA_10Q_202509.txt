@@ -126,11 +126,175 @@
 |     Net cash provided by financing activities | $429 | $2,868 |
 |     Effect of exchange rate changes on cash and cash equivalents and restricted cash | $134 | $(8) |
 |   Net increase in cash and cash equivalents and restricted cash | $2,547 | $1,785 |
-|   Cash and cash equivalents and restricted cash, end of period |  |  |
-|   Cash and cash equivalents and restricted cash, end of period |  |  |
+|   Cash and cash equivalents and restricted cash, beginning of period | $17,037 | $17,189 |
+|   Cash and cash equivalents and restricted cash, end of period | $19,584 | $18,974 |
 |     Acquisitions of property and equipment included in liabilities | $1,631 | $2,727 |
 |     Leased assets obtained in exchange for finance lease liabilities |  | $32 |
 |     Leased assets obtained in exchange for operating lease liabilities | $1,171 | $1,232 |
+
+--- [TABLE extra #0] ---
+(Mark One)
+
+| x | QUARTERLY REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #1] ---
+For the quarterly period ended
+
+| o | TRANSITION REPORT PURSUANT TO SECTION 13 OR 15(d) OF THE SECURITIES EXCHANGE ACT OF 1934 |
+| --- | --- |...
+
+--- [TABLE extra #2] ---
+(Exact name of registrant as specified in its charter)
+
+| Texas |  | 91-2197729 |
+| --- | --- | --- |
+| (State or other jurisdiction of incorporation or organization) |  | (I.R.S. Employer Identification No.) |...
+
+--- [TABLE extra #3] ---
+| 1 Tesla Road Austin , Texas |  | 78725 |
+| --- | --- | --- |
+| (Address of principal executive offices) |  | (Zip Code) |...
+
+--- [TABLE extra #4] ---
+Securities registered pursuant to Section 12(b) of the Act:
+
+| Title of each class | Trading Symbol(s) | Name of each exchange on which registered |
+| --- | --- | --- |
+| Common stock | TSLA | The Nasdaq Global Select Market |...
+
+--- [TABLE extra #5] ---
+Indicate by check mark whether the registrant is a large accelerated filer, an accelerated filer, a non-accelerated filer, a smaller reporting company, or an emerging growth company. See the definitions of “large accelerated filer,” “accele
+
+| Large accelerated filer |  | x |  | Accelerated filer |  | o |
+| --- | --- | --- | --- | --- | --- | --- |
+| Non-accelerated filer |  | o |  | Smaller repor...
+
+--- [TABLE extra #6] ---
+INDEX
+
+|  |  | Page |
+| --- | --- | --- |
+| PART I. FINANCIAL INFORMATION |  |  |
+| Item 1. | Financial Statements | 4 |
+|  | Consolidated Balance Sheets | 4 |
+|  | Consolidated Statements of Operations | 5 |
+|  | Consolidated Statements of Comprehensive Income | 6 |
+|  | Consolidated Statements of Redeemable Noncontrolling Interests and Equity | 7 |
+|  | Consolidated Statements of Cash Flows | 9 ...
+
+--- [TABLE extra #7] ---
+(unaudited)
+
+|  | Three Months Ended September 30, |  | Nine Months Ended September 30, |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | 2025 |  | 2024 |  | 2025 |  | 2024 |  |  |  |  |  |  |  |  |
+| Net income | $ | 1,389 |  |  | $ | 2,189 |  |  | $ | 2,999 |  |  | $ | 5,010 |  |
+| Other comprehensive inco...
+
+--- [TABLE extra #8] ---
+(unaudited)
+
+| Three Months Ended September 30, 2025 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Income |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- |...
+
+--- [TABLE extra #9] ---
+(unaudited)
+
+| Three Months Ended September 30, 2024 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Loss |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | -...
+
+--- [TABLE extra #10] ---
+The table shows the equity section of the balance sheet for the nine months ended September 30, 2024, comparing it to the December 31, 2023 balance and detailing adjustments, issuances, and net income.
+
+| Nine Months Ended September 30, 2024 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Loss |  | Retained Earnings | ...
+
+--- [TABLE extra #11] ---
+The following is a summary of the status of production of each of our announced vehicle models in production and under development, as of the date of this Quarterly Report on Form 10-Q:
+
+| Production Location |  | Vehicle Model(s) |  | Production Status |
+| --- | --- | --- | --- | --- |
+| Fremont Factory |  | Model S / Model X |  | Active |
+|  |  | Model 3 / Model Y |  | Active |
+| Gigafactory Sha...
+
+--- [TABLE extra #12] ---
+Revenues
+
+|  | Three Months Ended September 30, | Change |  | Nine Months Ended September 30, |  | Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in millions) | 2025 |  | 2024 ...
+
+--- [TABLE extra #13] ---
+Cost of Revenues and Gross Margin
+
+|  | Three Months Ended September 30, |  | Change |  | Nine Months Ended September 30, |  | Change |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| (Dollars in mi...
+
+--- [TABLE extra #14] ---
+INDEX TO EXHIBITS
+
+| Exhibit Number |  |  |  | Incorporated by Reference |  | Filed Herewith |  |  |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Exhibit Description |  | Form |  | File No. |  | Exhibit |  | Filing Date |  |  |  |
+| 10.1** |  | 2025 CEO Interim Restricted Stock Agreement, dated August 3, 2025 |  | 8-K |  | 000-34756 |  | 10.1 |  ...
+
+[INFO] extra tables kept=15 (去重後，來自 unstructured)
+
+--- [ITEM] Part I, Item 1 (len=73804 chars) ---
+ITEM 1. FINANCIAL STATEMENTS
+
+Tesla, Inc.
+
+Consolidated Balance Sheets
+
+(in millions, except per share data)
+
+(unaudited)
+
+September 30,2025December 31,2024
+
+Assets
+
+Current assets
+
+Cash and cash equivalents$18,289 $16,139 
+
+Short-term investments23,358 20,424 
+
+Accounts receivable, net4,703 4,418 
+
+Inventory12,276 12,017 
+
+Prepaid expenses and other current assets6,027 5,362 
+
+Total current asset...
+
+[MIN-MERGE] item=Part_I_Item_1 section=None 28 → 24 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_I_Item_1 原 chunk 1881 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1607 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 2630 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_I_Item_1 原 chunk 1489 token > 1200 → 補切成 2 份
+
+--- [ITEM] Part I, Item 2 (len=38517 chars) ---
+Table of Contents
+
+ITEM 2. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
+
+The following discussion and analysis should be read in conjunction with the consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q.
+
+Overview
+
+Our mission is to accelerate the world’s transition to sustainable energy. We design...
+
+[SECTION] item=Part_I_Item_2 period=None 依小標切成 25 段：(小標前=章節層) | Overview | Automotive and AI Enabled Products—Production | TBD RoadsterIn development | Cash Flow and Capital Expenditure Trends | Critical Accounting Policies and Estimates | Recent Accounting Pronouncements | Revenues | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Cost of Revenues and Gross Margin | Automotive & Services and Other Segment | Energy Generation and Storage Segment | Research and Development Expense | Selling, General and Administrative Expense | Restructuring and Other | Interest Income | Other (Expense) Income, Net | Provision for Income Taxes | Liquidity and Capital Resources | Material Cash Requirements | Sources and Conditions of Liquidity | Cash Flows from Operating Activities | Cash Flows from Investing Activities | Cash Flows from Financing Activities
+
+[MIN-MERGE] item=Part_I_Item_2 section=Overview 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 --- [ITEM] Part I, Item 3 (len=1645 chars) ---
 Table of Contents
@@ -140,6 +304,13 @@ ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
 Foreign Currency Risk
 
 We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). ...
+
+--- [ITEM] Part I, Item 4 (len=1884 chars) ---
+ITEM 4. CONTROLS AND PROCEDURES
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our Chief Executive Officer and our Chief Financial Officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Securities Exchange Act of 1934, as amended (the “Exchange Act”). In designing and evaluating the disclosure c...
 
 --- [ITEM] Part II, Item 1 (len=237 chars) ---
 ITEM 1. LEGAL PROCEEDINGS
@@ -171,7 +342,7 @@ ITEM 5. OTHER INFORMATION
 
 None of the Company’s directors or officers adopted, modified or terminated a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended September 30, 2025, as such terms are defined under Item 408(a) of Regulation S-K....
 
---- [ITEM] Part II, Item 6 (len=1679 chars) ---
+--- [ITEM] Part II, Item 6 (len=1303 chars) ---
 Table of Contents
 
 ITEM 6. EXHIBITS
@@ -190,54 +361,4 @@ Exhibit DescriptionFormFile No.ExhibitFiling Date
 
 10.2*Form of Indemn...
 
---- [ITEM] Part I, Item 1 (len=73804 chars) ---
-ITEM 1. FINANCIAL STATEMENTS
-
-Tesla, Inc.
-
-Consolidated Balance Sheets
-
-(in millions, except per share data)
-
-(unaudited)
-
-September 30,2025December 31,2024
-
-Assets
-
-Current assets
-
-Cash and cash equivalents$18,289 $16,139 
-
-Short-term investments23,358 20,424 
-
-Accounts receivable, net4,703 4,418 
-
-Inventory12,276 12,017 
-
-Prepaid expenses and other current assets6,027 5,362 
-
-Total current asset...
-
-[RCTS] item=Part_I_Item_1 原 chunk 1881 token > 1200 → 補切成 3 份
-
-[RCTS] item=Part_I_Item_1 原 chunk 1607 token > 1200 → 補切成 3 份
-
-[RCTS] item=Part_I_Item_1 原 chunk 2630 token > 1200 → 補切成 4 份
-
-[RCTS] item=Part_I_Item_1 原 chunk 1489 token > 1200 → 補切成 2 份
-
-[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
-
---- [ITEM] Part I, Item 2 (len=38517 chars) ---
-Table of Contents
-
-ITEM 2. MANAGEMENT’S DISCUSSION AND ANALYSIS OF FINANCIAL CONDITION AND RESULTS OF OPERATIONS
-
-The following discussion and analysis should be read in conjunction with the consolidated financial statements and the related notes included elsewhere in this Quarterly Report on Form 10-Q.
-
-Overview
-
-Our mission is to accelerate the world’s transition to sustainable energy. We design...
-
-[RCTS] item=Part_I_Item_2 原 chunk 3091 token > 1200 → 補切成 6 份
+[MIN-MERGE] item=Part_II_Item_6 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）

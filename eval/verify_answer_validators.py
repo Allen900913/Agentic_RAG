@@ -35,9 +35,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-sys.stdout.reconfigure(encoding="utf-8", errors="replace")   # 本檔輸出含 ↔／⚠／全形，Windows 預設 cp950 會在 gate8 當場炸
+for _s in (sys.stdout, sys.stderr):  # ⚠ stderr 也要轉：traceback 走 stderr，只轉 stdout 的話「印到一半 crash」照樣發生（2026-09-11 閘門 H1）
 
-import agentic_rag_v2 as ar   # noqa: E402
+    _s.reconfigure(encoding="utf-8", errors="replace")   # 本檔輸出含 ↔／⚠／全形，Windows 預設 cp950 會在 gate8 當場炸
+
+import agentic_rag_version as ar   # noqa: E402
 
 _PASS = _FAIL = 0
 _FAILURES: list[str] = []
@@ -1005,14 +1007,66 @@ _GUARDED_VALIDATORS = ("_consistency_check_and_fix", "_period_check_and_fix",
                        "_reflect_and_fix", "_number_check_and_fix")
 
 
+def _pkg_funcdefs() -> dict:
+    """套件裡**每一個模組**的 top-level 函式 AST，name -> FunctionDef。
+
+    ⚠ **為什麼不是 `ast.parse(Path(ar.__file__).read_text())`**（2026-09-03 套件化時改）：
+      `agentic_rag_v2.py` 還是單一檔時，`ar.__file__` 就是全部原始碼；套件化之後它只是
+      `__init__.py`，**任何被拆進子模組的函式都會查無此人**。而這兩道閘門的前提斷言
+      （⑭a／⑮a）寫的是「找不到的話下面全部是假性通過」——也就是說，重構會讓它們
+      **大聲失敗**（這是好的），但修法不該是「把函式搬回 __init__ 遷就量尺」，
+      那是量尺與被測物耦合。改成掃整個套件，之後怎麼拆都不用再動這裡。
+
+    ⚠ 同名函式跨模組重複時**保留先掃到的並記在 `_DUP`**：靜默覆蓋會讓斷言驗到另一個
+      同名函式而完全看不出來。
+    """
+    import ast as _a
+    import pkgutil as _pk
+    import sys as _s
+    from pathlib import Path as _Pa
+
+    paths = [_Pa(ar.__file__)]
+    pkg = _s.modules[ar.__name__]
+    if hasattr(pkg, "__path__"):
+        for mi in _pk.iter_modules(list(pkg.__path__)):
+            m = _s.modules.get(f"{ar.__name__}.{mi.name}")
+            f = getattr(m, "__file__", None)
+            if f and _Pa(f) not in paths:
+                paths.append(_Pa(f))
+
+    out: dict = {}
+    _pkg_funcdefs._DUP = []
+    _pkg_funcdefs._TREES = []
+    for p in paths:
+        try:
+            tree = _a.parse(p.read_text(encoding="utf-8"))
+        except (OSError, SyntaxError):
+            continue
+        _pkg_funcdefs._TREES.append(tree)
+        # ⚠ 只收 **top-level** 函式，不用 `ast.walk`：walk 會把類別的 method 與巢狀
+        #   helper 一起撈進來，於是每個定義了 `__init__` 的類別都會被記成「跨模組同名」。
+        #   （這條是加了重複檢查之後**當場**被誤報出來的，量尺錯不是系統錯。）
+        for n in tree.body:
+            if isinstance(n, _a.FunctionDef):
+                if n.name in out:
+                    _pkg_funcdefs._DUP.append(f"{n.name}@{p.name}")
+                else:
+                    out[n.name] = n
+    _pkg_funcdefs._PATHS = paths
+    return out
+
+
 def gate14_synthesize_refusal_guards() -> None:
     print("\n[⑭] Synthesize 四道 validator 的拒答守門")
     import ast
     from pathlib import Path
 
-    src = Path(ar.__file__).read_text(encoding="utf-8")
-    fn = next((n for n in ast.walk(ast.parse(src))
-               if isinstance(n, ast.FunctionDef) and n.name == "_node_synthesize"), None)
+    _funcs = _pkg_funcdefs()
+    # ⚠ 跨模組同名函式：`_pkg_funcdefs` 保留先掃到的那個，於是後面每一條斷言都可能
+    #   驗到**另一個**同名函式而完全看不出來。拆分期間這是真實風險，所以當場擋掉。
+    _assert(f"⑭a 前提：套件裡沒有跨模組同名函式（掃了 {len(_pkg_funcdefs._PATHS)} 個模組）",
+            not _pkg_funcdefs._DUP, f"重複：{_pkg_funcdefs._DUP[:5]}")
+    fn = _funcs.get("_node_synthesize")
     _assert("⑭a 前提：找得到 `_node_synthesize`（找不到的話下面全部是假性通過）", fn is not None)
     if fn is None:
         return
@@ -1106,9 +1160,7 @@ def gate15_period_fallback_disclosure() -> None:
     import ast
     from pathlib import Path as _Path
 
-    src = _Path(ar.__file__).read_text(encoding="utf-8")
-    tree = ast.parse(src)
-    funcs = {n.name: n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+    funcs = _pkg_funcdefs()
 
     # ── ⑮a 產生點：`_retrieve_chunks` 不准丟掉 `rq.retrieve` 的第二個回傳值
     rc = funcs.get("_retrieve_chunks")
@@ -1169,7 +1221,14 @@ def gate15_period_fallback_disclosure() -> None:
             not revalidate_missing, f"沒帶的：{revalidate_missing}")
 
     # ── ⑮c 誤報對照：沒有揭露時，prompt 必須逐字不變（否則 65 題基準會無聲漂移）
-    _c = [{"source": "MSFT_10K_2026.html", "chunk_index": 3, "content": "Revenue increased 18%."}]
+    # ⚠ `raw_rerank_score` 不可省（同 ⑯ 那邊的註解）：`_fair_select` 拿它分桶排序。
+    #   ⚙ 2026-09-06 被抳出來的：舊版 `_fair_select` 有一道 `len(collected) <= k` 的 early-return，
+    #   這筆單顆測資永遠走那條捷徑 → 它的形狀與生產不同（生產的 chunk 一律由
+    #   `rq._payload_to_chunk` 建，一定有這個欄位，見 ⑯h）**卻從來沒有現形**。
+    #   拿掉 early-return 當場 KeyError。修法是改測資不是改生產函式（後者就是
+    #   「讓量尺反過來拉著被測物走」）。同族第四次，見 CLAUDE.md ⑯k／⑯m。
+    _c = [{"source": "MSFT_10K_2026.html", "chunk_index": 3, "content": "Revenue increased 18%.",
+           "ticker": "MSFT", "raw_rerank_score": 0.9}]
     _assert("⑮c 空揭露 → user prompt 與「完全不傳這個參數」逐字相同",
             ar.rq.build_user_prompt("Q", _c, "") == ar.rq.build_user_prompt("Q", _c))
 
@@ -1263,7 +1322,8 @@ def gate15_period_fallback_disclosure() -> None:
     # ⚠ 2026-09-01：確定性補救迴圈改成經由 `_dispatch_todo` 叫檢索器（route 分派），
     #   所以「帶 attributable 的呼叫點」現在**兩種函式都算**。少了 `_dispatch_todo`
     #   這一半，⑮f3 會找不到迴圈那一處而變成前提失敗——那是錨點過期不是系統壞掉。
-    _calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)
+    # ⚠ 2026-09-03 套件化：呼叫點可能落在**任何**子模組，所以掃整個套件而不是單一 tree。
+    _calls = [n for _t in _pkg_funcdefs._TREES for n in ast.walk(_t) if isinstance(n, ast.Call)
               and (ast.unparse(n.func).endswith("_retrieve_chunks")
                    or ast.unparse(n.func).endswith("_dispatch_todo"))]
     _assert("⑮f2 前提：找得到 `_retrieve_chunks` 的呼叫點（找不到＝下面全是假性通過）",
@@ -1352,7 +1412,7 @@ def gate15_period_fallback_disclosure() -> None:
     #      todo 的 rnd 0 照樣是「第一輪」→ `attributable=(rnd == 0)` 為真 → col-10 的假前提從
     #      另一扇門原封不動地回來，而 ⑮f 全綠（它驗的條件確實還在）。這一格就是那扇門。
     #      實測 replanner 會生出「改用網路搜尋查…」→「即時網路搜尋…」這種同義待辦串，
-    #      裡面夾帶的年份／filing type 都是機器腦補的（見 agentic_rag_v2.py `_node_replan`）。
+    #      裡面夾帶的年份／filing type 都是機器腦補的（見 agentic_rag_version/__init__.py `_node_replan`）。
     _appends = []          # (所在函式, dict 節點)
     for _fname in ("_node_plan", "_node_replan"):
         _fn = funcs.get(_fname)
@@ -1415,7 +1475,10 @@ def gate15_period_fallback_disclosure() -> None:
         return d
 
     try:
-        ar._run_executor = (lambda task, scope, fm, idx, verbose, *, attributable, route="kb":
+        # ⚠ `exec_stats=None` 不可省：`_run_one_todo` 2026-09-08 起會傳這個 out-param
+        #   （閘門⑯）。漏了它這支 stub 會 TypeError，而那不是被測物的問題。
+        ar._run_executor = (lambda task, scope, fm, idx, verbose, *, attributable, route="kb",
+                            exec_stats=None:
                             (_seen_attr.append(attributable), _seen_route.append(route),
                              ("摘要", [], "none", []))[2])
         for _flag in (True, False):
@@ -1748,6 +1811,737 @@ def gate18_web_fetched_but_uncited() -> None:
         _assert("⑱f2/⑱f3 跨量尺誤報對照", False, f"import 失敗 {e!r}（不要靜默跳過斷言）")
 
 
+
+def gate19_unit_finalization():
+    """⑲ 金額單位三層後處理（`rq.finalize_answer_units`）。零 LLM、零網路、零 Qdrant。
+
+    ⚠ **這道的價值幾乎全在誤報對照與接線斷言**：陽性那三條，一個「一律把億剝掉」的
+      粗暴實作也會過；真正會出事的是它**動到不該動的東西**（非金額計數、敘述性括號）、
+      或**擾動既有基準**（LLM 照 Rule 11 寫的正常路徑必須逐字不變）。
+    ⚠ **⑲g 是這道最重要的一條**：三層的正確性完全建立在「順序」上，而順序是註解裡的
+      宣稱。⑲g 把順序調換、證明它當場壞掉——沒有它，那個宣稱無法被證偽。
+      ⚠ 這條的**症狀是我第一版猜錯的**：原本斷言「調換會吐巢狀」，實跑發現 `repair_paired_yi`
+        會把巢狀自己拆掉、於是**乾淨地留下 LLM 那個錯值**（84.75 而非 847.5）。
+        後者危險得多——外觀完全正常。所以現在斷言的是**值**，不是格式。
+    """
+    print()
+    print("⑲ finalize_answer_units：金額單位三層後處理")
+    F = ar.rq.finalize_answer_units
+    KB = [{"content": "Total revenue was $84.75 billion for the quarter."}]
+
+    # ── 陽性：三個逐字驗證過的真實形狀（2026-09-03）
+    _assert("⑲a ① million 換算差 10 倍 → 修成 828.86 億（原答案寫 82.9）",
+            F("營收為 $82,886 百萬美元（約 $82.9 億美元）") ==
+            "營收為 828.86 億美元（$82,886 百萬）")
+    _assert("⑲b ② 同形狀（716,924 百萬 → 7,169.24 億，原答案寫 716.924）",
+            F("總營收為 716,924 百萬美元（即 716.924 億美元）") ==
+            "總營收為 7,169.24 億美元（$716,924 百萬）")
+    _assert("⑲c ③ LLM 自寫雙寫：值改對且**不巢狀**（舊版會吐 `84.75 億美元（847.5 億美元（…））`）",
+            F("營收為 84.75 億美元（$84.75 billion）") == "營收為 847.5 億美元（$84.75 billion）")
+
+    # ── 誤報對照①：正常路徑必須**逐字**與舊版相同 ＝ 既有基準不被這層動到的證明
+    for txt in ("營收為 $84.75 billion，較去年成長",
+                "淨利為 58,321 百萬美元",
+                "市值 $4962.16B"):
+        _assert(f"⑲d 正常路徑逐字等於單獨跑 convert_usd_units_to_yi：{txt[:18]}",
+                F(txt) == ar.rq.convert_usd_units_to_yi(txt),
+                f"新 {F(txt)!r} vs 舊 {ar.rq.convert_usd_units_to_yi(txt)!r}")
+
+    # ── 誤報對照②：非金額計數。回測踩過 news-10 / mi-11，幣別標記是承重條件
+    NON_MONEY = "月活躍使用者達 10 億人，裝置 25 億部，流通股數 2.57 億股"
+    _assert("⑲e 非金額計數（10 億使用者/25 億部/2.57 億股）一個字都不能動",
+            F(NON_MONEY, KB) == NON_MONEY, f"實得 {F(NON_MONEY, KB)!r}")
+
+    # ── 誤報對照③：敘述性括號不是單位雙寫，不可誤刪
+    NARR = "營收為 $84.75 billion（其中雲端佔大宗）"
+    _assert("⑲f 敘述性括號保留（只有『括號內是換算成億』才剝）",
+            "（其中雲端佔大宗）" in F(NARR), f"實得 {F(NARR)!r}")
+
+    # ── ⑲g **順序承重的證明**：調換 → 巢狀當場重現。少了這條，「順序不可調換」只是註解。
+    wrong_order = ar.rq.repair_paired_yi(
+        ar.rq.convert_usd_units_to_yi("營收為 84.75 億美元（$84.75 billion）"))[0]
+    _right = F("營收為 84.75 億美元（$84.75 billion）")
+    _assert("⑲g 誤報對照：順序調換 → 錯值**靜默留著**（證明順序是承重的）",
+            wrong_order != _right and "847.5" not in wrong_order,
+            f"調換順序實得 {wrong_order!r} vs 正確 {_right!r}（若相同，這條沒有判別力）")
+
+    # ── ⑲h 孤立的億：沒有來源時不准動（判準需要來源，無來源＝無從定罪）
+    SOLO = "營收為 84.75 億美元，年增 12%"
+    _assert("⑲h 無來源時孤立的億不動", F(SOLO) == SOLO, f"實得 {F(SOLO)!r}")
+    _assert("⑲h2 有來源且可定罪時才修（證明 ⑲h 不是因為這層根本沒接上）",
+            F(SOLO, KB) == "營收為 847.5 億美元（$84.75 billion），年增 12%",
+            f"實得 {F(SOLO, KB)!r}")
+
+    # ── ⑲k 證據 B：② 自己的產出當權威（2026-09-04 端到端跑出來才補的路）
+    #     背景：⑲h/⑲h2 走的是證據 A（來源有 "$N billion"），而 SEC 的數字幾乎都住在
+    #     markdown 表格裡（`| Revenue | $82,886 |`，"In millions" 只在表頭）→ `_src_has`
+    #     要求單位詞緊貼數字，對表格來源**兩個方向都是 False**（實測）。於是這個真實形狀
+    #     三層全漏：`828.86 億美元（$82,886 百萬），相當於 $82.886 億美元`——同句自相矛盾、
+    #     後半差 10 倍。⑲k 驗的是換掉證據源之後它會被接住。
+    TBL = [{"content": "| Revenue | $82,886 | $70,066 |\n(In millions, except per share amounts)"}]
+    E2E = "總營收為 $82,886 百萬美元，相當於 $82.886 億美元。"
+    _assert("⑲k 表格來源：② 產出的億值可當證據，孤立的 82.886 億被修成 828.86",
+            F(E2E, TBL) == "總營收為 828.86 億美元（$82,886 百萬），相當於 828.86 億美元。",
+            f"實得 {F(E2E, TBL)!r}")
+    _assert("⑲k2 前提：證據 A 對這份表格來源確實兩個方向都失明（否則 ⑲k 測到的是別條路）",
+            not ar.rq._src_has(TBL[0]["content"], 82.886, r"billion|B\b")
+            and not ar.rq._src_has(TBL[0]["content"], 82886, r"million|M\b"))
+    _assert("⑲k3 證據 B **不補 `（$N billion）`**：那字串不在來源裡，補了會被判無法溯源",
+            "billion" not in F(E2E, TBL))
+    # 誤報對照①：兩個**真的**差 10 倍的獨立金額 → 都由 ② 產出、都帶括號雙寫 → 一個都不准動。
+    TWO = "雲端部門為 $8,288.6 百萬美元，總營收為 $82,886 百萬美元。"
+    _assert("⑲k4 誤報對照：真的差 10 倍的兩筆獨立金額不得被改（`_DUAL_PAREN_RE` 擋）",
+            F(TWO, TBL) == "雲端部門為 82.886 億美元（$8,288.6 百萬），總營收為 828.86 億美元（$82,886 百萬）。",
+            f"實得 {F(TWO, TBL)!r}")
+    # 誤報對照②：② 一個億值都沒產出時，證據 B 必須整條靜默（不能退化成「看到億就乘 10」）。
+    _assert("⑲k5 誤報對照：② 無產出時證據 B 靜默（無來源）",
+            F("營收為 82.886 億美元。") == "營收為 82.886 億美元。")
+    _assert("⑲k6 誤報對照：② 無產出且來源也定不了罪 → 不動",
+            F("營收為 82.886 億美元。", TBL) == "營收為 82.886 億美元。")
+    # 誤報對照③：非金額計數仍不得動——即使 ② 剛好產出了它的 10 倍值。
+    CNT = "該平台有 10 億使用者。總營收為 $10,000 百萬美元。"
+    _assert("⑲k7 誤報對照：非金額計數不因 ② 產出 100 億而被改",
+            "10 億使用者" in F(CNT, TBL), f"實得 {F(CNT, TBL)!r}")
+    # ⑲k8 尾綴裸「元」：LLM 寫 `$X 百萬元` 時，「元」不可被留成孤兒。
+    _assert("⑲k8 尾綴裸「元」被吃掉（舊版吐 `1,197.96 億美元（$119,796 百萬）元`）",
+            F("總營收為 $119,796 百萬元。") == "總營收為 1,197.96 億美元（$119,796 百萬）。",
+            f"實得 {F('總營收為 $119,796 百萬元。')!r}")
+
+    # ── ⑲i 接線：兩條生產路徑都必須走 finalize，且**不得**再裸呼叫 convert
+    #     （⑮e 的教訓：呼叫點寫了名字不代表值真的流過去 → 上面 ⑲a~⑲h 已經是行為測試，
+    #      這裡補的是「有沒有別的路徑繞過這層」，那是 AST 才看得到的）
+    import ast as _ast
+    for path, want in (("rag_query.py", "finalize_answer_units"),
+                       ("agentic_rag_version/graph.py", "finalize_answer_units"),
+                       ("api_server.py", "finalize_answer_units")):   # ← 產品線走的那條
+        src = Path(path).read_text(encoding="utf-8")
+        tree = _ast.parse(src)
+        calls = [n for n in _ast.walk(tree) if isinstance(n, _ast.Call)]
+        def _name(n):
+            f = n.func
+            return f.attr if isinstance(f, _ast.Attribute) else getattr(f, "id", "")
+        n_final = sum(1 for c in calls if _name(c) == want)
+        n_bare = sum(1 for c in calls if _name(c) == "convert_usd_units_to_yi")
+        _assert(f"⑲i {path} 呼叫 {want}", n_final >= 1, f"實得 {n_final} 次")
+        allowed = 1 if path == "rag_query.py" else 0   # rq 只准 finalize 內部那一次
+        _assert(f"⑲i2 {path} 裸呼叫 convert_usd_units_to_yi 次數 == {allowed}",
+                n_bare == allowed,
+                f"實得 {n_bare} 次（繞過三層組裝＝那條路徑重新失明）")
+
+    # ── ⑲l `stats` out-param：「億」發生頻率的分母（2026-09-04 加）
+    #     BACKLOG〈量不到：先斬後奏的「億」發生頻率〉缺的就是這個分母。① 與 ③ 觸發的每一筆
+    #     都代表 **LLM 違反 Rule 11 自己寫了億**，所以計數就是分子、跑過的題數就是分母。
+    #     ⚠ **判別力幾乎全在誤報對照**：陽性那兩條，一個「stats 一律填 1」的實作也會過；
+    #       會出事的是它把「沒觸發」與「沒經過」混成同一格，或動到不傳 stats 時的既有行為。
+    _st: dict = {}
+    F("營收為 $82,886 百萬美元（約 $82.9 億美元）", KB, stats=_st)
+    _assert("⑲l1 ① 觸發時 yi_stripped 計數正確",
+            _st.get("yi_stripped") == 1, f"實得 {_st.get('yi_stripped')!r}")
+    _assert("⑲l2 明細逐筆可稽核（不是只有計數）",
+            len(_st.get("yi_stripped_detail") or []) == _st.get("yi_stripped"),
+            f"實得 {_st.get('yi_stripped_detail')!r}")
+
+    # ⚠ 測資必須是**孤立**的億且來源有 `$N billion`（證據 A 的形狀）。第一版寫成
+    #   `8.475 億` 去找 `8.475 billion`，方向搞反 → 當場 FAIL。
+    _st3: dict = {}
+    F("營收為 84.75 億美元。", KB, stats=_st3)
+    _assert("⑲l3 ③ 觸發時 yi_repaired 計數正確且明細帶 before/after",
+            _st3.get("yi_repaired") == 1
+            and set((_st3.get("yi_repaired_detail") or [{}])[0]) == {"before", "after"},
+            f"實得 {_st3!r}")
+
+    # 誤報對照①：**沒觸發**必須是 0，不是「這一格不存在」。少了它，一個「只在觸發時才
+    # 填 stats」的實作也會通過 ⑲l1/⑲l3——而那會讓消費端分不出「LLM 這次乖」與「這一題
+    # 根本沒經過後處理」（崩潰降級走 `_fallback_local_summary`，確實不經過）。
+    _st0: dict = {}
+    F("營收為 $84.75 billion。", KB, stats=_st0)
+    _assert("⑲l4 誤報對照：沒觸發時兩個計數都是 0 而**不是缺席**",
+            _st0.get("yi_stripped") == 0 and _st0.get("yi_repaired") == 0,
+            f"實得 {_st0!r}")
+
+    # 誤報對照②：不傳 stats 時**輸出逐字不變**。這是加參數這件事本身的回歸護欄
+    #（同 ⑲d 的理由：既有基準不可被這層動到）。
+    for _txt in ("營收為 $82,886 百萬美元（約 $82.9 億美元）",
+                 "總營收為 716,924 百萬美元（即 716.924 億美元）",
+                 "營收為 84.75 億美元（$84.75 billion）"):
+        _probe: dict = {}
+        _assert(f"⑲l5 誤報對照：帶不帶 stats 的輸出逐字相同（{_txt[:14]}…）",
+                F(_txt, KB) == F(_txt, KB, stats=_probe))
+
+    # 接線（同 ⑮e 的教訓：呼叫點寫了 `stats=` 不代表值真的流到結果檔）。
+    _g = Path("agentic_rag_version/graph.py").read_text(encoding="utf-8")
+    _assert("⑲l6 graph 的 finalize 呼叫點有傳 stats=",
+            "finalize_answer_units(answer, chunks, web_extra=web_extra, stats=" in _g)
+    _assert("⑲l7 synthesize 把 unit_stats 放進回傳 state（否則 stats 收了也上不去）",
+            '"unit_stats": _unit_stats' in _g)
+    _assert("⑲l8 run_agentic 對外吐 unit_stats",
+            '"unit_stats": final.get("unit_stats")'
+            in Path("agentic_rag_version/__init__.py").read_text(encoding="utf-8"))
+
+    # ⑲l9 是這一組最重要的一條：**值真的流進結果檔**。⑲l6~⑲l8 只問「有沒有寫這個名字」，
+    # 那照樣可能傳一個永遠是空的變數（⑮e 就是被這件事教的）→ 這裡拿真實 stats 餵
+    # **生產的 record 建構子**，驗欄位值。
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("_runagentic_eval", "eval/run_agentic_on_evalset.py")
+    _mod = _ilu.module_from_spec(_spec)
+    try:
+        _spec.loader.exec_module(_mod)
+        _rec = _mod._record_from_agentic(
+            {"id": "t", "category": "lexical", "query": "q"}, "ans", [], [], [], _st)
+        _assert("⑲l9 真實 stats 經生產 record 建構子後仍讀得到 yi_stripped",
+                (_rec.get("unit_stats") or {}).get("yi_stripped") == 1, f"實得 {_rec.get('unit_stats')!r}")
+        _rec_none = _mod._record_from_agentic(
+            {"id": "t", "category": "lexical", "query": "q"}, "ans", [], [], [], None)
+        # 誤報對照③：崩潰降級那條路沒有 stats，必須留 None 而**不可**被填成 {} 或 0——
+        # 併成同一格會把降級題算進分母，讓「億」頻率被系統性低估。
+        _assert("⑲l10 誤報對照：沒有 stats 時記成 None，與『有經過但沒觸發』區分得開",
+                _rec_none.get("unit_stats") is None, f"實得 {_rec_none.get('unit_stats')!r}")
+    except Exception as _e:      # noqa: BLE001 — import 失敗也是一種接線壞掉
+        _assert("⑲l9 真實 stats 經生產 record 建構子後仍讀得到 yi_stripped", False, repr(_e))
+        _assert("⑲l10 誤報對照：沒有 stats 時記成 None", False, repr(_e))
+
+    # ── ⑲m `$N 億`：幣別詞可省，但只在有 `$` 前綴時（2026-09-05 加）
+    # **這一組是端到端跑出來才補的，不是想出來的**——⑲a~⑲l 全綠時，真實答案
+    # （`gj_multiyear_r2_unitstats.json` 的 col-11）仍吐出「增加 29% 至 $54.5 億」，
+    # 而來源逐字寫著 `Microsoft Cloud revenue increased 29% to $54.5 billion`＝差 10 倍。
+    # 成因是舊 `_YI_SOLO_RE` 把幣別詞寫成**無條件必填**，於是那份答案匹配到 0 個。
+    # ⚠ 教訓同 ⑲k：**測資的形狀與生產不同，那條路等於從來沒被測過**。⑲a~⑲l 的
+    #   測資全部寫成 `N 億美元`，而 LLM 實際會寫 `$N 億`。
+    # ⚠ **判別力幾乎全在誤報對照**：陽性那兩條，一個「看到億就乘 10」的實作也會過；
+    #   會出事的是它把非金額計數改掉——那正是這條規則當初從嚴的理由（news-10 / mi-11）。
+    _M_SRC = [{"content": "Microsoft Cloud revenue increased 29% to $54.5 billion. "
+                          "Intelligent Cloud revenue increased $22.1 billion or 29%."}]
+
+    _assert("⑲m1 陽性：`$54.5 億` 依來源修成 `545 億美元（$54.5 billion）`",
+            F("Microsoft Cloud 收入增加 29% 至 $54.5 億。", _M_SRC)
+            == "Microsoft Cloud 收入增加 29% 至 545 億美元（$54.5 billion）。")
+
+    # ⑲m2：col-11 的五處逐字凍結。**凍在測試檔裡、不讀 `experiments/`**（同 ② 的教訓：
+    # 讀產物的話，修法一生效陽性就消失，量尺就跟著被測物一起動了）。
+    _M_REAL = ("Intelligent Cloud 收入增加 $22.1 億或 29%，其中 Server products 收入增加 $21.8 億或 31%。"
+               "三個月內 Intelligent Cloud 收入增加 $7.9 億，Server products 增加 $7.8 億。"
+               "Microsoft Cloud 收入增加 29% 至 $54.5 億。")
+    _M_SRC5 = [{"content": "increased $22.1 billion or 29%; increased $21.8 billion or 31%; "
+                           "increased $7.9 billion; increased $7.8 billion; "
+                           "Microsoft Cloud revenue increased 29% to $54.5 billion."}]
+    _m_stats = {}
+    _m_out = F(_M_REAL, _M_SRC5, stats=_m_stats)
+    _assert("⑲m2 陽性：col-11 的五處 `$N 億` 全部被修（真實答案逐字）",
+            _m_stats.get("yi_repaired") == 5, f"實得 {_m_stats.get('yi_repaired')}")
+    _assert("⑲m2b 五處的值都是 ×10（不是只改了格式）",
+            all(x in _m_out for x in ("221 億美元", "218 億美元", "79 億美元",
+                                      "78 億美元", "545 億美元")), _m_out[:160])
+
+    # ⑲m3~⑲m6 誤報對照：**沒有 `$` 前綴的一律不准動**。
+    # ⑲m3 是逐字的歷史回歸（news-10 / mi-11）：來源剛好有 `$10 billion` 時，
+    # 舊的「幣別詞可選」實作會把「10 億使用者」改成「100 億美元（$10 billion）使用者」。
+    _M_NEG_SRC = [{"content": "revenue of $10 billion and $2.57 billion; 10 billion users."}]
+    for _t, _why in [("我們的平台有 10 億使用者。", "⑲m3 非金額計數（news-10 / mi-11 的逐字回歸）"),
+                     ("流通在外股數 2.57 億股。", "⑲m4 非金額計數（股數）"),
+                     ("出貨量達 25 億部裝置。", "⑲m5 非金額計數（裝置數）"),
+                     ("營收 10 億元。", "⑲m6 `億元` 不是本層的幣別（無 `$` 亦無 美元/歐元）")]:
+        _assert(f"{_why} → 逐字不變", F(_t, _M_NEG_SRC) == _t, f"實得 {F(_t, _M_NEG_SRC)!r}")
+
+    # ⑲m7 誤報對照：`$N 億（$N billion）` 這種**已配對**的形狀由 ① 負責（剝掉 LLM 的億）、
+    # ② 重算，③ **一次都不該觸發**。少了這條，一個「③ 也去處理配對形狀」的實作會兩層都動，
+    # 而 ② 不冪等 → 值會被乘兩次。
+    # ⚠ **這一條的第一版斷言是我寫錯的**（原本斷言「`545 億` 不得出現」）：`545 億美元` 正是
+    #   ① ＋ ② 算出來的**正確**結果，錯的是期望值不是系統。改成驗「③ 不觸發 ＋ 值正確」。
+    _M_DUAL = "Microsoft Cloud 收入增加至 $54.5 億（$54.5 billion）。"
+    _m_d = {}
+    _m_dout = F(_M_DUAL, _M_SRC, stats=_m_d)
+    _assert("⑲m7 誤報對照：已配對的 `$N 億（...）` 由 ①②處理，③ 一次都不觸發",
+            _m_d.get("yi_repaired") == 0 and _m_d.get("yi_stripped") == 1,
+            f"stripped={_m_d.get('yi_stripped')} repaired={_m_d.get('yi_repaired')}")
+    _assert("⑲m7b 值正確（54.5 billion → 545 億美元，不是乘兩次）",
+            "545 億美元（$54.5 billion）" in _m_dout, _m_dout)
+
+    # ⑲m11 ① 剝掉億時，前綴的 `$` 不可留成孤兒（舊版吐 `$$54.5 billion` → `$545 億美元`）。
+    _assert("⑲m11 ① 吃掉前綴 `$`，輸出不得出現 `$$` 或 `$N 億美元`",
+            "$$" not in _m_dout and "$545 億" not in _m_dout, _m_dout)
+
+    # ⑲m8 **這一組最重要的一條**：`_yi_values`（產生證據 B）與 `repair_yi_against_source`
+    # （執行修改）必須用**同一個**資格判準。兩邊各判各的，就會出現「被當成證據卻不會被修」
+    # 或反過來的形狀——而那是靜默的：外觀與「這一題沒觸發」完全相同。
+    _M_MIX = "有 10 億使用者，營收 $3.5 億，另有 12.5 億美元的投資。"
+    _m_vals = ar.rq._yi_values(_M_MIX)
+    _assert("⑲m8 `_yi_values` 只收金額形狀（`$3.5 億` 與 `12.5 億美元` 收，`10 億使用者` 不收）",
+            _m_vals == {3.5, 12.5}, f"實得 {_m_vals}")
+    _m_repaired = {b for b, _ in ar.rq.repair_yi_against_source(
+        _M_MIX, "revenue $3.5 billion; investment $12.5 billion; 10 billion users")[1]}
+    _assert("⑲m8b 會被修的形狀 ⊆ 被當成證據的形狀（同一個判準，不是兩套）",
+            all(("$3.5" in b or "12.5" in b) for b in _m_repaired) and
+            not any("使用者" in b for b in _m_repaired), f"實得 {_m_repaired}")
+
+    # ⑲m9 誤報對照：排除條款對 `$` 前綴形狀一樣要生效——來源另有 n/10 的 billion 值時，
+    # 代表答案可能本來就對，不准改。少了這條，新放行的形狀就沒有「無從定罪則不動」的保護。
+    _assert("⑲m9 誤報對照：來源有 `$5.45 billion` 時 `$54.5 億` 不動（排除條款）",
+            F("金額為 $54.5 億。", [{"content": "amount was $5.45 billion"}]) == "金額為 $54.5 億。",
+            F("金額為 $54.5 億。", [{"content": "amount was $5.45 billion"}]))
+
+    # ⑲m10 回歸護欄：新放行的形狀不得擾動既有的正常路徑（同 ⑲d 的作法）。
+    _M_OK = "營收為 84.75 億美元（$8.475 billion）。"
+    _assert("⑲m10 誤報對照：既有的正確雙寫逐字不變",
+            F(_M_OK, [{"content": "revenue was $8.475 billion"}]) == _M_OK,
+            F(_M_OK, [{"content": "revenue was $8.475 billion"}]))
+
+    # ── ⑲j 拒答不受影響（拒答沒有數字，但這層跑在所有路徑上）
+    REF = "I don't have enough information in my knowledge base to answer this."
+    _assert("⑲j 拒答文字逐字不變", F(REF, KB) == REF)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+def gate20_fair_select_order() -> None:
+    """⑳ `_fair_select` 決定「餵給 Generator 的順序」時，不得用跨子問題不可比的分數。
+
+    **病灶是這個函式自己的兩句話互相矛盾**：它的 docstring 寫著「cross-encoder 原始分數是
+    **相對當次 query** 的，跨子問題不可直接比（B 的 0.72 可能已是 B 的最佳答案，卻輸給 A 的
+    第七名）」——那正是**選擇**改成 round-robin 的全部理由；然後最後一行仍然
+    `sorted(picked, key=raw_rerank_score)`，**把同一個剛被宣告不可比的分數拿回來決定順序**。
+
+    **順序為什麼有影響**：`rq.SYSTEM_PROMPT` Rule 4 要模型第一句就給結論、Rule 9 要求多公司題
+    在句子裡逐一具名歸屬，而 writer budget 上限是 `WRITER_BUDGET_CAP=16` 顆。分數降序會把
+    「某個 facet **唯一**的證據」（它在自己的子問題裡是第 1 名，但絕對分數低）壓到最後幾位。
+
+    ⚠ **這次動的只有順序，不是選擇**：⑳c 是那條護欄——選出來的**集合必須完全相同**。
+    ⚠ **收益未量**：這裡沒有任何一條宣稱答案會變好，全部是結構性質。這是刻意的——
+      「換個順序答案會更好」是機制宣稱，而本 repo 的量尺（RAGAS）分不出這個量級。
+      不量就不宣稱，見 [`BACKLOG.md`](BACKLOG.md)。
+    ⚠ **判別力集中在三條誤報對照**：**⑳b**（單桶時必須與分數降序逐字相同＝既有單意圖題
+      的回歸護欄）、**⑳e**（桶**內**分數仍然可比，不可以為了「不用分數」連桶內也打亂）、
+      **⑳i**（`_subq` 缺席的降級路徑 chunk 不得炸，且行為要退化成單桶）。
+      陽性的 ⑳a 少了 ⑳f 也可能碰巧通過，所以 ⑳f 另外斷言「輸出不是全域分數降序」。
+    """
+    print("\n⑳ _fair_select：順序不得由跨子問題不可比的分數決定")
+    F = ar._fair_select
+
+    def _c(subq: int, idx: int, score: float) -> dict:
+        return {"source": f"S{subq}.txt", "chunk_index": idx, "ticker": "X",
+                "raw_rerank_score": score, "_subq": subq}
+
+    def _ids(rows) -> list:
+        return [(c["_subq"], c["chunk_index"]) for c in rows]
+
+    # A 桶三顆分數全面壓過 B/C ——這正是 `_fair_select` docstring 描述的那個形狀：
+    # B 的 0.40 已經是 B 自己的最佳答案，卻輸給 A 的第三名 0.85。
+    A1, A2, A3 = _c(0, 1, 0.95), _c(0, 2, 0.90), _c(0, 3, 0.85)
+    B1, C1 = _c(1, 1, 0.40), _c(2, 1, 0.35)
+    # ⚠ 進來時本來就是分數降序（`_merge_chunks` 的輸出形狀）。這一點很重要：
+    #   一個「原樣回傳輸入順序」的實作會與舊行為**逐字相同**，所以陽性斷言必須看位置。
+    POOL = [A1, A2, A3, B1, C1]
+
+    got4 = F(list(POOL), 4)
+    head = {c["_subq"] for c in got4[:3]}
+    _assert("⑳a 三個子問題各自的第 1 名都落在前 3 個位置（每個 facet 的最佳證據不被壓到後面）",
+            head == {0, 1, 2}, f"前 3 位的 _subq={[c['_subq'] for c in got4[:3]]} 全序={_ids(got4)}")
+
+    _assert("⑳c 護欄：這次只動順序——選出來的**集合**與 round-robin 選擇邏輯完全相同",
+            sorted(_ids(got4)) == sorted([(0, 1), (0, 2), (1, 1), (2, 1)]), _ids(got4))
+
+    _assert("⑳f 判別力：輸出**不是**全域分數降序（少了這條，一個沒真的改的實作也會過 ⑳a）",
+            _ids(got4) != _ids(sorted(got4, key=lambda x: x["raw_rerank_score"], reverse=True)),
+            _ids(got4))
+
+    got5 = F(list(POOL), 5)
+    _assert("⑳d len(collected) <= k 也要走同一條路（不再有 early-return 的順序分岔），且一顆都不掉",
+            sorted(_ids(got5)) == sorted(_ids(POOL)) and _ids(got5) != _ids(POOL),
+            f"got={_ids(got5)} pool={_ids(POOL)}")
+
+    # ⑳e 誤報對照：桶**內**的分數是同一個 query 評出來的＝可比，不可以一併丟掉。
+    # ⚠ **輸入必須刻意打亂**：第一版拿上面那個 `POOL`（本來就是分數降序）來測，於是
+    #   「桶內有排序」與「桶內不排序」的輸出逐字相同 → 這條斷言**恆真**（變異測試 M3
+    #   當場沒抓到）。同 ⑰i／⑱f 那兩次的形狀：**測資讓那條路從來沒被走到**。
+    #   生產上 `collected` 確實一直是降序的（`_merge_chunks` 的輸出），但這條要守的
+    #   正是「不要依賴那個巧合」。
+    SHUFFLED = [A3, B1, A1, C1, A2]      # 桶 0 的輸入序是 .85 / .95 / .90：刻意不是降序
+    _a_seq = [c["raw_rerank_score"] for c in F(list(SHUFFLED), 5) if c["_subq"] == 0]
+    _assert("⑳e 誤報對照：同一個子問題內部仍然是分數降序（桶內分數可比，別連它也不用）",
+            _a_seq == [0.95, 0.90, 0.85], _a_seq)
+
+    # ⑳b 回歸護欄：單一子問題（eval_set 裡大多數題就是這個形狀）行為必須逐字不變。
+    SINGLE = [A1, A2, A3]
+    _assert("⑳b 誤報對照：單一子問題 → 與分數降序逐字相同（單意圖題的回歸護欄）",
+            _ids(F(list(SINGLE), 2)) == [(0, 1), (0, 2)]
+            and _ids(F(list(SINGLE), 9)) == [(0, 1), (0, 2), (0, 3)],
+            f"k=2 → {_ids(F(list(SINGLE), 2))}；k=9 → {_ids(F(list(SINGLE), 9))}")
+
+    # ⑳i 誤報對照：降級路徑（`_fallback_local_summary`）與舊結果檔的 chunk 沒有 `_subq`。
+    #   `.get('_subq', 0)` 讓它們全歸桶 0 ＝ 退化成單桶，不得炸、也不得改變相對順序。
+    NOSUB = [{"source": "Z.txt", "chunk_index": i, "ticker": "X", "raw_rerank_score": s}
+             for i, s in ((1, 0.9), (2, 0.8), (3, 0.7))]
+    try:
+        _got_ns = F(list(NOSUB), 2)
+        _ok_ns = [c["chunk_index"] for c in _got_ns] == [1, 2]
+        _detail = [c["chunk_index"] for c in _got_ns]
+    except Exception as e:      # noqa: BLE001 — 這條就是要抓「沒有 _subq 會不會炸」
+        _ok_ns, _detail = False, repr(e)
+    _assert("⑳i 誤報對照：chunk 沒有 `_subq`（降級路徑／舊結果檔）不得炸，退化成單桶分數降序",
+            _ok_ns, _detail)
+
+    # ── ⑳g 生產接線：`_subq` 真的是生產打上去的，不是只有測試自己寫（同 ⑮e／⑲l9 的教訓）
+    import ast as _ast
+    _fd = _pkg_funcdefs()
+    _rot = _fd.get("_run_one_todo")
+    _src = _ast.unparse(_rot) if _rot else ""
+    _assert("⑳g 生產接線：`_run_one_todo` 真的把 `_subq` 打在 commit 進 collected 的 chunk 上",
+            _rot is not None and "'_subq'" in _src and "todo['id']" in _src,
+            f"找到 _run_one_todo={_rot is not None}")
+
+    # ── ⑳h 活體：排序讀的 `raw_rerank_score` 真的由生產建構子產出（不是測試自造的 dict）
+    try:
+        _cl = ar.rq.make_qdrant_client()
+        _pts, _ = _cl.scroll(ar.rq.COLLECTION_NAME, limit=1, with_payload=True, with_vectors=False)
+        _built = ar.rq._payload_to_chunk(_pts[0].payload, 0.5, 0.75)
+        _assert("⑳h 活體：真實 payload 餵生產建構子 `rq._payload_to_chunk` 後確實有 `raw_rerank_score`",
+                _built.get("raw_rerank_score") == 0.75,
+                f"keys={sorted(_built)[:12]}")
+    except Exception as e:      # noqa: BLE001
+        _assert("⑳h 活體對照可執行（掃不到就等於這道閘門只測了合成資料）", False, repr(e))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+def gate21_revision_regression_guard() -> None:
+    """㉑ 重生成不得讓**已經通過的**確定性檢查倒退（2026-09-06）。
+
+    **病灶**：Synthesize 是一條六道的修補鏈（citation → consistency → period → reflect →
+    number → dual_source），每一道抓到就**整篇重生成**。碼上的註解顯示排序是**兩兩推理**出來的
+    （「number 放 reflect 之後」「dual_source 放最末」），但那個論證只在「後面那道不會破壞前面
+    那道」時成立，六道兩兩之間並不都成立——`_dual_source_check_and_fix` 的重生成可以引入新的
+    不可溯源數字或新的期別錯誤，而那兩道**已經跑完了，沒有人再看**。
+
+    **業界的說法一致**（2026-09-06 查的，見 docs/AGENTIC.md A13）：整篇重生成會讓先前已滿足的
+    約束被破壞，解法是 targeted correction ＋ **每次 refine 之後重跑全部約束**（DeCRIM 的
+    critique↔refine 迴圈）；沒有外部回饋的自我修正常常反而變差。
+
+    **本 repo 的成本結構讓這件事很便宜**：critique 側本來就是**零 LLM** 的偵測器，
+    所以「重生成之後把全部偵測器重跑一次」幾乎不要錢——**只有 refine 要錢**。
+    因此這裡做的不是 DeCRIM 那種迴圈（會多燒 LLM），而是**單向的接受守衛**：
+    重生成之後重算一次零 LLM 的缺陷指紋，**任何一格變差就退回原答案**。
+
+    ⚠ **判別力幾乎全在誤報對照**：陽性那兩條，一個「一律退回原答案」的實作也會過——而那等於
+      把整條修補鏈關掉。會出事的是它擋掉不該擋的：**㉑c**（修好自己那道、其餘不變 → 必須接受）、
+      **㉑d**（逐字相同 → 接受，不可以因為「沒變好」就退）、**㉑e**（同時修好兩道 → 接受）。
+    ⚠ **指紋刻意只收零 LLM 的四項**：`find_claim_conflicts` 要先跑 `_extract_claims`（一次 LLM
+      呼叫），放進守衛會讓每次重生成多燒一次錢，那正是這個設計要避免的。
+    ⚠ **計數要在場**（同 ⑲l4／⑭d）：沒退回就是 0 而不是缺席，否則消費端分不出
+      「這一題沒有重生成」與「重生成了而且沒退步」。
+    """
+    print("\n㉑ 重生成的回歸守衛：任何零 LLM 檢查變差就退回原答案")
+    FP = ar._deterministic_defects
+    ACC = ar._accept_revision
+
+    KB = [{"source": "MSFT_10K_2026.html", "chunk_index": 3, "ticker": "MSFT",
+           "raw_rerank_score": 0.9,
+           "content": "Revenue increased 18% to $84.75 billion in fiscal year 2026."}]
+    CITE = "【MSFT_10K_2026.html, chunk #3】"
+    GOOD = f"營收成長 18% 至 $84.75 billion{CITE}。"
+
+    # ── ㉑a 指紋本身：乾淨答案四項全 0；四個 key 都要在場 ──────────────────────
+    fp = FP(GOOD, KB, "")
+    _assert("㉑a 乾淨答案的缺陷指紋四項全 0，且四個 key 都在場（不是缺席）",
+            set(fp) == {"citations", "untraceable", "stale_period", "undated_dual"}
+            and all(v == 0 for v in fp.values()), fp)
+
+    # ── ㉑b 陽性：重生成引入了不可溯源的數字 → 退回 ─────────────────────────────
+    # ⚠ 測資的形狀要**真的**觸發 `find_untraceable_numbers`：它的正則要求「恰好兩位小數、
+    #   後面不接 % 或億兆萬」。第一版寫 `71.3%`，一個都匹配不到 → ㉑b 當場 FAIL。
+    #   同一天第四次踩到「測資的形狀與被測物不同」（⑳e／⑭j／⑮q 是前三次）。
+    BAD_NUM = f"營收成長 18% 至 $84.75 billion{CITE}，另計 12345.67 的調整項{CITE}。"
+    st: dict = {}
+    got = ACC(GOOD, BAD_NUM, KB, "", tag="number", stats=st)
+    _assert("㉑b 重生成引入不可溯源的數字 → 退回原答案 ＋ 計數",
+            got == GOOD and st.get("rejected") == 1, f"stats={st}")
+    _assert("㉑b2 退回要有逐筆明細（哪一道 validator 的重生成、退步在哪一格）",
+            len(st.get("rejected_detail") or []) == 1
+            and "number" in (st["rejected_detail"][0] or ""),
+            f"實得 {st.get('rejected_detail')}")
+
+    # ── ㉑f 陽性：重生成引入不存在的引用 → 退回 ────────────────────────────────
+    BAD_CITE = f"營收成長 18% 至 $84.75 billion{CITE}，另見【AAPL_10K_2025.html, chunk #9】。"
+    st2: dict = {}
+    _assert("㉑f 重生成引入指向不存在來源的引用 → 退回",
+            ACC(GOOD, BAD_CITE, KB, "", tag="reflect", stats=st2) == GOOD
+            and st2.get("rejected") == 1, f"stats={st2}")
+
+    # ── ㉑c 誤報對照：修好了自己那道、其餘不變 → **必須接受** ──────────────────
+    #    少了這條，一個「一律退回」的實作也會滿分——而那等於把整條修補鏈整個關掉。
+    st3: dict = {}
+    FIXED = ACC(BAD_NUM, GOOD, KB, "", tag="number", stats=st3)
+    _assert("㉑c **誤報對照**：重生成把缺陷修好了 → 必須接受（一律退回的實作在這裡會掛）",
+            FIXED == GOOD and st3.get("rejected") == 0 and st3.get("accepted") == 1,
+            f"stats={st3}")
+
+    # ── ㉑d 誤報對照：逐字相同 → 接受（不可以因為「沒變好」就退） ────────────────
+    st4: dict = {}
+    _assert("㉑d **誤報對照**：重生成與原答案逐字相同 → 接受，退回數必須是 0",
+            ACC(GOOD, GOOD, KB, "", tag="period", stats=st4) == GOOD
+            and st4.get("rejected") == 0, f"stats={st4}")
+
+    # ── ㉑e 誤報對照：兩道一起修好 → 接受 ─────────────────────────────────────
+    st5: dict = {}
+    _assert("㉑e **誤報對照**：同時修好兩格 → 接受",
+            ACC(BAD_CITE + BAD_NUM, GOOD, KB, "", tag="dual_source", stats=st5) == GOOD
+            and st5.get("rejected") == 0, f"stats={st5}")
+
+    # ── ㉑h **逐格比較 vs 總和**：一格變好、另一格變壞、總和持平 → 必須退回 ─────
+    #    ⚠ 這條是變異測試 P3 逼出來的：少了它，一個「比四格**加總**」的實作全綠，
+    #    而那會讓「修好一個期別錯、引入一個捏造數字」看起來持平——那兩者的嚴重度不對稱。
+    st_mix: dict = {}
+    _assert("㉑h **誤報對照**：一格變好、一格變壞、總和持平 → 仍須退回（逐格比較，不是加總）",
+            ACC(BAD_CITE, BAD_NUM, KB, "", tag="period", stats=st_mix) == BAD_CITE
+            and st_mix.get("rejected") == 1,
+            f"before={FP(BAD_CITE, KB, '')} after={FP(BAD_NUM, KB, '')} stats={st_mix}")
+
+    # ── ㉑g 計數在場（同 ⑲l4／⑭d 的形狀）────────────────────────────────────
+    st6: dict = {}
+    ACC(GOOD, GOOD, KB, "", tag="consistency", stats=st6)
+    _assert("㉑g 沒退回時 `rejected` 是 0 而**不是缺席**（否則分不出「沒重生成」與「沒退步」）",
+            st6.get("rejected") == 0 and st6.get("accepted") == 1, f"實得 {st6}")
+
+    # ── ㉑l 誤報對照：空的重生成不是「退步」，是別的病 ─────────────────────────
+    st7: dict = {}
+    _assert("㉑l **誤報對照**：重生成回空字串 → 保留原答案，但**不計入退回**（那是別的病）",
+            ACC(GOOD, "", KB, "", tag="reflect", stats=st7) == GOOD
+            and st7.get("rejected") == 0 and st7.get("empty") == 1, f"實得 {st7}")
+
+    # ── ㉑i 接線：五道 `*_check_and_fix` **全部**都要掛守衛（同 ⑭a：改三道漏一道要叫）
+    import ast
+    _funcs = _pkg_funcdefs()
+    _GUARDED = ("_consistency_check_and_fix", "_period_check_and_fix", "_reflect_and_fix",
+                "_number_check_and_fix", "_dual_source_check_and_fix")
+    _missing = []
+    for _n in _GUARDED:
+        _fn = _funcs.get(_n)
+        if _fn is None or "_accept_revision" not in ast.unparse(_fn):
+            _missing.append(_n)
+    _assert("㉑i 五道會重生成的 validator **全部**掛上守衛（漏一道要叫得出來）",
+            not _missing, f"缺 {_missing}")
+
+    # ── ㉑j 接線：state → run_agentic → record，且 None ≠ {}（同 ⑲l10）─────────
+    _ann = getattr(ar.SupervisorState, "__annotations__", {})
+    _assert("㉑j SupervisorState 宣告了 `revision_stats`（沒宣告 → LangGraph 丟掉它）",
+            "revision_stats" in _ann, f"實得 {sorted(_ann)}")
+    _assert("㉑j2 `run_agentic` 真的回傳 `revision_stats`",
+            "revision_stats" in inspect.getsource(ar.run_agentic))
+    try:
+        import importlib.util as _iu
+        _spec = _iu.spec_from_file_location(
+            "_rgoe_rev", str(Path(__file__).resolve().parent / "run_agentic_on_evalset.py"))
+        _m = _iu.module_from_spec(_spec)
+        _spec.loader.exec_module(_m)
+        _q = {"id": "x-1", "category": "mixed", "query": "Q"}
+        _r1 = _m._record_from_agentic(_q, "A", [], [], [], {}, {}, {}, st)
+        _r2 = _m._record_from_agentic(_q, "A", [], [], [], {}, {}, {}, None)
+        _assert("㉑j3 record 建構子寫進 `revision_stats` 的**值**", _r1.get("revision_stats") == st,
+                f"實得 {_r1.get('revision_stats')}")
+        _assert("㉑j4 `None`（崩潰降級／舊結果檔）不得被寫成 `{}`",
+                _r2.get("revision_stats") is None, f"實得 {_r2.get('revision_stats')!r}")
+    except Exception as e:      # noqa: BLE001
+        _assert("㉑j3 record 建構子接得上（接不上＝只測了記憶體裡的 dict）", False, repr(e))
+
+    # ── ㉑k 回歸護欄：指紋函式本身零 LLM（呼叫 call_llm 就當場失敗）────────────
+    _called = {"n": 0}
+    _saved = ar.rq.call_llm
+
+    def _boom(*a, **k):
+        _called["n"] += 1
+        raise AssertionError("指紋函式不得呼叫 LLM")
+
+    ar.rq.call_llm = _boom
+    try:
+        FP(BAD_NUM, KB, "")
+        ACC(GOOD, BAD_NUM, KB, "", tag="t", stats={})
+    finally:
+        ar.rq.call_llm = _saved
+    _assert("㉑k 指紋與守衛全程零 LLM（否則每次重生成都多燒一次錢，那正是這個設計要避開的）",
+            _called["n"] == 0, f"實得 {_called['n']} 次 LLM 呼叫")
+
+
+
+def gate22_observability_channels() -> None:
+    """㉒ 兩個**觀測**通道：降級成因（`degraded_reason`）與檢索候選池聯集（`retrieved_union`）。
+
+    **病灶一：降級的成因無處可查。** `run_agentic` 的 `graph.invoke` 崩潰降級路徑只用
+    `_trace` 印例外（非 verbose 完全不輸出），而降級記錄**外觀完全正常**（有 answer、
+    無 error、resume 還會跳過它，見 `repair_degraded_records.py`）。實測 2026-09-08 三題、
+    09-09 九題降級，**成因到現在全是猜的**。
+
+    **病灶二：「撈到了但被丟掉」量不到。** 結果檔的 `sources` 是
+    `rq.retrieve` → `run_state.pool` → **Grader `relevant_ids` 圈選** → `[:COMMIT_TOP_K]`
+    → `picked` → `collected` 這條鏈的**最末端**（實測 65 題中位數只有 3 顆），
+    於是 `probe_gold_funnel` 的「撈到卻沒引用」這一格**結構性接近恆為 0**——
+    那個 0 是量尺的性質，不是系統健康。⚠ 這一格歸因錯過兩次（先說是 `_fair_select`
+    的輸出、再說是檢索聯集），現在這條鏈是逐行讀出來的。
+
+    ⚠ **兩者都只加觀測、不改行為**（同 `unit_stats`／`replan_stats`／`exec_stats` 的順序：
+      先做出分母，再談要不要改行為）。㉒e／㉒p 是「行為逐字沒變」的那兩條護欄。
+    ⚠ **缺席 ≠ 空值**（同 ⑲l10／⑯j5）：`degraded_reason` 缺席 ＝ 沒降級；
+      `retrieved_union` 缺席 ＝ 沒經過 graph。填 `""`／`[]` 會讓兩種情況外觀相同。
+    ⚠ **判別力集中在誤報對照**：陽性那幾條，一個「一律填一個字串／一律回空 list」的實作
+      也會過。會出事的是 ㉒b（正常路徑不得帶成因）、㉒d（成因不帶位置 ＝ 與 `_trace`
+      等價、還是查不出哪個節點炸的）、㉒j（跨波必須**累加**，同 ⑭i／⑯i）、
+      ㉒k（同一顆 chunk 被兩個子問題撈到要留兩筆——那正是「哪一個子問題撈到它」的資訊）。
+    ⚠ **變異測試本身踩了本 repo 一再出現的那個坑**（⑳e／⑰i／⑭j／⑮q 之後第五次）：
+      第一版的「去重鍵漏掉 subq」只改了迴圈裡的 `k`、沒改 `seen` 的推導式，於是實際變成
+      「去重從此不觸發」——被 ㉒l 抓到，而 **㉒k 那條路一次都沒被走到**。改成 `seen` 與 `k`
+      一致地漏掉 subq（M4b）之後，㉒k 才真的失敗。**變異本身也要自洽**，否則「抓到了」
+      是抓到別的東西。9/9 變異全抓到。
+    """
+    print("\n[㉒] 觀測通道：降級成因 ＋ 檢索候選池聯集")
+    import ast
+    fds = _pkg_funcdefs()
+
+    def _return_dict_keys(node) -> list[set]:
+        """node 底下每一個 `return {...}` 的字面 key 集合。"""
+        out = []
+        for n in ast.walk(node):
+            if isinstance(n, ast.Return) and isinstance(n.value, ast.Dict):
+                out.append({k.value for k in n.value.keys
+                            if isinstance(k, ast.Constant) and isinstance(k.value, str)})
+        return out
+
+    # ── A 部分：degraded_reason ────────────────────────────────────────────────
+    ra = fds.get("run_agentic")
+    _assert("㉒a0 前提：AST 找得到 `run_agentic`（找不到的話下面全部是假性通過）",
+            ra is not None)
+    if ra is None:
+        return
+
+    handlers = [h for n in ast.walk(ra) if isinstance(n, ast.Try) for h in n.handlers]
+    deg_keys = [ks for h in handlers for ks in _return_dict_keys(h)]
+    _assert("㉒a 降級（except）路徑的 return dict 帶 `degraded_reason`",
+            bool(deg_keys) and any("degraded_reason" in ks for ks in deg_keys),
+            f"實得 {deg_keys}")
+
+    # ⚠ **誤報對照**：正常路徑**不得**帶這個鍵。缺席才是「沒降級」的表示法；
+    #   正常路徑填 None／"" 會讓消費端要多維護一套「什麼算空」的判準。
+    all_keys = _return_dict_keys(ra)
+    normal_keys = [ks for ks in all_keys if ks not in deg_keys and "answer" in ks]
+    _assert("㉒b **誤報對照**：正常路徑的 return 不得帶 `degraded_reason`（缺席＝沒降級）",
+            bool(normal_keys) and all("degraded_reason" not in ks for ks in normal_keys),
+            f"實得 {normal_keys}")
+
+    # ── ㉒c/d/e/f 行為：真的把 graph 弄炸，驗降級回傳 ───────────────────────────
+    class _BoomGraph:
+        def invoke(self, *a, **kw):
+            raise RuntimeError("nim-404-boom")
+
+    _saved = {k: getattr(ar, k) for k in
+              ("_get_graph", "_get_models", "_fallback_local_summary")}
+    _saved_retrieve = ar.rq.retrieve
+    try:
+        ar._get_graph = lambda: _BoomGraph()
+        ar._get_models = lambda: (None, None, None)
+        ar.rq.retrieve = lambda *a, **kw: ([], None)
+        ar._fallback_local_summary = lambda *a, **kw: "FALLBACK-ANSWER"
+        out = ar.run_agentic("測試查詢", freshness_mode="snapshot")
+    finally:
+        for k, v in _saved.items():
+            setattr(ar, k, v)
+        ar.rq.retrieve = _saved_retrieve
+
+    reason = out.get("degraded_reason")
+    _assert("㉒c 降級時 `degraded_reason` 有值，且帶得出例外型別與訊息",
+            isinstance(reason, str) and "RuntimeError" in reason and "nim-404-boom" in reason,
+            f"實得 {reason!r}")
+    # ⚠ **這條是 A 部分最重要的一條**：只帶 `repr(e)` 的話，資訊量與現行 `_trace` 印的
+    #   **完全相同**，而現行的問題正是「印了也查不出是哪個節點炸的」。要能定位到**檔:行**。
+    _tail = (reason or "").split(".py:")[-1][:6]
+    _assert("㉒d **誤報對照**：成因要帶最深一層的位置（檔名:行號），不只是 repr(e)",
+            isinstance(reason, str) and ".py:" in reason and any(c.isdigit() for c in _tail),
+            f"實得 {reason!r}")
+    _assert("㉒e **回歸護欄**：只加觀測，降級路徑既有的三個鍵逐字不變",
+            (out.get("answer") or "").startswith("FALLBACK-ANSWER")
+            and out.get("chunks") == [] and out.get("sub_queries") == ["測試查詢"],
+            f"實得 answer={out.get('answer')!r} chunks={out.get('chunks')} "
+            f"sub_queries={out.get('sub_queries')}")
+    # ⚠ 降級沒經過 graph → 檢索聯集這一格必須**缺席**（不是空 list）。
+    _assert("㉒f 降級路徑不得憑空產生 `retrieved_union`（缺席≠空 list，同 ⑲l10）",
+            "retrieved_union" not in out, f"實得 {out.get('retrieved_union')!r}")
+
+    # ── ㉒g/h 消費端接線：拿真實值餵**生產的** record 建構子（同 ⑮e／⑲l9 的教訓）──
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import run_agentic_on_evalset as rae   # noqa: E402
+    Q = {"id": "t-1", "category": "semantic", "query": "q"}
+    UNION = [{"source": "S", "chunk_index": 1, "subq": 0}]
+    rec = rae._record_from_agentic(Q, "a", [], [], [], None, None, None, None, None,
+                                   retrieved_union=UNION, degraded_reason=reason)
+    _assert("㉒g 兩個值都真的流進 record（不是呼叫點寫了參數名而已）",
+            rec.get("degraded_reason") == reason and rec.get("retrieved_union") == UNION,
+            f"實得 {rec.get('degraded_reason')!r} / {rec.get('retrieved_union')!r}")
+    rec2 = rae._record_from_agentic(Q, "a", [], [], [])
+    _assert("㉒h **誤報對照**：沒降級時兩格都是 None（不是空字串也不是空 list）",
+            rec2.get("degraded_reason") is None and rec2.get("retrieved_union") is None,
+            f"實得 {rec2.get('degraded_reason')!r} / {rec2.get('retrieved_union')!r}")
+
+    # ── ㉒i 舊格式回歸：`repair_degraded_records` 不得因為新欄位而誤判 ──────────
+    import repair_degraded_records as rdr   # noqa: E402
+    _assert("㉒i **誤報對照**：舊格式結果檔（無新欄位）仍不得被判成降級",
+            not rdr.is_degraded({"id": "x", "answer": "a"})
+            and not rdr.is_degraded({"id": "x", "exec_stats": {}, "unit_stats": {}}))
+    _assert("㉒i2 有 `degraded_reason` 就是降級（新指紋，比五鍵全 None 更直接）",
+            rdr.is_degraded({"id": "x", "degraded_reason": "RuntimeError: boom @ g.py:1"}))
+    _assert("㉒i3 **誤報對照**：`degraded_reason` 為 None 不算降級",
+            not rdr.is_degraded({"id": "x", "degraded_reason": None, "exec_stats": {}}))
+
+    # ── B 部分：retrieved_union 的合併語意（純函式，零 I/O）────────────────────
+    MP = getattr(ar, "_merge_pool_keys", None)
+    _assert("㉒j0 前提：`_merge_pool_keys` 存在（合併語意要有單一定義點）", MP is not None)
+    if MP is None:
+        return
+    A = [{"source": "S1", "chunk_index": 1, "subq": 0}]
+    B = [{"source": "S2", "chunk_index": 2, "subq": 1}]
+    # ⚠ **同 ⑭i／⑯i**：LangGraph 對沒有 reducer 的 key 是**取代**語意。只回傳這一波
+    #   會讓最終只剩最後一波，而 multi_hop 的第二跳正好都在最後一波。
+    _assert("㉒j 跨波必須**累加**（不是取代）", MP(A, B) == A + B, f"實得 {MP(A, B)}")
+    # ⚠ **誤報對照**：同一顆 chunk 被**兩個**子問題撈到 → 兩筆都要留。
+    #   併掉就丟掉了「哪一個子問題撈到它」，而那正是這個通道要回答的問題。
+    C = [{"source": "S1", "chunk_index": 1, "subq": 1}]
+    _assert("㉒k **誤報對照**：同一顆 chunk 不同子問題 → 兩筆都留（subq 是資訊不是雜訊）",
+            len(MP(A, C)) == 2, f"實得 {MP(A, C)}")
+    _assert("㉒l **誤報對照**：同一子問題同一顆只留一筆（重跑同一波不得灌水分母）",
+            MP(A, list(A)) == A, f"實得 {MP(A, list(A))}")
+    _assert("㉒m **誤報對照**：空的新一波不得清掉既有累計",
+            MP(A + B, []) == A + B, f"實得 {MP(A + B, [])}")
+
+    # ── ㉒n/o/p 接線：executor 回傳帶 pool_keys、_node_execute 累加進 state ─────
+    rot = fds.get("_run_one_todo")
+    nex = fds.get("_node_execute")
+    _assert("㉒n0 前提：AST 找得到 `_run_one_todo` 與 `_node_execute`",
+            rot is not None and nex is not None)
+    if rot is None or nex is None:
+        return
+    _assert("㉒n executor 的每一個 return dict 都帶 `pool_keys`",
+            bool(_return_dict_keys(rot))
+            and all("pool_keys" in ks for ks in _return_dict_keys(rot)),
+            f"實得 {_return_dict_keys(rot)}")
+    nex_dicts = _return_dict_keys(nex)
+    _assert("㉒n2 `_node_execute` 的 return 帶 `retrieved_union`",
+            any("retrieved_union" in ks for ks in nex_dicts), f"實得 {nex_dicts}")
+    # crash 兜底那個 result dict（wave worker 未預期例外）漏了 pool_keys 的話，
+    # 那一波會靜默地不計入分母——與「這一波沒跑」外觀相同（同 ⑯i3 的教訓）。
+    # ⚠ **量尺自己踩的坑**：crash 兜底那個 dict 是 `results[i] = {...}` 的**指派**不是
+    #   `return`，只走 `ast.Return` 的話它整個看不到 → 第一版當場 FAIL，而系統是對的
+    #   （「稽核回報 FAIL，先問是不是量尺錯」，這次就是量尺錯）。改成掃所有 Dict 字面。
+    _all_dicts = [{k.value for k in n.keys
+                   if isinstance(k, ast.Constant) and isinstance(k.value, str)}
+                  for n in ast.walk(nex) if isinstance(n, ast.Dict)]
+    _crash = [ks for ks in _all_dicts if "picked" in ks]
+    _assert("㉒n3 crash 兜底的 result dict 也要帶 `pool_keys`（同 ⑯i3：漏了會靜默消失）",
+            bool(_crash) and all("pool_keys" in ks for ks in _crash), f"實得 {_crash}")
+    # ⚠ **同 ⑭i／⑯i 的那條**：累加必須讀 `state`，只回傳這一波是錯的。
+    _src = ast.unparse(nex)
+    _assert("㉒o `retrieved_union` 的累加要讀 `state`（不讀就只剩最後一波）",
+            "state.get('retrieved_union'" in _src or 'state.get("retrieved_union"' in _src,
+            "沒看到從 state 讀既有累計")
+    # ⚠ **回歸護欄**：這個通道只是觀測，`picked` 的建構不得被動到。
+    _rot_src = ast.unparse(rot)
+    _assert("㉒p **回歸護欄**：`pool_keys` 只讀 pool，不得參與 `picked` 的建構",
+            "pool_keys" in _rot_src
+            and "picked = " not in _rot_src.split("pool_keys")[-1].split("return")[0],
+            "pool_keys 之後又動了 picked")
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -1776,6 +2570,10 @@ def main() -> int:
     gate16_round0_query_is_verbatim()
     gate17_dual_source_timepoints()
     gate18_web_fetched_but_uncited()
+    gate19_unit_finalization()
+    gate20_fair_select_order()
+    gate21_revision_regression_guard()
+    gate22_observability_channels()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")

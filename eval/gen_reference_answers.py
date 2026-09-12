@@ -8,8 +8,8 @@ ground_truth，導致答案裡每個「清單沒明講的正確細節」都被�
 
 作法：對每個有 rubric 的 query，從**黃金來源檔**（eval_set 的 relevant globs）撈
 chunk、用 BGE-M3 dense 相似度快速選 top-K（避開 CPU cross-encoder 的 46s 瓶頸），
-用 gemini-2.5-flash 生成一份 grounded、完整的英文參考答案。參考答案獨立於系統
-輸出（grounded 在黃金來源，而非系統檢索結果），避免循環。
+用 `--gen-model` 指定的模型生成一份 grounded、完整的英文參考答案。參考答案獨立於
+系統輸出（grounded 在黃金來源，而非系統檢索結果），避免循環。
 
 ⚠️ 生成走 rq.call_llm（'gemini-' 開頭走 Google GenAI，其餘走 NVIDIA NIM）。
 ⚠️ 本腳本跑在專案 .venv（需要 rag_query / qdrant / FlagEmbedding）。
@@ -24,6 +24,15 @@ import argparse
 import fnmatch
 import json
 import sys
+# ⚠ Windows 主控台預設 cp950，而本檔的報表帶著 ⚠／✔／① 等字元 ⇒ **印到一半就 crash**，
+#   而 crash 的退出碼與「有 FAIL」外觀相同 ＝ 把量尺自己的失敗讀成系統的失敗。
+#   2026-09-11 普查：eval/ 的 51 支裡有 27 支帶著這個地雷，其中兩支當天真的踩了。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
+
 from pathlib import Path
 
 import numpy as np
@@ -35,7 +44,23 @@ import rag_query as rq
 EVAL_SET_PATH = Path("eval/eval_set.json")
 GOLD_TOP_K = 8           # 生成參考答案時餵幾個黃金 chunk（收斂以控 token）
 CHUNK_CHAR_CAP = 1500    # 每個 chunk 餵進 context 的字元上限（控 token）
-GEN_MODEL = "openai/gpt-oss-120b"   # NVIDIA NIM（見 rag_query.call_llm 的 provider 路由）
+# 參考答案的生成模型（NVIDIA NIM；見 rag_query.call_llm 的 provider 路由）。
+# 2026-09-06 從 `openai/gpt-oss-120b` 換掉——它於 2026-09-03T08:00Z 被 NVIDIA 退役（410 Gone），
+# 留著等於第一次呼叫就炸。
+# ⚠ **這個角色的選型判準與別處不同：不能與 judge 或系統 generator 同源。**
+#   參考答案是 `answer_correctness` 的 ground truth，系統答案要跟它比對——
+#   · 不用 `google/gemma-4-31b-it`：那是現在的 **RAGAS judge**（judge 評自己家族寫的文字）。
+#   · 不用 `nvidia/nemotron-3-super-120b-a12b`：那是現在的**生產 GEN_MODEL**，
+#     參考答案會長得像系統輸出 → correctness 被系統性灌高。
+#   本 repo 已經量過並否決「judge 與 generator 同源」這個形狀，這裡是同一個道理。
+# ⚠ 為什麼 20b 在**這個角色**可以，而在 RAGAS judge 不行：那邊一輪 390 個 metric-row，
+#   8.8s 中位延遲會變成幾小時；這裡是 65 題跑一次、輸出直接進版控，延遲無關緊要。
+#   穩定性有當日實測：2026-09-06 `judge_regression --repeat 9` 連續 ~100 次呼叫零失敗。
+#   `call_llm` 不傳 `max_tokens`（吃 server 預設），所以「reasoning token 吃光正文」
+#   那個坑（TABLE_SUMMARY_MODEL @200 實測 10/10 全空）在這裡不成立。
+# ⚠ **這個角色沒有 bake-off**。上面是排除法＋可用性，不是量出來的品質排名。
+#   真要換，先想清楚它會不會與 judge／generator 同源，再用 `--gen-model` 覆蓋。
+GEN_MODEL = "openai/gpt-oss-20b"
 
 REFERENCE_SYSTEM = """You are writing a GOLD REFERENCE ANSWER for evaluating a RAG system.
 
@@ -101,71 +126,14 @@ def gen_reference_clean(msgs: list, model: str, max_retries: int = 2) -> str:
     return txt
 
 
-# ── 確定性 backstop：LLM 勸不動時，直接拿來源把「億」算對 ────────────────────────
-# 為什麼需要這層：上面的 prompt(CRITICAL 規則) + gen_reference_clean(重試) 都只是「勸」，
-# 勸不動時舊碼只 print 一行「需人工檢查」就放行——2026-08-07 稽核抓到 13 題 23 處錯，
-# 全部是這樣漏出去的（警告在 100 題輸出裡捲過去，沒人回頭看）。
-# rq.convert_usd_units_to_yi 也救不了：它只認「數字+英文單位詞」，LLM 一旦先斬後奏寫成
-# 「253.49 億美元」，那支轉換器明文「不碰已經是億的值」→ 結構性失明。
-#
-# 判準必須自足，不能拿答案的 N 億去撞來源的 $N billion 就定罪（來源同時有 $2.5B 與
-# $250 million 時會誤判）。因此三個條件同時成立才動手：
-#   ① 來源有 "$N billion"  ② 來源沒有 "$N/10 billion"  ③ 來源沒有 "$N*100 million"
-# ②③ 排掉「答案其實是對的、只是來源另有一個數字長得像」的情況。
-# 實測：對本 eval 的 29 處雙寫 + 15 處 millions 表格推導，零誤報。
-# 幣別標記【必填】：不可寫成可選。「10 億使用者」「25 億部裝置」「2.57 億股」都是
-# 非金額計數，若允許無幣別匹配，來源剛好有 "$10 billion" 就會把「10 億使用者」改成
-# 「100 億美元（$10 billion）使用者」——回測實際踩到（news-10 / mi-11）。
-# 漏修無害（人工稽核還在），改壞有害，故一律從嚴。
-_YI_SOLO_RE = _re.compile(r"([0-9][0-9,]*(?:\.[0-9]+)?)[\s  ]*億[\s  ]*(美元|歐元)")
-# 後接括號是否為「單位雙寫」（$X billion / 12,345 百萬），而非敘述性括號（如「（其中…」）。
-_DUAL_PAREN_RE = _re.compile(r"^[\s  ]*[（(][\s  ]*(?:US)?\$?[\s  ]*[0-9]")
-
-
-def _num_variants(v: float) -> set:
-    """一個數值在文本中可能的字面寫法（含千分位）。"""
-    s = f"{v:.10f}".rstrip("0").rstrip(".")
-    out = {s}
-    if abs(v - round(v)) < 1e-9:
-        out |= {f"{int(round(v)):,}", str(int(round(v)))}
-    if "." in s:
-        ip, dp = s.split(".")
-        out.add(f"{int(ip):,}.{dp}")
-    return out
-
-
-def _src_has(context: str, v: float, unit: str) -> bool:
-    return any(_re.search(rf"\$\s?{_re.escape(x)}\s*(?:{unit})", context)
-               for x in _num_variants(v))
-
-
-def repair_yi_against_source(text: str, context: str) -> tuple:
-    """把答案裡「LLM 手轉且確定錯」的 N 億，依來源修成 (N*10) 億美元（$N billion）。
-    回傳 (修好的文字, [(原字串, 新字串), ...])。無法判定的一律不動（寧可漏修不可錯改）。"""
-    repairs = []
-
-    def _repl(m):
-        # 已經是雙寫「N 億美元（$X billion）」的不碰：那是 post-processor 算好的。
-        # 但只認「括號內以數字/$ 開頭」的單位雙寫——敘述性括號（「（其中 34.75…」）不算，
-        # 否則會漏修（回測：mi-09 的 84.75 就是這樣被跳過的）。
-        if _DUAL_PAREN_RE.match(text[m.end():m.end() + 8]):
-            return m.group(0)
-        n = float(m.group(1).replace(",", ""))
-        if not _src_has(context, n, r"billion|B\b"):
-            return m.group(0)                      # 來源沒這個 billion 數字 → 無從定罪
-        if _src_has(context, n / 10, r"billion|B\b") or _src_has(context, n * 100, r"million|M\b"):
-            return m.group(0)                      # 來源另有對應值 → 答案可能本來就對
-        new = f"{_fmt_yi_local(n * 10)} 億{m.group(2) or '美元'}（${m.group(1)} billion）"
-        repairs.append((m.group(0), new))
-        return new
-
-    return _YI_SOLO_RE.sub(_repl, text or ""), repairs
-
-
-def _fmt_yi_local(v: float) -> str:
-    if abs(v - round(v)) < 1e-9:
-        return f"{int(round(v)):,}"
-    return f"{v:,.4f}".rstrip("0").rstrip(".")
+# ── 確定性 backstop：**定義已於 2026-09-03 提升到 `rag_query.py`** ─────────────────
+# 為什麼搬：這一層原本只活在本檔，於是**生產管線完全沒有它**——agentic 只有
+# `convert_usd_units_to_yi`（對 LLM 先斬後奏的「億」結構性失明），單發管線連那支都沒有。
+# 現在 `rq.finalize_answer_units` 是三層的唯一組裝點，本檔改成 import 同一份實作。
+# ⚠ 本檔的呼叫順序**刻意維持原樣**（repair → convert），不改成 finalize_answer_units：
+#   參考答案含 24 處人工校正，換順序等於動到 gold 的產生方式。
+repair_yi_against_source = rq.repair_yi_against_source
+_YI_SOLO_RE = rq._YI_SOLO_RE   # 第 336 行還在用（列出「勸不動又修不掉」的殘留億）
 
 
 def detect_lang(text: str) -> str:
@@ -264,10 +232,24 @@ def main():
                     help="無視快取強制重生成（配 --ids 用）。用途：切塊方式變了但 query 與 "
                          "gold_files 都沒變時，快取條件 ①②③ 都攔不到（③ 只在舊檔已有 "
                          "collection 欄位時才判得出來）。⚠ 不帶 --ids 就是全量重生成，"
-                         "會覆蓋掉 reference_answers.json 裡的人工校正。")
+                         "會覆蓋掉 reference_answers.json 裡的人工校正——那需要 --force-all。")
+    ap.add_argument("--force-all", action="store_true",
+                    help="確認要全量重生成（--force 不帶 --ids 時必須加）。"
+                         "⚠ 這會覆蓋掉 reference_answers.json 裡 24 處人工校正，**腳本重現不了**。")
     ap.add_argument("--match-lang-from", nargs="*", default=None,
                     help="結果檔清單：逐題把參考答案語言對齊該題系統答案語言（消跨語言失真）")
     args = ap.parse_args()
+
+    # ⚠ `--force` 不帶 `--ids` ＝ 全量重生成 ＝ 洗掉 reference_answers.json 的 24 處人工校正
+    #   （非腳本可重現，見 CLAUDE.md）。原本只有 help 字串在擋，而在 2026-09-06 之前
+    #   還有一道**意外的**保險：預設模型是已退役的 `gpt-oss-120b`，跑下去第一個呼叫就 410，
+    #   人工校正毫髮無傷。把預設換成活的模型等於拆掉那道保險 → 這裡補一道真的。
+    if args.force and not args.ids and not args.force_all:
+        print(f"[refuse] --force 不帶 --ids ＝ 全量重生成，會覆蓋 {args.output} 裡的人工校正。",
+              file=sys.stderr)
+        print("         只想重生成幾題：加 --ids <id> ...", file=sys.stderr)
+        print("         真的要全量重生成：加 --force-all（先確認該檔已 commit）。", file=sys.stderr)
+        sys.exit(2)
 
     lang_map = build_answer_lang_map(args.match_lang_from) if args.match_lang_from else {}
 

@@ -103,9 +103,9 @@
 |     Net cash provided by (used in) financing activities | $9,414 | $(35,472) |
 |     Effect of exchange rate changes on cash, cash equivalents, restricted cash, and restricted cash equivalents |  | $243 |
 |   Net decrease in cash, cash equivalents, restricted cash, and restricted cash equivalents | $(9,829) | $(31,610) |
-|     Total cash, cash equivalents, restricted cash, and restricted cash equivalents |  |  |
-|     Total cash, cash equivalents, restricted cash, and restricted cash equivalents |  |  |
-|       Cash and cash equivalents |  |  |
+|     Cash, cash equivalents, restricted cash, and restricted cash equivalents at beginning of the period | $39,100 | $45,438 |
+|     Cash, cash equivalents, restricted cash, and restricted cash equivalents at end of the period | $29,271 | $13,828 |
+|       Cash and cash equivalents | $15,462 | $12,005 |
 | *      Money market funds - Reclassification, Other* |  |  |
 |       Restricted cash and restricted cash equivalents, included in prepaid expenses and other current assets |  |  |
 |       Restricted cash and restricted cash equivalents, included in other assets |  |  |
@@ -192,98 +192,6 @@ Item 6.Exhibits
 
 [INFO] extra tables kept=11 (去重後，來自 unstructured)
 
-[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
-
---- [ITEM] Part I, Item 3 (len=418 chars) ---
-Table of Contents
-
-Item 3.Quantitative and Qualitative Disclosures About Market Risk
-
-There have been no material changes to our market risk exposures during the six months ended June 30, 2026. For quantitative and qualitative disclosures about market risk, refer to Part II, Item 7A, Quantitative and Qualitative Disclosures About Market Risk, from our Annual Report on Form 10-K for the year ended ...
-
---- [ITEM] Part II, Item 1 (len=41008 chars) ---
-Item 1.Legal Proceedings
-
-As a multinational company with a complex and evolving business, we are, and expect to continue to be, subject to numerous claims, litigation, regulatory, tax, and government inquiries and investigations, and other legal proceedings in jurisdictions around the world. Although we believe many of these matters are without merit and are vigorously defending them, we may not ...
-
-[SECTION] item=Part_II_Item_1 period=None 依小標切成 6 段：(小標前=章節層) | Privacy and Related Matters | Competition | Securities and Other Actions | Youth-Related Actions | Other Actions
-
-[MIN-MERGE] item=Part_II_Item_1 section=None 3 → 2 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Part_II_Item_1 section=Privacy and Related Matters 8 → 5 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Part_II_Item_1 section=Securities and Other Actions 4 → 3 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Part_II_Item_1 section=Other Actions 7 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Part II, Item 1A (len=198836 chars) ---
-Table of Contents
-
-Item 1A. Risk Factors 
-
-Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Quarterly Report on Form 10-Q, including our condensed consolidated financial statements and related notes. The ris...
-
-[SECTION] item=Part_II_Item_1A period=None 依小標切成 4 段：(小標前=章節層) | Summary Risk Factors | Risks Related to Our Product Offerings | Risks Related to Our Product Offerings
-
-[MIN-MERGE] item=Part_II_Item_1A section=Risks Related to Our Product Offerings 75 → 67 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[RCTS] item=Part_II_Item_1A 原 chunk 1353 token > 1200 → 補切成 2 份
-
-[RCTS] item=Part_II_Item_1A 原 chunk 1843 token > 1200 → 補切成 5 份
-
-[RCTS] item=Part_II_Item_1A 原 chunk 1508 token > 1200 → 補切成 4 份
-
-[RCTS] item=Part_II_Item_1A 原 chunk 2244 token > 1200 → 補切成 5 份
-
-[RCTS] item=Part_II_Item_1A 原 chunk 1270 token > 1200 → 補切成 2 份
-
-[RCTS] item=Part_II_Item_1A 原 chunk 1486 token > 1200 → 補切成 2 份
-
-[RCTS] item=Part_II_Item_1A 原 chunk 1488 token > 1200 → 補切成 3 份
-
-[RCTS] item=Part_II_Item_1A 原 chunk 2247 token > 1200 → 補切成 4 份
-
-[RCTS] item=Part_II_Item_1A 原 chunk 1901 token > 1200 → 補切成 4 份
-
-[RCTS] item=Part_II_Item_1A 原 chunk 1253 token > 1200 → 補切成 2 份
-
---- [ITEM] Part II, Item 2 (len=258 chars) ---
-Table of Contents
-
-Item 2.Unregistered Sales of Equity Securities and Use of Proceeds 
-
-a) Sales of Unregistered Securities 
-
-None.
-
-c) Issuer Purchases of Equity Securities
-
-There was no share repurchase activity during the three months ended June 30, 2026....
-
-[SECTION] item=Part_II_Item_2 period=None 依小標切成 2 段：a) Sales of Unregistered Securities | c) Issuer Purchases of Equity Securities
-
---- [ITEM] Part II, Item 5 (len=1825 chars) ---
-Item 5.Other Information
-
-Rule 10b5-1 Trading Plans
-
-During the quarter ended June 30, 2026, the officers listed below adopted, modified, or terminated trading plans intended to satisfy the affirmative defense conditions of Rule 10b5-1(c) under the Securities Exchange Act of 1934, as amended. References to "net shares received" below refer to net shares received by an officer after excluding any s...
-
---- [ITEM] Part II, Item 6 (len=2469 chars) ---
-Table of Contents
-
-Item 6.Exhibits 
-
-ExhibitNumberIncorporated by ReferenceFiledHerewith
-
-Exhibit DescriptionFormFile No.ExhibitFiling Date
-
-4.1Fifth Supplemental Indenture, dated as of May 4, 2026, by and between Meta Platforms, Inc. and U.S. Bank Trust Company, National Association, as trustee.
-
-8-K001-355514.1May 4, 2026
-
-31.1Certification of Mark Zuckerberg, Chief Executive Officer, pursuant t...
-
 --- [ITEM] Part I, Item 1 (len=82712 chars) ---
 Item 1.Financial Statements
 
@@ -339,3 +247,88 @@ You should read the following discussion of our financial condition and results 
 [MIN-MERGE] item=Part_I_Item_2 section=Research and development 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
 [MIN-MERGE] item=Part_I_Item_2 section=Long-term Debt 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Part I, Item 3 (len=418 chars) ---
+Table of Contents
+
+Item 3.Quantitative and Qualitative Disclosures About Market Risk
+
+There have been no material changes to our market risk exposures during the six months ended June 30, 2026. For quantitative and qualitative disclosures about market risk, refer to Part II, Item 7A, Quantitative and Qualitative Disclosures About Market Risk, from our Annual Report on Form 10-K for the year ended ...
+
+--- [ITEM] Part I, Item 4 (len=2145 chars) ---
+Item 4.Controls and Procedures
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our chief executive officer (CEO) and chief financial officer (CFO), has evaluated the effectiveness of our disclosure controls and procedures (as defined in Rules 13a- 15(e) and 15d- 15(e) under the Securities Exchange Act of 1934, as amended (Exchange Act)), as of the end o...
+
+--- [ITEM] Part II, Item 1 (len=41008 chars) ---
+Item 1.Legal Proceedings
+
+As a multinational company with a complex and evolving business, we are, and expect to continue to be, subject to numerous claims, litigation, regulatory, tax, and government inquiries and investigations, and other legal proceedings in jurisdictions around the world. Although we believe many of these matters are without merit and are vigorously defending them, we may not ...
+
+[MIN-MERGE] item=Part_II_Item_1 section=None 27 → 20 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Part II, Item 1A (len=198836 chars) ---
+Table of Contents
+
+Item 1A. Risk Factors 
+
+Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Quarterly Report on Form 10-Q, including our condensed consolidated financial statements and related notes. The ris...
+
+[MIN-MERGE] item=Part_II_Item_1A section=None 76 → 68 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1353 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1843 token > 1200 → 補切成 5 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1508 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 2244 token > 1200 → 補切成 5 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1270 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1486 token > 1200 → 補切成 2 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1488 token > 1200 → 補切成 3 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 2247 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 2372 token > 1200 → 補切成 4 份
+
+[RCTS] item=Part_II_Item_1A 原 chunk 1253 token > 1200 → 補切成 2 份
+
+--- [ITEM] Part II, Item 2 (len=258 chars) ---
+Table of Contents
+
+Item 2.Unregistered Sales of Equity Securities and Use of Proceeds 
+
+a) Sales of Unregistered Securities 
+
+None.
+
+c) Issuer Purchases of Equity Securities
+
+There was no share repurchase activity during the three months ended June 30, 2026....
+
+--- [ITEM] Part II, Item 5 (len=1825 chars) ---
+Item 5.Other Information
+
+Rule 10b5-1 Trading Plans
+
+During the quarter ended June 30, 2026, the officers listed below adopted, modified, or terminated trading plans intended to satisfy the affirmative defense conditions of Rule 10b5-1(c) under the Securities Exchange Act of 1934, as amended. References to "net shares received" below refer to net shares received by an officer after excluding any s...
+
+--- [ITEM] Part II, Item 6 (len=1940 chars) ---
+Table of Contents
+
+Item 6.Exhibits 
+
+ExhibitNumberIncorporated by ReferenceFiledHerewith
+
+Exhibit DescriptionFormFile No.ExhibitFiling Date
+
+4.1Fifth Supplemental Indenture, dated as of May 4, 2026, by and between Meta Platforms, Inc. and U.S. Bank Trust Company, National Association, as trustee.
+
+8-K001-355514.1May 4, 2026
+
+31.1Certification of Mark Zuckerberg, Chief Executive Officer, pursuant t...

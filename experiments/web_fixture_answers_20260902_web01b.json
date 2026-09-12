@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "as_of": "2026-09-02",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture.json",
+    "replay_cache": "eval/web_replay_llm.json"
+  },
+  "records": [
+    {
+      "id": "web-01",
+      "query": "Apple 目前的市值是多少？",
+      "why": "intraday；KB 結構上沒有即時市值",
+      "answer": "Apple 目前的市值約為 **47,500 億美元（$4.75 兆）**（截至 2026‑09‑01）【web: https://stockanalysis.com/stocks/aapl/market-cap】。  \n\n- 依照 2026‑06‑12 的公司基本面資料，Apple 的市值為 **43,420.2 億美元（$4,342.02 billion）**（即約 43,400 億美元（$4.34 兆））【AAPL_Fundamentals_20260612.txt, chunk #0】。  \n- 兩者的差異是因為時間點不同，前者反映 2026‑09‑01 的最新市場估值，後者則是 2026‑06‑12 的估值。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.719)",
+      "n_web_calls": 1,
+      "n_web_calls_recorded": 1,
+      "sub_queries": [
+        "Apple 目前的市值是多少"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    }
+  ]
+}

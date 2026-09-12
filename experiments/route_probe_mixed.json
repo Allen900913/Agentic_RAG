@@ -1,0 +1,1030 @@
+[
+ {
+  "id": "mi-01",
+  "kind": "mixed",
+  "query": "NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新財報的營收成長率是多少",
+     "NVIDIA 與 IREN 最新的 AI 雲端合作案的內容是什麼，並說明它在資料中心布局上有哪些具體進展"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 最新財報的營收成長率是多少",
+     "NVIDIA 與 IREN 最新的 AI 雲端合作案的內容及其在資料中心布局上的具體進展是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 目前的營收成長率是多少",
+     "NVIDIA 與 IREN 最新的 AI 雲端合作案的內容是什麼，並說明它反映出公司在資料中心布局上的哪些具體進展"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-02",
+  "kind": "mixed",
+  "query": "NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 目前的毛利率是多少",
+     "NVIDIA 最近黃仁勳談及對中國市場開放 AI 晶片銷售的消息，以及此舉對公司未來營收的潛在影響是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 目前的毛利率是多少",
+     "黃仁勳最近談到在中國市場開放 AI 晶片銷售的新聞內容是什麼，且此舉對 NVIDIA 未來營收可能有何影響？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 目前的毛利率表現如何？",
+     "NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的談話，這可能對未來營收產生什麼影響？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-03",
+  "kind": "mixed",
+  "query": "Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 目前的毛利率是多少",
+     "Apple 最近有什麼 Evercore ISI 調升目標價與評等的新聞，以及市場對此的綜合看法"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 目前的毛利率表現如何",
+     "Evercore ISI 最新調升的目標價與評等，以及市場對 Apple 的綜合看法是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 目前的毛利率是多少",
+     "Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場對此的綜合看法是什麼"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-04",
+  "kind": "mixed",
+  "query": "Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 近一年整體營收成長率是多少",
+     "Apple 在 WWDC 發表的 Siri AI 新功能是什麼，這對公司未來的成長動能有何意義"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 近一年整體營收成長率是多少",
+     "Apple 在最近的 WWDC 中發表的 Siri AI 新功能是什麼，這對公司未來的成長動能有何意義？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Apple 近一年整體營收成長率是多少",
+     "Apple 最近在 WWDC 發表的 Siri AI 新功能是什麼，這對公司未來的成長動能有何意義？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-05",
+  "kind": "mixed",
+  "query": "Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Microsoft 的營收成長率表現如何",
+     "Microsoft 最近有關自研七個 AI 模型的新聞內容及其對公司 AI 布局的意涵是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Microsoft 的營收成長率是多少",
+     "Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Microsoft 目前的營收成長率是多少",
+     "Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容是什麼，這透露了公司 AI 布局的哪些訊息"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-06",
+  "kind": "mixed",
+  "query": "Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Microsoft 目前的淨利率是多少",
+     "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Microsoft 目前的淨利率是多少",
+     "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Microsoft 目前的淨利率是多少",
+     "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-07",
+  "kind": "mixed",
+  "query": "Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Amazon 目前的毛利率是多少",
+     "Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，這反映了什麼樣的成長策略"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Amazon 目前的毛利率是多少",
+     "Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，這反映了什麼樣的成長策略"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Amazon 目前的毛利率是多少",
+     "Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-08",
+  "kind": "mixed",
+  "query": "Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Amazon 近一年營收成長率是多少",
+     "新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場看待 Amazon 透露了什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Amazon 近一年的營收成長率是多少",
+     "新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Amazon 近一年的營收成長率是多少",
+     "新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這則新聞透露了市場對 Amazon 的什麼看法"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-09",
+  "kind": "mixed",
+  "query": "Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Alphabet 目前的毛利率是多少",
+     "Alphabet 最近有什麼關於 850 多億美元籌資計畫與大幅提高資本支出的新聞內容"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Alphabet 目前的毛利率是多少",
+     "新聞中 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，透露了什麼關於其 AI 投資策略的訊息"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Alphabet 目前的毛利率是多少",
+     "Alphabet 最近有關 850 多億美元 籌資計畫與大幅提高資本支出的新聞是什麼，這透露了公司 AI 投資策略的什麼訊息"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-10",
+  "kind": "mixed",
+  "query": "Alphabet 近一年的營收成長率是多少？加上新聞中 Navan 與 Google Gemini 的合作案例，反映出 Google 在 AI 生態系布局上的哪些進展？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Alphabet 近一年營收成長率是多少",
+     "Navan 與 Google Gemini 的合作案例反映出 Google 在 AI 生態系布局上的哪些進展"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Alphabet 近一年的營收成長率是多少",
+     "Navan 與 Google Gemini 的合作案例是什麼，並說明它反映出 Google 在 AI 生態系布局上的哪些進展"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Alphabet 近一年的營收成長率是多少",
+     "Navan 與 Google Gemini 的合作案例是什麼，並說明它反映出 Google 在 AI 生態系布局上的哪些進展"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-11",
+  "kind": "mixed",
+  "query": "Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Meta 目前的毛利率是多少",
+     "Morgan Stanley 在最近的新聞中如何評價 Meta 的 AI 護城河與資本支出，市場對 Meta 的 AI 投資有何綜合看法"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Meta 目前的毛利率是多少",
+     "Morgan Stanley 對 Meta AI 護城河與資本支出的評價是什麼，市場如何綜合看待 Meta 的 AI 投資？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Meta 目前的毛利率如何",
+     "Morgan Stanley 在新聞中對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-12",
+  "kind": "mixed",
+  "query": "Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Meta 近一年的營收成長率是多少",
+     "科技股在 SpaceX IPO 前遭避險基金拋售的新聞內容是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Meta 近一年營收成長率是多少",
+     "科技股在 SpaceX IPO 前遭避險基金拋售的新聞對 Meta 股價表現有何意義"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Meta 近一年的營收成長率是多少",
+     "新聞中提到科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼，且這對 Meta 股價表現的背景有何意義？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-13",
+  "kind": "mixed",
+  "query": "Tesla 目前的毛利率表現如何？加上新聞中 SpaceX 即將 IPO 讓 Tesla 關注度降溫的報導，這對 Tesla 目前的市場處境有何影響？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Tesla 目前的毛利率是多少",
+     "SpaceX 即將 IPO 的報導對 Tesla 目前的市場處境有何影響？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Tesla 目前的毛利率是多少",
+     "SpaceX 即將 IPO 的報導內容是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Tesla 目前的毛利率是多少",
+     "SpaceX 即將 IPO 的報導對 Tesla 目前的市場處境有何影響？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-14",
+  "kind": "mixed",
+  "query": "Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Tesla 汽車業務的毛利率近期有什麼變化趨勢",
+     "Magnificent Seven 科技股近期全數下跌的報導中，Tesla 的股價表現透露了什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Tesla 汽車業務的毛利率近期的變化趨勢是什麼",
+     "Magnificent Seven 科技股近期全數下跌的新聞內容及其對 Tesla 股價表現的透露是什麼"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Tesla 汽車業務的毛利率近期有什麼變化趨勢",
+     "Magnificent Seven 科技股近期全數下跌的報導對 Tesla 股價表現透露了什麼"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mi-15",
+  "kind": "mixed",
+  "query": "NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 目前的淨利率是多少",
+     "黃仁勳最近談到在中國市場開放 AI 晶片銷售的消息是什麼，這透露了 NVIDIA 在 AI 晶片競爭中的定位"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 目前的淨利率（profit margin）水準如何",
+     "NVIDIA 最近黃仁勳關於向中國市場開放 AI 晶片銷售的談話內容是什麼，這透露了公司在 AI 晶片競爭中的定位嗎"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "NVIDIA 目前的淨利率（profit margin）水準如何？",
+     "黃仁勳最近談到對中國市場開放 AI 晶片銷售的內容是什麼，這透露了 NVIDIA 在 AI 晶片競爭中的定位嗎？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mh-06",
+  "kind": "mixed",
+  "query": "新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Evercore ISI 最新調升目標價與評等的是哪一家公司",
+     "該公司目前的毛利率是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Evercore ISI 最新調升目標價與評等的是哪一家公司？",
+     "該公司目前的毛利率是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "Evercore ISI 最新調升目標價與評等的是哪一家公司？",
+     "Evercore ISI 最新調升目標價與評等的公司目前的毛利率是多少？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mh-07",
+  "kind": "mixed",
+  "query": "新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪一家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫？",
+     "該公司最新年度的總營收是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫？",
+     "該公司最新年度的總營收是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪家公司在新聞中宣布在歐洲投入逾 100 億歐元的投資計畫？",
+     "該公司最新財政年度的總營收是多少？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mh-08",
+  "kind": "mixed",
+  "query": "新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？",
+     "該公司最近一年的營收年增率是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪家公司在新聞中提出 850 多億美元籌資計畫，並大幅拉高資本支出？",
+     "該公司最近一年的營收年增率是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪家公司在新聞中提出 850 多億美元的籌資計畫，並大幅拉高資本支出？",
+     "該公司最近一年的營收年增率是多少？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mh-09",
+  "kind": "mixed",
+  "query": "新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪家公司在 6 月 5 日獲穆迪評為信用正面，融資案金額為 847.5 億美元",
+     "該公司目前的營業利益率是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪家公司在 6 月 5 日的 847.5 億美元融資案獲穆迪評為信用正面？",
+     "該公司的目前營業利益率是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪家公司在 6 月 5 日獲穆迪評為信用正面，融資案金額為 847.5 億美元？",
+     "該公司目前的營業利益率是多少？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "mh-10",
+  "kind": "mixed",
+  "query": "新聞中被 Morgan Stanley 特別稱許其 AI 護城河、同時大舉提高資本支出的是哪一家公司？該公司最新年度的淨利（net income）是多少？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪一家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河且大幅提高資本支出？",
+     "該公司最新年度的淨利（net income）是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪一家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河，且同時大舉提高資本支出？",
+     "該公司最新年度的淨利（net income）是多少？"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "哪家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河，且同時大幅提高資本支出？",
+     "該公司最新財政年度的淨利（net income）是多少？"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "col-15",
+  "kind": "mixed",
+  "query": "特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "特斯拉最近是否因為馬斯克另一家公司要上市而失去風頭",
+     "特斯拉本季的盈餘（淨利）是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "特斯拉最近因為馬斯克另一家公司要上市而被搶走風頭的相關新聞是什麼",
+     "特斯拉 這一季（FY2026 Q2）的營收與淨利是多少"
+    ]
+   },
+   {
+    "routes": [
+     "kb",
+     "web"
+    ],
+    "n_sub": 2,
+    "tasks": [
+     "特斯拉最近因為馬斯克的另一家公司要上市而被搶走風頭的相關新聞是什麼",
+     "特斯拉 FY2026 Q2 的淨利是多少"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ },
+ {
+  "id": "col-08",
+  "kind": "mixed",
+  "query": "NVIDIA 現在值多少錢（市值）？",
+  "probe_only": false,
+  "rounds": [
+   {
+    "routes": [
+     "both"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 現在的市值是多少"
+    ]
+   },
+   {
+    "routes": [
+     "both"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 目前的市值是多少"
+    ]
+   },
+   {
+    "routes": [
+     "both"
+    ],
+    "n_sub": 1,
+    "tasks": [
+     "NVIDIA 現在的市值是多少"
+    ]
+   }
+  ],
+  "verdicts": [
+   "ok",
+   "ok",
+   "ok"
+  ],
+  "unstable": false
+ }
+]

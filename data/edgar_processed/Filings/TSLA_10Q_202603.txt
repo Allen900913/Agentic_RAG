@@ -122,8 +122,8 @@
 |     Net cash provided by (used in) financing activities | $1,172 | $(332) |
 |     Effect of exchange rate changes on cash and cash equivalents and restricted cash | $(47) | $40 |
 |   Net increase in cash and cash equivalents and restricted cash | $39 | $213 |
-|   Cash and cash equivalents and restricted cash, end of period |  |  |
-|   Cash and cash equivalents and restricted cash, end of period |  |  |
+|   Cash and cash equivalents and restricted cash, beginning of period | $17,616 | $17,037 |
+|   Cash and cash equivalents and restricted cash, end of period | $17,655 | $17,250 |
 |     Acquisitions of property and equipment included in liabilities | $2,814 | $1,581 |
 |     Leased assets obtained in exchange for finance lease liabilities | $6 |  |
 |     Leased assets obtained in exchange for operating lease liabilities | $565 | $342 |
@@ -180,9 +180,9 @@ INDEX
 |  | Consolidated Statements of Cash Flows | 8 ...
 
 --- [TABLE extra #7] ---
-Stockholders' equity changes for the three months ended March 31, 2025.
+The table shows the balance sheet components of stockholders’ equity for the three months ended March 31, 2025, including balances and changes for common stock, additional paid‑in capital, retained earnings, and noncontrolling interests.
 
-| Three Months Ended March 31, 2025 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensive Loss |  | Retained Earnings |  | Total Stockholders’ Equity |  | Noncontrolling Interests in Subsidiaries |  | Total Equity |  |  |  |  |  |  |  |  |  |  |  |  |  ...
+| Three Months Ended March 31, 2025 | Redeemable Noncontrolling Interests |  |  | Common Stock |  | Additional Paid-In Capital |  | Accumulated Other Comprehensi...
 
 --- [TABLE extra #8] ---
 INDEX TO EXHIBITS
@@ -193,21 +193,6 @@ INDEX TO EXHIBITS
 | 10.1 |  | Implementation Agreement, dated as of April 21, 2026, between the Registrant and Elon Musk |  |  |  |  | ...
 
 [INFO] extra tables kept=9 (去重後，來自 unstructured)
-
-[SKIP] 'Part I, Item 8' 不屬於 10-Q 官方表格結構，略過
-
---- [ITEM] Part II, Item 5 (len=5358 chars) ---
-ITEM 5. OTHER INFORMATION
-
-Rule 10b5-1 Trading Arrangements
-
-None of the Company’s directors or officers adopted, modified or terminated a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended March 31, 2026, as such terms are defined under Item 408(a) of Regulation S-K.
-
-CEO Compensation
-
-As previously disclosed in the Company’s annual ...
-
-[SECTION] item=Part_II_Item_5 period=None 依小標切成 2 段：(小標前=章節層) | CEO Compensation
 
 --- [ITEM] Part I, Item 1 (len=73402 chars) ---
 ITEM 1. FINANCIAL STATEMENTS
@@ -263,6 +248,22 @@ We are focused on bringing artificial intelligence into the real world, through 
 
 [MIN-MERGE] item=Part_I_Item_2 section=Cash Flows from Financing Activities 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
 
+--- [ITEM] Part I, Item 3 (len=1641 chars) ---
+Table of Contents
+
+ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
+
+Foreign Currency Risk
+
+We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). ...
+
+--- [ITEM] Part I, Item 4 (len=1876 chars) ---
+ITEM 4. CONTROLS AND PROCEDURES
+
+Evaluation of Disclosure Controls and Procedures
+
+Our management, with the participation of our Chief Executive Officer and our Chief Financial Officer, evaluated the effectiveness of our disclosure controls and procedures pursuant to Rule 13a-15 under the Securities Exchange Act of 1934, as amended (the “Exchange Act”). In designing and evaluating the disclosure c...
+
 --- [ITEM] Part II, Item 1 (len=230 chars) ---
 ITEM 1. LEGAL PROCEEDINGS
 
@@ -283,7 +284,23 @@ ITEM 3. DEFAULTS UPON SENIOR SECURITIES
 
 None....
 
---- [ITEM] Part II, Item 6 (len=1520 chars) ---
+--- [ITEM] Part II, Item 4 (len=48 chars) ---
+ITEM 4. MINE SAFETY DISCLOSURES
+
+Not applicable....
+
+--- [ITEM] Part II, Item 5 (len=5358 chars) ---
+ITEM 5. OTHER INFORMATION
+
+Rule 10b5-1 Trading Arrangements
+
+None of the Company’s directors or officers adopted, modified or terminated a Rule 10b5-1 trading arrangement or a non-Rule 10b5-1 trading arrangement during the Company’s fiscal quarter ended March 31, 2026, as such terms are defined under Item 408(a) of Regulation S-K.
+
+CEO Compensation
+
+As previously disclosed in the Company’s annual ...
+
+--- [ITEM] Part II, Item 6 (len=1147 chars) ---
 Table of Contents
 
 ITEM 6. EXHIBITS
@@ -302,22 +319,4 @@ X
 
 31.1Rule 13a-14(a) / 15(d...
 
-[SECTION] item=Part_II_Item_6 period=None 依小標切成 2 段：(小標前=章節層) | Exhibit DescriptionFormFile No.ExhibitFiling Date
-
 [MIN-MERGE] item=Part_II_Item_6 section=None 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Part_II_Item_6 section=Exhibit DescriptionFormFile No.ExhibitFiling Date 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Part II, Item 4 (len=48 chars) ---
-ITEM 4. MINE SAFETY DISCLOSURES
-
-Not applicable....
-
---- [ITEM] Part I, Item 3 (len=1641 chars) ---
-Table of Contents
-
-ITEM 3. QUANTITATIVE AND QUALITATIVE DISCLOSURES ABOUT MARKET RISK
-
-Foreign Currency Risk
-
-We transact business globally in multiple currencies and hence have foreign currency risks related to our revenue, costs of revenue and operating expenses denominated in currencies other than the U.S. dollar (primarily the Chinese yuan and euro in relation to our current year operations). ...

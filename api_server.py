@@ -50,7 +50,7 @@ NVIDIA_BASE_URL = rq.NVIDIA_BASE_URL
 # 以及 CLAUDE.md「model_name 陷阱」）：
 #   - retrieval_model：retrieve() 內部 filter/rewrite/translate 用，必須跟 eval 的
 #     retrieval side（rq.DEFAULT_MODEL）一致，否則 web 路徑量到的檢索行為會與 eval 不符。
-#   - gen_model：生成答案用，預設 rq.DEFAULT_GEN_MODEL（gpt-oss-120b，見 CHANGELOG 07-09）。
+#   - gen_model：生成答案用，預設 rq.DEFAULT_GEN_MODEL（模型名不在這裡複述——2026-09-03 換過一次）。
 DEFAULT_RETRIEVAL_MODEL = os.getenv("LLM_MODEL", rq.DEFAULT_MODEL)
 DEFAULT_GEN_MODEL       = os.getenv("LLM_GEN_MODEL", rq.DEFAULT_GEN_MODEL)
 
@@ -241,7 +241,7 @@ async def chat(req: ChatRequest):
 
                 # 組 prompt（沿用 CLI 的 SYSTEM_PROMPT / build_user_prompt / 多輪截斷）
                 user_prompt = rq.build_user_prompt(req.query, chunks, fallback_note)
-                messages = [{"role": "system", "content": rq.SYSTEM_PROMPT}]
+                messages = [{"role": "system", "content": rq.SYSTEM_PROMPT + rq.ZH_ANSWER_DIRECTIVE}]
                 messages.extend(req.history[-(rq.MAX_HISTORY * 2):])
                 messages.append({"role": "user", "content": user_prompt})
 
@@ -250,11 +250,23 @@ async def chat(req: ChatRequest):
                 # 串流生成：把同步 generator 逐塊抽到 threadpool，避免阻塞 event loop
                 gen = stream_llm(messages, gen_model)
                 sentinel = object()
+                _streamed = []
                 while True:
                     piece = await loop.run_in_executor(None, lambda: next(gen, sentinel))
                     if piece is sentinel:
                         break
+                    _streamed.append(piece)
                     yield _sse("token", {"text": piece})
+
+                # 金額單位後處理（`rq.finalize_answer_units`）。⚠ 串流沒辦法在送出前改，
+                # 所以改成**送完再送一次定稿**：只有真的動過才發 `revision`，前端整段換掉。
+                # 這是 additive 的——舊前端看不懂 `revision` 會忽略它，行為與改動前相同。
+                # ⚠ 不要改成「先收完再一次送出」：那會把串流 UX 換掉，代價遠大於這個缺陷。
+                _raw = "".join(_streamed)
+                _final = await loop.run_in_executor(
+                    None, lambda: rq.finalize_answer_units(_raw, chunks))
+                if _final != _raw:
+                    yield _sse("revision", {"text": _final})
 
                 yield _sse("done", {})
             except Exception as e:

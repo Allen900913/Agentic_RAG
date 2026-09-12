@@ -1,0 +1,120 @@
+[bakeoff] 準備真實 chunk（生成題用同一份輸入,對每個模型公平）...
+[agentic_rag] Loading BGE-M3 + reranker + Qdrant (one-time)...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 1509.00it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:00<00:36, 10.66it/s]Loading weights:  35%|███▌      | 137/391 [00:00<00:00, 262.42it/s]Loading weights:  46%|████▌     | 179/391 [00:00<00:00, 244.84it/s]Loading weights:  66%|██████▌   | 257/391 [00:00<00:00, 342.44it/s]Loading weights:  78%|███████▊  | 304/391 [00:01<00:00, 329.46it/s]Loading weights:  88%|████████▊ | 345/391 [00:01<00:00, 262.43it/s]Loading weights:  97%|█████████▋| 378/391 [00:01<00:00, 270.27it/s]Loading weights: 100%|██████████| 391/391 [00:01<00:00, 259.52it/s]
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights:  72%|███████▏  | 284/393 [00:00<00:00, 2832.41it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 3353.91it/s]
+[INFO] Opening Qdrant server: http://localhost:6333
+WARN  - query-filter parsing failed (APIStatusError('Error code: 410 - {\'type\': \'about:blank\', \'title\': \'Gone\', \'status\': 410, \'detail\': "The model \'openai/gpt-oss-120b\' has reached its end of life on 2026-09-03T08:00:00Z and is no longer available."}')); falling back to deterministic filter
+WARN  - period intent parsing failed (APIStatusError('Error code: 410 - {\'type\': \'about:blank\', \'title\': \'Gone\', \'status\': 410, \'detail\': "The model \'openai/gpt-oss-120b\' has reached its end of life on 2026-09-03T08:00:00Z and is no longer available."}')); treating as 'none'
+DEBUG - period intent (LLM): {'period_ref': 'none', 'fiscal_year': None, 'granularity': None}
+DEBUG - Detected filing filter(s): [{'field': 'ticker', 'value': 'AAPL', 'polarity': 'include'}]
+DEBUG - Tier 1 (strict filter): hit
+DEBUG - Qdrant returned 20 fused candidates (server-side RRF):
+  [1] AAPL_10Q_202506.html | chunk #15 | rrf_score=0.583333
+  [2] AAPL_10K_2025.html | chunk #0 | rrf_score=0.500000
+  [3] AAPL_10Q_202503.html | chunk #15 | rrf_score=0.424242
+  [4] AAPL_10Q_202512.html | chunk #0 | rrf_score=0.333333
+  [5] AAPL_10K_2025.html | chunk #108 | rrf_score=0.311111
+  [6] AAPL_10K_2025.html | chunk #109 | rrf_score=0.271739
+  [7] AAPL_10K_2023.html | chunk #0 | rrf_score=0.250000
+  [8] AAPL_10Q_202512.html | chunk #15 | rrf_score=0.219298
+  [9] AAPL_10K_2025.html | chunk #2 | rrf_score=0.200000
+  [10] AAPL_10Q_202606.html | chunk #15 | rrf_score=0.174107
+  [11] AAPL_10K_2024.html | chunk #0 | rrf_score=0.166667
+  [12] AAPL_10K_2025.html | chunk #110 | rrf_score=0.162500
+  [13] AAPL_10Q_202603.html | chunk #14 | rrf_score=0.148148
+  [14] AAPL_10Q_202412.html | chunk #0 | rrf_score=0.142857
+  [15] AAPL_10Q_202512.html | chunk #20 | rrf_score=0.125000
+  [16] AAPL_10Q_202506.html | chunk #0 | rrf_score=0.125000
+  [17] AAPL_10Q_202503.html | chunk #0 | rrf_score=0.100000
+  [18] AAPL_10Q_202506.html | chunk #26 | rrf_score=0.090909
+  [19] AAPL_10Q_202506.html | chunk #16 | rrf_score=0.083333
+  [20] AAPL_10K_2023.html | chunk #109 | rrf_score=0.076923
+DEBUG - Reranked top candidates:
+  [1] AAPL_10K_2025.html | chunk #0 | type=10-K | rrf=0.500000 | raw=0.9953 | sigmoid=0.7301
+  [2] AAPL_10K_2024.html | chunk #0 | type=10-K | rrf=0.166667 | raw=0.9886 | sigmoid=0.7288
+  [3] AAPL_10K_2025.html | chunk #108 | type=10-K | rrf=0.311111 | raw=0.9882 | sigmoid=0.7287
+  [4] AAPL_10K_2025.html | chunk #2 | type=10-K | rrf=0.200000 | raw=0.9863 | sigmoid=0.7284
+  [5] AAPL_10Q_202503.html | chunk #0 | type=10-Q | rrf=0.100000 | raw=0.9823 | sigmoid=0.7276
+DEBUG - Cross-period collapse (keep=2, prefer=newest): dropped 9 same-section candidates
+
+==============================================================================
+openai/gpt-oss-20b   （對照下限：同家族更小,用來看『縮水會怎樣』）
+==============================================================================
+  ✅ plan    3/3  中位  24.0s  空0
+        · OK 2 個子問題
+        · OK 2 個子問題
+        · OK 3 個子問題
+  ✅ check   3/3  中位  30.3s  空0
+        · OK sufficient=True ids=3
+        · OK sufficient=True ids=3
+        · OK sufficient=True ids=3
+  ✅ filter  3/3  中位   5.4s  空0
+        · OK {"filters": [{"field": "fiscal_year", "value": "2025", "pola
+        · OK {"filters": [{"field": "fiscal_year", "value": "2025", "pola
+        · OK {"filters": [{"field": "fiscal_year", "value": "2025", "pola
+  ❌ gen     0/3  中位  10.4s  空0
+        · NG 沒有任何 [來源] 引用
+        · NG 沒有任何 [來源] 引用
+        · NG 沒有任何 [來源] 引用
+
+==============================================================================
+nvidia/nemotron-3-super-120b-a12b   （同級 120B,活躍 12B(vs 5.1B)）
+==============================================================================
+  ✅ plan    3/3  中位  10.4s  空0
+        · OK 2 個子問題
+        · OK 2 個子問題
+        · OK 2 個子問題
+  ✅ check   3/3  中位   6.5s  空0
+        · OK sufficient=False ids=0
+        · OK sufficient=False ids=0
+        · OK sufficient=False ids=0
+  ✅ filter  3/3  中位   2.8s  空0
+        · OK {"filters": [{"field": "fiscal_year", "value": "2025", "pola
+        · OK {"filters": [{"field": "fiscal_year", "value": "2025", "pola
+        · OK {"filters": [{"field": "fiscal_year", "value": "2025", "pola
+  ⚠️ gen     1/3  中位   9.4s  空0
+        · OK 185字 引用2處
+        · NG 沒有任何 [來源] 引用
+        · NG 沒有任何 [來源] 引用
+
+==============================================================================
+nvidia/llama-3.1-nemotron-ultra-253b-v1   （253B reasoning）
+==============================================================================
+  ❌ plan    0/3  中位   0.4s  空0  ERR=NotFoundError: Error code: 404 - {'status': 404, 'title': 'Not Found', 'detail': "Function '84bf12ff-edbd-4435-baea-0fa6a7453
+  ❌ check   0/3  中位   0.4s  空0  ERR=NotFoundError: Error code: 404 - {'status': 404, 'title': 'Not Found', 'detail': "Function '84bf12ff-edbd-4435-baea-0fa6a7453
+  ❌ filter  0/3  中位   0.4s  空0  ERR=NotFoundError: Error code: 404 - {'status': 404, 'title': 'Not Found', 'detail': "Function '84bf12ff-edbd-4435-baea-0fa6a7453
+  ❌ gen     0/3  中位   0.4s  空0  ERR=NotFoundError: Error code: 404 - {'status': 404, 'title': 'Not Found', 'detail': "Function '84bf12ff-edbd-4435-baea-0fa6a7453
+
+==============================================================================
+nvidia/nemotron-3-ultra-550b-a55b   （550B/55B active）
+==============================================================================
+  ✅ plan    3/3  中位  16.2s  空0
+        · OK 2 個子問題
+        · OK 2 個子問題
+        · OK 2 個子問題
+  ✅ check   3/3  中位  31.8s  空0
+        · OK sufficient=False ids=4
+        · OK sufficient=False ids=3
+        · OK sufficient=False ids=3
+  ✅ filter  3/3  中位  20.5s  空0
+        · OK {"filters": [{"field": "fiscal_year", "value": "2025", "pola
+        · OK {"filters": [{"field": "fiscal_year", "value": "2025", "pola
+        · OK {"filters": [{"field": "fiscal_year", "value": "2025", "pola
+  ⚠️ gen     2/3  中位  47.6s  空0
+        · OK 284字 引用4處
+        · OK 304字 引用3處
+        · NG 中文字太少(20)
+
+==============================================================================
+deepseek-ai/deepseek-v4-pro-0813   （前沿級 MoE）
+==============================================================================
+  ✅ plan    3/3  中位 604.7s  空0
+        · OK 2 個子問題
+        · OK 2 個子問題
+        · OK 2 個子問題
+  ✅ check   3/3  中位 284.8s  空0
+        · OK sufficient=False ids=3
+        · OK sufficient=False ids=3
+        · OK sufficient=False ids=3

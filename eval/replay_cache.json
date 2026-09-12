@@ -689,7 +689,16 @@
   "Apple 最新一個財年的總營收是多少？": "What was Apple's total revenue for its most recent fiscal year?",
   "NVIDIA 最新一個財年的營收是多少？": "What was NVIDIA's revenue for its most recent fiscal year?",
   "Microsoft 最新一個財年的營收是多少？": "What was Microsoft's revenue for its most recent fiscal year?",
-  "Meta 最新一個財年的營收是多少？": "What was Meta's revenue for the most recent fiscal year?"
+  "Meta 最新一個財年的營收是多少？": "What was Meta's revenue for the most recent fiscal year?",
+  "NVIDIA 現在值多少錢（市值）？": "What is NVIDIA's current market capitalization?",
+  "在 Amazon、Microsoft、Alphabet、Meta 這四家公司中，最近十二個月（TTM）總營收規模最大的是哪一家？該公司同期的毛利率又是多少？": "Among Amazon, Microsoft, Alphabet, and Meta, which company had the largest total revenue over the trailing twelve months (TTM)? What was that company's gross margin for the same period?",
+  "Apple 近一年的整體營收成長率是多少？": "What is Apple's overall revenue growth rate over the past year?",
+  "Microsoft 的營收成長率表現如何？": "How is Microsoft's revenue growth rate performing?",
+  "微軟每年能自由運用的現金大概有多少？": "What is Microsoft's annual free cash flow?",
+  "在 Meta、NVIDIA、Microsoft 這三家公司中，最近十二個月（TTM）毛利率最高的是哪一家公司？該公司同期的總營收是多少？": "Among Meta, NVIDIA, and Microsoft, which company had the highest gross margin over the trailing twelve months (TTM)? What was that company's total revenue for the same period?",
+  "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？": "Among NVIDIA, Meta, and Alphabet, which company had the highest year-over-year revenue growth over the past year? What is that company's trailing twelve months (TTM) net income?",
+  "在 Microsoft、Alphabet、Apple 這三家公司中，最近十二個月（TTM）營業利益率（operating margin）最高的是哪一家？該公司同期的總營收是多少？": "Among Microsoft, Alphabet, and Apple, which company had the highest operating margin over the trailing twelve months (TTM)? What was that company's total revenue for the same period?",
+  "在 Alphabet、Microsoft、Amazon 這三家公司中，最近十二個月（TTM）淨利（net income）最高的是哪一家？該公司最近一年的營收年增率是多少？": "Among Alphabet, Microsoft, and Amazon, which company had the highest trailing twelve-month net income? What is that company's year-over-year revenue growth rate?"
  },
  "check": {
   "Apple 最近與 Siri 相關的法律訴訟或和解消息 || AAPL_News_20260508_01.txt#2 AAPL_News_20260519_01.txt#5 AAPL_News_20260519_01.txt#4 AAPL_News_20260612_03.txt#0 AAPL_News_20260612_02.txt#0": {
@@ -6895,6 +6904,106 @@
    "period_ref": "latest",
    "fiscal_year": null,
    "granularity": "annual"
+  },
+  "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？": {
+   "period_ref": "absolute",
+   "fiscal_year": 2026,
+   "granularity": "annual"
+  },
+  "NVIDIA 現在值多少錢（市值）？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "在 Amazon、Microsoft、Alphabet、Meta 這四家公司中，最近十二個月（TTM）總營收規模最大的是哪一家？該公司同期的毛利率又是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA 目前的 Market Cap（市值）是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "NVIDIA 的 trailing P/E Ratio 是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple 目前的 Market Cap（市值）是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Apple fiscal year 2025 的 Diluted EPS 是多少？": {
+   "period_ref": "absolute",
+   "fiscal_year": 2025,
+   "granularity": "annual"
+  },
+  "Microsoft 目前的 Free Cash Flow 是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Amazon 目前的 Total Debt 是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Alphabet（Google）目前的員工人數是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Meta 目前的 Return on Equity（股東權益報酬率）是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "Meta fiscal year 2025 的 Diluted EPS 是多少？": {
+   "period_ref": "absolute",
+   "fiscal_year": 2025,
+   "granularity": "annual"
+  },
+  "Apple 近一年的整體營收成長率是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "Microsoft 的營收成長率表現如何？": {
+   "period_ref": "none",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "蘋果公司現在市值多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "微軟每年能自由運用的現金大概有多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "在 Meta、NVIDIA、Microsoft 這三家公司中，最近十二個月（TTM）毛利率最高的是哪一家公司？該公司同期的總營收是多少？": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "在 NVIDIA、Meta、Alphabet 這三家公司中，最近一年營收年增率（YoY revenue growth）最高的是哪一家？該公司最近十二個月（TTM）的淨利（net income）是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
+  },
+  "在 Microsoft、Alphabet、Apple 這三家公司中，最近十二個月（TTM）營業利益率（operating margin）最高的是哪一家？該公司同期的總營收是多少？": {
+   "period_ref": "range",
+   "fiscal_year": null,
+   "granularity": "annual"
+  },
+  "在 Alphabet、Microsoft、Amazon 這三家公司中，最近十二個月（TTM）淨利（net income）最高的是哪一家？該公司最近一年的營收年增率是多少？": {
+   "period_ref": "latest",
+   "fiscal_year": null,
+   "granularity": null
   }
  }
 }

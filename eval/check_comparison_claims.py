@@ -1,7 +1,7 @@
 """多實體比較題的逐條斷言（**零 LLM、零網路、零 Qdrant**，只讀結果檔）。
 
 **為什麼需要這一支**：`multi_hop` 的 5 題全是「在 A、B、C 中，X 最高的是哪一家？」。
-2026-08-29 查過全碼庫：**沒有任何一行 Python 在做這個比較**（`agentic_rag_v2.py` 裡所有
+2026-08-29 查過全碼庫：**沒有任何一行 Python 在做這個比較**（`agentic_rag_version/__init__.py` 裡所有
 `max()` 都在比日期或 rerank 分數）。六個子問題各自撈回 chunk → `_fair_select` 挑一批 →
 **由 Generator 自己讀著數字比大小**。
 
@@ -52,6 +52,15 @@ import json
 import re
 import sys
 from pathlib import Path
+
+# ⚠ Windows 主控台預設 cp950，而本檔的報表帶著 ⚠／✔ 等字元 ⇒ **摘要那一行會 crash**，
+#   而 crash 的退出碼與「有 wrong_winner」外觀相同 ＝ 把一個編碼問題讀成一個系統缺陷。
+#   2026-09-11 實際踩到（5/5 全 PASS，卻是 UnicodeEncodeError 收場）。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import rag_query as rq          # noqa: E402  只為了共用 _COMPANY_TICKER（唯一定義點）

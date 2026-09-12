@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "as_of": "2026-09-01",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_newsroute_prod.json",
+    "replay_cache": "eval/web_replay_llm_newsroute_after2.json"
+  },
+  "records": [
+    {
+      "id": "news-06",
+      "query": "NVIDIA 財報前，新聞關注它面臨哪些競爭與市場焦點？",
+      "why": "flow",
+      "answer": "在財報公布前的新聞中，NVIDIA 被指出正面臨來自多家晶片廠商的激烈競爭，同時市場焦點集中在 AI 訓練與推論、資料中心需求以及自家 CPU、ASIC 與客製化晶片的布局上【web: https://www.reuters.com/technology/nvidia-focus-competition-beating-ai-advances-megaconference-2026-03-13】。\n\n**主要競爭者**  \n- **AMD**：不只在 GPU 市場與 Nvidia 競爭，亦推出自家 CPU，並與 OpenAI 簽署高達 6 GW AI 處理器的合約，另與 Oracle 訂購 50,000 顆 GPU【web: https://finance.yahoo.com/news/nvidia-stock-nears-5-trillion-market-cap-after-slew-of-updates-at-gtc-event-200415333.html】。  \n- **Intel**：其傳統的 x86 CPU 被視為「回到焦點」的競爭威脅，尤其在「agentic AI」的編排層面可能成為瓶頸【web: https://www.reuters.com/technology/nvidia-focus-competition-beating-ai-advances-megaconference-2026-03-13】。  \n- **Google 與 Amazon**：兩大雲端巨頭正開發自家 AI 晶片，聲稱其效能與能源效率可與 Nvidia GPU 競爭【web: https://www.wsj.com/tech/ai/nvidia-ai-chips-competitors-amd-broadcom-google-amazon-6729c65a】。  \n- **Qualcomm**：推出 AI 加速器晶片，並以 Snapdragon PC 晶片與 Nvidia 的 RTX Spark 正面交鋒【web: https://finance.yahoo.com/markets/stocks/articles/nvidia-just-flipped-script-competition-190807515.html】。  \n- **Broadcom**：亦在推出針對 AI 資料中心的產品，加入競爭行列【web: https://www.wsj.com/tech/ai/nvidia-ai-chips-competitors-amd-broadcom-google-amazon-6729c65a】。  \n- **客戶自製晶片**：OpenAI 與 Meta Platforms 等大型客戶開始設計自家客製化 AI 晶片，挑戰 Nvidia 的市場佔有率【web: https://www.wsj.com/tech/ai/nvidia-ai-chips-competitors-amd-broadcom-google-amazon-6729c65a】。  \n- **新創公司**：2026 年 AI 晶片新創共募集 83 億美元（$8.3 billion） 資金，專注於針對 AI 推論（inference）優化的非 GPU 架構，對 Nvidia 的壟斷形成潛在威脅【web: https://www.cnbc.com/2026/04/17/nvidia-ai-chip-rivals-funding-euclyd-fractile.html】。\n\n**市場焦點**  \n- **AI 訓練與推論**：Nvidia 仍掌握超過 90% 的訓練與推論市場份額，但分析師預測自 2027 年起，隨著客製化 ASIC 規模化，可能出現市場份額流失【web: https://www.reuters.com/technology/nvidia-focus-competition-beating-ai-advances-megaconference-2026-03-13】。  \n- **資料中心需求**：AI 資料中心是主要成長動力，且「主權 AI」概念（各國與企業自行建置 AI 資料中心）正受到關注【web: https://finance.yahoo.com/news/nvidia-stock-nears-5-trillion-market-cap-after-slew-of-updates-at-gtc-event-200415333.html】。  \n- **AI 推論效率**：市場正從單純的 GPU 訓練轉向更高效的推論解決方案，創業公司主張其新型系統架構能在能源與成本上大幅節省【web: https://www.cnbc.com/2026/04/17/nvidia-ai-chip-rivals-funding-euclyd-fractile.html】。  \n- **PC 與 AI 代理人**：Nvidia 推出的 RTX Spark 與 Vera CPU 針對個人電腦 AI 代理人市場，直接與 Qualcomm 的 Snapdragon PC 晶片競爭，顯示 Nvidia 正在擴展 AI 應用場景【web: https://finance.yahoo.com/markets/stocks/articles/nvidia-just-flipped-script-competition-190807515.html】。  \n- **6G 與電信合作**：公司亦與 Cisco、T‑Mobile 等合作，布局 6G 無線建設，顯示其在未來通訊基礎設施的市場關注度【web: https://finance.yahoo.com/news/nvidia-stock-nears-5-trillion-market-cap-after-slew-of-updates-at-gtc-event-200415333.html】。\n\n綜合上述，新聞在財報前聚焦於 **競爭者多元化（AMD、Intel、Google、Amazon、Qualcomm、Broadcom、客戶自製晶片與新創公司）** 以及 **AI 訓練/推論、資料中心、客製化 ASIC、PC AI 代理人與 6G 電信等市場機會**，這些都是 Nvidia 必須應對的關鍵挑戰與成長方向。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 最近的新聞中，提到它面臨哪些競爭與市場焦點？",
+        "查找2026年最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點",
+        "查找2026年8月到2026年9月的新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點",
+        "查找截至2026-09-01的最新新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點",
+        "查找2026年9月1日前的分析師評論或市場報告，聚焦於NVIDIA財報前的競爭與市場焦點",
+        "查找2026年最新的新聞與分析師報告，聚焦於NVIDIA財報前的競爭對手（如AMD、Intel等）與市場焦點（AI晶片、資料中心需求等）",
+        "搜尋2026年1月至2026年7月的新聞，聚焦於NVIDIA財報前的競爭對手與市場焦點（如AMD、Intel、AI晶片、資料中心需求等）"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-07",
+      "query": "微軟最近在 AI 策略上有什麼新消息，分析師怎麼看？",
+      "why": "flow",
+      "answer": "微軟最近在 AI 策略上推出多項新舉措，包括在 Microsoft 365 中推出更高價位、具進階 AI 功能的方案、將 Anthropic 的模型納入 Copilot、在 Build 開發者大會展示自家高效能轉錄與影像模型，以及成立新公司協助企業導入 AI，同時分析師普遍認為這些動作將提升營收成長、改善毛利結構，並已上調股價目標。  \n\n**最新 AI 產品與服務**  \n- 微軟宣布在 Microsoft 365 推出「更高價位」的 AI 方案，內含整合聊天機器人與圖像生成等功能【web: https://finance.yahoo.com/news/analyst-views-shifting-microsofts-ai-071305123.html】。  \n- 同時將 Anthropic 的生成式 AI 模型加入 Copilot 助理，擴大生成式 AI 版圖【web: https://finance.yahoo.com/news/analyst-views-shifting-microsofts-ai-071305123.html】。  \n- 在 2026‑06‑02 的 Build 大會上，微軟展示了「最有效率的雲端轉錄 AI 模型」以及與 Google 競爭的影像模型，並推出首款推理模型 MAI Thinking‑1，聲稱其表現與 Anthropic 的 Claude Opus 4.6 相當【web: https://www.reuters.com/world/china/microsoft-expected-showcase-new-pc-cloud-ai-tools-developer-conference-2026-06-02】。  \n- 2026‑07‑02 微軟成立新公司協助企業導入 AI，並說明去年已將 Anthropic 模型加入 Copilot，以因應企業對多元 AI 供應商的需求【web: https://www.reuters.com/business/retail-consumer/microsoft-launches-firm-help-companies-adopt-ai-with-25-billion-2026-07-02】。  \n\n**財務層面的 AI 投入**  \n- 2026 財年「生產力與商務流程」部門的營業成本因 AI 基礎設施投資上升 26 億美元（$2.6 billion）（+12%），同時營業費用因 AI 計算容量、AI 人才與資料支援增加 25 億美元（$2.5 billion）（+9%）【MSFT_10K_2026.html, chunk #128】。  \n- 研發支出全年提升 31 億美元（$3.1 billion）（+9%），主要用於 AI 計算容量與人才投入【MSFT_10K_2026.html, chunk #132】。  \n- 2026‑03‑31 結束的第一季，因 AI 基礎設施導致成本上升 49 億美元（$4.9 billion）（+22%），毛利率因 AI 投資而略為下降，但毛利額仍增 79 億美元（$7.9 billion）（+16%）【MSFT_10Q_202603.html, chunk #63】。  \n- 2026 前九個月，成本因 AI 驅動的雲端服務上升 130 億美元（$13.0 billion）（+20%），營業費用因 AI 計算與 Copilot 廣告支出增加 31 億美元（$3.1 billion）（+7%）【MSFT_10Q_202603.html, chunk #66】。  \n- 同期「生產力與商務流程」部門營業收入因 Microsoft 365 商業雲與 Copilot 成長，營業收入提升 112 億美元（$11.2 billion）（+22%），毛利額增 128 億美元（$12.8 billion）（+18%）【MSFT_10Q_202603.html, chunk #74】。  \n\n**分析師觀點與市場反應**  \n- 多位分析師（如 Morgan Stanley）已將微軟的股價目標從 $620 提升至 $670，顯示對 AI 動能的信心上升【web: https://finance.yahoo.com/news/analyst-views-shifting-microsofts-ai-071305123.html】。  \n- JPMorgan、Wedbush 等研究報告指出，微軟在雲端與生產力領域的執行力強勁，Q4 期間營收與毛利均超出預期，預期未來可維持「中高兩位數」的營收成長率【web: https://finance.yahoo.com/news/analyst-views-shifting-microsofts-ai-071305123.html】。  \n- 另一篇 Yahoo 財經報導認為，Azure 的收入在第四季加速成長，Copilot 企業採用持續擴大，AI 投資正從「短期毛利壓力」轉為「耐久成長催化劑」【web: https://finance.yahoo.com/markets/stocks/articles/microsoft-eases-ai-spending-concerns-141037033.html】。  \n- MarketWatch 的分析師則指出，Copilot 與更廣泛的「E7」機會可能成為 Microsoft 歷史上最重要的 ARPU（每使用者平均收入）擴張來源，並認為若 AI 能力持續落實，股價有望上漲 50%【web: https://www.marketwatch.com/story/microsoft-has-3-secret-weapons-that-could-drive-its-stock-50-higher-analyst-says-f1afb554】。  \n- Wood（分析師）認為市場低估了 Azure 作為 AI 基礎設施的價值，未充分計算 AI 服務向更高價值 Microsoft 服務的「拉動效應」【web: https://www.marketwatch.com/story/microsoft-has-3-secret-weapons-that-could-drive-its-stock-50-higher-analyst-says-f1afb554】。  \n\n**綜合結論**  \n微軟正透過高階 AI 功能、模型自主研發、Copilot 生態系擴張以及新成立的 AI 導入公司，將 AI 深度嵌入產品與雲端服務；財報顯示相關投資已開始提升營收與毛利貢獻；分析師普遍提升目標價、看好 Azure 與 Copilot 的成長動能，並認為 AI 可能成為未來股價的大幅上漲推手。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-01）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10K_2026.html #131 (rerank=0.730)\n  - MSFT_10K_2026.html #128 (rerank=0.730)\n  - MSFT_10K_2026.html #132 (rerank=0.730)\n  - MSFT_10Q_202603.html #63 (rerank=0.714)\n  - MSFT_10Q_202603.html #48 (rerank=0.712)\n  - MSFT_10Q_202603.html #66 (rerank=0.705)\n  - MSFT_10Q_202603.html #74 (rerank=0.702)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 微軟最近在 AI 策略上的新消息及分析師的看法\n  - 查詢分析師對微軟AI策略的看法及近期相關新聞\n  - 取得分析師對微軟AI策略的看法的最新報導\n  - 查詢2026年9月以來分析師對微軟 AI 策略的最新評價與評論\n  - 取得2026年9月以來分析師對微軟 AI 策略的最新評價與評論",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "微軟最近在 AI 策略上的新消息及分析師的看法",
+        "查詢微軟2026年第三季10-Q中關於AI策略的敘述",
+        "查詢微軟2026年最新的財務基本面中AI相關營收與研發支出",
+        "查詢分析師對微軟AI策略的看法及近期相關新聞",
+        "取得分析師對微軟AI策略的看法的最新報導",
+        "查詢2026年9月以來分析師對微軟 AI 策略的最新評價與評論",
+        "取得2026年9月以來分析師對微軟 AI 策略的最新評價與評論"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 131
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 128
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 132
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 129
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 125
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 63
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 48
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 66
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 74
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 68
+        }
+      ]
+    },
+    {
+      "id": "news-08",
+      "query": "有沒有 Microsoft 參與 AI 資安合作的新聞？",
+      "why": "flow",
+      "answer": "有，近期有多則新聞報導 Microsoft 正在與不同夥伴展開 AI 與資安的合作計畫。\n\n- **Project Glasswing**：Microsoft 參與「Project Glasswing」，與多家產業夥伴共同使用 Anthropic 的 AI 模型來加強資安，針對 AI‑驅動的程式碼與漏洞風險提供防護【web: https://finance.yahoo.com/sectors/technology/articles/microsoft-deepens-ai-cybersecurity-reach-050417967.html】。  \n- **Accenture 合作**：Accenture 與 Microsoft 合作開發生成式 AI 資安工具，聚焦於 SOC 現代化、資料與 AI 安全自動化、資安遷移與整合，以及身分與存取管理（IAM），已在英國 Nationwide Building Society 推行相關解決方案【web: https://finance.yahoo.com/news/accenture-microsoft-join-forces-develop-115958094.html】。  \n- **Accenture 進一步擴大合作**：2025 年 7 月 10 日，Accenture 與 Microsoft 再次宣佈共同投資開發先進的生成式 AI 資安解決方案，強調「AI‑驅動、全端保護」的願景【web: https://www.nasdaq.com/press-release/accenture-and-microsoft-expand-collaboration-gen-ai-powered-cyber-solutions-2025-07】。  \n- **Stellantis 五年合作**：2026 年 4 月 16 日，Microsoft 與汽車製造商 Stellantis 簽署五年戰略合作協議，雙方將共同開發超過 100 項 AI 計畫，並在全球建立「Cyber Defence Centre」以利用 AI 分析防止資安威脅、保護車輛與客戶資料【web: https://www.reuters.com/business/autos-transportation/stellantis-microsoft-sign-five-year-partnership-ai-push-2026-04-16】。  \n\n以上即為目前可查到的 Microsoft 參與 AI 資安合作的主要新聞。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Microsoft 參與 AI 資安合作的新聞有哪些"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-09",
+      "query": "Alphabet（Google）最近有什麼大規模籌資或資本支出的消息？",
+      "why": "flow",
+      "answer": "Alphabet 最近宣布將透過股權與混合證券籌集約 **80 至 850 億美元（$85 十億）** 的資金，同時將 **2026 年的資本支出預估提升至約 175 至 1,850 億美元（$185 十億）**【web: https://finance.yahoo.com/markets/stocks/articles/alphabet-us-80-billion-ai-071812155.html】【web: https://www.cnbc.com/2026/06/05/alphabet-ai-data-center-financing.html】【web: https://www.reuters.com/business/google-parent-alphabet-forecasts-sharp-surge-2026-capital-spending-2026-02-04】。\n\n- **籌資計畫**：在 2026 年初，Alphabet 透過後續股權發行、可轉換與優先固定收益證券，以及來自 Berkshire Hathaway 的 **100 億美元（$10 十億）私募配售**，總計籌得 **超過 800 億美元（$80 十億）**；隨後在同月將目標提升至 **850 億美元（$85 十億）**【web: https://finance.yahoo.com/markets/stocks/articles/alphabet-us-80-billion-ai-071812155.html】【web: https://www.cnbc.com/2026/06/05/alphabet-ai-data-center-financing.html】。此舉顯示公司將以股權與混合工具為 AI 計算基礎設施的大規模建設提供資金，而非僅依賴傳統債務。\n\n- **資本支出指引**：Alphabet 在 2026 年 2 月的財報電話會議中指出，AI 伺服器、資料中心與網路設備的投資將使當年資本支出目標升至 **175 至 1,850 億美元（$185 十億）**，較 2025 年的 **914.5 億美元（$91.45 十億）** 大幅增加，遠高於分析師預期的約 **1,152.6 億美元（$115.26 十億）**【web: https://www.reuters.com/business/google-parent-alphabet-forecasts-sharp-surge-2026-capital-spending-2026-02-04】。此增幅反映公司為滿足雲端與 AI 需求而加速建置基礎設施的決心。\n\n- **過去資本支出**：2025 年，Alphabet 已將當年的資本支出從原先預估的 **750 億美元（$75 十億）** 上調至 **850 億美元（$85 十億）**，主要用於伺服器與資料中心的擴建【web: https://www.cnbc.com/2025/07/23/googles-85-billion-capital-spend-spurred-by-cloud-ai-demand.html】。這為 2026 年更大規模的支出奠定基礎。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Alphabet 最近有什麼大規模籌資或資本支出的消息"
+      ],
+      "sources": []
+    },
+    {
+      "id": "news-10",
+      "query": "最近有哪些關於 Meta 的利多分析與 AI 投資消息？",
+      "why": "flow",
+      "answer": "最近，分析師普遍給予 Meta 正面評價，預測股價將有顯著上漲，同時公司正大幅擴大 AI 基礎設施投資，2026 年的資本支出預計介於 **1,300 億美元（$130 billion）** 至 **1,450 億美元（$145 billion）** 之間【web: https://www.reuters.com/business/meta-narrows-annual-capex-forecast-ai-buildout-grows-2026-07-29】。\n\n**利多分析**  \n- 依 24/7 Wall St. 的模型，Meta 2026 年目標價為 **$760**，2027 年為 **$837.78**，2028 年為 **$1,050**，預期 2031 年市值可達 **$1,661.42**【web: https://finance.yahoo.com/markets/stocks/articles/meta-recent-pullback-creates-attractive-154509860.html】。  \n- 同一篇報導指出，預測的每股盈餘為 **$41.13**，以 **17x** 前瞻本益比計算，對應的前瞻股價為 **$784.73**，再加上分析師共識平均目標價 **$827.32**，加權後的預估價格為 **$754.08**【web: https://finance.yahoo.com/markets/stocks/articles/meta-recent-pullback-creates-attractive-154509860.html】。  \n- 另一篇分析指出，分析師維持「Strong Buy」共識，平均目標價 **$750.37**，意味著相較於近期收盤價約有 **38%** 上漲空間【web: https://finance.yahoo.com/markets/stocks/articles/meta-stock-sinks-32-analysts-150427583.html】。  \n- 同時，該篇文章認為，市場已將 Meta 大幅 AI 投資的風險基本定價，因而認為股價仍具上行潛力【web: https://finance.yahoo.com/markets/stocks/articles/meta-stock-sinks-32-analysts-150427583.html】。\n\n**AI 投資消息**  \n- Meta 在 2026 年第一季的財報中透露，AI 相關資本支出將介於 **1,150 億美元（$115 billion）** 至 **1,350 億美元（$135 billion）**，約為去年支出的兩倍【web: https://www.cnbc.com/2026/01/28/metas-zuckerberg-gets-green-light-from-wall-street-to-invest-in-ai.html】。  \n- 隨後公司將資本支出上調至 **1,250 億美元（$125 billion）**‑**1,450 億美元（$145 billion）**，並在 7 月份再次上修至 **1,300 億美元（$130 billion）**‑**1,450 億美元（$145 billion）**，顯示 AI 基礎設施投資持續加速【web: https://www.reuters.com/business/meta-narrows-annual-capex-forecast-ai-buildout-grows-2026-07-29】。  \n- 為籌措 AI 投資資金，Meta 已在去年十月提交最高 **300 億美元（$30 billion）** 的債券發行計畫，並與 Blue Owl Capital 簽署 **270 億美元（$27 billion）** 融資協議，同時考慮透過股票增發籌集「數十億美元」的資金【web: https://finance.yahoo.com/markets/stocks/articles/meta-weighs-big-equity-raising-182445811.html】。  \n- 公司於 2026 年 7 月宣布將在德克薩斯州埃爾帕索建置 **100 億美元（$10 billion）** 的 AI 數據中心，目標在 2028 年達成 **1 GW** 計算容量【web: https://www.cnbc.com/2026/03/26/meta-to-spend-10-billion-on-ai-data-center-in-el-paso-1gw-by-2028.html】。  \n- 同時，Meta 推出 **10 億美元（$1 billion）** 的「Future Is For Everyone Fund」，旨在支援社區，同時計畫將自有計算資源出售給其他 AI 公司，形成額外營收來源【web: https://finance.yahoo.com/technology/ai/articles/meta-launches-1b-fund-amid-062906367.html】。  \n- Reuters 報導指出，Meta 今年將整體計算功率提升至 **7 GW**，並計畫在次年再增至 **14 GW**，以滿足日益增長的 AI 訓練需求【web: https://www.reuters.com/business/meta-narrows-annual-capex-forecast-ai-buildout-grows-2026-07-29】。  \n\n綜合以上，市場對 Meta 的股價持正面預期，同時公司正透過大規模資本支出、債券與股權融資、以及新建數據中心與社區基金等多元方式，積極布局 AI 基礎設施。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Meta 最近有哪些利多分析",
+        "Meta 最近有哪些 AI 投資的消息"
+      ],
+      "sources": []
+    }
+  ]
+}

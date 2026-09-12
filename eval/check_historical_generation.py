@@ -26,7 +26,7 @@
 的母體」讓詞表漏掉**。要拿它去量新的 run 之前，必須重新逐份複核，或改成 LLM 裁決。
 
 ⚠ **生產的期間缺口揭露語（`_build_fallback_note`）在 agentic 這條路上根本到不了答案**：
-`agentic_rag_v2._retrieve_chunks()` 寫的是 `chunks, _note = rq.retrieve(...)`——note 被丟掉。
+`agentic_rag_version._retrieve_chunks()` 寫的是 `chunks, _note = rq.retrieve(...)`——note 被丟掉。
 單管線（`rag_query.py` CLI／`api_server.py`）兩邊都有（SSE 顯示 ＋ 注入 generator prompt），
 產品線走的是單管線。所以下面報的 `gap_note` 欄在 agentic 結果檔上恆為 0，**那是在覆述一行
 程式碼，不是量測**。修法見 BACKLOG。
@@ -47,6 +47,15 @@ import argparse
 import json
 import re
 import sys
+# ⚠ Windows 主控台預設 cp950，而本檔的報表帶著 ⚠／✔／① 等字元 ⇒ **印到一半就 crash**，
+#   而 crash 的退出碼與「有 FAIL」外觀相同 ＝ 把量尺自己的失敗讀成系統的失敗。
+#   2026-09-11 普查：eval/ 的 51 支裡有 27 支帶著這個地雷，其中兩支當天真的踩了。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
+
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent
@@ -202,7 +211,7 @@ def run(paths: list[str], query_set: str) -> int:
         n = sum(has_gap_note(a["recs"][q].get("answer", "")) for q in ids)
         print(f"  {a['name']}：帶到生產期間缺口揭露語的題數 {n}/{len(ids)}")
     print("⚠ agentic 結果檔上那個數字**恆為 0 是結構使然**——"
-          "`agentic_rag_v2._retrieve_chunks()` 把 `rq.retrieve` 的 note 丟掉了。")
+          "`agentic_rag_version._retrieve_chunks()` 把 `rq.retrieve` 的 note 丟掉了。")
     print("   它在覆述一行程式碼，不是量測。產品線走的單管線兩邊都有揭露。見本檔 docstring。")
     print("⚠ `admits_gap` 的措辭清單是硬編碼、且只對這 40 份讀過的答案負責；"
           "拿去量新的 run 前必須重新逐份複核。")

@@ -481,7 +481,8 @@
       "category": "lexical",
       "query": "NVIDIA fiscal year 2026 的 Diluted EPS 是多少？",
       "relevant": [
-        "NVDA_IncomeStatement_*.txt"
+        "NVDA_IncomeStatement_*.txt",
+        "NVDA_10K_2026.html"
       ],
       "answerable": true
     },
@@ -517,7 +518,8 @@
       "category": "lexical",
       "query": "Apple fiscal year 2025 的 Diluted EPS 是多少？",
       "relevant": [
-        "AAPL_IncomeStatement_*.txt"
+        "AAPL_IncomeStatement_*.txt",
+        "AAPL_10K_2025.html"
       ],
       "answerable": true
     },
@@ -590,7 +592,8 @@
       "category": "lexical",
       "query": "Meta fiscal year 2025 的 Diluted EPS 是多少？",
       "relevant": [
-        "META_IncomeStatement_*.txt"
+        "META_IncomeStatement_*.txt",
+        "META_10K_2025.html"
       ],
       "answerable": true
     },

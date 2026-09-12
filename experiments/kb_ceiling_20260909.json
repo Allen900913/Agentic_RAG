@@ -1,0 +1,1622 @@
+{
+  "_meta": {
+    "results": "experiments/agentic/gj_65q_denominators_r2_20260909.json",
+    "repeat": 3,
+    "freshness_mode": "live",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "wide": {
+      "FETCH_N": 180,
+      "RRF_TOP_N_PRIMARY": 50,
+      "POOL_RETURN_K": 15
+    },
+    "note": "跨輪只重跑 Grader，檢索池凍住（單次生產檢索 33s）",
+    "rescored_with": [
+      "prod_sufficient",
+      "rescued_by_width",
+      "ceiling_recency",
+      "ceiling_content"
+    ]
+  },
+  "rows": {
+    "sem-04::Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？": {
+      "qid": "sem-04",
+      "category": "semantic",
+      "task": "Microsoft 如何靠 Windows 帶動雲端與 Copilot 相關服務的參與度？",
+      "arm_kind": "positive",
+      "verdicts": [
+        "rescued_by_width",
+        "prod_sufficient",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 9,
+            "missing": "缺少明確說明 Windows 如何直接帶動 Copilot 相關服務的參與度（例如 Windows 採用導致 Copilot 使用量或雲端服務訂閱成長的具體數據或敘述）。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 25,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 9,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 25,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 9,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 25,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "sem-14::Apple 在 10-K 中如何描述其在個人電腦（PC）市場面臨的競爭壓力與市佔地位？": {
+      "qid": "sem-14",
+      "category": "semantic",
+      "task": "Apple 在 10-K 中如何描述其在個人電腦（PC）市場面臨的競爭壓力與市佔地位？",
+      "arm_kind": "positive",
+      "verdicts": [
+        "ceiling_content",
+        "ceiling_content",
+        "ceiling_content"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 12,
+            "missing": "缺少 Apple 在 10-K 中具體論述其在個人電腦（PC）市場面臨的競爭壓力與市佔地位的描述（例如提及 PC 市場的主要競爭者、市場份額或競爭優勢等細節）。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 32,
+            "missing": "缺少具體描述 Apple 在個人電腦（PC）市場的競爭壓力（如價格競爭、產品差異化）及其市佔地位（市場佔有率或相對排名）的敘述。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 12,
+            "missing": "缺少 Apple 在 10-K 中具體說明其在個人電腦（PC）市場面臨的競爭壓力（如與 Windows PC 廠商的價格競爭、市佔比例或排名）及其市佔地位的敘述。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 32,
+            "missing": "缺少 Apple 在 10-K 中對個人電腦（PC）市場具體競爭壓力（如來自 Windows PC 廠商的價格競爭、產品創新壓力）及其市佔地位（Mac 在 PC 市場的市場佔有率或排名）的描述。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 12,
+            "missing": "缺少 Apple 在 10-K 中對個人電腦（PC）市場具體競爭壓力（如價格壓力、主要競爭對手、市場份額變化）及其市佔地位（具體百分比或排名）的描述。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 32,
+            "missing": "缺少Apple在10-K中針對個人電腦（PC）市場具體競爭壓力描述（如競爭對手、價格壓力、市場份額數字或百分比）及其市佔地位說明。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "sem-14::Apple 在 10-K 中如何描述其在平板電腦市場面臨的競爭壓力與市佔地位？": {
+      "qid": "sem-14",
+      "category": "semantic",
+      "task": "Apple 在 10-K 中如何描述其在平板電腦市場面臨的競爭壓力與市佔地位？",
+      "arm_kind": "positive",
+      "verdicts": [
+        "ceiling_content",
+        "ceiling_content",
+        "ceiling_content"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 12,
+            "missing": "缺少具體的平板電腦市場競爭壓力描述及市佔地位（例如 iPad 的市佔百分比、排名、主要競爭對手或 10-K 中針對平板電腦的具體競爭因素說明）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 34,
+            "missing": "缺少具體描述 iPad（平板電腦）在市場上的競爭壓力細節與市佔地位數據或敘述，例如蘋果在10-K中提及 iPad 市場份額、主要競爭對手、價格壓力或市場趨勢的說明。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 12,
+            "missing": "缺少具體關於 iPad/平板電腦市場的競爭壓力描述與市佔地位數據（例如市場份額、排名、競爭對手具體說法）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 34,
+            "missing": "缺少具體的平板電腦市場競爭壓力描述（如主要競爭對手、價格壓力、模仿風險）以及蘋果在該市場的市佔地位或份額數據。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 12,
+            "missing": "缺少 Apple 在 10-K 中具體描述其在平板電腦（iPad）市場所面臨的競爭壓力（如價格競爭、競爭對手、市場進入壁壘等）以及其市佔地位或市場份額的敘述。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 34,
+            "missing": "缺少具體描述 Apple 在平板電腦（iPad）市場所面臨的競爭壓力（如主要競爭對手、價格或產品壓力）以及其市佔地位（市場份額百分比、排名或相關敘述）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "sem-15::Google（Android）的第三方開發者生態系黏著度主要透過哪些機制或策略建立？": {
+      "qid": "sem-15",
+      "category": "semantic",
+      "task": "Google（Android）的第三方開發者生態系黏著度主要透過哪些機制或策略建立？",
+      "arm_kind": "positive",
+      "verdicts": [
+        "ceiling_content",
+        "ceiling_content",
+        "ceiling_content"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 15,
+            "missing": "缺少關於 Android 第三方開發者生態系黏著度的具體機制或策略，例如 Google Play 計費與收入分成、Firebase 開發者套件、Android Jetpack 與開發者工具、Play Store 政策與推廣計畫、開發者社群與支援、API 開放程度等資訊。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 25,
+            "missing": "缺少具體說明 Google 透過何種機制或策略（例如 Google Play 收費結構、開發者工具如 Firebase、Android Jetpack、API 存取、收益分成、開發者激勵計畫、Play Console、安全與品質標準等）來提升 Android 第三方開發者生態系的黏著度。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 15,
+            "missing": "缺少關於 Android 開發者生態系黏著度的具體機制或策略，例如 Google Play 商店政策、開發者工具（Android Jetpack、Firebase）、收益分成、早期存取計畫、文件與支援、開發者獎勵等資訊。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 25,
+            "missing": "缺少具體說明 Google 透過哪些機制或策略（如 Google Play 收益分成、開發者工具與 API、Firebase、Android Jetpack、開發者獎勵計畫、應用程式內購買政策等）來提升第三方開發者對 Android 生態系統的黏著度。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 15,
+            "missing": "缺少具體說明 Google 如何透過開發者激勵、收入分成、API 開放、工具與文件、Google Play 商店政策、測試與發布支援、社群與活動等機制來提升 Android 第三方開發者生態系的黏著度。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 25,
+            "missing": "缺乏具體說明 Google 透過哪些機制或策略（例如收入分成、開發者工具/ SDK、Play Store 政策、激勵計畫、Firebase/Android Jetpack 等）來建構 Android 第三方開發者生態系的黏著度。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "sem-15::Microsoft（Windows）的第三方開發者生態系黏著度主要透過哪些機制或策略建立？": {
+      "qid": "sem-15",
+      "category": "semantic",
+      "task": "Microsoft（Windows）的第三方開發者生態系黏著度主要透過哪些機制或策略建立？",
+      "arm_kind": "positive",
+      "verdicts": [
+        "ceiling_content",
+        "ceiling_content",
+        "ceiling_content"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 12,
+            "missing": "缺少具體描述 Windows 平台上吸引並留住第三方開發者的具體機制，例如 Windows SDK、API 開放、開發者工具 (Visual Studio)、Windows 應用程式商店營收分成、開發者激勵計畫、Windows Insider 程式、開發者文件與支援、GitHub 整合、Azure 開發服務等。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 29,
+            "missing": "缺少具體的開發者工具與平台機制，如 Windows SDK、開發者中心 (Dev Center)、應用程式介面 (API) 公開、Windows Store 收益分成、開發者獎勵計畫、Visual Studio 整合、GitHub 合作、開發者會議 (Build) 等資訊。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 12,
+            "missing": "缺少具體說明 Microsoft 如何透過開發者工具、API/SDK、Windows Store/Marketplace、收入分成、開發者計畫（如 Microsoft Partner Network、Visual Studio、GitHub 整合）、開發者激勵或社群活動來建立第三方開發者生態系的黏著度。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 29,
+            "missing": "缺少具體的開發者激勵機制、收入分成模式、Windows SDK/API 提供、開發者工具與文件、Windows 應用程式商店政策、開發者夥伴計畫、認證與支援等資訊，僅有關於提供檔案格式、程式介面與協議的概略說明。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 12,
+            "missing": "缺少具體說明 Microsoft 如何透過哪些機制或策略（例如 Windows Store/Marketplace、開發者工具與 SDK、API 開放、收入分成或補助計畫、開發者會議與社群支援、Azure 整合、Windows Insider 計畫、跨平台開發支援等）來提升第三方開發者在 Windows 生態系的黏著度。現有片段僅討論授權、分銷、OEM 預裝、Xbox 第三方內容等，未直接針對 W",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 29,
+            "missing": "缺少具體描述 Windows 第三方開發者生態系的黏著機制或策略，例如 Windows SDK/API、開發者工具（Visual Studio、GitHub 整合）、開發者計畫與激勵（Windows Insider、Microsoft Partner Network、ISV 計畫）、應用程式商店收益分成與推廣資源、開發者文件與技術支援、開發者會議/活動、以及與雲端服務（Azure）的整合等關鍵資訊",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "mix-04::Amazon International segment revenue in FY2026 Q2": {
+      "qid": "mix-04",
+      "category": "mixed",
+      "task": "Amazon International segment revenue in FY2026 Q2",
+      "arm_kind": "positive",
+      "verdicts": [
+        "rescued_by_width",
+        "rescued_by_width",
+        "rescued_by_width"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "The actual dollar amount (in millions or billions) of Amazon's International segment revenue for FY2026 Q2 is not provided; only percentage growth and proportion of consolidated revenue are given.",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "Actual International segment revenue (net sales) figure for FY2026 Q2 in dollars",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "Actual International segment revenue (in dollars) for FY2026 Q2",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "mix-12::NVIDIA 在 FY2027 Q1 (202604) 中國市場的資料中心晶片出貨量是多少？": {
+      "qid": "mix-12",
+      "category": "mixed",
+      "task": "NVIDIA 在 FY2027 Q1 (202604) 中國市場的資料中心晶片出貨量是多少？",
+      "arm_kind": "positive",
+      "verdicts": [
+        "ceiling_content",
+        "ceiling_content",
+        "ceiling_content"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "缺少 FY2027 Q1 中國市場資料中心晶片出貨量的具體數字（出貨量或收入）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "缺少 FY2027 Q1 (202604) NVIDIA 在中國市場的資料中心晶片出貨量（出貨金額或數量）的具體數據。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "缺少 FY2027 Q1 (202604) NVIDIA 在中國市場的資料中心晶片出貨量（出貨件數或對應收入）的具體數據。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "缺少 FY2027 Q1 (202604) 中國市場的資料中心晶片出貨量（或收入）的具體數據。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "缺少 FY2027 Q1 (202604) 中國市場資料中心晶片出貨量的具體數據（出貨量或出貨額）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "缺少 FY2027 Q1 (202604) NVIDIA 在中國市場的資料中心晶片出貨量具體數字（出貨量或對應的收入/出貨額）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "mix-12::NVIDIA 在 FY2026 Q1 (202504) 中國市場的資料中心晶片出貨量是多少？": {
+      "qid": "mix-12",
+      "category": "mixed",
+      "task": "NVIDIA 在 FY2026 Q1 (202504) 中國市場的資料中心晶片出貨量是多少？",
+      "arm_kind": "positive",
+      "verdicts": [
+        "ceiling_content",
+        "ceiling_content",
+        "ceiling_content"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "缺少 FY2026 Q1 (202504) 中國市場資料中心晶片的具體出貨量（單位或件數），僅見收入、撥備等財務數據，未提供出貨量。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "缺少 FY2026 Q1 中國市場資料中心晶片的出貨量（單位或件數）具體數據，僅有收入或庫存相關資訊",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "缺少 FY2026 Q1 中國市場資料中心晶片的出貨量（數量或收入）具體數據。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "缺少 FY2026 Q1（202504）中國市場資料中心晶片的出貨量（單位或數量）具體資料，僅見收入或撥備等相關資訊。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "缺少 FY2026 Q1 中國市場資料中心晶片（如 H20）的出貨量具體數字（出貨量或收入）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "缺少 FY2026 Q1 中國市場資料中心晶片出貨量（具體單位數量）的具體數據",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "lex-04::NVIDIA 是哪一年推出 CUDA 開發平台的？": {
+      "qid": "lex-04",
+      "category": "lexical",
+      "task": "NVIDIA 是哪一年推出 CUDA 開發平台的？",
+      "arm_kind": "positive",
+      "verdicts": [
+        "ceiling_content",
+        "ceiling_content",
+        "ceiling_content"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 11,
+            "missing": "CUDA 開發平台推出的具體年份",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 26,
+            "missing": "缺少 CUDA 開發平台推出的具體年份",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 11,
+            "missing": "缺少 CUDA 開發平台推出的具體年份",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 26,
+            "missing": "缺少 CUDA 開發平台推出的具體年份（例如 2006 年或 2007 年）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 11,
+            "missing": "缺少 CUDA 開發平台推出的具體年份（例如 2006 年或其他年份）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 26,
+            "missing": "CUDA 開發平台的推出年份（例如 2006 年）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "lex-10::Amazon 在 2025 年的現金資本支出（cash capital expenditures）是多少？": {
+      "qid": "lex-10",
+      "category": "lexical",
+      "task": "Amazon 在 2025 年的現金資本支出（cash capital expenditures）是多少？",
+      "arm_kind": "positive",
+      "verdicts": [
+        "ceiling_content",
+        "ceiling_content",
+        "ceiling_content"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 19,
+            "missing": "缺少 Amazon 2025 年全年度（十二個月）的現金資本支出（cash capital expenditures）具體數字；現有片段僅提供 Q3 及前九個月的數據，無法直接得出全年總額。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 42,
+            "missing": "缺少 Amazon 2025 全年度的現金資本支出（cash capital expenditures）具體數字；現有片段僅提供 Q2、Q3、九個月等部分期間的數據，未給出全年合計。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 19,
+            "missing": "缺少 2025 年度第四季（Q4）現金資本支出數據，或直接的全年 2025 年現金資本支出總額。現有片段僅提供 Q2、Q3 以及前九個月的數額，無法推算全年。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 42,
+            "missing": "缺少 2025 年全年度的現金資本支出數字（僅有 Q3 及前九個月的 $89.9 億美元，需補充 Q4 或全年合計）",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 19,
+            "missing": "缺少 2025 全年度（FY2025）現金資本支出的具體數字，僅有 Q3 及九個月的數據，無法直接得出全年 cash capital expenditures。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 42,
+            "missing": "缺少 2025 年第四季的現金資本支出（cash capital expenditures）具體數據，無法計算全年總額。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "mh-04::Apple 最近十二個月（TTM）營業利益率是多少？": {
+      "qid": "mh-04",
+      "category": "multi_hop",
+      "task": "Apple 最近十二個月（TTM）營業利益率是多少？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "rescued_by_width",
+        "ceiling_recency",
+        "rescued_by_width"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 4,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 4,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 4,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 4,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 4,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 4,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "mh-03::NVIDIA FY2026 營收是多少？": {
+      "qid": "mh-03",
+      "category": "multi_hop",
+      "task": "NVIDIA FY2026 營收是多少？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "prod_sufficient",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 15,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 32,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 15,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 32,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 15,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 32,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "lex-14::Meta fiscal year 2025 的 Diluted EPS 是多少？": {
+      "qid": "lex-14",
+      "category": "lexical",
+      "task": "Meta fiscal year 2025 的 Diluted EPS 是多少？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "prod_sufficient",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 18,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 43,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 18,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 43,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 18,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 43,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "mix-02::Microsoft FY2026 Q3 More Personal Computing 部門營收的哪些正向與負向因素互相": {
+      "qid": "mix-02",
+      "category": "mixed",
+      "task": "Microsoft FY2026 Q3 More Personal Computing 部門營收的哪些正向與負向因素互相抵銷？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "prod_sufficient",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "mh-05::在 Alphabet、Microsoft、Amazon 三家公司中，哪一家的 TTM 淨利最高?": {
+      "qid": "mh-05",
+      "category": "multi_hop",
+      "task": "在 Alphabet、Microsoft、Amazon 三家公司中，哪一家的 TTM 淨利最高?",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "prod_sufficient",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 9,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 9,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 9,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 9,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 9,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 9,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "mix-10::Apple iPhone 營收成長主要是由哪些機型帶動的？": {
+      "qid": "mix-10",
+      "category": "mixed",
+      "task": "Apple iPhone 營收成長主要是由哪些機型帶動的？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "ceiling_recency",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 11,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 22,
+            "missing": "候選中沒有任何能證明時效的來源（KB 只有財報期間資料，財報期間不是發布日）,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 11,
+            "missing": "候選中沒有任何能證明時效的來源（KB 只有財報期間資料，財報期間不是發布日）,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 22,
+            "missing": "候選中沒有任何能證明時效的來源（KB 只有財報期間資料，財報期間不是發布日）,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 11,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 22,
+            "missing": "候選中沒有任何能證明時效的來源（KB 只有財報期間資料，財報期間不是發布日）,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          }
+        }
+      ]
+    },
+    "mix-11::NVIDIA FY2027 Q1 資料中心營收的主要驅動產品是什麼？": {
+      "qid": "mix-11",
+      "category": "mixed",
+      "task": "NVIDIA FY2027 Q1 資料中心營收的主要驅動產品是什麼？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "prod_sufficient",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "mix-09::Apple 大中華區 FY2026 Q3 營收成長的主要驅動因素是什麼？": {
+      "qid": "mix-09",
+      "category": "mixed",
+      "task": "Apple 大中華區 FY2026 Q3 營收成長的主要驅動因素是什麼？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "prod_sufficient",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 50,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "sem-02::NVIDIA 如何用同一套底層架構同時佈局資料中心、遊戲、專業視覺化與車用市場？": {
+      "qid": "sem-02",
+      "category": "semantic",
+      "task": "NVIDIA 如何用同一套底層架構同時佈局資料中心、遊戲、專業視覺化與車用市場？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "prod_sufficient",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 12,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 28,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 12,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 28,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 12,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 28,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "sem-12::Tesla 在電動車市場面臨什麼樣的競爭態勢？": {
+      "qid": "sem-12",
+      "category": "semantic",
+      "task": "Tesla 在電動車市場面臨什麼樣的競爭態勢？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "prod_sufficient",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 13,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 31,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 13,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 31,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 13,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 31,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "col-03::亞馬遜最近跟哪家 AI 公司搭上線？": {
+      "qid": "col-03",
+      "category": "colloquial",
+      "task": "亞馬遜最近跟哪家 AI 公司搭上線？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "ceiling_recency",
+        "ceiling_recency",
+        "ceiling_recency"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 days 等級的即時性（原判定：足夠）",
+            "realtime_need": "days",
+            "kb_unfixable": true
+          }
+        }
+      ]
+    },
+    "col-09::蘋果公司現在市值多少？": {
+      "qid": "col-09",
+      "category": "colloquial",
+      "task": "蘋果公司現在市值多少？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "ceiling_content",
+        "ceiling_recency",
+        "ceiling_recency"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "up-to-date market cap as of 2026-09-09",
+            "realtime_need": "intraday",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "最新市值數據（截至 2026-09-09）",
+            "realtime_need": "intraday",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "缺少截至 2026-09-09 的蘋果公司當前市值數據；現有片段僅提供 2026-06-12 的市值。",
+            "realtime_need": "intraday",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+            "realtime_need": "intraday",
+            "kb_unfixable": true
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+            "realtime_need": "intraday",
+            "kb_unfixable": true
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "需要蘋果公司截至 2026-09-09 的即時市值，現有片段僅提供 2026-06-12 的市值數據。",
+            "realtime_need": "intraday",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "sem-13::Tesla 的能源生成與儲能業務在公司整體策略中扮演什麼角色？": {
+      "qid": "sem-13",
+      "category": "semantic",
+      "task": "Tesla 的能源生成與儲能業務在公司整體策略中扮演什麼角色？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "prod_sufficient",
+        "rescued_by_width"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 14,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 28,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 14,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 28,
+            "missing": "需要說明能源生成與儲能業務在 Tesla 整體策略中的具體定位，例如其作為多元化收入來源、支援公司可持續能源使命、提升整體毛利或現金流、與汽車業務的協同效應等戰略角色的敘述。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 14,
+            "missing": "缺少明確說明能源生成與儲能業務在 Tesla 整體公司策略中的定位或戰略目的（例如：作為業務多元化、提升毛利、創造經常性收入、利用車輛技術協同效應、支援永續能源使命、減少汽車週期性波動等）。現有片段僅描述業務內容與技術細節，未說明其在公司層面的戰略角色。",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 28,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "mix-07::確認 Google 收購 Wiz 對 Google Cloud 部門的具體財務影響（如增加的資產、無形資產、商譽金額）": {
+      "qid": "mix-07",
+      "category": "mixed",
+      "task": "確認 Google 收購 Wiz 對 Google Cloud 部門的具體財務影響（如增加的資產、無形資產、商譽金額）",
+      "arm_kind": "negative",
+      "verdicts": [
+        "prod_sufficient",
+        "prod_sufficient",
+        "prod_sufficient"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": true,
+            "pool": 11,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": true,
+            "pool": 11,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": true,
+            "pool": 11,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": true,
+            "pool": 20,
+            "missing": "",
+            "realtime_need": "none",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    },
+    "lex-06::Apple 目前的 Market Cap（市值）是多少？": {
+      "qid": "lex-06",
+      "category": "lexical",
+      "task": "Apple 目前的 Market Cap（市值）是多少？",
+      "arm_kind": "negative",
+      "verdicts": [
+        "ceiling_content",
+        "ceiling_recency",
+        "ceiling_content"
+      ],
+      "detail": [
+        {
+          "round": 0,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "需要 2026-09-09（今日）的即時市值數據，目前僅有 2026-06-12 的市值 $4342.02B，缺少最新的盤中或收盤市值。",
+            "realtime_need": "intraday",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "最新的市場資料（截至 2026-09-09 的 Market Cap）",
+            "realtime_need": "intraday",
+            "kb_unfixable": false
+          }
+        },
+        {
+          "round": 1,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "Current market cap as of 2026-09-09",
+            "realtime_need": "intraday",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "候選中最新來源已是 89 天前的資料,而本題需要 intraday 等級的即時性（原判定：足夠）",
+            "realtime_need": "intraday",
+            "kb_unfixable": true
+          }
+        },
+        {
+          "round": 2,
+          "prod": {
+            "sufficient": false,
+            "pool": 20,
+            "missing": "缺少截至 2026-09-09 的 Apple 市值數據",
+            "realtime_need": "intraday",
+            "kb_unfixable": false
+          },
+          "wide": {
+            "sufficient": false,
+            "pool": 50,
+            "missing": "需要截至 2026-09-09 的最新市值數據（目前僅有 2026-06-12 的市值）",
+            "realtime_need": "intraday",
+            "kb_unfixable": false
+          }
+        }
+      ]
+    }
+  }
+}

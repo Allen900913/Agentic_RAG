@@ -1,6 +1,6 @@
 """run_agentic_on_evalset.py — 讓 agentic RAG 產出「與 chunking 實驗可並排比較」的結果檔。
 
-目的（2026-07-24）：把目前指定的 agentic 模組（預設 agentic_rag_v2）跑在**與單管線同一份題庫
+目的（2026-07-24）：把目前指定的 agentic 模組（預設 agentic_rag_version）跑在**與單管線同一份題庫
 ＋同一個 collection** 上，
 輸出**與 eval_generation_llm_judge.py 相同 schema** 的 generation_judge.json（含 answer +
 contexts），再丟進**原封不動的** eval_ragas_vs_rubric.py 跑同一套 RAGAS 六指標——agentic 就
@@ -65,7 +65,14 @@ DEFAULT_OUTPUT = Path("experiments/agentic/generation_judge.json")
 
 
 def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
-                         sub_queries: list, period_notes: list | None = None) -> dict:
+                         sub_queries: list, period_notes: list | None = None,
+                         unit_stats: dict | None = None,
+                         replan_stats: dict | None = None,
+                         plan_stats: dict | None = None,
+                         revision_stats: dict | None = None,
+                         exec_stats: dict | None = None,
+                         retrieved_union: list | None = None,
+                         degraded_reason: str | None = None) -> dict:
     """把 agentic 輸出攤平成 generation_judge.json 的 record schema。
     RAGAS 只讀 id/category/query/answer/contexts；其餘欄位補上以對齊 schema、方便複查。"""
     # ⚠ 2026-08-11 修：`contexts` 與 `sources` 必須**同一次過濾**、逐位對齊。原本 contexts 濾掉
@@ -94,6 +101,36 @@ def _record_from_agentic(q: dict, answer: str, chunks: list[dict],
         # （「沒有任何文件提及」「我沒有足夠的資訊來回答」）卻都記成 False。
         # 改為複用單管線那邊已經寫好的 `looks_like_refusal`（含中文標記、全文比對），
         # 不再維護第二套判定——兩套必然漂移，這次就是漂移的結果。
+        # 金額單位後處理的計數與明細（`rq.finalize_answer_units` 的 stats）。這是
+        # BACKLOG〈「億」發生頻率〉缺的分母：每一筆都代表 LLM 違反 Rule 11 自己寫了億。
+        # ⚠ **`None` 與 `{}` 不同**：`None` ＝ 這一題沒經過後處理（graph 崩潰降級，或舊結果檔），
+        #   `{}`／全 0 ＝ 經過了但沒觸發。合併兩者會把降級題算進分母，讓頻率被系統性低估。
+        "unit_stats": unit_stats if unit_stats is not None else None,
+        # Replanner 的待辦額度統計（`_node_replan`）。`refused_budget` 每一筆都代表
+        # **Replanner 想加一個待辦、但額度被 Planner 用光了**（`MAX_TODOS` 是兩者共用的）。
+        # ⚠ `None` 與 `{}` 同樣不可合併，理由與上面那格逐字相同。
+        "replan_stats": replan_stats if replan_stats is not None else None,
+        # Plan 的依賴宣告品質。⚠ `deps_declared=False` 的題是舊格式 plan（重放命中
+        # 舊 fixture），那時依賴仍由詞表判 → 彙總 `deps_pruned`／`deps_disagreed`
+        # 之前要先按這一格分群，否則會把「沒走新路」算成「新路沒問題」。
+        "plan_stats": plan_stats if plan_stats is not None else None,
+        # 重生成回歸守衛的計數。`rejected` 每一筆＝某一道 validator 的重生成讓另一道
+        # 已經通過的確定性檢查倒退了（見 `_accept_revision`）。⚠ `None` ≠ `{}` 同上。
+        "revision_stats": revision_stats if revision_stats is not None else None,
+        # executor 的出場方式。`forced_pass` 每一筆＝Grader 連 MAX_REWRITES+1 輪都判不足、
+        # 系統仍拿它作答且零保留（見 `_merge_exec_stats`）。⚠ 另外三種出場不是同一種病，
+        # 彙總時不可合併；⚠ `None` ≠ `{}` 同上——崩潰降級題不經過 graph，整格缺席。
+        "exec_stats": exec_stats if exec_stats is not None else None,
+        # 各子問題檢索候選池的 key 聯集（Grader 圈選**之前**）。`sources` 是這條鏈
+        # （pool → 圈選 → COMMIT_TOP_K 截斷）的**末端**，兩者的差就是「撈到了卻沒被用」。
+        # ⚠ `None` ≠ `[]`：`None` ＝ 這一題沒經過 graph（崩潰降級／舊結果檔），
+        #   `[]` ＝ 經過了但一顆都沒撈到。合併兩者會讓降級題被算進分母。
+        "retrieved_union": retrieved_union if retrieved_union is not None else None,
+        # 崩潰降級的成因（型別 ＋ 訊息 ＋ 最深一層的檔:行）。
+        # ⚠ **缺席／None ＝ 沒降級**，不是「降級了但不知道為什麼」。在這一格之前，
+        #   降級記錄外觀完全正常（有 answer、無 error），成因只有 `_trace` 印、
+        #   非 verbose 完全不輸出 → 2026-09-08／09-09 共 12 題降級的成因全是猜的。
+        "degraded_reason": degraded_reason,
         "is_refusal": looks_like_refusal(answer),
         "wrongful_refusal": None,
         "context_recall_llm": None,
@@ -147,7 +184,7 @@ def main() -> None:
             stream.reconfigure(encoding="utf-8", errors="replace")
 
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--module", default="agentic_rag_v2", help="要跑的 agentic 模組")
+    ap.add_argument("--module", default="agentic_rag_version", help="要跑的 agentic 模組")
     ap.add_argument("--collection", default=DEFAULT_COLLECTION,
                     help="Qdrant collection（預設＝生產的 rq.COLLECTION_NAME，與單次版對照必須同一個）")
     ap.add_argument("--eval-set", default=str(EVAL_SET))
@@ -158,7 +195,7 @@ def main() -> None:
     ap.add_argument("--no-validator", action="store_true",
                     help="關閉 agentic 的 Reflection 幻覺稽核（省一次 LLM 呼叫）")
     ap.add_argument("--no-web", action="store_true",
-                    help="關閉 agentic_rag_v2 的 web_search（Tavily）。eval 強烈建議加此旗標："
+                    help="關閉 agentic_rag_version 的 web_search（Tavily）。eval 強烈建議加此旗標："
                          "golden answer 是根據 KB 資料生成的，且網路搜尋結果不可重現，摻入會傷 correctness/"
                          "context_recall 並讓結果無法重現比較。對沒有 web_search 的模組（如 agentic_rag_nv）無作用。")
     ap.add_argument("--freshness-mode", choices=["snapshot", "live"], default="snapshot",
@@ -229,7 +266,14 @@ def main() -> None:
             out = ar.run_agentic(q["query"], **run_kwargs)
             rec = _record_from_agentic(q, out["answer"], out.get("chunks", []),
                                        out.get("sub_queries", []),
-                                       out.get("period_notes", []))
+                                       out.get("period_notes", []),
+                                       out.get("unit_stats"),
+                                       out.get("replan_stats"),
+                                       out.get("plan_stats"),
+                                       out.get("revision_stats"),
+                                       out.get("exec_stats"),
+                                       out.get("retrieved_union"),
+                                       out.get("degraded_reason"))
             records_by_id[q["id"]] = rec
             print(f"    ✓ {time.time()-t0:.0f}s | sub_queries={len(out.get('sub_queries', []))} "
                   f"| chunks={rec['agentic_n_chunks']} | answer_len={len(out['answer'])} "

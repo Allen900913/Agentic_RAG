@@ -34,7 +34,8 @@ import sys
 from pathlib import Path
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    for _s in (sys.stdout, sys.stderr):  # ⚠ stderr 也要轉：traceback 走 stderr，只轉 stdout 的話「印到一半 crash」照樣發生（2026-09-11 閘門 H1）
+        _s.reconfigure(encoding="utf-8")
 
 RAW = Path("data/raw")
 EVAL_SET = Path("eval/eval_set.json")

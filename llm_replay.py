@@ -5,7 +5,7 @@
 
 | 位置 | 同輸入重跑的不一致率 |
 |---|---|
-| `agentic_rag_v2._plan_subqueries` | **12/25 題（48%）子問題不同** |
+| `agentic_rag_version._plan_subqueries` | **12/25 題（48%）子問題不同** |
 | `rag_query.translate_query_to_english` | 由「同組態兩次跑 top-8 有 47/100 題不同」推得 |
 
 後果是**任何 A/B 都不是受控實驗**：兩臂差異裡有一大半跟你改的東西無關。同組態連跑兩次

@@ -1,0 +1,627 @@
+{
+  "meta": {
+    "as_of": "2026-09-02",
+    "collection": "us_stock_rag_edgar_multiyear",
+    "fixture": "eval/web_fixture_mixed_prod.json",
+    "replay_cache": "eval/web_replay_llm_mixed_prod.json"
+  },
+  "records": [
+    {
+      "id": "mi-01",
+      "query": "NVIDIA 最新財報顯示的營收成長速度如何？加上新聞中它與 IREN 最新的 AI 雲端合作案，這反映出公司在資料中心布局上的哪些具體進展？",
+      "why": "multi_intent",
+      "answer": "NVIDIA 在最新財報中，營收同比成長 **約 85.20%**【NVDA_Fundamentals_20260612.txt, chunk #0】；以第一季 (FY2027 Q1) 為例，營收從前一年同季的 440.62 億美元（$44,062 百萬）提升至 816.15 億美元（$81,615 百萬），增幅同樣約為 85.2%【NVDA_10Q_202604.html, chunk #0】。  \n\n此高速成長主要來自資料中心（Data Center）業務，該部門在第一季貢獻 752.46 億美元（$75,246 百萬）營收，佔總營收約 92%【NVDA_10Q_202604.html, chunk #0】。結合近期與 IREN 的 AI 雲端合作，顯示 NVIDIA 正在以下具體方向擴大資料中心布局：\n\n1. **大規模基礎設施部署**：NVIDIA 與資料中心營運商 IREN 簽署合作，將在全球部署最高 **5 GW** 的 AI 基礎設施，使用 NVIDIA 自家 DSX‑branded 設計【web: https://finance.yahoo.com/sectors/technology/articles/nvidia-invests-2-1-billion-111838996.html】。  \n2. **投資與股權安排**：NVIDIA 獲得在 IREN 投資最高 **21 億美元（$2.1 billion）** 的權利，並可於五年內以每股 $70 的行使價購買最多 0.3 億（30 million） 股 IREN 普通股【web: https://www.cnbc.com/2026/05/07/iren-stock-ai-infrastructure-nvidia.html】。  \n3. **具體部署地點與容量**：雙方同意在 IREN 位於美國德州 Childress 的現有資料中心校園部署 **約 60 MW** 的 AI 雲端服務，使用 NVIDIA 最新的 Blackwell GPU 平台系統【web: https://finance.yahoo.com/sectors/technology/articles/iren-partnership-nvidia-expands-3-143642848.html】。  \n4. **技術與服務範疇**：合作不僅提供裸機 GPU 計算，還包括完整的「全托管雲端解決方案」與叢集管理軟體（與 Mirantis 合作開發），擴大 NVIDIA 在 AI 訓練與推論工作負載的內部使用與外部服務能力【web: https://finance.yahoo.com/sectors/technology/articles/nvidia-invests-2-1-billion-111838996.html】。  \n5. **地理與能源多元化**：IREN 的電力組合覆蓋北美、歐洲與亞太的再生能源豐富區域，說明 NVIDIA 正透過此合作在多區域建立可持續供電的 AI 資料中心網路【web: https://finance.yahoo.com/sectors/technology/articles/nvidia-invests-2-1-billion-111838996.html】。\n\n**結論**：營收 85% 的高速成長與資料中心營收佔比超過九成相呼應，而與 IREN 的合作則具體體現在 5 GW 大規模 AI 基礎設施、60 MW 具體部署、Blackwell GPU 及全托管雲端服務的落地，以及高達 21 億美元（$2.1 billion） 的投資與股權安排，顯示 NVIDIA 正在加速全球 AI 資料中心的佈局與能源多元化。\n\n> **資訊缺口**：目前的知識庫未提供 2026 年 6 月 12 日之後、特別是 2026 年 8 月以後的官方新聞稿或分析師評論，亦未有更近期（2026‑09 之間）的正式公告可供引用。若需要更近階段的細節，需另行搜尋最新來源。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10Q_202504.html #27 (rerank=0.721)\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.720)\n  - NVDA_10Q_202604.html #26 (rerank=0.718)\n  - NVDA_10Q_202604.html #14 (rerank=0.715)\n  - NVDA_10Q_202604.html #36 (rerank=0.713)\n  - NVDA_10Q_202604.html #0 (rerank=0.712)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - NVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展\n  - 查找 2026 年 6 月 12 日之後的新聞報導，特別是 2026 年 8 月以後，說明 NVIDIA 與 IREN 的最新 AI 雲端合作案及其在資料中心布局上的具體進展\n  - 查找 2026 年 6 月至 2026 年 9 月間 NVIDIA 與 IREN AI 雲端合作的新聞報導與官方公告，說明合作內容與資料中心布局的具體進展\n  - 查找 NVIDIA 官方發布的與 IREN AI 雲端合作的新聞稿或公告，說明合作內容與資料中心布局的具體進展\n  - 查找分析師或業界評論（如 Bloomberg、Reuters）對 NVIDIA 與 IREN 合作在資料中心布局上的影響與具體進展",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 目前的營收成長率是多少",
+        "NVIDIA 與 IREN 的最新 AI 雲端合作案顯示了公司在資料中心布局上的哪些具體進展",
+        "在 NVIDIA 2026 FY Q1 10‑Q 中查找與 IREN AI 雲端合作的相關資訊",
+        "查找 2026 年 6 月 12 日之後的新聞報導，特別是 2026 年 8 月以後，說明 NVIDIA 與 IREN 的最新 AI 雲端合作案及其在資料中心布局上的具體進展",
+        "查找 2026 年 6 月至 2026 年 9 月間 NVIDIA 與 IREN AI 雲端合作的新聞報導與官方公告，說明合作內容與資料中心布局的具體進展",
+        "查找 NVIDIA 官方發布的與 IREN AI 雲端合作的新聞稿或公告，說明合作內容與資料中心布局的具體進展",
+        "查找分析師或業界評論（如 Bloomberg、Reuters）對 NVIDIA 與 IREN 合作在資料中心布局上的影響與具體進展"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10Q_202504.html",
+          "chunk_index": 27
+        },
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 26
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 14
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 36
+        },
+        {
+          "source": "NVDA_10Q_202604.html",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-02",
+      "query": "NVIDIA 目前的毛利率表現如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對公司未來營收有何潛在影響？",
+      "why": "multi_intent",
+      "answer": "NVIDIA 目前的毛利率為 **74.14%**（TTM）【NVDA_Fundamentals_20260612.txt, chunk #0】。  \n\n- 黃仁勳在 2025 年 8 月的財報電話會議中表示，將 **Blackwell** AI 晶片帶到中國是「**real possibility**」【web: https://www.cnbc.com/amp/2025/08/27/nvidia-jensen-huang-real-possibility-blackwell-ai-chip-to-china.html】；同時他指出即使本季未向中國銷售 H20 晶片，NVIDIA 仍實現了 **56%** 的年比年營收成長至 **540 億美元（$54 billion）**【web: https://www.cnbc.com/amp/2025/08/27/nvidia-jensen-huang-real-possibility-blackwell-ai-chip-to-china.html】。  \n- 2026 年 1 月的報導指出，中國過去曾貢獻 **至少 1/5**（約 20%）的資料中心營收，而美國出口限制已阻止 NVIDIA 向中國出售最先進的晶片【web: https://www.cnbc.com/amp/2026/01/23/nvidia-ceo-jensen-huang-china-visit-chip-sales-restrictions.html】。  \n- 在未標示日期的 Yahoo 財經訪談中，黃仁勳強調美國政府正努力在制裁環境下維持美國公司的全球影響力，暗示若限制放寬，NVIDIA 可重新向中國供應高階 AI 晶片【web: https://finance.yahoo.com/news/jensen-huang-china-sanctions-were-144519950.html】。  \n\n**潛在影響**：若美國政府放寬對中國的晶片出口限制，讓 NVIDIA 能將 Blackwell 或其他先進 AI 晶片重新銷往中國，這將重新開啟佔資料中心營收 **約 20%** 的市場，依照黃仁勳的說法可能為公司未來營收帶來顯著的增長動能。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n⚠ 口徑說明：上文引用的 TTM（最近十二個月）口徑數值為 **Revenue Growth 85.20%**，與文中的財報期間（財年／單季）數字不是同一個口徑——兩者數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.722)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響\n  - 查找黃仁勳最近關於在中國市場開放 AI 晶片銷售的新聞及其對 NVIDIA 未來營收的潛在影響\n  - 搜尋截至2026-09-02的最近新聞，黃仁勳談及在中國市場開放 AI 晶片銷售的具體內容\n  - 查找 Bloomberg 或 Reuters 等主要金融媒體於 2026-08 至 2026-09 報導黃仁勳宣布在中國開放 AI 晶片銷售的具體內容與市場影響分析\n  - 取得 NVIDIA 官方於 2026-08 至 2026-09 的新聞稿，說明在中國市場開放 AI 晶片銷售的具體內容\n  - 收集分析師或市場研究機構對 NVIDIA 在中國開放 AI 晶片銷售的營收影響評估",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 目前的毛利率是多少",
+        "黃仁勳最近談到在中國市場開放 AI 晶片銷售，這可能對 NVIDIA 未來營收有何影響",
+        "查找黃仁勳最近關於在中國市場開放 AI 晶片銷售的新聞及其對 NVIDIA 未來營收的潛在影響",
+        "搜尋截至2026-09-02的最近新聞，黃仁勳談及在中國市場開放 AI 晶片銷售的具體內容",
+        "查找 Bloomberg 或 Reuters 等主要金融媒體於 2026-08 至 2026-09 報導黃仁勳宣布在中國開放 AI 晶片銷售的具體內容與市場影響分析",
+        "取得 NVIDIA 官方於 2026-08 至 2026-09 的新聞稿，說明在中國市場開放 AI 晶片銷售的具體內容",
+        "收集分析師或市場研究機構對 NVIDIA 在中國開放 AI 晶片銷售的營收影響評估"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-03",
+      "query": "Apple 目前的毛利率表現如何？加上新聞中 Evercore ISI 最新調升的目標價與評等，市場如何綜合看待這家公司？",
+      "why": "multi_intent",
+      "answer": "Apple 目前的毛利率為 **47.86%（TTM）**，屬於相當高的毛利率水平，且 Evercore ISI 最近將目標價提升至 **$365**（由 $330 上調），同時維持 **Outperform** 評等，市場因此對 Apple 持正面看法。  \n\n- Apple 的毛利率在過去十二個月為 **47.86%**，顯示公司在產品與服務的成本控制上仍具優勢 [Reference 1: AAPL_Fundamentals_20260612.txt, chunk #0]。  \n- Evercore ISI 在 5 月 14 日將 Apple 的目標價從 **$330** 提升至 **$365**，並保持 **Outperform** 評等，說明分析師對公司未來的營收與獲利成長仍抱持信心 [web: https://finance.yahoo.com/markets/stocks/articles/evercore-isi-raises-price-target-082006105.html]。  \n- 同一篇報導指出，此次目標價上調反映了對 Apple **高毛利、可持續的服務收入** 以及 **低至中等幅度的盈餘與自由現金流成長** 的預期，進一步強化了市場對其「高利潤、可重複收入」的正面評價 [web: https://finance.yahoo.com/markets/stocks/articles/evercore-isi-raises-price-target-082006105.html]。  \n- 另一篇相關報導補充說，Apple 股價目前約在 **$299** 左右，接近 52 週高點 $300.92，顯示股價已在市場的正面情緒中得到支撐 [web: https://finance.yahoo.com/markets/stocks/articles/evercore-isi-hikes-apple-price-151204269.html]。  \n\n綜合以上資訊，Apple 以 **47.86%** 的高毛利率為基礎，結合 Evercore ISI 提升目標價至 **$365** 並維持 **Outperform** 評等，市場普遍認為 Apple 具備持續的高利潤服務收入與穩健的成長動能，對其未來表現持樂觀態度。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; AAPL 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.715)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？\n  - 查找 Evercore ISI 最近對 Apple 的目標價調升及評等變化，以及市場對此的綜合看法\n  - Evercore ISI 最新對 Apple 的目標價與評等數值\n  - 查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）\n  - 查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）\n  - 查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此調升的綜合看法（截至2026-09-02）",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 目前的毛利率是多少",
+        "Apple 最近有 Evercore ISI 調升目標價與評等的新聞，市場如何綜合看待這家公司？",
+        "查找 Evercore ISI 最近對 Apple 的目標價調升及評等變化，以及市場對此的綜合看法",
+        "Evercore ISI 最新對 Apple 的目標價與評等數值",
+        "查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）",
+        "查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此的綜合看法（截至2026-09-02）",
+        "查找 Evercore ISI 最新對 Apple 的目標價、評等以及市場對此調升的綜合看法（截至2026-09-02）"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-04",
+      "query": "Apple 近一年的整體營收成長率是多少？加上新聞中 WWDC 發表的 Siri AI 新功能，這對公司未來的成長動能有何意義？",
+      "why": "multi_intent",
+      "answer": "Apple 近一年（TTM）營收成長率為 **16.60%** YoY【AAPL_Fundamentals_20260612.txt, chunk #0】。  \n\n- **Siri AI 的功能亮點**：在 2026 年 WWDC 上，Apple 公布了全新「Siri AI」版本，利用 Apple Intelligence 讓 Siri 能理解個人情境、跨 App 執行更複雜的任務，並提供更具對話性的回應【web: https://www.cnbc.com/2026/06/08/apple-wwdc-2026-live-updates.html】。AP News 亦指出此升級聚焦隱私與日常使用，並將於今年秋季以獨立 App 形式推出【web: https://apnews.com/article/apple-siri-wwdc-iphone-aa25d07c06d366ec5b62643a1f5b0db9】。  \n\n- **對未來成長動能的可能意義**：  \n  1. **提升生態系統黏著度**：Siri AI 能更深入整合 iPhone、iPad、Mac、Vision Pro 等裝置的功能，理論上可促進使用者在 Apple 產品間的互動與服務消費。  \n  2. **與競爭對手的 AI 競爭**：新聞中提到 Apple 正在「追趕」其他語音助理，顯示公司正加速 AI 版圖，若成功可能為 iPhone 銷售與服務收入注入新動能。  \n  3. **投資者觀感分歧**：Yahoo Finance 報導指出，投資者仍在觀望這些 AI 升級是否足以重新點燃市場熱情，部分分析師認為短期內影響有限【web: https://finance.yahoo.com/sectors/technology/article/why-apples-wwdc-and-siri-ai-hype-left-investors-sad-113633979.html】。  \n\n- **結論**：雖然目前的財務資料顯示 Apple 已有 16.60% 的營收成長，但關於 Siri AI 具體能帶來多少額外營收或利潤增長，現有新聞僅提供功能描述與市場觀感，未提供量化的成長預測。因此，Siri AI 被視為提升產品差異化與長期生態系統價值的潛在驅動力，但其短期財務貢獻仍需後續財報與市場反應驗證。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_Fundamentals_20260612.txt #0 (rerank=0.704)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？\n  - 查找2024年 WWDC Apple 發表的 Siri AI 新功能的新聞報導，並分析其對公司未來成長動能的影響\n  - 查找分析師對 WWDC 2024 Siri AI 功能的成長動能評估\n  - 查找 Apple 官方在 2024 年 WWDC 發表的 Siri AI 新功能的具體描述與主要媒體報導\n  - 查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的最新新聞報導，並彙整分析師對其未來成長動能的評估\n  - 查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的新聞報導，並彙整分析師對其未來成長動能的評估",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Apple 近一年營收成長率是多少",
+        "Apple 在 WWDC 發表的 Siri AI 新功能是什麼，對公司未來的成長動能有何意義？",
+        "查找2024年 WWDC Apple 發表的 Siri AI 新功能的新聞報導，並分析其對公司未來成長動能的影響",
+        "查找分析師對 WWDC 2024 Siri AI 功能的成長動能評估",
+        "查找 Apple 官方在 2024 年 WWDC 發表的 Siri AI 新功能的具體描述與主要媒體報導",
+        "查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的最新新聞報導，並彙整分析師對其未來成長動能的評估",
+        "查找 2024 年 WWDC Apple 發表的 Siri AI（Apple Intelligence）新功能的新聞報導，並彙整分析師對其未來成長動能的評估"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-05",
+      "query": "Microsoft 的營收成長率表現如何？加上新聞中它自研七個 AI 模型的策略進展，對公司的 AI 布局透露什麼訊息？",
+      "why": "multi_intent",
+      "answer": "Microsoft 的營收成長率在最新的 TTM 為 **18.30% YoY**，而在截至 2026 年 3 月 31 日的九個月期間整體營收增長 **18%**（增加 **365 億美元（$36.5 billion）**）[MSFT_10Q_202603.html, chunk #65]，同時其「Productivity and Business Processes」部門營收增長 **16%**（增加 **145 億美元（$14.5 billion）**）[MSFT_10Q_202603.html, chunk #73]，公司整體的營收成長率則在基本面資料中顯示為 **18.30% YoY**[MSFT_Fundamentals_20260612.txt, chunk #0]。\n\n- **AI 模型策略**：Microsoft 在 Build 大會上公布了 **七個自研 AI 模型**，其中包括首個推理模型 **MAI‑Thinking‑1**，此舉旨在多元化 AI 能力、降低對 OpenAI 的依賴，並可用於 Copilot 系列 AI 助手等產品[web: https://finance.yahoo.com/news/microsoft-debuts-in-house-ai-models-as-it-looks-to-ease-reliance-on-openai-190000961.html]。  \n- **布局訊息**：  \n  1. **自研模型族群**（MAI）被描述為能與 OpenAI、Anthropic 等領先模型「抗衡」的競爭力模型，顯示 Microsoft 正在建立自有的核心模型基礎，以提升技術自主性[web: https://finance.yahoo.com/news/microsoft-creates-house-ai-models-200600774.html]。  \n  2. 公司計畫 **擴大自有運算資源**，投入大量資金建置專屬的計算叢集，以支援這些模型的訓練與部署，反映出對 AI 基礎設施的長期投入[web: https://www.bloomberg.com/news/articles/2025-09-11/microsoft-to-put-more-computing-power-behind-in-house-ai-models]。  \n  3. 透過 **多模型（multimodel）策略**，Microsoft 打算在所有產品線中根據客戶偏好選擇最適合的模型，顯示其 AI 產品將更具彈性與客製化[web: https://www.bloomberg.com/news/articles/2025-09-11/microsoft-to-put-more-computing-power-behind-in-house-ai-models]。  \n\n綜合來看，Microsoft 不僅在營收上保持兩位數的高速成長，且透過自研七個 AI 模型與加碼運算基礎建設，正積極打造 **自給自足且多元化的 AI 生態系**，以支撐其雲端與生產力服務的長期增長動能。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; MSFT 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.715)\n  - MSFT_10Q_202603.html #73 (rerank=0.692)\n  - MSFT_10Q_202603.html #65 (rerank=0.663)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息\n  - 查詢 Microsoft 最近自研七個 AI 模型的策略進展的最新新聞與分析，並說明對公司 AI 布局的意涵\n  - 查詢 Microsoft 最近在新聞中宣布自研七個 AI 模型的具體內容與分析，並說明對公司 AI 布局的意涵\n  - 取得截至 2026-09-02 的最新新聞與分析，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵\n  - 查詢 2026 年 9 月前 Microsoft 宣布自研七個 AI 模型的最新新聞與分析，說明對公司 AI 布局的意涵\n  - 取得截至 2026-09-02 的最新新聞，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Microsoft 目前的營收成長率是多少",
+        "Microsoft 最近有關自研七個 AI 模型的策略進展的新聞內容及其對公司 AI 布局透露了什麼訊息",
+        "查詢 Microsoft 最近自研七個 AI 模型的策略進展的最新新聞與分析，並說明對公司 AI 布局的意涵",
+        "查詢 Microsoft 最近在新聞中宣布自研七個 AI 模型的具體內容與分析，並說明對公司 AI 布局的意涵",
+        "取得截至 2026-09-02 的最新新聞與分析，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵",
+        "查詢 2026 年 9 月前 Microsoft 宣布自研七個 AI 模型的最新新聞與分析，說明對公司 AI 布局的意涵",
+        "取得截至 2026-09-02 的最新新聞，說明 Microsoft 自研七個 AI 模型的策略進展及其對公司 AI 布局的意涵"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 73
+        },
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 65
+        }
+      ]
+    },
+    {
+      "id": "mi-06",
+      "query": "Microsoft 目前的獲利能力（淨利率）如何？加上新聞中它加入 Anthropic Mythos 資安計畫的最新消息，這顯示公司在 AI 資安領域有哪些布局？",
+      "why": "multi_intent",
+      "answer": "Microsoft 目前的淨利率為 **39.34%（TTM）**，顯示公司在營收中保留了相當高的淨利潤比例【MSFT_Fundamentals_20260612.txt, chunk #0】。\n\n**Anthropic Mythos 資安計畫的最新動態與 Microsoft 的 AI 資安布局**  \n- 2026‑08‑12，Anthropic 宣布與 Microsoft（以及 Nvidia 等）共同啟動「Project Glasswing」，讓參與的約 40 家企業可使用其最新的 Claude Mythos Preview 模型來偵測軟體中的零日漏洞，Microsoft 因此成為此 AI‑驅動資安聯盟的一員【web: https://finance.yahoo.com/markets/article/anthropic-launches-cybersecurity-partnership-with-nvidia-microsoft-other-tech-giants-after-latest-ai-model-finds-thousands-of-previously-unknown-bugs-180115193.html】。  \n- 2026‑06‑02，Anthropic 進一步擴大 Mythos 計畫至 150 家組織，Microsoft 再次列為「主要合作夥伴」之一，顯示其持續參與該 AI 資安生態系統【web: https://www.cnbc.com/2026/06/02/anthropic-mythos-ai-project-glasswing.html】。  \n- 同時，Microsoft 自行開發了名為 **MAI‑Cyber‑1‑Flash** 的 AI 模型，並與 OpenAI 的 GPT‑5.4 結合成 **MDASH** 系統，用於快速定位攻擊者可利用的程式缺陷，並聲稱在 CyberGym 基準測試中以 50% 成本提供「世界領先」的效能【web: https://www.cnbc.com/2026/07/27/microsoft-touts-cost-saving-ai-model-for-cybersecurity.html】。  \n\n**這些資訊顯示的布局**  \n1. **合作參與前沿 AI 資安平台**：透過加入 Project Glasswing，Microsoft 取得 Anthropic 最先進的 Claude Mythos Preview，直接利用 AI 來自動化零日漏洞偵測。  \n2. **自有 AI 資安產品研發**：Microsoft 正以 MAI‑Cyber‑1‑Flash 與 MDASH 為基礎，打造自家 AI 驗證與漏洞掃描服務，強調成本效益與效能領先。  \n3. **多元夥伴生態系**：與 Anthropic、OpenAI、以及其他大型科技公司共同構築「AI + 資安」的合作網路，提升整體防禦能力並擴大市場影響力。  \n\n綜合來說，Microsoft 透過加入 Anthropic Mythos 計畫與自研 AI 資安模型，正同步加強其在 AI 驅動資安領域的技術深度、產品供給與產業合作布局。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; MSFT 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.718)\n  - MSFT_10K_2026.html #28 (rerank=0.681)\n  - MSFT_10K_2026.html #96 (rerank=0.678)\n  - MSFT_10K_2026.html #240 (rerank=0.662)\n  - MSFT_10K_2026.html #33 (rerank=0.659)\n  - MSFT_10K_2026.html #25 (rerank=0.656)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？\n  - Microsoft 加入 Anthropic Mythos 資安計畫的最新消息與相關布局\n  - 查找 Microsoft 加入 Anthropic Mythos 資安計畫的最新新聞及其在 AI 資安領域的布局\n  - 查找最新新聞，Microsoft 加入 Anthropic Mythos 資安計畫的細節與公司在 AI 資安領域的布局",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Microsoft 目前的淨利率是多少",
+        "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息是什麼，這顯示公司在 AI 資安領域有哪些布局？",
+        "Microsoft 加入 Anthropic Mythos 資安計畫的最新消息與相關布局",
+        "查找 Microsoft 加入 Anthropic Mythos 資安計畫的最新新聞及其在 AI 資安領域的布局",
+        "查找最新新聞，Microsoft 加入 Anthropic Mythos 資安計畫的細節與公司在 AI 資安領域的布局",
+        "在 Microsoft 2026 年 10-K 中搜尋與 Anthropic Mythos 資安計畫相關的描述"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 28
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 96
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 240
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 33
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 25
+        }
+      ]
+    },
+    {
+      "id": "mi-07",
+      "query": "Amazon 目前的毛利率表現如何？加上新聞中它在歐洲逾 100 億歐元的最新投資計畫，反映出什麼樣的成長策略？",
+      "why": "multi_intent",
+      "answer": "Amazon 目前的毛利率為 **50.60%（TTM）**，顯示其在營收中保留了約一半的毛利【AMZN_Fundamentals_20260612.txt, chunk #0】。\n\n近期新聞指出，Amazon 宣布在歐洲投入 **超過 €100 億（10 billion）**（約合 116 億美元（$11.6 billion））用於擴大與升級其履行中心，重點包括部署新一代自動化機器人（Proteus、Vulcan、STARK）以及在 2027 年前於 15 個站點推廣 STARK 系統，同時計畫在未來數年內新增 25,000 名履行中心員工【web: https://finance.yahoo.com/sectors/technology/articles/amazon-unveils-ai-warehouse-robot-115033989.html】；另一篇報導亦提到相同的 €100 億（10 billion） 投資規模，強調透過機器人自動化與「Amazon Now」超快速配送服務在曼徹斯特與伯明罕的推廣，旨在提升歐洲物流效率與客戶體驗【web: https://finance.yahoo.com/markets/stocks/articles/amazon-com-inc-amzn-plots-032530521.html】。\n\n這項大規模投資反映了 Amazon 的 **兩大成長策略**：\n\n1. **自動化與技術升級**：透過 Proteus、Vulcan 與 STARK 等機器人系統，提升倉儲作業的效率與精準度，減少人工作業的重複性與勞動強度，進一步強化其在歐洲的供應鏈競爭力【web: https://finance.yahoo.com/sectors/technology/articles/amazon-unveils-ai-warehouse-robot-115033989.html】。  \n2. **擴大履行網路與服務範圍**：投資新建與改造履行中心、增加 25,000 名員工，並推出「Amazon Now」超快速配送服務，顯示 Amazon 正以 **提升物流容量與加速最後一哩配送** 為核心，鞏固在歐洲市場的客戶基礎與營收增長動能【web: https://finance.yahoo.com/markets/stocks/articles/amazon-com-inc-amzn-plots-032530521.html】。\n\n綜合來看，Amazon 以 **高毛利率** 為基礎，透過大規模的歐洲自動化與物流擴張投資，持續推動營運效率與市場滲透，展現以技術驅動的成長路徑。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; AMZN 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AMZN_Fundamentals_20260612.txt #0 (rerank=0.717)\n  - AMZN_10K_2025.html #45 (rerank=0.686)\n  - AMZN_10K_2024.html #44 (rerank=0.675)\n  - AMZN_10K_2025.html #216 (rerank=0.672)\n  - AMZN_10K_2025.html #50 (rerank=0.649)\n  - AMZN_10K_2024.html #213 (rerank=0.641)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略\n  - 查詢 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略\n  - 查找最新新聞報導，說明 Amazon 在歐洲逾 100 億歐元的投資計畫內容及其背後的成長策略\n  - 查找2026年9月2日前的最新新聞，說明Amazon在歐洲超過100億歐元的投資計畫及其成長策略\n  - 查找2026年最新新聞，說明Amazon在歐洲投資逾100億歐元的具體內容及其成長策略",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Amazon 目前的毛利率是多少",
+        "Amazon 在歐洲逾 100 億歐元的最新投資計畫是什麼，並說明它反映了什麼樣的成長策略",
+        "查詢 Amazon 在歐洲逾 100 億歐元的最新投資計畫及其成長策略",
+        "查找最新新聞報導，說明 Amazon 在歐洲逾 100 億歐元的投資計畫內容及其背後的成長策略",
+        "查找 Amazon 2026 年度 10‑K 或 10‑Q 中有關歐洲超過 100 億歐元 投資計畫的說明",
+        "查找2026年9月2日前的最新新聞，說明Amazon在歐洲超過100億歐元的投資計畫及其成長策略",
+        "查找2026年最新新聞，說明Amazon在歐洲投資逾100億歐元的具體內容及其成長策略"
+      ],
+      "sources": [
+        {
+          "source": "AMZN_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 45
+        },
+        {
+          "source": "AMZN_10K_2024.html",
+          "chunk_index": 44
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 216
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 50
+        },
+        {
+          "source": "AMZN_10K_2024.html",
+          "chunk_index": 213
+        }
+      ]
+    },
+    {
+      "id": "mi-08",
+      "query": "Amazon 近一年的營收成長率是多少？加上新聞中避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這對市場如何看待 Amazon 透露了什麼？",
+      "why": "multi_intent",
+      "answer": "Amazon 近一年的營收成長率為 **16.60% YoY**【AMZN_Fundamentals_20260612.txt, chunk #0】。  \n\n至於新聞中提到的避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，**知識庫中查無足夠資料** 能說明市場因此對 Amazon 的具體看法。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Amazon 近一年的營收成長率是多少",
+        "新聞中提到避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股，這透露了市場對 Amazon 的何種看法",
+        "查詢避險基金在 SpaceX IPO 前拋售 Amazon 等大型科技股的新聞，並分析市場對 Amazon 的看法",
+        "查詢近期有關避險基金在 SpaceX IPO 前拋售包括 Amazon 在內的大型科技股的新聞，並分析市場對 Amazon 的看法",
+        "查詢2026年SpaceX IPO前避險基金拋售Amazon等大型科技股的新聞，並提取市場對Amazon的看法",
+        "搜尋 2026 年 SpaceX IPO 前避險基金拋售 Amazon 股票 的新聞並提取市場對 Amazon 的看法",
+        "查詢2026年SpaceX IPO前避險基金拋售Amazon等大型科技股的新聞，並分析市場對Amazon的看法"
+      ],
+      "sources": [
+        {
+          "source": "AMZN_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        },
+        {
+          "source": "AMZN_10K_2025.html",
+          "chunk_index": 24
+        }
+      ]
+    },
+    {
+      "id": "mi-09",
+      "query": "Alphabet 目前的毛利率是多少？加上新聞中它 850 多億美元的籌資計畫與大幅提高的資本支出，這對公司的 AI 投資策略透露什麼？",
+      "why": "multi_intent",
+      "answer": "Alphabet 目前的毛利率為 **60.37%**【GOOGL_Fundamentals_20260612.txt, chunk #0】。  \n\n- **籌資規模**：Alphabet 在 2026 年 6 月的文件中表示，將透過普通股與存託憑證的發行募集 **847.5 億美元（$84.75 billion）** 的資金【web: https://www.reuters.com/legal/transactional/alphabet-raise-8475-billion-upsized-equity-offering-fund-ai-ambitions-2026-06-03】。  \n- **資本支出提升**：同一文件指出，Alphabet 已將年度資本支出預測上調 **50 億美元（$5 billion）**，至 **1,800 億美元（$180 billion）‑1,900 億美元（$190 billion）**【web: https://www.reuters.com/legal/transactional/alphabet-raise-8475-billion-upsized-equity-offering-fund-ai-ambitions-2026-06-03】。  \n- **2025 年資本支出計畫**：根據 2025 年 7 月 Bloomberg 報導，Alphabet 預計 2025 年的資本支出將達 **850 億美元（$85 billion）**，較早前的預估多出 **100 億美元（$10 billion）**【web: https://www.bloomberg.com/news/articles/2025-07-23/alphabet-slips-after-boosting-guidance-for-capital-expenditures】。  \n- **2026 年資本支出指引**：Yahoo Finance 於 2026 年 8 月報導，Alphabet 的 2026 年資本支出指引已提升至 **1,950 億美元（$195 billion）‑2,050 億美元（$205 billion）**【web: https://finance.yahoo.com/technology/ai/articles/alphabet-googl-doubles-down-ai-151138408.html】。  \n\n**對 AI 投資策略的意涵**  \n1. **大規模資金配置**：超過 **840 億美元（$84 billion）** 的股權募集與資本支出上調至 **$180‑1,900 億（190 billion）**（2025）甚至 **$195‑2,050 億（205 billion）**（2026），顯示 Alphabet 正以史上最大規模的資金池支撐 AI 基礎設施建設，包括資料中心、伺服器與高速運算平台。  \n2. **雲端與 AI 服務擴張**：資本支出從 **750 億美元（$75 billion）** 提升至 **850 億美元（$85 billion）**（2025）以及更高的未來指引，直接回應雲端客戶對 AI 服務的強勁需求，暗示 Google Cloud 及自家 AI 產品（如 Gemini）將成為主要收入驅動力。  \n3. **人才與教育投入**：Yahoo Finance 亦提到在 2025 年的 AI 投資計畫中，Alphabet 將投入 **10 億美元（$1 billion）** 用於 AI 教育與人才培育，顯示公司不僅在硬體上投入，也在生態系統與人才供給端下功夫，以確保長期 AI 創新能力。  \n\n綜合以上，Alphabet 以 **60.37%** 的高毛利率為基礎，透過巨額募資與持續上調資本支出，正全力打造 AI 基礎設施與雲端服務，確保在 AI 競賽中保持領先，同時也將自由現金流的壓力與未來營收成長緊密相連。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; GOOGL 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_Fundamentals_20260612.txt #0 (rerank=0.724)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼\n  - 查找最新新聞關於 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，分析其對 AI 投資策略的透露\n  - 查找最新新聞中 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出細節，並分析其對 AI 投資策略的透露\n  - 查找 2026 年最新新聞中 Alphabet 850 多億美元的籌資計畫與資本支出細節，並分析其對 AI 投資策略的影響\n  - Alphabet 850 多億美元 籌資 計畫 與 大幅提高 資本支出 2026 新聞細節 以及 AI 投資策略的分析\n  - 查找2026年Alphabet 850億美元籌資計畫與資本支出提升的最新新聞，並分析其對AI投資策略的影響",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Alphabet 目前的毛利率是多少",
+        "新聞中提到 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，這透露了其 AI 投資策略什麼",
+        "查找最新新聞關於 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出，分析其對 AI 投資策略的透露",
+        "查找最新新聞中 Alphabet 850 多億美元的籌資計畫與大幅提高的資本支出細節，並分析其對 AI 投資策略的透露",
+        "查找 2026 年最新新聞中 Alphabet 850 多億美元的籌資計畫與資本支出細節，並分析其對 AI 投資策略的影響",
+        "Alphabet 850 多億美元 籌資 計畫 與 大幅提高 資本支出 2026 新聞細節 以及 AI 投資策略的分析",
+        "查找2026年Alphabet 850億美元籌資計畫與資本支出提升的最新新聞，並分析其對AI投資策略的影響"
+      ],
+      "sources": [
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-10",
+      "query": "Alphabet 近一年的營收成長率是多少？加上新聞中 Navan 與 Google Gemini 的合作案例，反映出 Google 在 AI 生態系布局上的哪些進展？",
+      "why": "multi_intent",
+      "answer": "Alphabet 在過去一年（TTM）營收成長率為 **21.80%**【GOOGL_Fundamentals_20260612.txt, chunk #0】。  \n\n- 這個 21.80% 為年度（YoY）營收增長，根據公司最新的 TTM 數據計算。  \n- Navan 與 Google Gemini 的合作案例顯示 Google 正在將 Gemini 企業版（Gemini Enterprise）嵌入 Google Cloud Marketplace，讓第三方平台直接使用 AI 代理人。根據 Navan 發布的新聞稿，Navan Anywhere 讓 Navan 的 AI 旅行代理人「完全嵌入於 Gemini Enterprise」並在 Google Cloud Marketplace 上提供服務【web: https://finance.yahoo.com/sectors/technology/articles/navan-unveils-navan-anywhere-let-130000843.html】。  \n- 此合作是「首次將 Navan 的 AI 代理人整合至第三方平台」的實作，說明 Google 正在把 Gemini 從內部模型擴展到生態系合作夥伴，打造可在企業工作流程中即時呼叫的 AI 功能。  \n- 透過將 Gemini 企業版作為可在 Marketplace 購買的模組，Google 不僅提升了雲端 AI 服務的可及性，也加速了 AI 應用在垂直產業（如商務旅行與費用管理）的落地，顯示其 AI 生態系正向「平台化、即服務化」以及「與產業合作夥伴共創」的方向發展。  \n\n因此，Alphabet 的營收持續高速成長，同時透過 Gemini 與 Navan 的合作，展現 Google 在 AI 生態系布局上從模型研發向雲端平台化、合作夥伴整合與垂直應用擴散的多重進展。\n\n---\n⚠ 資料時效：GOOGL 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - GOOGL_Fundamentals_20260612.txt #0 (rerank=0.724)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Navan 與 Google Gemini 的合作案例是什麼，並說明它反映出 Google 在 AI 生態系布局上的哪些進展",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Alphabet 近一年的營收成長率是多少",
+        "Navan 與 Google Gemini 的合作案例是什麼，並說明它反映出 Google 在 AI 生態系布局上的哪些進展"
+      ],
+      "sources": [
+        {
+          "source": "GOOGL_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-11",
+      "query": "Meta 目前的毛利率如何？加上新聞中 Morgan Stanley 對其 AI 護城河與資本支出的評價，市場如何綜合看待 Meta 的 AI 投資？",
+      "why": "multi_intent",
+      "answer": "Meta 目前的毛利率為 **81.94%**（截至最新 TTM）【META_Fundamentals_20260612.txt, chunk #0】。  \n\nMorgan Stanley 在其分析中指出，Meta 透過大規模的人工智慧支出正擴大其競爭護城河，並預測 2027‑2028 年的資本支出將達 **3,800 億美元（$380 billion）**【web: https://finance.yahoo.com/markets/stocks/articles/why-morgan-stanley-views-meta-032559502.html】。  \n\n市場對此 AI 投資的綜合看法呈現相對正面：  \n- CNBC 報導稱，儘管投資人先前對 AI 大手筆支出感到擔憂，但在最新財報顯示 24% 年增營收後，投資人「感到安慰」，Meta 股價在盤後最高上漲約 **10%**【web: https://www.cnbc.com/2026/01/28/metas-zuckerberg-gets-green-light-from-wall-street-to-invest-in-ai.html】。  \n- 同樣在 CNBC 中，分析師指出 AI 投資已提升廣告定位與行銷工具，並認為這將成為未來營收成長的關鍵驅動力【web: https://www.cnbc.com/2026/04/09/metas-long-awaited-ai-model-is-finally-here-but-can-it-make-money.html】。  \n- Yahoo Finance 的報導中，Rosenblatt 分析師 Barton Crockett 給予 Meta 「Buy」評等，提升目標價，並強調 AI 投資是「關鍵成長加速器」，能提升廣告轉換與使用者互動【web: https://finance.yahoo.com/news/metas-q2-results-turn-skeptics-185036371.html】。  \n\n綜合上述，Meta 目前保持極高的毛利率（81.94%），而 Morgan Stanley 認為其 AI 大規模支出將鞏固競爭護城河；市場則普遍將此視為正向信號，投資者情緒轉為支持，股價亦因 AI 投資前景而出現顯著上揚。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_Fundamentals_20260612.txt #0 (rerank=0.726)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資\n  - 最新 Morgan Stanley 分析 Meta AI 護城河與資本支出，及市場對其 AI 投資的綜合看法\n  - Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資\n  - 查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出的分析及市場對其 AI 投資的綜合看法\n  - 查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出以及市場對其 AI 投資的綜合看法\n  - 查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出以及市場對其 AI 投資的分析與評論",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Meta 目前的毛利率如何",
+        "Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資",
+        "最新 Morgan Stanley 分析 Meta AI 護城河與資本支出，及市場對其 AI 投資的綜合看法",
+        "Morgan Stanley 對 Meta 的 AI 護城河與資本支出有何評價，市場如何綜合看待 Meta 的 AI 投資",
+        "查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出的分析及市場對其 AI 投資的綜合看法",
+        "查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出以及市場對其 AI 投資的綜合看法",
+        "查詢 Morgan Stanley 最近對 Meta AI 護城河與資本支出以及市場對其 AI 投資的分析與評論"
+      ],
+      "sources": [
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-12",
+      "query": "Meta 近一年的營收成長率是多少？加上新聞中科技股在 SpaceX IPO 前遭避險基金拋售的報導，這對 Meta 股價表現的背景有何意義？",
+      "why": "multi_intent",
+      "answer": "Meta 在過去一年（TTM）的營收成長率為 **33.10%**【META_Fundamentals_20260612.txt, chunk #0】。  \n\n此數字顯示 Meta 的營收仍在高速擴張，但同時新聞指出，對沖基金在 SpaceX IPO 前大幅減少了對大型科技股的持倉，可能對 Meta 股價形成壓力。  \n\n- Reuters 2023‑10‑23 報導稱，對沖基金在 SpaceX 上市前「trimmed exposure」於包括 **Meta Platforms (META.O)** 在內的四大美國巨型科技股【web: https://www.reuters.com/markets/hedge-funds-trim-exposure-megacap-tech-stocks-banks-say-2023-10-23】。  \n- 未標示日期的 Yahoo 文章亦提到，對沖基金拋售了追蹤 Apple、Amazon、Microsoft 等公司的 **Magnificent Seven** ETF，顯示市場對整體科技板塊的風險偏好下降【web: https://finance.yahoo.com/markets/stocks/articles/hedge-funds-dump-magnificent-seven-125420563.html】。  \n\n因此，儘管 Meta 近一年營收成長強勁（33.10%），但因對沖基金在 SpaceX IPO 前的拋售行為，市場對科技股的整體情緒轉弱，可能導致 Meta 股價在短期內受到賣壓，抵消部分基本面正面的影響。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - META_Fundamentals_20260612.txt #0 (rerank=0.726)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼\n  - 取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導\n  - 取得2026年SpaceX IPO前避險基金拋售科技股的新聞報導，並收集對Meta股價可能影響的分析\n  - 取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導，並分析其對Meta股價的可能影響\n  - 取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導與主要內容\n  - 分析上述新聞對Meta股價在2026年9月前後的影響，包含股價變動幅度與可能的市場解讀",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Meta 近一年的營收成長率是多少",
+        "科技股在 SpaceX IPO 前遭避險基金拋售的報導內容是什麼",
+        "取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導",
+        "取得2026年SpaceX IPO前避險基金拋售科技股的新聞報導，並收集對Meta股價可能影響的分析",
+        "取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導，並分析其對Meta股價的可能影響",
+        "取得2026年SpaceX IPO前避險基金拋售科技股的最新新聞報導與主要內容",
+        "分析上述新聞對Meta股價在2026年9月前後的影響，包含股價變動幅度與可能的市場解讀"
+      ],
+      "sources": [
+        {
+          "source": "META_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-13",
+      "query": "Tesla 目前的毛利率表現如何？加上新聞中 SpaceX 即將 IPO 讓 Tesla 關注度降溫的報導，這對 Tesla 目前的市場處境有何影響？",
+      "why": "multi_intent",
+      "answer": "Tesla 目前的毛利率為 **19.06%（TTM）**【TSLA_Fundamentals_20260612.txt, chunk #0】。\n\n- 2026‑06‑12 的 SpaceX IPO 現場報導指出，投資人注意力轉向 SpaceX，Tesla 股價當日下跌約 **2%**【web: https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html】；同一天收盤時又因市場情緒回暖，股價回升 **1.8%**至 **$406.43**【web: https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html】。  \n- 2026‑04‑23 的 CNBC 分析認為，短期內 Tesla 股價「可能與 SpaceX IPO 及潛在合併傳聞掛鉤」，市場對合併可能性的猜測在短期內支撐了股價波動【web: https://www.cnbc.com/2026/04/23/tesla-shares-fall-after-results-but-this-market-speculation-may-keep-the-stock-afloat-for-a-while.html?recirc=taboolainternal】。  \n- Reuters 2026‑06‑09 的報導則指出，儘管 SpaceX IPO 可能分散注意力，投資人仍對 Musk 同時管理兩家公司抱持信心，認為「Musk 對 Tesla 的持續承諾」減少了對公司被分心的擔憂【web: https://www.reuters.com/legal/legalindustry/spacexs-lofty-valuation-set-put-elon-premium-test-2026-06-09】。\n\n**綜合影響**：SpaceX IPO 的新聞在短期內造成 Tesla 股價的波動（先跌後升），並引發市場對可能合併的猜測，提升了投機性交易量；同時，分析師與媒體也強調 Musk 對 Tesla 的持續投入，認為此種關注不會根本削弱 Tesla 的基本面或長期市場定位。這些因素共同塑造了目前 Tesla 在投資者情緒上的「高波動、短期關注轉移」的市場處境。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_Fundamentals_20260612.txt #0 (rerank=0.721)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - SpaceX 即將 IPO 的報導對 Tesla 目前的市場處境有何影響\n  - 查找最新關於 SpaceX 即將 IPO 的新聞，分析其對 Tesla 市場處境的影響",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Tesla 目前的毛利率是多少",
+        "SpaceX 即將 IPO 的報導對 Tesla 目前的市場處境有何影響",
+        "查找最新關於 SpaceX 即將 IPO 的新聞，分析其對 Tesla 市場處境的影響"
+      ],
+      "sources": [
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-14",
+      "query": "Tesla 汽車業務的毛利率近期有什麼變化趨勢？加上新聞中 Magnificent Seven 科技股近期全數下跌的報導，這對 Tesla 的股價表現透露什麼？",
+      "why": "multi_intent",
+      "answer": "Tesla 汽車業務的毛利率正呈上升趨勢：在 2026 年 3 月底的三個月內，總汽車與服務及其他部門的毛利率由 2025 年同季的 14.3% 提升至 18.9%【TSLA_10Q_202603.html, chunk #65】；而在 2024 年 9 月底的三個月內，總汽車毛利率亦由 18.7% 上升至 20.1%【TSLA_10Q_202409.html, chunk #69】。這顯示近期汽車業務的獲利能力持續改善。\n\n同時，新聞報導指出「Magnificent Seven」科技股全數下跌，Tesla 也出現顯著跌幅：2026 年 8 月 21 日的報導稱 Tesla 股價下跌 14%，市值蒸發約 200 億美元【web: https://finance.yahoo.com/markets/article/magnificent-7-stocks-erase-797-billion-in-market-value-in-worst-day-since-april-2025-201930579.html】；2026 年 7 月 1 日的 CNBC 報導則指出 Tesla 在當月跌幅為 3.5%【web: https://www.cnbc.com/2026/07/01/magnificent-7-stocks-rough-june-pushes-them-into-the-red-for-the-year-whats-behind-the-decline.html】；Nasdaq 的分析更提到 Tesla 股價自一年前高點以來已下跌超過 17%【web: https://www.nasdaq.com/articles/all-7-magnificent-7-stocks-rated-worst-first】。這些資料顯示，儘管汽車毛利率持續上升，Tesla 的股價仍受到整體科技股跌勢的拖累，投資者在「Magnificent Seven」整體走弱時仍對 Tesla 持謹慎或負面情緒。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; TSLA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n⚠ 口徑說明：以上比率／成長率取自財報期間口徑（財年或單季），**不是最近十二個月（TTM）**。同一指標的兩種口徑數值可能接近但不可互換。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_10Q_202603.html #65 (rerank=0.699)\n  - TSLA_10Q_202409.html #69 (rerank=0.690)\n  - TSLA_Fundamentals_20260612.txt #0 (rerank=0.582)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Magnificent Seven 科技股近期全數下跌的新聞內容是什麼，且這對 Tesla 的股價表現透露了什麼\n  - Magnificent Seven 科技股全數下跌的最新新聞內容及其對 Tesla 股價的可能影響分析\n  - 查詢最近 Magnificent Seven 科技股全數下跌的新聞，並分析其對 Tesla 股價的即時影響\n  - 查詢截至 2026-09-02 的 Magnificent Seven 科技股全數下跌的最新新聞，並說明對 Tesla 股價的即時影響\n  - 搜尋分析師對 Magnificent Seven 全部下跌對 Tesla 股價的看法與預測\n  - 查詢 Tesla 股價在 Magnificent Seven 下跌當日的即時走勢與交易量",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Tesla 汽車業務的毛利率近期變化趨勢是什麼",
+        "Magnificent Seven 科技股近期全數下跌的新聞內容是什麼，且這對 Tesla 的股價表現透露了什麼",
+        "Magnificent Seven 科技股全數下跌的最新新聞內容及其對 Tesla 股價的可能影響分析",
+        "查詢最近 Magnificent Seven 科技股全數下跌的新聞，並分析其對 Tesla 股價的即時影響",
+        "查詢截至 2026-09-02 的 Magnificent Seven 科技股全數下跌的最新新聞，並說明對 Tesla 股價的即時影響",
+        "搜尋分析師對 Magnificent Seven 全部下跌對 Tesla 股價的看法與預測",
+        "查詢 Tesla 股價在 Magnificent Seven 下跌當日的即時走勢與交易量"
+      ],
+      "sources": [
+        {
+          "source": "TSLA_10Q_202603.html",
+          "chunk_index": 65
+        },
+        {
+          "source": "TSLA_10Q_202409.html",
+          "chunk_index": 69
+        },
+        {
+          "source": "TSLA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mi-15",
+      "query": "NVIDIA 目前的淨利率（profit margin）水準如何？加上新聞中黃仁勳對中國市場開放 AI 晶片銷售的最新談話，這對輝達的 AI 晶片競爭定位透露什麼？",
+      "why": "multi_intent",
+      "answer": "NVIDIA 目前的淨利率（profit margin）為 **62.97%（TTM）**【NVDA_Fundamentals_20260612.txt, chunk #0】。  \n\n黃仁勳最近在未標示日期的報導中表示，NVIDIA 正在恢復向中國銷售 H200 AI 晶片，這是公司在當前出口管制下唯一可向中國提供的次高階晶片，且中國在管制前佔公司總營收約 13%，貢獻至少五分之一的資料中心營收【web: https://finance.yahoo.com/news/nvidia-going-back-china-123934923.html】。  \n\n此訊息透露的競爭定位要點如下：  \n1. **重新進入中國市場**：恢復 H200 銷售顯示 NVIDIA 正在利用已取得的出口許可，爭取在中國市場重新取得營收增長的「額外上行空間」【web: https://finance.yahoo.com/news/nvidia-going-back-china-123934923.html】。  \n2. **產品層級限制**：因 Blackwell 系列仍受限，NVIDIA 只能以較低階的 H200 參與中國競爭，意味著在高端 AI 晶片領域仍受制於美國政策限制。  \n3. **市場份額與競爭壓力**：黃仁勳亦承認中國本土晶片廠商已成為「巨頭」，顯示即使恢復 H200 銷售，NVIDIA 仍面臨來自華為等本土競爭者的挑戰【web: https://apnews.com/article/ai-chips-nvidia-huawei-china-1ae6228c4928ddbb43f984e9b38f49dd】。  \n4. **戰略定位**：NVIDIA 把中國視為約 **500 億美元（$50 billion）** 的當年機會，並期待若能以具競爭力的產品切入，未來可望以 50% 年增速成長，顯示公司將中國定位為重要的收入來源與長期增長動能【web: https://www.cnbc.com/2025/08/27/nvidia-jensen-huang-real-possibility-blackwell-ai-chip-to-china.html】。  \n\n綜合來看，NVIDIA 以 62.97% 的高淨利率維持強勁盈利，同時透過恢復 H200 銷售試圖在受限環境下重新捕捉中國市場的營收機會，並以此維持其在全球 AI 晶片領域的領先地位，儘管面臨本土競爭者的壓力與高階晶片出口限制。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; NVDA 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_Fundamentals_20260612.txt #0 (rerank=0.726)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼\n  - 查找最新新聞中黃仁勳關於向中國市場開放 AI 晶片銷售的談話，並分析此訊息對輝達 AI 晶片競爭定位的影響\n  - 查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響\n  - 查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響\n  - 查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的具體新聞或訪談內容，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響\n  - 查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "NVIDIA 目前的淨利率（profit margin）水準如何",
+        "NVIDIA 最近有什麼關於黃仁勳對中國市場開放 AI 晶片銷售的消息，這透露了其 AI 晶片的競爭定位是什麼",
+        "查找最新新聞中黃仁勳關於向中國市場開放 AI 晶片銷售的談話，並分析此訊息對輝達 AI 晶片競爭定位的影響",
+        "查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響",
+        "查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響",
+        "查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的具體新聞或訪談內容，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響",
+        "查找2026年9月最新的黃仁勳關於向中國市場開放 AI 晶片銷售的新聞報導，並分析此訊息對 NVIDIA AI 晶片競爭定位的影響"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "col-15",
+      "query": "特斯拉最近是不是因為馬斯克另一家公司要上市，風頭被搶走了？加上這一季賺得怎樣？",
+      "why": "colloquial",
+      "answer": "特斯拉本季（截至 2026 年 6 月 30 日的三個月）淨利約為 **11.28 億美元**，綜合淨利則為 **11.95 億美元**；至於馬斯克的另一家公司 SpaceX 可能在六月上市的傳聞，雖有報導指出此舉「可能會分散」他的注意力，但目前沒有具體證據顯示已實際搶走特斯拉的媒體焦點或影響其財務表現。  \n\n- 2026 年 3 個月（截至 6 月 30 日）特斯拉的 **Net income 為 11.28 億美元（$1,128 million）**，**Comprehensive income 為 11.95 億美元（$1,195 million）**【TSLA_10Q_202606.html, chunk #19】。  \n- AP News 報導提到「他有計畫在六月將火箭公司 SpaceX 上市…但也可能分散他的注意力」【web: https://apnews.com/article/tesla-musk-trump-electric-vehicles-ev-robots-autonomous-selfdriving-bcb143e0bb16085f7b80b6bf0b759abf】。  \n\n因此，從財報看來特斯拉本季仍維持正向盈餘；至於是否因 SpaceX 上市而失去關注，僅有可能性之說，缺乏進一步的實證資料。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - TSLA_10Q_202606.html #19 (rerank=0.706)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注\n  - 查詢近期有關馬斯克旗下 SpaceX 或其他公司上市計畫的新聞，並評估是否影響特斯拉的媒體關注度\n  - 查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度\n  - 查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度\n  - 查詢2026年最新有關SpaceX或其他馬斯克公司上市計畫的新聞，並評估其對特斯拉媒體關注度的影響\n  - 查詢2026年7月至2026年9月期間有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "特斯拉最近是否因為馬斯克的另一家公司要上市而失去關注",
+        "特斯拉本季的淨利是多少",
+        "查詢近期有關馬斯克旗下 SpaceX 或其他公司上市計畫的新聞，並評估是否影響特斯拉的媒體關注度",
+        "查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度",
+        "查詢2026年最新有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度",
+        "查詢2026年最新有關SpaceX或其他馬斯克公司上市計畫的新聞，並評估其對特斯拉媒體關注度的影響",
+        "查詢2026年7月至2026年9月期間有關馬斯克旗下SpaceX或其他公司上市計畫的新聞，並評估是否分散特斯拉的媒體關注度"
+      ],
+      "sources": [
+        {
+          "source": "TSLA_10Q_202606.html",
+          "chunk_index": 19
+        }
+      ]
+    },
+    {
+      "id": "mh-06",
+      "query": "新聞中，Evercore ISI 最新調升目標價與評等的是哪一家公司？該公司目前的毛利率是多少？",
+      "why": "multi_hop",
+      "answer": "Evercore ISI 最近一次調升目標價並維持「Outperform」評等的是 **Vornado Realty Trust (VNO)**，該調整於 2026 年 2 月 11 日發布【web: https://finance.yahoo.com/news/evercore-isi-raises-price-target-205054899.html】。\n\n至於 VNO 目前的毛利率，提供的參考資料中僅包含 Apple (AAPL) 的毛利率數據，未收錄 Vornado Realty Trust 的毛利率資訊，故無法給出該公司的毛利率數值。  \n\n（※ 參考資料未提供 VNO 的毛利率）\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; 本次查詢 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - AAPL_10Q_202606.html #39 (rerank=0.731)\n  - AAPL_10Q_202606.html #15 (rerank=0.730)\n  - AAPL_10Q_202606.html #0 (rerank=0.730)\n  - AAPL_10K_2024.html #83 (rerank=0.702)\n  - AAPL_10Q_202512.html #37 (rerank=0.698)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - Evercore ISI 最近調升目標價與評等的是哪家公司\n  - 查找 Evercore ISI 最近調升目標價與評等的公司名稱\n  - 查找新聞中 Evercore ISI 最近調升目標價與評等的公司名稱\n  - 查找 2026 年 8 月至 9 月期間 Evercore ISI 最近調升目標價與評等的公司名稱",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "Evercore ISI 最近調升目標價與評等的是哪家公司",
+        "該公司目前的毛利率是多少",
+        "該公司目前的毛利率是多少",
+        "查找 Evercore ISI 最近調升目標價與評等的公司名稱",
+        "查詢Apple最新的毛利率（截至最新可用的 10‑Q）",
+        "查找新聞中 Evercore ISI 最近調升目標價與評等的公司名稱",
+        "查找 2026 年 8 月至 9 月期間 Evercore ISI 最近調升目標價與評等的公司名稱"
+      ],
+      "sources": [
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 39
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 15
+        },
+        {
+          "source": "AAPL_10Q_202606.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "AAPL_10K_2024.html",
+          "chunk_index": 83
+        },
+        {
+          "source": "AAPL_10Q_202512.html",
+          "chunk_index": 37
+        }
+      ]
+    },
+    {
+      "id": "mh-07",
+      "query": "新聞中宣布在歐洲投入逾 100 億歐元投資計畫的是哪一家公司？該公司最新年度的總營收是多少？",
+      "why": "multi_hop",
+      "answer": "Amazon.com, Inc.（NASDAQ: AMZN）在新聞中宣布將在歐洲投入逾 100 億歐元（即超過 10 億歐元）的投資計畫【web: https://finance.yahoo.com/markets/stocks/articles/amazon-com-inc-amzn-plots-032530521.html】。  \n根據目前提供的參考資料，未包含 Amazon 最新完整財政年度的總營收數字，故無法給出該公司最新年度的營收金額。  \n\n（※ 以上結論僅基於已提供的資料；若需更完整的營收資訊，需查閱 Amazon 的最新 10‑K 或其他財務報告。）\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #203 (rerank=0.726)\n  - NVDA_10K_2026.html #0 (rerank=0.719)\n  - NVDA_10K_2026.html #164 (rerank=0.718)\n  - NVDA_10K_2025.html #206 (rerank=0.585)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫\n  - 查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱\n  - 確認是哪家公司在最新新聞中宣布在歐洲投入超過 100 億歐元的投資計畫\n  - 查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "哪家公司在新聞中宣布在歐洲投入逾 100 億歐元投資計畫",
+        "該公司最新年度的總營收是多少",
+        "該公司最新年度的總營收是多少",
+        "查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱",
+        "確認是哪家公司在最新新聞中宣布在歐洲投入超過 100 億歐元的投資計畫",
+        "取得NVIDIA最新財政年度的總營收",
+        "查找最新新聞中宣布在歐洲投入逾 100 億歐元投資計畫的公司名稱"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 203
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2025.html",
+          "chunk_index": 206
+        }
+      ]
+    },
+    {
+      "id": "mh-08",
+      "query": "新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？該公司最近一年的營收年增率是多少？",
+      "why": "multi_hop",
+      "answer": "新聞中提到的 850 多億美元籌資計畫並大幅拉高資本支出的是 **Alphabet（Google）**，其在 2026 年的募資規模升至 **847.5 億美元（$84.75 billion）**【web: https://www.bloomberg.com/news/articles/2026-06-03/alphabet-upsizes-equity-offering-to-85-billion-for-ai-spending】。  \n\n根據同時報導，Alphabet 在最近一季（2025 Q1）營收為 **1,100 億美元（$110 billion）**，較去年同期 **上升 22%**，因此可視為最近一年（以年增率衡量）的營收成長率為 **22%**【web: https://finance.yahoo.com/markets/stocks/articles/alphabet-record-breaking-85b-raise-193832938.html】。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; 本次查詢 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10K_2026.html #172 (rerank=0.730)\n  - NVDA_10K_2026.html #203 (rerank=0.730)\n  - NVDA_10K_2026.html #126 (rerank=0.729)\n  - MSFT_10K_2026.html #0 (rerank=0.694)\n  - MSFT_10K_2026.html #127 (rerank=0.691)\n  - MSFT_10K_2026.html #123 (rerank=0.686)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？\n  - 查找提及 850 多億美元 籌資 計畫 並大幅拉高資本支出的公司新聞\n  - 搜尋近期新聞中提及 850 多億美元 籌資 計畫 並 大幅 拉高 資本 支出的公司名稱\n  - 搜尋2026年最新新聞，關鍵字「850 億美元」籌資 計畫 資本支出 以確定公司名稱",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "新聞中提出 850 多億美元籌資計畫、並大幅拉高資本支出的是哪一家公司？",
+        "該公司最近一年的營收年增率是多少？",
+        "查詢該公司最近一年的營收並計算年增率",
+        "查找提及 850 多億美元 籌資 計畫 並大幅拉高資本支出的公司新聞",
+        "取得Microsoft最近完整財政年度的營收數據並計算年增率",
+        "搜尋近期新聞中提及 850 多億美元 籌資 計畫 並 大幅 拉高 資本 支出的公司名稱",
+        "搜尋2026年最新新聞，關鍵字「850 億美元」籌資 計畫 資本支出 以確定公司名稱"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 172
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 203
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 126
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 127
+        },
+        {
+          "source": "MSFT_10K_2026.html",
+          "chunk_index": 123
+        }
+      ]
+    },
+    {
+      "id": "mh-09",
+      "query": "新聞中，其 847.5 億美元（$84.75 billion）的融資案在 6 月 5 日獲穆迪（Moody's）評為「信用正面（credit-positive）」的是哪一家公司？該公司目前的營業利益率（operating margin）是多少？",
+      "why": "multi_hop",
+      "answer": "Alphabet Inc.（NASDAQ: GOOGL）是於 6 月 5 日獲穆迪評為「信用正面」且涉及 84.75 億美元（847.5 億美元（$84.75 billion））融資案的公司【web: https://finance.yahoo.com/markets/stocks/articles/alphabet-inc-googl-one-best-032550927.html】。  \n\n根據目前提供的參考資料，未能找到 Alphabet 近期的營業利益率（operating margin）數值，故此資訊在現有文件中未披露。\n\n---\n⚠ 資料時效：本次查詢 需要即時／近期資料，知識庫僅含 SEC 財報與基本面（查詢日 2026-09-02）; 本次查詢 需要即時／近期資料，知識庫最新期別截至 2026-06-12（查詢日 2026-09-02）；本次有部分子問題未經網路補充，**未標註 [web:] 出處的內容**不代表涵蓋至查詢日。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - MSFT_10Q_202603.html #0 (rerank=0.724)\n  - MSFT_Fundamentals_20260612.txt #0 (rerank=0.675)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？\n  - 查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱\n  - 查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱\n  - 查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "哪一家公司在 6 月 5 日獲穆迪評為「信用正面」，其融資案金額為 847.5 億美元？",
+        "該公司目前的營業利益率（operating margin）是多少？",
+        "查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱",
+        "取得Microsoft最新的營業利益率",
+        "查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱",
+        "查詢 2026 年 6 月 5 日穆迪 評為信用正面 融資 847.5 億美元 的公司名稱",
+        "取得Microsoft的最新營業利益率"
+      ],
+      "sources": [
+        {
+          "source": "MSFT_10Q_202603.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "MSFT_Fundamentals_20260612.txt",
+          "chunk_index": 0
+        }
+      ]
+    },
+    {
+      "id": "mh-10",
+      "query": "新聞中被 Morgan Stanley 特別稱許其 AI 護城河、同時大舉提高資本支出的是哪一家公司？該公司最新年度的淨利（net income）是多少？",
+      "why": "multi_hop",
+      "answer": "NVIDIA（NVDA）是被 Morgan Stanley 在新聞中特別提及其 AI 護城河且正大幅提升資本支出的公司【web: https://finance.yahoo.com/technology/ai/articles/morgan-stanley-drops-50-billion-113057367.html】。該公司在最新完成的財政年度（截至 2026 年 1 月 25 日）淨利為 **1,200.67 億美元（$120,067 百萬）**【NVDA_10K_2026.html, chunk #164】。\n\n---\n📚 引用來源（Generator 實際依據的 chunk）:\n  - NVDA_10K_2026.html #164 (rerank=0.727)\n  - NVDA_10K_2026.html #0 (rerank=0.725)\n  - NVDA_10K_2026.html #2 (rerank=0.724)\n  - NVDA_10K_2026.html #165 (rerank=0.719)\n  - NVDA_10K_2026.html #166 (rerank=0.695)\n\n---\n⚠ 知識庫未涵蓋以下子問題,以上回答未就其提供依據:\n  - 哪家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河，且大幅提高資本支出？",
+      "n_web_calls": 3,
+      "n_web_calls_recorded": 3,
+      "sub_queries": [
+        "哪家公司在新聞中被 Morgan Stanley 稱讚其 AI 護城河，且大幅提高資本支出？",
+        "NVIDIA最新年度的淨利（net income）是多少？",
+        "查詢 Nvidia 最新年度的淨利（net income）"
+      ],
+      "sources": [
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 164
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 0
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 2
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 165
+        },
+        {
+          "source": "NVDA_10K_2026.html",
+          "chunk_index": 166
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,8 @@
 """ablate_retrieval_model.py — 檢索側 LLM（gpt-oss-20b vs 120b）的零噪音對照。
 
+⚠ **2026-09-06 起這支跑不起來**：`MODEL_BIG`＝`gpt-oss-120b` 已被 NVIDIA 退役（410 Gone）。
+  保留作為**已完成實驗的記錄**，理由與重跑要改哪些地方寫在 `MODEL_BIG` 上方。
+
 **動機**：單發管線的檢索側模型預設是 `rq.DEFAULT_MODEL`＝`gpt-oss-120b`，agentic 則
 刻意分層用 `gpt-oss-20b`。翻遍 CHANGELOG 找不到任何對照——那個 120b 不是選型結論，
 是沒人動過的預設。而它同時是 2026-08-14「單發 vs agentic」對照裡的一個未控制變因。
@@ -47,6 +50,15 @@ import argparse
 import json
 import os
 import sys
+# ⚠ Windows 主控台預設 cp950，而本檔的報表帶著 ⚠／✔／① 等字元 ⇒ **印到一半就 crash**，
+#   而 crash 的退出碼與「有 FAIL」外觀相同 ＝ 把量尺自己的失敗讀成系統的失敗。
+#   2026-09-11 普查：eval/ 的 51 支裡有 27 支帶著這個地雷，其中兩支當天真的踩了。
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:      # noqa: BLE001
+        pass
+
 import time
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
@@ -58,7 +70,15 @@ os.environ.pop("RAG_REPLAY_CACHE", None)
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import rag_query as rq  # noqa: E402
 
-MODEL_BIG = "openai/gpt-oss-120b"
+# ⚠ **這支目前跑不起來，而且刻意不修**（2026-09-06 標記）。
+#   `MODEL_BIG` 於 2026-09-03T08:00Z 被 NVIDIA 退役（410 Gone），stage `understand` 一開跑就炸。
+#   **不把它偷偷指向活的模型**：這兩個常數是一次**已完成實驗的臂定義**，換掉之後檔裡的結論、
+#   `experiments/retrieval_model_ab.json` 的 meta、以及第 257 行寫死的臂標籤（"120b#0" /
+#   "120b#1" / "20b#0"）就會與實際跑過的東西對不上——那是把舊結論掛到沒跑過的組態上。
+#   **要重跑得改三個地方**：這兩個常數、那三個臂標籤、本檔 docstring 的「20b vs 120b」敘述；
+#   而且新的兩臂**都必須是活的**（同模型跑兩次當噪音底線這件事，兩邊都要做得到）。
+#   原本那次的結論見 CHANGELOG（檢索側換模型的零噪音對照）。
+MODEL_BIG = "openai/gpt-oss-120b"     # ⚠ 已退役（410）
 MODEL_SMALL = "openai/gpt-oss-20b"
 
 

@@ -105,8 +105,8 @@
 |     Net cash used in financing activities | $(20,370) | $(40,781) | $(19,500) |
 |     Effect of exchange rate changes on cash, cash equivalents, and restricted cash equivalents | $235 | $(786) | $113 |
 |   Net increase (decrease) in cash, cash equivalents, and restricted cash equivalents | $(6,338) | $2,611 | $27,231 |
-|     Total cash, cash equivalents, and restricted cash equivalents |  |  |  |
-|     Total cash, cash equivalents, and restricted cash equivalents |  |  |  |
+|     Cash, cash equivalents, and restricted cash equivalents at beginning of the period | $45,438 | $42,827 | $15,596 |
+|     Cash, cash equivalents, and restricted cash equivalents at end of the period | $39,100 | $45,438 | $42,827 |
 |       Cash and cash equivalents |  |  |  |
 |       Restricted cash equivalents, included in prepaid expenses and other current assets |  |  |  |
 |       Restricted cash equivalents, included in other assets |  |  |  |
@@ -281,6 +281,120 @@ Table of Contents
 
 [INFO] extra tables kept=19 (去重後，來自 unstructured)
 
+--- [ITEM] Item 1 (len=24549 chars) ---
+Item 1.Business 
+
+Overview
+
+Our mission is to build the future of human connection and the technology that makes it possible. 
+
+Our products enable people to connect and share through mobile devices, personal computers, virtual reality (VR) headsets, and AI glasses. We are innovating in artificial intelligence (AI) technologies to build transformative experiences and capabilities across our Family...
+
+[MIN-MERGE] item=Item_1 section=None 15 → 12 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1 原 chunk 1783 token > 1200 → 補切成 3 份
+
+--- [ITEM] Item 1A (len=195548 chars) ---
+Table of Contents
+
+Item 1A. Risk Factors
+
+Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Annual Report on Form 10-K, including our consolidated financial statements and related notes. The risks and uncerta...
+
+[MIN-MERGE] item=Item_1A section=None 74 → 68 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_1A 原 chunk 1836 token > 1200 → 補切成 5 份
+
+[RCTS] item=Item_1A 原 chunk 1458 token > 1200 → 補切成 4 份
+
+[RCTS] item=Item_1A 原 chunk 2244 token > 1200 → 補切成 5 份
+
+[RCTS] item=Item_1A 原 chunk 1270 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 1353 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1424 token > 1200 → 補切成 4 份
+
+[RCTS] item=Item_1A 原 chunk 1526 token > 1200 → 補切成 3 份
+
+[RCTS] item=Item_1A 原 chunk 1343 token > 1200 → 補切成 2 份
+
+[RCTS] item=Item_1A 原 chunk 2288 token > 1200 → 補切成 4 份
+
+[RCTS] item=Item_1A 原 chunk 1253 token > 1200 → 補切成 2 份
+
+--- [ITEM] Item 1B (len=41 chars) ---
+Item 1B.Unresolved Staff Comments 
+
+None....
+
+--- [ITEM] Item 1C (len=6878 chars) ---
+Item 1C.Cybersecurity
+
+At Meta, cybersecurity risk management is an important part of our overall risk management efforts. Our industry is prone to cybersecurity threats and attacks, and we regularly experience cybersecurity incidents of varying degrees. We believe we are a particularly attractive target as a result of our prominence and scale, the types and volume of personal data and content on ...
+
+--- [ITEM] Item 2 (len=899 chars) ---
+Table of Contents
+
+Item 2.Properties 
+
+Our corporate headquarters are located in Menlo Park, California. As of December 31, 2025, we owned and leased approximately 10 million square feet of office and building space for our corporate headquarters and in the surrounding areas, which included approximately two million square feet of unoccupied office and building space that we plan to either subleas...
+
+--- [ITEM] Item 3 (len=38437 chars) ---
+Item 3.Legal Proceedings
+
+As a multinational company with a complex and evolving business, we are, and expect to continue to be, subject to numerous claims, litigation, regulatory, tax, and government inquiries and investigations, and other legal proceedings in jurisdictions around the world. Although we believe many of these matters are without merit and are vigorously defending them, we may not ...
+
+[MIN-MERGE] item=Item_3 section=None 24 → 16 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[RCTS] item=Item_3 原 chunk 2162 token > 1200 → 補切成 7 份
+
+--- [ITEM] Item 4 (len=56 chars) ---
+Item 4.Mine Safety Disclosures
+
+Not applicable.
+
+PART II...
+
+--- [ITEM] Item 5 (len=3233 chars) ---
+Item 5.Market for Registrant's Common Equity, Related Stockholder Matters and Issuer Purchases of Equity Securities
+
+Market Information for Common Stock
+
+Our Class A common stock is trading on the Nasdaq Global Select Market under the ticker symbol 'META'. Our Class B common stock is not listed on any stock exchange nor traded on any public market.
+
+Holders of Record
+
+As of December 31, 2025, ther...
+
+--- [ITEM] Item 7 (len=60341 chars) ---
+Table of Contents
+
+Item 7.Management's Discussion and Analysis of Financial Condition and Results of Operations
+
+You should read the following discussion of our financial condition and results of operations in conjunction with our consolidated financial statements and the related notes included in Part II, Item 8, "Financial Statements and Supplementary Data" of this Annual Report on Form 10-K. In...
+
+[GROUND] item=Item_7 period=None 41 → 40 段（無幅度數字的段併回帶表格的前一段）
+
+[SECTION] item=Item_7 period=None 依小標切成 40 段：(小標前=章節層) | Consolidated and Segment Results | Family of Apps Metrics | Developments in Advertising | Other Business and Macroeconomic Conditions | Investment Philosophy | Non-Ad Revenue | Trends in Our Family Metrics | Critical Accounting Estimates | Loss Contingencies | Income Taxes | Valuation of Non-marketable Equity Investments | Change in Accounting Estimate | Family of Apps (FoA) | Reality Labs (RL) | Cost of Revenue and Operating Expenses | Results of Operations | Revenue | Family of Apps | Advertising | Other revenue | Reality Labs | Revenue Seasonality | Foreign Exchange Impact on Revenue | Segment profitability | Family of Apps | Reality Labs | NM    - not meaningful | Liquidity and Capital Resources | Cash Provided by Operating Activities | Cash Used in Investing Activities | Cash Used in Financing Activities | Free Cash Flow | Leases and Contractual Commitments | Long-term Debt | Share Repurchase | Dividend | Taxes | Loss Contingencies | Recently Issued Accounting Pronouncements
+
+[MIN-MERGE] item=Item_7 section=Change in Accounting Estimate 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Results of Operations 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+[MIN-MERGE] item=Item_7 section=Long-term Debt 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
+--- [ITEM] Item 7A (len=5949 chars) ---
+Item 7A.Quantitative and Qualitative Disclosures About Market Risk
+
+We are exposed to market risks, including changes to foreign currency exchange rates, interest rates, and equity price risk.
+
+Foreign Currency Exchange Risk
+
+We have foreign currency risks related to our revenue and operating expenses denominated in currencies other than the U.S. dollar, the majority of which is in Euro. According...
+
+[MIN-MERGE] item=Item_7A section=None 5 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+
 --- [ITEM] Item 8 (len=142278 chars) ---
 Table of Contents
 
@@ -342,8 +456,6 @@ Evaluation of Disclosure Controls and Procedures
 
 Our management, with the participation of our chief executive officer (CEO) and chief financial officer (CFO), has evaluated the effectiveness of our disclosure controls and procedures (as defined in Rules 13a- 15(e) and 15d- 15(e) under the Securities Exchange Act of 1934, as amended (Exchange Act)), as of the end ...
 
-[SECTION] item=Item_9A period=None 依小標切成 2 段：Evaluation of Disclosure Controls and Procedures | Changes in Internal Control
-
 --- [ITEM] Item 9B (len=1884 chars) ---
 Item 9B.Other Information
 
@@ -384,20 +496,12 @@ Item 13.Certain Relationships and Related Transactions, and Director Independenc
 
 The information required by this item is incorporated by reference to our Proxy Statement for the 2026 Annual Meeting of Stockholders to be filed with the SEC within 120 days of the fiscal year ended December 31, 2025....
 
---- [ITEM] Item 1 (len=24549 chars) ---
-Item 1.Business 
+--- [ITEM] Item 14 (len=275 chars) ---
+Item 14.Principal Accountant Fees and Services
 
-Overview
+The information required by this item is incorporated by reference to our Proxy Statement for the 2026 Annual Meeting of Stockholders to be filed with the SEC within 120 days of the fiscal year ended December 31, 2025.
 
-Our mission is to build the future of human connection and the technology that makes it possible. 
-
-Our products enable people to connect and share through mobile devices, personal computers, virtual reality (VR) headsets, and AI glasses. We are innovating in artificial intelligence (AI) technologies to build transformative experiences and capabilities across our Family...
-
-[SECTION] item=Item_1 period=None 依小標切成 16 段：Overview | Family of Apps Products | Reality Labs Products | Revenue and Investments | Competition | Technology | Sales and Operations | Marketing | Intellectual Property | Government Regulation | Human Capital | Employee Learning and Development | The Pulse of Our Workforce | Compensation, Benefits, Health, and Well-being | Corporate Information | Available Information
-
-[MIN-MERGE] item=Item_1 section=Corporate Information 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_1 section=Available Information 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
+PART IV...
 
 --- [ITEM] Item 15 (len=7005 chars) ---
 Item 15. Exhibit and Financial Statement Schedules
@@ -426,124 +530,7 @@ Consolidated Statements of Comprehensive Income
 
 Consolidated Statements of Stock...
 
---- [ITEM] Item 16 (len=2887 chars) ---
+--- [ITEM] Item 16 (len=33 chars) ---
 Item 16. Form 10-K Summary
 
-None.
-
-SIGNATURES
-
-Pursuant to the requirements of Section 13 or 15(d) of the Securities Exchange Act of 1934, the registrant has duly caused this Annual Report on Form 10-K to be signed on its behalf by the undersigned, thereunto duly authorized, in the City of Menlo Park, State of California, on this 28th day of January 2026.
-
-META PLATFORMS, INC.
-
-Date: January 28, 2...
-
---- [ITEM] Item 1A (len=195548 chars) ---
-Table of Contents
-
-Item 1A. Risk Factors
-
-Certain factors may have a material adverse effect on our business, financial condition, and results of operations. You should consider carefully the risks and uncertainties described below, in addition to other information contained in this Annual Report on Form 10-K, including our consolidated financial statements and related notes. The risks and uncerta...
-
-[SECTION] item=Item_1A period=None 依小標切成 4 段：(小標前=章節層) | Summary Risk Factors | Risks Related to Our Product Offerings | Risks Related to Our Product Offerings
-
-[MIN-MERGE] item=Item_1A section=Risks Related to Our Product Offerings 73 → 67 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[RCTS] item=Item_1A 原 chunk 1836 token > 1200 → 補切成 5 份
-
-[RCTS] item=Item_1A 原 chunk 1458 token > 1200 → 補切成 4 份
-
-[RCTS] item=Item_1A 原 chunk 2244 token > 1200 → 補切成 5 份
-
-[RCTS] item=Item_1A 原 chunk 1270 token > 1200 → 補切成 2 份
-
-[RCTS] item=Item_1A 原 chunk 1353 token > 1200 → 補切成 3 份
-
-[RCTS] item=Item_1A 原 chunk 1424 token > 1200 → 補切成 4 份
-
-[RCTS] item=Item_1A 原 chunk 1526 token > 1200 → 補切成 3 份
-
-[RCTS] item=Item_1A 原 chunk 1343 token > 1200 → 補切成 2 份
-
-[RCTS] item=Item_1A 原 chunk 2288 token > 1200 → 補切成 4 份
-
-[RCTS] item=Item_1A 原 chunk 1253 token > 1200 → 補切成 2 份
-
---- [ITEM] Item 1B (len=41 chars) ---
-Item 1B.Unresolved Staff Comments 
-
 None....
-
---- [ITEM] Item 1C (len=6878 chars) ---
-Item 1C.Cybersecurity
-
-At Meta, cybersecurity risk management is an important part of our overall risk management efforts. Our industry is prone to cybersecurity threats and attacks, and we regularly experience cybersecurity incidents of varying degrees. We believe we are a particularly attractive target as a result of our prominence and scale, the types and volume of personal data and content on ...
-
---- [ITEM] Item 2 (len=899 chars) ---
-Table of Contents
-
-Item 2.Properties 
-
-Our corporate headquarters are located in Menlo Park, California. As of December 31, 2025, we owned and leased approximately 10 million square feet of office and building space for our corporate headquarters and in the surrounding areas, which included approximately two million square feet of unoccupied office and building space that we plan to either subleas...
-
---- [ITEM] Item 3 (len=38437 chars) ---
-Item 3.Legal Proceedings
-
-As a multinational company with a complex and evolving business, we are, and expect to continue to be, subject to numerous claims, litigation, regulatory, tax, and government inquiries and investigations, and other legal proceedings in jurisdictions around the world. Although we believe many of these matters are without merit and are vigorously defending them, we may not ...
-
-[SECTION] item=Item_3 period=None 依小標切成 6 段：(小標前=章節層) | Privacy and Related Matters | Competition | Securities and Other Actions | Youth-Related Actions | Other Actions
-
-[MIN-MERGE] item=Item_3 section=Privacy and Related Matters 9 → 6 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_3 section=Other Actions 7 → 4 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 4 (len=56 chars) ---
-Item 4.Mine Safety Disclosures
-
-Not applicable.
-
-PART II...
-
---- [ITEM] Item 5 (len=3233 chars) ---
-Item 5.Market for Registrant's Common Equity, Related Stockholder Matters and Issuer Purchases of Equity Securities
-
-Market Information for Common Stock
-
-Our Class A common stock is trading on the Nasdaq Global Select Market under the ticker symbol 'META'. Our Class B common stock is not listed on any stock exchange nor traded on any public market.
-
-Holders of Record
-
-As of December 31, 2025, ther...
-
-[SECTION] item=Item_5 period=None 依小標切成 5 段：Market Information for Common Stock | Holders of Record | Dividend Policy | Recent Sale of Unregistered Securities | Stock Performance Graph
-
-[MIN-MERGE] item=Item_5 section=Holders of Record 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 7 (len=60341 chars) ---
-Table of Contents
-
-Item 7.Management's Discussion and Analysis of Financial Condition and Results of Operations
-
-You should read the following discussion of our financial condition and results of operations in conjunction with our consolidated financial statements and the related notes included in Part II, Item 8, "Financial Statements and Supplementary Data" of this Annual Report on Form 10-K. In...
-
-[GROUND] item=Item_7 period=None 41 → 40 段（無幅度數字的段併回帶表格的前一段）
-
-[SECTION] item=Item_7 period=None 依小標切成 40 段：(小標前=章節層) | Consolidated and Segment Results | Family of Apps Metrics | Developments in Advertising | Other Business and Macroeconomic Conditions | Investment Philosophy | Non-Ad Revenue | Trends in Our Family Metrics | Critical Accounting Estimates | Loss Contingencies | Income Taxes | Valuation of Non-marketable Equity Investments | Change in Accounting Estimate | Family of Apps (FoA) | Reality Labs (RL) | Cost of Revenue and Operating Expenses | Results of Operations | Revenue | Family of Apps | Advertising | Other revenue | Reality Labs | Revenue Seasonality | Foreign Exchange Impact on Revenue | Segment profitability | Family of Apps | Reality Labs | NM    - not meaningful | Liquidity and Capital Resources | Cash Provided by Operating Activities | Cash Used in Investing Activities | Cash Used in Financing Activities | Free Cash Flow | Leases and Contractual Commitments | Long-term Debt | Share Repurchase | Dividend | Taxes | Loss Contingencies | Recently Issued Accounting Pronouncements
-
-[MIN-MERGE] item=Item_7 section=Change in Accounting Estimate 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_7 section=Results of Operations 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
-[MIN-MERGE] item=Item_7 section=Long-term Debt 2 → 1 個 chunk（< 200 字元、或有漲跌陳述卻無幅度數字 → 併進鄰居）
-
---- [ITEM] Item 7A (len=5949 chars) ---
-Item 7A.Quantitative and Qualitative Disclosures About Market Risk
-
-We are exposed to market risks, including changes to foreign currency exchange rates, interest rates, and equity price risk.
-
-Foreign Currency Exchange Risk
-
-We have foreign currency risks related to our revenue and operating expenses denominated in currencies other than the U.S. dollar, the majority of which is in Euro. According...
-
-[SECTION] item=Item_7A period=None 依小標切成 3 段：Foreign Currency Exchange Risk | Interest Rate Sensitivity | Equity Price Risk
