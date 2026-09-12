@@ -185,6 +185,15 @@ def main() -> int:
         return _selftest()
 
     fails: list[str] = []
+    # ⚠ 缺 baseline 一律 FAIL，**不可以退回空 dict**（2026-09-12 修）：舊版寫成
+    #   `... if BASELINE.exists() else {}`，於是在一份新 clone 上（該檔一度被 eval/.gitignore
+    #   的 `*.json` 吃掉）H3 會印綠的、零常數、零抄寫點 ＝ **量尺安靜地變成恆真**，
+    #   而那正是這支閘門自己存在的理由。`--update-baseline` 是唯一的例外（首次建檔）。
+    if not BASELINE.exists() and not args.update_baseline:
+        print(f"[FAIL] baseline 不存在：{BASELINE}")
+        print("       H3 沒有可比對的基準 ＝ 這一格量不到任何東西。"
+              "複核完當下的常數與抄寫點之後跑 `--update-baseline` 建檔。")
+        return 1
     base = json.loads(io.open(BASELINE, encoding="utf-8").read()) if BASELINE.exists() else {}
 
     print("=" * 78)

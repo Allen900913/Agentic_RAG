@@ -1,0 +1,119 @@
+{
+  "_why": "H3 的 baseline。**兩件事**：① `constants` 凍結生產常數的值——它一變，閘門就 FAIL 並列出所有抄寫候選要求重新複核（2026-09-10 RRF 20→30 時缺的正是這一步，當天三支尺一起脫鉤而沒有任何閘門叫）；② `acknowledged` 逼每個候選寫下理由。**多數是小整數撞值的誤報**，那是這個判準已知的訊噪比，寫下來比假裝抓得到好。改動生產常數之後：逐筆複核 → 更新 reason → 才可以跑 `--update-baseline`。",
+  "constants": {
+    "FETCH_N": 60,
+    "RRF_TOP_N_PRIMARY": 30,
+    "RERANK_INPUT_N": 50,
+    "POOL_RETURN_K": 5,
+    "COMMIT_TOP_K": 5,
+    "MAX_TODOS": 7,
+    "MAX_REWRITES": 2,
+    "MAX_ITERS": 8,
+    "WRITER_MAX_CHUNKS": 8,
+    "QUERY_WEB_BUDGET": 3
+  },
+  "acknowledged": [
+    {
+      "file": "probe_chunk_gold_recall.py",
+      "constant": "RERANK_INPUT_N",
+      "value": 50,
+      "reason": "誤報：字面 50 是分隔線寬度與 sweep 自測的測資值（`RRF_TOP_N_PRIMARY=50`），不是抄生產組態。已逐行看過。"
+    },
+    {
+      "file": "probe_kb_content_ceiling.py",
+      "constant": "FETCH_N",
+      "value": 60,
+      "reason": "誤報：字面 60 是 `task[:60]` 的字串切片。⚠ 但這一筆確實指出了旁邊 docstring 的過期抄寫（原寫「20→50」而生產已是 30），2026-09-11 已改。"
+    },
+    {
+      "file": "probe_kb_content_ceiling.py",
+      "constant": "RERANK_INPUT_N",
+      "value": 50,
+      "reason": "誤報：字面 50 出現在「刻意不動 RERANK_INPUT_N」那段說明的 `_WIDE` 值裡，不是生產值。"
+    },
+    {
+      "file": "probe_kb_content_ceiling.py",
+      "constant": "MAX_REWRITES",
+      "value": 2,
+      "reason": "誤報：字面 2 是兩臂／兩輪之類的小整數，與 MAX_REWRITES=2 撞值。小整數本來就分不開，見本檔 docstring。"
+    },
+    {
+      "file": "run_agentic_on_evalset.py",
+      "constant": "MAX_REWRITES",
+      "value": 2,
+      "reason": "誤報：小整數 2 撞值。"
+    },
+    {
+      "file": "verify_answer_validators.py",
+      "constant": "COMMIT_TOP_K",
+      "value": 5,
+      "reason": "誤報：小整數 5 撞值（測資的 chunk 顆數等）。"
+    },
+    {
+      "file": "verify_answer_validators.py",
+      "constant": "MAX_REWRITES",
+      "value": 2,
+      "reason": "誤報：小整數 2 撞值 ×30。"
+    },
+    {
+      "file": "verify_eval_harness.py",
+      "constant": "RRF_TOP_N_PRIMARY",
+      "value": 30,
+      "reason": "誤報：本檔自測拿 30 當合成測資（③/③b/③c 的誤報對照都要用到一個具體值）。"
+    },
+    {
+      "file": "verify_eval_harness.py",
+      "constant": "POOL_RETURN_K",
+      "value": 5,
+      "reason": "誤報：小整數 5 撞值。"
+    },
+    {
+      "file": "verify_eval_harness.py",
+      "constant": "COMMIT_TOP_K",
+      "value": 5,
+      "reason": "誤報：小整數 5 撞值。"
+    },
+    {
+      "file": "verify_eval_harness.py",
+      "constant": "MAX_REWRITES",
+      "value": 2,
+      "reason": "誤報：小整數 2 撞值。"
+    },
+    {
+      "file": "verify_eval_harness.py",
+      "constant": "QUERY_WEB_BUDGET",
+      "value": 3,
+      "reason": "誤報：小整數 3 撞值。"
+    },
+    {
+      "file": "verify_web_gate_isolation.py",
+      "constant": "POOL_RETURN_K",
+      "value": 5,
+      "reason": "誤報：小整數 5 撞值。"
+    },
+    {
+      "file": "verify_web_gate_isolation.py",
+      "constant": "MAX_TODOS",
+      "value": 7,
+      "reason": "⚠ **要看**：閘門⑭ 在驗 MAX_TODOS 的額度語意，字面 7 有可能是抄的。2026-09-11 逐行看過＝測資裡的 todo 顆數，與常數同值是巧合；常數本身是 import 來的。"
+    },
+    {
+      "file": "verify_web_gate_isolation.py",
+      "constant": "MAX_REWRITES",
+      "value": 2,
+      "reason": "誤報：小整數 2 撞值 ×15。"
+    },
+    {
+      "file": "verify_web_gate_isolation.py",
+      "constant": "MAX_ITERS",
+      "value": 8,
+      "reason": "誤報：小整數 8 撞值 ×13。"
+    },
+    {
+      "file": "verify_web_gate_isolation.py",
+      "constant": "QUERY_WEB_BUDGET",
+      "value": 3,
+      "reason": "誤報：小整數 3 撞值 ×15。"
+    }
+  ]
+}
