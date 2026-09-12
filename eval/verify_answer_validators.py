@@ -2542,6 +2542,153 @@ def gate22_observability_channels() -> None:
             "pool_keys 之後又動了 picked")
 
 
+def gate23_trace_channel() -> None:
+    """㉓ `[TRACE]` 這條**觀測通道的開關**真的撥得動（2026-09-12）。
+
+    **這道閘門是被踩出來的**：`--trace`／`--verbose` 的 trace 半邊從套件化那天起就**一個字
+    都不印**。`__init__.main()` 寫的是 `global _TRACE; _TRACE = True`，重綁的是
+    `agentic_rag_version._TRACE`（`from .tracing import _TRACE` **複製來**的那份），而四個子模組
+    用的 `_trace()` 讀的是 `tracing._TRACE` ⇒ **沒有人讀被重綁的那個名字**。失敗方式是**靜默**：
+    「沒印」與「這個節點沒有 trace 可印」外觀完全相同。
+
+    ⚠ **為什麼 H2／閘門⑬ 結構上攔不到它**：那兩道守的是「eval 會 monkeypatch 的名字不得被
+      裸用」，而名單是**從 eval 腳本反推**的——沒有任何 eval 攔截 `_TRACE`，所以它永遠進不了
+      那份名單。規則（「子模組不得 `from .x import` 會被重綁的名字」）涵蓋得到它，**強制器
+      涵蓋不到**。這裡補的是**行為**那一半：不問原始碼長什麼樣，直接問「撥了開關之後印不印」。
+
+    ⚠ **它為什麼活了這麼久**：`AGENTIC_TRACE=true` 那條路一直是好的（env 在 import 時就讀完），
+      而 BACKLOG 記載的兩次實際診斷都走 env ⇒ **能用的替代路徑會讓壞掉的那條活得更久**。
+
+    ⚠ **判別力全在 ㉓d 與 ㉓f**。㉓b／㉓c 只證明 `set_trace_enabled()` 這個 API 自己會動，
+      一個「CLI 根本不呼叫它」的實作照樣全綠。㉓d 把 `main()` 裡 `--trace` 分支的**真實原始碼**
+      抽出來 exec 再探針；㉓f 則把**修法前的寫法**注入，要求探針保持靜音——沒有 ㉓f 的話 ㉓d
+      有可能只是恆真。
+
+    ⚠ 刻意**不用** subprocess 跑真的 CLI：那得先過 `_get_models()` 再燒 50~60 次 LLM 呼叫，
+      與本檔「零 LLM、秒級」相違。exec 真實分支是在不跑整支 CLI 的前提下，仍然測到**那幾行字**。
+    """
+    print("\n[㉓] 觀測通道：`--trace` / `--verbose` 撥得動 `[TRACE]`")
+    import ast
+    import contextlib
+    import io
+
+    from agentic_rag_version import tracing as _tr
+
+    def _probe() -> str:
+        """呼叫 `_trace()` 並回傳它實際寫進 stderr 的東西（`_trace` 在呼叫時才查 `sys.stderr`）。"""
+        buf = io.StringIO()
+        with contextlib.redirect_stderr(buf):
+            ar._trace("probe")
+        return buf.getvalue()
+
+    class _Args:
+        def __init__(self, **kw):
+            self.__dict__.update(kw)
+
+    _saved = _tr._TRACE
+    try:
+        # ── ㉓a 前提：探針本身分得出開與關（分不出的話底下全部是假性通過）────────────
+        _tr._TRACE = False
+        _off = _probe()
+        _tr._TRACE = True
+        _on = _probe()
+        _assert("㉓a 前提：探針有判別力（直接開關 `tracing._TRACE`，`_trace()` 的輸出要不同）",
+                _off == "" and "[TRACE]" in _on, f"off={_off!r} on={_on!r}")
+        _assert("㉓a2 前提：`set_trace_enabled` re-export 得到（拿不到的話 ㉓b/㉓c 會 crash）",
+                hasattr(ar, "set_trace_enabled"))
+        if not hasattr(ar, "set_trace_enabled"):
+            return
+
+        # ── ㉓b／㉓c 開關 API 自己 ──────────────────────────────────────────────
+        _tr._TRACE = False
+        ar.set_trace_enabled(True)
+        _assert("㉓b `set_trace_enabled(True)` → `_trace()` 印得出 `[TRACE]`",
+                "[TRACE] probe" in _probe())
+        ar.set_trace_enabled(False)
+        _assert("㉓c **陰性對照**：`set_trace_enabled(False)` → 一個字都不印",
+                _probe() == "")
+
+        # ── ㉓d 核心：CLI 那幾行**真的**撥得動 ───────────────────────────────────
+        _pkg_funcdefs()   # 只為了拿 _PATHS（掃的是整個套件，不是只有 __init__）
+        src = branch = None
+        for p in _pkg_funcdefs._PATHS:
+            try:
+                text = p.read_text(encoding="utf-8")
+                tree = ast.parse(text)
+            except (OSError, SyntaxError):
+                continue
+            for n in tree.body:
+                if not (isinstance(n, ast.FunctionDef) and n.name == "main"):
+                    continue
+                for st in ast.walk(n):
+                    if isinstance(st, ast.If) and "args.trace" in (
+                            ast.get_source_segment(text, st.test) or ""):
+                        src, branch = text, st
+                        break
+            if branch is not None:
+                break
+        _assert("㉓d0 前提：AST 找得到 `main()` 裡 `--trace` 的那個分支"
+                "（找不到的話 ㉓d/㉓e 是假性通過）", branch is not None)
+        if branch is None:
+            return
+
+        def _run_real_branch(**flags) -> str:
+            """把 CLI 那個分支的**真實原始碼**跑一次，回傳之後探針看到的東西。
+
+            ⚠ globals 用 `vars(ar)` 的**複本**：分支若寫 `global _TRACE; _TRACE = True`
+              就只會落在複本裡（＝修法前的行為 ⇒ 探針該靜音），而 `set_trace_enabled(True)`
+              是呼叫共用模組的函式、**穿得過複本** ⇒ 兩種寫法在這裡分得開，同時不會污染
+              真正的 `ar` 命名空間。
+            """
+            _tr._TRACE = False
+            ns = dict(vars(ar))
+            ns["args"] = _Args(**flags)
+            exec(compile(ast.Module(body=[branch], type_ignores=[]),   # noqa: S102
+                         "<trace-branch>", "exec"), ns)
+            return _probe()
+
+        _assert("㉓d1 `--trace` 走真實分支 → `_trace()` 印得出來（**原 bug 就死在這條**）",
+                "[TRACE] probe" in _run_real_branch(trace=True, verbose=False))
+        _assert("㉓d2 `--verbose` 也共用同一個分支 → 同樣要印得出來",
+                "[TRACE] probe" in _run_real_branch(trace=False, verbose=True))
+
+        # ── ㉓e 唯一定義點：`tracing` 是唯一真相來源，不存在第二個開關 ──────────────
+        _run_real_branch(trace=True, verbose=False)
+        _tr._TRACE = False
+        _assert("㉓e **唯一定義點**：分支跑完後把 `tracing._TRACE` 關掉，通道必須立刻靜音"
+                "（還有聲音 ＝ 有第二個開關）", _probe() == "")
+
+        # ── ㉓f 變異：修法前的寫法必須**撥不動**（否則 ㉓d 只是恆真）────────────────
+        _tr._TRACE = False
+        _ns = dict(vars(ar))
+        _ns["args"] = _Args(trace=True, verbose=False)
+        exec("if args.trace or args.verbose:\n    _TRACE = True\n", _ns)   # noqa: S102
+        _assert("㉓f **變異**：修法前的寫法（重綁套件命名空間的 `_TRACE`）必須撥不動通道"
+                "——抓不到的話 ㉓d 沒有判別力", _probe() == "")
+
+        # ── ㉓g 那份 re-export 快照不得有人讀寫 ─────────────────────────────────
+        # `ar._TRACE` 只為閘門⑬f（子模組 top-level 名字全部 re-export 得到）而存在；它是
+        # import 當下的**快照**，讀它就會讀到謊話。這條把地雷從隱形變成有守門的。
+        offenders = []
+        for p in _pkg_funcdefs._PATHS:
+            if p.name == "tracing.py":       # 真身住在這裡，本來就該讀寫
+                continue
+            try:
+                tree = ast.parse(p.read_text(encoding="utf-8"))
+            except (OSError, SyntaxError):
+                continue
+            for n in ast.walk(tree):
+                if isinstance(n, ast.Name) and n.id == "_TRACE":
+                    offenders.append(f"{p.name}:{n.lineno} 裸名 _TRACE")
+                elif isinstance(n, ast.Attribute) and n.attr == "_TRACE":
+                    offenders.append(f"{p.name}:{n.lineno} <obj>._TRACE")
+        _assert("㉓g `_TRACE` 的 re-export 快照不得被任何模組讀寫（判斷開沒開讀 "
+                "`tracing._TRACE`，開關用 `set_trace_enabled()`）",
+                not offenders, f"{offenders[:6]}")
+    finally:
+        _tr._TRACE = _saved
+
+
 def main() -> int:
     print(f"collection={ar.rq.COLLECTION_NAME}")
     cov = ar._get_kb_coverage()
@@ -2574,6 +2721,7 @@ def main() -> int:
     gate20_fair_select_order()
     gate21_revision_regression_guard()
     gate22_observability_channels()
+    gate23_trace_channel()
 
     print(f"\n{'=' * 66}")
     print(f"GATE: {'PASS' if _FAIL == 0 else 'FAIL'}    PASS {_PASS}  FAIL {_FAIL}")

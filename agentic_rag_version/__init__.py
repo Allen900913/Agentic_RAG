@@ -83,7 +83,11 @@ CHECKER_MODEL   = os.getenv("AGENTIC_CHECKER_MODEL", "nvidia/nemotron-3-super-12
 
 POOL_RETURN_K     = int(os.getenv("AGENTIC_POOL_RETURN_K", "5"))   # 餵給 Checker 看的候選片段數（top-k by rerank）。env 可覆蓋供 ablation。
 
-from .tracing import _TRACE, _trace   # noqa: E402
+# ⚠ `_TRACE` 這份是 **import 當下的快照**，留著只為了閘門⑬f（子模組的 top-level 名字全部要
+#   re-export 得到）。**任何地方都不准讀它、更不准重綁它**：要判斷 trace 開沒開讀
+#   `tracing._TRACE`，要開關一律呼叫 `set_trace_enabled()`。理由見 `tracing.set_trace_enabled`
+#   的 docstring（重綁這一份 ＝ 旗標靜默失效）。守門在閘門㉓g。
+from .tracing import _TRACE, _trace, set_trace_enabled   # noqa: E402
 from .retrieval import (   # noqa: E402
     _COVERAGE_SOURCE_RE,
     WRITER_BUDGET_BASE,
@@ -1263,9 +1267,12 @@ def main() -> None:
                          "replan 增刪待辦)到 stderr(等同 AGENTIC_TRACE=true)")
     args = ap.parse_args()
 
-    global _TRACE, ENABLE_WEB_SEARCH
+    global ENABLE_WEB_SEARCH
     if args.trace or args.verbose:
-        _TRACE = True
+        # ⚠ 這裡**不可以**寫 `global _TRACE; _TRACE = True`（2026-09-12 之前就是那樣，整條
+        #   `--trace`／`--verbose` 靜默無效）：重綁本模組的 `_TRACE` 動不到 `_trace()` 實際
+        #   讀的 `tracing._TRACE`。唯一寫入點是 `set_trace_enabled()`，理由見它的 docstring。
+        set_trace_enabled(True)
     if args.no_web:
         ENABLE_WEB_SEARCH = False
 

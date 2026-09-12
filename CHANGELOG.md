@@ -6,6 +6,14 @@
 
 ---
 
+## 2026-09-12
+
+- **`--trace` / `--verbose` 的 trace 半邊從套件化那天起就一個字都不印（靜默失效）。** `__init__.main()` 寫的是 `global _TRACE; _TRACE = True`，重綁的是 `agentic_rag_version._TRACE`（`from .tracing import _TRACE` **複製來**的快照），而四個子模組用的 `_trace()` 讀的是 `tracing._TRACE` ⇒ **沒有人讀被重綁的那個名字**。修法：`tracing.set_trace_enabled()` 成為**唯一寫入點**（刻意**不**讓 `_trace()` 去讀 `_pkg._TRACE`——那會讓 `tracing` 反向依賴套件，正好拆掉它「零相依」的存在理由）。⚠ **`AGENTIC_TRACE=true` 一直是好的**（env 在 import 時就讀完），而 BACKLOG 記載的兩次實際診斷都走 env ⇒ **能用的替代路徑會讓壞掉的那條活得更久**。
+- **為什麼 H2／閘門⑬ 結構上攔不到它，以及補上的那一半。** 那兩道的 patch 名單**從 eval 腳本反推**，而沒有任何 eval monkeypatch `_TRACE` ⇒ 它永遠進不了那份名單：**規則涵蓋得到，強制器涵蓋不到**。新增閘門㉓（`verify_answer_validators` 339 → **349 項**，**4/4 變異**）：㉓d **exec `main()` 裡 `--trace` 分支的真實原始碼**再探針（**原 bug 就死在這條**）／㉓f 把修法前的寫法注入、要求探針保持靜音（否則 ㉓d 可能只是恆真）／㉓e 關掉 `tracing._TRACE` 必須立刻靜音（＝沒有第二個開關）／㉓g `ar._TRACE` 那份快照不得被任何模組讀寫。⚠ **快照刻意留著不刪**：閘門⑬f 要求子模組每個 top-level 名字都 `hasattr(ar, …)` 拿得到，刪掉會當場打掉 ⑬f ⇒ 改成「留著但有守門」。⚠ 刻意**不用** subprocess 跑真 CLI（要先過 `_get_models()` 再燒 50~60 次 LLM 呼叫，與本檔零 LLM 相違）。變異：M1 改回原 bug → ㉓d1/㉓d2/㉓g 抓到；M2 漏 re-export → ㉓a2；M3 子模組偷讀快照 → ㉓g；M4 `_trace` 反向依賴 → ㉓a/㉓b/㉓d。
+- **三條從來沒驗過的路在新機器上跑通（單發管線與確定性閘門之外的那三條）。** ① **兩個 venv 無污染**：prod `langchain 1.4.0`／`langchain-core 1.6.3`／`langgraph 1.2.11`、**無 ragas**；`.venv-ragas` `langchain-core 0.3.86` ＋ `ragas 0.2.15`、**無 langgraph**，且 prod 的 `SemanticChunker`／`langgraph`／`agentic_rag_version` 全 import 得起來 ② **agentic 端到端**（multi_hop）：Plan 正確拆 2 個子問題、跨子問題聯集 11 顆 chunk、NVDA ~74% > MSFT ~68% 結論正確，**口徑揭露主動並陳** Fundamentals TTM 74.14% 與 FY2026 10-K 自算的 71.06% ③ **產品線 `api_server` + `app.py`** SSE 全程通，期別判到 `NVDA_10Q_202604`（FY2027 Q1 ＝ 財年反轉那一格），`revision` 事件的金額單位後處理前端有接並整段換掉。
+- **產品線撿到一個缺陷，登錄 [`BACKLOG.md`](BACKLOG.md) 未修**：`app.py` 的事件鏈**靜默丟掉 `fallback_note`**（期間降級揭露）。確定性那條通道在 UI 上沒了，只剩 prompt 注入後由 LLM 轉述的那條（實測這次有講，但不保證）。
+- **文件**：[`README.md`](README.md) 的 agentic CLI 那節補上「**`--freshness-mode` 預設是 `live` ⇒ 會真的呼叫 Tavily 燒額度**」與 `--trace` 用法。先前**沒有任何一處**寫過 CLI 預設與 `run_agentic_on_evalset.py`（預設 snapshot）**相反**——這次是實測撞到才發現。
+
 ## 2026-09-11
 
 - **量尺為什麼一直錯：歸類成五個根因，三個機械可判定的做成一道閘門。** 新增 [`eval/verify_eval_harness.py`](eval/verify_eval_harness.py)（19 項、4/4 變異）：**H1** 非 ASCII 輸出要轉 stdout **與** stderr（掃出 27＋7 支違規）／**H2** eval 攔截的名字在套件子模組裡不得裸名引用（當場抓到 `_classify_staleness` @ `graph.py:417`）／**H3** 生產常數凍結＋抄寫點登錄制（`eval/eval_harness_baseline.json`）。五個根因與判別力分析見 [`docs/EVAL.md`](docs/EVAL.md) §4.0。

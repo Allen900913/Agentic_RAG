@@ -66,3 +66,6 @@ data/raw/sec_local/
 
 # 遷移腳本的備份快照（migrate_*.py 產生）：git 歷史本身就有遷移前內容，不需要再存一份
 *.bak_pct
+
+*.zip
+*.sha256

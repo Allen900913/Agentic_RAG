@@ -273,8 +273,14 @@ python rag_query.py -q "NVIDIA 最新財報的毛利率是多少？"
 python rag_query.py -q "NVIDIA 最新財報的毛利率是多少？" -m gemini-2.5-flash   # 改走 Gemini
 
 # ⑧ Agentic 管線（多步驟拆解 + 自我檢核，適合複合題 / 多跳題）
+#    ⚠ 一題燒 50~60 次 LLM 呼叫（單管線 3~4 次）
+#    ⚠ CLI 的 --freshness-mode 預設是 live（＝生產入口，「最近」指截至今天）
+#       → 會真的呼叫 Tavily 燒 web 搜尋額度。不想連網就加 --no-web 或 --freshness-mode snapshot
+#       （eval 的 run_agentic_on_evalset.py 預設 snapshot，與這裡相反，不要混淆）
 python -m agentic_rag_version -q "比較 NVIDIA 與 Tesla 最新一季的毛利率差距"
 python -m agentic_rag_version -q "..." -v          # 印節點決策與中間輸出
+python -m agentic_rag_version -q "..." --trace     # 印 [TRACE] 各節點決策到 stderr（等同 AGENTIC_TRACE=true）
+python -m agentic_rag_version -q "..." --no-web --freshness-mode snapshot   # 完全不連網，只用知識庫
 
 # 互動式多輪對話
 python rag_query.py
